@@ -317,9 +317,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   wrong-executor dispatches were rejected without worker binding or false Future completion.
 - `ParslResultMisroute.cfg`: 371,765 states generated, 46,560 distinct states, depth 40;
   wrong-executor result envelopes were rejected before Future resolution.
-- `ParslJoin.cfg`: 308,488 states generated, 47,881 distinct states, depth 55;
+- `ParslJoin.cfg`: 427,320 states generated, 66,459 distinct states, depth 61;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
-- `ParslJoinSafety.cfg`: 308,488 states generated, 47,881 distinct states, depth 55;
+- `ParslJoinSafety.cfg`: 427,320 states generated, 66,459 distinct states, depth 61;
   join dependency and outer-Future safety invariants passed.
 - `ParslJoinInvalid.cfg`: 1,114 states generated, 276 distinct states, depth 32;
   invalid join return values rejected the outer Future without a false success.

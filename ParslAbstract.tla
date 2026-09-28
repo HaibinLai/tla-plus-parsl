@@ -1328,6 +1328,10 @@ JoinSafety ==
     /\ \A t \in JOIN_INVALID : taskState[t] = "failed" =>
           futureState[t] = "rejected" /\ t \in rejected
 
+JoinResultSafety ==
+    \A t \in JOIN_TASKS : outputs[t] = "join-result" =>
+        taskState[t] = "succeeded" /\ joinObserved[t] = JoinDeps(t)
+
 ResultConsistency ==
     /\ completed \cap rejected = {}
     /\ \A t \in TASKS : futureState[t] = "resolved" => t \in completed
