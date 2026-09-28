@@ -35,3 +35,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterSubmitScrip
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterSubmitScriptMissingKey.cfg models/providers/ParslClusterSubmitScript.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterSubmitScriptIOError.cfg models/providers/ParslClusterSubmitScript.tla
 ```
+
+`ParslLSFMissingJob.tla` refines the concrete LSF `bjobs` polling behavior. When an active job
+is absent from the scheduler output, the current provider marks it `COMPLETED`, even though the
+absence can also represent a failed job and the source comment notes that failure information is
+lost. The fixed branch retains `UNKNOWN` until an explicit scheduler terminal state is seen.
+The runtime probe invokes `LSFProvider._status` with empty `bjobs` output.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFMissingJobCurrent.cfg models/providers/ParslLSFMissingJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFMissingJobFixed.cfg models/providers/ParslLSFMissingJob.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_lsf_missing_job_runtime.py -v
+```

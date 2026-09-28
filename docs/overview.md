@@ -319,6 +319,11 @@ the fixed branch makes removal idempotent.
 in a set, so a duplicate record raises `KeyError` on the second removal. The runtime probe and
 fixed branch document idempotent handling.
 
+`ParslLSFMissingJob.tla` models the LSF provider's missing-job fallback. The current `_status`
+path marks an active job absent from `bjobs` output as `COMPLETED`, which can hide a scheduler
+failure; the fixed branch keeps it `UNKNOWN`. The runtime probe confirms the current
+`COMPLETED` transition using the real provider method.
+
 `ParslSlurmDuplicateStatus.tla` models the corresponding Slurm status path. Duplicate rows also
 raise `KeyError` when the same job is removed twice from the missing-job set; the runtime probe
 and fixed branch make this behavior explicit.
@@ -1594,6 +1599,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   bjobs line raises `KeyError` while removing the same set member twice.
 - `ParslLSFDuplicateStatusFixed.cfg` and `ParslLSFDuplicateStatusUnique.cfg`: 6 states generated,
   3 distinct states, depth 3; idempotent and unique status handling satisfy `DuplicateSafety`.
+- `ParslLSFMissingJobCurrent.cfg`: expected counterexample at depth 2; an absent `bjobs` record
+  is reported as `COMPLETED`.
+- `ParslLSFMissingJobFixed.cfg`: 7 states generated, 4 distinct states, depth 2; missing jobs
+  remain `UNKNOWN` while explicit failure and running states are preserved.
 - `ParslSlurmDuplicateStatusCurrent.cfg`: expected counterexample, 4 states generated; a duplicate
   status row raises `KeyError` while removing the same set member twice.
 - `ParslSlurmDuplicateStatusFixed.cfg` and `ParslSlurmDuplicateStatusUnique.cfg`: 6 states
@@ -2697,6 +2706,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `ComputePollTimeout` / `PollTimeoutSafety` | nonnegative ZMQ poll deadline calculation | `high_throughput.zmq_pipes.CommandClient.run` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling | `GridEngineProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `LSFProvider._status` |
+| `MissingJob` / `MissingJobSafety` | missing LSF scheduler record versus explicit terminal status | `LSFProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `SlurmProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with list removal | `TorqueProvider._status` |
 | `HandleShortId` / `HandleSecondRecord` / `AliasSafety` | PBS Pro short/qualified job-id normalization and idempotent missing-job bookkeeping | `PBSProProvider._status` |
