@@ -248,6 +248,8 @@ line failure, normal state translation, foreign-job filtering, and missing-job f
 running translation, pending fallback, and cloud API error propagation.
 `tests/test_googlecloud_status_runtime.py` drives Google Compute Engine status with a fake
 discovery client, checking normal translation, API error propagation, and unknown-state handling.
+`ParslGridEngineStatus.tla` models the Grid Engine malformed-qstat boundary. Its current
+configuration reproduces the short-line crash; fixed and valid-output configurations pass.
 `ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,

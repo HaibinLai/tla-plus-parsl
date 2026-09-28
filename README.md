@@ -909,6 +909,17 @@ Google Compute Engine status handling is exercised with a fake discovery client:
 The probe checks normal `RUNNING` translation, propagation of API errors, and the current
 `KeyError` path for an unrecognized provider status.
 
+The corresponding Grid Engine qstat TLA+ model can be checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineStatus.cfg ParslGridEngineStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineStatusFixed.cfg ParslGridEngineStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineStatusPresent.cfg ParslGridEngineStatus.tla
+```
+
+The current configuration finds an expected depth-3 counterexample (4 generated/3 distinct
+states); fixed and valid configurations each generate 6 states/3 distinct states at depth 3.
+
 Torque cancellation outcomes are exercised with deterministic `qdel` results:
 
 ```bash
@@ -1204,6 +1215,7 @@ failure result for each in-flight task.
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
+| `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Grid Engine qstat line length validation and update | `GridEngineProvider._status` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |
