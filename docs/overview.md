@@ -706,6 +706,11 @@ configuration violates `NoLateCallbackError`/`NoLatePublication`; the fixed conf
 the cancellation request into binding. The direct probe is
 `tests/test_flux_cancel_submit_race_runtime.py`.
 
+`ParslFluxErrorCleanupCancellation.tla` models `_error_out_jobs` after a Flux submission-thread
+failure. The current helper can raise on a canceled first Future while setting its exception,
+leaving later queued Futures pending; the fixed branch treats canceled Futures as stale and drains
+the remainder. The runtime probe drives the real helper with a canceled and a pending Future.
+
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
@@ -2479,6 +2484,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   callback attempts to complete a cancelled wrapper.
 - `ParslFluxCancelSubmitRaceFixed.cfg`: 15 states generated, 7 distinct states, depth 4;
   cancellation is propagated at binding and late callback publication is suppressed.
+- `ParslFluxErrorCleanupCancellationCurrent.cfg`: expected counterexample at depth 2; an
+  `InvalidStateError` on a canceled first Future strands the next queued Future.
+- `ParslFluxErrorCleanupCancellationFixed.cfg`: 4 states generated, 3 distinct states, depth 3;
+  terminal Futures are skipped and the cleanup queue drains.
 - `ParslProviderKinds.cfg`: 424,001 states generated, 40,000 distinct states, depth 15;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal

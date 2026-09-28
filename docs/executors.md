@@ -214,6 +214,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelSubmitRa
 /tmp/parsl-venv/bin/python -m unittest tests/test_flux_cancel_submit_race_runtime.py -v
 ```
 
+`ParslFluxErrorCleanupCancellation.tla` covers the Flux submit-thread failure cleanup path.
+`_error_out_jobs` currently calls `set_exception` on queued Futures without checking whether
+the user already canceled them. A canceled first Future can therefore raise `InvalidStateError`
+and strand later queued Futures; the fixed branch skips terminal Futures and continues draining.
+The runtime probe invokes the real cleanup helper with two queued Futures.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxErrorCleanupCancellationCurrent.cfg models/executors/ParslFluxErrorCleanupCancellation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxErrorCleanupCancellationFixed.cfg models/executors/ParslFluxErrorCleanupCancellation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_error_cleanup_cancellation_runtime.py -v
+```
+
 `ParslGlobusComputeResult.tla` models the result boundary of `GlobusComputeExecutor.submit`.
 The wrapper returns the underlying Globus Compute SDK `Future` directly, so success, remote
 exception, and cancellation are visible to Parsl without an additional result wrapper. The
