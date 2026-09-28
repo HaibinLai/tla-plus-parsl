@@ -84,6 +84,9 @@ result guard successfully.
 results. Its current configuration permits a post-timeout result and violates `ResultSafety`; the
 fixed configuration rejects the result as stale while preserving independent heartbeat and task
 timeout transitions.
+`ParslMonitoringDelivery.tla` connects logical status versions to an asynchronous event queue and
+database record. Queue reordering exposes the stale-event overwrite in the current branch;
+`ParslMonitoringDeliveryFixed.cfg` preserves the database version high-water mark.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery

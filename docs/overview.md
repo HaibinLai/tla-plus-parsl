@@ -931,6 +931,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimedHeartbeatFixed.cf
 The current branch produces a `ResultSafety` counterexample after timeout or manager expiry; the
 fixed branch rejects the late result and checks 3,061 states.
 
+The monitoring delivery check is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDelivery.cfg models/monitoring/ParslMonitoringDelivery.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeliveryFixed.cfg models/monitoring/ParslMonitoringDelivery.tla
+```
+
+The current branch exposes an older monitoring event overwriting a newer database record; the
+fixed branch preserves the version high-water mark and checks 1,978 states.
+
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
 workers, one retry, and one block per executor. Java and `tla2tools.jar` are required.
 
