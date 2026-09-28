@@ -108,6 +108,13 @@ The queue can reorder events, writes can fail and be retried, stale versions are
 terminal database record is not overwritten by an older event. `MAX_FAILURES` and queue bounds
 keep the monitoring model finite for TLC.
 
+`ParslMonitoringDeferred.tla` adds the concrete database-manager race for worker task messages.
+When a worker's first status/resource message arrives before the DFK inserts the corresponding
+task/try rows, the message is deferred and replayed after the try row exists. A second first
+message replaces the single deferred entry, while status rows are never written before their try
+foreign key exists. This follows the deferred-message sets and replay logic in
+[`monitoring/db_manager.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/monitoring/db_manager.py).
+
 `ParslExecutorProvider.tla` is a focused model of the HTEX/BlockProviderExecutor boundary. It
 separates provider block requests and failures from executor admission, manager registration,
 worker readiness, queued/running tasks, drain/recovery, and block-granular scale-in. Provider
@@ -513,6 +520,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDeferred.cfg ParslMonitoringDeferred.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
@@ -608,6 +616,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   record safety passed.
 - `ParslMonitoringDBReorder.cfg`: 527 states generated, 206 distinct states, depth 9;
   radio queue reordering and stale-event suppression passed with the same invariants.
+- `ParslMonitoringDeferred.cfg`: 36 states generated, 16 distinct states, depth 6;
+  deferred first-message replay, duplicate-first replacement/discard, try-before-status foreign
+  key ordering, and bounded monitoring cleanup all passed.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
@@ -790,6 +801,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `RetryLostAttempt` / `DeliverResult` | attempt deadline, manager-loss retry choice, and stale late result | DFK timeout/retry callbacks, HTEX manager-loss handling, and result completion path |
 | `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
 | `DeliverHead` / `ReorderRadio` / `WriteSuccess` / `WriteFailure` | asynchronous monitoring queue and database persistence | MonitoringHub/radio/database boundary |
+| `ReceiveFirstBeforeTry` / `InsertTaskAndTry` / `ReceiveFirstAfterTry` | deferred worker-task monitoring message replay and try-row ordering | `DatabaseManager.start` deferred-resource logic |
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
 | `StatusBatchSuccess` / `StatusBatchFailure` | bounded scheduler polling, atomic status update, and timeout/error preservation | `ClusterProvider.status`, `SlurmProvider._status`, and `execute_wait` |
 | `PollError` / `ErrorVisibility` | Kubernetes pod-read exception and UNKNOWN-state exposure, including the identity-check regression probe | `KubernetesProvider._status` |

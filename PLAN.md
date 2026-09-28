@@ -130,6 +130,8 @@ after manager recovery while their late results remain stale.
 `ParslMonitoringDB.tla` models the asynchronous monitoring radio queue, bounded event versions,
 database write failure/retry, queue reordering, stale-event suppression, and terminal-record
 stability.
+`ParslMonitoringDeferred.tla` models the DB manager's deferred first worker-task message, replay
+after TASK/TRY insertion, duplicate-first replacement, and foreign-key ordering.
 `ParslExecutorProvider.tla` models the HTEX executor/provider boundary: block request outcomes,
 manager registration, worker readiness, submit admission, draining/recovery, provider failure,
 and scale-in cleanup of queued/running tasks.
