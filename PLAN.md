@@ -87,6 +87,8 @@ the associated provider/executor capacity.
 allowing existing attempts to finish, followed by explicit recovery.
 `MessageCorrelationSafety` now checks that queued, received, duplicate, and consumed envelopes
 remain associated with their logical task and retry attempt.
+`ParslMisroute.cfg` explores decoded work offered to the wrong executor manager and checks that
+the protocol rejects it before worker execution.
 
 ### 3. Checked properties
 

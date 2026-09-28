@@ -423,6 +423,31 @@ DispatchAttempt(t, k, w) ==
                     providerBlocks, completed, rejected, outputs, taskWireState,
                     resultWireState, taskEnvelope, resultEnvelope>>
 
+MisrouteAttempt(t, k, w) ==
+    LET a == <<t, k>> IN
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
+    /\ attemptState[a] = "decoded"
+    /\ workerState[w] = "idle" /\ WorkerExec(w) # attemptExecutor[a]
+    /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ attemptState' = [attemptState EXCEPT ![a] = "lost"]
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "dropped"]
+    /\ taskEnvelope' = [taskEnvelope EXCEPT ![a] = "invalid"]
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
+                    attemptExecutor, attemptWorker, workerState, workerAttempt,
+                    executorState, providerState, providerTarget, providerBlocks,
+                    completed, outputs, resultWireState, resultEnvelope>>
+
 StartAttempt(t, k, w) ==
     LET a == <<t, k>> IN
     /\ attemptState[a] = "dispatched" /\ attemptWorker[a] = w
@@ -875,6 +900,7 @@ CoreActions ==
           \/ DiscardTaskDuplicate(t, k) \/ DecodeAttempt(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           DispatchAttempt(t, k, w)
+          \/ MisrouteAttempt(t, k, w)
           \/ SerializeResult(t, k, w)
           \/ AttemptSuccess(t, k, w) \/ AttemptFailure(t, k, w)
           \/ AttemptTimeout(t, k, w)
