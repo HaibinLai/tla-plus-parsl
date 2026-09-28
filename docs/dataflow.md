@@ -27,3 +27,12 @@ Futures and checks the resulting `JoinError.dependent_exceptions_tids` sequence.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFailureAggregation.cfg models/dataflow/ParslJoinFailureAggregation.tla
 ```
+
+`ParslJoinErrorRootCause.tla` captures `PropagatedException` metadata used by `JoinError`: the
+first dependent exception is followed recursively to a non-propagated root, and sibling failures
+are marked with `(+ others)` in the representative path. The runtime probe checks the actual
+exception `__cause__` and string representation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinErrorRootCause.cfg models/dataflow/ParslJoinErrorRootCause.tla
+```
