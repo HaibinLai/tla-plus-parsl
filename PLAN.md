@@ -272,6 +272,9 @@ after manager recovery while their late results remain stale.
 `ParslHeartbeatBoundary.tla` checks the strict HTEX expiration inequality, heartbeat reset ordering,
 and conversion of a manager's in-flight tasks into failure reports at expiry.
 `ParslHeartbeatClockJump.tla` separates adjustable wall-clock time from monotonic elapsed time.
+`ParslHeartbeatClockRollback.tla` covers the opposite clock adjustment: a backward `time.time()`
+jump can suppress heartbeat expiry in the current branch, while the fixed branch uses monotonic
+elapsed time and preserves the expiry threshold.
 The current `time.time()`-based expiry can remove a recently healthy manager after a forward clock
 jump; `tests/test_heartbeat_clock_jump_runtime.py` reproduces the decision with the real method.
 `ParslMonitoringDB.tla` models the asynchronous monitoring radio queue, bounded event versions,

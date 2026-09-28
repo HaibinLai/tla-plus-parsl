@@ -1,5 +1,9 @@
 # Clock and strategy models
 
+`ParslHeartbeatClockRollback.tla` complements the forward-jump model with a backward system-clock
+adjustment. The current wall-clock branch can reach the bounded horizon without expiring the
+manager, while the monotonic fixed branch expires once elapsed time reaches the threshold.
+
 `models/clock/` contains logical time, timeout timers, heartbeat age, and terminal timeout
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
