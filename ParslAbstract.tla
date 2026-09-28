@@ -472,9 +472,7 @@ RequestAllocation(e) ==
     /\ e \in EXECUTORS
     /\ ((providerState[e] \in {"none", "cancelled"} /\ providerTarget[e] < MAX_BLOCKS)
         \/ providerState[e] = "failed")
-    /\ providerTarget' = IF providerState[e] = "failed"
-                          THEN providerTarget
-                          ELSE [providerTarget EXCEPT ![e] = @ + 1]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] = @ + 1]
     /\ providerState' = [providerState EXCEPT ![e] = "requested"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState,
@@ -498,11 +496,31 @@ AllocationFails(e) ==
     /\ ALLOW_FAILURES
     /\ e \in EXECUTORS /\ providerState[e] = "requested"
     /\ providerState' = [providerState EXCEPT ![e] = "failed"]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] = 0]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState,
                     attemptExecutor, attemptWorker, workerState,
-                    workerAttempt, executorState, providerTarget,
+                    workerAttempt, executorState,
                     providerBlocks, completed, rejected, outputs>>
+
+ProviderFailure(e) ==
+    /\ ALLOW_FAILURES
+    /\ e \in EXECUTORS /\ providerState[e] = "active"
+    /\ executorState[e] = "up"
+    /\ \A w \in WORKERS : WorkerExec(w) = e => workerState[w] = "idle"
+    /\ \A a \in AttemptIds : attemptExecutor[a] = e =>
+          attemptState[a] \notin {"submitted", "serialized", "sent", "received",
+                                   "decoded", "dispatched", "running",
+                                   "result_serialized", "result_sent",
+                                   "result_received", "result_decoded"}
+    /\ providerState' = [providerState EXCEPT ![e] = "failed"]
+    /\ executorState' = [executorState EXCEPT ![e] = "down"]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] = 0]
+    /\ providerBlocks' = [providerBlocks EXCEPT ![e] = 0]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState,
+                    attemptExecutor, attemptWorker, workerState, workerAttempt,
+                    completed, rejected, outputs>>
 
 CancelAllocation(e) ==
     /\ ALLOW_FAILURES
@@ -542,6 +560,7 @@ CoreActions ==
           ExecutorFailure(e, t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : LateResult(t, k)
     \/ \E e \in EXECUTORS : RequestAllocation(e) \/ AllocationFails(e)
+    \/ \E e \in EXECUTORS : ProviderFailure(e)
     \/ \E e \in EXECUTORS, w \in WORKERS : AllocationSucceeds(e, w)
     \/ \E e \in EXECUTORS : CancelAllocation(e)
 
@@ -663,6 +682,12 @@ SubmitSafety ==
                             "dispatched", "running", "result_serialized", "result_sent",
                             "result_received", "result_decoded", "succeeded"} =>
           attemptExecutor[a] \in SUBMITTABLE_EXECUTORS
+
+ProviderExecutorConsistency ==
+    /\ \A e \in EXECUTORS : providerState[e] = "active" =>
+          executorState[e] = "up" /\ providerBlocks[e] > 0
+    /\ \A e \in EXECUTORS : providerState[e] = "failed" =>
+          providerBlocks[e] = 0 /\ providerTarget[e] = 0
 
 ResultConsistency ==
     /\ completed \cap rejected = {}

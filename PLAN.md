@@ -60,6 +60,8 @@ timeout guards so TLC can explore timing-dependent worker loss and retry behavio
 that persisted terminal statuses never precede the corresponding Future outcome.
 `ParslSubmitFailure.cfg` adds a focused executor/provider boundary model in which an active
 provider block does not imply that the executor accepts a new task submission.
+`ParslProviderFailure.cfg` covers an active block becoming failed, clearing capacity, and
+requesting a replacement block without producing a negative target count.
 
 ### 3. Checked properties
 

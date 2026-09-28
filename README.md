@@ -125,6 +125,13 @@ executor rejects new submissions; it creates a failed physical attempt before an
 bound and follows the normal retry/rejection path. `ParslSubmitFailure.cfg` explores this race
 with a one-task executor whose submit set is empty.
 
+Provider block failure is modeled separately from allocation failure. `ProviderFailure` represents
+an already-active block terminating while idle; it marks the provider and executor unavailable and
+clears the desired and active block counts. `ProviderExecutorConsistency` checks that an active
+provider implies an up executor with a positive block count, and that a failed provider has no
+remaining target or active blocks. Recovery requests increment the target again before a new
+allocation can become active.
+
 ## TLC verification
 
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
@@ -138,6 +145,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslNoFailures.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTime.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMonitoring.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSubmitFailure.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslProviderFailure.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -167,6 +175,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 121 states generated, 31 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.
+- `ParslProviderFailure.cfg`: 890 states generated, 219 distinct states, depth 32;
+  provider failure, recovery request, and block-count consistency all passed.
 
 ## Source-to-model mapping
 
@@ -188,6 +198,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
+| `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
