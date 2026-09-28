@@ -69,6 +69,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxSubmissionFail
 /tmp/parsl-venv/bin/python -m unittest tests/test_flux_submission_failure_runtime.py -v
 ```
 
+`ParslFluxCancelSubmitRace.tla` models a Flux-specific cancellation race. If the wrapper is
+cancelled while `_flux_future` is still unbound, a later successful underlying callback can call
+`set_result` on the already-cancelled wrapper. The current configuration reaches the callback
+error; the fixed branch propagates the cancellation into the bind step and suppresses the late
+callback. `tests/test_flux_cancel_submit_race_runtime.py` reproduces the interleaving directly.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelSubmitRaceCurrent.cfg models/executors/ParslFluxCancelSubmitRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelSubmitRaceFixed.cfg models/executors/ParslFluxCancelSubmitRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_cancel_submit_race_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider

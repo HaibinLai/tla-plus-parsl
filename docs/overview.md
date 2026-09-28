@@ -588,6 +588,13 @@ configuration finds cross-task specification or endpoint use under interleaving 
 serialized configuration captures the caller-side lock required to make the wrapper safe. This follows
 [`globus_compute.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/globus_compute.py).
 
+`ParslFluxCancelSubmitRace.tla` models the cancellation interleaving in
+`FluxFutureWrapper.cancel`: cancellation can happen before `_flux_future` is bound, after which
+a late successful callback currently attempts to publish into the cancelled wrapper. The current
+configuration violates `NoLateCallbackError`/`NoLatePublication`; the fixed configuration carries
+the cancellation request into binding. The direct probe is
+`tests/test_flux_cancel_submit_race_runtime.py`.
+
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
@@ -1654,7 +1661,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 287 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 288 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2306,6 +2313,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   distinct); interleaved submits can observe another task's temporary resource specification.
 - `ParslGlobusComputeConfigFixed.cfg`: 37 states generated, 16 distinct states, depth 8;
   serialized submit sections preserve per-task resource specifications and default restoration.
+- `ParslFluxCancelSubmitRaceCurrent.cfg`: expected counterexample at depth 5; a late result
+  callback attempts to complete a cancelled wrapper.
+- `ParslFluxCancelSubmitRaceFixed.cfg`: 15 states generated, 7 distinct states, depth 4;
+  cancellation is propagated at binding and late callback publication is suppressed.
 - `ParslProviderKinds.cfg`: 424,001 states generated, 40,000 distinct states, depth 15;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
@@ -2592,6 +2603,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
 | `Validate` / `Register` / `CheckSubmitProcess` | WorkQueue resource validation and submit-process liveness ordering | `WorkQueueExecutor.submit` |
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
+| `CancelBeforeBind` / `BindUnderlying` / `PublishCallback` | Flux cancellation versus late underlying-future binding | `FluxFutureWrapper.cancel` and `_complete_future` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
