@@ -266,6 +266,9 @@ invalid non-exception path modeled by `ParslRadicalPilotResults.tla`.
 `tests/test_globus_compute_runtime.py` drives Globus Compute's real wrapper submit method with a
 fake SDK executor, checking override restoration, exception cleanup, and the unsynchronized
 concurrent-specification race modeled by `ParslGlobusComputeConfig.tla`.
+`tests/test_condor_submit_runtime.py` drives Condor submission with temporary scripts and fake
+`condor_submit` output, checking valid cluster registration, command failure, and malformed
+successful-output indexing modeled by `ParslCondorSubmit.tla`.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed

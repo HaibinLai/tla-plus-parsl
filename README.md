@@ -775,6 +775,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   ignored without changing the known resource status.
 - `ParslCondorStatusPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a valid
   two-field status line updates the tracked job.
+- `ParslCondorSubmit.cfg`: expected counterexample at depth 3 (9 states generated, 7 distinct);
+  empty successful submit output reaches an uncaught job-id indexing error.
+- `ParslCondorSubmitFixed.cfg`: 18 states generated, 9 distinct states, depth 3; malformed
+  successful output is rejected without registering a resource.
 
 The Condor status counterexample is also checked against the current Python source with a
 deterministic scheduler stub (no Condor installation is required):
@@ -785,6 +789,15 @@ deterministic scheduler stub (no Condor installation is required):
 
 The runtime probe confirms that a one-field `condor_q` line raises `IndexError`, while a valid
 two-field line updates the tracked resource.
+
+Condor submission parsing is also exercised without a Condor installation:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_submit_runtime.py -v
+```
+
+The probe covers valid cluster registration, nonzero command failure, and the current uncaught
+`IndexError` paths for empty or malformed successful `condor_submit` output.
 
 The Torque foreign-job counterexample has the same kind of source-level runtime probe:
 
@@ -842,7 +855,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 94 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 98 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
