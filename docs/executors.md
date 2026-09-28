@@ -112,6 +112,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBashTimeoutCleanup
 /tmp/parsl-venv/bin/python -m unittest tests/test_bash_timeout_cleanup_runtime.py -v
 ```
 
+`ParslHtexForceScaleIn.tla` models the concrete `HighThroughputExecutor.scale_in` policy.
+With the default `max_idletime=None`, the current implementation deliberately selects the
+longest-idle block even when its manager still reports active tasks, calls `_hold_block`, and
+cancels the provider job. The current TLC branch therefore violates `BusyScaleInSafety`; the
+fixed branch represents an idle-only policy. The runtime probe uses a busy fake manager and
+checks the real block/provider cancellation calls. This captures the source docstring's
+explicitly rude forced scale-in behavior (issue #530).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexForceScaleInCurrent.cfg models/executors/ParslHtexForceScaleIn.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexForceScaleInFixed.cfg models/executors/ParslHtexForceScaleIn.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_force_scale_in_runtime.py -v
+```
+
 `ParslWorkQueueCancelledResult.tla` models a Work Queue collector result racing with cancellation.
 The current collector removes the cancelled Future and calls `set_result`, so `InvalidStateError`
 exits the collector; its `finally` block then marks an unrelated pending Future as

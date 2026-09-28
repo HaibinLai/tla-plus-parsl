@@ -192,6 +192,13 @@ the task queued until resources are returned.
 `remote_side_bash_executor` reports `AppTimeout` after `Popen.wait` expires but leaves the shell
 or process group alive; the fixed branch kills it before reporting the timeout.
 
+`ParslHtexForceScaleIn.tla` models the concrete HTEX `scale_in` path. With
+`max_idletime=None`, the current implementation can select a block whose manager still has
+active tasks, hold it, and cancel its provider job; this is the intentionally forceful behavior
+documented in `high_throughput/executor.py` (issue #530). The current model violates
+`BusyScaleInSafety`, while the fixed idle-only policy passes. The runtime probe verifies the
+busy-manager cancellation calls against the real method.
+
 `ParslWorkQueueCancelledResult.tla` models cancellation racing with a Work Queue collector
 report. The current collector removes a cancelled Future before `set_result`, so
 `InvalidStateError` exits the collector and its cleanup marks an unrelated pending Future with
