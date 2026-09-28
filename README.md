@@ -218,6 +218,14 @@ The event categories correspond to the task-information channel in
 [`monitoring/message_type.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/monitoring/message_type.py)
 and the sender/receiver boundary in [`monitoring/radios/base.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/monitoring/radios/base.py).
 
+`ParslResourceAdmission.tla` models concrete WorkQueue-style resource admission. It checks the
+accepted resource-specification fields (`cores`, `memory`, `disk`, `gpus`, priority, and runtime),
+the rule that cores/memory/disk are supplied together when `autolabel=False`, and worker-level
+capacity accounting while tasks wait, dispatch, and complete. The companion autolabel
+configuration checks that a partial specification is admitted only when autolabeling is enabled.
+This follows the validation and task tuple construction in
+[`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -436,6 +444,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslResultRace.cfg ParslResultRace.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinCallbackRace.cfg ParslJoinCallbackRace.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMemoData.cfg ParslJoinMemoData.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMonitoring.cfg ParslJoinMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmission.cfg ParslResourceAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmissionAutolabel.cfg ParslResourceAdmission.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -542,6 +552,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslJoinMonitoring.cfg`: 7,545 states generated, 1,816 distinct states, depth 18;
   join status emission, memoized/staged inner readiness, radio reordering, database write failure
   and retry, version monotonicity, and terminal monitoring protection all passed.
+- `ParslResourceAdmission.cfg`: 861 states generated, 288 distinct states, depth 9;
+  WorkQueue-style resource field validation, complete resource-triplet enforcement, worker
+  capacity accounting, queueing, dispatch, and release all passed with autolabel disabled.
+- `ParslResourceAdmissionAutolabel.cfg`: 1,640 states generated, 489 distinct states, depth 9;
+  partial resource specifications were admitted only under the autolabel-enabled contract, with
+  the same capacity invariants passing.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.
