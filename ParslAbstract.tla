@@ -33,7 +33,8 @@ DataStates == {"unavailable", "staging", "available", "stageout",
                "stageout_chunk1", "stageout_chunk1_corrupt",
                "stageout_chunk2", "stageout_chunk2_corrupt",
                "transferred", "corrupt"}
-WireStates == {"none", "queued", "sent", "received", "duplicate", "consumed", "dropped"}
+WireStates == {"none", "queued", "sent", "received", "duplicate", "acknowledged",
+               "consumed", "dropped"}
 EnvelopeStates == {"none", "valid", "invalid"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
 NoAttempt == <<"none", -1>>
@@ -585,9 +586,22 @@ DiscardResultDuplicate(t, k) ==
                     completed, rejected, outputs, taskWireState,
                     taskEnvelope, resultEnvelope>>
 
+AcknowledgeResult(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "result_received"
+    /\ resultWireState[a] = "received"
+    /\ resultEnvelope[a] = "valid"
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "acknowledged"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, taskWireState, taskEnvelope,
+                    resultEnvelope>>
+
 DecodeResult(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "result_received" /\ resultWireState[a] = "received"
+    /\ attemptState[a] = "result_received" /\ resultWireState[a] = "acknowledged"
     /\ attemptState' = [attemptState EXCEPT ![a] = "result_decoded"]
     /\ resultWireState' = [resultWireState EXCEPT ![a] = "consumed"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
@@ -1000,7 +1014,7 @@ CoreActions ==
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
           SendResult(t, k) \/ ReceiveResult(t, k)
           \/ DuplicateResultMessage(t, k) \/ DiscardResultDuplicate(t, k)
-          \/ DecodeResult(t, k)
+          \/ AcknowledgeResult(t, k) \/ DecodeResult(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           DropResultMessage(t, k, w)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS, e \in EXECUTORS :
@@ -1165,6 +1179,9 @@ MessageSafety ==
           resultWireState[a] = "duplicate" =>
               resultEnvelope[a] = "valid" /\ attemptState[a] = "result_received"
     /\ \A a \in AttemptIds :
+          resultWireState[a] = "acknowledged" =>
+              resultEnvelope[a] = "valid" /\ attemptState[a] = "result_received"
+    /\ \A a \in AttemptIds :
           resultWireState[a] = "consumed" =>
               resultEnvelope[a] = "valid" /\
               attemptState[a] \in {"result_decoded", "succeeded", "lost", "stale"}
@@ -1175,7 +1192,7 @@ MessageCorrelationSafety ==
           currentAttempt[a[1]] = a[2] \/
           attemptState[a] \in {"succeeded", "failed", "timed_out", "lost", "stale"}
     /\ \A a \in AttemptIds : resultWireState[a] \in
-          {"queued", "sent", "received", "duplicate", "consumed"} =>
+          {"queued", "sent", "received", "duplicate", "acknowledged", "consumed"} =>
           currentAttempt[a[1]] = a[2] \/
           attemptState[a] \in {"succeeded", "failed", "timed_out", "lost", "stale"}
 

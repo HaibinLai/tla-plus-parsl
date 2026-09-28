@@ -137,11 +137,14 @@ a worker is enabled only after decoding succeeds. Payload bytes and Python objec
 abstract; this stage checks ordering and failure-safe handoff rather than ZMQ or pickle behavior.
 
 The wire lifecycle is represented explicitly by `taskWireState` and `resultWireState` for every
-physical attempt. Each side has the finite states `none`, `queued`, `sent`, `received`, and
-`consumed`, while `taskEnvelope` and `resultEnvelope` record whether the serialized envelope is
+physical attempt. Each side has the finite states `none`, `queued`, `sent`, `received`,
+`acknowledged`, and `consumed`, while `taskEnvelope` and `resultEnvelope` record whether the serialized envelope is
 `valid` or `invalid`. `MessageSafety` checks that a queued/sent/received envelope agrees with the
 corresponding attempt state. This is a protocol-level ZMQ abstraction: it models the two message
 directions and their ordering without enumerating sockets, byte buffers, or multipart frames.
+The result direction additionally uses `acknowledged` between `received` and `consumed`, modeling
+a receiver-side consume acknowledgement before decode without claiming a particular ZMQ wire
+ack implementation.
 The next refinement can add bounded drops, duplicate deliveries, and symbolic object graphs
 without changing the logical-task/physical-attempt boundary.
 
@@ -309,12 +312,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   join dependency and outer-Future safety invariants passed.
 - `ParslJoinInvalid.cfg`: 1,114 states generated, 276 distinct states, depth 32;
   invalid join return values rejected the outer Future without a false success.
-- `ParslMessaging.cfg`: 5,728,457 states generated, 661,192 distinct states, depth 48;
+- `ParslMessaging.cfg`: 5,941,081 states generated, 679,392 distinct states, depth 49;
   task/result wire ordering, envelope validity, symbolic object-graph serialization, and
   stale-result invariants passed.
 - `ParslMessageLoss.cfg`: 3,696 states generated, 760 distinct states, depth 33;
   task/result message loss, worker cleanup, retry bounds, and Future consistency passed.
-- `ParslMessageDuplicate.cfg`: 94 states generated, 29 distinct states, depth 18;
+- `ParslMessageDuplicate.cfg`: 97 states generated, 30 distinct states, depth 19;
   duplicate task/result envelopes were explicitly discarded without duplicate completion.
 
 ## Source-to-model mapping
@@ -335,6 +338,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
 | `taskWireState` / `resultWireState` and `MessageSafety` | bounded ZMQ-like queues and envelope/attempt ordering | interchange task/result queues and manager socket message handling |
+| `AcknowledgeResult` | receiver-side result consume acknowledgement before decode | manager result receive/dispatch boundary |
 | `DropTaskMessage` / `DropResultMessage` | transport loss before dispatch or Future resolution | interchange/socket failure boundary and retry handling |
 | `DuplicateTaskMessage` / `DuplicateResultMessage` | duplicate delivery and receiver-side discard | interchange receive loop and result deduplication boundary |
 | `MessageCorrelationSafety` | bind task/result envelopes to `(task, retryAttempt)` | interchange message identity and DFK current-attempt checks |
