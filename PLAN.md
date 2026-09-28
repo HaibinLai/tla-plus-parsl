@@ -548,6 +548,9 @@ the separate post-pop decode-failure orphaning path.
 `tests/test_htex_submit_runtime.py` drives the real `HighThroughputExecutor.submit_payload` with a
 failing outgoing queue, showing that current send failure leaves a pending Future in `tasks`; this
 is modeled by `ParslHtexSubmitFailure.tla`.
+`ParslHtexSubmitLifecycle.tla` refines that probe with the preceding serialization gate: a
+serialization error must occur before task/Future allocation, while queue failure occurs after
+allocation and requires rollback in the fixed branch.
 `tests/test_htex_manager_loss_runtime.py` connects the real interchange expiry report to the real
 HTEX result worker, checking serialized `ManagerLost` propagation into the task Future.
 `tests/test_htex_version_mismatch_runtime.py` drives the real interchange registration parser with

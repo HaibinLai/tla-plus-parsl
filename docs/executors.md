@@ -17,6 +17,18 @@ old heartbeat reaches the interchange. The current branch accepts that stale ack
 resurrects the manager, violating `ExpiryTerminal`; the fixed branch ignores it as stale. This
 matches the manager-record lookup guard in HTEX `interchange.py` before processing messages.
 
+`ParslHtexSubmitLifecycle.tla` refines HTEX submission ordering. Serialization failure
+terminates before a task/Future is allocated, while an outgoing-queue failure happens after
+allocation. The current queue-failure configuration leaves an orphaned pending Future and
+violates `QueueFailureSafety`; the fixed configuration removes the task mapping and fails the
+Future. The serialization-failure configuration passes with no Future allocation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitLifecycleQueueFailure.cfg models/executors/ParslHtexSubmitLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitLifecycleQueueFailureFixed.cfg models/executors/ParslHtexSubmitLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitLifecycleSerializationFailure.cfg models/executors/ParslHtexSubmitLifecycle.tla
+```
+
 Run this focused check with:
 
 ```bash
