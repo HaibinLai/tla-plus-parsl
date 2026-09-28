@@ -28,7 +28,7 @@ class Queue:
 
 
 class WorkQueueSubmitRuntimeTest(unittest.TestCase):
-    def make_executor(self, directory, alive):
+    def make_executor(self, directory, alive, serialize_error=False):
         executor = WorkQueueExecutor.__new__(WorkQueueExecutor)
         executor.function_data_dir = directory
         executor.executor_task_counter = -1
@@ -45,7 +45,10 @@ class WorkQueueSubmitRuntimeTest(unittest.TestCase):
         executor.shared_fs = False
         executor._register_file = lambda file_obj: str(file_obj)
         executor._std_output_to_wq = lambda kind, file_obj: str(file_obj)
-        executor._serialize_function = lambda *args, **kwargs: None
+        if serialize_error:
+            executor._serialize_function = lambda *args, **kwargs: (_ for _ in ()).throw(TypeError("cannot serialize closure"))
+        else:
+            executor._serialize_function = lambda *args, **kwargs: None
         executor._construct_map_file = lambda *args, **kwargs: None
         return executor
 
@@ -65,6 +68,15 @@ class WorkQueueSubmitRuntimeTest(unittest.TestCase):
 
             self.assertIs(executor._tasks["0"], future)
             self.assertEqual(len(executor.task_queue.items), 1)
+
+    def test_serialization_failure_leaves_orphaned_future(self):
+        with tempfile.TemporaryDirectory() as directory:
+            executor = self.make_executor(directory, alive=True, serialize_error=True)
+            with self.assertRaises(TypeError):
+                executor.submit(lambda: 1, {})
+
+            self.assertIn("0", executor._tasks)
+            self.assertFalse(executor.task_queue.items)
 
     def test_invalid_resource_key_is_rejected_before_task_mapping(self):
         with tempfile.TemporaryDirectory() as directory:

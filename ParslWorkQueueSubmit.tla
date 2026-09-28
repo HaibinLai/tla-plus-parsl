@@ -5,12 +5,12 @@ EXTENDS Naturals
  * Bounded model of WorkQueueExecutor.submit around submit-process failure.
  *
  * The current source inserts the executor Future into `_tasks` before checking
- * whether the Work Queue submit process is alive.  If that check fails, the
- * call raises ExecutorError but the map entry remains.  ROLLBACK models the
- * candidate fix which removes that orphaned entry before returning failure.
+ * serialization and submit-process liveness.  Either failure can therefore
+ * leave an orphaned entry.  ROLLBACK models the candidate fix which removes
+ * that orphaned entry before returning failure.
  ***************************************************************************)
 
-CONSTANTS PROCESS_ALIVE, ROLLBACK
+CONSTANTS PROCESS_ALIVE, SERIALIZE_OK, ROLLBACK
 
 States == {"new", "registered", "serialized", "queued", "failed", "rejected"}
 
@@ -19,6 +19,7 @@ vars == <<state, taskMapped>>
 
 Init ==
     /\ PROCESS_ALIVE \in BOOLEAN
+    /\ SERIALIZE_OK \in BOOLEAN
     /\ ROLLBACK \in BOOLEAN
     /\ state = "new"
     /\ taskMapped = FALSE
@@ -30,8 +31,12 @@ Validate ==
 
 Serialize ==
     /\ state = "registered"
-    /\ state' = "serialized"
-    /\ UNCHANGED taskMapped
+    /\ IF SERIALIZE_OK THEN
+           /\ state' = "serialized"
+           /\ UNCHANGED taskMapped
+       ELSE
+           /\ state' = "failed"
+           /\ taskMapped' = IF ROLLBACK THEN FALSE ELSE taskMapped
 
 CheckSubmitProcess ==
     /\ state = "serialized"

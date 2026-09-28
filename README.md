@@ -292,11 +292,12 @@ process/collector exits, the final cleanup action fails every remaining outstand
 follows `_collect_work_queue_results` in
 [`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py).
 
-`ParslWorkQueueSubmit.tla` models the submit-side ordering around the Work Queue process. The
-current implementation registers the Future in `_tasks` before checking process liveness; when the
-process is already dead, the raised `ExecutorError` leaves that map entry orphaned. The fixed
-configuration removes the mapping on this failure. The runtime probe reproduces the current
-ordering with a real `WorkQueueExecutor.submit` and fake filesystem/queue objects.
+`ParslWorkQueueSubmit.tla` models the submit-side ordering around serialization and the Work Queue
+process. The current implementation registers the Future in `_tasks` before serialization and
+before checking process liveness; either a serialization exception or a dead process can leave that
+map entry orphaned. The fixed configurations remove the mapping on either failure. The runtime
+probe reproduces both orderings with a real `WorkQueueExecutor.submit` and fake filesystem/queue
+objects.
 
 `ParslFluxResult.tla` models the Flux executor's wrapped Future boundary. A Flux job must finish
 before the callback reads the result file; zero exit status still requires a valid serialized
@@ -1034,7 +1035,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 156 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 157 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
