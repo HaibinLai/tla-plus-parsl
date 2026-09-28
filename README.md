@@ -85,6 +85,12 @@ identity and route checks, disconnect/drop, queue reordering, duplicate delivery
 and receiver-side correlation by `(task, attempt, kind)`. It is deliberately independent of the
 DFK model so transport counterexamples remain short and interpretable.
 
+`ParslPython.tla` refines callable serialization into Python-like object categories: function
+code, globals, defaults, closure cells, arguments, and nested references. Encoding traverses the
+referenced graph before creating a symbolic pickle token; decoding traverses it again before a
+payload is considered reconstructed. `ParslPythonFailure.cfg` marks a nested closure object as
+unserializable and checks that the task fails before a token or decoded payload is exposed.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -281,6 +287,8 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileCorruptionSmall.cfg P
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslNestedSerialization.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -329,6 +337,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslZMQ.cfg`: 33,321 states generated, 6,216 distinct states, depth 35;
   multipart encoding order, bounded queues, disconnect/drop, route validation, duplicate discard,
   correlation, and acknowledgement safety all passed in the focused transport model.
+- `ParslPython.cfg`: 4,415 states generated, 1,035 distinct states, depth 17;
+  callable roots, globals/defaults/closure traversal, symbolic pickle round-trip, and payload
+  reconstruction safety passed.
+- `ParslPythonFailure.cfg`: 4,415 states generated, 1,035 distinct states, depth 18;
+  a non-serializable nested closure object failed before encoding completed or a payload token was
+  published.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -414,6 +428,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `EncodeHeader` / `EncodeBody` / `FinishEncode` | multipart task/result serialization before transport | DFK/interchange task path and worker result encoding |
 | `Send` / `Deliver` / `DuplicateInbound` / `DropOutbound` | bounded ZMQ-like transport, reconnect loss, reordering, duplicate delivery | HTEX interchange and manager socket queues |
 | `ReceiveValid` / `RejectInvalid` / `Ack` | receiver validation, correlation, and consume acknowledgement | interchange manager message handling and DFK result path |
+| `StartEncode` / `EncodeObject` / `FinishEncode` | callable, globals, defaults, closure, and argument object serialization | DFK task serialization and executor submission boundary |
+| `StartDecode` / `DecodeObject` / `FinishDecode` | reconstructing a callable/payload only after a complete encoded graph | worker-side task deserialization |
+| `MutateObject` / `RepairObject` | object content becoming unencodable before submission | Python object/payload serialization failure path |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces

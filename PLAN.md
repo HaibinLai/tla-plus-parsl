@@ -117,6 +117,10 @@ separate from the DFK protocol state machine so TLC can isolate scaling-policy c
 bounded queues, endpoint identities, disconnect/drop, reordering, duplicate delivery, route
 validation, and acknowledgement. The configuration is intentionally small so transport traces
 can be inspected before merging these states into the larger DFK model.
+`ParslPython.tla` adds a callable-content abstraction with separate function, global, default,
+closure, argument, and nested-object roots. It checks graph traversal before symbolic pickle
+creation and graph traversal again during worker-side reconstruction, including a deliberately
+unserializable nested-object configuration.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.
