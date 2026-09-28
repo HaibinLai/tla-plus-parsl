@@ -649,6 +649,10 @@ the protocol rejects it before worker execution.
 `ParslResultMisroute.cfg` applies the same executor-source check to result envelopes before
 Future resolution.
 
+`ParslMonitoringTaskRetry.tla` connects monitoring records to logical task retry and terminal
+state: the current branch lets an old attempt event lower the database version after a newer
+event, while the fixed branch preserves the database high-water mark and terminal consistency.
+
 ### 3. Checked properties
 
 The safety configurations check:
