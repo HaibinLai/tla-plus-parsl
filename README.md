@@ -173,6 +173,13 @@ new submissions after shutdown begins. The mapping follows the concrete shutdown
 [`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py),
 and [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
 
+`ParslWorkQueueResults.tla` models the WorkQueue collector's result-file boundary. A valid
+deserialized value resolves the executor Future, a corrupt result file or an app-produced
+exception becomes a failed Future, and a report without a result file also fails. If the submit
+process/collector exits, the final cleanup action fails every remaining outstanding task. This
+follows `_collect_work_queue_results` in
+[`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py).
+
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
@@ -500,6 +507,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskT
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueResults.cfg ParslWorkQueueResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
@@ -609,6 +617,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslExecutorShutdown.cfg`: 394,010 states generated, 74,431 distinct states, depth 28;
   shutdown admission rejection, ThreadPool completion-before-stop, WorkQueue collector failure
   cleanup, HTEX interchange closure, and in-flight cleanup all passed.
+- `ParslWorkQueueResults.cfg`: 606 states generated, 225 distinct states, depth 9;
+  valid-result completion, corrupt/exception/no-result failure mapping, collector shutdown
+  cleanup, and terminal-result consistency all passed.
 - `ParslProviderKinds.cfg`: 424,001 states generated, 40,000 distinct states, depth 15;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
@@ -759,6 +770,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
 | `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |
+| `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
