@@ -285,6 +285,8 @@ checking successful registration, failed launch handling, unknown-state fallback
 launch-response unpacking path modeled by `ParslAWSProviderSubmit.tla`.
 `tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
+`tests/test_pbspro_status_runtime.py` drives PBS Pro's JSON status parser, checking known-job
+translation, scheduler failure preservation, and the current foreign-job `KeyError` boundary.
 `tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
 admission paths, including accepted-work completion and resource-specification rejection.
 `tests/test_future_cancellation_runtime.py` checks the concrete cancellation contract: AppFuture

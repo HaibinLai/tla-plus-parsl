@@ -1042,7 +1042,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 165 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 168 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1368,6 +1368,16 @@ output:
 
 The tests reproduce the successful-empty-output path returning `None` without a resource and the
 normal path registering a pending job id.
+
+The PBS Pro JSON status path is exercised with deterministic `qstat` responses:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_status_runtime.py -v
+```
+
+`ParslPBSProStatus.tla` models known-job translation, scheduler failure preservation, and the
+current `KeyError` when JSON contains a foreign job id not present in `resources`. The fixed
+configuration ignores that foreign record.
 
 The concrete thread executor shutdown and admission contract is exercised directly:
 
@@ -1720,6 +1730,7 @@ failure result for each in-flight task.
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `SubmitSuccess` / `SubmitEmptyCurrent` / `SubmitEmptyFixed` | PBS Pro `qsub` output parsing and job/resource registration | `PBSProProvider.submit` |
+| `BeginStatus` / `HandleForeignJob` | PBS Pro JSON status translation and foreign-job handling | `PBSProProvider._status` |
 | `WriteScript` / `ExecuteBsub` / `ParseBsub` | LSF `bsub` submission and resource registration | `LSFProvider.submit` |
 | `Cancel` | LSF `bkill` cancellation and local resource-state update | `LSFProvider.cancel` |
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
