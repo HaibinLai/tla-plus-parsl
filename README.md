@@ -832,7 +832,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 37 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 58 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -890,6 +890,15 @@ Grid Engine qstat parsing is exercised with deterministic output:
 
 The probe reproduces the short-line `IndexError` boundary, checks `r` to `RUNNING` translation,
 and verifies foreign-job filtering with the missing-job `COMPLETED` fallback.
+
+Grid Engine submission parsing is exercised with deterministic `qsub` output:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_submit_runtime.py -v
+```
+
+The tests cover successful empty output returning `None` without a resource and normal job-id
+registration as `PENDING`.
 
 Azure VM status handling is exercised with a fake compute client:
 

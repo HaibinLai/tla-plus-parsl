@@ -244,6 +244,8 @@ command failure preservation and successful reported/missing-job application.
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
 line failure, normal state translation, foreign-job filtering, and missing-job fallback.
+`tests/test_grid_engine_submit_runtime.py` drives Grid Engine qsub submission with temporary
+scripts and deterministic output, checking empty-output and normal job registration.
 `tests/test_azure_status_runtime.py` drives Azure VM status with a fake compute client, checking
 running translation, pending fallback, and cloud API error propagation.
 `tests/test_googlecloud_status_runtime.py` drives Google Compute Engine status with a fake
@@ -358,7 +360,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 37 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 58 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
