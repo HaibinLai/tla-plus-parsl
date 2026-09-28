@@ -212,6 +212,13 @@ worker loss, retry correlation, result serialization failure, and stale results 
 physical attempt. `ParslTaskTransportFailure.cfg` uses a non-serializable object graph to exercise
 the pre-dispatch failure path.
 
+`ParslDependencyTraversal.tla` models the dependency resolver used by `DataFlowKernel`. The
+default shallow resolver only recognizes a Future passed directly; the deep resolver recursively
+gathers and unwraps Futures in lists, tuples, sets, and dictionaries. The bounded model uses a
+single nested list to show why a shallow configuration can send a Future object to the callable,
+while the deep configuration waits for and substitutes its result. The runtime probe is
+`tests/test_dependency_traversal_runtime.py`.
+
 The repository also contains [`tools/cloudpickle_fixture.py`](tools/cloudpickle_fixture.py) and
 an observed fixture at [`fixtures/cloudpickle_fixture.json`](fixtures/cloudpickle_fixture.json).
 The script serializes a closure with globals, defaults, arguments, and nested objects, checks the
@@ -1002,7 +1009,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 128 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 130 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1574,6 +1581,7 @@ failure result for each in-flight task.
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
+| `GatherDependencies` / `RunWorker` | shallow versus recursive Future collection and unwrapping | `parsl/dataflow/dependency_resolvers.py` and `DataFlowKernel._unwrap_futures` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
 | `SerializationFailure` | callable/argument serialization failure before dispatch | `DataFlowKernel.launch_task` and executor serialization boundary |

@@ -160,6 +160,10 @@ through the nested handle before the outer join can complete.
 `ParslTaskTransport.tla` connects object-graph serialization to task/result transport, including
 envelope corruption, decode rejection, dispatch gating, worker loss, retry correlation, and stale
 result suppression.
+`ParslDependencyTraversal.tla` models the real shallow/deep dependency-resolver boundary for a
+direct Future and a Future nested in a container. Its shallow configuration intentionally exposes
+the worker receiving a nested Future object, while the deep configuration proves recursive gather
+and unwrap before execution.
 `ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
 exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
 when the current pop-before-validation path exits the worker.
@@ -236,6 +240,9 @@ future hardening change.
 `tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
 executor, covering single Futures, ordered duplicate references, empty lists, `JoinError`,
 nested joins, scalar-return rejection, and mixed-list rejection.
+`tests/test_dependency_traversal_runtime.py` runs the real default shallow resolver and the real
+`DEEP_DEPENDENCY_RESOLVER`, checking that a nested list Future is either unwrapped or reaches the
+callable unchanged according to configuration.
 `tests/test_join_callback_runtime.py` calls the real `DataFlowKernel.handle_join_update` with
 controlled Futures, checking early-callback gating, ordered duplicate aggregation, duplicate
 callback suppression, and `JoinError` metadata modeled by `ParslJoinCallbackRace.tla`.
@@ -450,7 +457,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 128 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 130 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
