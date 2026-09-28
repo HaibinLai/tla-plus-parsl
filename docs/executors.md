@@ -40,6 +40,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientSendT
 /tmp/parsl-venv/bin/python -m unittest tests/test_command_send_timeout_runtime.py -v
 ```
 
+`ParslCommandClientLockTimeout.tla` models the timeout boundary around the client's Python
+mutex. The current `CommandClient.run` starts its deadline before `with self._lock`, so a caller
+blocked behind another command can acquire the lock after its deadline and still send. The fixed
+branch makes lock acquisition deadline-aware. The runtime probe holds the real lock, invokes
+`run(timeout_s=...)` in another thread, and verifies the late send.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientLockTimeoutCurrent.cfg models/executors/ParslCommandClientLockTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientLockTimeoutFixed.cfg models/executors/ParslCommandClientLockTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_lock_timeout_runtime.py -v
+```
+
 `ParslCommandClientMaxRetries.tla` records a source-level audit finding: `CommandClient.run`
 accepts `max_retries`, but the current implementation does not read it. A transient
 `send_pyobj` exception therefore escapes after exactly one send for both `max_retries=0` and

@@ -315,6 +315,11 @@ command; the fixed branch quotes each shell argument.
 has already elapsed, the current path passes a negative timeout to ZMQ `poll`; the runtime probe
 records that value with a fake socket. The fixed branch clamps the poll timeout to zero.
 
+`ParslCommandClientLockTimeout.tla` adds the mutex boundary: the current command client starts
+its timeout clock before acquiring `_lock`, so lock contention can consume the entire deadline and
+still allow a late send. The fixed branch rejects the command at lock acquisition when the
+deadline has expired. A threaded runtime probe holds the real client lock to force the interleaving.
+
 `ParslGridEngineDuplicateStatus.tla` models duplicate records in Grid Engine `qstat` output. The
 current `_status` implementation removes each job from `jobs_missing` without checking whether it
 was already removed, so duplicate lines raise `ValueError`. The runtime probe reproduces this and
@@ -1610,6 +1615,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   2 distinct states, depth 2; clamped and non-expired deadlines satisfy `PollTimeoutSafety`.
 - `ParslCommandClientSendTimeout.cfg`: 8 states generated, 5 distinct states, depth 3; a
   pre-send timeout leaves the command client reusable and the later reply path consistent.
+- `ParslCommandClientLockTimeoutCurrent.cfg`: expected counterexample at depth 4; a caller sends
+  after its deadline because it waited on the Python lock.
+- `ParslCommandClientLockTimeoutFixed.cfg`: 12 states generated, 8 distinct states, depth 4;
+  deadline-aware lock acquisition prevents the late send.
 - `ParslGridEngineDuplicateStatusCurrent.cfg`: expected counterexample, 4 states generated; a
   duplicate qstat line crashes while removing the same job twice.
 - `ParslGridEngineDuplicateStatusFixed.cfg` and `ParslGridEngineDuplicateStatusUnique.cfg`: 6
