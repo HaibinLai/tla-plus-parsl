@@ -66,3 +66,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSum
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSummaryLarge.cfg models/executors/ParslJobStatusOutputSummary.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSummaryMissing.cfg models/executors/ParslJobStatusOutputSummary.tla
 ```
+
+`ParslHtexManagerDrain.tla` models `Interchange.expire_drained_managers`. A present draining
+manager with no tasks receives the drained reply and is removed from both bookkeeping sets. The
+current configuration exposes the unchecked `_ready_managers[manager_id]` lookup when an
+interesting set contains a stale manager ID; the fixed configuration ignores that ID. The runtime
+probe reproduces the current `KeyError` and checks the normal drain path.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainCurrent.cfg models/executors/ParslHtexManagerDrain.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainFixed.cfg models/executors/ParslHtexManagerDrain.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainPresent.cfg models/executors/ParslHtexManagerDrain.tla
+```
