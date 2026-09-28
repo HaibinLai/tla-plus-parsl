@@ -64,6 +64,8 @@ provider block does not imply that the executor accepts a new task submission.
 requesting a replacement block without producing a negative target count.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
+Its object-graph constants model callable, argument, closure, and nested referenced objects;
+`ObjectGraphSafety` checks that a valid envelope cannot contain an unencodable object.
 
 ### 3. Checked properties
 
@@ -87,7 +89,7 @@ The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` 
 After the MVP is stable, possible extensions are:
 
 - richer DataManager/staging behavior, including stage-in/stage-out failure;
-- bounded message drops, duplicate deliveries, and symbolic callable/object graphs;
+- bounded message drops and duplicate deliveries;
 - richer `join_app` behavior beyond the bounded inner-Future set now modeled;
 - manager heartbeat timeout, version mismatch, drain, and executor bad state;
 - monitoring as an abstract eventual event stream;

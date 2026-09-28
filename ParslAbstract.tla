@@ -12,6 +12,7 @@ EXTENDS Naturals, Integers, FiniteSets, Sequences
 
 CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
+          OBJECTS, TASK_OBJECTS, SERIALIZABLE_OBJECTS, OBJECT_EDGES,
           FILE_OUTPUTS, SUBMITTABLE_EXECUTORS, JOIN_TASKS, JOIN_DEPS,
           MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES,
           MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MONITORING_ENABLED
@@ -34,7 +35,14 @@ NoAttempt == <<"none", -1>>
 Deps(t) == {d \in TASKS : d \o "->" \o t \in DEPS}
 JoinDeps(t) == {d \in TASKS : d \o "=>" \o t \in JOIN_DEPS}
 WorkerExec(w) == CHOOSE e \in EXECUTORS : w \o ":" \o e \in WORKER_EXECUTOR
-SerializableTask(t) == t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
+ObjectPayload(t) == {o \in OBJECTS : t \o ":" \o o \in TASK_OBJECTS}
+ObjectChildren(o) == {c \in OBJECTS : o \o "->" \o c \in OBJECT_EDGES}
+ObjectGraphSerializable(t) ==
+    /\ ObjectPayload(t) \subseteq SERIALIZABLE_OBJECTS
+    /\ \A o \in ObjectPayload(t) : ObjectChildren(o) \subseteq SERIALIZABLE_OBJECTS
+SerializableTask(t) ==
+    t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
+    /\ ObjectGraphSerializable(t)
 
 VARIABLES taskState, futureState, retries, currentAttempt, selectedExecutor,
           dataState, attemptState, attemptExecutor, attemptWorker,
@@ -58,6 +66,9 @@ Init ==
     /\ TASKS # {} /\ EXECUTORS # {} /\ WORKERS # {}
     /\ CALLABLE_SERIALIZABLE \subseteq TASKS
     /\ PAYLOAD_SERIALIZABLE \subseteq TASKS
+    /\ SERIALIZABLE_OBJECTS \subseteq OBJECTS
+    /\ TASK_OBJECTS \subseteq {t \o ":" \o o : t \in TASKS, o \in OBJECTS}
+    /\ OBJECT_EDGES \subseteq {o \o "->" \o c : o \in OBJECTS, c \in OBJECTS}
     /\ FILE_OUTPUTS \subseteq TASKS
     /\ SUBMITTABLE_EXECUTORS \subseteq EXECUTORS
     /\ DEPS \subseteq {d \o "->" \o t : d \in TASKS, t \in TASKS}
@@ -862,6 +873,11 @@ SerializationSafety ==
                             "dispatched", "running", "result_serialized",
                             "result_sent", "result_received", "result_decoded",
                             "succeeded"} => SerializableTask(a[1])
+
+ObjectGraphSafety ==
+    /\ \A a \in AttemptIds : taskEnvelope[a] = "valid" =>
+          ObjectGraphSerializable(a[1])
+    /\ \A t \in TASKS : ObjectPayload(t) \subseteq OBJECTS
 
 DataReadinessSafety ==
     \A t \in TASKS : taskState[t] \in {"ready", "queued", "running"} =>

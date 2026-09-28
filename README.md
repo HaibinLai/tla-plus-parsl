@@ -64,6 +64,13 @@ can be encoded. `SerializeAttempt` requires both. If either capability is absent
 `SerializationFailure` rejects the attempt before a worker is assigned and applies the normal
 retry bound.
 
+The finite object-graph refinement adds `OBJECTS`, `TASK_OBJECTS`, `SERIALIZABLE_OBJECTS`, and
+`OBJECT_EDGES`. A task's object set stands for its function object, arguments, and closure
+contents; one level of referenced children is checked as well. Thus a task can have a
+serializable callable and top-level arguments but still fail because a nested closure object is
+not serializable. This is still symbolic rather than an execution of Python `pickle`, but it
+makes the failure cause explicit and gives TLC a concrete counterexample vocabulary.
+
 File-oriented data readiness is represented by `dataState`:
 
 ```text
@@ -204,8 +211,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslJoinSafety.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
   join dependency and outer-Future safety invariants passed.
 - `ParslMessaging.cfg`: 443,612 states generated, 65,139 distinct states, depth 43;
-  task/result wire ordering, envelope validity, serialization ordering, and stale-result
-  invariants passed.
+  task/result wire ordering, envelope validity, symbolic object-graph serialization, and
+  stale-result invariants passed.
 
 ## Source-to-model mapping
 
@@ -217,6 +224,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
 | `SerializationFailure` | callable/argument serialization failure before dispatch | `DataFlowKernel.launch_task` and executor serialization boundary |
+| `ObjectGraphSerializable` / `ObjectGraphSafety` | callable, argument, closure, and nested-object serializability | Python callable/payload serialization boundary in `DataFlowKernel` and executor |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
