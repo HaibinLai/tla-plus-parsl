@@ -81,6 +81,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelSubmitRa
 /tmp/parsl-venv/bin/python -m unittest tests/test_flux_cancel_submit_race_runtime.py -v
 ```
 
+`ParslGlobusComputeResult.tla` models the result boundary of `GlobusComputeExecutor.submit`.
+The wrapper returns the underlying Globus Compute SDK `Future` directly, so success, remote
+exception, and cancellation are visible to Parsl without an additional result wrapper. The
+runtime probe uses a fake SDK executor and checks Future identity and all three terminal outcomes.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResult.cfg models/executors/ParslGlobusComputeResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_result_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider

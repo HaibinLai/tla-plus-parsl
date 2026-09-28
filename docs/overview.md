@@ -610,6 +610,12 @@ configuration finds cross-task specification or endpoint use under interleaving 
 serialized configuration captures the caller-side lock required to make the wrapper safe. This follows
 [`globus_compute.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/globus_compute.py).
 
+`ParslGlobusComputeResult.tla` models the complementary result boundary: the wrapper returns the
+SDK Future directly, so success, exception, and cancellation propagate without a second Future.
+The TLC model checks identity and terminal-result consistency, and
+[`tests/test_globus_compute_result_runtime.py`](../tests/test_globus_compute_result_runtime.py)
+verifies the behavior with a fake SDK executor.
+
 `ParslFluxCancelSubmitRace.tla` models the cancellation interleaving in
 `FluxFutureWrapper.cancel`: cancellation can happen before `_flux_future` is bound, after which
 a late successful callback currently attempts to publish into the cancelled wrapper. The current
@@ -1219,6 +1225,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineDuplicateR
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineDuplicateReportFixed.cfg models/executors/ParslTaskVineDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotResultsFixed.cfg models/executors/ParslRadicalPilotResults.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusComputeConfigFixed.cfg models/staging/ParslGlobusComputeConfig.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResult.cfg models/executors/ParslGlobusComputeResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderKinds.cfg models/providers/ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatus.cfg models/providers/ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatusFixed.cfg models/providers/ParslAWSProviderStatus.tla
@@ -1701,7 +1708,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 293 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 295 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2353,6 +2360,8 @@ This probe patches the real interchange clock forward and confirms that the curr
   distinct); interleaved submits can observe another task's temporary resource specification.
 - `ParslGlobusComputeConfigFixed.cfg`: 37 states generated, 16 distinct states, depth 8;
   serialized submit sections preserve per-task resource specifications and default restoration.
+- `ParslGlobusComputeResult.cfg`: 8 states generated, 5 distinct states, depth 3; direct SDK
+  Future identity and success/exception/cancellation propagation satisfy the result invariants.
 - `ParslFluxCancelSubmitRaceCurrent.cfg`: expected counterexample at depth 5; a late result
   callback attempts to complete a cancelled wrapper.
 - `ParslFluxCancelSubmitRaceFixed.cfg`: 15 states generated, 7 distinct states, depth 4;
