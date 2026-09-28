@@ -121,6 +121,10 @@ can be inspected before merging these states into the larger DFK model.
 closure, argument, and nested-object roots. It checks graph traversal before symbolic pickle
 creation and graph traversal again during worker-side reconstruction, including a deliberately
 unserializable nested-object configuration.
+`ParslExecuteTask.tla` models the worker-side `execute_task` boundary after transport: a packed
+apply message is decoded before invocation, user exceptions become failed execution results, and
+malformed messages are rejected without invoking user code. `tests/test_execute_task_runtime.py`
+checks the same behavior against the real executor helper.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

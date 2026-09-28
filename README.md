@@ -91,6 +91,11 @@ referenced graph before creating a symbolic pickle token; decoding traverses it 
 payload is considered reconstructed. `ParslPythonFailure.cfg` marks a nested closure object as
 unserializable and checks that the task fails before a token or decoded payload is exposed.
 
+`ParslExecuteTask.tla` models the next worker-side boundary in `parsl.executors.execute_task`:
+the packed apply message must decode before the callable is invoked, a user exception becomes a
+failed execution result, and malformed input is rejected without invoking user code. The three
+configurations cover successful execution, user failure, and malformed input.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1042,7 +1047,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 171 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 174 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1095,6 +1100,15 @@ The underlying timeout timer lifecycle is exercised directly:
 `ParslTimeoutTimer.tla` checks that `AutoCancelTimer` is cancelled after a fast return or an
 ordinary function exception, while a slow function can still receive `AppTimeout` before it
 finishes.
+
+The worker-side apply-message helper is exercised directly:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_execute_task_runtime.py -v
+```
+
+This confirms callable/argument decoding, propagation of a user exception, and rejection of a
+malformed packed message before invocation.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1712,6 +1726,7 @@ failure result for each in-flight task.
 | `ResultSerializationFailure` / `ResultSerializationSafety` | worker return-value serialization failure before transport | worker result encoding and executor/interchange result boundary |
 | `ObjectGraphSerializable` / `ObjectGraphSafety` | callable, argument, closure, and nested-object serializability | Python callable/payload serialization boundary in `DataFlowKernel` and executor |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
+| `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
