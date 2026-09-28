@@ -117,6 +117,10 @@ The fixed configuration uses a temporary output and atomic publication.
 the source. If source cleanup fails, a retry currently appends a duplicate member (and emits a
 duplicate-name warning); the fixed configuration models idempotent replacement.
 
+`ParslCommandClient.tla` models the HTEX command REQ/REP socket. A successful reply completes the
+request; a response timeout marks the client permanently bad, matching `CommandClient.run`'s
+protection against reusing a request socket whose state is unknown.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1068,7 +1072,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 179 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 181 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1169,6 +1173,15 @@ behavior on a failed direct write.
 The stage-out retry boundary is covered by the same zip probe. It changes the source between a
 failed cleanup and retry, then checks that the archive contains two entries for the same member;
 Python reads the latest entry, but the duplicate archive state remains observable.
+
+The HTEX command client lifecycle is exercised without starting an interchange:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_client_runtime.py -v
+```
+
+The fake socket covers a normal reply and the timeout path that poisons the client and rejects a
+second request.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1792,6 +1805,7 @@ failure result for each in-flight task.
 | `Submit` / `RejectResource` / `BeginShutdown` / `CompleteTask` / `FinishShutdown` | provider-free thread executor admission and shutdown | `ThreadPoolExecutor.submit` and `ThreadPoolExecutor.shutdown` |
 | `OpenArchive` / `WriteOutput` | zip archive stage-in validation and atomic output publication | `ZipFileStaging._zip_stage_in` |
 | `WriteArchive` / `RemoveSource` / `ModifySourceBeforeRetry` | zip stage-out append, source cleanup, and retry duplication | `ZipFileStaging._zip_stage_out` |
+| `SendCommand` / `ReceiveReply` / `ResponseTimeout` | HTEX command REQ/REP lifecycle and timeout poisoning | `high_throughput.zmq_pipes.CommandClient.run` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |

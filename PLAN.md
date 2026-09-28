@@ -144,6 +144,9 @@ write failure into the real `_zip_stage_in` helper.
 successful archive write followed by failed source cleanup can be retried into duplicate archive
 members; its fixed configuration models idempotent replacement. The zip runtime probe reproduces
 the duplicate entry with a source-version change between attempts.
+`ParslCommandClient.tla` models the HTEX REQ/REP command socket: a successful reply completes a
+request, while a response timeout poisons the client and rejects later reuse. The runtime probe
+uses a fake socket to exercise the real polling and error classes without a network daemon.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
