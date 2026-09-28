@@ -224,6 +224,8 @@ executor, covering single Futures, ordered duplicate references, empty lists, `J
 nested joins, scalar-return rejection, and mixed-list rejection.
 `tests/test_retry_timeout_runtime.py` runs a retryable app and a walltime-limited app on the
 real thread executor, confirming distinct physical attempts and terminal `AppTimeout` behavior.
+`tests/test_memoization_runtime.py` runs duplicate and distinct cached calls plus a dependent app,
+checking the real BasicMemoizer result path and execution count.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of

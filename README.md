@@ -844,6 +844,15 @@ Physical retry and Python app timeout behavior are checked against a local threa
 The tests confirm a first-attempt failure is followed by a second physical attempt, and that a
 task exceeding its `walltime` completes with `AppTimeout` when no retries remain.
 
+Memoization and cached-result dependency propagation are exercised with a real local executor:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_memoization_runtime.py -v
+```
+
+The probe confirms duplicate calls execute once, calls with different arguments execute normally,
+and a dependent app can consume the memoized Future result.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash
