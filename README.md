@@ -96,6 +96,11 @@ content flag. Each chunk carries a checksum through a temporary transfer buffer;
 repair/retransfer, and an input whose source version changes during stage-in becomes `stale`.
 Stage-in and stage-out publish atomically only after every chunk is complete and validated.
 
+`ParslClock.tla` separates wall-clock progression from heartbeat delivery and attempt deadlines.
+It models heartbeat send/drop/delivery, manager expiry and recovery, per-attempt timeout, retry
+selection, and a late result that is marked stale when its physical attempt is no longer current.
+`ParslClockTerminal.cfg` fixes the retry budget at zero to exercise terminal timeout rejection.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -295,6 +300,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -352,6 +359,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
+- `ParslClock.cfg`: 66,805 states generated, 14,496 distinct states, depth 20;
+  wall-clock bounds, heartbeat delivery/drop/expiry, attempt deadlines, retry selection, and stale
+  late-result handling all passed.
+- `ParslClockTerminal.cfg`: 4,328 states generated, 1,094 distinct states, depth 13;
+  terminal timeout rejection with no remaining retry passed the same time and result invariants.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -442,6 +454,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `MutateObject` / `RepairObject` | object content becoming unencodable before submission | Python object/payload serialization failure path |
 | `SendChunk` / `ReceiveChunk` / `RejectCorruptChunk` / `RepairChunk` | chunked content transfer, checksum validation, and retransmission | `DataManager.stage_in` / `stage_out` transfer paths |
 | `PublishStageIn` / `RejectStaleStageIn` / `PublishStageOut` | readiness and atomic file visibility after complete transfer | DataManager staging completion and file publication boundary |
+| `Tick` / `SendHeartbeat` / `DeliverHeartbeat` / `ExpireManager` | wall-clock and manager heartbeat expiry | HTEX interchange heartbeat and manager health handling |
+| `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `DeliverResult` | attempt deadline, retry choice, and stale late result | DFK timeout/retry callbacks and result completion path |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces

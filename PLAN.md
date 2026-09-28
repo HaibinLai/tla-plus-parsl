@@ -123,6 +123,9 @@ creation and graph traversal again during worker-side reconstruction, including 
 unserializable nested-object configuration.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
+`ParslClock.tla` separates wall-clock ticks, heartbeat transport and expiry, attempt start/deadline
+timestamps, retry selection, and stale late-result delivery. A zero-retry configuration checks the
+terminal timeout path explicitly.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.
