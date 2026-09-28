@@ -19,6 +19,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslResultsIncomingTim
 /tmp/parsl-venv/bin/python -m unittest tests/test_results_incoming_runtime.py -v
 ```
 
+`ParslTasksOutgoing.tla` covers the matching task sender: `put()` sends one Python object over the
+DEALER socket without a reply handshake, and `close()` terminates the socket/context so the sender
+is no longer open. `tests/test_tasks_outgoing_runtime.py` checks the real wrapper boundary with a
+fake socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoing.cfg models/executors/ParslTasksOutgoing.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_tasks_outgoing_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
