@@ -258,6 +258,9 @@ successful completion after timeout injection.
 checking the real BasicMemoizer result path and execution count.
 `tests/test_lsf_status_runtime.py` drives the current LSF provider parser with deterministic
 `bjobs` output, checking foreign-job filtering, unknown-state mapping, and missing-job fallback.
+`tests/test_lsf_submit_runtime.py` drives the real LSF `bsub` parser with fake command results,
+checking script/command construction, successful job registration, scheduler failure, and
+successful-but-unparseable output.
 `tests/test_kubernetes_polling_runtime.py` drives the current Kubernetes polling method with a
 mock API client, reproducing the read-error identity-comparison path and checking normal terminal
 pod translation.
