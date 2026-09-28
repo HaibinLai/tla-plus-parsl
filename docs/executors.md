@@ -60,6 +60,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineShutdown.c
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_shutdown_runtime.py -v
 ```
 
+`ParslFluxSubmissionFailure.tla` covers the Flux submission-thread exception path. `_error_out_jobs`
+continues draining queued jobs after the stop event is set and fails each queued Future. The
+runtime probe calls that real helper with a one-job queue.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxSubmissionFailure.cfg models/executors/ParslFluxSubmissionFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_submission_failure_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
