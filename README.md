@@ -842,7 +842,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 70 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 74 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1072,6 +1072,17 @@ The concrete thread executor shutdown and admission contract is exercised direct
 
 The probe checks that accepted work completes before blocking shutdown returns, new submissions
 are rejected afterwards, and unsupported resource specifications are rejected at admission.
+
+The WorkQueue collector result boundary is exercised directly without requiring a Work Queue
+installation:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_results_runtime.py -v
+```
+
+The probe uses the real collector method and serialization facade to cover valid result values,
+serialized app exceptions, corrupt result files, and collector failure cleanup of outstanding
+Futures.
 
 File/DataFuture readiness is exercised through a real two-task local dataflow:
 

@@ -251,6 +251,9 @@ checking normal registration, empty-output rejection, and the custom-regex named
 `tests/test_mpi_spec_runtime.py` drives the real MPI resource-specification validator, checking
 empty-spec rejection, positive-node rank derivation, and the zero-node division failure modeled by
 `ParslMPISpec.tla`.
+`tests/test_workqueue_results_runtime.py` drives the real WorkQueue collector method with fake
+queues and serialized files, checking valid values, app exceptions, corrupt results, and cleanup
+of outstanding Futures when the submit process exits.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
