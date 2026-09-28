@@ -64,3 +64,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageInOr
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageInOrderingFixed.cfg models/staging/ParslDataManagerStageInOrdering.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_data_manager_stage_in_ordering_runtime.py -v
 ```
+
+`ParslDataManagerStageOutOrdering.tla` checks the analogous output path in
+`DataFlowKernel._add_output_deps`: `stage_out` starts a separate transfer before
+`replace_task_stage_out` constructs the application wrapper. A wrapper exception can therefore
+leave an active stage-out Future after task setup fails. The current model violates
+`NoOrphanTransfer`; the fixed ordering model passes with 4 generated/2 distinct states. The
+runtime probe reproduces the pending transfer with a fake provider.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageOutOrderingCurrent.cfg models/staging/ParslDataManagerStageOutOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageOutOrderingFixed.cfg models/staging/ParslDataManagerStageOutOrdering.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_data_manager_stage_out_ordering_runtime.py -v
+```
