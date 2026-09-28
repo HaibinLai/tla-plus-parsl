@@ -226,6 +226,9 @@ insertion and that a duplicate deferred message keeps only the latest observatio
 `tests/test_datafuture_runtime.py` also checks the real `DataManager.optionally_stage_in` clean-copy
 boundary: a staging operation receives a fresh `File` without the caller's site-local path, while
 the original object and its parent `DataFuture` remain intact.
+`tests/test_retry_timeout_runtime.py` distinguishes the standard-library caller wait timeout from
+Parsl app walltime: a short `Future.result(timeout=...)` raises `TimeoutError` but the same real
+thread task later succeeds, while walltime still produces `AppTimeout`.
 `tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
 executor, covering single Futures, ordered duplicate references, empty lists, `JoinError`,
 nested joins, scalar-return rejection, and mixed-list rejection.
@@ -412,7 +415,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 111 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 112 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

@@ -123,6 +123,11 @@ physical attempt is no longer current. A manager-lost attempt can now retry afte
 its late result is explicitly allowed to arrive but cannot resolve the Future.
 `ParslClockTerminal.cfg` fixes the retry budget at zero to exercise terminal timeout rejection.
 
+`ParslFutureWaitTimeout.tla` separates the caller's `Future.result(timeout=...)` wait deadline from
+the app's Parsl `walltime`: a caller timeout only returns control to the caller while the physical
+task continues, whereas an app walltime timeout rejects the Future. The distinction is exercised
+against a real thread executor in `test_client_wait_timeout_does_not_cancel_app`.
+
 `ParslHeartbeatBoundary.tla` makes the HTEX heartbeat boundary explicit: expiration occurs only
 when `now - last_heartbeat > heartbeat_threshold`, a heartbeat received before the expiry check
 resets the timestamp, and expiration converts all manager in-flight tasks into failure reports.
@@ -628,6 +633,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFut
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslFutureWaitTimeout.cfg ParslFutureWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatBoundary.cfg ParslHeartbeatBoundary.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
@@ -760,6 +766,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslHeartbeatBoundary.cfg`: 316 states generated, 93 distinct states, depth 10;
   strict heartbeat threshold, heartbeat reset at the boundary, manager expiry, and in-flight
   failure accounting all passed.
+- `ParslFutureWaitTimeout.cfg`: 20 states generated, 10 distinct states, depth 5; a caller-side
+  wait timeout left the running task and Future unresolved, while app walltime failure rejected
+  the Future.
 - `ParslMonitoringDB.cfg`: 757 states generated, 291 distinct states, depth 11;
   asynchronous write failure/retry, version monotonicity, database consistency, and terminal
   record safety passed.
@@ -883,7 +892,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 111 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 112 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

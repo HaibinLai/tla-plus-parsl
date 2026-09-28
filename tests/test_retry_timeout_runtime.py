@@ -2,6 +2,7 @@
 
 import time
 import unittest
+from concurrent.futures import TimeoutError
 
 import parsl
 from parsl import Config, python_app
@@ -36,6 +37,15 @@ def catches_timeout(walltime=None):
 
 
 class RetryTimeoutRuntimeTest(unittest.TestCase):
+    def test_client_wait_timeout_does_not_cancel_app(self):
+        config = Config(executors=[ThreadPoolExecutor(max_threads=1)], retries=0)
+
+        with parsl.load(config):
+            future = slow_app()
+            with self.assertRaises(TimeoutError):
+                future.result(timeout=0.01)
+            self.assertEqual(future.result(), "finished")
+
     def test_retry_uses_a_new_physical_attempt(self):
         attempt_counter["count"] = 0
         config = Config(executors=[ThreadPoolExecutor(max_threads=1)], retries=1)
