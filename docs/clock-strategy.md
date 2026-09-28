@@ -14,6 +14,17 @@ the fact that callback exceptions are logged without stopping the timer, and the
 boundary after `close()`. `tests/test_periodic_timer_runtime.py` probes the same behavior against
 the real timer implementation.
 
+`ParslWorkerContactTimeout.tla` models the HTEX worker-side clock: periodic heartbeat emission,
+contact timestamp refresh on incoming messages, and self-stop when a no-message poll reaches the
+heartbeat threshold. A message at the exact threshold wins because the source handles `POLLIN`
+before checking the no-message timeout. The runtime probe also checks the pickled heartbeat and
+drain control messages emitted by the real worker `Manager` class.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslWorkerContactTimeout.cfg models/clock/ParslWorkerContactTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_worker_pool_heartbeat_runtime.py -v
+```
+
 `ParslTimedHeartbeat.tla` is the compact combined abstraction. It uses one logical clock for
 heartbeat age and task deadlines, models manager expiry and task timeout separately, and allows a
 late result after either event. `ParslTimedHeartbeat.cfg` intentionally violates `ResultSafety`
