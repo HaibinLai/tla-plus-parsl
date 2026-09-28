@@ -188,6 +188,15 @@ This is a bounded status-mapping model, not a shell or Kubernetes API emulator. 
 [`providers/kubernetes/kube.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/kubernetes/kube.py),
 and [`jobs/states.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/states.py).
 
+`ParslProviderStatusBatch.tla` models the scheduler polling boundary more closely. Active jobs
+are queried in bounded batches; a failed or timed-out scheduler command leaves the previous
+provider status map unchanged, while a successful poll applies all reported states atomically
+and maps jobs absent from the scheduler output to `COMPLETED` (the current Slurm fallback rule).
+The finite configuration bounds the number of successful polls while retaining all status
+translation branches. This follows the batching and `execute_wait` behavior in
+[`cluster_provider.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/cluster_provider.py)
+and [`slurm.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/slurm/slurm.py).
+
 `ParslProviderExecutorBridge.tla` connects those provider observations to executor admission.
 It models a pilot block moving from `pending` to `running`, manager registration, task submission,
 unknown status without immediate teardown, and terminal provider observations from either the
@@ -482,6 +491,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPo
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResultRace.cfg ParslResultRace.tla
@@ -592,6 +602,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
   handling, and resource admission all passed.
+- `ParslProviderStatusBatch.cfg`: 140,628 states generated, 17,672 distinct states, depth 6;
+  bounded batch size, atomic status updates, scheduler-command failure preservation, missing-job
+  completion mapping, and terminal-state stability all passed.
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.
@@ -725,6 +738,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
 | `DeliverHead` / `ReorderRadio` / `WriteSuccess` / `WriteFailure` | asynchronous monitoring queue and database persistence | MonitoringHub/radio/database boundary |
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
+| `StatusBatchSuccess` / `StatusBatchFailure` | bounded scheduler polling, atomic status update, and timeout/error preservation | `ClusterProvider.status`, `SlurmProvider._status`, and `execute_wait` |
 | `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
 | `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |

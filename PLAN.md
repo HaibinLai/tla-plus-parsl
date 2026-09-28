@@ -156,6 +156,9 @@ backends: submit/status/cancel outcomes, backend-to-Parsl state translation, mis
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
+`ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
+successful output, and preservation of the prior status map when a scheduler command fails or
+times out; missing Slurm jobs follow the current `COMPLETED` fallback behavior.
 `ParslProviderExecutorBridge.tla` connects provider job observations to executor admission,
 manager registration, worker capacity, unknown-status tolerance, and terminal cleanup of queued
 and running work. It now covers terminal provider failure both before manager registration and
