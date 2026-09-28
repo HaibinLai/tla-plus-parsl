@@ -129,6 +129,19 @@ worker loss, retry correlation, result serialization failure, and stale results 
 physical attempt. `ParslTaskTransportFailure.cfg` uses a non-serializable object graph to exercise
 the pre-dispatch failure path.
 
+The repository also contains [`tools/cloudpickle_fixture.py`](tools/cloudpickle_fixture.py) and
+an observed fixture at [`fixtures/cloudpickle_fixture.json`](fixtures/cloudpickle_fixture.json).
+The script serializes a closure with globals, defaults, arguments, and nested objects, checks the
+round trip, and verifies that a `threading.Lock` captured by a closure is rejected. Pickle length
+and SHA-256 are recorded as versioned observations, not universal constants:
+
+```bash
+python3 tools/cloudpickle_fixture.py --output fixtures/cloudpickle_fixture.json
+```
+
+The checked observation used cloudpickle 2.0.0, 776 bytes, and round-trip result `42`; a lock
+closure raised `TypeError`.
+
 `ParslProviderPolling.tla` refines the provider side of the executor model into explicit
 `submit`, `status`, and `cancel` API calls. It distinguishes pending/running/unknown status,
 transient API errors, submit rejection, cancel failure rollback, and desired block-target updates;

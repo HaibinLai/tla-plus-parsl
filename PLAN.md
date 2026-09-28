@@ -142,6 +142,9 @@ envelope corruption, decode rejection, dispatch gating, worker loss, retry corre
 result suppression.
 `ParslProviderPolling.tla` refines provider behavior into submit/status/cancel calls, transient API
 errors, unknown status, cancellation rollback, and bounded polling/failure windows.
+`tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
+object-graph model, including a successful closure round trip and a lock-containing closure that
+raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.

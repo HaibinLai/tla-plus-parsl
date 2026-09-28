@@ -1,0 +1,23 @@
+{
+  "closure_cell_types": [
+    "int"
+  ],
+  "function_name": "closure_function",
+  "has_defaults": true,
+  "object_components": [
+    "function",
+    "globals",
+    "defaults",
+    "closure",
+    "argument",
+    "nested"
+  ],
+  "pickle_bytes": 776,
+  "pickle_sha256": "e54587d67e32cd53d53df98263c730c7b6d9c055770c881f165a00b5e43a3872",
+  "protocol": 4,
+  "round_trip_result": 42,
+  "serializer": "cloudpickle",
+  "serializer_version": "2.0.0",
+  "unserializable_case": "threading.Lock in closure",
+  "unserializable_error": "TypeError"
+}
