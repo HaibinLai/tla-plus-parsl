@@ -181,6 +181,11 @@ heterogeneous dictionary keys, but the current `id_for_memo_dict` calls `sorted(
 so a mixed `int`/`str` key dictionary raises `TypeError` while computing a memo key. The runtime
 probe and current TLC configuration reproduce this; the fixed branch uses a canonical ordering.
 
+`ParslRsyncQuoting.tla` models shell argument construction in `RSyncStaging`. The current
+in-task wrappers interpolate hostnames and paths directly into `os.system`, so a valid path with
+spaces is split into multiple shell words. `tests/test_rsync_quoting_runtime.py` captures that
+command; the fixed branch quotes each shell argument.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -831,6 +836,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutSuccess.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingCurrent.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingFixed.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingHomogeneous.cfg ParslMemoDictOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingCurrent.cfg ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingFixed.cfg ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingNormal.cfg ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -1029,6 +1037,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMemoDictOrderingFixed.cfg` and `ParslMemoDictOrderingHomogeneous.cfg`: 4 states generated,
   2 distinct states, depth 2; canonical and homogeneous key ordering satisfy
   `MixedDictHashSafety`.
+- `ParslRsyncQuotingCurrent.cfg`: expected counterexample, 2 states generated; a path with spaces
+  builds an ambiguous shell command.
+- `ParslRsyncQuotingFixed.cfg` and `ParslRsyncQuotingNormal.cfg`: 4 states generated, 2 distinct
+  states, depth 2; quoted and whitespace-free paths satisfy `PathQuotingSafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1170,7 +1182,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 199 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 200 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1924,6 +1936,7 @@ failure result for each in-flight task.
 | `ChangeSource` / `MemoKeySafety` | function-body identity and memo-key invalidation | `BasicMemoizer.id_for_memo_function` |
 | `Complete` / `Timeout` / `TimeoutCleanupSafety` | scheduler command timeout and subprocess cleanup | `utils.execute_wait`, `ClusterProvider.execute_wait` |
 | `HashDict` / `MixedDictHashSafety` | heterogeneous dictionary-key normalization for memoization | `BasicMemoizer.id_for_memo_dict` |
+| `BuildCommand` / `PathQuotingSafety` | shell-safe rsync command construction | `RSyncStaging.in_task_stage_in_wrapper` and `in_task_stage_out_wrapper` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
