@@ -941,6 +941,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeliver
 The current branch exposes an older monitoring event overwriting a newer database record; the
 fixed branch preserves the version high-water mark and checks 1,978 states.
 
+The combined `join_app` check is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinComplete.cfg models/dataflow/ParslJoinComplete.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCompleteFixed.cfg models/dataflow/ParslJoinComplete.tla
+```
+
+The current branch loses duplicate Future positions; the fixed branch preserves list order and
+checks 5,694 states.
+
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
 workers, one retry, and one block per executor. Java and `tla2tools.jar` are required.
 

@@ -87,6 +87,10 @@ timeout transitions.
 `ParslMonitoringDelivery.tla` connects logical status versions to an asynchronous event queue and
 database record. Queue reordering exposes the stale-event overwrite in the current branch;
 `ParslMonitoringDeliveryFixed.cfg` preserves the database version high-water mark.
+`ParslJoinComplete.tla` consolidates the `join_app` cases into one state machine: single and list
+returns, duplicate references, empty and invalid returns, `None` results, and inner cancellation.
+The current branch's set-like duplicate handling violates `JoinResultSafety`; the fixed branch
+preserves the returned sequence.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery
