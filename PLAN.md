@@ -168,6 +168,9 @@ remote terminate. Fixed configurations model idempotent local cleanup.
 successful remote deletion without changing the local resource status; the fixed configuration
 marks the resource terminal. `tests/test_googlecloud_cancel_runtime.py` drives both delete
 success and API failure with a fake GCE client.
+`ParslMonitoringClose.tla` models `DatabaseManager.close`: abnormal exit finalizes a started
+workflow once, normal exit avoids duplicate finalization, and both paths switch to drain mode and
+signal the manager thread to stop. `tests/test_monitoring_close_runtime.py` exercises both paths.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
