@@ -204,6 +204,11 @@ attempts. A retryable inner failure leaves the Future unresolved, so the outer j
 final-attempt failure is propagated as `JoinError`, while a later successful retry contributes its
 final result to the ordered aggregate.
 
+`ParslJoinCancellation.tla` covers a cancelled inner Future. In the current callback,
+`future.exception()` raises `CancelledError` before `_complete_task_exception` runs, leaving the
+outer task in `joining`. The current configuration produces that counterexample; the fixed
+configuration converts cancellation into terminal join failure.
+
 `ParslNestedJoin.tla` adds a nested join: the outer join observes a direct Future and a Future
 produced by another join. The nested handle remains live until both leaf Futures are observed;
 nested success/failure then becomes the only state visible to the outer join.
@@ -1037,7 +1042,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 164 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 165 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1060,7 +1065,8 @@ The callback-level join gate is exercised directly against the real `DataFlowKer
 
 The probe checks that early callbacks do not finalize an outer task, final callbacks preserve list
 order and duplicate references, duplicate callbacks after terminal state are harmless, and inner
-failures become `JoinError` with dependent exception metadata.
+failures become `JoinError` with dependent exception metadata. It also reproduces the current
+cancelled-inner `CancelledError` escape that leaves the outer task in `joining`.
 
 Physical retry and Python app timeout behavior are checked against a local thread executor:
 
@@ -1766,6 +1772,7 @@ failure result for each in-flight task.
 | `ObservePosition` / `DuplicateCallback` | ordered list-position callbacks and duplicate Future references | `DataFlowKernel.handle_join_update` list branch |
 | `ReturnJoinable` / `ReturnMixedList` / `RegisterEmptyCompletion` | list element validation, immediate empty-list completion, and mixed-list rejection | `DataFlowKernel.handle_exec_update` join branch |
 | `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
+| `CompleteInner` / `HandleCallback` in `ParslJoinCancellation.tla` | cancelled inner Future handling and outer join termination | `DataFlowKernel.handle_join_update` |
 | `StartNestedJoin` / `FinalizeNested` / `ObserveNestedResult` | nested join handle and result propagation | nested `join_app` callback composition |
 | `BeginEncode` / `FinishEncodeSuccess` / `DecodeTaskSuccess` | serialized callable/payload gating task transport | DFK serialization boundary, interchange task queue, worker decode |
 | `CorruptTaskEnvelope` / `DecodeTaskFailure` / `LoseAttempt` / `AcceptResult` | protocol corruption, worker loss, retry and stale result handling | HTEX message/result paths and DFK attempt correlation |

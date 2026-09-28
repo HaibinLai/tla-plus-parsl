@@ -156,6 +156,9 @@ completes without callbacks. `ParslJoinValueList.cfg` adds the distinct non-empt
 shape, which is also rejected before callback registration.
 `ParslJoinRetry.tla` adds physical inner attempts and verifies that retryable inner failures remain
 unresolved to the outer join until a final attempt succeeds or fails.
+`ParslJoinCancellation.tla` models a cancelled inner Future. The current callback's
+`future.exception()` raises `CancelledError` and leaves the outer task joining; the fixed
+configuration maps cancellation into terminal join failure.
 `ParslNestedJoin.tla` adds a nested join layer and checks that leaf completion/failure propagates
 through the nested handle before the outer join can complete.
 `ParslTaskTransport.tla` connects object-graph serialization to task/result transport, including
@@ -247,7 +250,8 @@ rejection.
 callable unchanged according to configuration.
 `tests/test_join_callback_runtime.py` calls the real `DataFlowKernel.handle_join_update` with
 controlled Futures, checking early-callback gating, ordered duplicate aggregation, duplicate
-callback suppression, and `JoinError` metadata modeled by `ParslJoinCallbackRace.tla`.
+callback suppression, `JoinError` metadata, and the cancelled-inner callback escape modeled by
+`ParslJoinCallbackRace.tla` and `ParslJoinCancellation.tla`.
 `tests/test_join_runtime.py` also returns an already-completed `concurrent.futures.Future` from a
 real `join_app`, checking the immediate `add_done_callback` registration path modeled by
 `ParslJoinImmediateCallback.tla`.

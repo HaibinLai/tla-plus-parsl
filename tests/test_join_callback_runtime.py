@@ -2,7 +2,7 @@
 
 import threading
 import unittest
-from concurrent.futures import Future
+from concurrent.futures import CancelledError, Future
 
 from parsl.dataflow.dflow import DataFlowKernel
 from parsl.dataflow.errors import JoinError
@@ -81,6 +81,19 @@ class JoinCallbackRuntimeTest(unittest.TestCase):
         self.assertEqual(len(kernel.failed), 1)
         self.assertIsInstance(kernel.failed[0][1], JoinError)
         self.assertEqual(len(kernel.failed[0][1].dependent_exceptions_tids), 1)
+
+    def test_cancelled_inner_raises_and_leaves_outer_joining(self):
+        kernel = self.kernel_for()
+        inner = Future()
+        inner.cancel()
+        record = self.record_for(inner)
+
+        with self.assertRaises(CancelledError):
+            kernel.handle_join_update(record, inner)
+
+        self.assertEqual(record["status"], States.joining)
+        self.assertEqual(kernel.completed, [])
+        self.assertEqual(kernel.failed, [])
 
 
 if __name__ == "__main__":
