@@ -16,7 +16,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Monitoring models](docs/monitoring.md)
 - [Clock and strategy models](docs/clock-strategy.md)
 
-Runtime probes are under [`tests/`](tests/). The complete runtime baseline is 231 passing tests.
+Runtime probes are under [`tests/`](tests/). The complete runtime baseline is 232 passing tests.
 TLC commands and measured state-space results are maintained in [`docs/overview.md`](docs/overview.md).
 
 ## Quick start
