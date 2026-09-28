@@ -818,6 +818,16 @@ The test confirms both the duplicate primary-key `IntegrityError` and the curren
 `DatabaseManager._insert` behavior that catches, rolls back, and silently returns from that
 error, leaving only the original STATUS row.
 
+The deferred worker-message race is also exercised through the real database-manager loop:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_deferred_runtime.py -v
+```
+
+These probes use a temporary SQLite database and verify that an early first worker message is
+replayed after its TASK_INFO/TRY row arrives, while a duplicate deferred message replaces the
+older observation. This is the runtime counterpart of `ParslMonitoringDeferred.tla`.
+
 The real serialization facade is also exercised with the same callable/object boundary used by
 the wire models:
 
