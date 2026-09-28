@@ -120,6 +120,12 @@ fails at cache lookup. The current configuration produces this counterexample, w
 configuration bypasses the cache for unhashable callable objects. The runtime probe compares the
 real Parsl facade with direct Dill serialization.
 
+`ParslCallableDeserializeCache.tla` checks the reverse cache. The current
+`DillCallableSerializer.deserialize` cache can return the same mutable callable instance for an
+identical payload, so a mutation by one task becomes visible to a later task. The current model
+violates `FreshSecondDecode`; the fixed model uses a fresh decode. The runtime probe is
+`tests/test_callable_deserialize_cache_runtime.py`.
+
 `ParslExecuteTask.tla` models the next worker-side boundary in `parsl.executors.execute_task`:
 the packed apply message must decode before the callable is invoked, a user exception becomes a
 failed execution result, and malformed input is rejected without invoking user code. The three
@@ -1046,6 +1052,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPython.cfg mod
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonFailure.cfg models/serialization/ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCache.cfg models/serialization/ParslCallableSerializerCache.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCacheFixed.cfg models/serialization/ParslCallableSerializerCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeserializeCacheCurrent.cfg models/serialization/ParslCallableDeserializeCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeserializeCacheFixed.cfg models/serialization/ParslCallableDeserializeCache.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationSnapshot.cfg models/serialization/ParslSerializationSnapshot.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileBytes.cfg models/staging/ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDataFutureCopy.cfg models/dataflow/ParslDataFutureCopy.tla
@@ -1326,6 +1334,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   2 distinct); an unhashable callable fails in the `lru_cache` wrapper before `dill.dumps`.
   `ParslCallableSerializerCacheFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
   the unhashable callable reaches serialization and completes.
+- `ParslCallableDeserializeCacheCurrent.cfg`: expected counterexample at depth 4; a second decode
+  returns the first task's mutated callable object.
+- `ParslCallableDeserializeCacheFixed.cfg`: 8 states generated, 4 distinct states, depth 4;
+  repeated payloads receive fresh callable objects.
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
@@ -1642,7 +1654,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 286 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 287 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2485,6 +2497,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `WriteScript` / `SubmitCommand` / `CommandFails` / `EmptySuccess` / `RegisterJob` | Grid Engine qsub submission and resource registration | `GridEngineProvider.submit` |
 | `BeginPoll` / `HandleReportedJob` | Slurm batch status translation, foreign-job handling, and missing-job completion | `SlurmProvider._status` |
 | `BeginInsert` / `OperationalFailure` / `RetryInsert` / `InsertSuccess` / `IntegrityFailure` | monitoring database retry and duplicate/error handling | `DatabaseManager._insert` |
+| `FirstDecode` / `MutateFirst` / `SecondDecode` | callable deserialization cache aliasing and fresh-object safety | `DillCallableSerializer.deserialize` |
 | `IgnoreLinger` / `RemoteFailure` / `RemoteSuccessWithLocalState` / `RemoteSuccessWithoutLocalState` | AWS EC2 cancellation and local bookkeeping | `AWSProvider.cancel` |
 | `DeleteFails` / `DeleteSucceeds` | GCE cancellation result and local resource status | `GoogleCloudProvider.cancel` |
 | `Close` / `FinalizationSafety` | monitoring workflow finalization and shutdown drain | `DatabaseManager.close` |

@@ -54,3 +54,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableMutati
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableMutationCacheFixed.cfg models/serialization/ParslCallableMutationCache.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_mutation_cache_runtime.py -v
 ```
+
+`ParslCallableDeserializeCache.tla` checks the other side of the same cache. The current
+`DillCallableSerializer.deserialize` cache can return the same mutable callable instance for
+repeated identical payloads; a mutation made by one task is then visible to the next task. The
+current configuration violates `FreshSecondDecode`, while the fixed configuration creates a fresh
+object and checks 8 generated/4 distinct states. The runtime probe demonstrates the alias with a
+real dill payload.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeserializeCacheCurrent.cfg models/serialization/ParslCallableDeserializeCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeserializeCacheFixed.cfg models/serialization/ParslCallableDeserializeCache.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_callable_deserialize_cache_runtime.py -v
+```
