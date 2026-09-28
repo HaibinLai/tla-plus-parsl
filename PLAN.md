@@ -266,6 +266,9 @@ the corresponding multiplicity to `JoinError`.
 registered for callbacks, while `[Future, non-Future]` fails immediately and an empty list
 completes without callbacks. `ParslJoinValueList.cfg` adds the distinct non-empty all-value list
 shape, which is also rejected before callback registration.
+`ParslJoinNoneResult.tla` makes Python `None` an explicit successful inner result and checks exact
+propagation through both single and list-valued joins. The accompanying runtime probe uses the
+real thread executor rather than treating falsey results as missing values.
 `ParslJoinRetry.tla` adds physical inner attempts and verifies that retryable inner failures remain
 unresolved to the outer join until a final attempt succeeds or fails.
 `ParslJoinCancellation.tla` models a cancelled inner Future. The current callback's
@@ -637,7 +640,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 223 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 226 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

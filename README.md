@@ -1010,6 +1010,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinDuplicates.cfg ParslJoinDuplica
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinImmediateCallback.cfg ParslJoinImmediateCallback.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedList.cfg ParslJoinMixedList.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedListValid.cfg ParslJoinMixedList.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinNoneResultSingle.cfg ParslJoinNoneResult.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinNoneResultList.cfg ParslJoinNoneResult.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
@@ -1467,6 +1469,11 @@ All runtime probes can be run together as an integration baseline:
 The current baseline runs 224 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
+
+`ParslJoinNoneResult.tla` adds the falsey-result case to the join abstraction. A completed inner
+Future whose value is Python `None` is still successful; both single-Future and list-valued joins
+must preserve `None` and list positions. The two TLC configurations cover those shapes, and
+`tests/test_join_none_result_runtime.py` checks them with the real thread executor.
 
 The concrete `join_app` protocol is exercised with a real local thread executor:
 
@@ -2049,6 +2056,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   list observation, ordered aggregation, and inner-failure propagation passed.
 - `ParslJoinValueList.cfg`: 4 states generated, 2 distinct states, depth 2; a non-empty list of
   ordinary values fails immediately without registering callbacks.
+- `ParslJoinNoneResultSingle.cfg`: 10 states generated, 5 distinct states, depth 5; a
+  successful single join preserves an inner `None` result.
+- `ParslJoinNoneResultList.cfg`: 26 states generated, 11 distinct states, depth 7; a
+  successful list join preserves both `None` values and their positions.
 - `ParslTaskTransport.cfg`: 859 states generated, 288 distinct states, depth 28;
   serialization-before-send, envelope/decode ordering, dispatch admission, worker-loss retry,
   result serialization, correlation, and stale-result safety all passed.
