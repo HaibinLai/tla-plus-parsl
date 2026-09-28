@@ -165,6 +165,12 @@ cost therefore permits another physical attempt even when `retries=0`. The curre
 configuration and `tests/test_retry_handler_runtime.py` reproduce that behavior, while the fixed
 configuration charges a minimum cost of one.
 
+`ParslMemoFunctionIdentity.tla` models the function identity used by `BasicMemoizer`. The current
+`id_for_memo_function` implementation hashes only `__name__` and `__module__`, so a changed body
+can reuse an old checkpoint. `tests/test_memo_function_identity_runtime.py` constructs two
+same-identity functions with different results and confirms their keys collide; the fixed model
+adds a symbolic source/version component.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -806,6 +812,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchPositive.cfg ParslMo
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerCurrent.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerFixed.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerPositive.cfg ParslRetryHandler.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMemoFunctionIdentityCurrent.cfg ParslMemoFunctionIdentity.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMemoFunctionIdentityFixed.cfg ParslMemoFunctionIdentity.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMemoFunctionIdentityStable.cfg ParslMemoFunctionIdentity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -989,6 +998,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   advances `tryId` to 1 despite `RETRIES=0`.
 - `ParslRetryHandlerFixed.cfg`: 3 distinct states, depth 3; minimum-cost charging preserves
   `RetryLimitSafety`. `ParslRetryHandlerPositive.cfg` also passes with a one-unit budget.
+- `ParslMemoFunctionIdentityCurrent.cfg`: expected counterexample, 2 states generated; changing
+  the symbolic function source leaves the memo key unchanged.
+- `ParslMemoFunctionIdentityFixed.cfg` and `ParslMemoFunctionIdentityStable.cfg`: 4 states
+  generated, 2 distinct states, depth 2; source-aware and unchanged-function cases satisfy
+  `MemoKeySafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1130,7 +1144,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 196 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 197 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1881,6 +1895,7 @@ failure result for each in-flight task.
 | `Close` / `FinalizationSafety` | monitoring workflow finalization and shutdown drain | `DatabaseManager.close` |
 | `Batch` / `AvailableBatchSafety` | zero-interval queue-read boundary and message collection | `DatabaseManager._get_messages_in_batch` |
 | `AttemptFails` / `HandleFailure` / `RetryLimitSafety` | retry-handler failure-cost accounting and physical-attempt admission | `DataFlowKernel.handle_exec_update` |
+| `ChangeSource` / `MemoKeySafety` | function-body identity and memo-key invalidation | `BasicMemoizer.id_for_memo_function` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |

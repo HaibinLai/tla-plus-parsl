@@ -181,6 +181,9 @@ The runtime probe and TLC counterexample document this starvation edge case.
 `ParslRetryHandler.tla` models the retry-budget contract when a user `retry_handler` returns a
 failure cost. The current path accepts a zero cost, so `retries=0` can launch another physical
 attempt; the runtime probe reproduces this, and the fixed branch charges at least one unit.
+`ParslMemoFunctionIdentity.tla` models function-body changes across memoized calls. The current
+`id_for_memo_function` key uses only module and name, so two different bodies collide; the runtime
+probe creates same-identity functions with different results and observes the same hash.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
