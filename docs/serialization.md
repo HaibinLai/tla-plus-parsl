@@ -42,3 +42,15 @@ module and counts imports and plugin instances.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginCache.cfg models/serialization/ParslSerializationPluginCache.tla
 ```
+
+`ParslCallableMutationCache.tla` makes the immutability assumption behind
+`DillCallableSerializer` explicit. A mutable, hashable callable is serialized once, mutated, and
+serialized again; the current `lru_cache` path returns the old payload, while the fixed branch
+invalidates/recomputes it. `tests/test_callable_mutation_cache_runtime.py` reproduces the stale
+callable state with the real dill serializer.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableMutationCacheCurrent.cfg models/serialization/ParslCallableMutationCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableMutationCacheFixed.cfg models/serialization/ParslCallableMutationCache.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_callable_mutation_cache_runtime.py -v
+```
