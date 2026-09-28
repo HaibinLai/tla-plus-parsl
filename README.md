@@ -39,7 +39,7 @@ ready --memoization hit--> memoized
 Physical attempt states:
 
 ```text
-absent -> submitted -> dispatched -> running -> succeeded
+absent -> submitted -> serialized -> sent -> received -> decoded -> dispatched -> running -> succeeded
                                              \-> failed
                                              \-> timed_out
                                              \-> lost
@@ -68,6 +68,12 @@ represented only by `unavailable/staging/available`. The model therefore checks 
 properties of a bounded abstraction; it is not a proof that the complete Parsl implementation
 is correct.
 
+The submission path now exposes an abstract message lifecycle: `SerializeAttempt` represents
+encoding the task payload, `SendAttempt` and `ReceiveAttempt` represent transport across the
+interchange boundary, and `DecodeAttempt` represents reconstructing the work item. Dispatch to
+a worker is enabled only after decoding succeeds. Payload bytes and Python object contents remain
+abstract; this stage checks ordering and failure-safe handoff rather than ZMQ or pickle behavior.
+
 ## TLC verification
 
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
@@ -85,10 +91,10 @@ attempts, attempt identity, Future result consistency, and stale-result safety.
 
 Measured with TLC 2.19 and Java 17 on 2026-09-28:
 
-- `ParslAbstract.cfg`: 1,721,594 states generated, 337,605 distinct states, depth 49;
+- `ParslAbstract.cfg`: 2,605,090 states generated, 518,645 distinct states, depth 73;
   all invariants passed.
-- `ParslMemo.cfg`: 102,348 states generated, 21,923 distinct states, depth 39; all invariants passed.
-- `ParslNoFailures.cfg`: 1,306 states generated, 409 distinct states, depth 25;
+- `ParslMemo.cfg`: 130,788 states generated, 28,611 distinct states, depth 55; all invariants passed.
+- `ParslNoFailures.cfg`: 3,242 states generated, 985 distinct states, depth 37;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 
 ## Source-to-model mapping
@@ -99,6 +105,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
+| `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` / `AttemptSuccess` | worker execution and result return | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
