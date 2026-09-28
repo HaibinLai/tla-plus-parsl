@@ -665,6 +665,11 @@ executable counterexample for a future parser-hardening change.
 exactly three buffers, so a fourth frame can trigger deserializer work before rejection. The fixed
 configuration validates the frame count before decoding.
 
+`ParslApplyMessageArity.tla` checks the public `unpack_apply_message` boundary itself. The
+current function returns every decoded frame, so an extra fourth buffer is accepted until
+`execute_task` later fails tuple unpacking; the fixed configuration rejects any count other than
+three at the public boundary. `tests/test_apply_message_arity_runtime.py` drives the real facade.
+
 `ParslSerializationZMQBridge.tla` connects those framed buffers to a bounded ZMQ-like route.
 Task and result messages carry an attempt id and serializer token; send/receive can drop, duplicate,
 or misroute a message; decode is required before task dispatch; and only a result for the current
@@ -1070,6 +1075,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLengthFixed.cfg ParslS
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountCurrent.cfg ParslSerializationFrameCount.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountFixed.cfg ParslSerializationFrameCount.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountNormal.cfg ParslSerializationFrameCount.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslApplyMessageArity.cfg ParslApplyMessageArity.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslApplyMessageArityFixed.cfg ParslApplyMessageArity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureCurrent.cfg ParslHtexResultDecodeFailure.tla
@@ -1117,6 +1124,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslSerializationFrameCountFixed.cfg` and `ParslSerializationFrameCountNormal.cfg`: 4 states
   generated, 2 distinct states, depth 2; extra frames are rejected before decode and normal
   three-buffer messages decode successfully.
+- `ParslApplyMessageArity.cfg`: expected counterexample at depth 2 (2 states generated,
+  2 distinct); the public unpacker returns a fourth decoded frame. `ParslApplyMessageArityFixed.cfg`:
+  4 states generated, 2 distinct states, depth 2; non-three-frame messages are rejected early.
 - `ParslDataFutureCopy.cfg`: 61 states generated, 26 distinct states, depth 7; clean staging
   copies preserved the original local-path annotation and dependency admission waited for the
   parent Future.
@@ -1492,7 +1502,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 229 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 230 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
