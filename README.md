@@ -144,6 +144,11 @@ enabled, `JoinFailure` propagates a rejected inner Future to the outer task. Thi
 outer logical task separate from the physical attempt that produced the list of inner Futures,
 matching `DataFlowKernel.handle_exec_update` and `handle_join_update`.
 
+`JOIN_INVALID` models a join app whose callable returns neither a Future nor a list of Futures.
+The physical attempt may finish successfully, but join unwrapping fails deterministically and
+the outer Future becomes rejected. `ParslJoinInvalid.cfg` checks this TypeError-like branch
+without allowing it to masquerade as a successful join.
+
 ## Logical time and heartbeat failures
 
 The model uses a bounded logical clock rather than wall-clock timestamps. `Tick` advances the
@@ -191,6 +196,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSubmitFailure.cfg ParslAb
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslProviderFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoin.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinInvalid.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
@@ -217,9 +223,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMemo.cfg`: 557,440 states generated, 81,233 distinct states, depth 65; all invariants passed.
 - `ParslSerializationFailure.cfg`: 3,901,406 states generated, 569,651 distinct states, depth 69;
   all safety invariants passed, including the pre-dispatch serialization-failure path.
-- `ParslNoFailures.cfg`: 8,676 states generated, 1,649 distinct states, depth 51;
+- `ParslNoFailures.cfg`: 11,458 states generated, 2,083 distinct states, depth 51;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
-- `ParslTime.cfg`: 492 states generated, 145 distinct states, depth 31;
+- `ParslTime.cfg`: 562 states generated, 161 distinct states, depth 31;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
 - `ParslMonitoring.cfg`: 4,387 states generated, 907 distinct states, depth 33;
   all monitoring consistency invariants passed.
@@ -231,10 +237,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
 - `ParslFileCorruptionSmall.cfg`: 24,084 states generated, 4,875 distinct states, depth 60;
   corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
-- `ParslJoin.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
+- `ParslJoin.cfg`: 225,414 states generated, 34,989 distinct states, depth 52;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
-- `ParslJoinSafety.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
+- `ParslJoinSafety.cfg`: 225,414 states generated, 34,989 distinct states, depth 52;
   join dependency and outer-Future safety invariants passed.
+- `ParslJoinInvalid.cfg`: 1,045 states generated, 258 distinct states, depth 31;
+  invalid join return values rejected the outer Future without a false success.
 - `ParslMessaging.cfg`: 1,217,956 states generated, 169,491 distinct states, depth 44;
   task/result wire ordering, envelope validity, symbolic object-graph serialization, and
   stale-result invariants passed.
@@ -263,6 +271,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `DuplicateTaskMessage` / `DuplicateResultMessage` | duplicate delivery and receiver-side discard | interchange receive loop and result deduplication boundary |
 | `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
 | `JoinObserve` / `JoinComplete` / `JoinFailure` | wait for inner Futures and propagate join result/failure | `DataFlowKernel.handle_exec_update`, `handle_join_update`, and `join_app` |
+| `JOIN_INVALID` / `JoinSafety` | invalid `join_app` return and outer-Future rejection | `DataFlowKernel.handle_exec_update` joinable-type validation |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |

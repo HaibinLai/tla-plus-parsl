@@ -74,6 +74,8 @@ decode, preventing a duplicate envelope from resolving a Future twice.
 that stage-out transfers the token only after successful task completion.
 `ParslFileCorruptionSmall.cfg` adds a minimal corrupted-output and repair/retransfer path;
 the larger three-task corruption configuration is retained for future state-space reduction.
+`ParslJoinInvalid.cfg` covers the `join_app` type-error branch. `SpecFair` now uses strong
+fairness for logical/attempt progress so duplicate-message discard loops cannot starve work.
 
 ### 3. Checked properties
 
@@ -98,7 +100,7 @@ After the MVP is stable, possible extensions are:
 
 - richer DataManager/staging behavior, including stage-in/stage-out failure and checksums;
 - bounded message reordering and message correlation IDs;
-- richer `join_app` behavior beyond the bounded inner-Future set now modeled;
+- richer `join_app` behavior beyond the bounded inner-Future set and invalid-return branch now modeled;
 - manager heartbeat timeout, version mismatch, drain, and executor bad state;
 - monitoring as an abstract eventual event stream;
 - dynamic task creation while a workflow is running;

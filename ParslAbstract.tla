@@ -13,7 +13,7 @@ EXTENDS Naturals, Integers, FiniteSets, Sequences
 CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
           OBJECTS, TASK_OBJECTS, SERIALIZABLE_OBJECTS, OBJECT_EDGES,
-          FILE_OUTPUTS, SUBMITTABLE_EXECUTORS, JOIN_TASKS, JOIN_DEPS,
+          FILE_OUTPUTS, SUBMITTABLE_EXECUTORS, JOIN_TASKS, JOIN_DEPS, JOIN_INVALID,
           MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES,
           MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MONITORING_ENABLED
 
@@ -75,6 +75,8 @@ Init ==
     /\ DEPS \subseteq {d \o "->" \o t : d \in TASKS, t \in TASKS}
     /\ JOIN_TASKS \subseteq TASKS
     /\ JOIN_DEPS \subseteq {d \o "=>" \o t : d \in TASKS, t \in TASKS}
+    /\ JOIN_INVALID \subseteq TASKS
+    /\ JOIN_INVALID \cap JOIN_TASKS = {}
     /\ WORKER_EXECUTOR \subseteq {w \o ":" \o e : w \in WORKERS, e \in EXECUTORS}
     /\ \A t \in TASKS : t \notin Deps(t)
     /\ \A t \in JOIN_TASKS : t \notin JoinDeps(t)
@@ -518,22 +520,30 @@ AttemptSuccess(t, k, w) ==
     /\ attemptState[a] = "result_decoded" /\ attemptWorker[a] = w
     /\ currentAttempt[t] = k /\ taskState[t] = "running"
     /\ attemptState' = [attemptState EXCEPT ![a] = "succeeded"]
-    /\ taskState' = IF t \in JOIN_TASKS
-                    THEN [taskState EXCEPT ![t] = "joining"]
-                    ELSE [taskState EXCEPT ![t] = "succeeded"]
-    /\ futureState' = IF t \in JOIN_TASKS
-                      THEN futureState
-                      ELSE [futureState EXCEPT ![t] = "resolved"]
-    /\ completed' = IF t \in JOIN_TASKS THEN completed ELSE completed \cup {t}
-    /\ outputs' = [outputs EXCEPT ![t] = IF t \in JOIN_TASKS
-                                      THEN "join-handle" ELSE "result"]
+    /\ taskState' = IF t \in JOIN_INVALID
+                    THEN [taskState EXCEPT ![t] = "failed"]
+                    ELSE IF t \in JOIN_TASKS
+                         THEN [taskState EXCEPT ![t] = "joining"]
+                         ELSE [taskState EXCEPT ![t] = "succeeded"]
+    /\ futureState' = IF t \in JOIN_INVALID
+                      THEN [futureState EXCEPT ![t] = "rejected"]
+                      ELSE IF t \in JOIN_TASKS
+                           THEN futureState
+                           ELSE [futureState EXCEPT ![t] = "resolved"]
+    /\ completed' = IF t \in JOIN_INVALID \/ t \in JOIN_TASKS
+                    THEN completed ELSE completed \cup {t}
+    /\ rejected' = IF t \in JOIN_INVALID THEN rejected \cup {t} ELSE rejected
+    /\ outputs' = [outputs EXCEPT ![t] = IF t \in JOIN_INVALID
+                                      THEN "absent"
+                                      ELSE IF t \in JOIN_TASKS
+                                           THEN "join-handle" ELSE "result"]
     /\ workerState' = [workerState EXCEPT ![w] = "idle"]
     /\ workerAttempt' = [workerAttempt EXCEPT ![w] = NoAttempt]
     /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
     /\ UNCHANGED <<retries, currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, executorState,
                     providerState, providerTarget, providerBlocks,
-                    rejected, taskWireState, resultWireState,
+                    taskWireState, resultWireState,
                     taskEnvelope, resultEnvelope>>
 
 AttemptFailure(t, k, w) ==
@@ -878,7 +888,10 @@ NextCore ==
 Next == NextCore \/ UNCHANGED vars
 
 Spec == Init /\ [][Next]_vars
-SpecFair == Init /\ [][Next]_vars /\ WF_vars(NextCore)
+ProgressNext == NextCore /\
+    (taskState' # taskState \/ futureState' # futureState \/
+     attemptState' # attemptState \/ completed' # completed \/ rejected' # rejected)
+SpecFair == Init /\ [][Next]_vars /\ WF_vars(NextCore) /\ SF_vars(ProgressNext)
 
 TypeOK ==
     /\ taskState \in [TASKS -> TaskStates]
@@ -999,6 +1012,8 @@ JoinSafety ==
     /\ \A t \in JOIN_TASKS : joinObserved[t] \subseteq JoinDeps(t)
     /\ \A t \in JOIN_TASKS : taskState[t] = "succeeded" =>
           JoinDeps(t) \subseteq {i \in TASKS : futureState[i] = "resolved"}
+    /\ \A t \in JOIN_INVALID : taskState[t] = "failed" =>
+          futureState[t] = "rejected" /\ t \in rejected
 
 ResultConsistency ==
     /\ completed \cap rejected = {}
