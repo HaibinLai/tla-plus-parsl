@@ -127,8 +127,25 @@ RetryAttempt ==
                     attemptState, attemptStart, attemptDeadline,
                     futureState, resultState>>
 
+RetryLostAttempt ==
+    /\ attemptState[currentAttempt] = "lost"
+    /\ currentAttempt < MAX_RETRIES
+    /\ currentAttempt' = currentAttempt + 1
+    /\ UNCHANGED <<wallClock, managerState, lastHeartbeat,
+                    heartbeatInFlight, attemptState, attemptStart,
+                    attemptDeadline, futureState, resultState>>
+
+RejectLostAttempt ==
+    /\ attemptState[currentAttempt] = "lost"
+    /\ currentAttempt = MAX_RETRIES
+    /\ futureState = "unresolved"
+    /\ futureState' = "rejected"
+    /\ UNCHANGED <<wallClock, managerState, lastHeartbeat,
+                    heartbeatInFlight, attemptState, attemptStart,
+                    attemptDeadline, currentAttempt, resultState>>
+
 SendResult(k) ==
-    /\ attemptState[k] \in {"completed", "timed_out"}
+    /\ attemptState[k] \in {"completed", "timed_out", "lost"}
     /\ resultState[k] = "none"
     /\ resultState' = [resultState EXCEPT ![k] = "sent"]
     /\ UNCHANGED <<wallClock, managerState, lastHeartbeat, heartbeatInFlight,
@@ -152,6 +169,8 @@ Next ==
     \/ \E k \in AttemptIds : StartAttempt(k) \/ CompleteAttempt(k)
     \/ \E k \in AttemptIds : TimeoutAttempt(k)
     \/ RetryAttempt
+    \/ RetryLostAttempt
+    \/ RejectLostAttempt
     \/ \E k \in AttemptIds : SendResult(k) \/ DeliverResult(k)
     \/ UNCHANGED vars
 
@@ -195,6 +214,7 @@ ResultSafety ==
 
 FutureSafety ==
     /\ futureState = "resolved" => attemptState[currentAttempt] = "completed"
-    /\ futureState = "rejected" => attemptState[currentAttempt] = "timed_out"
+    /\ futureState = "rejected" =>
+          attemptState[currentAttempt] \in {"timed_out", "lost"}
 
 =============================================================================

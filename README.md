@@ -98,7 +98,9 @@ Stage-in and stage-out publish atomically only after every chunk is complete and
 
 `ParslClock.tla` separates wall-clock progression from heartbeat delivery and attempt deadlines.
 It models heartbeat send/drop/delivery, manager expiry and recovery, per-attempt timeout, retry
-selection, and a late result that is marked stale when its physical attempt is no longer current.
+selection after both task timeout and manager loss, and a late result that is marked stale when its
+physical attempt is no longer current. A manager-lost attempt can now retry after reconnection;
+its late result is explicitly allowed to arrive but cannot resolve the Future.
 `ParslClockTerminal.cfg` fixes the retry budget at zero to exercise terminal timeout rejection.
 
 `ParslMonitoringDB.tla` models a versioned monitoring radio queue and asynchronous database writer.
@@ -459,10 +461,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
-- `ParslClock.cfg`: 66,805 states generated, 14,496 distinct states, depth 20;
-  wall-clock bounds, heartbeat delivery/drop/expiry, attempt deadlines, retry selection, and stale
-  late-result handling all passed.
-- `ParslClockTerminal.cfg`: 4,328 states generated, 1,094 distinct states, depth 13;
+- `ParslClock.cfg`: 179,383 states generated, 37,788 distinct states, depth 21;
+  wall-clock bounds, heartbeat delivery/drop/expiry, attempt deadlines, timeout-or-manager-loss
+  retry selection, and stale late-result handling all passed.
+- `ParslClockTerminal.cfg`: 6,440 states generated, 1,574 distinct states, depth 13;
   terminal timeout rejection with no remaining retry passed the same time and result invariants.
 - `ParslMonitoringDB.cfg`: 757 states generated, 291 distinct states, depth 11;
   asynchronous write failure/retry, version monotonicity, database consistency, and terminal
@@ -593,7 +595,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `SendChunk` / `ReceiveChunk` / `RejectCorruptChunk` / `RepairChunk` | chunked content transfer, checksum validation, and retransmission | `DataManager.stage_in` / `stage_out` transfer paths |
 | `PublishStageIn` / `RejectStaleStageIn` / `PublishStageOut` | readiness and atomic file visibility after complete transfer | DataManager staging completion and file publication boundary |
 | `Tick` / `SendHeartbeat` / `DeliverHeartbeat` / `ExpireManager` | wall-clock and manager heartbeat expiry | HTEX interchange heartbeat and manager health handling |
-| `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `DeliverResult` | attempt deadline, retry choice, and stale late result | DFK timeout/retry callbacks and result completion path |
+| `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `RetryLostAttempt` / `DeliverResult` | attempt deadline, manager-loss retry choice, and stale late result | DFK timeout/retry callbacks, HTEX manager-loss handling, and result completion path |
 | `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
 | `DeliverHead` / `ReorderRadio` / `WriteSuccess` / `WriteFailure` | asynchronous monitoring queue and database persistence | MonitoringHub/radio/database boundary |
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |

@@ -124,8 +124,9 @@ unserializable nested-object configuration.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslClock.tla` separates wall-clock ticks, heartbeat transport and expiry, attempt start/deadline
-timestamps, retry selection, and stale late-result delivery. A zero-retry configuration checks the
-terminal timeout path explicitly.
+timestamps, retry selection after timeout or manager loss, and stale late-result delivery. A
+zero-retry configuration checks the terminal timeout path explicitly; lost attempts can now retry
+after manager recovery while their late results remain stale.
 `ParslMonitoringDB.tla` models the asynchronous monitoring radio queue, bounded event versions,
 database write failure/retry, queue reordering, stale-event suppression, and terminal-record
 stability.
