@@ -316,7 +316,8 @@ without checking HTTP status. It also drives the separate `_http_stage_in` funct
 the same non-success-body behavior. `ParslHTTPStage.tla` keeps this as an executable counterexample.
 `tests/test_ftp_staging_runtime.py` drives the real FTP in-task wrapper with a fake connection
 drop after a partial write, recording that the user function is skipped but the partial local
-file remains. `ParslFTPStage.tla` models the cleanup contract.
+file remains. It also drives the separate `_ftp_stage_in` function and observes the same residual
+file. `ParslFTPStage.tla` models the cleanup contract.
 `tests/test_globus_staging_runtime.py` drives the real `GlobusStaging.stage_in` and `stage_out`
 dispatch paths with fake staging apps, checking that parent and application Future objects are
 passed through unchanged. `ParslGlobusStageDependency.tla` models the corresponding gates.
@@ -444,7 +445,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 125 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 126 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

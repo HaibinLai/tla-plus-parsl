@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from parsl.data_provider.files import File
-from parsl.data_provider.ftp import in_task_transfer_wrapper
+from parsl.data_provider.ftp import _ftp_stage_in, in_task_transfer_wrapper
 
 
 class FailingFTP:
@@ -42,6 +42,17 @@ class FTPStagingRuntimeTest(unittest.TestCase):
                     wrapped()
 
             self.assertEqual(calls, [])
+            self.assertEqual(Path(file_obj.local_path).read_bytes(), b"partial-input")
+
+    def test_separate_stage_in_also_leaves_partial_file_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            file_obj = File("ftp://server/data/separate.txt")
+            file_obj.local_path = str(Path(directory) / "separate.txt")
+
+            with patch("parsl.data_provider.ftp.ftplib.FTP", FailingFTP):
+                with self.assertRaises(OSError):
+                    _ftp_stage_in(directory, outputs=[file_obj])
+
             self.assertEqual(Path(file_obj.local_path).read_bytes(), b"partial-input")
 
 

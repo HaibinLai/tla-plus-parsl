@@ -122,6 +122,7 @@ unchecked response handling is present in the separate-task `_http_stage_in` pat
 transfer must not run the user function, and a corrected wrapper should remove bytes already
 written before the connection failure. The current configuration records the residual partial
 file; fixed and successful-transfer configurations pass the cleanup invariant.
+The separate-task `_ftp_stage_in` path exhibits the same residual partial-file behavior.
 
 `ParslGlobusStageDependency.tla` models the Future wiring in `GlobusStaging`: stage-in preserves
 the parent `DataFuture` as an input dependency, while stage-out passes the application Future to
@@ -983,7 +984,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 125 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 126 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
