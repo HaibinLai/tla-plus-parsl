@@ -181,6 +181,8 @@ The runtime probe and TLC counterexample document this starvation edge case.
 `ParslMonitoringBatchAtomicity.tla` models bulk STATUS insertion: a duplicate key rolls back the
 whole SQLAlchemy batch, and the current `_insert` path drops valid sibling events. The runtime
 SQLite probe and fixed branch make the valid-message preservation contract explicit.
+`ParslMonitoringThreshold.tla` models the zero `batching_threshold` edge: the current batch loop
+returns before reading an available event, while the fixed branch consumes one available message.
 `ParslRetryHandler.tla` models the retry-budget contract when a user `retry_handler` returns a
 failure cost. The current path accepts a zero cost, so `retries=0` can launch another physical
 attempt; the runtime probe reproduces this, and the fixed branch charges at least one unit.
@@ -645,7 +647,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 228 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 229 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

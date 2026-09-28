@@ -171,6 +171,11 @@ STATUS key can make a SQLAlchemy bulk insert roll back the entire batch. The cur
 drops a valid sibling event along with the duplicate; fixed bookkeeping preserves valid messages.
 `tests/test_monitoring_batch_atomicity_runtime.py` reproduces this with a temporary SQLite DB.
 
+`ParslMonitoringThreshold.tla` checks the configuration boundary where
+`batching_threshold=0`. The current loop returns before reading an available event; the fixed
+configuration guarantees one available event is consumed before applying the threshold. The
+runtime probe exercises the real `_get_messages_in_batch` method.
+
 `ParslRetryHandler.tla` models the retry-budget boundary in `DataFlowKernel.handle_exec_update`.
 The current implementation adds the user handler's returned cost directly to `fail_cost`; a zero
 cost therefore permits another physical attempt even when `retries=0`. The current TLC
@@ -952,6 +957,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchPositive.cfg ParslMo
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicityCurrent.cfg ParslMonitoringBatchAtomicity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicityFixed.cfg ParslMonitoringBatchAtomicity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicitySuccess.cfg ParslMonitoringBatchAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringThreshold.cfg ParslMonitoringThreshold.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringThresholdFixed.cfg ParslMonitoringThreshold.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerCurrent.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerFixed.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerPositive.cfg ParslRetryHandler.tla
@@ -1226,6 +1233,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMonitoringBatchAtomicityFixed.cfg` and `ParslMonitoringBatchAtomicitySuccess.cfg`: 4
   states generated, 2 distinct states, depth 2; valid events are preserved with and without a
   duplicate.
+- `ParslMonitoringThreshold.cfg`: expected counterexample at depth 2 (2 states generated,
+  2 distinct); a zero threshold leaves an available event queued. `ParslMonitoringThresholdFixed.cfg`:
+  4 states generated, 2 distinct states, depth 2; the first available event is consumed.
 - `ParslRetryHandlerCurrent.cfg`: expected counterexample, 3 distinct states; a zero-cost handler
   advances `tryId` to 1 despite `RETRIES=0`.
 - `ParslRetryHandlerFixed.cfg`: 3 distinct states, depth 3; minimum-cost charging preserves
@@ -1482,7 +1492,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 227 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 229 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
