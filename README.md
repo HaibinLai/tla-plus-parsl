@@ -1464,7 +1464,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 223 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 224 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1733,6 +1733,19 @@ The model represents the `.ec` marker, process liveness, cancellation, malformed
 a delayed zero exit marker. The current implementation configuration exposes a counterexample:
 a late numeric marker can make a cancelled process appear `COMPLETED`; the fixed configuration
 prioritizes cancellation during polling.
+
+`ParslLocalProviderStatusScope.tla` checks a separate query-scope boundary. The implementation
+loops over every resource in `self.resources` even when `status(job_ids)` requests one job, so a
+stale unrelated resource with a missing `.ec` file can abort the requested status query. The
+current configuration produces this counterexample; the fixed configuration updates only the
+requested resource. `tests/test_local_provider_status_scope_runtime.py` reproduces the behavior
+with the real provider method.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config ParslLocalProviderStatusScope.cfg ParslLocalProviderStatusScope.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslLocalProviderStatusScopeFixed.cfg ParslLocalProviderStatusScope.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_status_scope_runtime.py -v
+```
 
 Google Compute Engine status handling is exercised with a fake discovery client:
 
@@ -2178,6 +2191,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   a delayed zero `.ec` marker can turn a cancelled local job into `COMPLETED`.
 - `ParslLocalProviderFixed.cfg`: 31 states generated, 14 distinct states, depth 5; cancellation
   takes precedence over a late numeric exit marker.
+- `ParslLocalProviderStatusScope.cfg`: expected counterexample at depth 2 (2 states generated,
+  2 distinct); an unrequested resource can abort a requested status query. The fixed
+  configuration has 4 states generated, 2 distinct states, depth 2 and limits polling to the
+  requested resource.
 - `ParslSlurmSubmit.cfg`: expected counterexample at depth 3 (13 states generated, 9 distinct);
   a matching custom regex without a named `id` group reaches the provider's uncaught error path.
 - `ParslSlurmSubmitFixed.cfg`: 18 states generated, 9 distinct states, depth 3; malformed or
