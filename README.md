@@ -356,6 +356,11 @@ final result to the ordered aggregate.
 outer task in `joining`. The current configuration produces that counterexample; the fixed
 configuration converts cancellation into terminal join failure.
 
+`ParslJoinListCancellation.tla` applies the same check to a list-valued join. A cancelled member
+still raises from the list's `future.exception()` scan, so the current outer join remains in
+`joining`; the fixed branch converts the cancellation into terminal failure. The runtime probe
+uses the real `DataFlowKernel.handle_join_update` list path.
+
 `ParslNestedJoin.tla` adds a nested join: the outer join observes a direct Future and a Future
 produced by another join. The nested handle remains live until both leaf Futures are observed;
 nested success/failure then becomes the only state visible to the outer join.
@@ -938,6 +943,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureSuccess.cfg Pars
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinListCancellationCurrent.cfg ParslJoinListCancellation.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinListCancellationFixed.cfg ParslJoinListCancellation.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinListCancellationSuccess.cfg ParslJoinListCancellation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslNestedJoin.cfg ParslNestedJoin.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinDuplicates.cfg ParslJoinDuplicates.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinImmediateCallback.cfg ParslJoinImmediateCallback.tla
@@ -1161,6 +1169,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   aliased join list lets the outer join finish with `resultCount = 0` instead of 2.
 - `ParslJoinListMutationFixed.cfg`: 6 states generated, 3 distinct states, depth 3; snapshotting
   the join membership satisfies `JoinSnapshotSafety`. The stable-list configuration also passes.
+- `ParslJoinListCancellationCurrent.cfg`: expected counterexample, 2 states generated; a cancelled
+  list member raises `CancelledError` and leaves the outer join in `joining`.
+- `ParslJoinListCancellationFixed.cfg` and `ParslJoinListCancellationSuccess.cfg`: 4 states
+  generated, 2 distinct states, depth 2; cancellation becomes terminal failure and normal list
+  completion remains successful.
 - `ParslFTPConnectionCleanupCurrent.cfg`: expected counterexample, 2 states generated; a failed
   transfer leaves the FTP connection open.
 - `ParslFTPConnectionCleanupFixed.cfg` and `ParslFTPConnectionCleanupSuccess.cfg`: 4 states
@@ -1329,7 +1342,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 211 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 214 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1349,6 +1362,15 @@ The callback-level join gate is exercised directly against the real `DataFlowKer
 ```bash
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_callback_runtime.py -v
 ```
+
+The list-cancellation boundary is also exercised directly:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_list_cancellation_runtime.py -v
+```
+
+The probe confirms that the current callback raises `CancelledError` and leaves a list-valued
+outer join in `joining`.
 
 The probe checks that early callbacks do not finalize an outer task, final callbacks preserve list
 order and duplicate references, duplicate callbacks after terminal state are harmless, and inner
@@ -2188,6 +2210,7 @@ failure result for each in-flight task.
 | `ReturnJoinable` / `ReturnMixedList` / `RegisterEmptyCompletion` | list element validation, immediate empty-list completion, and mixed-list rejection | `DataFlowKernel.handle_exec_update` join branch |
 | `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
 | `CompleteInner` / `HandleCallback` in `ParslJoinCancellation.tla` | cancelled inner Future handling and outer join termination | `DataFlowKernel.handle_join_update` |
+| `ObserveCancelled` / `CancellationTerminal` in `ParslJoinListCancellation.tla` | cancelled Future handling for list-valued joins | `DataFlowKernel.handle_join_update` list branch |
 | `StartNestedJoin` / `FinalizeNested` / `ObserveNestedResult` | nested join handle and result propagation | nested `join_app` callback composition |
 | `BeginEncode` / `FinishEncodeSuccess` / `DecodeTaskSuccess` | serialized callable/payload gating task transport | DFK serialization boundary, interchange task queue, worker decode |
 | `CorruptTaskEnvelope` / `DecodeTaskFailure` / `LoseAttempt` / `AcceptResult` | protocol corruption, worker loss, retry and stale result handling | HTEX message/result paths and DFK attempt correlation |

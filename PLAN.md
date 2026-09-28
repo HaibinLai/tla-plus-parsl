@@ -262,6 +262,9 @@ unresolved to the outer join until a final attempt succeeds or fails.
 `ParslJoinCancellation.tla` models a cancelled inner Future. The current callback's
 `future.exception()` raises `CancelledError` and leaves the outer task joining; the fixed
 configuration maps cancellation into terminal join failure.
+`ParslJoinListCancellation.tla` applies the cancellation boundary to a list-valued join. The
+current list exception scan also escapes through `CancelledError`, while the fixed branch maps it
+to terminal outer failure; `tests/test_join_list_cancellation_runtime.py` exercises the real path.
 `ParslNestedJoin.tla` adds a nested join layer and checks that leaf completion/failure propagates
 through the nested handle before the outer join can complete.
 `ParslTaskTransport.tla` connects object-graph serialization to task/result transport, including
@@ -603,7 +606,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 203 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 214 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
