@@ -312,6 +312,9 @@ tasks when the collector exits.
 interleaving. It captures the current `tasks.pop(task_report.id)` `KeyError` path, the resulting
 collector exit and unrelated-future cleanup, and a candidate guard that ignores reports whose
 Future was already removed.
+`ParslCallableSerializerCache.tla` isolates callable-object dispatch through the cached Dill
+serializer. It models the current failure for callable objects with `__hash__ = None` and a
+candidate uncached path that still reaches `dill.dumps`.
 `ParslFluxResult.tla` refines FluxExecutor's wrapped Future, result-file decoding, abnormal exit,
 and cancellation propagation; its actual configuration preserves a cancellation-orphan probe and
 the fixed configuration checks the candidate propagation fix.
@@ -631,7 +634,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 221 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 223 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

@@ -91,6 +91,13 @@ referenced graph before creating a symbolic pickle token; decoding traverses it 
 payload is considered reconstructed. `ParslPythonFailure.cfg` marks a nested closure object as
 unserializable and checks that the task fails before a token or decoded payload is exposed.
 
+`ParslCallableSerializerCache.tla` isolates a smaller callable-object boundary. Parsl routes a
+callable through the `DillCallableSerializer`, whose `lru_cache` wrapper hashes the callable before
+calling `dill.dumps`; an otherwise serializable callable object with `__hash__ = None` therefore
+fails at cache lookup. The current configuration produces this counterexample, while the fixed
+configuration bypasses the cache for unhashable callable objects. The runtime probe compares the
+real Parsl facade with direct Dill serialization.
+
 `ParslExecuteTask.tla` models the next worker-side boundary in `parsl.executors.execute_task`:
 the packed apply message must decode before the callable is invoked, a user exception becomes a
 failed execution result, and malformed input is rejected without invoking user code. The three
@@ -889,6 +896,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCallableSerializerCache.cfg ParslCallableSerializerCache.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCallableSerializerCacheFixed.cfg ParslCallableSerializerCache.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationSnapshot.cfg ParslSerializationSnapshot.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureCopy.cfg ParslDataFutureCopy.tla
@@ -1142,6 +1151,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslPythonFailure.cfg`: 4,415 states generated, 1,035 distinct states, depth 18;
   a non-serializable nested closure object failed before encoding completed or a payload token was
   published.
+- `ParslCallableSerializerCache.cfg`: expected counterexample at depth 2 (2 states generated,
+  2 distinct); an unhashable callable fails in the `lru_cache` wrapper before `dill.dumps`.
+  `ParslCallableSerializerCacheFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  the unhashable callable reaches serialization and completes.
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
@@ -1451,7 +1464,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 221 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 223 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
