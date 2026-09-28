@@ -3,6 +3,9 @@
 import datetime
 import tempfile
 import unittest
+from unittest.mock import patch
+
+import sqlalchemy as sa
 
 from parsl.monitoring.db_manager import Database, DatabaseManager, STATUS, WORKFLOW
 
@@ -62,6 +65,27 @@ class MonitoringDatabaseRuntimeTest(unittest.TestCase):
 
         rows = database.session.execute(database.meta.tables[STATUS].select()).fetchall()
         self.assertEqual(len(rows), 1)
+
+    def test_database_manager_retries_transient_operational_error(self):
+        class RetryingDatabase:
+            def __init__(self):
+                self.calls = 0
+
+            def insert(self, *, table, messages):
+                self.calls += 1
+                if self.calls == 1:
+                    raise sa.exc.OperationalError("database locked", None, None)
+
+            def rollback(self):
+                return None
+
+        manager = DatabaseManager.__new__(DatabaseManager)
+        manager.db = RetryingDatabase()
+
+        with patch("parsl.monitoring.db_manager.time.sleep", return_value=None):
+            manager._insert(table=STATUS, messages=[{"task_id": 1}])
+
+        self.assertEqual(manager.db.calls, 2)
 
 
 if __name__ == "__main__":

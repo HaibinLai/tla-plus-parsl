@@ -158,6 +158,9 @@ the existing `tests/test_grid_engine_submit_runtime.py` probe.
 `KeyError` when scheduler output names a foreign job ID; the fixed configuration ignores that line
 while preserving local resources. `test_slurm_status_batch_runtime.py` now reproduces the current
 exception alongside command-failure preservation and missing-job completion.
+`ParslMonitoringDBRetry.tla` models the concrete `_insert` distinction between recoverable
+SQLAlchemy `OperationalError` (rollback and retry) and integrity errors (rollback and drop). The
+monitoring runtime probe verifies one transient lock error is retried and then stored.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
