@@ -23,3 +23,16 @@ Files live in [`models/monitoring/`](../models/monitoring/).
 versions, an asynchronous queue, reordering, and database writes. The current configuration finds
 a `DatabaseMonotonic` counterexample when an older event overwrites a newer record. The fixed
 configuration ignores that stale event and checks 1,978 states with all four invariants passing.
+
+`ParslMonitoringLastMessageRace.tla` covers the complementary ordering race in
+`DatabaseManager._db_mgmt_loop`: first worker messages are deferred until their `TRY` row exists,
+but last worker messages are currently inserted into `STATUS` immediately. The current
+configuration reaches a status row before its try row; the fixed configuration defers and replays
+the last message as well. The runtime probe uses a real SQLite-backed `DatabaseManager` and
+reproduces the current ordering.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLastMessageRaceCurrent.cfg models/monitoring/ParslMonitoringLastMessageRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLastMessageRaceFixed.cfg models/monitoring/ParslMonitoringLastMessageRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_last_message_runtime.py -v
+```
