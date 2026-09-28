@@ -129,6 +129,9 @@ terminal timeout path explicitly.
 `ParslMonitoringDB.tla` models the asynchronous monitoring radio queue, bounded event versions,
 database write failure/retry, queue reordering, stale-event suppression, and terminal-record
 stability.
+`ParslExecutorProvider.tla` models the HTEX executor/provider boundary: block request outcomes,
+manager registration, worker readiness, submit admission, draining/recovery, provider failure,
+and scale-in cleanup of queued/running tasks.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.

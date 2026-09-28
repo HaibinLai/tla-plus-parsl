@@ -106,6 +106,12 @@ The queue can reorder events, writes can fail and be retried, stale versions are
 terminal database record is not overwritten by an older event. `MAX_FAILURES` and queue bounds
 keep the monitoring model finite for TLC.
 
+`ParslExecutorProvider.tla` is a focused model of the HTEX/BlockProviderExecutor boundary. It
+separates provider block requests and failures from executor admission, manager registration,
+worker readiness, queued/running tasks, drain/recovery, and block-granular scale-in. Provider
+failure and scale-in explicitly clean up queued tasks for resubmission and mark running tasks
+lost; an active provider block alone never implies that `submit` is accepted.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -309,6 +315,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -376,6 +383,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   record safety passed.
 - `ParslMonitoringDBReorder.cfg`: 527 states generated, 206 distinct states, depth 9;
   radio queue reordering and stale-event suppression passed with the same invariants.
+- `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
+  provider request/success/failure, manager registration, worker slots, submit rejection, executor
+  drain/recovery, provider failure, and block-granular scale-in all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -470,6 +480,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `DeliverResult` | attempt deadline, retry choice, and stale late result | DFK timeout/retry callbacks and result completion path |
 | `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
 | `DeliverHead` / `ReorderRadio` / `WriteSuccess` / `WriteFailure` | asynchronous monitoring queue and database persistence | MonitoringHub/radio/database boundary |
+| `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
+| `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
+| `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
+| `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces
