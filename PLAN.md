@@ -257,6 +257,11 @@ covering liveness, completion, malformed exit codes, cancellation, and a real lo
 collection path, including non-zero application exit handling.
 The same runtime probe now exercises cancellation of a real local process group and terminal
 `CANCELLED` observation.
+The probe also records the current late-zero-exit convention: a numeric `.ec` marker can win after
+a cancellation request, yielding `COMPLETED`.
+`ParslLocalProvider.tla` models this provider-specific `.ec`/PID boundary; its current
+configuration finds the late-marker cancellation counterexample and its fixed configuration
+prioritizes cancellation during polling.
 `ParslGridEngineStatus.tla` models the Grid Engine malformed-qstat boundary. Its current
 configuration reproduces the short-line crash; fixed and valid-output configurations pass.
 `ParslGoogleCloudStatus.tla` models direct GCE status-table lookup: the current unknown-status

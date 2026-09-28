@@ -54,6 +54,13 @@ class LocalProviderRuntimeTest(unittest.TestCase):
                 provider.status(["local-1"])
             self.assertEqual(provider.resources["local-1"]["status"].state, JobState.CANCELLED)
 
+    def test_late_zero_exit_marker_wins_after_cancel_request(self):
+        with tempfile.TemporaryDirectory() as directory:
+            provider, _ = self.provider_for(Path(directory) / "job", "0\n", alive=False, cancelled=True)
+            with patch.object(provider, "_is_alive", return_value=False):
+                provider.status(["local-1"])
+            self.assertEqual(provider.resources["local-1"]["status"].state, JobState.COMPLETED)
+
     def test_submit_launches_real_local_process_and_collects_output(self):
         with tempfile.TemporaryDirectory() as directory:
             provider = LocalProvider()

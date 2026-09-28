@@ -832,7 +832,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 58 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 59 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -931,6 +931,18 @@ An additional real process exits with code 3 and is recorded as `FAILED` rather 
 failure.
 The suite also starts a real `sleep` process, cancels its process group, and observes terminal
 `CANCELLED` status.
+
+The corresponding LocalProvider model can be checked with TLC:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config ParslLocalProvider.cfg ParslLocalProvider.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslLocalProviderFixed.cfg ParslLocalProvider.tla
+```
+
+The model represents the `.ec` marker, process liveness, cancellation, malformed exit codes, and
+a delayed zero exit marker. The current implementation configuration exposes a counterexample:
+a late numeric marker can make a cancelled process appear `COMPLETED`; the fixed configuration
+prioritizes cancellation during polling.
 
 Google Compute Engine status handling is exercised with a fake discovery client:
 
@@ -1176,6 +1188,10 @@ failure result for each in-flight task.
   suppression, Future consistency, and retry bounds all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
+- `ParslLocalProvider.cfg`: expected counterexample at depth 5 (23 states generated, 13 distinct);
+  a delayed zero `.ec` marker can turn a cancelled local job into `COMPLETED`.
+- `ParslLocalProviderFixed.cfg`: 31 states generated, 14 distinct states, depth 5; cancellation
+  takes precedence over a late numeric exit marker.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
 - `ParslInputCorruption.cfg`: 37,556 states generated, 7,024 distinct states, depth 66;
