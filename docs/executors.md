@@ -29,6 +29,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoing.cfg 
 /tmp/parsl-venv/bin/python -m unittest tests/test_tasks_outgoing_runtime.py -v
 ```
 
+`ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
+Python task has no serialized exception payload, the current callback passes a string to
+`Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
+the missing payload in a real `RuntimeError`. `test_radical_results_runtime.py` contains the
+corresponding source-level probe.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotFailurePayloadCurrent.cfg models/executors/ParslRadicalPilotFailurePayload.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotFailurePayloadFixed.cfg models/executors/ParslRadicalPilotFailurePayload.tla
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
