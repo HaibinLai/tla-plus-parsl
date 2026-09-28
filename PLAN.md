@@ -244,6 +244,8 @@ command failure preservation and successful reported/missing-job application.
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
 line failure, normal state translation, foreign-job filtering, and missing-job fallback.
+`tests/test_azure_status_runtime.py` drives Azure VM status with a fake compute client, checking
+running translation, pending fallback, and cloud API error propagation.
 `ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,

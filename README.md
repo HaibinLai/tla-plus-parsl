@@ -891,6 +891,15 @@ Grid Engine qstat parsing is exercised with deterministic output:
 The probe reproduces the short-line `IndexError` boundary, checks `r` to `RUNNING` translation,
 and verifies foreign-job filtering with the missing-job `COMPLETED` fallback.
 
+Azure VM status handling is exercised with a fake compute client:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_azure_status_runtime.py -v
+```
+
+The tests check running-state translation, the current `IndexError`-to-`PENDING` path for missing
+instance-view status, and propagation of non-index cloud API errors.
+
 Torque cancellation outcomes are exercised with deterministic `qdel` results:
 
 ```bash
