@@ -2042,8 +2042,8 @@ This probe patches the real interchange clock forward and confirms that the curr
   cleanup, and terminal-result consistency all passed.
 - `ParslWorkQueueDuplicateReport.cfg`: expected counterexample at depth 3 (5 states
   generated, 4 distinct); a duplicate report kills the collector and exposes unrelated task
-  failure. `ParslWorkQueueDuplicateReportFixed.cfg`: 9 states generated, 6 distinct states,
-  depth 3; stale reports are ignored while the unrelated task remains pending.
+  failure. `ParslWorkQueueDuplicateReportFixed.cfg`: 22 states generated, 7 distinct states,
+  depth 4; stale reports are ignored while every still-active unrelated task remains pending.
 - `ParslFluxResult.cfg`: expected counterexample at depth 2 (54 states generated, 24 distinct);
   cancellation of the underlying Flux future can leave the wrapper Future non-terminal.
 - `ParslFluxResultFixed.cfg`: 63 states generated, 26 distinct states, depth 6; valid, missing,
