@@ -123,6 +123,8 @@ creation and graph traversal again during worker-side reconstruction, including 
 unserializable nested-object configuration.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
+`ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
+paths, including stage-out failure/retry and dependent-task gating on the output `DataFuture`.
 `ParslClock.tla` separates wall-clock ticks, heartbeat transport and expiry, attempt start/deadline
 timestamps, retry selection after timeout or manager loss, and stale late-result delivery. A
 zero-retry configuration checks the terminal timeout path explicitly; lost attempts can now retry

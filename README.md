@@ -96,6 +96,15 @@ content flag. Each chunk carries a checksum through a temporary transfer buffer;
 repair/retransfer, and an input whose source version changes during stage-in becomes `stale`.
 Stage-in and stage-out publish atomically only after every chunk is complete and validated.
 
+`ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
+separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
+(the wrapper makes publication part of application completion), and the no-staging `None` path.
+The separate path includes failure, retry, and the rule that dependent work cannot start until the
+published output is ready. This follows
+[`data_manager.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/data_provider/data_manager.py)
+and the output handling in
+[`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
+
 `ParslClock.tla` separates wall-clock progression from heartbeat delivery and attempt deadlines.
 It models heartbeat send/drop/delivery, manager expiry and recovery, per-attempt timeout, retry
 selection after both task timeout and manager loss, and a late result that is marked stale when its
@@ -548,6 +557,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatBoundary.cfg ParslHeartbeatBoundary.tla
@@ -642,6 +654,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
+- `ParslStageOutFuture.cfg`: 47 states generated, 23 distinct states, depth 10; separate
+  stage-out completion, failure/retry, output publication, and dependent-task gating passed.
+- `ParslStageOutInTask.cfg`: 14 states generated, 7 distinct states, depth 5; in-task transfer
+  publication is tied to application completion.
+- `ParslStageOutNone.cfg`: 14 states generated, 7 distinct states, depth 5; the no-staging path
+  correctly makes the application Future the output dependency.
 - `ParslClock.cfg`: 179,383 states generated, 37,788 distinct states, depth 21;
   wall-clock bounds, heartbeat delivery/drop/expiry, attempt deadlines, timeout-or-manager-loss
   retry selection, and stale late-result handling all passed.
@@ -848,6 +866,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `MutateObject` / `RepairObject` | object content becoming unencodable before submission | Python object/payload serialization failure path |
 | `SendChunk` / `ReceiveChunk` / `RejectCorruptChunk` / `RepairChunk` | chunked content transfer, checksum validation, and retransmission | `DataManager.stage_in` / `stage_out` transfer paths |
 | `PublishStageIn` / `RejectStaleStageIn` / `PublishStageOut` | readiness and atomic file visibility after complete transfer | DataManager staging completion and file publication boundary |
+| `CompleteApp` / `StartStageOut` / `CompleteStageOut` / `RetryStageOut` | output `DataFuture` dependency on application or separate stage-out Future | `DataFlowKernel._add_output_deps` and `DataManager.stage_out` |
 | `Tick` / `SendHeartbeat` / `DeliverHeartbeat` / `ExpireManager` | wall-clock and manager heartbeat expiry | HTEX interchange heartbeat and manager health handling |
 | `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `RetryLostAttempt` / `DeliverResult` | attempt deadline, manager-loss retry choice, and stale late result | DFK timeout/retry callbacks, HTEX manager-loss handling, and result completion path |
 | `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
