@@ -122,6 +122,10 @@ the model cannot mark an output `transferred` until the complete protocol has pr
 corrupted first or second chunk has a distinct state and repair restarts from the damaged chunk.
 `ParslFileCorruptionSmall.cfg` adds a minimal corrupted-output and repair/retransfer path;
 the larger three-task corruption configuration is retained for future state-space reduction.
+`ParslDataFutureTransfer.tla` connects the concrete data-manager ordering to a bounded
+producer, chunked stage-out, `DataFuture` readiness, and a blocked consumer. Its current
+configuration exposes premature readiness after a partial transfer; the fixed configuration
+requires an all-chunk atomic publish.
 `ParslJoinInvalid.cfg` covers the `join_app` type-error branch. `SpecFair` now uses strong
 fairness for logical/attempt progress so duplicate-message discard loops cannot starve work.
 Successful joins carry a distinct `join-result` marker, while `JoinSafety` still requires every
