@@ -295,6 +295,14 @@ attempt can resolve the Future. A result from an old attempt is explicitly stale
 valid decode. This combines the concrete serialization facade with the ROUTER/DEALER-style
 correlation already abstracted in `ParslZMQ.tla`.
 
+`ParslHtexResultQueue.tla` probes the concrete HTEX result thread. It models successful result
+decoding, exception decoding, malformed result messages, duplicate task IDs, and the special
+interchange-failure message. The actual configuration reproduces an orphaned Future when a
+malformed message is popped from `tasks` before validation; the fixed configuration keeps the
+Future terminal and ignores duplicates. This follows
+[`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py)
+around `_result_queue_worker` and `submit_payload`.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -524,6 +532,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslPollerBadState.cfg ParslPollerBadSt
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -664,6 +673,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslSerializationZMQBridge.cfg`: 104,657 states generated, 20,320 distinct states, depth 39;
   serializer-token correlation, route validation, drop/duplicate handling, decode-before-dispatch,
   worker-loss retry, and stale result suppression all passed.
+- `ParslHtexResultQueue.cfg`: expected counterexample at depth 1 (10 states generated, 6 distinct);
+  a malformed result causes the actual pop-before-validation path to leave a pending Future after
+  the result thread exits.
+- `ParslHtexResultQueueFixed.cfg`: 17 states generated, 7 distinct states, depth 3; malformed
+  message failure, duplicate-result handling, valid/exception result mapping, and interchange
+  failure cleanup all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.
@@ -771,6 +786,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
 | `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
+| `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |

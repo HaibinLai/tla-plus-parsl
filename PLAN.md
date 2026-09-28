@@ -143,6 +143,9 @@ through the nested handle before the outer join can complete.
 `ParslTaskTransport.tla` connects object-graph serialization to task/result transport, including
 envelope corruption, decode rejection, dispatch gating, worker loss, retry correlation, and stale
 result suppression.
+`ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
+exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
+when the current pop-before-validation path exits the worker.
 `ParslProviderPolling.tla` refines provider behavior into submit/status/cancel calls, transient API
 errors, unknown status, cancellation rollback, and bounded polling/failure windows.
 `ParslExecutorKinds.tla` adds a contract matrix for provider-free thread execution and
