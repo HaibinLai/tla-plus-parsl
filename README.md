@@ -96,6 +96,10 @@ the packed apply message must decode before the callable is invoked, a user exce
 failed execution result, and malformed input is rejected without invoking user code. The three
 configurations cover successful execution, user failure, and malformed input.
 
+`ParslAzureStatus.tla` models Azure VM status translation: a short `instanceView.statuses` list
+is treated as provisioning (`PENDING`), known running and terminal VM states are translated, and
+an unfamiliar display string remains explicit `UNKNOWN` rather than being mistaken for success.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1047,7 +1051,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 174 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 175 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1109,6 +1113,14 @@ The worker-side apply-message helper is exercised directly:
 
 This confirms callable/argument decoding, propagation of a user exception, and rejection of a
 malformed packed message before invocation.
+
+The Azure status parser is exercised without Azure SDK credentials:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_azure_status_runtime.py -v
+```
+
+The probe covers running VMs, short provisioning responses, and unknown Azure display states.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1727,6 +1739,7 @@ failure result for each in-flight task.
 | `ObjectGraphSerializable` / `ObjectGraphSafety` | callable, argument, closure, and nested-object serializability | Python callable/payload serialization boundary in `DataFlowKernel` and executor |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
+| `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |

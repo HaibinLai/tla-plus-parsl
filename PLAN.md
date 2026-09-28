@@ -125,6 +125,10 @@ unserializable nested-object configuration.
 apply message is decoded before invocation, user exceptions become failed execution results, and
 malformed messages are rejected without invoking user code. `tests/test_execute_task_runtime.py`
 checks the same behavior against the real executor helper.
+`ParslAzureStatus.tla` adds the Azure VM status translation boundary, including short
+`instanceView.statuses` lists during provisioning, known running/completed states, and explicit
+unknown-state handling. `tests/test_azure_status_runtime.py` drives the real provider method with
+fake Azure API objects.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
