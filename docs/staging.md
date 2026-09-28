@@ -50,3 +50,17 @@ Run it with:
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFilePathResolution.cfg models/staging/ParslFilePathResolution.tla
 ```
+
+`ParslDataManagerStageInOrdering.tla` models a failure boundary in
+`DataManager.optionally_stage_in`: the current order starts `stage_in` before calling
+`replace_task`. If wrapper construction raises, the separate stage-in Future can remain
+running after the task has failed. The current configuration produces the expected
+`NoOrphanTransfer` counterexample; the fixed configuration prepares the wrapper first and
+passes the invariant with 4 generated/2 distinct states. The runtime probe uses a fake provider
+whose real pending `Future` demonstrates the orphaned transfer.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageInOrderingCurrent.cfg models/staging/ParslDataManagerStageInOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageInOrderingFixed.cfg models/staging/ParslDataManagerStageInOrdering.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_data_manager_stage_in_ordering_runtime.py -v
+```

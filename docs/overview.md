@@ -293,6 +293,13 @@ while the original user object remains unchanged. A dependent task is admitted o
 parent `DataFuture` is ready. The runtime counterpart is
 `test_stage_in_uses_clean_file_copy_and_preserves_parent` in `tests/test_datafuture_runtime.py`.
 
+`ParslDataManagerStageInOrdering.tla` checks a failure ordering in the concrete
+`DataManager.optionally_stage_in` implementation. A provider's separate stage-in transfer is
+started before `replace_task` is called; if wrapper construction raises, the transfer can remain
+pending after the task has failed. The current configuration violates `NoOrphanTransfer`, while
+the fixed configuration prepares the wrapper first. The direct probe is
+`tests/test_data_manager_stage_in_ordering_runtime.py`.
+
 `ParslRsyncStage.tla` models the in-task `RSyncStaging` wrappers. Stage-in transfers before the
 user function and blocks the function on a nonzero `rsync` result; stage-out runs the function
 first but propagates a later transfer failure. The model has separate in-failure, out-failure,
@@ -1239,6 +1246,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslDataFutureCopy.cfg`: 61 states generated, 26 distinct states, depth 7; clean staging
   copies preserved the original local-path annotation and dependency admission waited for the
   parent Future.
+- `ParslDataManagerStageInOrderingCurrent.cfg`: expected counterexample at depth 3; a wrapper
+  construction failure left a separate stage-in transfer running after task failure.
+- `ParslDataManagerStageInOrderingFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  wrapper preparation before transfer prevents the orphaned stage-in state.
 - `ParslRsyncStageInFail.cfg`: 6 states generated, 3 distinct states, depth 3; stage-in failure
   prevented user-function execution.
 - `ParslRsyncStageOutFail.cfg`: 8 states generated, 4 distinct states, depth 4; stage-out
@@ -1611,7 +1622,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 282 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 283 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2426,6 +2437,8 @@ This probe patches the real interchange clock forward and confirms that the curr
 | TLA+ action | Parsl concept | Current source location |
 | --- | --- | --- |
 | `BeginStaging` / `FinishStaging` | data readiness/staging | `parsl/data_provider/data_manager.py` |
+| `StartTransferCurrent` / `PrepareWrapperCurrent` | stage-in transfer started before wrapper failure | `DataManager.optionally_stage_in` |
+| `PrepareWrapperFixed` / `StartTransferFixed` | failure-safe wrapper-before-transfer ordering | proposed ordering around `DataManager.optionally_stage_in` |
 | `ParentCancels` / `ParentCallback` | DataFuture parent success/failure/cancellation propagation | `DataFuture.parent_callback` |
 | `CorruptStaging` / `RepairStaging` / `FileStagingSafety` | damaged input transfer and repair before dependency release | `DataManager.stage_in` and transfer error paths |
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
