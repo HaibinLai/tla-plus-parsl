@@ -65,6 +65,8 @@ provider block does not imply that the executor accepts a new task submission.
 requesting a replacement block without producing a negative target count.
 `ParslScaleIn.cfg` covers multi-block scale-in: cancelling one idle block preserves provider
 activity and cancelling the final block clears provider capacity.
+`ParslLocalExecutor.cfg` adds a provider-free `local` executor path while retaining the common
+serialization, worker binding, and result protocol.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 Its object-graph constants model callable, argument, closure, and nested referenced objects;

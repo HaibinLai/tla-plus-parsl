@@ -49,6 +49,7 @@ ObjectGraphSerializable(t) ==
     /\ \A o \in ObjectPayload(t) :
           ObjectDescendants(o) \subseteq SERIALIZABLE_OBJECTS
 ContentToken(t) == t \o ":content"
+LocalExecutors == {e \in EXECUTORS : e = "local"}
 SerializableTask(t) ==
     t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
     /\ ObjectGraphSerializable(t)
@@ -246,7 +247,7 @@ SubmitAttempt(t, e) ==
     LET a == <<t, retries[t]>> IN
     /\ t \in TASKS /\ e \in EXECUTORS
     /\ taskState[t] = "queued" /\ executorState[e] = "up"
-    /\ providerState[e] = "active"
+    /\ providerState[e] = "active" \/ e \in LocalExecutors
     /\ e \in SUBMITTABLE_EXECUTORS
     /\ retries[t] <= MAX_RETRIES /\ attemptState[a] = "absent"
     /\ taskState' = [taskState EXCEPT ![t] = "running"]
@@ -436,7 +437,8 @@ DispatchAttempt(t, k, w) ==
     /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
     /\ attemptState[a] = "decoded"
     /\ workerState[w] = "idle" /\ WorkerExec(w) = attemptExecutor[a]
-    /\ providerState[attemptExecutor[a]] = "active"
+    /\ (providerState[attemptExecutor[a]] = "active"
+        \/ attemptExecutor[a] \in LocalExecutors)
     /\ attemptState' = [attemptState EXCEPT ![a] = "dispatched"]
     /\ attemptWorker' = [attemptWorker EXCEPT ![a] = w]
     /\ workerAttempt' = [workerAttempt EXCEPT ![w] = a]
@@ -864,7 +866,7 @@ LateResult(t, k) ==
                     taskEnvelope, resultEnvelope>>
 
 RequestAllocation(e) ==
-    /\ e \in EXECUTORS
+    /\ e \in EXECUTORS \ LocalExecutors
     /\ ((providerState[e] \in {"none", "cancelled"} /\ providerTarget[e] < MAX_BLOCKS)
         \/ providerState[e] = "failed")
     /\ providerTarget' = [providerTarget EXCEPT ![e] = @ + 1]
