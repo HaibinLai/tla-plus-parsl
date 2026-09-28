@@ -862,6 +862,15 @@ The LSF provider status parser is exercised with deterministic `bjobs` output:
 The probe checks foreign-job filtering, unknown-state exposure, and the current missing-job
 fallback to `COMPLETED`.
 
+The Kubernetes polling regression is also exercised with a mocked Kubernetes API client:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_polling_runtime.py -v
+```
+
+The test reproduces the current read-error path that leaves a running job as `RUNNING`, and
+checks the normal `Succeeded` pod translation to `COMPLETED`.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash

@@ -228,6 +228,9 @@ real thread executor, confirming distinct physical attempts and terminal `AppTim
 checking the real BasicMemoizer result path and execution count.
 `tests/test_lsf_status_runtime.py` drives the current LSF provider parser with deterministic
 `bjobs` output, checking foreign-job filtering, unknown-state mapping, and missing-job fallback.
+`tests/test_kubernetes_polling_runtime.py` drives the current Kubernetes polling method with a
+mock API client, reproducing the read-error identity-comparison path and checking normal terminal
+pod translation.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
