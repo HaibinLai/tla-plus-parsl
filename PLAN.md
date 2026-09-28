@@ -604,6 +604,9 @@ and running work. It now covers terminal provider failure both before manager re
 after a manager has become active.
 `ParslHeartbeatProvider.tla` separates transient provider `UNKNOWN` status from HTEX manager
 heartbeat expiry, and checks manager reconnect plus loss accounting after heartbeat timeout.
+`ParslHeartbeatLateAck.tla` adds the in-flight heartbeat acknowledgement race: after manager
+expiry, the fixed branch ignores an old acknowledgement instead of resurrecting the removed
+manager record.
 `ParslResultRace.tla` separates physical attempt result production from callback delivery and
 checks retry selection, late success/failure races, stale callback suppression, and one-time
 Future resolution.
