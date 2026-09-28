@@ -154,6 +154,8 @@ interchange before in-flight cleanup. It also checks that shutdown rejects new s
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
+It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
+`SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderExecutorBridge.tla` connects provider job observations to executor admission,
 manager registration, worker capacity, unknown-status tolerance, and terminal cleanup of queued
 and running work. It now covers terminal provider failure both before manager registration and

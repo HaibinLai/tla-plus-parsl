@@ -176,7 +176,9 @@ and [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Pars
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
-timeout as distinct from failure, cancellation success/failure, and CPU-per-task admission.
+timeout as distinct from failure, cancellation success/failure, executor-driven `SCALED_IN`,
+and CPU-per-task admission. It also covers Slurm `SUSPENDED` to `HELD` and `REQUEUED` to
+`PENDING` translations while preserving terminal-state stability.
 The missing-job rule intentionally preserves the current Slurm provider behavior (a job absent
 from `squeue` is treated as completed) while Kubernetes reports an unknown pod as `UNKNOWN`.
 This is a bounded status-mapping model, not a shell or Kubernetes API emulator. It is based on
@@ -586,10 +588,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslExecutorShutdown.cfg`: 394,010 states generated, 74,431 distinct states, depth 28;
   shutdown admission rejection, ThreadPool completion-before-stop, WorkQueue collector failure
   cleanup, HTEX interchange closure, and in-flight cleanup all passed.
-- `ParslProviderKinds.cfg`: 213,121 states generated, 25,600 distinct states, depth 14;
+- `ParslProviderKinds.cfg`: 424,001 states generated, 40,000 distinct states, depth 15;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
-  handling, timeout-versus-failure distinction, cancellation outcomes, and resource admission
-  all passed.
+  handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
+  handling, and resource admission all passed.
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.

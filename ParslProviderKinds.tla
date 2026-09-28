@@ -16,10 +16,12 @@ CONSTANTS PROVIDERS, CLUSTER_PROVIDERS, KUBERNETES_PROVIDERS,
 
 ProviderStates == {"ready", "failed"}
 RawStates == {"PENDING", "RUNNING", "COMPLETED", "FAILED",
-              "CANCELLED", "TIMEOUT", "UNKNOWN"}
+              "CANCELLED", "TIMEOUT", "SUSPENDED", "REQUEUED", "UNKNOWN"}
 JobStates == {"DOWN", "PENDING", "RUNNING", "COMPLETED", "FAILED",
-              "CANCELLED", "TIMEOUT", "UNKNOWN", "MISSING"}
-TerminalStates == {"COMPLETED", "FAILED", "CANCELLED", "TIMEOUT", "MISSING"}
+              "CANCELLED", "TIMEOUT", "HELD", "UNKNOWN", "MISSING",
+              "SCALED_IN"}
+TerminalStates == {"COMPLETED", "FAILED", "CANCELLED", "TIMEOUT", "MISSING",
+                   "SCALED_IN"}
 
 Translate(p, raw) ==
     IF raw = "PENDING" THEN "PENDING"
@@ -27,6 +29,8 @@ Translate(p, raw) ==
     ELSE IF raw = "COMPLETED" THEN "COMPLETED"
     ELSE IF raw = "CANCELLED" THEN "CANCELLED"
     ELSE IF raw = "TIMEOUT" THEN "TIMEOUT"
+    ELSE IF raw = "SUSPENDED" THEN "HELD"
+    ELSE IF raw = "REQUEUED" THEN "PENDING"
     ELSE IF raw = "FAILED" THEN "FAILED"
     ELSE "UNKNOWN"
 
@@ -115,6 +119,16 @@ CancelFailure(p) ==
     /\ UNCHANGED <<providerState, jobState, rawState, observed,
                     statusFailures, submitRejected, cpusPerTask>>
 
+ScaleIn(p) ==
+    /\ providerState[p] = "ready"
+    /\ jobState[p] \notin TerminalStates
+    /\ jobState' = [jobState EXCEPT ![p] = "SCALED_IN"]
+    /\ rawState' = [rawState EXCEPT ![p] = "UNKNOWN"]
+    /\ observed' = [observed EXCEPT ![p] = FALSE]
+    /\ cancelResult' = [cancelResult EXCEPT ![p] = "none"]
+    /\ UNCHANGED <<providerState, statusFailures, submitRejected,
+                    cpusPerTask>>
+
 FailProvider(p) ==
     /\ providerState[p] = "ready"
     /\ providerState' = [providerState EXCEPT ![p] = "failed"]
@@ -132,6 +146,7 @@ Next ==
     \/ \E p \in PROVIDERS, raw \in RawStates : StatusSuccess(p, raw)
     \/ \E p \in PROVIDERS : StatusFailure(p) \/ ObserveMissing(p)
     \/ \E p \in PROVIDERS : CancelSuccess(p) \/ CancelFailure(p)
+    \/ \E p \in PROVIDERS : ScaleIn(p)
     \/ \E p \in PROVIDERS : FailProvider(p) \/ RecoverProvider(p)
     \/ UNCHANGED vars
 
@@ -153,6 +168,7 @@ TerminalStability ==
            /\ (jobState[p] = "TIMEOUT" => rawState[p] = "TIMEOUT")
            /\ (jobState[p] = "FAILED" => rawState[p] = "FAILED")
            /\ (jobState[p] = "MISSING" => ~observed[p])
+           /\ (jobState[p] = "SCALED_IN" => ~observed[p])
 
 TimeoutIsDistinct ==
     \A p \in PROVIDERS : rawState[p] = "TIMEOUT"
@@ -165,6 +181,11 @@ SubmitStatusSafety ==
 CancelSafety ==
     \A p \in PROVIDERS : cancelResult[p] = "true"
         => jobState[p] = "CANCELLED"
+
+ScaleInSafety ==
+    \A p \in PROVIDERS : jobState[p] = "SCALED_IN"
+        => /\ ~observed[p]
+           /\ cancelResult[p] = "none"
 
 ResourceSafety ==
     TASKS_PER_NODE <= CORES_PER_NODE => cpusPerTask > 0
