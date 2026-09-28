@@ -24,6 +24,13 @@ fixed configuration reads old then new and passes.
 [`tests/test_memo_checkpoint_order_runtime.py`](../tests/test_memo_checkpoint_order_runtime.py)
 creates two UUID-like directories and demonstrates the actual stale restoration.
 
+`ParslLastCheckpointUUID.tla` models the run-directory filter in `get_last_checkpoint`. Current
+DFK instances use UUID run IDs, but the helper keeps only `isdigit()` directory names, so a valid
+UUID checkpoint is invisible. TLC finds the two-state current counterexample; the fixed branch
+accepts the UUID directory. [`tests/test_last_checkpoint_uuid_runtime.py`](../tests/test_last_checkpoint_uuid_runtime.py)
+confirms the current helper returns `[]` for a UUID directory while retaining the legacy numeric
+behavior.
+
 `ParslDependencyTraversal.tla` has explicit dictionary-value and dictionary-key configurations.
 The deep resolver configurations pass with 10 distinct states each; the shallow dictionary
 configuration exposes `NoNestedFutureLeak` because the nested Future reaches the worker.

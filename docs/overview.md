@@ -237,6 +237,12 @@ the old result wins. The chronological fixed configuration passes with 3 distinc
 [`tests/test_memo_checkpoint_order_runtime.py`](../tests/test_memo_checkpoint_order_runtime.py)
 reproduces the stale restoration using two UUID-like run directory names.
 
+`ParslLastCheckpointUUID.tla` models `get_last_checkpoint` in `parsl/utils.py`. Current DFK run
+directories are UUIDs, but the helper filters candidates with `str.isdigit()`, so a valid UUID
+checkpoint is not selected. TLC finds the two-state current counterexample and the fixed branch
+passes with 2 distinct states. [`tests/test_last_checkpoint_uuid_runtime.py`](../tests/test_last_checkpoint_uuid_runtime.py)
+confirms the actual UUID-versus-numeric behavior.
+
 `ParslMemoDictOrdering.tla` models dictionary-key normalization in `BasicMemoizer`. Python allows
 heterogeneous dictionary keys, but the current `id_for_memo_dict` calls `sorted(dict)` directly,
 so a mixed `int`/`str` key dictionary raises `TypeError` while computing a memo key. The runtime
@@ -1131,6 +1137,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoExceptionCheckp
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoExceptionCheckpointFixed.cfg models/dataflow/ParslMemoExceptionCheckpoint.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoCheckpointOrderCurrent.cfg models/dataflow/ParslMemoCheckpointOrder.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoCheckpointOrderFixed.cfg models/dataflow/ParslMemoCheckpointOrder.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslLastCheckpointUUIDCurrent.cfg models/dataflow/ParslLastCheckpointUUID.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslLastCheckpointUUIDFixed.cfg models/dataflow/ParslLastCheckpointUUID.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutCurrent.cfg models/executors/ParslExecuteWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutFixed.cfg models/executors/ParslExecuteWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutSuccess.cfg models/executors/ParslExecuteWaitTimeout.tla
@@ -1442,6 +1450,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   loads `new` before `old`, then restores the old duplicate value.
 - `ParslMemoCheckpointOrderFixed.cfg`: 4 states generated, 3 distinct states, depth 3;
   chronological loading satisfies `LatestCheckpointWins`.
+- `ParslLastCheckpointUUIDCurrent.cfg`: expected counterexample at depth 2; `isdigit()` filtering
+  leaves a UUID checkpoint unselected.
+- `ParslLastCheckpointUUIDFixed.cfg`: 3 states generated, 2 distinct states, depth 2; UUID
+  checkpoint selection satisfies `UUIDCheckpointRecovery`.
 - `ParslExecuteWaitTimeoutCurrent.cfg`: expected counterexample, 2 states generated; a command
   timeout raises while the scheduler process remains alive.
 - `ParslExecuteWaitTimeoutFixed.cfg` and `ParslExecuteWaitTimeoutSuccess.cfg`: 4 states generated,
@@ -1689,7 +1701,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 291 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 293 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
