@@ -52,6 +52,8 @@ Worker result messages use the same abstract lifecycle before a Future is resolv
 the possibility that a failed attempt's late result is rejected as stale.
 Task payloads now distinguish callable serializability from argument/closure serializability;
 an unencodable payload fails before worker dispatch and follows the bounded retry path.
+The data path now distinguishes input stage-in from output stage-out and records a transferred
+content token for declared output files.
 
 ### 3. Checked properties
 

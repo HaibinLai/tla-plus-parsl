@@ -64,6 +64,19 @@ can be encoded. `SerializeAttempt` requires both. If either capability is absent
 `SerializationFailure` rejects the attempt before a worker is assigned and applies the normal
 retry bound.
 
+File-oriented data readiness is represented by `dataState`:
+
+```text
+unavailable -> staging -> available -> stageout -> transferred
+```
+
+`BeginStaging`/`FinishStaging` model input stage-in before dependency release. For tasks in
+`FILE_OUTPUTS`, `BeginStageOut`/`FinishStageOut` model the output file becoming a transferred
+content token after the logical task succeeds. The token stands for file contents and transfer
+completion without enumerating bytes, paths, or a particular staging provider. The checked
+configurations use task `C` as one representative output file to keep the finite state space
+small while still exercising both directions of the data path.
+
 ## What is and is not modeled
 
 The current model covers the major control-flow effects represented in the paper's DFK,
@@ -106,12 +119,12 @@ attempts, attempt identity, Future result consistency, and stale-result safety.
 
 Measured with TLC 2.19 and Java 17 on 2026-09-28:
 
-- `ParslAbstract.cfg`: 3,400,082 states generated, 637,157 distinct states, depth 85;
+- `ParslAbstract.cfg`: 4,114,402 states generated, 755,365 distinct states, depth 87;
   all invariants passed.
-- `ParslMemo.cfg`: 162,340 states generated, 33,651 distinct states, depth 63; all invariants passed.
+- `ParslMemo.cfg`: 207,668 states generated, 41,907 distinct states, depth 65; all invariants passed.
 - `ParslSerializationFailure.cfg`: 1,636,240 states generated, 310,025 distinct states, depth 69;
   all safety invariants passed, including the pre-dispatch serialization-failure path.
-- `ParslNoFailures.cfg`: 5,322 states generated, 1,625 distinct states, depth 49;
+- `ParslNoFailures.cfg`: 5,378 states generated, 1,649 distinct states, depth 51;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 
 ## Source-to-model mapping
@@ -119,6 +132,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | TLA+ action | Parsl concept | Current source location |
 | --- | --- | --- |
 | `BeginStaging` / `FinishStaging` | data readiness/staging | `parsl/data_provider/data_manager.py` |
+| `BeginStageOut` / `FinishStageOut` | output file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |

@@ -12,6 +12,7 @@ EXTENDS Naturals, Integers, FiniteSets, Sequences
 
 CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
+          FILE_OUTPUTS,
           MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES
 
 TaskStates == {"pending", "staging", "ready", "queued", "running",
@@ -23,7 +24,7 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
                   "succeeded", "failed", "timed_out", "lost", "stale"}
 WorkerStates == {"idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
-DataStates == {"unavailable", "staging", "available"}
+DataStates == {"unavailable", "staging", "available", "stageout", "transferred"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
 NoAttempt == <<"none", -1>>
 Deps(t) == {d \in TASKS : d \o "->" \o t \in DEPS}
@@ -46,6 +47,7 @@ Init ==
     /\ TASKS # {} /\ EXECUTORS # {} /\ WORKERS # {}
     /\ CALLABLE_SERIALIZABLE \subseteq TASKS
     /\ PAYLOAD_SERIALIZABLE \subseteq TASKS
+    /\ FILE_OUTPUTS \subseteq TASKS
     /\ DEPS \subseteq {d \o "->" \o t : d \in TASKS, t \in TASKS}
     /\ WORKER_EXECUTOR \subseteq {w \o ":" \o e : w \in WORKERS, e \in EXECUTORS}
     /\ \A t \in TASKS : t \notin Deps(t)
@@ -88,6 +90,28 @@ FinishStaging(t) ==
     /\ UNCHANGED <<futureState, retries, currentAttempt, selectedExecutor,
                     attemptState, attemptExecutor, attemptWorker,
                     workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+BeginStageOut(t) ==
+    /\ t \in FILE_OUTPUTS
+    /\ taskState[t] \in {"succeeded", "memoized"}
+    /\ dataState[t] = "available"
+    /\ dataState' = [dataState EXCEPT ![t] = "stageout"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+FinishStageOut(t) ==
+    /\ t \in FILE_OUTPUTS
+    /\ taskState[t] \in {"succeeded", "memoized"}
+    /\ dataState[t] = "stageout"
+    /\ dataState' = [dataState EXCEPT ![t] = "transferred"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs>>
 
@@ -460,6 +484,7 @@ CancelAllocation(e) ==
 
 NextCore ==
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
+    \/ \E t \in TASKS : BeginStageOut(t) \/ FinishStageOut(t)
     \/ \E t \in TASKS : DependencyCheck(t) \/ MemoizationHit(t) \/ Enqueue(t)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitAttempt(t, e)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : SerializationFailure(t, k)
@@ -551,6 +576,14 @@ SerializationSafety ==
                             "dispatched", "running", "result_serialized",
                             "result_sent", "result_received", "result_decoded",
                             "succeeded"} => SerializableTask(a[1])
+
+DataReadinessSafety ==
+    \A t \in TASKS : taskState[t] \in {"ready", "queued", "running"} =>
+        dataState[t] \in {"available", "transferred"}
+
+FileTransferSafety ==
+    \A t \in TASKS : dataState[t] \in {"stageout", "transferred"} =>
+        t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
 
 EventuallySettled ==
     \A t \in TASKS : <> (taskState[t] \in {"succeeded", "memoized", "failed"})
