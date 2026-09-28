@@ -80,6 +80,10 @@ release, task serialization, wire delivery, worker execution, result delivery, r
 and late-result correlation are represented in one short state machine. The current configuration
 produces a `StaleResultSafety` counterexample, while `ParslEndToEndFixed.cfg` checks the stale
 result guard successfully.
+`ParslTimedHeartbeat.tla` combines logical time, heartbeat expiry, task deadlines, and late
+results. Its current configuration permits a post-timeout result and violates `ResultSafety`; the
+fixed configuration rejects the result as stale while preserving independent heartbeat and task
+timeout transitions.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery

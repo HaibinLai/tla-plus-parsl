@@ -921,6 +921,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEndFixed.cfg model
 The first command is an intentional counterexample configuration: an old attempt can resolve the
 Future. The fixed configuration rejects that result as stale and passes all six invariants.
 
+The combined clock/heartbeat check is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimedHeartbeat.cfg models/clock/ParslTimedHeartbeat.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimedHeartbeatFixed.cfg models/clock/ParslTimedHeartbeat.tla
+```
+
+The current branch produces a `ResultSafety` counterexample after timeout or manager expiry; the
+fixed branch rejects the late result and checks 3,061 states.
+
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
 workers, one retry, and one block per executor. Java and `tla2tools.jar` are required.
 
