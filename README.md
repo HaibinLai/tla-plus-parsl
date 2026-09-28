@@ -920,6 +920,8 @@ cancelled dead-process handling.
 They also launch a real local provider process and collect its exit code and stdout.
 An additional real process exits with code 3 and is recorded as `FAILED` rather than a submission
 failure.
+The suite also starts a real `sleep` process, cancels its process group, and observes terminal
+`CANCELLED` status.
 
 Google Compute Engine status handling is exercised with a fake discovery client:
 

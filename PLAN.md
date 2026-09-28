@@ -253,6 +253,8 @@ checking linger refusal, failure rollback, and successful instance removal.
 `tests/test_local_provider_runtime.py` drives LocalProvider's real exit-file state inference,
 covering liveness, completion, malformed exit codes, cancellation, and a real local submit/output
 collection path, including non-zero application exit handling.
+The same runtime probe now exercises cancellation of a real local process group and terminal
+`CANCELLED` observation.
 `ParslGridEngineStatus.tla` models the Grid Engine malformed-qstat boundary. Its current
 configuration reproduces the short-line crash; fixed and valid-output configurations pass.
 `ParslGoogleCloudStatus.tla` models direct GCE status-table lookup: the current unknown-status

@@ -90,6 +90,23 @@ class LocalProviderRuntimeTest(unittest.TestCase):
             self.assertEqual(status.state, JobState.FAILED)
             self.assertEqual(status.exit_code, 3)
 
+    def test_cancel_terminates_real_local_process(self):
+        with tempfile.TemporaryDirectory() as directory:
+            provider = LocalProvider()
+            provider.script_dir = directory
+            job_id = provider.submit("sleep 5", tasks_per_node=1)
+
+            self.assertEqual(provider.cancel([job_id]), [True])
+            status = None
+            for _ in range(100):
+                status = provider.status([job_id])[0]
+                if status.terminal:
+                    break
+                time.sleep(0.02)
+
+            self.assertIsNotNone(status)
+            self.assertEqual(status.state, JobState.CANCELLED)
+
 
 if __name__ == "__main__":
     unittest.main()
