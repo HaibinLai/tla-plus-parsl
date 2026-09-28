@@ -911,6 +911,16 @@ allocation can become active.
 
 ## TLC verification
 
+The compact integration check is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEnd.cfg models/core/ParslEndToEnd.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEndFixed.cfg models/core/ParslEndToEnd.tla
+```
+
+The first command is an intentional counterexample configuration: an old attempt can resolve the
+Future. The fixed configuration rejects that result as stale and passes all six invariants.
+
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
 workers, one retry, and one block per executor. Java and `tla2tools.jar` are required.
 

@@ -75,6 +75,11 @@ non-zero `MIN_BLOCKS` floor.
 `ParslLocalExecutor.cfg` adds a provider-free `local` executor path while retaining the common
 serialization, worker binding, and result protocol; local workers start idle without manager
 registration.
+`ParslEndToEnd.tla` is a compact integration model for the next refinement step: dependency
+release, task serialization, wire delivery, worker execution, result delivery, retry/timeout,
+and late-result correlation are represented in one short state machine. The current configuration
+produces a `StaleResultSafety` counterexample, while `ParslEndToEndFixed.cfg` checks the stale
+result guard successfully.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery
