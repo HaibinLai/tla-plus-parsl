@@ -28,6 +28,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataFutureTransfer.c
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataFutureTransferFixed.cfg models/staging/ParslDataFutureTransfer.tla
 ```
 
+`ParslDataFutureCancellationPropagation.tla` isolates the parent-cancellation boundary in
+`DataFuture.parent_callback`. The current truthiness check treats a cancelled parent as a ready
+file, while the fixed branch propagates a non-success terminal state. The existing
+`tests/test_datafuture_cancellation_runtime.py` probe reproduces the current behavior with real
+`Future` and `DataFuture` objects.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataFutureCancellationPropagationCurrent.cfg models/staging/ParslDataFutureCancellationPropagation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataFutureCancellationPropagationFixed.cfg models/staging/ParslDataFutureCancellationPropagation.tla
+```
+
 `ParslFilePathResolution.tla` isolates the lower-level `File.filepath` contract in
 `parsl/data_provider/files.py`. It checks that a `file:` URI resolves directly, that a
 `local_path` annotation takes precedence after staging, and that a remote URI without a
