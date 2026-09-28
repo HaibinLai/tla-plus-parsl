@@ -377,6 +377,11 @@ message replaces the single deferred entry, while status rows are never written 
 foreign key exists. This follows the deferred-message sets and replay logic in
 [`monitoring/db_manager.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/monitoring/db_manager.py).
 
+`ParslFilesystemRadioAtomicity.tla` models the monitoring filesystem radio. A writer must keep
+partial pickle bytes in `tmp/` and atomically rename the complete file into `new/`; publishing
+directly in `new/` allows a reader to consume a partial message. The runtime probe exercises the
+real `FilesystemRadioSender` and its write-failure behavior.
+
 `ParslExecutorProvider.tla` is a focused model of the HTEX/BlockProviderExecutor boundary. It
 separates provider block requests and failures from executor admission, manager registration,
 worker readiness, queued/running tasks, drain/recovery, and block-granular scale-in. Provider
@@ -1354,6 +1359,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   idempotent duplicate handler preserves the row and satisfies `DuplicatePersistence`.
 - `ParslMonitoringDBInsertPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a
   non-duplicate STATUS insert passes the same invariants.
+- `ParslFilesystemRadioAtomicityCurrent.cfg`: expected counterexample at depth 3; direct
+  publication lets the reader consume a partial monitoring message.
+- `ParslFilesystemRadioAtomicityFixed.cfg`: 13 states generated, 6 distinct states, depth 6;
+  tmp-file writes and atomic rename preserve complete-message visibility.
 - `ParslMonitoringBatchCurrent.cfg`: expected counterexample, 2 states generated; with a queued
   message and zero interval, the batch action returns empty and leaves the message unread.
 - `ParslMonitoringBatchFixed.cfg` and `ParslMonitoringBatchPositive.cfg`: 4 states generated,
@@ -1622,7 +1631,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 283 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 285 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2502,6 +2511,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `ExpireManager` / `Heartbeat` / `ExpirationAccounting` | strict heartbeat threshold and in-flight manager-loss cleanup | `Interchange.expire_bad_managers` and main polling loop |
 | `AdvanceClock` / `CheckExpiry` / `NoPrematureExpiry` | wall-clock jump versus monotonic heartbeat expiry | `Interchange.expire_bad_managers` |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
+| `BeginWrite` / `FinishWrite` / `PublishFixed` / `ReadComplete` | filesystem monitoring message write, atomic rename, and reader visibility | `FilesystemRadioSender.send` and `filesystem_router_starter` |
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
 | `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |
 | `RegistrationFailure` / `RetryRegistration` | manager startup failure and reconnect/re-registration | `Interchange` manager registration failure boundary |

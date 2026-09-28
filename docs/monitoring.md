@@ -58,3 +58,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringShutdow
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringShutdownRaceFixed.cfg models/monitoring/ParslMonitoringShutdownRace.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_shutdown_race_runtime.py -v
 ```
+
+`ParslFilesystemRadioAtomicity.tla` models the filesystem monitoring radio's publication
+protocol. The current direct-write branch lets a reader observe a partial message; the fixed
+branch writes under `tmp/` and atomically renames into `new/`. TLC finds the expected current
+counterexample and checks 13 generated/6 distinct states for the fixed branch. The runtime probe
+uses the real `FilesystemRadioSender` to verify complete pickle visibility and failure isolation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslFilesystemRadioAtomicityCurrent.cfg models/monitoring/ParslFilesystemRadioAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslFilesystemRadioAtomicityFixed.cfg models/monitoring/ParslFilesystemRadioAtomicity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_filesystem_radio_runtime.py -v
+```
