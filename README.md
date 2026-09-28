@@ -241,6 +241,13 @@ configuration probes shutdown with a pending RP task, because the current `shutd
 session without an explicit sweep of `future_tasks`; the fixed configuration adds that sweep.
 This follows [`radical/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/radical/executor.py).
 
+`ParslGlobusComputeConfig.tla` models the thin Globus Compute wrapper's temporary resource
+configuration. Each submit copies a task-specific specification into the shared SDK executor,
+calls the underlying submit, and restores defaults in `finally`. The unsynchronized configuration
+finds cross-task specification use under interleaving submits; the serialized configuration
+captures the caller-side lock required to make the wrapper safe. This follows
+[`globus_compute.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/globus_compute.py).
+
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
@@ -603,6 +610,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueResults.cfg ParslWorkQueue
 java -cp tla2tools.jar tlc2.TLC -config ParslFluxResultFixed.cfg ParslFluxResult.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGlobusComputeConfigFixed.cfg ParslGlobusComputeConfig.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
@@ -745,6 +753,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   distinct); shutdown can leave a submitted RP task's Parsl Future pending.
 - `ParslRadicalPilotResultsFixed.cfg`: 79 states generated, 38 distinct states, depth 4; Bash,
   Python, MPI, cancellation, task failure, master failure, and shutdown cleanup all passed.
+- `ParslGlobusComputeConfig.cfg`: expected counterexample at depth 3 (38 states generated, 25
+  distinct); interleaved submits can observe another task's temporary resource specification.
+- `ParslGlobusComputeConfigFixed.cfg`: 37 states generated, 16 distinct states, depth 8;
+  serialized submit sections preserve per-task resource specifications and default restoration.
 - `ParslProviderKinds.cfg`: 424,001 states generated, 40,000 distinct states, depth 15;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
@@ -919,6 +931,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
+| `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
 | `Dispatch` / `Complete` / `Drain` / `Recover` | HTEX pending-task priority, manager capacity, and draining admission | `Interchange.process_task_incoming`, `get_tasks`, and `process_tasks_to_send` |

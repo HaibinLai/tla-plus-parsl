@@ -180,6 +180,8 @@ the fixed configuration checks the candidate propagation fix.
 result-file failure mapping and cleanup of all outstanding Futures after manager failure.
 `ParslRadicalPilotResults.tla` refines RadicalPilot callback mapping for Bash/Python/MPI tasks,
 master failure propagation, cancellation, and the shutdown pending-Future probe.
+`ParslGlobusComputeConfig.tla` refines Globus Compute's temporary per-submit resource configuration
+and records the caller-side serialization assumption needed to avoid cross-submit interference.
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
