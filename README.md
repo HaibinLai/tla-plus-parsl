@@ -619,6 +619,11 @@ and [`serialize/concretes.py`](https://raw.githubusercontent.com/Parsl/Parsl/mas
 `LengthSafety`; the fixed configuration models strict rejection. This is retained as an
 executable counterexample for a future parser-hardening change.
 
+`ParslSerializationFrameCount.tla` checks the complementary extra-frame boundary. The current
+`unpack_and_deserialize` decodes every framed buffer before asserting that an apply message has
+exactly three buffers, so a fourth frame can trigger deserializer work before rejection. The fixed
+configuration validates the frame count before decoding.
+
 `ParslSerializationZMQBridge.tla` connects those framed buffers to a bounded ZMQ-like route.
 Task and result messages carry an attempt id and serializer token; send/receive can drop, duplicate,
 or misroute a message; decode is required before task dispatch; and only a result for the current
@@ -999,6 +1004,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializ
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLength.cfg ParslSerializationLength.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLengthFixed.cfg ParslSerializationLength.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountCurrent.cfg ParslSerializationFrameCount.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountFixed.cfg ParslSerializationFrameCount.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountNormal.cfg ParslSerializationFrameCount.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitFailure.cfg ParslHtexSubmitFailure.tla
@@ -1038,6 +1046,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   a declared-length mismatch (`5` declared, `3` bytes received), violating `LengthSafety`.
 - `ParslSerializationLengthFixed.cfg`: 4 states generated, 2 distinct states, depth 2; strict
   length validation rejects the truncated frame.
+- `ParslSerializationFrameCountCurrent.cfg`: expected counterexample, 4 states generated; an
+  extra frame is deserialized before the three-buffer assertion rejects the message.
+- `ParslSerializationFrameCountFixed.cfg` and `ParslSerializationFrameCountNormal.cfg`: 4 states
+  generated, 2 distinct states, depth 2; extra frames are rejected before decode and normal
+  three-buffer messages decode successfully.
 - `ParslDataFutureCopy.cfg`: 61 states generated, 26 distinct states, depth 7; clean staging
   copies preserved the original local-path annotation and dependency admission waited for the
   parent Future.
@@ -1323,6 +1336,15 @@ They also verify closure snapshot semantics and nested argument-object graph rou
 The truncated-frame probe records the current `unpack_buffers` behavior: a short slice is returned
 instead of being rejected, matching the TLA+ counterexample above.
 
+Extra apply-message framing is exercised separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_frame_count_runtime.py -v
+```
+
+The probe confirms that all four payloads are passed to `deserialize` before the current
+three-buffer assertion rejects the message.
+
 The HTEX result-thread boundary is exercised without launching an interchange:
 
 ```bash
@@ -1370,7 +1392,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 216 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 217 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2204,6 +2226,7 @@ failure result for each in-flight task.
 | `ReceiveValid` / `RejectInvalid` / `Ack` | receiver validation, correlation, and consume acknowledgement | interchange manager message handling and DFK result path |
 | `StartEncode` / `EncodeObject` / `FinishEncode` | callable, globals, defaults, closure, and argument object serialization | DFK task serialization and executor submission boundary |
 | `StartDecode` / `DecodeObject` / `FinishDecode` | reconstructing a callable/payload only after a complete encoded graph | worker-side task deserialization |
+| `ValidateFrameCount` / `DecodeExtraFrames` / `ExtraDecodeSafety` | apply-message frame-count validation before deserialization | `serialize.facade.unpack_and_deserialize` |
 | `MutateObject` / `RepairObject` | object content becoming unencodable before submission | Python object/payload serialization failure path |
 | `SendChunk` / `ReceiveChunk` / `RejectCorruptChunk` / `RepairChunk` | chunked content transfer, checksum validation, and retransmission | `DataManager.stage_in` / `stage_out` transfer paths |
 | `PublishStageIn` / `RejectStaleStageIn` / `PublishStageOut` | readiness and atomic file visibility after complete transfer | DataManager staging completion and file publication boundary |

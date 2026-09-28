@@ -353,6 +353,9 @@ thread task later succeeds, while walltime still produces `AppTimeout`.
 `unpack_buffers`: a declared length larger than the received bytes is silently sliced instead of
 rejected. `ParslSerializationLengthFixed.cfg` records the strict parser behavior expected for a
 future hardening change.
+`tests/test_serialization_frame_count_runtime.py` records the complementary extra-frame behavior:
+`unpack_and_deserialize` invokes the deserializer for a fourth buffer before its final count
+assertion. `ParslSerializationFrameCount.tla` checks count validation before decode.
 `tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
 executor, covering single Futures, ordered duplicate references, empty lists, `JoinError`,
 nested joins, scalar-return rejection, mixed-list rejection, and non-empty all-value list
@@ -612,7 +615,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 216 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 217 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
