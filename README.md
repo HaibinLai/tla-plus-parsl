@@ -853,6 +853,15 @@ Memoization and cached-result dependency propagation are exercised with a real l
 The probe confirms duplicate calls execute once, calls with different arguments execute normally,
 and a dependent app can consume the memoized Future result.
 
+The LSF provider status parser is exercised with deterministic `bjobs` output:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_lsf_status_runtime.py -v
+```
+
+The probe checks foreign-job filtering, unknown-state exposure, and the current missing-job
+fallback to `COMPLETED`.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash

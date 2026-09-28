@@ -226,6 +226,8 @@ nested joins, scalar-return rejection, and mixed-list rejection.
 real thread executor, confirming distinct physical attempts and terminal `AppTimeout` behavior.
 `tests/test_memoization_runtime.py` runs duplicate and distinct cached calls plus a dependent app,
 checking the real BasicMemoizer result path and execution count.
+`tests/test_lsf_status_runtime.py` drives the current LSF provider parser with deterministic
+`bjobs` output, checking foreign-job filtering, unknown-state mapping, and missing-job fallback.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
