@@ -1,6 +1,7 @@
 """Runtime probes for LocalProvider exit-file status inference."""
 
 import tempfile
+import time
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -52,6 +53,25 @@ class LocalProviderRuntimeTest(unittest.TestCase):
             with patch.object(provider, "_is_alive", return_value=False):
                 provider.status(["local-1"])
             self.assertEqual(provider.resources["local-1"]["status"].state, JobState.CANCELLED)
+
+    def test_submit_launches_real_local_process_and_collects_output(self):
+        with tempfile.TemporaryDirectory() as directory:
+            provider = LocalProvider()
+            provider.script_dir = directory
+            job_id = provider.submit("echo local-provider-runtime", tasks_per_node=1)
+
+            status = None
+            for _ in range(100):
+                status = provider.status([job_id])[0]
+                if status.terminal:
+                    break
+                time.sleep(0.02)
+
+            self.assertIsNotNone(status)
+            self.assertEqual(status.state, JobState.COMPLETED)
+            self.assertEqual(status.exit_code, 0)
+            with open(status.stdout_path) as stdout:
+                self.assertIn("local-provider-runtime", stdout.read())
 
 
 if __name__ == "__main__":

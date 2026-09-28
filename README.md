@@ -917,6 +917,7 @@ The provider-free LocalProvider exit-file state machine is exercised with tempor
 
 The tests cover running-marker/liveness, zero exit completion, malformed exit failure, and
 cancelled dead-process handling.
+They also launch a real local provider process and collect its exit code and stdout.
 
 Google Compute Engine status handling is exercised with a fake discovery client:
 
