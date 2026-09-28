@@ -234,6 +234,14 @@ minimum block floor. This combines the resource-aware admission abstraction with
 rules in [`jobs/strategy.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/strategy.py)
 and block request handling in [`executors/status_handling.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/status_handling.py).
 
+`ParslPollerBadState.tla` models the ordering in `JobStatusPoller.poll`: provider status is
+refreshed first, the error handler counts `FAILED`/`MISSING` blocks, and strategy scaling is
+available only while the executor is healthy. Reaching the initial-block failure threshold puts
+the executor in bad state, fails outstanding tasks, and prevents later task admission or scale-out.
+The abstraction follows [`jobs/job_status_poller.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/job_status_poller.py),
+[`jobs/error_handlers.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/error_handlers.py),
+and [`executors/status_handling.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/status_handling.py).
+
 `ParslSerializationWire.tla` models the concrete `pack_apply_message` wire shape: callable,
 args, and kwargs are serialized separately; callable/data serializer identifiers are placed before
 each body; decimal length prefixes frame the buffers in order; and unpack/decode cannot dispatch
@@ -470,6 +478,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinMonitoring.cfg ParslJoinMonitor
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmission.cfg ParslResourceAdmission.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmissionAutolabel.cfg ParslResourceAdmission.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceScaling.cfg ParslResourceScaling.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPollerBadState.cfg ParslPollerBadState.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
@@ -588,6 +597,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslResourceScaling.cfg`: 987 states generated, 292 distinct states, depth 21;
   resource-driven scale-out, pending allocation success/failure rollback, capacity-guarded
   dispatch, retryable scaling pressure, and minimum-block scale-in safety all passed.
+- `ParslPollerBadState.cfg`: 6,699 states generated, 936 distinct states, depth 12;
+  status-poll ordering, `FAILED`/`MISSING` threshold handling, bad-state task failure, and
+  suppression of later admission/scale-out all passed.
 - `ParslSerializationWire.cfg`: 208 states generated, 73 distinct states, depth 14;
   three-buffer serialization, serializer headers, decimal length framing, ordered unpack/decode,
   dispatch gating, and corrupt-frame rejection all passed.

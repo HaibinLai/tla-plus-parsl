@@ -173,6 +173,9 @@ terminal-record protection.
 worker capacity accounting, with a companion autolabel configuration for partial specifications.
 `ParslResourceScaling.tla` connects per-task core demand to strategy scale-out, pending allocation
 success/failure rollback, capacity-guarded dispatch, retryable pressure, and minimum-block scale-in.
+`ParslPollerBadState.tla` models the `JobStatusPoller.poll` ordering: provider status refresh,
+`FAILED`/`MISSING` error-threshold handling, executor bad-state transition, failure of outstanding
+tasks, and suppression of later admission or scale-out.
 `ParslSerializationWire.tla` models concrete callable/args/kwargs serialization headers, decimal
 length framing, ordered unpack/decode, serializer failure, and corrupt-frame rejection before
 dispatch.
@@ -217,7 +220,7 @@ After the MVP is stable, possible extensions are:
 - richer DataManager/staging behavior, including stage-in/stage-out failure and checksums;
 - bounded message reordering and message correlation IDs;
 - richer `join_app` behavior beyond the bounded inner-Future set and invalid-return branch now modeled;
-- manager heartbeat timeout, version mismatch, drain, and executor bad state;
+- manager heartbeat timeout, version mismatch, drain, and richer executor bad-state transitions;
 - monitoring as an abstract eventual event stream;
 - dynamic task creation while a workflow is running;
 - additional executor/provider-specific models.
