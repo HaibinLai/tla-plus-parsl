@@ -473,6 +473,12 @@ process/collector exits, the final cleanup action fails every remaining outstand
 follows `_collect_work_queue_results` in
 [`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py).
 
+`ParslWorkQueueDuplicateReport.tla` models a stale or duplicate collector report. The current
+collector removes the Future before decoding the report, so a second report for the same executor
+ID raises `KeyError`, exits the collector, and causes its `finally` block to fail unrelated
+outstanding Futures. The fixed configuration ignores the stale report instead. The runtime probe
+drives the real `_collect_work_queue_results` method through this duplicate-report path.
+
 `ParslWorkQueueSubmit.tla` models the submit-side ordering around serialization and the Work Queue
 process. The current implementation registers the Future in `_tasks` before serialization and
 before checking process liveness; either a serialization exception or a dead process can leave that
@@ -1001,6 +1007,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPo
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueResults.cfg ParslWorkQueueResults.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueDuplicateReport.cfg ParslWorkQueueDuplicateReport.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueDuplicateReportFixed.cfg ParslWorkQueueDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFluxResultFixed.cfg ParslFluxResult.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
@@ -1443,7 +1451,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 220 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 221 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2032,6 +2040,10 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslWorkQueueResults.cfg`: 606 states generated, 225 distinct states, depth 9;
   valid-result completion, corrupt/exception/no-result failure mapping, collector shutdown
   cleanup, and terminal-result consistency all passed.
+- `ParslWorkQueueDuplicateReport.cfg`: expected counterexample at depth 3 (5 states
+  generated, 4 distinct); a duplicate report kills the collector and exposes unrelated task
+  failure. `ParslWorkQueueDuplicateReportFixed.cfg`: 9 states generated, 6 distinct states,
+  depth 3; stale reports are ignored while the unrelated task remains pending.
 - `ParslFluxResult.cfg`: expected counterexample at depth 2 (54 states generated, 24 distinct);
   cancellation of the underlying Flux future can leave the wrapper Future non-terminal.
 - `ParslFluxResultFixed.cfg`: 63 states generated, 26 distinct states, depth 6; valid, missing,
