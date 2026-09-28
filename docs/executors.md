@@ -44,3 +44,13 @@ The runtime probe calls `set_bad_state_and_fail_all` on a small concrete subclas
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadState.cfg models/executors/ParslBlockProviderBadState.tla
 ```
+
+`ParslHtexManagerSelection.tla` abstracts the two manager selectors in
+`high_throughput/manager_selector.py`. Random selection is modeled as any permutation of ready
+managers; block-ID selection preserves the source ordering rule, including managers with no block
+ID and lexicographic block IDs. The runtime probe invokes both concrete selector classes.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerSelection.cfg models/executors/ParslHtexManagerSelection.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerSelectionBlock.cfg models/executors/ParslHtexManagerSelection.tla
+```

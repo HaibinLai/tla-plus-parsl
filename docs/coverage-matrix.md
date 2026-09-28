@@ -12,7 +12,7 @@ implementations or every detail in the paper.
 | Files and transfer | ParslFileBytes, ParslDataFutureTransfer, ParslFilePathResolution, and staging-provider models | file, DataFuture, File path, FTP/HTTP/Rsync/Zip/Globus probes | Chunk counts and content versions are bounded |
 | Time, heartbeat, timeout | ParslTimedHeartbeat, ParslHeartbeatClockJump, ParslHeartbeatClockRollback, ParslHeartbeatLateAck | heartbeat, deadline, and command-timeout probes | Logical time replaces OS scheduling and network latency |
 | Monitoring database | ParslMonitoringDelivery, ParslMonitoringDB, ParslMonitoringTaskRetry | monitoring DB retry, batching, atomicity, and close probes | Database schema and transaction batches are reduced to finite records |
-| Executors/providers | lifecycle, HTEX, Thread, WorkQueue, Flux, TaskVine, LocalProvider, `ParslBlockProviderBadState`, and scheduler-specific models under models/executors/ and models/providers/ | 241 local/fake-provider runtime tests | Not every backend implementation is modeled at identical depth |
+| Executors/providers | lifecycle, HTEX, manager selection, Thread, WorkQueue, Flux, TaskVine, LocalProvider, `ParslBlockProviderBadState`, and scheduler-specific models under models/executors/ and models/providers/ | 243 local/fake-provider runtime tests | Not every backend implementation is modeled at identical depth |
 | join_app | ParslJoinComplete, callback/cancellation/mutation/nested/memo-data models | join, callback, cancellation, mutation, and None probes | Python exception identity and arbitrary user object graphs remain abstract |
 
 The next refinements should select one row, read the relevant source path, and add a focused
