@@ -125,6 +125,10 @@ protection against reusing a request socket whose state is unknown.
 or pickle input is ignored without changing the manager record; a valid heartbeat updates its
 timestamp and produces the heartbeat reply.
 
+`ParslGridEngineSubmit.tla` models Grid Engine `qsub` submission: script creation precedes the
+command, failed/empty output creates no resource, and the first non-empty successful output line
+registers a pending job.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1819,6 +1823,7 @@ failure result for each in-flight task.
 | `WriteArchive` / `RemoveSource` / `ModifySourceBeforeRetry` | zip stage-out append, source cleanup, and retry duplication | `ZipFileStaging._zip_stage_out` |
 | `SendCommand` / `ReceiveReply` / `ResponseTimeout` | HTEX command REQ/REP lifecycle and timeout poisoning | `high_throughput.zmq_pipes.CommandClient.run` |
 | `DecodeMalformed` / `DecodeHeartbeat` / `UpdateHeartbeat` / `ReplyHeartbeat` | manager message decoding and heartbeat reply | `Interchange.process_manager_socket_message` |
+| `WriteScript` / `SubmitCommand` / `CommandFails` / `EmptySuccess` / `RegisterJob` | Grid Engine qsub submission and resource registration | `GridEngineProvider.submit` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |

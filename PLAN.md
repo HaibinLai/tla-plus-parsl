@@ -151,6 +151,9 @@ uses a fake socket to exercise the real polling and error classes without a netw
 or pickle input is ignored without changing manager heartbeat state, while a valid heartbeat
 updates the timestamp and emits the heartbeat reply. `tests/test_htex_manager_message_runtime.py`
 drives the real `Interchange.process_manager_socket_message` method.
+`ParslGridEngineSubmit.tla` adds the missing Grid Engine provider submission model: submit-script
+creation, qsub failure, empty successful output, and first-job-id registration. It corresponds to
+the existing `tests/test_grid_engine_submit_runtime.py` probe.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
