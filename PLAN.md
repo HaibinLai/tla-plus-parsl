@@ -74,7 +74,8 @@ decode, preventing a duplicate envelope from resolving a Future twice.
 `ParslFileContent.cfg` adds a deterministic symbolic content token for output files and checks
 that stage-out transfers the token only after successful task completion.
 The transfer is split into two bounded chunks (`stageout_chunk1` and `stageout_chunk2`) so that
-the model cannot mark an output `transferred` until the complete protocol has progressed.
+the model cannot mark an output `transferred` until the complete protocol has progressed. A
+corrupted first or second chunk has a distinct state and repair restarts from the damaged chunk.
 `ParslFileCorruptionSmall.cfg` adds a minimal corrupted-output and repair/retransfer path;
 the larger three-task corruption configuration is retained for future state-space reduction.
 `ParslJoinInvalid.cfg` covers the `join_app` type-error branch. `SpecFair` now uses strong

@@ -29,7 +29,9 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
 WorkerStates == {"unregistered", "idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
 DataStates == {"unavailable", "staging", "available", "stageout",
-               "stageout_chunk1", "stageout_chunk2", "transferred", "corrupt"}
+               "stageout_chunk1", "stageout_chunk1_corrupt",
+               "stageout_chunk2", "stageout_chunk2_corrupt",
+               "transferred", "corrupt"}
 WireStates == {"none", "queued", "sent", "received", "duplicate", "consumed", "dropped"}
 EnvelopeStates == {"none", "valid", "invalid"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
@@ -176,7 +178,10 @@ CorruptStageOut(t) ==
     /\ t \in FILE_OUTPUTS
     /\ taskState[t] \in {"succeeded", "memoized"}
     /\ dataState[t] \in {"stageout", "stageout_chunk1", "stageout_chunk2", "transferred"}
-    /\ dataState' = [dataState EXCEPT ![t] = "corrupt"]
+    /\ dataState' = [dataState EXCEPT ![t] =
+          IF dataState[t] = "stageout_chunk1" THEN "stageout_chunk1_corrupt"
+          ELSE IF dataState[t] = "stageout_chunk2" THEN "stageout_chunk2_corrupt"
+          ELSE "corrupt"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
@@ -188,8 +193,10 @@ RepairStageOut(t) ==
     /\ ALLOW_FAILURES
     /\ t \in FILE_OUTPUTS
     /\ taskState[t] \in {"succeeded", "memoized"}
-    /\ dataState[t] = "corrupt"
-    /\ dataState' = [dataState EXCEPT ![t] = "stageout_chunk1"]
+    /\ dataState[t] \in {"corrupt", "stageout_chunk1_corrupt", "stageout_chunk2_corrupt"}
+    /\ dataState' = [dataState EXCEPT ![t] =
+          IF dataState[t] = "stageout_chunk2_corrupt" THEN "stageout_chunk2"
+          ELSE "stageout_chunk1"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
@@ -1212,9 +1219,13 @@ FileContentSafety ==
 FileChunkSafety ==
     /\ \A t \in TASKS : dataState[t] \in {"stageout_chunk1", "stageout_chunk2"} =>
           t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
+    /\ \A t \in TASKS : dataState[t] \in {"stageout_chunk1_corrupt",
+                                             "stageout_chunk2_corrupt", "corrupt"} =>
+          t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
 
 FileCorruptionSafety ==
-    \A t \in TASKS : dataState[t] = "corrupt" =>
+    \A t \in TASKS : dataState[t] \in {"corrupt", "stageout_chunk1_corrupt",
+                                         "stageout_chunk2_corrupt"} =>
         t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
 
 TimeSafety ==

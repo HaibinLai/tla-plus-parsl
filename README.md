@@ -80,6 +80,8 @@ File-oriented data readiness is represented by `dataState`:
 
 ```text
 unavailable -> staging -> available -> stageout_chunk1 -> stageout_chunk2 -> transferred
+                                      \-> stageout_chunk1_corrupt
+                                      \-> stageout_chunk2_corrupt
 ```
 
 `BeginStaging`/`FinishStaging` model input stage-in before dependency release. For tasks in
@@ -89,6 +91,11 @@ execution from claiming that a file is ready before all transfer stages complete
 for file contents and transfer completion without enumerating bytes, paths, or a particular staging provider. The checked
 configurations use task `C` as one representative output file to keep the finite state space
 small while still exercising both directions of the data path.
+
+The corruption refinement records which chunk was damaged: corruption of the first or second
+chunk enters a chunk-specific state, and repair resumes from that chunk rather than silently
+marking the whole file transferred. This is a symbolic content/checksum abstraction, not a byte-
+for-byte file-system simulation.
 
 The file-content refinement defines a deterministic symbolic token `task:content` for each
 logical output task. `FinishStageOut` therefore represents transfer of that task's content token,
@@ -255,7 +262,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   provider failure, recovery request, and block-count consistency all passed.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
-- `ParslFileCorruptionSmall.cfg`: 52,888 states generated, 9,144 distinct states, depth 63;
+- `ParslFileCorruptionSmall.cfg`: 60,824 states generated, 10,424 distinct states, depth 64;
   corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
 - `ParslRegistration.cfg`: 94 states generated, 29 distinct states, depth 18;
   unregistered workers could not receive work or heartbeat until manager registration.
@@ -289,6 +296,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | --- | --- | --- |
 | `BeginStaging` / `FinishStaging` | data readiness/staging | `parsl/data_provider/data_manager.py` |
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
+| `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
