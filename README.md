@@ -196,6 +196,12 @@ callback has already selected a retry, and requires that only the current attemp
 logical Future. Older or duplicate callbacks are consumed as stale. This mirrors the retry and
 Future-completion branches in [`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
 
+`ParslJoinCallbackRace.tla` refines `join_app` at callback level. An inner completion callback
+may run while another inner Future is still unresolved; that callback returns without finalizing.
+The callback for the final done Future performs the all-done check under a modeled join lock.
+Failures therefore propagate as `JoinError` only after every selected Future is done, and duplicate
+callbacks after outer termination are harmless. Ordered list results remain tied to input order.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -411,6 +417,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKind
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResultRace.cfg ParslResultRace.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinCallbackRace.cfg ParslJoinCallbackRace.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -508,6 +515,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.
+- `ParslJoinCallbackRace.cfg`: 4,778 states generated, 956 distinct states, depth 11;
+  early callback return, all-inner-done gating, join-lock serialization, ordered aggregation,
+  duplicate callback tolerance, and delayed JoinError propagation all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.

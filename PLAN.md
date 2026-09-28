@@ -160,6 +160,9 @@ heartbeat expiry, and checks manager reconnect plus loss accounting after heartb
 `ParslResultRace.tla` separates physical attempt result production from callback delivery and
 checks retry selection, late success/failure races, stale callback suppression, and one-time
 Future resolution.
+`ParslJoinCallbackRace.tla` models the actual `join_app` callback gate: early callbacks return
+without finalizing, the final callback checks all inner Futures under a lock, failures become
+`JoinError` only after all selected Futures are done, and duplicate callbacks are harmless.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
