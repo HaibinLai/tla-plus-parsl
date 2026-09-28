@@ -46,7 +46,7 @@ Task A
 
 The model includes task/Future state, dependency gating, executor assignment, worker binding,
 provider allocation and failure, scale-in, memoization, data readiness, retries, timeout,
-worker loss, stale results, and final-result acceptance.
+worker loss, executor loss, stale results, and final-result acceptance.
 
 ### 3. Checked properties
 

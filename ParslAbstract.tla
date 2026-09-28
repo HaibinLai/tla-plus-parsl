@@ -247,6 +247,37 @@ WorkerFailure(w) ==
                     attemptExecutor, executorState, providerState,
                     providerTarget, providerBlocks, completed, outputs>>
 
+ExecutorFailure(e, t, k) ==
+    LET a == <<t, k>> IN
+    /\ ALLOW_FAILURES
+    /\ e \in EXECUTORS /\ t \in TASKS /\ k \in 0..MAX_RETRIES
+    /\ executorState[e] = "up" /\ attemptExecutor[a] = e
+    /\ attemptState[a] = "running" /\ attemptWorker[a] \in WORKERS
+    /\ workerState[attemptWorker[a]] = "busy"
+    /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ Cardinality({x \in AttemptIds : attemptExecutor[x] = e /\
+                    attemptState[x] \in {"submitted", "dispatched", "running"}}) = 1
+    /\ attemptState' = [attemptState EXCEPT ![a] = "lost"]
+    /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
+    /\ workerState' = [workerState EXCEPT ![attemptWorker[a]] = "failed"]
+    /\ workerAttempt' = [workerAttempt EXCEPT ![attemptWorker[a]] = NoAttempt]
+    /\ executorState' = [executorState EXCEPT ![e] = "down"]
+    /\ providerState' = [providerState EXCEPT ![e] = "failed"]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] = 0]
+    /\ providerBlocks' = [providerBlocks EXCEPT ![e] = 0]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
+                    attemptExecutor, completed, outputs>>
+
 LateResult(t, k) ==
     LET a == <<t, k>> IN
     /\ t \in TASKS /\ k \in 0..MAX_RETRIES
@@ -319,6 +350,8 @@ NextCore ==
           \/ AttemptTimeout(t, k, w)
     \/ \E t \in TASKS : RetryTask(t)
     \/ \E w \in WORKERS : WorkerFailure(w)
+    \/ \E e \in EXECUTORS, t \in TASKS, k \in 0..MAX_RETRIES :
+          ExecutorFailure(e, t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : LateResult(t, k)
     \/ \E e \in EXECUTORS : RequestAllocation(e) \/ AllocationFails(e)
     \/ \E e \in EXECUTORS, w \in WORKERS : AllocationSucceeds(e, w)
@@ -370,6 +403,10 @@ WorkerBinding ==
 ValidRunningAttempt ==
     \A a \in AttemptIds : attemptState[a] = "running" =>
         attemptExecutor[a] \in EXECUTORS /\ attemptWorker[a] \in WORKERS
+
+NoRunningOnDownExecutor ==
+    \A a \in AttemptIds : attemptState[a] = "running" =>
+        executorState[attemptExecutor[a]] = "up"
 
 AttemptIdentity ==
     \A t \in TASKS : currentAttempt[t] # -1 =>

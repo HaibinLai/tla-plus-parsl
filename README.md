@@ -80,14 +80,14 @@ java -cp tla2tools.jar tlc2.TLC -config ParslNoFailures.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
-retry bounds, worker capacity/binding, valid assignments, attempt identity, Future result
-consistency, and stale-result safety.
+retry bounds, worker capacity/binding, valid assignments, executor availability for running
+attempts, attempt identity, Future result consistency, and stale-result safety.
 
 Measured with TLC 2.19 and Java 17 on 2026-09-28:
 
-- `ParslAbstract.cfg`: 1,247,270 states generated, 243,593 distinct states, depth 49;
+- `ParslAbstract.cfg`: 1,721,594 states generated, 337,605 distinct states, depth 49;
   all invariants passed.
-- `ParslMemo.cfg`: 78,656 states generated, 16,799 distinct states, depth 39; all invariants passed.
+- `ParslMemo.cfg`: 102,348 states generated, 21,923 distinct states, depth 39; all invariants passed.
 - `ParslNoFailures.cfg`: 1,306 states generated, 409 distinct states, depth 25;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 
@@ -103,6 +103,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` / `AttemptSuccess` | worker execution and result return | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
+| `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 
