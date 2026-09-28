@@ -156,6 +156,11 @@ duplicate-name warning); the fixed configuration models idempotent replacement.
 request; a response timeout marks the client permanently bad, matching `CommandClient.run`'s
 protection against reusing a request socket whose state is unknown.
 
+`ParslCommandClientSendTimeout.tla` models the complementary pre-send timeout branch. When the
+socket is not writable before any request is sent, `CommandClient.run` raises a timeout but keeps
+the client reusable; a later command may send and receive normally. The runtime probe is
+[`tests/test_command_send_timeout_runtime.py`](../tests/test_command_send_timeout_runtime.py).
+
 `ParslHtexManagerMessage.tla` models manager-to-interchange message decoding. Malformed multipart
 or pickle input is ignored without changing the manager record; a valid heartbeat updates its
 timestamp and produces the heartbeat reply.
@@ -1183,6 +1188,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingNormal.c
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineCurrent.cfg models/executors/ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineFixed.cfg models/executors/ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineNormal.cfg models/executors/ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientSendTimeout.cfg models/executors/ParslCommandClientSendTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusCurrent.cfg models/providers/ParslGridEngineDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusFixed.cfg models/providers/ParslGridEngineDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusUnique.cfg models/providers/ParslGridEngineDuplicateStatus.tla
@@ -1513,6 +1519,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   command deadline forwards `pollTimeout = -1`.
 - `ParslCommandDeadlineFixed.cfg` and `ParslCommandDeadlineNormal.cfg`: 4 states generated,
   2 distinct states, depth 2; clamped and non-expired deadlines satisfy `PollTimeoutSafety`.
+- `ParslCommandClientSendTimeout.cfg`: 8 states generated, 5 distinct states, depth 3; a
+  pre-send timeout leaves the command client reusable and the later reply path consistent.
 - `ParslGridEngineDuplicateStatusCurrent.cfg`: expected counterexample, 4 states generated; a
   duplicate qstat line crashes while removing the same job twice.
 - `ParslGridEngineDuplicateStatusFixed.cfg` and `ParslGridEngineDuplicateStatusUnique.cfg`: 6
@@ -1742,7 +1750,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 302 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 303 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

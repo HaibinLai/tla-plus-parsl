@@ -29,6 +29,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoing.cfg 
 /tmp/parsl-venv/bin/python -m unittest tests/test_tasks_outgoing_runtime.py -v
 ```
 
+`ParslCommandClientSendTimeout.tla` adds the pre-send timeout branch of the HTEX REQ/REP command
+client. A `POLLOUT` timeout occurs before any request is put on the socket, so it leaves
+`client.ok` true and a later command can safely retry; this contrasts with a post-send reply
+timeout, which poisons the client. The runtime probe checks both the empty first send and the
+successful second command.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientSendTimeout.cfg models/executors/ParslCommandClientSendTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_send_timeout_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
