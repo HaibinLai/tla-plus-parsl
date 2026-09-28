@@ -191,6 +191,8 @@ Successful joins carry a distinct symbolic `join-result` output marker, recordin
 value is an aggregation rather than an ordinary task result while remaining independent of the
 concrete Python list/dict shape.
 `JoinHandleSafety` also keeps the intermediate `join-handle` distinct from the final aggregate.
+`JoinFailureSafety` requires a failed outer join to have a rejected inner Future; an arbitrary
+outer rejection cannot masquerade as inner-Future propagation.
 
 `JOIN_INVALID` models a join app whose callable returns neither a Future nor a list of Futures.
 The physical attempt may finish successfully, but join unwrapping fails deterministically and
@@ -357,7 +359,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `MessageCorrelationSafety` | bind task/result envelopes to `(task, retryAttempt)` | interchange message identity and DFK current-attempt checks |
 | `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
 | `JoinObserve` / `JoinComplete` / `JoinFailure` | wait for inner Futures and propagate join result/failure | `DataFlowKernel.handle_exec_update`, `handle_join_update`, and `join_app` |
-| `JOIN_INVALID` / `JoinSafety` / `JoinHandleSafety` | invalid `join_app` return, handle lifetime, and outer-Future rejection | `DataFlowKernel.handle_exec_update` joinable-type validation |
+| `JOIN_INVALID` / `JoinSafety` / `JoinHandleSafety` / `JoinFailureSafety` | invalid return, handle lifetime, aggregate completion, and inner-failure propagation | `DataFlowKernel.handle_exec_update` and `handle_join_update` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |

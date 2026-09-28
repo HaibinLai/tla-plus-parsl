@@ -100,7 +100,8 @@ fairness for logical/attempt progress so duplicate-message discard loops cannot 
 Successful joins carry a distinct `join-result` marker, while `JoinSafety` still requires every
 inner Future to be resolved before the outer Future can succeed. `JoinResultSafety` additionally
 requires the complete inner-Future observation set before an aggregate result is exposed, while
-`JoinHandleSafety` distinguishes the intermediate handle from the final aggregate.
+`JoinHandleSafety` distinguishes the intermediate handle from the final aggregate. `JoinFailureSafety`
+requires outer rejection to be caused by a rejected inner Future.
 `ParslRegistration.cfg` adds explicit HTEX manager registration before a worker can receive
 dispatches or emit heartbeats.
 `ParslRegistrationFailure.cfg` explores manager startup failure before registration and checks

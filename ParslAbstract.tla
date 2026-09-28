@@ -1336,6 +1336,11 @@ JoinHandleSafety ==
     \A t \in JOIN_TASKS : taskState[t] \in {"joining", "succeeded"} =>
         outputs[t] \in {"join-handle", "join-result"}
 
+JoinFailureSafety ==
+    \A t \in JOIN_TASKS : taskState[t] = "failed" =>
+        futureState[t] = "rejected" /\ t \in rejected /\
+        (\E i \in JoinDeps(t) : futureState[i] = "rejected")
+
 ResultConsistency ==
     /\ completed \cap rejected = {}
     /\ \A t \in TASKS : futureState[t] = "resolved" => t \in completed
