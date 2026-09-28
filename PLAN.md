@@ -304,6 +304,9 @@ scripts and deterministic output, checking empty-output and normal job registrat
 running translation, pending fallback, and cloud API error propagation.
 `tests/test_googlecloud_status_runtime.py` drives Google Compute Engine status with a fake
 discovery client, checking normal translation, API error propagation, and unknown-state handling.
+`tests/test_googlecloud_submit_runtime.py` drives the real Google Cloud `create_instance` method
+with a failing image lookup, exposing that `num_instances` is incremented before a VM exists;
+`ParslGoogleCloudSubmit.tla` records the current counterexample and fixed bookkeeping contract.
 `tests/test_azure_cancel_runtime.py` drives Azure VM cancellation with a fake async delete client,
 checking linger refusal, failure rollback, and successful instance removal.
 `tests/test_azure_submit_runtime.py` drives Azure VM submission with fake resource/network/compute
@@ -422,7 +425,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 114 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 115 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

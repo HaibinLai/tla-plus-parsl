@@ -1101,6 +1101,18 @@ java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudStatusPresent.cfg ParslG
 The current unknown-status configuration finds a depth-2 counterexample (2 generated/2 distinct
 states); fixed and known-status configurations each generate 4 states/2 distinct states at depth 2.
 
+The Google Cloud instance-creation bookkeeping boundary is checked separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_submit_runtime.py -v
+java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudSubmit.cfg ParslGoogleCloudSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudSubmitFixed.cfg ParslGoogleCloudSubmit.tla
+```
+
+The current probe reproduces a failed image/API request consuming `num_instances` before any VM
+exists; the current TLA configuration finds the depth-2 bookkeeping counterexample, while the
+fixed configuration keeps the allocation counter unchanged on failure.
+
 Torque cancellation outcomes are exercised with deterministic `qdel` results:
 
 ```bash
@@ -1335,6 +1347,10 @@ failure result for each in-flight task.
   distinct); an empty instance-launch response reaches an uncaught destructuring error.
 - `ParslAWSProviderSubmitFixed.cfg`: 12 states generated, 5 distinct states, depth 3; empty
   responses are handled without registering a resource.
+- `ParslGoogleCloudSubmit.cfg`: expected counterexample at depth 2; a failed GCE image/API
+  request increments the instance-name counter even though no instance was created.
+- `ParslGoogleCloudSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; failed
+  creation leaves the allocation counter unchanged.
 - `ParslProviderStatusBatch.cfg`: 140,628 states generated, 17,672 distinct states, depth 6;
   bounded batch size, atomic status updates, scheduler-command failure preservation, missing-job
   completion mapping, and terminal-state stability all passed.
