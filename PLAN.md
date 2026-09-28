@@ -121,6 +121,8 @@ can be inspected before merging these states into the larger DFK model.
 closure, argument, and nested-object roots. It checks graph traversal before symbolic pickle
 creation and graph traversal again during worker-side reconstruction, including a deliberately
 unserializable nested-object configuration.
+`ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
+repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.

@@ -91,6 +91,11 @@ referenced graph before creating a symbolic pickle token; decoding traverses it 
 payload is considered reconstructed. `ParslPythonFailure.cfg` marks a nested closure object as
 unserializable and checks that the task fails before a token or decoded payload is exposed.
 
+`ParslFileBytes.tla` models file contents as bounded symbolic byte chunks rather than a single
+content flag. Each chunk carries a checksum through a temporary transfer buffer; corruption forces
+repair/retransfer, and an input whose source version changes during stage-in becomes `stale`.
+Stage-in and stage-out publish atomically only after every chunk is complete and validated.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -289,6 +294,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -343,6 +349,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslPythonFailure.cfg`: 4,415 states generated, 1,035 distinct states, depth 18;
   a non-serializable nested closure object failed before encoding completed or a payload token was
   published.
+- `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
+  chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
+  publication all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -431,6 +440,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartEncode` / `EncodeObject` / `FinishEncode` | callable, globals, defaults, closure, and argument object serialization | DFK task serialization and executor submission boundary |
 | `StartDecode` / `DecodeObject` / `FinishDecode` | reconstructing a callable/payload only after a complete encoded graph | worker-side task deserialization |
 | `MutateObject` / `RepairObject` | object content becoming unencodable before submission | Python object/payload serialization failure path |
+| `SendChunk` / `ReceiveChunk` / `RejectCorruptChunk` / `RepairChunk` | chunked content transfer, checksum validation, and retransmission | `DataManager.stage_in` / `stage_out` transfer paths |
+| `PublishStageIn` / `RejectStaleStageIn` / `PublishStageOut` | readiness and atomic file visibility after complete transfer | DataManager staging completion and file publication boundary |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces
