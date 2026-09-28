@@ -173,6 +173,9 @@ interchange before in-flight cleanup. It also checks that shutdown rejects new s
 `ParslWorkQueueResults.tla` refines WorkQueue's collector result protocol: valid result files,
 deserialization failures, app exceptions, no-result reports, and final cleanup of outstanding
 tasks when the collector exits.
+`ParslFluxResult.tla` refines FluxExecutor's wrapped Future, result-file decoding, abnormal exit,
+and cancellation propagation; its actual configuration preserves a cancellation-orphan probe and
+the fixed configuration checks the candidate propagation fix.
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
