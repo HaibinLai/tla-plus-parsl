@@ -9,10 +9,10 @@ implementations or every detail in the paper.
 | --- | --- | --- | --- |
 | ZMQ and serialization | ParslZMQ, ParslSerializationWire, ParslZMQSerializationEndToEnd | test_zmq_serialization_runtime.py and serializer/frame-count probes | Bounded queues and symbolic bytes; no full distributed timing model |
 | Python functions and object contents | ParslPython, ParslSerializationSnapshot, ParslCallableClosureMemo | test_serialization_runtime.py, test_memo_closure_runtime.py, tools/cloudpickle_fixture.py | Object graphs are finite symbolic nodes rather than arbitrary Python heaps |
-| Files and transfer | ParslFileBytes, ParslDataFutureTransfer, ParslFilePathResolution, and staging-provider models | file, DataFuture, File path, FTP/HTTP/Rsync/Zip/Globus probes | Chunk counts and content versions are bounded |
+| Files and transfer | ParslFileBytes, ParslDataFutureTransfer, ParslFilePathResolution, JobStatus output summaries, and staging-provider models | file, DataFuture, File path, output-summary, FTP/HTTP/Rsync/Zip/Globus probes | Chunk counts and content versions are bounded |
 | Time, heartbeat, timeout | ParslTimedHeartbeat, ParslHeartbeatClockJump, ParslHeartbeatClockRollback, ParslHeartbeatLateAck | heartbeat, deadline, and command-timeout probes | Logical time replaces OS scheduling and network latency |
 | Monitoring database | ParslMonitoringDelivery, ParslMonitoringDB, ParslMonitoringTaskRetry | monitoring DB retry, batching, atomicity, and close probes | Database schema and transaction batches are reduced to finite records |
-| Executors/providers | lifecycle, HTEX, manager selection, Thread, WorkQueue, Flux, TaskVine, LocalProvider, `ParslBlockProviderBadState`, and scheduler-specific models under models/executors/ and models/providers/ | 243 local/fake-provider runtime tests | Not every backend implementation is modeled at identical depth |
+| Executors/providers | lifecycle, HTEX, manager selection, Thread, WorkQueue, Flux, TaskVine, LocalProvider, `ParslBlockProviderBadState`, and scheduler-specific models under models/executors/ and models/providers/ | 246 local/fake-provider runtime tests | Not every backend implementation is modeled at identical depth |
 | join_app | ParslJoinComplete, callback/cancellation/mutation/nested/memo-data models | join, callback, cancellation, mutation, and None probes | Python exception identity and arbitrary user object graphs remain abstract |
 
 The next refinements should select one row, read the relevant source path, and add a focused

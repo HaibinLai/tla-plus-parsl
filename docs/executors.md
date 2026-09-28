@@ -54,3 +54,15 @@ ID and lexicographic block IDs. The runtime probe invokes both concrete selector
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerSelection.cfg models/executors/ParslHtexManagerSelection.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerSelectionBlock.cfg models/executors/ParslHtexManagerSelection.tla
 ```
+
+`ParslJobStatusOutputSummary.tla` models the concrete output-file behavior of
+`JobStatus.stdout_summary` and `stderr_summary`: a missing path/file yields no output, files at
+or below 2048 bytes are returned in full, and larger files preserve only the head and tail with
+an ellipsis marker. `tests/test_job_status_output_summary_runtime.py` checks these boundaries
+against real temporary files.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSummary.cfg models/executors/ParslJobStatusOutputSummary.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSummaryLarge.cfg models/executors/ParslJobStatusOutputSummary.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSummaryMissing.cfg models/executors/ParslJobStatusOutputSummary.tla
+```
