@@ -27,6 +27,8 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
 WorkerStates == {"idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
 DataStates == {"unavailable", "staging", "available", "stageout", "transferred"}
+WireStates == {"none", "queued", "sent", "received", "consumed", "dropped"}
+EnvelopeStates == {"none", "valid", "invalid"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
 NoAttempt == <<"none", -1>>
 Deps(t) == {d \in TASKS : d \o "->" \o t \in DEPS}
@@ -39,14 +41,16 @@ VARIABLES taskState, futureState, retries, currentAttempt, selectedExecutor,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
           completed, rejected, outputs,
-          clock, lastHeartbeat, attemptStart, monitoringState, joinObserved
+          clock, lastHeartbeat, attemptStart, monitoringState, joinObserved,
+          taskWireState, resultWireState, taskEnvelope, resultEnvelope
 
 vars == <<taskState, futureState, retries, currentAttempt, selectedExecutor,
           dataState, attemptState, attemptExecutor, attemptWorker,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
           completed, rejected, outputs,
-          clock, lastHeartbeat, attemptStart, monitoringState, joinObserved>>
+          clock, lastHeartbeat, attemptStart, monitoringState, joinObserved,
+          taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 timeVars == <<clock, lastHeartbeat, attemptStart>>
 
@@ -86,6 +90,10 @@ Init ==
     /\ attemptStart = [a \in AttemptIds |-> -1]
     /\ monitoringState = [t \in TASKS |-> "none"]
     /\ joinObserved = [t \in TASKS |-> {}]
+    /\ taskWireState = [a \in AttemptIds |-> "none"]
+    /\ resultWireState = [a \in AttemptIds |-> "none"]
+    /\ taskEnvelope = [a \in AttemptIds |-> "none"]
+    /\ resultEnvelope = [a \in AttemptIds |-> "none"]
 
 BeginStaging(t) ==
     /\ t \in TASKS /\ taskState[t] = "pending"
@@ -97,7 +105,8 @@ BeginStaging(t) ==
                     attemptState, attemptExecutor, attemptWorker,
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 FinishStaging(t) ==
     /\ t \in TASKS /\ taskState[t] = "staging" /\ dataState[t] = "staging"
@@ -107,7 +116,8 @@ FinishStaging(t) ==
                     attemptState, attemptExecutor, attemptWorker,
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 BeginStageOut(t) ==
     /\ t \in FILE_OUTPUTS
@@ -118,7 +128,8 @@ BeginStageOut(t) ==
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 FinishStageOut(t) ==
     /\ t \in FILE_OUTPUTS
@@ -129,7 +140,8 @@ FinishStageOut(t) ==
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 DependencyCheck(t) ==
     /\ t \in TASKS /\ taskState[t] = "pending" /\ dataState[t] = "available"
@@ -139,7 +151,8 @@ DependencyCheck(t) ==
                     dataState, attemptState, attemptExecutor, attemptWorker,
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 MemoizationHit(t) ==
     /\ t \in TASKS /\ t \in MEMOIZED /\ taskState[t] = "ready"
@@ -151,7 +164,8 @@ MemoizationHit(t) ==
                     attemptState, attemptExecutor, attemptWorker,
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    rejected>>
+                    rejected, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 Enqueue(t) ==
     /\ t \in TASKS /\ taskState[t] = "ready" /\ t \notin MEMOIZED
@@ -160,7 +174,8 @@ Enqueue(t) ==
                     dataState, attemptState, attemptExecutor, attemptWorker,
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 SubmitAttempt(t, e) ==
     LET a == <<t, retries[t]>> IN
@@ -177,7 +192,8 @@ SubmitAttempt(t, e) ==
     /\ UNCHANGED <<futureState, retries, dataState, attemptWorker,
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 SubmitFailure(t, e) ==
     LET a == <<t, retries[t]>> IN
@@ -202,18 +218,21 @@ SubmitFailure(t, e) ==
     /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
     /\ UNCHANGED <<dataState, attemptWorker, workerState, workerAttempt,
                     executorState, providerState, providerTarget, providerBlocks,
-                    completed, outputs>>
+                    completed, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 SerializeAttempt(t, k) ==
     LET a == <<t, k>> IN
     /\ attemptState[a] = "submitted" /\ currentAttempt[t] = k
     /\ SerializableTask(t)
     /\ attemptState' = [attemptState EXCEPT ![a] = "serialized"]
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "queued"]
+    /\ taskEnvelope' = [taskEnvelope EXCEPT ![a] = "valid"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, resultWireState, resultEnvelope>>
 
 SerializationFailure(t, k) ==
     LET a == <<t, k>> IN
@@ -222,6 +241,8 @@ SerializationFailure(t, k) ==
     /\ attemptState[a] = "submitted" /\ currentAttempt[t] = k
     /\ ~SerializableTask(t)
     /\ attemptState' = [attemptState EXCEPT ![a] = "failed"]
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "dropped"]
+    /\ taskEnvelope' = [taskEnvelope EXCEPT ![a] = "invalid"]
     /\ retries' = IF retries[t] < MAX_RETRIES
                     THEN [retries EXCEPT ![t] = @ + 1]
                     ELSE retries
@@ -235,37 +256,43 @@ SerializationFailure(t, k) ==
     /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, attemptWorker, workerState, workerAttempt,
                     executorState, providerState, providerTarget, providerBlocks,
-                    completed, outputs>>
+                    completed, outputs, resultWireState, resultEnvelope>>
 
 SendAttempt(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "serialized"
+    /\ attemptState[a] = "serialized" /\ taskWireState[a] = "queued"
     /\ attemptState' = [attemptState EXCEPT ![a] = "sent"]
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "sent"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 ReceiveAttempt(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "sent"
+    /\ attemptState[a] = "sent" /\ taskWireState[a] = "sent"
     /\ attemptState' = [attemptState EXCEPT ![a] = "received"]
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "received"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 DecodeAttempt(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "received"
+    /\ attemptState[a] = "received" /\ taskWireState[a] = "received"
     /\ attemptState' = [attemptState EXCEPT ![a] = "decoded"]
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "consumed"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 DispatchAttempt(t, k, w) ==
     LET a == <<t, k>> IN
@@ -280,7 +307,8 @@ DispatchAttempt(t, k, w) ==
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     executorState, providerState, providerTarget,
-                    providerBlocks, completed, rejected, outputs>>
+                    providerBlocks, completed, rejected, outputs, taskWireState,
+                    resultWireState, taskEnvelope, resultEnvelope>>
 
 StartAttempt(t, k, w) ==
     LET a == <<t, k>> IN
@@ -291,7 +319,8 @@ StartAttempt(t, k, w) ==
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 SerializeResult(t, k, w) ==
     LET a == <<t, k>> IN
@@ -299,41 +328,50 @@ SerializeResult(t, k, w) ==
     /\ attemptState[a] = "running" /\ attemptWorker[a] = w
     /\ currentAttempt[t] = k /\ taskState[t] = "running"
     /\ attemptState' = [attemptState EXCEPT ![a] = "result_serialized"]
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "queued"]
+    /\ resultEnvelope' = [resultEnvelope EXCEPT ![a] = "valid"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState,
+                    taskEnvelope>>
 
 SendResult(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "result_serialized"
+    /\ attemptState[a] = "result_serialized" /\ resultWireState[a] = "queued"
     /\ attemptState' = [attemptState EXCEPT ![a] = "result_sent"]
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "sent"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState,
+                    taskEnvelope, resultEnvelope>>
 
 ReceiveResult(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "result_sent"
+    /\ attemptState[a] = "result_sent" /\ resultWireState[a] = "sent"
     /\ attemptState' = [attemptState EXCEPT ![a] = "result_received"]
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "received"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState,
+                    taskEnvelope, resultEnvelope>>
 
 DecodeResult(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "result_received"
+    /\ attemptState[a] = "result_received" /\ resultWireState[a] = "received"
     /\ attemptState' = [attemptState EXCEPT ![a] = "result_decoded"]
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "consumed"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState,
+                    taskEnvelope, resultEnvelope>>
 
 AttemptSuccess(t, k, w) ==
     LET a == <<t, k>> IN
@@ -356,7 +394,8 @@ AttemptSuccess(t, k, w) ==
     /\ UNCHANGED <<retries, currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, executorState,
                     providerState, providerTarget, providerBlocks,
-                    rejected>>
+                    rejected, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 AttemptFailure(t, k, w) ==
     LET a == <<t, k>> IN
@@ -380,7 +419,8 @@ AttemptFailure(t, k, w) ==
     /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
     /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, executorState, providerState,
-                    providerTarget, providerBlocks, completed, outputs>>
+                    providerTarget, providerBlocks, completed, outputs,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 JoinObserve(t, i) ==
     /\ t \in JOIN_TASKS /\ i \in JoinDeps(t)
@@ -393,7 +433,8 @@ JoinObserve(t, i) ==
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs, clock, lastHeartbeat,
-                    attemptStart, monitoringState>>
+                    attemptStart, monitoringState, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 JoinComplete(t) ==
     /\ t \in JOIN_TASKS /\ taskState[t] = "joining"
@@ -407,7 +448,8 @@ JoinComplete(t) ==
                     attemptState, attemptExecutor, attemptWorker, workerState,
                     workerAttempt, executorState, providerState, providerTarget,
                     providerBlocks, rejected, clock, lastHeartbeat, attemptStart,
-                    monitoringState, joinObserved>>
+                    monitoringState, joinObserved, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 JoinFailure(t) ==
     /\ ALLOW_FAILURES
@@ -421,7 +463,8 @@ JoinFailure(t) ==
                     attemptState, attemptExecutor, attemptWorker, workerState,
                     workerAttempt, executorState, providerState, providerTarget,
                     providerBlocks, completed, outputs, clock, lastHeartbeat,
-                    attemptStart, monitoringState, joinObserved>>
+                    attemptStart, monitoringState, joinObserved, taskWireState,
+                    resultWireState, taskEnvelope, resultEnvelope>>
 
 RetryTask(t) ==
     /\ t \in TASKS /\ taskState[t] = "retry_wait" /\ retries[t] <= MAX_RETRIES
@@ -430,7 +473,8 @@ RetryTask(t) ==
                     dataState, attemptState, attemptExecutor, attemptWorker,
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 AttemptTimeout(t, k, w) ==
     LET a == <<t, k>> IN
@@ -445,7 +489,8 @@ AttemptTimeout(t, k, w) ==
     /\ retries' = [retries EXCEPT ![t] = @ + 1]
     /\ UNCHANGED <<futureState, currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, executorState, providerState,
-                    providerTarget, providerBlocks, completed, rejected, outputs>>
+                    providerTarget, providerBlocks, completed, rejected, outputs,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 WorkerFailure(w) ==
     /\ (ALLOW_FAILURES \/ clock - lastHeartbeat[w] >= HEARTBEAT_TIMEOUT)
@@ -468,9 +513,12 @@ WorkerFailure(w) ==
                          ELSE [futureState EXCEPT ![a[1]] = "rejected"]
        /\ rejected' = IF currentAttempt[a[1]] = a[2] /\ retries[a[1]] < MAX_RETRIES
                       THEN rejected ELSE rejected \cup {a[1]}
+       /\ resultWireState' = [resultWireState EXCEPT ![a] = "dropped"]
+       /\ resultEnvelope' = [resultEnvelope EXCEPT ![a] = "invalid"]
     /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, executorState, providerState,
-                    providerTarget, providerBlocks, completed, outputs>>
+                    providerTarget, providerBlocks, completed, outputs,
+                    taskWireState, taskEnvelope>>
 
 ExecutorFailure(e, t, k) ==
     LET a == <<t, k>> IN
@@ -504,8 +552,10 @@ ExecutorFailure(e, t, k) ==
                       THEN futureState
                       ELSE [futureState EXCEPT ![t] = "rejected"]
     /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "dropped"]
+    /\ resultEnvelope' = [resultEnvelope EXCEPT ![a] = "invalid"]
     /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
-                    attemptExecutor, completed, outputs>>
+                    attemptExecutor, completed, outputs, taskWireState, taskEnvelope>>
 
 LateResult(t, k) ==
     LET a == <<t, k>> IN
@@ -517,7 +567,8 @@ LateResult(t, k) ==
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 RequestAllocation(e) ==
     /\ e \in EXECUTORS
@@ -529,7 +580,8 @@ RequestAllocation(e) ==
                     selectedExecutor, dataState, attemptState,
                     attemptExecutor, attemptWorker, workerState,
                     workerAttempt, executorState, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 AllocationSucceeds(e, w) ==
     /\ e \in EXECUTORS /\ w \in WORKERS
@@ -541,7 +593,8 @@ AllocationSucceeds(e, w) ==
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState,
                     attemptExecutor, attemptWorker, workerState,
-                    workerAttempt, providerTarget, completed, rejected, outputs>>
+                    workerAttempt, providerTarget, completed, rejected, outputs,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 AllocationFails(e) ==
     /\ ALLOW_FAILURES
@@ -552,7 +605,8 @@ AllocationFails(e) ==
                     selectedExecutor, dataState, attemptState,
                     attemptExecutor, attemptWorker, workerState,
                     workerAttempt, executorState,
-                    providerBlocks, completed, rejected, outputs>>
+                    providerBlocks, completed, rejected, outputs,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 ProviderFailure(e) ==
     /\ ALLOW_FAILURES
@@ -571,7 +625,8 @@ ProviderFailure(e) ==
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState,
                     attemptExecutor, attemptWorker, workerState, workerAttempt,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
 
 CancelAllocation(e) ==
     /\ ALLOW_FAILURES
@@ -586,7 +641,8 @@ CancelAllocation(e) ==
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState,
                     attemptExecutor, attemptWorker, workerState, workerAttempt,
-                    executorState, completed, rejected, outputs>>
+                    executorState, completed, rejected, outputs,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 CoreActions ==
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
@@ -628,7 +684,8 @@ Tick ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs, monitoringState, joinObserved>>
+                    completed, rejected, outputs, monitoringState, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 Heartbeat(w) ==
     /\ w \in WORKERS /\ workerState[w] # "failed"
@@ -638,7 +695,8 @@ Heartbeat(w) ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs, monitoringState, joinObserved>>
+                    completed, rejected, outputs, monitoringState, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 MonitorView(t) ==
     CASE taskState[t] = "memoized"  -> "memoized"
@@ -658,7 +716,8 @@ PublishMonitor(t) ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs, joinObserved>>
+                    completed, rejected, outputs, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 NextCore ==
     \/ CoreActions /\ UNCHANGED <<timeVars, monitoringState, joinObserved>>
@@ -698,6 +757,45 @@ TypeOK ==
     /\ attemptStart \in [AttemptIds -> -1..MAX_TIME]
     /\ monitoringState \in [TASKS -> MonitorStates]
     /\ joinObserved \in [TASKS -> SUBSET TASKS]
+    /\ taskWireState \in [AttemptIds -> WireStates]
+    /\ resultWireState \in [AttemptIds -> WireStates]
+    /\ taskEnvelope \in [AttemptIds -> EnvelopeStates]
+    /\ resultEnvelope \in [AttemptIds -> EnvelopeStates]
+
+MessageSafety ==
+    /\ \A a \in AttemptIds :
+          taskWireState[a] = "none" => taskEnvelope[a] = "none"
+    /\ \A a \in AttemptIds :
+          taskWireState[a] = "queued" =>
+              taskEnvelope[a] = "valid" /\ attemptState[a] = "serialized"
+    /\ \A a \in AttemptIds :
+          taskWireState[a] = "sent" =>
+              taskEnvelope[a] = "valid" /\ attemptState[a] = "sent"
+    /\ \A a \in AttemptIds :
+          taskWireState[a] = "received" =>
+              taskEnvelope[a] = "valid" /\ attemptState[a] = "received"
+    /\ \A a \in AttemptIds :
+          taskWireState[a] = "consumed" =>
+              taskEnvelope[a] = "valid" /\
+              attemptState[a] \in {"decoded", "dispatched", "running",
+                                   "result_serialized", "result_sent",
+                                   "result_received", "result_decoded", "succeeded",
+                                   "lost", "timed_out", "failed", "stale"}
+    /\ \A a \in AttemptIds :
+          resultWireState[a] = "none" => resultEnvelope[a] = "none"
+    /\ \A a \in AttemptIds :
+          resultWireState[a] = "queued" =>
+              resultEnvelope[a] = "valid" /\ attemptState[a] = "result_serialized"
+    /\ \A a \in AttemptIds :
+          resultWireState[a] = "sent" =>
+              resultEnvelope[a] = "valid" /\ attemptState[a] = "result_sent"
+    /\ \A a \in AttemptIds :
+          resultWireState[a] = "received" =>
+              resultEnvelope[a] = "valid" /\ attemptState[a] = "result_received"
+    /\ \A a \in AttemptIds :
+          resultWireState[a] = "consumed" =>
+              resultEnvelope[a] = "valid" /\
+              attemptState[a] \in {"result_decoded", "succeeded", "lost", "stale"}
 
 DependencySafety ==
     \A t \in TASKS : taskState[t] = "running" =>

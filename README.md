@@ -96,6 +96,15 @@ interchange boundary, and `DecodeAttempt` represents reconstructing the work ite
 a worker is enabled only after decoding succeeds. Payload bytes and Python object contents remain
 abstract; this stage checks ordering and failure-safe handoff rather than ZMQ or pickle behavior.
 
+The wire lifecycle is represented explicitly by `taskWireState` and `resultWireState` for every
+physical attempt. Each side has the finite states `none`, `queued`, `sent`, `received`, and
+`consumed`, while `taskEnvelope` and `resultEnvelope` record whether the serialized envelope is
+`valid` or `invalid`. `MessageSafety` checks that a queued/sent/received envelope agrees with the
+corresponding attempt state. This is a protocol-level ZMQ abstraction: it models the two message
+directions and their ordering without enumerating sockets, byte buffers, or multipart frames.
+The next refinement can add bounded drops, duplicate deliveries, and symbolic object graphs
+without changing the logical-task/physical-attempt boundary.
+
 The result path has the same shape after worker execution: `SerializeResult`, `SendResult`,
 `ReceiveResult`, and `DecodeResult` must occur before `AttemptSuccess` resolves the Future. A
 worker or executor failure can still replace an in-flight result with a retry, so a result from
@@ -158,6 +167,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSubmitFailure.cfg ParslAb
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslProviderFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoin.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -176,8 +186,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 
 - `ParslAbstract.cfg`: 6,074,516 states generated, 911,791 distinct states, depth 87;
   all invariants passed.
-- `ParslMemo.cfg`: 306,160 states generated, 48,185 distinct states, depth 65; all invariants passed.
-- `ParslSerializationFailure.cfg`: 2,467,560 states generated, 381,857 distinct states, depth 69;
+- `ParslMemo.cfg`: 557,440 states generated, 81,233 distinct states, depth 65; all invariants passed.
+- `ParslSerializationFailure.cfg`: 3,901,406 states generated, 569,651 distinct states, depth 69;
   all safety invariants passed, including the pre-dispatch serialization-failure path.
 - `ParslNoFailures.cfg`: 8,676 states generated, 1,649 distinct states, depth 51;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
@@ -193,6 +203,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
   join dependency and outer-Future safety invariants passed.
+- `ParslMessaging.cfg`: 443,612 states generated, 65,139 distinct states, depth 43;
+  task/result wire ordering, envelope validity, serialization ordering, and stale-result
+  invariants passed.
 
 ## Source-to-model mapping
 
@@ -208,6 +221,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
+| `taskWireState` / `resultWireState` and `MessageSafety` | bounded ZMQ-like queues and envelope/attempt ordering | interchange task/result queues and manager socket message handling |
 | `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
 | `JoinObserve` / `JoinComplete` / `JoinFailure` | wait for inner Futures and propagate join result/failure | `DataFlowKernel.handle_exec_update`, `handle_join_update`, and `join_app` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |

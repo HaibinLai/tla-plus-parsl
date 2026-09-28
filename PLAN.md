@@ -62,6 +62,8 @@ that persisted terminal statuses never precede the corresponding Future outcome.
 provider block does not imply that the executor accepts a new task submission.
 `ParslProviderFailure.cfg` covers an active block becoming failed, clearing capacity, and
 requesting a replacement block without producing a negative target count.
+`ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
+states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 
 ### 3. Checked properties
 
@@ -75,6 +77,8 @@ The safety configurations check:
 6. Valid executor/worker assignment for running attempts.
 7. Attempt identity and Future result consistency.
 8. Stale-result safety: an old attempt cannot overwrite a newer logical result.
+9. Wire/envelope safety: task and result messages cannot skip serialization, transport, or
+   decode states, and failed attempts cannot leave a deliverable result envelope behind.
 
 The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` fairness.
 
@@ -83,6 +87,7 @@ The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` 
 After the MVP is stable, possible extensions are:
 
 - richer DataManager/staging behavior, including stage-in/stage-out failure;
+- bounded message drops, duplicate deliveries, and symbolic callable/object graphs;
 - richer `join_app` behavior beyond the bounded inner-Future set now modeled;
 - manager heartbeat timeout, version mismatch, drain, and executor bad state;
 - monitoring as an abstract eventual event stream;
