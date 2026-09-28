@@ -765,6 +765,16 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   ignored without changing the known resource status.
 - `ParslCondorStatusPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a valid
   two-field status line updates the tracked job.
+
+The Condor status counterexample is also checked against the current Python source with a
+deterministic scheduler stub (no Condor installation is required):
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_status_malformed.py -v
+```
+
+The runtime probe confirms that a one-field `condor_q` line raises `IndexError`, while a valid
+two-field line updates the tracked resource.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
