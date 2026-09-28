@@ -163,6 +163,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSum
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputSummaryMissing.cfg models/executors/ParslJobStatusOutputSummary.tla
 ```
 
+`ParslJobStatusOutputReadError.tla` models the exception-policy mismatch between
+`JobStatus.stdout` and `stdout_summary`/`stderr_summary`: the former catches every read error,
+while the summaries currently catch only `FileNotFoundError`. TLC finds the three-state current
+counterexample for a permission error; the fixed branch normalizes it to no output. The runtime
+probe patches `open()` to raise `PermissionError` and checks both properties.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputReadErrorCurrent.cfg models/executors/ParslJobStatusOutputReadError.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputReadErrorFixed.cfg models/executors/ParslJobStatusOutputReadError.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_job_status_output_read_error_runtime.py -v
+```
+
 `ParslHtexManagerDrain.tla` models `Interchange.expire_drained_managers`. A present draining
 manager with no tasks receives the drained reply and is removed from both bookkeeping sets. The
 current configuration exposes the unchecked `_ready_managers[manager_id]` lookup when an

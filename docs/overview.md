@@ -622,6 +622,12 @@ completed Future can raise `InvalidStateError` and leave later pending tasks unr
 the two-state counterexample and the fixed branch skips terminal Futures. The runtime probe is
 [`tests/test_block_provider_bad_state_order_runtime.py`](../tests/test_block_provider_bad_state_order_runtime.py).
 
+`ParslJobStatusOutputReadError.tla` models the read-error mismatch in `JobStatus`: `stdout`
+swallows all file-read exceptions, while `stdout_summary` and `stderr_summary` currently swallow
+only `FileNotFoundError`. TLC finds the three-state current counterexample for a permission error;
+the fixed branch returns no output consistently. The runtime probe is
+[`tests/test_job_status_output_read_error_runtime.py`](../tests/test_job_status_output_read_error_runtime.py).
+
 `ParslFluxCancelSubmitRace.tla` models the cancellation interleaving in
 `FluxFutureWrapper.cancel`: cancellation can happen before `_flux_future` is bound, after which
 a late successful callback currently attempts to publish into the cancelled wrapper. The current
@@ -1241,6 +1247,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusComputeConfigF
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResult.cfg models/executors/ParslGlobusComputeResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadStateOrderingCurrent.cfg models/executors/ParslBlockProviderBadStateOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadStateOrderingFixed.cfg models/executors/ParslBlockProviderBadStateOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputReadErrorCurrent.cfg models/executors/ParslJobStatusOutputReadError.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslJobStatusOutputReadErrorFixed.cfg models/executors/ParslJobStatusOutputReadError.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderKinds.cfg models/providers/ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollClockRollbackCurrent.cfg models/providers/ParslProviderPollClockRollback.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollClockRollbackFixed.cfg models/providers/ParslProviderPollClockRollback.tla
@@ -1725,7 +1733,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 299 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 301 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2383,6 +2391,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   completed Future aborts the failure sweep and leaves a pending task unresolved.
 - `ParslBlockProviderBadStateOrderingFixed.cfg`: 3 states generated, 2 distinct states, depth 2;
   terminal Futures are skipped while outstanding tasks are failed.
+- `ParslJobStatusOutputReadErrorCurrent.cfg`: expected counterexample at depth 2; a permission
+  error escapes from `stdout_summary` even though `stdout` returns `None`.
+- `ParslJobStatusOutputReadErrorFixed.cfg`: 6 states generated, 4 distinct states, depth 3;
+  summary reads normalize the error to no output.
 - `ParslFluxCancelSubmitRaceCurrent.cfg`: expected counterexample at depth 5; a late result
   callback attempts to complete a cancelled wrapper.
 - `ParslFluxCancelSubmitRaceFixed.cfg`: 15 states generated, 7 distinct states, depth 4;
