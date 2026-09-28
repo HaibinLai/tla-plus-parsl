@@ -147,6 +147,10 @@ the duplicate entry with a source-version change between attempts.
 `ParslCommandClient.tla` models the HTEX REQ/REP command socket: a successful reply completes a
 request, while a response timeout poisons the client and rejects later reuse. The runtime probe
 uses a fake socket to exercise the real polling and error classes without a network daemon.
+`ParslHtexManagerMessage.tla` models manager-to-interchange decode isolation: malformed multipart
+or pickle input is ignored without changing manager heartbeat state, while a valid heartbeat
+updates the timestamp and emits the heartbeat reply. `tests/test_htex_manager_message_runtime.py`
+drives the real `Interchange.process_manager_socket_message` method.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

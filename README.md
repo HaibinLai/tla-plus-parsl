@@ -121,6 +121,10 @@ duplicate-name warning); the fixed configuration models idempotent replacement.
 request; a response timeout marks the client permanently bad, matching `CommandClient.run`'s
 protection against reusing a request socket whose state is unknown.
 
+`ParslHtexManagerMessage.tla` models manager-to-interchange message decoding. Malformed multipart
+or pickle input is ignored without changing the manager record; a valid heartbeat updates its
+timestamp and produces the heartbeat reply.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1072,7 +1076,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 181 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 183 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1182,6 +1186,14 @@ The HTEX command client lifecycle is exercised without starting an interchange:
 
 The fake socket covers a normal reply and the timeout path that poisons the client and rejects a
 second request.
+
+The manager-message boundary is exercised without a live worker:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_manager_message_runtime.py -v
+```
+
+The probe checks malformed-message isolation and heartbeat timestamp/reply handling.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1806,6 +1818,7 @@ failure result for each in-flight task.
 | `OpenArchive` / `WriteOutput` | zip archive stage-in validation and atomic output publication | `ZipFileStaging._zip_stage_in` |
 | `WriteArchive` / `RemoveSource` / `ModifySourceBeforeRetry` | zip stage-out append, source cleanup, and retry duplication | `ZipFileStaging._zip_stage_out` |
 | `SendCommand` / `ReceiveReply` / `ResponseTimeout` | HTEX command REQ/REP lifecycle and timeout poisoning | `high_throughput.zmq_pipes.CommandClient.run` |
+| `DecodeMalformed` / `DecodeHeartbeat` / `UpdateHeartbeat` / `ReplyHeartbeat` | manager message decoding and heartbeat reply | `Interchange.process_manager_socket_message` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
