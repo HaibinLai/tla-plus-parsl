@@ -953,7 +953,8 @@ LateResult(t, k) ==
 
 RequestAllocation(e) ==
     /\ e \in EXECUTORS \ LocalExecutors
-    /\ ((providerState[e] \in {"none", "cancelled"} /\ providerTarget[e] < MAX_BLOCKS)
+    /\ (((providerState[e] \in {"none", "cancelled", "active"})
+         /\ providerTarget[e] < MAX_BLOCKS)
         \/ providerState[e] = "failed")
     /\ providerTarget' = [providerTarget EXCEPT ![e] = @ + 1]
     /\ providerState' = [providerState EXCEPT ![e] = "requested"]
@@ -980,8 +981,10 @@ AllocationSucceeds(e, w) ==
 AllocationFails(e) ==
     /\ ALLOW_FAILURES
     /\ e \in EXECUTORS /\ providerState[e] = "requested"
-    /\ providerState' = [providerState EXCEPT ![e] = "failed"]
-    /\ providerTarget' = [providerTarget EXCEPT ![e] = 0]
+    /\ providerState' = [providerState EXCEPT ![e] =
+          IF providerBlocks[e] > 0 THEN "active" ELSE "failed"]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] =
+          IF providerBlocks[e] > 0 THEN @ - 1 ELSE 0]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState,
                     attemptExecutor, attemptWorker, workerState,
@@ -1288,6 +1291,7 @@ SubmitSafety ==
           attemptExecutor[a] \in SUBMITTABLE_EXECUTORS
 
 ProviderExecutorConsistency ==
+    /\ \A e \in EXECUTORS : providerBlocks[e] <= providerTarget[e]
     /\ \A e \in EXECUTORS : providerState[e] = "active" =>
           executorState[e] \in {"up", "draining"} /\ providerBlocks[e] > 0
     /\ \A e \in EXECUTORS : providerState[e] = "failed" =>

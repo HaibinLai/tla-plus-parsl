@@ -66,7 +66,9 @@ same serialized task/result and worker-binding protocol, but does not require a 
 `ParslLocalExecutor.cfg` checks this path separately from provider-backed executors.
 Scale-in is block-granular: cancelling one of several active blocks keeps the provider active,
 while cancelling the final block transitions it to `cancelled`. `ParslScaleIn.cfg` exercises this
-multi-block case.
+multi-block case. Scale-out may also fail while an earlier block remains active; in that case the
+failed request is rolled back to the existing active target instead of taking the whole provider
+offline.
 
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
@@ -288,10 +290,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.
-- `ParslProviderFailure.cfg`: 6,672 states generated, 1,240 distinct states, depth 37;
+- `ParslProviderFailure.cfg`: 6,868 states generated, 1,280 distinct states, depth 40;
   provider failure, recovery request, and block-count consistency all passed.
-- `ParslScaleIn.cfg`: 15,434 states generated, 2,572 distinct states, depth 34;
-  partial scale-in preserved an active provider until its final block was cancelled.
+- `ParslScaleIn.cfg`: 49,607 states generated, 7,236 distinct states, depth 37;
+  multi-block scale-out, partial scale-in, and failed secondary allocation preserved provider
+  block/target consistency.
 - `ParslLocalExecutor.cfg`: 80 states generated, 26 distinct states, depth 16;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;

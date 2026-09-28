@@ -67,7 +67,8 @@ provider block does not imply that the executor accepts a new task submission.
 `ParslProviderFailure.cfg` covers an active block becoming failed, clearing capacity, and
 requesting a replacement block without producing a negative target count.
 `ParslScaleIn.cfg` covers multi-block scale-in: cancelling one idle block preserves provider
-activity and cancelling the final block clears provider capacity.
+activity and cancelling the final block clears provider capacity. It also covers a failed
+secondary allocation while an earlier block remains active.
 `ParslLocalExecutor.cfg` adds a provider-free `local` executor path while retaining the common
 serialization, worker binding, and result protocol.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
