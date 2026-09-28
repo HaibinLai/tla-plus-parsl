@@ -161,6 +161,19 @@ and the manager/provider boundary in
 [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
 It is a contract-level comparison, not a full implementation of every executor.
 
+`ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
+the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
+translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
+timeout as distinct from failure, cancellation success/failure, and CPU-per-task admission.
+The missing-job rule intentionally preserves the current Slurm provider behavior (a job absent
+from `squeue` is treated as completed) while Kubernetes reports an unknown pod as `UNKNOWN`.
+This is a bounded status-mapping model, not a shell or Kubernetes API emulator. It is based on
+[`providers/base.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/base.py),
+[`providers/cluster_provider.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/cluster_provider.py),
+[`providers/slurm/slurm.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/slurm/slurm.py),
+[`providers/kubernetes/kube.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/kubernetes/kube.py),
+and [`jobs/states.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/states.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -372,6 +385,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTranspor
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -462,6 +476,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslExecutorKinds.cfg`: 50,149,761 states generated, 3,533,824 distinct states, depth 52;
   the bounded depth-10 executor contract run passed provider-free/provider-backed admission,
   manager registration, resource-specification rejection, drain/recovery, and failure cleanup.
+- `ParslProviderKinds.cfg`: 213,121 states generated, 25,600 distinct states, depth 14;
+  provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
+  handling, timeout-versus-failure distinction, cancellation outcomes, and resource admission
+  all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;

@@ -147,6 +147,9 @@ errors, unknown status, cancellation rollback, and bounded polling/failure windo
 `ParslExecutorKinds.tla` adds a contract matrix for provider-free thread execution and
 provider-backed HTEX/MPI/workqueue paths, including manager registration, resource-request
 rejection, admission, drain/recovery, and provider/executor failure cleanup.
+`ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
+backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
+unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
