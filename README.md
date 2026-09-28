@@ -266,6 +266,15 @@ The runtime probe confirms empty specifications are rejected, positive node coun
 missing rank count, and `num_nodes=0` with `num_ranks` reproduces the current division-by-zero
 failure.
 
+MPI launch-prefix selection is exercised directly against the composer:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_mpi_prefix_runtime.py -v
+```
+
+`ParslMPIPrefix.tla` checks that `mpiexec`, `srun`, and `aprun` select their matching generated
+prefixes and that an unsupported launcher is rejected rather than silently remapped.
+
 `ParslExecutorShutdown.tla` makes the shutdown distinction executable. ThreadPool shutdown keeps
 accepted work eligible to complete before the executor reaches `stopped`; WorkQueue shutdown has
 an explicit collector-cleanup action that fails work left behind when its submit process exits;
@@ -1019,7 +1028,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 143 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 146 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1694,6 +1703,7 @@ failure result for each in-flight task.
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
 | `Dispatch` / `Complete` / `Drain` / `Recover` | HTEX pending-task priority, manager capacity, and draining admission | `Interchange.process_task_incoming`, `get_tasks`, and `process_tasks_to_send` |
 | `Configure` / `Validate` / `DeriveRanks` / `Launch` | MPI resource-specification validation and derived rank counts | `MPIExecutor.validate_resource_spec` and `mpi_prefix_composer.validate_resource_spec` |
+| `Compose` | MPI launcher-prefix construction and backend selection | `mpi_prefix_composer.compose_all` |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
