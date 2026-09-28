@@ -79,6 +79,8 @@ the larger three-task corruption configuration is retained for future state-spac
 fairness for logical/attempt progress so duplicate-message discard loops cannot starve work.
 `ParslRegistration.cfg` adds explicit HTEX manager registration before a worker can receive
 dispatches or emit heartbeats.
+`ParslRegistrationFailure.cfg` explores manager startup failure before registration and checks
+that no worker binding is created from the failed manager.
 
 ### 3. Checked properties
 

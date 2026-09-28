@@ -202,6 +202,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoin.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinInvalid.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistration.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistrationFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
@@ -244,6 +245,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
 - `ParslRegistration.cfg`: 94 states generated, 29 distinct states, depth 18;
   unregistered workers could not receive work or heartbeat until manager registration.
+- `ParslRegistrationFailure.cfg`: 1,750 states generated, 429 distinct states, depth 32;
+  failed manager registration left the worker unavailable without violating bindings or Future consistency.
 - `ParslJoin.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
@@ -285,6 +288,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
 | `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |
+| `RegistrationFailure` | manager startup/registration failure | `Interchange` manager registration failure boundary |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
