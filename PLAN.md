@@ -148,6 +148,9 @@ errors, unknown status, cancellation rollback, and bounded polling/failure windo
 `ParslExecutorKinds.tla` adds a contract matrix for provider-free thread execution and
 provider-backed HTEX/MPI/workqueue paths, including manager registration, resource-request
 rejection, admission, drain/recovery, and provider/executor failure cleanup.
+`ParslExecutorShutdown.tla` refines concrete shutdown behavior: ThreadPool waits for accepted
+work, WorkQueue's collector fails tasks left behind during process shutdown, and HTEX closes its
+interchange before in-flight cleanup. It also checks that shutdown rejects new submissions.
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.

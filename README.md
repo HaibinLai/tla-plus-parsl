@@ -163,6 +163,16 @@ and the manager/provider boundary in
 [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
 It is a contract-level comparison, not a full implementation of every executor.
 
+`ParslExecutorShutdown.tla` makes the shutdown distinction executable. ThreadPool shutdown keeps
+accepted work eligible to complete before the executor reaches `stopped`; WorkQueue shutdown has
+an explicit collector-cleanup action that fails work left behind when its submit process exits;
+HTEX closes the interchange first and models in-flight cleanup as a separate loss event, matching
+the fact that worker termination is handled by scaling or heartbeat expiry. All three paths reject
+new submissions after shutdown begins. The mapping follows the concrete shutdown methods in
+[`threads.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/threads.py),
+[`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py),
+and [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
+
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
@@ -468,6 +478,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTranspor
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
@@ -572,6 +583,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslExecutorKinds.cfg`: 50,149,761 states generated, 3,533,824 distinct states, depth 52;
   the bounded depth-10 executor contract run passed provider-free/provider-backed admission,
   manager registration, resource-specification rejection, drain/recovery, and failure cleanup.
+- `ParslExecutorShutdown.cfg`: 394,010 states generated, 74,431 distinct states, depth 28;
+  shutdown admission rejection, ThreadPool completion-before-stop, WorkQueue collector failure
+  cleanup, HTEX interchange closure, and in-flight cleanup all passed.
 - `ParslProviderKinds.cfg`: 213,121 states generated, 25,600 distinct states, depth 14;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, and resource admission
@@ -711,6 +725,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
 | `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
+| `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
