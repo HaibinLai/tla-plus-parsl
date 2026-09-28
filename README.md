@@ -509,6 +509,12 @@ when the TaskVine submit process dies. The model follows
 and the report construction in
 [`taskvine/manager.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/taskvine/manager.py).
 
+`ParslTaskVineDuplicateReport.tla` refines the TaskVine collector with a duplicate or late manager
+report. The current `tasks.pop(task_report.executor_id)` path raises `KeyError`, exits the
+collector, and lets final cleanup fail unrelated Futures. The fixed configuration ignores an
+executor ID that has already been removed. `tests/test_taskvine_duplicate_report_runtime.py`
+drives the real collector method through this interleaving.
+
 `ParslRadicalPilotResults.tla` models RadicalPilot task callbacks for Bash, Python, and MPI-like
 tasks: DONE maps to an exit code, deserialized value, or raw MPI return; CANCELED cancels the
 Future; FAILED sets an exception; and a master failure fails all outstanding tasks. The actual
@@ -1022,6 +1028,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueDuplicateReport.cfg ParslW
 java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueDuplicateReportFixed.cfg ParslWorkQueueDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFluxResultFixed.cfg ParslFluxResult.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineResults.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReport.cfg ParslTaskVineDuplicateReport.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReportFixed.cfg ParslTaskVineDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslGlobusComputeConfigFixed.cfg ParslGlobusComputeConfig.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
@@ -1466,7 +1474,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 224 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 227 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2088,6 +2096,10 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslTaskVineResults.cfg`: 56 states generated, 26 distinct states, depth 5; valid-result
   completion, missing/corrupt/exception/no-result failure mapping, and submit-process cleanup of
   outstanding Futures all passed.
+- `ParslTaskVineDuplicateReport.cfg`: expected counterexample at depth 3 (5 states generated,
+  4 distinct); a duplicate report kills the collector and exposes unrelated task failure.
+  `ParslTaskVineDuplicateReportFixed.cfg`: 22 states generated, 7 distinct states, depth 4;
+  stale reports are ignored while active unrelated tasks remain pending.
 - `ParslRadicalPilotResults.cfg`: expected counterexample at depth 2 (73 states generated, 38
   distinct); shutdown can leave a submitted RP task's Parsl Future pending.
 - `ParslRadicalPilotResultsFixed.cfg`: 79 states generated, 38 distinct states, depth 4; Bash,

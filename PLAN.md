@@ -323,6 +323,9 @@ and cancellation propagation; its actual configuration preserves a cancellation-
 the fixed configuration checks the candidate propagation fix.
 `ParslTaskVineResults.tla` refines TaskVine's manager report and collector protocol, including
 result-file failure mapping and cleanup of all outstanding Futures after manager failure.
+`ParslTaskVineDuplicateReport.tla` adds the stale-report interleaving to that collector. It
+captures the current duplicate-ID `KeyError`, the resulting collector exit and unrelated-future
+cleanup, and the candidate idempotent guard.
 `ParslRadicalPilotResults.tla` refines RadicalPilot callback mapping for Bash/Python/MPI tasks,
 master failure propagation, cancellation, and the shutdown pending-Future probe.
 `ParslGlobusComputeConfig.tla` refines Globus Compute's temporary per-submit resource configuration
@@ -640,7 +643,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 226 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 227 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
