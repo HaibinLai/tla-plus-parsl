@@ -632,6 +632,13 @@ and CPU-per-task admission. It also covers Slurm `SUSPENDED` to `HELD` and `REQU
 The missing-job rule intentionally preserves the current Slurm provider behavior (a job absent
 from `squeue` is treated as completed) while Kubernetes reports an unknown pod as `UNKNOWN`.
 
+`ParslProviderPollClockRollback.tla` models the polling guard in
+`BlockProviderExecutor.poll_facade`. A wall-clock rollback makes
+`now >= _last_poll_time + status_polling_interval` false and suppresses provider status updates
+until the old timestamp is reached. TLC finds the two-state current counterexample; the fixed
+branch resets the polling baseline on rollback. The runtime probe is
+[`tests/test_provider_poll_clock_runtime.py`](../tests/test_provider_poll_clock_runtime.py).
+
 `ParslAWSProviderStatus.tla` adds a cloud-provider-specific status boundary. It models EC2
 `pending`/`running`/`terminated` translation and the case where a requested instance ID is absent
 from the `describe_instances` response. The actual configuration preserves the current behavior
@@ -1227,6 +1234,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotResult
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusComputeConfigFixed.cfg models/staging/ParslGlobusComputeConfig.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResult.cfg models/executors/ParslGlobusComputeResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderKinds.cfg models/providers/ParslProviderKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollClockRollbackCurrent.cfg models/providers/ParslProviderPollClockRollback.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollClockRollbackFixed.cfg models/providers/ParslProviderPollClockRollback.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatus.cfg models/providers/ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatusFixed.cfg models/providers/ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatusPresent.cfg models/providers/ParslAWSProviderStatus.tla
@@ -1708,7 +1717,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 295 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 297 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2370,6 +2379,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
   handling, and resource admission all passed.
+- `ParslProviderPollClockRollbackCurrent.cfg`: expected counterexample at depth 2; a wall-clock
+  rollback suppresses provider polling.
+- `ParslProviderPollClockRollbackFixed.cfg`: 3 states generated, 2 distinct states, depth 2;
+  rollback-aware polling preserves the safety invariant.
 - `ParslAWSProviderStatus.cfg`: expected counterexample at depth 2 (4 states generated, 3
   distinct); an absent EC2 instance response produces no returned provider status.
 - `ParslAWSProviderStatusFixed.cfg`: 11 states generated, 5 distinct states, depth 5; missing
