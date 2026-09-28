@@ -899,6 +899,15 @@ The concrete thread executor shutdown and admission contract is exercised direct
 The probe checks that accepted work completes before blocking shutdown returns, new submissions
 are rejected afterwards, and unsupported resource specifications are rejected at admission.
 
+File/DataFuture readiness is exercised through a real two-task local dataflow:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_runtime.py -v
+```
+
+The producer writes binary output through a Parsl `File`, and the dependent consumer reads the
+same bytes only after the producer has completed.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash

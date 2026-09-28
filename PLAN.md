@@ -237,6 +237,8 @@ missing-instance behavior and normal instance-state translation.
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
 `tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
 admission paths, including accepted-work completion and resource-specification rejection.
+`tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
+checking binary content readiness and dependent-task gating.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
