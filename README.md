@@ -833,6 +833,7 @@ The concrete `join_app` protocol is exercised with a real local thread executor:
 
 This verifies single-Future propagation, ordered list results with duplicate Future references,
 empty-list completion without callbacks, and `JoinError` propagation from a failed inner app.
+It also checks nested join propagation and rejection of both scalar and mixed-list join returns.
 
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 

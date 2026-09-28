@@ -220,7 +220,8 @@ deserialization, execution, and acknowledgement.
 STATUS primary-key collision and the current `DatabaseManager._insert` generic-exception path
 that rolls back and silently drops the duplicate event.
 `tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
-executor, covering single Futures, ordered duplicate references, empty lists, and `JoinError`.
+executor, covering single Futures, ordered duplicate references, empty lists, `JoinError`,
+nested joins, scalar-return rejection, and mixed-list rejection.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
