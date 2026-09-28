@@ -159,12 +159,13 @@ records an attempt start time. `WorkerFailure` can therefore be enabled by a hea
 workflow interleaving with clock values; `ParslTime.cfg` is a deliberately tiny one-task model
 that explores the time and timeout transitions with `MAX_TIME = 1`.
 
-Monitoring is modeled as `monitoringState`, the last task status persisted by the monitoring
-radio/database. `PublishMonitor` may lag behind the logical task state, matching asynchronous
-monitoring delivery, but `MonitoringConsistency` forbids a persisted terminal success, memoized
-state, or failure from appearing before the corresponding logical outcome. As with time, the
-full workflow configurations disable event expansion and `ParslMonitoring.cfg` is the focused
-one-task exploration.
+Monitoring is modeled as `monitoringState`, a per-task database record containing the last
+persisted status and a monotonic write `version`. `PublishMonitor` may lag behind the logical
+task state, matching asynchronous monitoring delivery, but `MonitoringConsistency` forbids a
+persisted terminal success, memoized state, or failure from appearing before the corresponding
+logical outcome. `MonitoringDatabaseSafety` ensures the initial `none` record has version zero
+and every published update advances its version. As with time, the full workflow configurations
+disable event expansion and `ParslMonitoring.cfg` is the focused one-task exploration.
 
 Executor/provider submission is separated into two hypotheses. `SubmitAttempt` is allowed only
 for an executor in `SUBMITTABLE_EXECUTORS`, representing an executor whose bad-state check and
@@ -227,7 +228,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 562 states generated, 161 distinct states, depth 31;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
-- `ParslMonitoring.cfg`: 4,387 states generated, 907 distinct states, depth 33;
+- `ParslMonitoring.cfg`: 43,700 states generated, 8,427 distinct states, depth 39;
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.
@@ -276,6 +277,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
+| `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |

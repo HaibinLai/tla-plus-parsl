@@ -21,6 +21,7 @@ TaskStates == {"pending", "staging", "ready", "queued", "running",
                "retry_wait", "joining", "succeeded", "memoized", "failed"}
 FutureStates == {"unresolved", "resolved", "rejected"}
 MonitorStates == {"none", "pending", "running", "retry_wait", "succeeded", "failed", "memoized"}
+MonitorRecord == [status : MonitorStates, version : Nat]
 AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "decoded",
                   "dispatched", "running", "result_serialized", "result_sent",
                   "result_received", "result_decoded",
@@ -102,7 +103,7 @@ Init ==
     /\ clock = 0
     /\ lastHeartbeat = [w \in WORKERS |-> 0]
     /\ attemptStart = [a \in AttemptIds |-> -1]
-    /\ monitoringState = [t \in TASKS |-> "none"]
+    /\ monitoringState = [t \in TASKS |-> [status |-> "none", version |-> 0]]
     /\ joinObserved = [t \in TASKS |-> {}]
     /\ taskWireState = [a \in AttemptIds |-> "none"]
     /\ resultWireState = [a \in AttemptIds |-> "none"]
@@ -865,8 +866,9 @@ MonitorView(t) ==
 PublishMonitor(t) ==
     /\ MONITORING_ENABLED
     /\ t \in TASKS
-    /\ monitoringState[t] # MonitorView(t)
-    /\ monitoringState' = [monitoringState EXCEPT ![t] = MonitorView(t)]
+    /\ monitoringState[t].status # MonitorView(t)
+    /\ monitoringState' = [monitoringState EXCEPT ![t] =
+          [status |-> MonitorView(t), version |-> monitoringState[t].version + 1]]
     /\ UNCHANGED <<clock, lastHeartbeat, attemptStart,
                     taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState, attemptExecutor,
@@ -914,7 +916,7 @@ TypeOK ==
     /\ clock \in 0..MAX_TIME
     /\ lastHeartbeat \in [WORKERS -> 0..MAX_TIME]
     /\ attemptStart \in [AttemptIds -> -1..MAX_TIME]
-    /\ monitoringState \in [TASKS -> MonitorStates]
+    /\ monitoringState \in [TASKS -> MonitorRecord]
     /\ joinObserved \in [TASKS -> SUBSET TASKS]
     /\ taskWireState \in [AttemptIds -> WireStates]
     /\ resultWireState \in [AttemptIds -> WireStates]
@@ -1059,12 +1061,18 @@ TimeSafety ==
     /\ \A w \in WORKERS : lastHeartbeat[w] <= clock
 
 MonitoringConsistency ==
-    /\ \A t \in TASKS : monitoringState[t] = "succeeded" =>
+    /\ \A t \in TASKS : monitoringState[t].status = "succeeded" =>
           taskState[t] \in {"succeeded", "memoized"}
-    /\ \A t \in TASKS : monitoringState[t] = "memoized" =>
+    /\ \A t \in TASKS : monitoringState[t].status = "memoized" =>
           taskState[t] = "memoized"
-    /\ \A t \in TASKS : monitoringState[t] = "failed" =>
+    /\ \A t \in TASKS : monitoringState[t].status = "failed" =>
           taskState[t] = "failed"
+
+MonitoringDatabaseSafety ==
+    /\ \A t \in TASKS : monitoringState[t].version = 0 =>
+          monitoringState[t].status = "none"
+    /\ \A t \in TASKS : monitoringState[t].status = "none" =>
+          monitoringState[t].version = 0
 
 EventuallySettled ==
     \A t \in TASKS : <> (taskState[t] \in {"succeeded", "memoized", "failed"})

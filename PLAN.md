@@ -56,8 +56,9 @@ The data path now distinguishes input stage-in from output stage-out and records
 content token for declared output files.
 The bounded `ParslTime.cfg` model adds logical ticking, heartbeat age, attempt start time, and
 timeout guards so TLC can explore timing-dependent worker loss and retry behavior.
-`ParslMonitoring.cfg` adds a focused asynchronous monitoring/database status model and checks
-that persisted terminal statuses never precede the corresponding Future outcome.
+`ParslMonitoring.cfg` adds a focused asynchronous monitoring/database status model with a
+monotonic per-task write version, and checks that persisted terminal statuses never precede the
+corresponding Future outcome.
 `ParslSubmitFailure.cfg` adds a focused executor/provider boundary model in which an active
 provider block does not imply that the executor accepts a new task submission.
 `ParslProviderFailure.cfg` covers an active block becoming failed, clearing capacity, and
