@@ -43,6 +43,12 @@ class SlurmStatusBatchRuntimeTest(unittest.TestCase):
         self.assertEqual(provider.resources["1"]["status"].state, JobState.RUNNING)
         self.assertEqual(provider.resources["2"]["status"].state, JobState.COMPLETED)
 
+    def test_foreign_scheduler_job_currently_raises_key_error(self):
+        provider = self.provider_with((0, "999 RUNNING\n", ""))
+
+        with self.assertRaises(KeyError):
+            provider._status()
+
 
 if __name__ == "__main__":
     unittest.main()
