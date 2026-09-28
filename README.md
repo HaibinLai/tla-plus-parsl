@@ -880,6 +880,16 @@ The EC2 status boundary is exercised with a fake `describe_instances` client:
 The probe checks the current missing-instance behavior (empty status list and unchanged resource)
 and normal `running` state translation.
 
+The PBS Pro submission parser is exercised with a temporary script directory and fake `qsub`
+output:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_submit_runtime.py -v
+```
+
+The tests reproduce the successful-empty-output path returning `None` without a resource and the
+normal path registering a pending job id.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash

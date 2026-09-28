@@ -233,6 +233,8 @@ mock API client, reproducing the read-error identity-comparison path and checkin
 pod translation.
 `tests/test_aws_status_runtime.py` drives `AWSProvider.status` with a fake EC2 client, checking
 missing-instance behavior and normal instance-state translation.
+`tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
+and deterministic `qsub` output, checking the empty-output and registered-job paths.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
