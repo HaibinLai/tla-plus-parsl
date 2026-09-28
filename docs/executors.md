@@ -161,6 +161,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotFailur
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotFailurePayloadFixed.cfg models/executors/ParslRadicalPilotFailurePayload.tla
 ```
 
+`ParslRadicalPilotLateCallback.tla` models a RADICAL-Pilot `CANCELED` callback racing with a
+late `DONE` callback for the same task. The current `task_state_cb` calls `set_result` even
+after the Parsl Future has been cancelled, raising `InvalidStateError`; the fixed branch drops
+callbacks after terminal state. The runtime probe invokes the real callback twice with a fake RP
+task and observes the exception.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotLateCallbackCurrent.cfg models/executors/ParslRadicalPilotLateCallback.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotLateCallbackFixed.cfg models/executors/ParslRadicalPilotLateCallback.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_late_callback_runtime.py -v
+```
+
 `ParslWorkQueueShutdown.tla` models the Work Queue collector's finalization contract. Shutdown
 sets the stop flag and waits for the collector; its `finally` block fails every accepted Future
 that has no result before the executor reaches `stopped`. The runtime probe invokes the real

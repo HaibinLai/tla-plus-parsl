@@ -656,6 +656,11 @@ configuration probes shutdown with a pending RP task, because the current `shutd
 session without an explicit sweep of `future_tasks`; the fixed configuration adds that sweep.
 This follows [`radical/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/radical/executor.py).
 
+`ParslRadicalPilotLateCallback.tla` isolates a terminal-state race in the same callback path:
+after a task is canceled, a late `DONE` callback currently calls `Future.set_result` and raises
+`InvalidStateError`. The fixed branch treats the callback as stale. The runtime probe reproduces
+the two callbacks against the real `task_state_cb` implementation.
+
 `ParslGlobusComputeConfig.tla` models the thin Globus Compute wrapper's temporary resource and
 endpoint configuration. Each submit copies task-specific values into the shared SDK executor,
 calls the underlying submit, and restores both defaults in `finally`. The unsynchronized
@@ -2767,6 +2772,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `CancelBeforeBind` / `BindUnderlying` / `PublishCallback` | Flux cancellation versus late underlying-future binding | `FluxFutureWrapper.cancel` and `_complete_future` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
+| `Cancel` / `LateDone` | Radical Pilot cancellation versus late result callback | `RadicalPilotExecutor.task_state_cb` terminal Future updates |
 | `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
 | `BeginA` / `BeginB` / `SubmitA` / `SubmitB` | concurrent Globus Compute configuration isolation and serialized fixed path | `GlobusComputeExecutor.submit` shared SDK executor mutation |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
