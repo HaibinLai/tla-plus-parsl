@@ -91,6 +91,11 @@ referenced graph before creating a symbolic pickle token; decoding traverses it 
 payload is considered reconstructed. `ParslPythonFailure.cfg` marks a nested closure object as
 unserializable and checks that the task fails before a token or decoded payload is exposed.
 
+`ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
+versioned snapshot of the callable/argument graph, later mutation of the original Python object
+does not alter the captured payload, and decoding exposes the captured version. The runtime
+counterpart is the closure snapshot test in `tests/test_serialization_runtime.py`.
+
 `ParslFileBytes.tla` models file contents as bounded symbolic byte chunks rather than a single
 content flag. Each chunk carries a checksum through a temporary transfer buffer; corruption forces
 repair/retransfer, and an input whose source version changes during stage-in becomes `stale`.
@@ -609,6 +614,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationSnapshot.cfg ParslSerializationSnapshot.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
@@ -696,6 +702,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   an unencodable worker return failed after execution without resolving the Future.
 - `ParslNestedSerialization.cfg`: 559 states generated, 118 distinct states, depth 16;
   a non-serializable grandchild object failed before dispatch while object-graph safety held.
+- `ParslSerializationSnapshot.cfg`: 18 states generated, 8 distinct states, depth 5; object
+  mutation after serialization could not change the captured payload or decoded value.
 - `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 690 states generated, 198 distinct states, depth 36;
@@ -865,7 +873,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 108 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 110 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
