@@ -855,7 +855,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 98 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 102 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1076,6 +1076,15 @@ The EC2 status boundary is exercised with a fake `describe_instances` client:
 The probe checks the current missing-instance behavior (empty status list and unchanged resource)
 and normal `running` state translation.
 
+The EC2 submission boundary is exercised with a fake instance launcher:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_submit_runtime.py -v
+```
+
+The probe covers successful instance registration, failed launch returning `None`, unknown-state
+fallback to `PENDING`, and the current unpacking error for an empty launch response.
+
 The PBS Pro submission parser is exercised with a temporary script directory and fake `qsub`
 output:
 
@@ -1225,6 +1234,10 @@ failure result for each in-flight task.
   instance completion mapping and status translation passed.
 - `ParslAWSProviderStatusPresent.cfg`: 11 states generated, 5 distinct states, depth 5; normal
   EC2 running-instance status translation passed.
+- `ParslAWSProviderSubmit.cfg`: expected counterexample at depth 3 (10 states generated, 6
+  distinct); an empty instance-launch response reaches an uncaught destructuring error.
+- `ParslAWSProviderSubmitFixed.cfg`: 12 states generated, 5 distinct states, depth 3; empty
+  responses are handled without registering a resource.
 - `ParslProviderStatusBatch.cfg`: 140,628 states generated, 17,672 distinct states, depth 6;
   bounded batch size, atomic status updates, scheduler-command failure preservation, missing-job
   completion mapping, and terminal-state stability all passed.

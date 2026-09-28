@@ -240,6 +240,9 @@ exception propagation from a returned error object that the current wrapper igno
 `ParslKubernetesCancel.tla` fixed model preserves `RUNNING` for that returned-error case.
 `tests/test_aws_status_runtime.py` drives `AWSProvider.status` with a fake EC2 client, checking
 missing-instance behavior and normal instance-state translation.
+`tests/test_aws_submit_runtime.py` drives `AWSProvider.submit` with a fake instance launcher,
+checking successful registration, failed launch handling, unknown-state fallback, and the empty
+launch-response unpacking path modeled by `ParslAWSProviderSubmit.tla`.
 `tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
 `tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
