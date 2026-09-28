@@ -205,6 +205,9 @@ probe and fixed idempotent branch make this scheduler-specific difference explic
 `ParslSlurmDuplicateStatus.tla` models the same set-removal boundary in Slurm `_status`. Duplicate
 status rows currently raise `KeyError`; a fixed idempotent bookkeeping branch is checked with the
 real provider parser.
+`ParslTorqueDuplicateStatus.tla` models the list-removal boundary in Torque `_status`. Duplicate
+qstat rows currently raise `ValueError`; the runtime parser probe and fixed idempotent branch cover
+the provider-specific path.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
