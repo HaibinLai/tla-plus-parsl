@@ -18,6 +18,16 @@ def nested_double(payload):
     return payload[0] * 2
 
 
+@python_app
+def dict_value_double(payload):
+    return payload["value"] * 2
+
+
+@python_app
+def dict_key_value(payload):
+    return next(iter(payload))
+
+
 class DependencyTraversalRuntimeTest(unittest.TestCase):
     def test_deep_resolver_waits_and_unwraps_nested_list(self):
         config = Config(
@@ -41,6 +51,30 @@ class DependencyTraversalRuntimeTest(unittest.TestCase):
             # The default policy only recognizes a Future passed directly.
             # A Future hidden in a list reaches the callable unchanged.
             self.assertIsInstance(result.exception(), TypeError)
+
+    def test_deep_resolver_unwraps_nested_dict_value(self):
+        config = Config(
+            executors=[ThreadPoolExecutor(max_threads=2)],
+            dependency_resolver=DEEP_DEPENDENCY_RESOLVER,
+        )
+
+        with parsl.load(config):
+            source = traversal_source(6)
+            result = dict_value_double({"value": source})
+
+            self.assertEqual(result.result(), 12)
+
+    def test_deep_resolver_unwraps_nested_dict_key(self):
+        config = Config(
+            executors=[ThreadPoolExecutor(max_threads=2)],
+            dependency_resolver=DEEP_DEPENDENCY_RESOLVER,
+        )
+
+        with parsl.load(config):
+            source = traversal_source(7)
+            result = dict_key_value({source: "value"})
+
+            self.assertEqual(result.result(), 7)
 
 
 if __name__ == "__main__":

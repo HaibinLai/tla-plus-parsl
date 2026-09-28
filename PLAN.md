@@ -320,6 +320,8 @@ result suppression.
 direct Future and a Future nested in a container. Its shallow configuration intentionally exposes
 the worker receiving a nested Future object, while the deep configuration proves recursive gather
 and unwrap before execution.
+`ParslDependencyTraversal.tla` now also checks deep traversal through dictionary values and keys,
+matching the resolver's recursive dict implementation and runtime probes.
 `ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
 exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
 when the current pop-before-validation path exits the worker.
