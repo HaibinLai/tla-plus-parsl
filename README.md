@@ -784,6 +784,16 @@ The Torque foreign-job counterexample has the same kind of source-level runtime 
 
 It confirms that an unregistered qstat job raises `KeyError`, while a known job line updates the
 tracked resource.
+
+The real serialization facade is also exercised with the same callable/object boundary used by
+the wire models:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_runtime.py -v
+```
+
+The tests verify closure round-trip behavior, the `C2` callable and `02` data headers, three-part
+apply-message ordering, and rejection of an unserializable argument before a message is packed.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.

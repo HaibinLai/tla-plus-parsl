@@ -204,6 +204,9 @@ the fixed configuration ignores foreign scheduler lines, matching the safer LSF-
 `ParslCondorStatus.tla` models Condor status parsing for truncated scheduler output. The current
 two-field indexing path can crash on a malformed line; the fixed configuration skips short lines
 and preserves the previously known resource status.
+`tests/test_serialization_runtime.py` exercises the current serialization facade against real
+closures, callable/data headers, three-part apply-message packing, and a deliberately failing
+object graph. It complements the finite TLA+ serialization-wire models with runtime evidence.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
