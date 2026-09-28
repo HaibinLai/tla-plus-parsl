@@ -223,6 +223,9 @@ that rolls back and silently drops the duplicate event.
 `tests/test_monitoring_deferred_runtime.py` runs the real `DatabaseManager.start` loop against a
 temporary SQLite database, proving that an early worker message is replayed after TASK_INFO/TRY
 insertion and that a duplicate deferred message keeps only the latest observation.
+`tests/test_datafuture_runtime.py` also checks the real `DataManager.optionally_stage_in` clean-copy
+boundary: a staging operation receives a fresh `File` without the caller's site-local path, while
+the original object and its parent `DataFuture` remain intact.
 `tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
 executor, covering single Futures, ordered duplicate references, empty lists, `JoinError`,
 nested joins, scalar-return rejection, and mixed-list rejection.
@@ -409,7 +412,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 110 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 111 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
