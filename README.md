@@ -101,6 +101,11 @@ It models heartbeat send/drop/delivery, manager expiry and recovery, per-attempt
 selection, and a late result that is marked stale when its physical attempt is no longer current.
 `ParslClockTerminal.cfg` fixes the retry budget at zero to exercise terminal timeout rejection.
 
+`ParslMonitoringDB.tla` models a versioned monitoring radio queue and asynchronous database writer.
+The queue can reorder events, writes can fail and be retried, stale versions are ignored, and a
+terminal database record is not overwritten by an older event. `MAX_FAILURES` and queue bounds
+keep the monitoring model finite for TLC.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -302,6 +307,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -364,6 +371,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   late-result handling all passed.
 - `ParslClockTerminal.cfg`: 4,328 states generated, 1,094 distinct states, depth 13;
   terminal timeout rejection with no remaining retry passed the same time and result invariants.
+- `ParslMonitoringDB.cfg`: 757 states generated, 291 distinct states, depth 11;
+  asynchronous write failure/retry, version monotonicity, database consistency, and terminal
+  record safety passed.
+- `ParslMonitoringDBReorder.cfg`: 527 states generated, 206 distinct states, depth 9;
+  radio queue reordering and stale-event suppression passed with the same invariants.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -456,6 +468,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `PublishStageIn` / `RejectStaleStageIn` / `PublishStageOut` | readiness and atomic file visibility after complete transfer | DataManager staging completion and file publication boundary |
 | `Tick` / `SendHeartbeat` / `DeliverHeartbeat` / `ExpireManager` | wall-clock and manager heartbeat expiry | HTEX interchange heartbeat and manager health handling |
 | `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `DeliverResult` | attempt deadline, retry choice, and stale late result | DFK timeout/retry callbacks and result completion path |
+| `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
+| `DeliverHead` / `ReorderRadio` / `WriteSuccess` / `WriteFailure` | asynchronous monitoring queue and database persistence | MonitoringHub/radio/database boundary |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces

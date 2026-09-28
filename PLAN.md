@@ -126,6 +126,9 @@ repair, source-version changes during stage-in, and atomic stage-in/stage-out pu
 `ParslClock.tla` separates wall-clock ticks, heartbeat transport and expiry, attempt start/deadline
 timestamps, retry selection, and stale late-result delivery. A zero-retry configuration checks the
 terminal timeout path explicitly.
+`ParslMonitoringDB.tla` models the asynchronous monitoring radio queue, bounded event versions,
+database write failure/retry, queue reordering, stale-event suppression, and terminal-record
+stability.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.
