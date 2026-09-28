@@ -890,6 +890,15 @@ output:
 The tests reproduce the successful-empty-output path returning `None` without a resource and the
 normal path registering a pending job id.
 
+The concrete thread executor shutdown and admission contract is exercised directly:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_runtime.py -v
+```
+
+The probe checks that accepted work completes before blocking shutdown returns, new submissions
+are rejected afterwards, and unsupported resource specifications are rejected at admission.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash

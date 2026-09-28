@@ -235,6 +235,8 @@ pod translation.
 missing-instance behavior and normal instance-state translation.
 `tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
+`tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
+admission paths, including accepted-work completion and resource-specification rejection.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
