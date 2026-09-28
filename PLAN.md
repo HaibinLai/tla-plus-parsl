@@ -161,6 +161,9 @@ exception alongside command-failure preservation and missing-job completion.
 `ParslMonitoringDBRetry.tla` models the concrete `_insert` distinction between recoverable
 SQLAlchemy `OperationalError` (rollback and retry) and integrity errors (rollback and drop). The
 monitoring runtime probe verifies one transient lock error is retried and then stored.
+`ParslAWSProviderCancel.tla` adds AWS EC2 cancellation: linger rejection, remote termination
+failure, successful local cleanup, and the current stale-local-ID exception after a successful
+remote terminate. Fixed configurations model idempotent local cleanup.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

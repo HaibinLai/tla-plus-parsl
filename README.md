@@ -137,6 +137,10 @@ ignores foreign lines and preserves local resource state.
 rolled back and retried, while integrity errors are dropped after rollback. The runtime probe
 drives one transient database-lock failure through the real retry loop.
 
+`ParslAWSProviderCancel.tla` models EC2 cancellation: `linger` rejection, remote termination
+failure, successful local cleanup, and the current exception when a successful remote terminate
+finds no local resource/instance record. The fixed configuration makes local cleanup idempotent.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1088,7 +1092,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 185 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 187 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1834,6 +1838,7 @@ failure result for each in-flight task.
 | `WriteScript` / `SubmitCommand` / `CommandFails` / `EmptySuccess` / `RegisterJob` | Grid Engine qsub submission and resource registration | `GridEngineProvider.submit` |
 | `BeginPoll` / `HandleReportedJob` | Slurm batch status translation, foreign-job handling, and missing-job completion | `SlurmProvider._status` |
 | `BeginInsert` / `OperationalFailure` / `RetryInsert` / `InsertSuccess` / `IntegrityFailure` | monitoring database retry and duplicate/error handling | `DatabaseManager._insert` |
+| `IgnoreLinger` / `RemoteFailure` / `RemoteSuccessWithLocalState` / `RemoteSuccessWithoutLocalState` | AWS EC2 cancellation and local bookkeeping | `AWSProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
