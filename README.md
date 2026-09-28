@@ -855,7 +855,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 104 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 107 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -868,6 +868,16 @@ The concrete `join_app` protocol is exercised with a real local thread executor:
 This verifies single-Future propagation, ordered list results with duplicate Future references,
 empty-list completion without callbacks, and `JoinError` propagation from a failed inner app.
 It also checks nested join propagation and rejection of both scalar and mixed-list join returns.
+
+The callback-level join gate is exercised directly against the real `DataFlowKernel` method:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_callback_runtime.py -v
+```
+
+The probe checks that early callbacks do not finalize an outer task, final callbacks preserve list
+order and duplicate references, duplicate callbacks after terminal state are harmless, and inner
+failures become `JoinError` with dependent exception metadata.
 
 Physical retry and Python app timeout behavior are checked against a local thread executor:
 

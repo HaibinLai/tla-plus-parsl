@@ -223,6 +223,9 @@ that rolls back and silently drops the duplicate event.
 `tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
 executor, covering single Futures, ordered duplicate references, empty lists, `JoinError`,
 nested joins, scalar-return rejection, and mixed-list rejection.
+`tests/test_join_callback_runtime.py` calls the real `DataFlowKernel.handle_join_update` with
+controlled Futures, checking early-callback gating, ordered duplicate aggregation, duplicate
+callback suppression, and `JoinError` metadata modeled by `ParslJoinCallbackRace.tla`.
 `tests/test_retry_timeout_runtime.py` runs a retryable app and a walltime-limited app on the
 real thread executor, confirming distinct physical attempts and terminal `AppTimeout` behavior.
 `tests/test_memoization_runtime.py` runs duplicate and distinct cached calls plus a dependent app,
