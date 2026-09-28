@@ -201,6 +201,9 @@ output configurations check the provider/executor submission contract.
 `ParslTorqueStatus.tla` models Torque's qstat parser when a status line names a job outside the
 provider's resource map. The actual configuration exposes the direct dictionary-indexing crash;
 the fixed configuration ignores foreign scheduler lines, matching the safer LSF-style guard.
+`ParslCondorStatus.tla` models Condor status parsing for truncated scheduler output. The current
+two-field indexing path can crash on a malformed line; the fixed configuration skips short lines
+and preserves the previously known resource status.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
