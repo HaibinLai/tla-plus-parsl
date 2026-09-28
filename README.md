@@ -28,8 +28,9 @@ abstraction and its first group of scenario configurations live under `models/co
 configuration remains next to the TLA+ module it instantiates. Serialization and transport
 models are under `models/serialization/`; monitoring models are under `models/monitoring/`; provider
 and scheduler models are under `models/providers/`; staging and data-transfer models are under
-`models/staging/`; runtime probes remain under `tests/`. More model families will move into topic
-directories only after their TLC commands are updated and checked.
+`models/staging/`; executor, HTEX, worker, and command models are under `models/executors/`;
+runtime probes remain under `tests/`. More model families will move into topic directories only
+after their TLC commands are updated and checked.
 
 ## Logical tasks and physical attempts
 
@@ -963,10 +964,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputStageOutE
 java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFutureWaitTimeout.cfg ParslFutureWaitTimeout.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatBoundary.cfg ParslHeartbeatBoundary.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpCurrent.cfg ParslHeartbeatClockJump.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpFixed.cfg ParslHeartbeatClockJump.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpNormal.cfg ParslHeartbeatClockJump.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatBoundary.cfg models/executors/ParslHeartbeatBoundary.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatClockJumpCurrent.cfg models/executors/ParslHeartbeatClockJump.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatClockJumpFixed.cfg models/executors/ParslHeartbeatClockJump.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatClockJumpNormal.cfg models/executors/ParslHeartbeatClockJump.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDB.cfg models/monitoring/ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBReorder.cfg models/monitoring/ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeferred.cfg models/monitoring/ParslMonitoringDeferred.tla
@@ -987,18 +988,18 @@ java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerPositive.cfg ParslRetry
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoFunctionIdentityCurrent.cfg ParslMemoFunctionIdentity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoFunctionIdentityFixed.cfg ParslMemoFunctionIdentity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoFunctionIdentityStable.cfg ParslMemoFunctionIdentity.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutCurrent.cfg ParslExecuteWaitTimeout.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutFixed.cfg ParslExecuteWaitTimeout.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutSuccess.cfg ParslExecuteWaitTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutCurrent.cfg models/executors/ParslExecuteWaitTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutFixed.cfg models/executors/ParslExecuteWaitTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutSuccess.cfg models/executors/ParslExecuteWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingCurrent.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingFixed.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingHomogeneous.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingCurrent.cfg models/staging/ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingFixed.cfg models/staging/ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingNormal.cfg models/staging/ParslRsyncQuoting.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineCurrent.cfg ParslCommandDeadline.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineFixed.cfg ParslCommandDeadline.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineNormal.cfg ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineCurrent.cfg models/executors/ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineFixed.cfg models/executors/ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineNormal.cfg models/executors/ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusCurrent.cfg models/providers/ParslGridEngineDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusFixed.cfg models/providers/ParslGridEngineDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusUnique.cfg models/providers/ParslGridEngineDuplicateStatus.tla
@@ -1040,7 +1041,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailur
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureFixedValid.cfg models/providers/ParslCondorStatusFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureFixedMalformed.cfg models/providers/ParslCondorStatusFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureSuccess.cfg models/providers/ParslCondorStatusFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorProvider.cfg models/executors/ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListCancellationCurrent.cfg ParslJoinListCancellation.tla
@@ -1056,16 +1057,16 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinNoneResultList.cfg ParslJoinNon
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportFailure.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPolling.cfg models/providers/ParslProviderPolling.tla
-java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueResults.cfg ParslWorkQueueResults.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueDuplicateReport.cfg ParslWorkQueueDuplicateReport.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueDuplicateReportFixed.cfg ParslWorkQueueDuplicateReport.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFluxResultFixed.cfg ParslFluxResult.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineResults.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReport.cfg ParslTaskVineDuplicateReport.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReportFixed.cfg ParslTaskVineDuplicateReport.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
+java -cp tla2tools.jar tlc2.TLC -depth 10 -config models/executors/ParslExecutorKinds.cfg models/executors/ParslExecutorKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorShutdown.cfg models/executors/ParslExecutorShutdown.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueResults.cfg models/executors/ParslWorkQueueResults.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueDuplicateReport.cfg models/executors/ParslWorkQueueDuplicateReport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueDuplicateReportFixed.cfg models/executors/ParslWorkQueueDuplicateReport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxResultFixed.cfg models/executors/ParslFluxResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineResults.cfg models/executors/ParslTaskVineResults.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineDuplicateReport.cfg models/executors/ParslTaskVineDuplicateReport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineDuplicateReportFixed.cfg models/executors/ParslTaskVineDuplicateReport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotResultsFixed.cfg models/executors/ParslRadicalPilotResults.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusComputeConfigFixed.cfg models/staging/ParslGlobusComputeConfig.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderKinds.cfg models/providers/ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatus.cfg models/providers/ParslAWSProviderStatus.tla
@@ -1076,7 +1077,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterProviderUnk
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterProviderUnknownJobFixed.cfg models/providers/ParslClusterProviderUnknownJob.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesPollingFixed.cfg models/providers/ParslKubernetesPolling.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatProvider.cfg models/executors/ParslHeartbeatProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResultRace.cfg ParslResultRace.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinCallbackRace.cfg ParslJoinCallbackRace.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMemoData.cfg ParslJoinMemoData.tla
@@ -1097,15 +1098,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationF
 java -cp tla2tools.jar tlc2.TLC -config ParslApplyMessageArity.cfg ParslApplyMessageArity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslApplyMessageArityFixed.cfg ParslApplyMessageArity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationZMQBridge.cfg models/serialization/ParslSerializationZMQBridge.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureCurrent.cfg ParslHtexResultDecodeFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureFixed.cfg ParslHtexResultDecodeFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureNormal.cfg ParslHtexResultDecodeFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitFailure.cfg ParslHtexSubmitFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitFailureFixed.cfg ParslHtexSubmitFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitSuccess.cfg ParslHtexSubmitFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexVersionMismatchFixed.cfg ParslHtexVersionMismatch.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHtexDispatchPriority.cfg ParslHtexDispatchPriority.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultQueueFixed.cfg models/executors/ParslHtexResultQueue.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultDecodeFailureCurrent.cfg models/executors/ParslHtexResultDecodeFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultDecodeFailureFixed.cfg models/executors/ParslHtexResultDecodeFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultDecodeFailureNormal.cfg models/executors/ParslHtexResultDecodeFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitFailure.cfg models/executors/ParslHtexSubmitFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitFailureFixed.cfg models/executors/ParslHtexSubmitFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitSuccess.cfg models/executors/ParslHtexSubmitFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexVersionMismatchFixed.cfg models/executors/ParslHtexVersionMismatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDispatchPriority.cfg models/executors/ParslHtexDispatchPriority.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMPISpecFixed.cfg ParslMPISpec.tla
 ```
 
