@@ -832,7 +832,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 64 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 67 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1025,6 +1025,16 @@ The probe checks successful pod creation and API failure propagation. The curren
 newly created pods as `RUNNING` immediately; the corresponding TLA+ fixed configuration records
 the resource as `PENDING` until Kubernetes reports a phase.
 
+Kubernetes pod cancellation is exercised with a fake delete API:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_cancel_runtime.py -v
+```
+
+An API exception propagates before the resource is changed, but a returned error object is ignored
+by the current `_delete_pod` wrapper and the resource is marked `CANCELLED`. The TLA+ fixed
+configuration treats a returned error as a failed cancellation that leaves the job `RUNNING`.
+
 The EC2 status boundary is exercised with a fake `describe_instances` client:
 
 ```bash
@@ -1154,6 +1164,10 @@ failure result for each in-flight task.
   distinct); a successful pod create is recorded as `RUNNING` before Kubernetes phase polling.
 - `ParslKubernetesSubmitFixed.cfg`: 10 states generated, 5 distinct states, depth 3; successful
   creation is represented as `PENDING`, while API failure registers no resource.
+- `ParslKubernetesCancel.cfg`: expected counterexample at depth 3 (8 states generated, 6
+  distinct); a returned delete-error object is treated as successful cancellation.
+- `ParslKubernetesCancelFixed.cfg`: 13 states generated, 6 distinct states, depth 3; returned
+  delete errors preserve `RUNNING`, while exceptions leave the resource unchanged.
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.

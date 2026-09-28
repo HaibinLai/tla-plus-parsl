@@ -235,6 +235,9 @@ pod translation.
 `tests/test_kubernetes_submit_runtime.py` drives Kubernetes pod creation with a fake CoreV1 API,
 checking successful resource registration and API error propagation. The current source's initial
 `RUNNING` status is captured by `ParslKubernetesSubmit.tla`; the fixed model waits in `PENDING`.
+`tests/test_kubernetes_cancel_runtime.py` drives pod deletion with a fake API, distinguishing
+exception propagation from a returned error object that the current wrapper ignores. The
+`ParslKubernetesCancel.tla` fixed model preserves `RUNNING` for that returned-error case.
 `tests/test_aws_status_runtime.py` drives `AWSProvider.status` with a fake EC2 client, checking
 missing-instance behavior and normal instance-state translation.
 `tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
