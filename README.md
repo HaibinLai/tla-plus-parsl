@@ -63,7 +63,8 @@ resource availability, and allocation failure. Memoization completes a task with
 an attempt or consuming a worker.
 The reserved executor name `local` models a provider-free local executor: it still uses the
 same serialized task/result and worker-binding protocol, but does not require a provider block.
-`ParslLocalExecutor.cfg` checks this path separately from provider-backed executors.
+Its workers start idle without HTEX manager registration. `ParslLocalExecutor.cfg` checks this
+path separately from provider-backed executors.
 Scale-in is block-granular: cancelling one of several active blocks keeps the provider active,
 while cancelling the final block transitions it to `cancelled`. `ParslScaleIn.cfg` exercises this
 multi-block case. Scale-out may also fail while an earlier block remains active; in that case the
@@ -296,7 +297,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslScaleIn.cfg`: 52,674 states generated, 7,371 distinct states, depth 37;
   multi-block scale-out, partial scale-in, and failed secondary allocation preserved provider
   block/target consistency.
-- `ParslLocalExecutor.cfg`: 80 states generated, 26 distinct states, depth 16;
+- `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
@@ -373,7 +374,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
-| `LocalExecutors` / provider-free `SubmitAttempt` and `DispatchAttempt` | local executor path without resource provisioning | `ThreadPoolExecutor`/`HighThroughputExecutor` submission boundary |
+| `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces
 

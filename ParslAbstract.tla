@@ -107,7 +107,8 @@ Init ==
     /\ attemptState = [a \in AttemptIds |-> "absent"]
     /\ attemptExecutor = [a \in AttemptIds |-> "none"]
     /\ attemptWorker = [a \in AttemptIds |-> "none"]
-    /\ workerState = [w \in WORKERS |-> "unregistered"]
+    /\ workerState = [w \in WORKERS |->
+          IF WorkerExec(w) \in LocalExecutors THEN "idle" ELSE "unregistered"]
     /\ workerAttempt = [w \in WORKERS |-> NoAttempt]
     /\ executorState = [e \in EXECUTORS |-> "up"]
     /\ providerState = [e \in EXECUTORS |-> "none"]
@@ -1280,6 +1281,10 @@ WorkerBinding ==
 RegistrationSafety ==
     \A w \in WORKERS : workerState[w] = "unregistered" =>
         workerAttempt[w] = NoAttempt
+
+LocalExecutorSafety ==
+    \A w \in WORKERS : WorkerExec(w) \in LocalExecutors =>
+        workerState[w] \in {"idle", "busy", "failed"}
 
 ValidRunningAttempt ==
     \A a \in AttemptIds : attemptState[a] = "running" =>

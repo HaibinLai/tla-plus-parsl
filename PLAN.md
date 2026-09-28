@@ -71,7 +71,8 @@ activity and cancelling the final block clears provider capacity. It also covers
 secondary allocation while an earlier block remains active, plus cancellation of a pending
 allocation before it becomes active.
 `ParslLocalExecutor.cfg` adds a provider-free `local` executor path while retaining the common
-serialization, worker binding, and result protocol.
+serialization, worker binding, and result protocol; local workers start idle without manager
+registration.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery
