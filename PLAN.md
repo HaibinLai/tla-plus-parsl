@@ -213,6 +213,9 @@ chunk/checksum and stage-out Future TLA+ models with concrete content evidence.
 `tests/test_htex_heartbeat_runtime.py` drives the current `Interchange.expire_bad_managers` method
 with deterministic time and fake output transport, checking the strict threshold and serialized
 manager-loss reports without starting a real worker process.
+`tests/test_zmq_serialization_runtime.py` connects real in-process ROUTER/DEALER and PAIR sockets
+to Parsl's apply-message serialization, checking multipart framing, route identity, payload
+deserialization, execution, and acknowledgement.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of

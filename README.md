@@ -805,6 +805,16 @@ This verifies stage-out archive creation and source cleanup, stage-in byte prese
 on a corrupt archive before output publication, and the local-file scheme gate in
 `NoOpFileStaging`.
 
+The ZMQ transport and serialization boundary is exercised with real in-process ROUTER/DEALER
+sockets:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialization_runtime.py -v
+```
+
+The probe checks multipart frame count, route identity preservation, Parsl apply-message
+deserialization, task execution, and an ACK sent back over the routed socket.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash
