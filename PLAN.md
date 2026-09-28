@@ -163,6 +163,9 @@ Future resolution.
 `ParslJoinCallbackRace.tla` models the actual `join_app` callback gate: early callbacks return
 without finalizing, the final callback checks all inner Futures under a lock, failures become
 `JoinError` only after all selected Futures are done, and duplicate callbacks are harmless.
+`ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
+Futures complete without executor attempts, staged file Futures remain unresolved until transfer
+readiness, and the outer join cannot finalize early.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
