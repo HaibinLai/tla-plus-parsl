@@ -210,6 +210,9 @@ object graph. It complements the finite TLA+ serialization-wire models with runt
 `tests/test_zip_file_transfer_runtime.py` executes the local `ZipFileStaging` byte path against
 real temporary files, including archive corruption before output publication. It complements the
 chunk/checksum and stage-out Future TLA+ models with concrete content evidence.
+`tests/test_htex_heartbeat_runtime.py` drives the current `Interchange.expire_bad_managers` method
+with deterministic time and fake output transport, checking the strict threshold and serialized
+manager-loss reports without starting a real worker process.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of

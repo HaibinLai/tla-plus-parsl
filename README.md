@@ -804,6 +804,16 @@ The local zip staging implementation is exercised against actual bytes as well:
 This verifies stage-out archive creation and source cleanup, stage-in byte preservation, failure
 on a corrupt archive before output publication, and the local-file scheme gate in
 `NoOpFileStaging`.
+
+The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_heartbeat_runtime.py -v
+```
+
+The runtime probe checks the strict `elapsed > heartbeat_threshold` boundary and verifies that an
+expired manager is deactivated, removed from the scheduling set, and converted into a serialized
+failure result for each in-flight task.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
