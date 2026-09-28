@@ -939,6 +939,14 @@ same bytes only after the producer has completed.
 The same probe also checks that a consumer wired to the producer's output `DataFuture` receives a
 `DependencyError` and is never executed when the producer fails.
 
+Ordinary Future dependency propagation is checked separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_dependency_runtime.py -v
+```
+
+This verifies successful value propagation and failure blocking for non-file task dependencies.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash

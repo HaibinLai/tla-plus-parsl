@@ -246,6 +246,8 @@ current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 checking binary content readiness and dependent-task gating.
 It also wires a failed producer's output `DataFuture` into a consumer and checks `DependencyError`
 propagation without consumer execution.
+`tests/test_dependency_runtime.py` separately exercises ordinary Future value propagation and
+failure blocking on the local executor.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
