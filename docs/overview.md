@@ -167,6 +167,12 @@ even when `max_retries=2`; TLC reaches the `RetryBudgetHonored` counterexample. 
 shows the candidate retry contract, but the repository does not claim that this policy is required
 by the Parsl paper.
 
+`ParslHtexCancelledResult.tla` models cancellation racing with HTEX result delivery. The current
+result thread removes a cancelled Future and then calls `set_result`, so `InvalidStateError` can
+terminate the thread before later results in the same batch are handled. The fixed branch treats
+the cancelled result as stale and continues processing the batch; the runtime probe reproduces
+the current orphaned-pending-task behavior.
+
 `ParslHtexManagerMessage.tla` models manager-to-interchange message decoding. Malformed multipart
 or pickle input is ignored without changing the manager record; a valid heartbeat updates its
 timestamp and produces the heartbeat reply.
@@ -1756,7 +1762,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 304 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 305 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

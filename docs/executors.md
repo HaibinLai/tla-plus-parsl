@@ -53,6 +53,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientMaxRe
 /tmp/parsl-venv/bin/python -m unittest tests/test_command_max_retries_runtime.py -v
 ```
 
+`ParslHtexCancelledResult.tla` covers a result arriving after a user cancelled its Future. The
+current HTEX result thread calls `set_result` unconditionally; `InvalidStateError` terminates the
+thread after removing the cancelled task, so later results in the same batch remain pending. The
+fixed branch discards the cancelled result and continues. `tests/test_htex_cancelled_result_runtime.py`
+reproduces the current failure with two messages in one batch.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResultCurrent.cfg models/executors/ParslHtexCancelledResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResultFixed.cfg models/executors/ParslHtexCancelledResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_cancelled_result_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
