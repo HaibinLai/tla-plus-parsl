@@ -136,6 +136,10 @@ The fixed configuration treats that idempotent bookkeeping case as cancelled.
 specifications are rejected before task creation, accepted work survives `shutdown(wait=False)`,
 and `shutdown(wait=True)` waits for the accepted task before becoming stopped. The runtime probe
 extends `tests/test_thread_executor_runtime.py` with the non-blocking shutdown path.
+`ParslZipStageIn.tla` refines zip-file stage-in with archive validation, output publication, and
+write failure. The current path can leave a partial output after a failed direct write; the fixed
+configuration represents temporary-file plus atomic publication. The runtime probe injects a
+write failure into the real `_zip_stage_in` helper.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

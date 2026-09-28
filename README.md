@@ -109,6 +109,10 @@ after the local `instances` list has already lost the VM id, `list.remove` raise
 unsupported resource specifications, preservation of accepted work across `shutdown(wait=False)`,
 and the stronger wait-for-completion contract of `shutdown(wait=True)`.
 
+`ParslZipStageIn.tla` refines `ZipFileStaging.stage_in`: archive validation happens before output
+creation, but the current direct write can expose a partial output if the destination write fails.
+The fixed configuration uses a temporary output and atomic publication.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1060,7 +1064,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 177 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 178 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1148,6 +1152,15 @@ The concrete thread executor shutdown modes are exercised directly:
 
 The non-blocking case confirms that new submissions are rejected while already accepted work is
 still allowed to finish.
+
+Zip stage-in is exercised with real temporary archives and an injected destination write failure:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
+```
+
+The probe confirms byte preservation, corrupt-archive rejection, and the current partial-output
+behavior on a failed direct write.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1769,6 +1782,7 @@ failure result for each in-flight task.
 | `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
 | `IgnoreLinger` / `DeleteFails` / `DeleteSucceedsWithLocalId` / `DeleteSucceedsWithoutLocalId` | Azure VM cancellation and local instance bookkeeping | `AzureProvider.cancel` |
 | `Submit` / `RejectResource` / `BeginShutdown` / `CompleteTask` / `FinishShutdown` | provider-free thread executor admission and shutdown | `ThreadPoolExecutor.submit` and `ThreadPoolExecutor.shutdown` |
+| `OpenArchive` / `WriteOutput` | zip archive stage-in validation and atomic output publication | `ZipFileStaging._zip_stage_in` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
