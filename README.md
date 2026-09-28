@@ -101,6 +101,16 @@ The result path has the same shape after worker execution: `SerializeResult`, `S
 worker or executor failure can still replace an in-flight result with a retry, so a result from
 the old attempt remains eligible only for the explicit stale-result transition.
 
+## Logical time and heartbeat failures
+
+The model uses a bounded logical clock rather than wall-clock timestamps. `Tick` advances the
+clock, `Heartbeat` records the latest manager heartbeat for a worker, and `StartAttemptTimed`
+records an attempt start time. `WorkerFailure` can therefore be enabled by a heartbeat age beyond
+`HEARTBEAT_TIMEOUT`, while `AttemptTimeout` can be enabled by an attempt age beyond
+`TASK_TIMEOUT`. The full workflow configurations set `MAX_TIME = 0` to avoid combining every
+workflow interleaving with clock values; `ParslTime.cfg` is a deliberately tiny one-task model
+that explores the time and timeout transitions with `MAX_TIME = 1`.
+
 ## TLC verification
 
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
@@ -111,21 +121,32 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config parsl.cfg parsl.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMemo.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSerializationFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslNoFailures.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTime.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
 retry bounds, worker capacity/binding, valid assignments, executor availability for running
-attempts, attempt identity, Future result consistency, and stale-result safety.
+attempts, attempt identity, Future result consistency, stale-result safety, serialization
+safety, data readiness, file-transfer safety, and time consistency.
+
+The purpose of these checks is bug finding, not only documentation. A model action is a small
+executable hypothesis about a Parsl transition; if an implementation change would permit a task
+to run before its data is ready, accept an old result, exceed its retry bound, or run after a
+heartbeat/timeout failure, the corresponding invariant should produce a finite TLC counterexample
+trace. Each trace can then be mapped back to the source locations in the table below and used as
+a focused test or as evidence that the abstraction is missing a guard.
 
 Measured with TLC 2.19 and Java 17 on 2026-09-28:
 
-- `ParslAbstract.cfg`: 4,114,402 states generated, 755,365 distinct states, depth 87;
+- `ParslAbstract.cfg`: 6,074,516 states generated, 911,791 distinct states, depth 87;
   all invariants passed.
-- `ParslMemo.cfg`: 207,668 states generated, 41,907 distinct states, depth 65; all invariants passed.
-- `ParslSerializationFailure.cfg`: 1,636,240 states generated, 310,025 distinct states, depth 69;
+- `ParslMemo.cfg`: 306,160 states generated, 48,185 distinct states, depth 65; all invariants passed.
+- `ParslSerializationFailure.cfg`: 2,467,560 states generated, 381,857 distinct states, depth 69;
   all safety invariants passed, including the pre-dispatch serialization-failure path.
-- `ParslNoFailures.cfg`: 5,378 states generated, 1,649 distinct states, depth 51;
+- `ParslNoFailures.cfg`: 8,676 states generated, 1,649 distinct states, depth 51;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
+- `ParslTime.cfg`: 492 states generated, 145 distinct states, depth 31;
+  `EventuallySettled` passed with logical ticking and timeout transitions enabled.
 
 ## Source-to-model mapping
 
@@ -144,6 +165,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
+| `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |

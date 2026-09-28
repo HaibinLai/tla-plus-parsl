@@ -13,7 +13,8 @@ EXTENDS Naturals, Integers, FiniteSets, Sequences
 CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
           FILE_OUTPUTS,
-          MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES
+          MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES,
+          MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT
 
 TaskStates == {"pending", "staging", "ready", "queued", "running",
                "retry_wait", "succeeded", "memoized", "failed"}
@@ -35,13 +36,17 @@ VARIABLES taskState, futureState, retries, currentAttempt, selectedExecutor,
           dataState, attemptState, attemptExecutor, attemptWorker,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
-          completed, rejected, outputs
+          completed, rejected, outputs,
+          clock, lastHeartbeat, attemptStart
 
 vars == <<taskState, futureState, retries, currentAttempt, selectedExecutor,
           dataState, attemptState, attemptExecutor, attemptWorker,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
-          completed, rejected, outputs>>
+          completed, rejected, outputs,
+          clock, lastHeartbeat, attemptStart>>
+
+timeVars == <<clock, lastHeartbeat, attemptStart>>
 
 Init ==
     /\ TASKS # {} /\ EXECUTORS # {} /\ WORKERS # {}
@@ -70,6 +75,9 @@ Init ==
     /\ completed = {}
     /\ rejected = {}
     /\ outputs = [t \in TASKS |-> "absent"]
+    /\ clock = 0
+    /\ lastHeartbeat = [w \in WORKERS |-> 0]
+    /\ attemptStart = [a \in AttemptIds |-> -1]
 
 BeginStaging(t) ==
     /\ t \in TASKS /\ taskState[t] = "pending"
@@ -346,7 +354,7 @@ RetryTask(t) ==
 
 AttemptTimeout(t, k, w) ==
     LET a == <<t, k>> IN
-    /\ ALLOW_FAILURES
+    /\ (ALLOW_FAILURES \/ clock - attemptStart[a] >= TASK_TIMEOUT)
     /\ attemptState[a] = "running" /\ attemptWorker[a] = w
     /\ currentAttempt[t] = k /\ retries[t] < MAX_RETRIES
     /\ attemptState' = [attemptState EXCEPT ![a] = "timed_out"]
@@ -360,7 +368,7 @@ AttemptTimeout(t, k, w) ==
                     providerTarget, providerBlocks, completed, rejected, outputs>>
 
 WorkerFailure(w) ==
-    /\ ALLOW_FAILURES
+    /\ (ALLOW_FAILURES \/ clock - lastHeartbeat[w] >= HEARTBEAT_TIMEOUT)
     /\ w \in WORKERS /\ workerState[w] = "busy"
     /\ LET a == workerAttempt[w] IN
        /\ attemptState[a] \in {"submitted", "dispatched", "running",
@@ -482,7 +490,7 @@ CancelAllocation(e) ==
                     attemptExecutor, attemptWorker, workerState, workerAttempt,
                     executorState, completed, rejected, outputs>>
 
-NextCore ==
+CoreActions ==
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
     \/ \E t \in TASKS : BeginStageOut(t) \/ FinishStageOut(t)
     \/ \E t \in TASKS : DependencyCheck(t) \/ MemoizationHit(t) \/ Enqueue(t)
@@ -492,7 +500,7 @@ NextCore ==
           SerializeAttempt(t, k) \/ SendAttempt(t, k)
           \/ ReceiveAttempt(t, k) \/ DecodeAttempt(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
-          DispatchAttempt(t, k, w) \/ StartAttempt(t, k, w)
+          DispatchAttempt(t, k, w)
           \/ SerializeResult(t, k, w)
           \/ AttemptSuccess(t, k, w) \/ AttemptFailure(t, k, w)
           \/ AttemptTimeout(t, k, w)
@@ -506,6 +514,38 @@ NextCore ==
     \/ \E e \in EXECUTORS : RequestAllocation(e) \/ AllocationFails(e)
     \/ \E e \in EXECUTORS, w \in WORKERS : AllocationSucceeds(e, w)
     \/ \E e \in EXECUTORS : CancelAllocation(e)
+
+StartAttemptTimed(t, k, w) ==
+    /\ StartAttempt(t, k, w)
+    /\ attemptStart' = [attemptStart EXCEPT ![<<t, k>>] = clock]
+    /\ UNCHANGED <<clock, lastHeartbeat>>
+
+Tick ==
+    /\ clock < MAX_TIME
+    /\ clock' = clock + 1
+    /\ UNCHANGED <<lastHeartbeat, attemptStart,
+                    taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+Heartbeat(w) ==
+    /\ w \in WORKERS /\ workerState[w] # "failed"
+    /\ lastHeartbeat' = [lastHeartbeat EXCEPT ![w] = clock]
+    /\ UNCHANGED <<clock, attemptStart,
+                    taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+NextCore ==
+    \/ CoreActions /\ UNCHANGED timeVars
+    \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
+          StartAttemptTimed(t, k, w)
+    \/ Tick
+    \/ \E w \in WORKERS : Heartbeat(w)
 
 Next == NextCore \/ UNCHANGED vars
 
@@ -530,6 +570,9 @@ TypeOK ==
     /\ providerBlocks \in [EXECUTORS -> 0..MAX_BLOCKS]
     /\ completed \subseteq TASKS /\ rejected \subseteq TASKS
     /\ outputs \in [TASKS -> {"absent", "memoized-output", "result"}]
+    /\ clock \in 0..MAX_TIME
+    /\ lastHeartbeat \in [WORKERS -> 0..MAX_TIME]
+    /\ attemptStart \in [AttemptIds -> -1..MAX_TIME]
 
 DependencySafety ==
     \A t \in TASKS : taskState[t] = "running" =>
@@ -584,6 +627,11 @@ DataReadinessSafety ==
 FileTransferSafety ==
     \A t \in TASKS : dataState[t] \in {"stageout", "transferred"} =>
         t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
+
+TimeSafety ==
+    /\ \A a \in AttemptIds : attemptState[a] = "running" =>
+          attemptStart[a] \in 0..clock
+    /\ \A w \in WORKERS : lastHeartbeat[w] <= clock
 
 EventuallySettled ==
     \A t \in TASKS : <> (taskState[t] \in {"succeeded", "memoized", "failed"})
