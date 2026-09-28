@@ -195,7 +195,9 @@ task state, matching asynchronous monitoring delivery, but `MonitoringConsistenc
 persisted terminal success, memoized state, or failure from appearing before the corresponding
 logical outcome. `MonitoringDatabaseSafety` ensures the initial `none` record has version zero
 and every published update advances its version. As with time, the full workflow configurations
-disable event expansion and `ParslMonitoring.cfg` is the focused one-task exploration.
+disable event expansion and `ParslMonitoring.cfg` is the focused one-task exploration. A bounded
+`write_failed` state represents a transient database write error; recovery must publish the
+current logical view again rather than inventing a terminal status.
 
 Executor/provider submission is separated into two hypotheses. `SubmitAttempt` is allowed only
 for an executor in `SUBMITTABLE_EXECUTORS`, representing an executor whose bad-state check and
@@ -267,7 +269,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 606 states generated, 173 distinct states, depth 32;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
-- `ParslMonitoring.cfg`: 43,775 states generated, 8,445 distinct states, depth 40;
+- `ParslMonitoring.cfg`: 167,482 states generated, 25,066 distinct states, depth 43;
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.

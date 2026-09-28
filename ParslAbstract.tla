@@ -20,7 +20,8 @@ CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
 TaskStates == {"pending", "staging", "ready", "queued", "running",
                "retry_wait", "joining", "succeeded", "memoized", "failed"}
 FutureStates == {"unresolved", "resolved", "rejected"}
-MonitorStates == {"none", "pending", "running", "retry_wait", "succeeded", "failed", "memoized"}
+MonitorStates == {"none", "pending", "running", "retry_wait", "succeeded", "failed", "memoized",
+                  "write_failed"}
 MonitorRecord == [status : MonitorStates, version : Nat]
 AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "decoded",
                   "dispatched", "running", "result_serialized", "result_sent",
@@ -1029,13 +1030,28 @@ PublishMonitor(t) ==
                     completed, rejected, outputs, joinObserved,
                     taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
+MonitoringWriteFailure(t) ==
+    /\ ALLOW_FAILURES
+    /\ MONITORING_ENABLED
+    /\ t \in TASKS
+    /\ monitoringState[t].status \notin {"write_failed", MonitorView(t)}
+    /\ monitoringState' = [monitoringState EXCEPT ![t] =
+          [status |-> "write_failed", version |-> monitoringState[t].version]]
+    /\ UNCHANGED <<clock, lastHeartbeat, attemptStart,
+                    taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
+
 NextCore ==
     \/ CoreActions /\ UNCHANGED <<timeVars, monitoringState, joinObserved>>
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           StartAttemptTimed(t, k, w)
     \/ Tick
     \/ \E w \in WORKERS : Heartbeat(w)
-    \/ \E t \in TASKS : PublishMonitor(t)
+    \/ \E t \in TASKS : PublishMonitor(t) \/ MonitoringWriteFailure(t)
     \/ \E t \in JOIN_TASKS, i \in TASKS : JoinObserve(t, i)
     \/ \E t \in JOIN_TASKS : JoinComplete(t) \/ JoinFailure(t)
 
@@ -1251,10 +1267,9 @@ MonitoringConsistency ==
           taskState[t] = "memoized"
     /\ \A t \in TASKS : monitoringState[t].status = "failed" =>
           taskState[t] = "failed"
-
 MonitoringDatabaseSafety ==
     /\ \A t \in TASKS : monitoringState[t].version = 0 =>
-          monitoringState[t].status = "none"
+          monitoringState[t].status \in {"none", "write_failed"}
     /\ \A t \in TASKS : monitoringState[t].status = "none" =>
           monitoringState[t].version = 0
 
