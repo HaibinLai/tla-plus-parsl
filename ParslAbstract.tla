@@ -14,7 +14,7 @@ CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
           OBJECTS, TASK_OBJECTS, SERIALIZABLE_OBJECTS, OBJECT_EDGES,
           FILE_OUTPUTS, SUBMITTABLE_EXECUTORS, JOIN_TASKS, JOIN_DEPS, JOIN_INVALID,
-          MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES,
+          MAX_RETRIES, MAX_BLOCKS, MIN_BLOCKS, ALLOW_FAILURES,
           MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MONITORING_ENABLED
 
 TaskStates == {"pending", "staging", "ready", "queued", "running",
@@ -82,6 +82,7 @@ timeVars == <<clock, lastHeartbeat, attemptStart>>
 
 Init ==
     /\ TASKS # {} /\ EXECUTORS # {} /\ WORKERS # {}
+    /\ MIN_BLOCKS \in 0..MAX_BLOCKS
     /\ CALLABLE_SERIALIZABLE \subseteq TASKS
     /\ PAYLOAD_SERIALIZABLE \subseteq TASKS
     /\ SERIALIZABLE_OBJECTS \subseteq OBJECTS
@@ -112,7 +113,7 @@ Init ==
     /\ workerAttempt = [w \in WORKERS |-> NoAttempt]
     /\ executorState = [e \in EXECUTORS |-> "up"]
     /\ providerState = [e \in EXECUTORS |-> "none"]
-    /\ providerTarget = [e \in EXECUTORS |-> 0]
+    /\ providerTarget = [e \in EXECUTORS |-> MIN_BLOCKS]
     /\ providerBlocks = [e \in EXECUTORS |-> 0]
     /\ completed = {}
     /\ rejected = {}
@@ -1025,6 +1026,7 @@ ProviderFailure(e) ==
 CancelAllocation(e) ==
     /\ ALLOW_FAILURES
     /\ e \in EXECUTORS /\ providerState[e] = "active" /\ providerBlocks[e] > 0
+    /\ providerBlocks[e] > MIN_BLOCKS
     /\ \A w \in WORKERS : WorkerExec(w) = e => workerState[w] = "idle"
     /\ \A a \in AttemptIds : attemptExecutor[a] = e =>
           attemptState[a] \notin {"submitted", "serialized", "sent", "received",
@@ -1044,8 +1046,10 @@ CancelRequestedAllocation(e) ==
     /\ e \in EXECUTORS \ LocalExecutors
     /\ providerState[e] = "requested"
     /\ providerTarget[e] > providerBlocks[e]
+    /\ providerTarget[e] > MIN_BLOCKS
     /\ providerState' = [providerState EXCEPT ![e] =
-          IF providerBlocks[e] > 0 THEN "active" ELSE "cancelled"]
+          IF providerTarget[e] - 1 > providerBlocks[e] THEN "requested"
+          ELSE IF providerBlocks[e] > 0 THEN "active" ELSE "cancelled"]
     /\ providerTarget' = [providerTarget EXCEPT ![e] = @ - 1]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt, selectedExecutor,
                     dataState, attemptState, attemptExecutor, attemptWorker,
@@ -1320,6 +1324,8 @@ SubmitSafety ==
 
 ProviderExecutorConsistency ==
     /\ \A e \in EXECUTORS : providerBlocks[e] <= providerTarget[e]
+    /\ \A e \in EXECUTORS : providerState[e] \in {"none", "requested", "active"} =>
+          providerTarget[e] >= MIN_BLOCKS
     /\ \A e \in EXECUTORS : providerState[e] = "active" =>
           executorState[e] \in {"up", "draining"} /\ providerBlocks[e] > 0
     /\ \A e \in EXECUTORS : providerState[e] = "failed" =>

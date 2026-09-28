@@ -70,7 +70,8 @@ requesting a replacement block without producing a negative target count.
 `ParslScaleIn.cfg` covers multi-block scale-in: cancelling one idle block preserves provider
 activity and cancelling the final block clears provider capacity. It also covers a failed
 secondary allocation while an earlier block remains active, plus cancellation of a pending
-allocation before it becomes active.
+allocation before it becomes active. `ParslMinBlocks.cfg` checks that scale-in respects a
+non-zero `MIN_BLOCKS` floor.
 `ParslLocalExecutor.cfg` adds a provider-free `local` executor path while retaining the common
 serialization, worker binding, and result protocol; local workers start idle without manager
 registration.

@@ -70,7 +70,8 @@ while cancelling the final block transitions it to `cancelled`. `ParslScaleIn.cf
 multi-block case. Scale-out may also fail while an earlier block remains active; in that case the
 failed request is rolled back to the existing active target instead of taking the whole provider
 offline. `CancelRequestedAllocation` covers cancelling a pending block request before it becomes
-active.
+active. The model now exposes a `MIN_BLOCKS` floor: active and pending scale-in cannot remove
+capacity below that floor. `ParslMinBlocks.cfg` exercises a provider that must retain one block.
 
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
@@ -301,9 +302,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   submit rejection remained pre-dispatch and all retry/result invariants passed.
 - `ParslProviderFailure.cfg`: 6,868 states generated, 1,280 distinct states, depth 40;
   provider failure, recovery request, and block-count consistency all passed.
-- `ParslScaleIn.cfg`: 52,674 states generated, 7,371 distinct states, depth 37;
+- `ParslScaleIn.cfg`: 54,755 states generated, 7,668 distinct states, depth 37;
   multi-block scale-out, partial scale-in, and failed secondary allocation preserved provider
   block/target consistency.
+- `ParslMinBlocks.cfg`: 66,423 states generated, 9,612 distinct states, depth 37;
+  scale-in could not remove the configured minimum one block.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
