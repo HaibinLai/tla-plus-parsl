@@ -159,6 +159,10 @@ It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
 successful output, and preservation of the prior status map when a scheduler command fails or
 times out; missing Slurm jobs follow the current `COMPLETED` fallback behavior.
+`ParslKubernetesPolling.tla` is a bug-finding probe for Kubernetes API read failures. Its actual
+configuration reproduces the source's `is JobStatus(...)` identity-check behavior and yields a
+counterexample in which a running pod remains `RUNNING` after a read error; the value-based fixed
+configuration proves the intended `UNKNOWN` transition.
 `ParslProviderExecutorBridge.tla` connects provider job observations to executor admission,
 manager registration, worker capacity, unknown-status tolerance, and terminal cleanup of queued
 and running work. It now covers terminal provider failure both before manager registration and

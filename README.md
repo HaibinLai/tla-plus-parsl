@@ -188,6 +188,16 @@ This is a bounded status-mapping model, not a shell or Kubernetes API emulator. 
 [`providers/kubernetes/kube.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/kubernetes/kube.py),
 and [`jobs/states.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/states.py).
 
+`ParslKubernetesPolling.tla` is a source-level bug probe for Kubernetes pod reads. The actual
+configuration (`USE_FIXED = FALSE`) reproduces the current exception branch: a failed pod read
+records an API error but leaves a running job in `RUNNING`, because the source uses an identity
+comparison against a newly constructed `JobStatus` object. TLC produces a two-state counterexample.
+The companion fixed configuration (`USE_FIXED = TRUE`) represents the intended value-based check
+and proves that every read error exposes `UNKNOWN` while terminal states remain stable. A likely
+source fix is to test `status.state == JobState.RUNNING` rather than `status is JobStatus(...)`.
+This is a model-derived candidate for a Parsl regression test, not a claim that the external source
+has already been patched.
+
 `ParslProviderStatusBatch.tla` models the scheduler polling boundary more closely. Active jobs
 are queried in bounded batches; a failed or timed-out scheduler command leaves the previous
 provider status map unchanged, while a successful poll applies all reported states atomically
@@ -492,6 +502,7 @@ java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslEx
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResultRace.cfg ParslResultRace.tla
@@ -605,6 +616,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslProviderStatusBatch.cfg`: 140,628 states generated, 17,672 distinct states, depth 6;
   bounded batch size, atomic status updates, scheduler-command failure preservation, missing-job
   completion mapping, and terminal-state stability all passed.
+- `ParslKubernetesPolling.cfg`: expected counterexample at depth 1 (62 states generated, 22
+  distinct); the actual exception branch fails `ErrorVisibility` because `RUNNING` is retained.
+- `ParslKubernetesPollingFixed.cfg`: 85 states generated, 23 distinct states, depth 5;
+  value-based error visibility, cancellation cleanup, phase translation, and terminal stability
+  all passed.
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.
@@ -739,6 +755,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `DeliverHead` / `ReorderRadio` / `WriteSuccess` / `WriteFailure` | asynchronous monitoring queue and database persistence | MonitoringHub/radio/database boundary |
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
 | `StatusBatchSuccess` / `StatusBatchFailure` | bounded scheduler polling, atomic status update, and timeout/error preservation | `ClusterProvider.status`, `SlurmProvider._status`, and `execute_wait` |
+| `PollError` / `ErrorVisibility` | Kubernetes pod-read exception and UNKNOWN-state exposure, including the identity-check regression probe | `KubernetesProvider._status` |
 | `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
 | `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |
