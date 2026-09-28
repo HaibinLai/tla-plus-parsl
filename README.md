@@ -100,6 +100,11 @@ configurations cover successful execution, user failure, and malformed input.
 is treated as provisioning (`PENDING`), known running and terminal VM states are translated, and
 an unfamiliar display string remains explicit `UNKNOWN` rather than being mistaken for success.
 
+`ParslAzureCancel.tla` models Azure VM cancellation, including `linger` rejection and cloud-delete
+failure. Its current configuration exposes a bookkeeping race: if the cloud deletion succeeds
+after the local `instances` list has already lost the VM id, `list.remove` raises and Parsl returns
+`False`; the fixed configuration makes this idempotent cleanup a successful cancellation.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1051,7 +1056,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 175 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 176 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1121,6 +1126,15 @@ The Azure status parser is exercised without Azure SDK credentials:
 ```
 
 The probe covers running VMs, short provisioning responses, and unknown Azure display states.
+
+Azure cancellation is also exercised against a fake compute API:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_azure_cancel_runtime.py -v
+```
+
+The runtime probe reproduces the current false result when cloud deletion succeeds but local
+bookkeeping no longer contains the VM id.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1740,6 +1754,7 @@ failure result for each in-flight task.
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
 | `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
+| `IgnoreLinger` / `DeleteFails` / `DeleteSucceedsWithLocalId` / `DeleteSucceedsWithoutLocalId` | Azure VM cancellation and local instance bookkeeping | `AzureProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |

@@ -54,6 +54,14 @@ class AzureCancelRuntimeTest(unittest.TestCase):
         self.assertEqual(provider.cancel(["vm-1"]), [True])
         self.assertEqual(provider.instances, [])
 
+    def test_successful_delete_of_missing_local_id_returns_false_currently(self):
+        # The VM API call succeeds, but list.remove raises ValueError because
+        # local bookkeeping was already cleaned up.
+        provider = self.provider_with(FakeDeleteOperation())
+        provider.instances = []
+
+        self.assertEqual(provider.cancel(["vm-1"]), [False])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -129,6 +129,9 @@ checks the same behavior against the real executor helper.
 `instanceView.statuses` lists during provisioning, known running/completed states, and explicit
 unknown-state handling. `tests/test_azure_status_runtime.py` drives the real provider method with
 fake Azure API objects.
+`ParslAzureCancel.tla` models Azure VM cancellation, including linger mode, cloud-delete failure,
+and the current `list.remove` race when a successful cloud deletion finds no local instance id.
+The fixed configuration treats that idempotent bookkeeping case as cancelled.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
