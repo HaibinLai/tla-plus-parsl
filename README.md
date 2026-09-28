@@ -83,6 +83,12 @@ not serializable. `ParslNestedSerialization.cfg` exercises that grandchild failu
 still symbolic rather than an execution of Python `pickle`, but it makes the failure cause
 explicit and gives TLC a concrete counterexample vocabulary.
 
+Result encoding is checked separately through the optional symbolic object `task:result`. If
+that object (or its bounded descendants) is not serializable, `SerializeResult` is disabled and
+`ResultSerializationFailure` releases the worker, drops the result envelope, and follows the
+normal retry/rejection path. `ParslResultSerializationFailure.cfg` exercises this post-execution
+failure.
+
 File-oriented data readiness is represented by `dataState`:
 
 ```text
@@ -263,6 +269,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMemo.cfg`: 557,440 states generated, 81,233 distinct states, depth 65; all invariants passed.
 - `ParslSerializationFailure.cfg`: 3,901,406 states generated, 569,651 distinct states, depth 69;
   all safety invariants passed, including the pre-dispatch serialization-failure path.
+- `ParslResultSerializationFailure.cfg`: 2,776 states generated, 600 distinct states, depth 28;
+  an unencodable worker return failed after execution without resolving the Future.
 - `ParslNestedSerialization.cfg`: 559 states generated, 118 distinct states, depth 16;
   a non-serializable grandchild object failed before dispatch while object-graph safety held.
 - `ParslNoFailures.cfg`: 17,742 states generated, 3,231 distinct states, depth 53;
@@ -320,6 +328,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
 | `SerializationFailure` | callable/argument serialization failure before dispatch | `DataFlowKernel.launch_task` and executor serialization boundary |
+| `ResultSerializationFailure` / `ResultSerializationSafety` | worker return-value serialization failure before transport | worker result encoding and executor/interchange result boundary |
 | `ObjectGraphSerializable` / `ObjectGraphSafety` | callable, argument, closure, and nested-object serializability | Python callable/payload serialization boundary in `DataFlowKernel` and executor |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |

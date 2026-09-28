@@ -51,6 +51,11 @@ ObjectGraphSerializable(t) ==
           ObjectDescendants(o) \subseteq SERIALIZABLE_OBJECTS
 ContentToken(t) == t \o ":content"
 LocalExecutors == {e \in EXECUTORS : e = "local"}
+ResultObject(t) == t \o ":result"
+ResultSerializable(t) ==
+    ResultObject(t) \notin OBJECTS \/
+    (ResultObject(t) \in SERIALIZABLE_OBJECTS /\ ObjectDescendants(ResultObject(t))
+        \subseteq SERIALIZABLE_OBJECTS)
 SerializableTask(t) ==
     t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
     /\ ObjectGraphSerializable(t)
@@ -492,6 +497,7 @@ SerializeResult(t, k, w) ==
     /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
     /\ attemptState[a] = "running" /\ attemptWorker[a] = w
     /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ ResultSerializable(t)
     /\ attemptState' = [attemptState EXCEPT ![a] = "result_serialized"]
     /\ resultWireState' = [resultWireState EXCEPT ![a] = "queued"]
     /\ resultEnvelope' = [resultEnvelope EXCEPT ![a] = "valid"]
@@ -513,6 +519,35 @@ SendResult(t, k) ==
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs, taskWireState,
                     taskEnvelope, resultEnvelope>>
+
+ResultSerializationFailure(t, k, w) ==
+    LET a == <<t, k>> IN
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
+    /\ attemptState[a] = "running" /\ attemptWorker[a] = w
+    /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ ~ResultSerializable(t)
+    /\ attemptState' = [attemptState EXCEPT ![a] = "failed"]
+    /\ workerState' = [workerState EXCEPT ![w] = "idle"]
+    /\ workerAttempt' = [workerAttempt EXCEPT ![w] = NoAttempt]
+    /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "dropped"]
+    /\ resultEnvelope' = [resultEnvelope EXCEPT ![a] = "invalid"]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES
+                   THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
+                    attemptExecutor, executorState, providerState,
+                    providerTarget, providerBlocks, completed, outputs,
+                    taskWireState, taskEnvelope>>
 
 ReceiveResult(t, k) ==
     LET a == <<t, k>> IN
@@ -959,6 +994,7 @@ CoreActions ==
           DispatchAttempt(t, k, w)
           \/ MisrouteAttempt(t, k, w)
           \/ SerializeResult(t, k, w)
+          \/ ResultSerializationFailure(t, k, w)
           \/ AttemptSuccess(t, k, w) \/ AttemptFailure(t, k, w)
           \/ AttemptTimeout(t, k, w)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
@@ -1217,10 +1253,15 @@ StaleResultSafety ==
 
 SerializationSafety ==
     \A a \in AttemptIds :
-      attemptState[a] \in {"serialized", "sent", "received", "decoded",
+          attemptState[a] \in {"serialized", "sent", "received", "decoded",
                             "dispatched", "running", "result_serialized",
                             "result_sent", "result_received", "result_decoded",
                             "succeeded"} => SerializableTask(a[1])
+
+ResultSerializationSafety ==
+    \A a \in AttemptIds :
+      attemptState[a] \in {"result_serialized", "result_sent", "result_received",
+                            "result_decoded", "succeeded"} => ResultSerializable(a[1])
 
 ObjectGraphSafety ==
     /\ \A a \in AttemptIds : taskEnvelope[a] = "valid" =>

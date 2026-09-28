@@ -74,6 +74,8 @@ Its object-graph constants model callable, argument, closure, and nested referen
 `ObjectGraphSafety` checks that a valid envelope cannot contain an unencodable object.
 The graph check covers two bounded reference levels, and `ParslNestedSerialization.cfg`
 exercises a non-serializable grandchild object in a closure-like payload.
+Result encoding is modeled separately through `task:result`; `ParslResultSerializationFailure.cfg`
+checks that an unencodable worker return follows retry/rejection without resolving its Future.
 `ParslMessageLoss.cfg` adds bounded task/result transport loss and checks cleanup plus retry
 behavior after a message is dropped.
 `ParslMessageDuplicate.cfg` adds receiver-side duplicate delivery and explicit discard before
