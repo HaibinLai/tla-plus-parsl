@@ -7,6 +7,18 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslResultsIncoming.tla` models the concrete `ResultsIncoming` DEALER wrapper in
+`high_throughput/zmq_pipes.py`: a readable socket yields one multipart message, a poll timeout
+returns `None`, and `close()` shuts down both the socket and its ZMQ context. The two configurations
+cover readable and timeout paths, while `tests/test_results_incoming_runtime.py` drives the real
+wrapper with a fake socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslResultsIncoming.cfg models/executors/ParslResultsIncoming.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslResultsIncomingTimeout.cfg models/executors/ParslResultsIncoming.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_results_incoming_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
