@@ -653,6 +653,10 @@ Future resolution.
 state: the current branch lets an old attempt event lower the database version after a newer
 event, while the fixed branch preserves the database high-water mark and terminal consistency.
 
+`ParslCallableClosureMemo.tla` connects closure contents to memoization: real serialized
+closures differ when their captured values differ, while the current name/module-only key
+collides and can return the first closure's result.
+
 ### 3. Checked properties
 
 The safety configurations check:

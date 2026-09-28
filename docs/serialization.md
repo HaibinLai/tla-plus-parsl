@@ -1,5 +1,10 @@
 # Serialization and transport models
 
+`ParslCallableClosureMemo.tla` connects serialized callable contents to memoization. Two
+closures with the same function name/module have distinct serialized payloads, but the current
+name/module-only memo key collides and can return the first closure's result. The current
+configuration violates `MemoResultSafety`; the fixed configuration includes closure identity.
+
 These models cover Python callable/object serialization, framed buffers, serializer plugins,
 ZMQ-style transport, task/result correlation, duplicate or stale messages, and apply-message
 arity.
