@@ -195,6 +195,10 @@ current `_status` implementation removes each job from `jobs_missing` without ch
 was already removed, so duplicate lines raise `ValueError`. The runtime probe reproduces this and
 the fixed branch makes removal idempotent.
 
+`ParslLSFDuplicateStatus.tla` models the analogous LSF `bjobs` behavior. LSF stores missing jobs
+in a set, so a duplicate record raises `KeyError` on the second removal. The runtime probe and
+fixed branch document idempotent handling.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -854,6 +858,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineNormal.cfg ParslComm
 java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusCurrent.cfg ParslGridEngineDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusFixed.cfg ParslGridEngineDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusUnique.cfg ParslGridEngineDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslLSFDuplicateStatusCurrent.cfg ParslLSFDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslLSFDuplicateStatusFixed.cfg ParslLSFDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslLSFDuplicateStatusUnique.cfg ParslLSFDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -1065,6 +1072,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslGridEngineDuplicateStatusFixed.cfg` and `ParslGridEngineDuplicateStatusUnique.cfg`: 6
   states generated, 3 distinct states, depth 3; idempotent and unique status handling satisfy
   `DuplicateSafety`.
+- `ParslLSFDuplicateStatusCurrent.cfg`: expected counterexample, 4 states generated; a duplicate
+  bjobs line raises `KeyError` while removing the same set member twice.
+- `ParslLSFDuplicateStatusFixed.cfg` and `ParslLSFDuplicateStatusUnique.cfg`: 6 states generated,
+  3 distinct states, depth 3; idempotent and unique status handling satisfy `DuplicateSafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1206,7 +1217,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 202 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 203 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1963,6 +1974,7 @@ failure result for each in-flight task.
 | `BuildCommand` / `PathQuotingSafety` | shell-safe rsync command construction | `RSyncStaging.in_task_stage_in_wrapper` and `in_task_stage_out_wrapper` |
 | `ComputePollTimeout` / `PollTimeoutSafety` | nonnegative ZMQ poll deadline calculation | `high_throughput.zmq_pipes.CommandClient.run` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling | `GridEngineProvider._status` |
+| `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `LSFProvider._status` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
