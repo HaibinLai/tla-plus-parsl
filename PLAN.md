@@ -215,6 +215,9 @@ branch snapshots membership.
 `ParslFTPConnectionCleanup.tla` models FTP in-task stage-in connection lifetime. A failed
 `retrbinary` currently bypasses `ftp.quit()`; the runtime probe observes the open fake connection,
 while the fixed branch closes it on failure.
+`ParslHTTPPartialCleanup.tla` models HTTP streaming publication. A later `iter_content` failure
+currently leaves earlier bytes at the destination path; the runtime probe observes the partial file,
+while the fixed branch removes the incomplete publication.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

@@ -217,6 +217,11 @@ callback, the outer join can complete with an empty result. The runtime probe ca
 leaving the connection open. The runtime probe uses a fake FTP connection; the fixed branch closes
 it on failure.
 
+`ParslHTTPPartialCleanup.tla` models HTTP streaming publication. If a later response chunk fails,
+the current wrapper leaves earlier bytes at the destination path. `tests/test_http_partial_cleanup_runtime.py`
+reproduces the partial file, while the fixed branch removes incomplete output before propagating the
+failure.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -891,6 +896,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationStable.cfg ParslJoi
 java -cp tla2tools.jar tlc2.TLC -config ParslFTPConnectionCleanupCurrent.cfg ParslFTPConnectionCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFTPConnectionCleanupFixed.cfg ParslFTPConnectionCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFTPConnectionCleanupSuccess.cfg ParslFTPConnectionCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHTTPPartialCleanupCurrent.cfg ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHTTPPartialCleanupFixed.cfg ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHTTPPartialCleanupSuccess.cfg ParslHTTPPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -1125,6 +1133,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslFTPConnectionCleanupFixed.cfg` and `ParslFTPConnectionCleanupSuccess.cfg`: 4 states
   generated, 2 distinct states, depth 2; failure cleanup and successful transfer satisfy
   `FailureCleanupSafety`.
+- `ParslHTTPPartialCleanupCurrent.cfg`: expected counterexample, 4 states generated; a failed
+  second chunk leaves `bytesPublished = 1`.
+- `ParslHTTPPartialCleanupFixed.cfg` and `ParslHTTPPartialCleanupSuccess.cfg`: 6 states generated,
+  3 distinct states, depth 3; failed-stream cleanup and successful transfer satisfy
+  `FailurePublicationSafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1266,7 +1279,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 207 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 208 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2028,6 +2041,7 @@ failure result for each in-flight task.
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with list removal | `TorqueProvider._status` |
 | `MutateBeforeCallback` / `Callback` / `JoinSnapshotSafety` | join Future-list snapshot and callback result stability | `DataFlowKernel.handle_join_update` |
 | `Transfer` / `TransferSuccess` / `FailureCleanupSafety` | FTP connection cleanup after stage-in failure | `FTPInTaskStaging.in_task_transfer_wrapper` |
+| `FirstChunk` / `LaterChunk` / `FailurePublicationSafety` | atomic HTTP destination publication after stream failure | `HTTPInTaskStaging.in_task_transfer_wrapper` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
