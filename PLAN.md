@@ -237,6 +237,9 @@ zero-retry configuration checks the terminal timeout path explicitly; lost attem
 after manager recovery while their late results remain stale.
 `ParslHeartbeatBoundary.tla` checks the strict HTEX expiration inequality, heartbeat reset ordering,
 and conversion of a manager's in-flight tasks into failure reports at expiry.
+`ParslHeartbeatClockJump.tla` separates adjustable wall-clock time from monotonic elapsed time.
+The current `time.time()`-based expiry can remove a recently healthy manager after a forward clock
+jump; `tests/test_heartbeat_clock_jump_runtime.py` reproduces the decision with the real method.
 `ParslMonitoringDB.tla` models the asynchronous monitoring radio queue, bounded event versions,
 database write failure/retry, queue reordering, stale-event suppression, and terminal-record
 stability.
@@ -615,7 +618,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 217 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 218 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

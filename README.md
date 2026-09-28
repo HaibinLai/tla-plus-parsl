@@ -313,6 +313,11 @@ resets the timestamp, and expiration converts all manager in-flight tasks into f
 The finite model mirrors the main-loop ordering in
 [`interchange.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/interchange.py).
 
+`ParslHeartbeatClockJump.tla` refines the clock source itself. The current interchange compares
+`time.time()` values, so a forward wall-clock adjustment can expire a manager whose monotonic age
+is still below the threshold. The fixed configuration uses monotonic elapsed time for the safety
+decision while retaining wall time only for diagnostics.
+
 `ParslMonitoringDB.tla` models a versioned monitoring radio queue and asynchronous database writer.
 The queue can reorder events, writes can fail and be retried, stale versions are ignored, and a
 terminal database record is not overwritten by an older event. `MAX_FAILURES` and queue bounds
@@ -892,6 +897,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFutureWaitTimeout.cfg ParslFutureWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatBoundary.cfg ParslHeartbeatBoundary.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpCurrent.cfg ParslHeartbeatClockJump.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpFixed.cfg ParslHeartbeatClockJump.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpNormal.cfg ParslHeartbeatClockJump.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDeferred.cfg ParslMonitoringDeferred.tla
@@ -1127,6 +1135,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslHeartbeatBoundary.cfg`: 316 states generated, 93 distinct states, depth 10;
   strict heartbeat threshold, heartbeat reset at the boundary, manager expiry, and in-flight
   failure accounting all passed.
+- `ParslHeartbeatClockJumpCurrent.cfg`: expected counterexample, 4 states generated; a wall-clock
+  jump expires a manager after only one monotonic tick.
+- `ParslHeartbeatClockJumpFixed.cfg` and `ParslHeartbeatClockJumpNormal.cfg`: 6 states generated,
+  3 distinct states, depth 3; monotonic expiry avoids the premature loss and normal clock passage
+  retains the existing threshold behavior.
 - `ParslFutureWaitTimeout.cfg`: 20 states generated, 10 distinct states, depth 5; a caller-side
   wait timeout left the running task and Future unresolved, while app walltime failure rejected
   the Future.
@@ -1392,7 +1405,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 217 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 218 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1931,6 +1944,15 @@ The HTEX heartbeat expiry path is also exercised without opening a real ZMQ sock
 The runtime probe checks the strict `elapsed > heartbeat_threshold` boundary and verifies that an
 expired manager is deactivated, removed from the scheduling set, and converted into a serialized
 failure result for each in-flight task.
+
+The adjustable-clock boundary is exercised separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_heartbeat_clock_jump_runtime.py -v
+```
+
+This probe patches the real interchange clock forward and confirms that the current
+`time.time()`-based implementation expires the manager.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
@@ -2194,6 +2216,7 @@ failure result for each in-flight task.
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `Start` / `FunctionReturns` / `FunctionRaises` / `TimerFires` | Python app timeout timer lifecycle and cleanup | `parsl.app.python.timeout` and `AutoCancelTimer` |
 | `ExpireManager` / `Heartbeat` / `ExpirationAccounting` | strict heartbeat threshold and in-flight manager-loss cleanup | `Interchange.expire_bad_managers` and main polling loop |
+| `AdvanceClock` / `CheckExpiry` / `NoPrematureExpiry` | wall-clock jump versus monotonic heartbeat expiry | `Interchange.expire_bad_managers` |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
 | `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |
