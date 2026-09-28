@@ -123,6 +123,10 @@ attempts. A retryable inner failure leaves the Future unresolved, so the outer j
 final-attempt failure is propagated as `JoinError`, while a later successful retry contributes its
 final result to the ordered aggregate.
 
+`ParslNestedJoin.tla` adds a nested join: the outer join observes a direct Future and a Future
+produced by another join. The nested handle remains live until both leaf Futures are observed;
+nested success/failure then becomes the only state visible to the outer join.
+
 `ParslTaskTransport.tla` connects object-graph serialization to the task/result wire protocol.
 It checks multipart encode order, envelope corruption, decode rejection, dispatch admission,
 worker loss, retry correlation, result serialization failure, and stale results from an old
@@ -353,6 +357,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonito
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslNestedJoin.cfg ParslNestedJoin.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
@@ -432,6 +437,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslJoinRetry.cfg`: 840 states generated, 258 distinct states, depth 16;
   logical-inner versus physical-attempt separation, retryable inner failure isolation, final failure
   propagation, and ordered final-result aggregation all passed.
+- `ParslNestedJoin.cfg`: 414 states generated, 126 distinct states, depth 11;
+  nested leaf observation, nested handle lifetime, nested success/failure propagation, and outer
+  completion gating all passed.
 - `ParslTaskTransport.cfg`: 859 states generated, 288 distinct states, depth 28;
   serialization-before-send, envelope/decode ordering, dispatch admission, worker-loss retry,
   result serialization, correlation, and stale-result safety all passed.
@@ -541,6 +549,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
 | `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
+| `StartNestedJoin` / `FinalizeNested` / `ObserveNestedResult` | nested join handle and result propagation | nested `join_app` callback composition |
 | `BeginEncode` / `FinishEncodeSuccess` / `DecodeTaskSuccess` | serialized callable/payload gating task transport | DFK serialization boundary, interchange task queue, worker decode |
 | `CorruptTaskEnvelope` / `DecodeTaskFailure` / `LoseAttempt` / `AcceptResult` | protocol corruption, worker loss, retry and stale result handling | HTEX message/result paths and DFK attempt correlation |
 | `SubmitBlock` / `SubmitAccepted` / `SubmitRejected` | provider submit API and target rollback | `ExecutionProvider.submit` and block scaling facade |

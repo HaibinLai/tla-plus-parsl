@@ -137,6 +137,8 @@ inner Future observation, ordered aggregate results, join-handle lifetime, and i
 propagation. Inner retry policy remains below this join protocol, as in Parsl's callback path.
 `ParslJoinRetry.tla` adds physical inner attempts and verifies that retryable inner failures remain
 unresolved to the outer join until a final attempt succeeds or fails.
+`ParslNestedJoin.tla` adds a nested join layer and checks that leaf completion/failure propagates
+through the nested handle before the outer join can complete.
 `ParslTaskTransport.tla` connects object-graph serialization to task/result transport, including
 envelope corruption, decode rejection, dispatch gating, worker loss, retry correlation, and stale
 result suppression.
