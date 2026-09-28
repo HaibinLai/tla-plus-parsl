@@ -178,6 +178,9 @@ updates only known local resources.
 With a zero interval, the current implementation checks elapsed time before reading the queue and
 can return an empty batch while an event is waiting; the fixed branch consumes the available event.
 The runtime probe and TLC counterexample document this starvation edge case.
+`ParslRetryHandler.tla` models the retry-budget contract when a user `retry_handler` returns a
+failure cost. The current path accepts a zero cost, so `retries=0` can launch another physical
+attempt; the runtime probe reproduces this, and the fixed branch charges at least one unit.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

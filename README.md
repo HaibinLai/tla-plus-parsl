@@ -159,6 +159,12 @@ queue, so it can return an empty batch while a message is waiting. The TLC curre
 produces that counterexample; fixed and positive-interval configurations preserve message
 collection. The runtime probe is `tests/test_monitoring_batch_runtime.py`.
 
+`ParslRetryHandler.tla` models the retry-budget boundary in `DataFlowKernel.handle_exec_update`.
+The current implementation adds the user handler's returned cost directly to `fail_cost`; a zero
+cost therefore permits another physical attempt even when `retries=0`. The current TLC
+configuration and `tests/test_retry_handler_runtime.py` reproduce that behavior, while the fixed
+configuration charges a minimum cost of one.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -797,6 +803,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertPresent.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchCurrent.cfg ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchFixed.cfg ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchPositive.cfg ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerCurrent.cfg ParslRetryHandler.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerFixed.cfg ParslRetryHandler.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerPositive.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -976,6 +985,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   message and zero interval, the batch action returns empty and leaves the message unread.
 - `ParslMonitoringBatchFixed.cfg` and `ParslMonitoringBatchPositive.cfg`: 4 states generated,
   2 distinct states, depth 2; queued-message collection satisfies `AvailableBatchSafety`.
+- `ParslRetryHandlerCurrent.cfg`: expected counterexample, 3 distinct states; a zero-cost handler
+  advances `tryId` to 1 despite `RETRIES=0`.
+- `ParslRetryHandlerFixed.cfg`: 3 distinct states, depth 3; minimum-cost charging preserves
+  `RetryLimitSafety`. `ParslRetryHandlerPositive.cfg` also passes with a one-unit budget.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1117,7 +1130,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 195 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 196 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1867,6 +1880,7 @@ failure result for each in-flight task.
 | `DeleteFails` / `DeleteSucceeds` | GCE cancellation result and local resource status | `GoogleCloudProvider.cancel` |
 | `Close` / `FinalizationSafety` | monitoring workflow finalization and shutdown drain | `DatabaseManager.close` |
 | `Batch` / `AvailableBatchSafety` | zero-interval queue-read boundary and message collection | `DatabaseManager._get_messages_in_batch` |
+| `AttemptFails` / `HandleFailure` / `RetryLimitSafety` | retry-handler failure-cost accounting and physical-attempt admission | `DataFlowKernel.handle_exec_update` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
