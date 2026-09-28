@@ -855,7 +855,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 102 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 104 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -949,6 +949,25 @@ Azure VM cancellation is exercised with a fake asynchronous delete client:
 
 The probe checks linger-mode refusal, delete-error rollback, and successful deletion/removal from
 the provider's instance list.
+
+Azure VM submission is exercised with fake resource, network, and compute clients:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_azure_submit_runtime.py -v
+```
+
+The probe checks successful pending-resource registration and reproduces the current partial-state
+path where a disk-attach failure leaves the instance list and resource map populated.
+
+The corresponding bounded model can be checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config ParslAzureProviderSubmit.cfg ParslAzureProviderSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslAzureProviderSubmitFixed.cfg ParslAzureProviderSubmit.tla
+```
+
+The current configuration finds the post-registration setup-failure counterexample; the fixed
+configuration rolls back both resource registration and instance tracking.
 
 The provider-free LocalProvider exit-file state machine is exercised with temporary `.ec` files:
 

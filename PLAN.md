@@ -284,6 +284,9 @@ running translation, pending fallback, and cloud API error propagation.
 discovery client, checking normal translation, API error propagation, and unknown-state handling.
 `tests/test_azure_cancel_runtime.py` drives Azure VM cancellation with a fake async delete client,
 checking linger refusal, failure rollback, and successful instance removal.
+`tests/test_azure_submit_runtime.py` drives Azure VM submission with fake resource/network/compute
+clients, checking successful registration and the partial-state disk-attach failure modeled by
+`ParslAzureProviderSubmit.tla`.
 `tests/test_local_provider_runtime.py` drives LocalProvider's real exit-file state inference,
 covering liveness, completion, malformed exit codes, cancellation, and a real local submit/output
 collection path, including non-zero application exit handling.
