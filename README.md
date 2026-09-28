@@ -842,7 +842,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 80 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 85 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1093,6 +1093,16 @@ The Flux result callback is exercised without a Flux installation:
 The probe calls the real `_complete_future` callback with serialized `TaskResult` files and fake
 Flux futures. It covers valid values, task exceptions, missing files, nonzero exit codes, and the
 current cancellation behavior where a cancelled underlying future leaves the wrapper pending.
+
+The TaskVine collector is exercised without a TaskVine installation:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_results_runtime.py -v
+```
+
+The probe calls the real collector with manager reports and serialized result files, covering
+valid values, task exceptions, corrupt files, no-result/resource failures, and manager-exit cleanup
+of outstanding Futures.
 
 File/DataFuture readiness is exercised through a real two-task local dataflow:
 
