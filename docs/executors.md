@@ -89,3 +89,13 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMess
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMessageFixed.cfg models/executors/ParslHtexMonitoringMessage.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMessageEnabled.cfg models/executors/ParslHtexMonitoringMessage.tla
 ```
+
+`ParslHtexUnknownManagerMessage.tla` checks the identity guard before processing manager traffic:
+unknown heartbeat and result messages are ignored without a reply, task update, or ready-manager
+mutation; registration remains the only message that can create a manager record. Runtime probes
+exercise both unknown heartbeat and unknown result messages.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownManagerHeartbeat.cfg models/executors/ParslHtexUnknownManagerMessage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownManagerResult.cfg models/executors/ParslHtexUnknownManagerMessage.tla
+```
