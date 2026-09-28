@@ -71,10 +71,11 @@ retry bound.
 
 The finite object-graph refinement adds `OBJECTS`, `TASK_OBJECTS`, `SERIALIZABLE_OBJECTS`, and
 `OBJECT_EDGES`. A task's object set stands for its function object, arguments, and closure
-contents; one level of referenced children is checked as well. Thus a task can have a
+contents; two bounded levels of referenced children are checked. Thus a task can have a
 serializable callable and top-level arguments but still fail because a nested closure object is
-not serializable. This is still symbolic rather than an execution of Python `pickle`, but it
-makes the failure cause explicit and gives TLC a concrete counterexample vocabulary.
+not serializable. `ParslNestedSerialization.cfg` exercises that grandchild failure path. This is
+still symbolic rather than an execution of Python `pickle`, but it makes the failure cause
+explicit and gives TLC a concrete counterexample vocabulary.
 
 File-oriented data readiness is represented by `dataState`:
 
@@ -229,6 +230,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbst
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileContent.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileCorruptionSmall.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslNestedSerialization.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -250,6 +252,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMemo.cfg`: 557,440 states generated, 81,233 distinct states, depth 65; all invariants passed.
 - `ParslSerializationFailure.cfg`: 3,901,406 states generated, 569,651 distinct states, depth 69;
   all safety invariants passed, including the pre-dispatch serialization-failure path.
+- `ParslNestedSerialization.cfg`: 559 states generated, 118 distinct states, depth 16;
+  a non-serializable grandchild object failed before dispatch while object-graph safety held.
 - `ParslNoFailures.cfg`: 17,742 states generated, 3,231 distinct states, depth 53;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 606 states generated, 173 distinct states, depth 32;

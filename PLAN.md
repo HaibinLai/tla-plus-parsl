@@ -67,6 +67,8 @@ requesting a replacement block without producing a negative target count.
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 Its object-graph constants model callable, argument, closure, and nested referenced objects;
 `ObjectGraphSafety` checks that a valid envelope cannot contain an unencodable object.
+The graph check covers two bounded reference levels, and `ParslNestedSerialization.cfg`
+exercises a non-serializable grandchild object in a closure-like payload.
 `ParslMessageLoss.cfg` adds bounded task/result transport loss and checks cleanup plus retry
 behavior after a message is dropped.
 `ParslMessageDuplicate.cfg` adds receiver-side duplicate delivery and explicit discard before

@@ -41,9 +41,13 @@ JoinDeps(t) == {d \in TASKS : d \o "=>" \o t \in JOIN_DEPS}
 WorkerExec(w) == CHOOSE e \in EXECUTORS : w \o ":" \o e \in WORKER_EXECUTOR
 ObjectPayload(t) == {o \in OBJECTS : t \o ":" \o o \in TASK_OBJECTS}
 ObjectChildren(o) == {c \in OBJECTS : o \o "->" \o c \in OBJECT_EDGES}
+ObjectGrandchildren(o) ==
+    {g \in OBJECTS : \E c \in ObjectChildren(o) : g \in ObjectChildren(c)}
+ObjectDescendants(o) == ObjectChildren(o) \cup ObjectGrandchildren(o)
 ObjectGraphSerializable(t) ==
     /\ ObjectPayload(t) \subseteq SERIALIZABLE_OBJECTS
-    /\ \A o \in ObjectPayload(t) : ObjectChildren(o) \subseteq SERIALIZABLE_OBJECTS
+    /\ \A o \in ObjectPayload(t) :
+          ObjectDescendants(o) \subseteq SERIALIZABLE_OBJECTS
 ContentToken(t) == t \o ":content"
 SerializableTask(t) ==
     t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
