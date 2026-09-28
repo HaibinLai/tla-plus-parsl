@@ -89,6 +89,8 @@ allowing existing attempts to finish, followed by explicit recovery.
 remain associated with their logical task and retry attempt.
 `ParslMisroute.cfg` explores decoded work offered to the wrong executor manager and checks that
 the protocol rejects it before worker execution.
+`ParslResultMisroute.cfg` applies the same executor-source check to result envelopes before
+Future resolution.
 
 ### 3. Checked properties
 

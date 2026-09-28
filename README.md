@@ -138,6 +138,9 @@ before the normal decode action can continue; it cannot create a second logical 
 The message is rejected and the attempt follows the lost/retry path instead of executing on the
 wrong manager.
 
+`MisrouteResult` applies the same check on the return path: a result envelope claiming a
+different executor source is rejected before `AttemptSuccess` can resolve the Future.
+
 The result path has the same shape after worker execution: `SerializeResult`, `SendResult`,
 `ReceiveResult`, and `DecodeResult` must occur before `AttemptSuccess` resolves the Future. A
 worker or executor failure can still replace an in-flight result with a retry, so a result from
@@ -212,6 +215,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistrationFailure.cfg P
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslIdleManagerTimeout.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslExecutorDrain.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMisroute.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslResultMisroute.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
@@ -262,6 +266,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   draining stopped new submissions while preserving safety for already submitted attempts.
 - `ParslMisroute.cfg`: 370,669 states generated, 46,560 distinct states, depth 40;
   wrong-executor dispatches were rejected without worker binding or false Future completion.
+- `ParslResultMisroute.cfg`: 371,765 states generated, 46,560 distinct states, depth 40;
+  wrong-executor result envelopes were rejected before Future resolution.
 - `ParslJoin.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
@@ -308,6 +314,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `IdleManagerTimeout` | idle manager heartbeat expiry and block cleanup | `Interchange` heartbeat expiration and executor/provider error handling |
 | `ExecutorDrain` / `ExecutorRecover` | executor drain and reopening of task submission | executor scaling strategy and `HighThroughputExecutor.submit` |
 | `MisrouteAttempt` | reject decoded work sent to the wrong manager/executor | `Interchange` dispatch routing and manager registration |
+| `MisrouteResult` | reject result envelopes claiming the wrong executor | interchange result routing and DFK completion boundary |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |

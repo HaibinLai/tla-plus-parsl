@@ -563,6 +563,35 @@ DropResultMessage(t, k, w) ==
                     executorState, providerState, providerTarget, providerBlocks,
                     completed, outputs, taskWireState, taskEnvelope>>
 
+MisrouteResult(t, k, w, e) ==
+    LET a == <<t, k>> IN
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS /\ e \in EXECUTORS
+    /\ e # attemptExecutor[a]
+    /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ attemptState[a] = "result_decoded" /\ attemptWorker[a] = w
+    /\ workerState[w] = "busy"
+    /\ resultWireState[a] = "consumed" /\ resultEnvelope[a] = "valid"
+    /\ attemptState' = [attemptState EXCEPT ![a] = "lost"]
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "dropped"]
+    /\ resultEnvelope' = [resultEnvelope EXCEPT ![a] = "invalid"]
+    /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
+    /\ workerAttempt' = [workerAttempt EXCEPT ![w] = NoAttempt]
+    /\ workerState' = [workerState EXCEPT ![w] = "idle"]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState, attemptExecutor,
+                    executorState, providerState, providerTarget, providerBlocks,
+                    completed, outputs, taskWireState, taskEnvelope>>
+
 AttemptSuccess(t, k, w) ==
     LET a == <<t, k>> IN
     /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
@@ -910,6 +939,8 @@ CoreActions ==
           \/ DecodeResult(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           DropResultMessage(t, k, w)
+    \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS, e \in EXECUTORS :
+          MisrouteResult(t, k, w, e)
     \/ \E t \in TASKS : RetryTask(t)
     \/ \E w \in WORKERS : WorkerFailure(w)
     \/ \E w \in WORKERS : IdleManagerTimeout(w)
