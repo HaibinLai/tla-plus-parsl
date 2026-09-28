@@ -226,6 +226,14 @@ underlying Flux future, which can leave the wrapper Future running. The fixed co
 propagates cancellation to the wrapper. This follows
 [`flux/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/flux/executor.py).
 
+`ParslTaskVineResults.tla` models the TaskVine executor's ready-task queue, manager report, and
+collector thread. It maps valid result files to success, missing/corrupt files and application
+exceptions to failed Futures, and models collector finalization failing every outstanding task
+when the TaskVine submit process dies. The model follows
+[`taskvine/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/taskvine/executor.py)
+and the report construction in
+[`taskvine/manager.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/taskvine/manager.py).
+
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
@@ -586,6 +594,7 @@ java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslEx
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueResults.cfg ParslWorkQueueResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFluxResultFixed.cfg ParslFluxResult.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
@@ -721,6 +730,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   cancellation of the underlying Flux future can leave the wrapper Future non-terminal.
 - `ParslFluxResultFixed.cfg`: 63 states generated, 26 distinct states, depth 6; valid, missing,
   malformed, and task-exception result mapping plus cancellation propagation all passed.
+- `ParslTaskVineResults.cfg`: 56 states generated, 26 distinct states, depth 5; valid-result
+  completion, missing/corrupt/exception/no-result failure mapping, and submit-process cleanup of
+  outstanding Futures all passed.
 - `ParslProviderKinds.cfg`: 424,001 states generated, 40,000 distinct states, depth 15;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
@@ -893,6 +905,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
+| `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
 | `Dispatch` / `Complete` / `Drain` / `Recover` | HTEX pending-task priority, manager capacity, and draining admission | `Interchange.process_task_incoming`, `get_tasks`, and `process_tasks_to_send` |

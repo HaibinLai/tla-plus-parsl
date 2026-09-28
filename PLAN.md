@@ -176,6 +176,8 @@ tasks when the collector exits.
 `ParslFluxResult.tla` refines FluxExecutor's wrapped Future, result-file decoding, abnormal exit,
 and cancellation propagation; its actual configuration preserves a cancellation-orphan probe and
 the fixed configuration checks the candidate propagation fix.
+`ParslTaskVineResults.tla` refines TaskVine's manager report and collector protocol, including
+result-file failure mapping and cleanup of all outstanding Futures after manager failure.
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
