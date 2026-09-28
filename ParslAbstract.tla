@@ -748,6 +748,30 @@ ExecutorFailure(e, t, k) ==
     /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, completed, outputs, taskWireState, taskEnvelope>>
 
+ExecutorDrain(e) ==
+    /\ ALLOW_FAILURES
+    /\ e \in EXECUTORS /\ executorState[e] = "up"
+    /\ executorState' = [executorState EXCEPT ![e] = "draining"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState,
+                    attemptExecutor, attemptWorker, workerState, workerAttempt,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, clock, lastHeartbeat,
+                    attemptStart, monitoringState, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
+
+ExecutorRecover(e) ==
+    /\ ALLOW_FAILURES
+    /\ e \in EXECUTORS /\ executorState[e] = "draining"
+    /\ executorState' = [executorState EXCEPT ![e] = "up"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState,
+                    attemptExecutor, attemptWorker, workerState, workerAttempt,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, clock, lastHeartbeat,
+                    attemptStart, monitoringState, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
+
 LateResult(t, k) ==
     LET a == <<t, k>> IN
     /\ t \in TASKS /\ k \in 0..MAX_RETRIES
@@ -865,6 +889,7 @@ CoreActions ==
     \/ \E w \in WORKERS : IdleManagerTimeout(w)
     \/ \E e \in EXECUTORS, t \in TASKS, k \in 0..MAX_RETRIES :
           ExecutorFailure(e, t, k)
+    \/ \E e \in EXECUTORS : ExecutorDrain(e) \/ ExecutorRecover(e)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : LateResult(t, k)
     \/ \E e \in EXECUTORS : RequestAllocation(e) \/ AllocationFails(e)
     \/ \E e \in EXECUTORS : ProviderFailure(e)
@@ -950,7 +975,7 @@ TypeOK ==
     /\ attemptWorker \in [AttemptIds -> (WORKERS \cup {"none"})]
     /\ workerState \in [WORKERS -> WorkerStates]
     /\ workerAttempt \in [WORKERS -> (AttemptIds \cup {NoAttempt})]
-    /\ executorState \in [EXECUTORS -> {"up", "down"}]
+    /\ executorState \in [EXECUTORS -> {"up", "draining", "down"}]
     /\ providerState \in [EXECUTORS -> ProviderStates]
     /\ providerTarget \in [EXECUTORS -> 0..MAX_BLOCKS]
     /\ providerBlocks \in [EXECUTORS -> 0..MAX_BLOCKS]
@@ -1036,7 +1061,11 @@ ValidRunningAttempt ==
 
 NoRunningOnDownExecutor ==
     \A a \in AttemptIds : attemptState[a] = "running" =>
-        executorState[attemptExecutor[a]] = "up"
+        executorState[attemptExecutor[a]] \in {"up", "draining"}
+
+ExecutorDrainSafety ==
+    \A a \in AttemptIds : attemptState[a] = "submitted" =>
+        executorState[attemptExecutor[a]] \in {"up", "draining"}
 
 AttemptIdentity ==
     \A t \in TASKS : currentAttempt[t] # -1 =>
@@ -1051,7 +1080,7 @@ SubmitSafety ==
 
 ProviderExecutorConsistency ==
     /\ \A e \in EXECUTORS : providerState[e] = "active" =>
-          executorState[e] = "up" /\ providerBlocks[e] > 0
+          executorState[e] \in {"up", "draining"} /\ providerBlocks[e] > 0
     /\ \A e \in EXECUTORS : providerState[e] = "failed" =>
           providerBlocks[e] = 0 /\ providerTarget[e] = 0
 

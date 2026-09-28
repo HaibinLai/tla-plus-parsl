@@ -83,6 +83,8 @@ dispatches or emit heartbeats.
 that no worker binding is created from the failed manager.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity.
+`ParslExecutorDrain.cfg` models an executor entering `draining`, rejecting new submissions while
+allowing existing attempts to finish, followed by explicit recovery.
 
 ### 3. Checked properties
 

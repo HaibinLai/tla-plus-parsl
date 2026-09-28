@@ -56,6 +56,8 @@ The provider uses `none/requested/active/failed/cancelled`; workers use
 `unregistered/idle/busy/failed`. Workers begin as `unregistered` and must pass through
 `RegisterWorker` before becoming idle, matching the HTEX interchange manager-registration
 boundary.
+Executors additionally use `up/draining/down`; `ExecutorDrain` blocks new submissions while
+existing attempts may continue, and `ExecutorRecover` reopens submission.
 `RequestAllocation`, `AllocationSucceeds`, and `AllocationFails` abstract resource request,
 resource availability, and allocation failure. Memoization completes a task without creating
 an attempt or consuming a worker.
@@ -204,6 +206,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinInvalid.cfg ParslAbst
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistration.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistrationFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslIdleManagerTimeout.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslExecutorDrain.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
@@ -250,6 +253,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   failed manager registration left the worker unavailable without violating bindings or Future consistency.
 - `ParslIdleManagerTimeout.cfg`: 10,808 states generated, 2,479 distinct states, depth 34;
   an idle manager exceeding the heartbeat age was removed with provider/executor capacity cleared.
+- `ParslExecutorDrain.cfg`: 3,696 states generated, 760 distinct states, depth 33;
+  draining stopped new submissions while preserving safety for already submitted attempts.
 - `ParslJoin.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
@@ -293,6 +298,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |
 | `RegistrationFailure` | manager startup/registration failure | `Interchange` manager registration failure boundary |
 | `IdleManagerTimeout` | idle manager heartbeat expiry and block cleanup | `Interchange` heartbeat expiration and executor/provider error handling |
+| `ExecutorDrain` / `ExecutorRecover` | executor drain and reopening of task submission | executor scaling strategy and `HighThroughputExecutor.submit` |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
