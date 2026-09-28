@@ -81,6 +81,8 @@ fairness for logical/attempt progress so duplicate-message discard loops cannot 
 dispatches or emit heartbeats.
 `ParslRegistrationFailure.cfg` explores manager startup failure before registration and checks
 that no worker binding is created from the failed manager.
+`ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
+the associated provider/executor capacity.
 
 ### 3. Checked properties
 

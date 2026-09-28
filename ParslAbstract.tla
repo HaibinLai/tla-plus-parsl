@@ -693,6 +693,24 @@ WorkerFailure(w) ==
                     providerTarget, providerBlocks, completed, outputs,
                     taskWireState, taskEnvelope>>
 
+IdleManagerTimeout(w) ==
+    LET e == WorkerExec(w) IN
+    /\ ALLOW_FAILURES
+    /\ w \in WORKERS /\ workerState[w] = "idle"
+    /\ clock - lastHeartbeat[w] >= HEARTBEAT_TIMEOUT
+    /\ providerState[e] = "active" /\ executorState[e] = "up"
+    /\ workerState' = [workerState EXCEPT ![w] = "failed"]
+    /\ providerState' = [providerState EXCEPT ![e] = "failed"]
+    /\ executorState' = [executorState EXCEPT ![e] = "down"]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] = 0]
+    /\ providerBlocks' = [providerBlocks EXCEPT ![e] = 0]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerAttempt, completed, rejected, outputs,
+                    clock, lastHeartbeat, attemptStart, monitoringState,
+                    joinObserved, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
 ExecutorFailure(e, t, k) ==
     LET a == <<t, k>> IN
     /\ ALLOW_FAILURES
@@ -844,6 +862,7 @@ CoreActions ==
           DropResultMessage(t, k, w)
     \/ \E t \in TASKS : RetryTask(t)
     \/ \E w \in WORKERS : WorkerFailure(w)
+    \/ \E w \in WORKERS : IdleManagerTimeout(w)
     \/ \E e \in EXECUTORS, t \in TASKS, k \in 0..MAX_RETRIES :
           ExecutorFailure(e, t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : LateResult(t, k)

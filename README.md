@@ -203,6 +203,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstr
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinInvalid.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistration.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistrationFailure.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslIdleManagerTimeout.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
@@ -237,7 +238,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.
-- `ParslProviderFailure.cfg`: 890 states generated, 219 distinct states, depth 32;
+- `ParslProviderFailure.cfg`: 2,566 states generated, 573 distinct states, depth 34;
   provider failure, recovery request, and block-count consistency all passed.
 - `ParslFileContent.cfg`: 11,458 states generated, 2,083 distinct states, depth 51;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
@@ -247,6 +248,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   unregistered workers could not receive work or heartbeat until manager registration.
 - `ParslRegistrationFailure.cfg`: 1,750 states generated, 429 distinct states, depth 32;
   failed manager registration left the worker unavailable without violating bindings or Future consistency.
+- `ParslIdleManagerTimeout.cfg`: 10,808 states generated, 2,479 distinct states, depth 34;
+  an idle manager exceeding the heartbeat age was removed with provider/executor capacity cleared.
 - `ParslJoin.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
@@ -289,6 +292,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
 | `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |
 | `RegistrationFailure` | manager startup/registration failure | `Interchange` manager registration failure boundary |
+| `IdleManagerTimeout` | idle manager heartbeat expiry and block cleanup | `Interchange` heartbeat expiration and executor/provider error handling |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
