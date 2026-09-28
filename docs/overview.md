@@ -188,6 +188,10 @@ comment). The fixed model returns such a result without a node-reclamation step.
 change, eventually overflowing the Python call stack. The fixed branch stops the pass and leaves
 the task queued until resources are returned.
 
+`ParslBashTimeoutCleanup.tla` models Bash app timeout cleanup. The current
+`remote_side_bash_executor` reports `AppTimeout` after `Popen.wait` expires but leaves the shell
+or process group alive; the fixed branch kills it before reporting the timeout.
+
 `ParslWorkQueueCancelledResult.tla` models cancellation racing with a Work Queue collector
 report. The current collector removes a cancelled Future before `set_result`, so
 `InvalidStateError` exits the collector and its cleanup marks an unrelated pending Future with
@@ -1787,7 +1791,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 310 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 311 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

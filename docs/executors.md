@@ -100,6 +100,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIBacklogRetryFix
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_backlog_retry_runtime.py -v
 ```
 
+`ParslBashTimeoutCleanup.tla` covers the Bash app walltime boundary. The current
+`remote_side_bash_executor` raises `AppTimeout` after `Popen.wait(timeout=...)` expires but does
+not kill the shell/process group, leaving the timed-out command alive. The fixed branch performs
+cleanup before reporting the timeout. The runtime probe uses a fake `Popen` to verify that the
+current path makes no kill call.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBashTimeoutCleanupCurrent.cfg models/executors/ParslBashTimeoutCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBashTimeoutCleanupFixed.cfg models/executors/ParslBashTimeoutCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_bash_timeout_cleanup_runtime.py -v
+```
+
 `ParslWorkQueueCancelledResult.tla` models a Work Queue collector result racing with cancellation.
 The current collector removes the cancelled Future and calls `set_result`, so `InvalidStateError`
 exits the collector; its `finally` block then marks an unrelated pending Future as
