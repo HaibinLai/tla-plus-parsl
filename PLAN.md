@@ -261,6 +261,8 @@ checking the real BasicMemoizer result path and execution count.
 `tests/test_lsf_submit_runtime.py` drives the real LSF `bsub` parser with fake command results,
 checking script/command construction, successful job registration, scheduler failure, and
 successful-but-unparseable output.
+`tests/test_lsf_cancel_runtime.py` drives the real LSF `bkill` path, checking successful and failed
+cancellation plus the current unknown-job `KeyError` boundary.
 `tests/test_kubernetes_polling_runtime.py` drives the current Kubernetes polling method with a
 mock API client, reproducing the read-error identity-comparison path and checking normal terminal
 pod translation.

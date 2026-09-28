@@ -1009,7 +1009,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 134 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 137 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1078,6 +1078,11 @@ The LSF submit path is exercised independently with fake `bsub` command results:
 `ParslLSFSubmit.tla` models script creation, command execution, marker-based job-id parsing,
 resource registration, scheduler failure, and successful output without a submission marker.
 The runtime probe also checks the `bsub < script` redirection option.
+
+`ParslLSFCancel.tla` models the `bkill` path for known and unknown resource ids. Its unknown-id
+configuration intentionally produces a depth-2 counterexample: the current implementation
+returns from the scheduler successfully and then indexes `resources[jid]`, which raises
+`KeyError` when the local resource map has no such id. The runtime probe reproduces that boundary.
 
 Slurm batched status handling is exercised with deterministic scheduler command results:
 
@@ -1627,6 +1632,7 @@ failure result for each in-flight task.
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `SubmitSuccess` / `SubmitEmptyCurrent` / `SubmitEmptyFixed` | PBS Pro `qsub` output parsing and job/resource registration | `PBSProProvider.submit` |
 | `WriteScript` / `ExecuteBsub` / `ParseBsub` | LSF `bsub` submission and resource registration | `LSFProvider.submit` |
+| `Cancel` | LSF `bkill` cancellation and local resource-state update | `LSFProvider.cancel` |
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
