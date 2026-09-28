@@ -57,6 +57,13 @@ The provider uses `none/requested/active/failed/cancelled`; workers use `idle/bu
 resource availability, and allocation failure. Memoization completes a task without creating
 an attempt or consuming a worker.
 
+Each logical task also has two abstract serialization capabilities: membership in
+`CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
+membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
+can be encoded. `SerializeAttempt` requires both. If either capability is absent,
+`SerializationFailure` rejects the attempt before a worker is assigned and applies the normal
+retry bound.
+
 ## What is and is not modeled
 
 The current model covers the major control-flow effects represented in the paper's DFK,
@@ -89,6 +96,7 @@ workers, one retry, and one block per executor. Java and `tla2tools.jar` are req
 ```bash
 java -cp tla2tools.jar tlc2.TLC -deadlock -config parsl.cfg parsl.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMemo.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSerializationFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslNoFailures.cfg ParslAbstract.tla
 ```
 
@@ -101,6 +109,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslAbstract.cfg`: 3,400,082 states generated, 637,157 distinct states, depth 85;
   all invariants passed.
 - `ParslMemo.cfg`: 162,340 states generated, 33,651 distinct states, depth 63; all invariants passed.
+- `ParslSerializationFailure.cfg`: 1,636,240 states generated, 310,025 distinct states, depth 69;
+  all safety invariants passed, including the pre-dispatch serialization-failure path.
 - `ParslNoFailures.cfg`: 5,322 states generated, 1,625 distinct states, depth 49;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 
@@ -112,6 +122,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
+| `SerializationFailure` | callable/argument serialization failure before dispatch | `DataFlowKernel.launch_task` and executor serialization boundary |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |

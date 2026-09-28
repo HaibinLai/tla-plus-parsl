@@ -50,6 +50,8 @@ worker loss, executor loss, stale results, final-result acceptance, and an abstr
 serialize/send/receive/decode path for task messages before worker dispatch.
 Worker result messages use the same abstract lifecycle before a Future is resolved, including
 the possibility that a failed attempt's late result is rejected as stale.
+Task payloads now distinguish callable serializability from argument/closure serializability;
+an unencodable payload fails before worker dispatch and follows the bounded retry path.
 
 ### 3. Checked properties
 

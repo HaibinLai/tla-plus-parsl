@@ -11,7 +11,8 @@ EXTENDS Naturals, Integers, FiniteSets, Sequences
  ***************************************************************************)
 
 CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
-          MEMOIZED, MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES
+          MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
+          MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES
 
 TaskStates == {"pending", "staging", "ready", "queued", "running",
                "retry_wait", "succeeded", "memoized", "failed"}
@@ -27,6 +28,7 @@ AttemptIds == TASKS \X (0..MAX_RETRIES)
 NoAttempt == <<"none", -1>>
 Deps(t) == {d \in TASKS : d \o "->" \o t \in DEPS}
 WorkerExec(w) == CHOOSE e \in EXECUTORS : w \o ":" \o e \in WORKER_EXECUTOR
+SerializableTask(t) == t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
 
 VARIABLES taskState, futureState, retries, currentAttempt, selectedExecutor,
           dataState, attemptState, attemptExecutor, attemptWorker,
@@ -42,6 +44,8 @@ vars == <<taskState, futureState, retries, currentAttempt, selectedExecutor,
 
 Init ==
     /\ TASKS # {} /\ EXECUTORS # {} /\ WORKERS # {}
+    /\ CALLABLE_SERIALIZABLE \subseteq TASKS
+    /\ PAYLOAD_SERIALIZABLE \subseteq TASKS
     /\ DEPS \subseteq {d \o "->" \o t : d \in TASKS, t \in TASKS}
     /\ WORKER_EXECUTOR \subseteq {w \o ":" \o e : w \in WORKERS, e \in EXECUTORS}
     /\ \A t \in TASKS : t \notin Deps(t)
@@ -137,12 +141,35 @@ SubmitAttempt(t, e) ==
 SerializeAttempt(t, k) ==
     LET a == <<t, k>> IN
     /\ attemptState[a] = "submitted" /\ currentAttempt[t] = k
+    /\ SerializableTask(t)
     /\ attemptState' = [attemptState EXCEPT ![a] = "serialized"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs>>
+
+SerializationFailure(t, k) ==
+    LET a == <<t, k>> IN
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ k \in 0..MAX_RETRIES
+    /\ attemptState[a] = "submitted" /\ currentAttempt[t] = k
+    /\ ~SerializableTask(t)
+    /\ attemptState' = [attemptState EXCEPT ![a] = "failed"]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
+                    attemptExecutor, attemptWorker, workerState, workerAttempt,
+                    executorState, providerState, providerTarget, providerBlocks,
+                    completed, outputs>>
 
 SendAttempt(t, k) ==
     LET a == <<t, k>> IN
@@ -435,6 +462,7 @@ NextCore ==
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
     \/ \E t \in TASKS : DependencyCheck(t) \/ MemoizationHit(t) \/ Enqueue(t)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitAttempt(t, e)
+    \/ \E t \in TASKS, k \in 0..MAX_RETRIES : SerializationFailure(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
           SerializeAttempt(t, k) \/ SendAttempt(t, k)
           \/ ReceiveAttempt(t, k) \/ DecodeAttempt(t, k)
@@ -516,6 +544,13 @@ ResultConsistency ==
 StaleResultSafety ==
     \A t \in TASKS, k \in 0..MAX_RETRIES :
       attemptState[<<t, k>>] = "stale" => currentAttempt[t] # k
+
+SerializationSafety ==
+    \A a \in AttemptIds :
+      attemptState[a] \in {"serialized", "sent", "received", "decoded",
+                            "dispatched", "running", "result_serialized",
+                            "result_sent", "result_received", "result_decoded",
+                            "succeeded"} => SerializableTask(a[1])
 
 EventuallySettled ==
     \A t \in TASKS : <> (taskState[t] \in {"succeeded", "memoized", "failed"})
