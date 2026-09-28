@@ -310,6 +310,9 @@ with a failing image lookup, exposing that `num_instances` is incremented before
 `tests/test_rsync_staging_runtime.py` drives the real RSync in-task wrappers with a fake
 `os.system`, checking that stage-in failure prevents the user function while stage-out failure
 is reported only after the user function has run. This is modeled by `ParslRsyncStage.tla`.
+`tests/test_http_staging_runtime.py` drives the real HTTP in-task wrapper with a fake 404
+response, recording that the current code writes the error body and runs the user function
+without checking HTTP status. `ParslHTTPStage.tla` keeps this as an executable counterexample.
 `tests/test_azure_cancel_runtime.py` drives Azure VM cancellation with a fake async delete client,
 checking linger refusal, failure rollback, and successful instance removal.
 `tests/test_azure_submit_runtime.py` drives Azure VM submission with fake resource/network/compute
@@ -428,7 +431,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 117 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 118 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

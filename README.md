@@ -112,6 +112,11 @@ user function and blocks the function on a nonzero `rsync` result; stage-out run
 first but propagates a later transfer failure. The model has separate in-failure, out-failure,
 and successful configurations, backed by fake-`os.system` runtime probes.
 
+`ParslHTTPStage.tla` checks the analogous HTTP in-task boundary. The current wrapper streams any
+response body without checking its status code, so a non-success response can be written as an
+input file and still reach the user function. The current configuration preserves that depth-3
+counterexample; fixed and successful-response configurations require status validation.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -646,6 +651,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureCopy.cfg ParslDataFutureC
 java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageInFail.cfg ParslRsyncStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageOutFail.cfg ParslRsyncStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageSuccess.cfg ParslRsyncStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageCurrent.cfg ParslHTTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageFixed.cfg ParslHTTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageSuccess.cfg ParslHTTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
@@ -751,6 +759,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   failure was propagated after the user function ran.
 - `ParslRsyncStageSuccess.cfg`: 8 states generated, 4 distinct states, depth 4; successful
   stage-in reached the user function and completed safely.
+- `ParslHTTPStageCurrent.cfg`: expected counterexample at depth 3; a non-success response was
+  written and the app still ran.
+- `ParslHTTPStageFixed.cfg`: 4 states generated, 2 distinct states, depth 2; non-success HTTP
+  responses failed before app execution.
+- `ParslHTTPStageSuccess.cfg`: 6 states generated, 3 distinct states, depth 3; successful HTTP
+  staging reached the app safely.
 - `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 690 states generated, 198 distinct states, depth 36;
@@ -925,7 +939,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 117 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 118 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
