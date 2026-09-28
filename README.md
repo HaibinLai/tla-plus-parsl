@@ -319,8 +319,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
 - `ParslRegistration.cfg`: 94 states generated, 29 distinct states, depth 18;
   unregistered workers could not receive work or heartbeat until manager registration.
-- `ParslRegistrationFailure.cfg`: 1,750 states generated, 429 distinct states, depth 32;
+- `ParslRegistrationFailure.cfg`: 7,067 states generated, 1,384 distinct states, depth 36;
   failed manager registration left the worker unavailable without violating bindings or Future consistency.
+- `ParslRegistrationRecovery.cfg`: 7,067 states generated, 1,384 distinct states, depth 36;
+  a failed manager could retry registration without becoming dispatchable before re-registration.
 - `ParslIdleManagerTimeout.cfg`: 27,639 states generated, 5,359 distinct states, depth 38;
   an idle manager exceeding the heartbeat age was removed with provider/executor capacity cleared.
 - `ParslMultiManagerTimeout.cfg`: 442,239 states generated, 59,892 distinct states, depth 40;
@@ -377,7 +379,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
 | `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |
-| `RegistrationFailure` | manager startup/registration failure | `Interchange` manager registration failure boundary |
+| `RegistrationFailure` / `RetryRegistration` | manager startup failure and reconnect/re-registration | `Interchange` manager registration failure boundary |
 | `IdleManagerTimeout` | idle manager heartbeat expiry and block cleanup | `Interchange` heartbeat expiration and executor/provider error handling |
 | `ExecutorDrain` / `ExecutorRecover` | executor drain and reopening of task submission | executor scaling strategy and `HighThroughputExecutor.submit` |
 | `MisrouteAttempt` | reject decoded work sent to the wrong manager/executor | `Interchange` dispatch routing and manager registration |

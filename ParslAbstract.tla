@@ -477,6 +477,18 @@ RegistrationFailure(w) ==
                     attemptStart, monitoringState, joinObserved,
                     taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
+RetryRegistration(w) ==
+    /\ ALLOW_FAILURES
+    /\ w \in WORKERS /\ workerState[w] = "failed"
+    /\ workerState' = [workerState EXCEPT ![w] = "unregistered"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, clock, lastHeartbeat,
+                    attemptStart, monitoringState, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
+
 DispatchAttempt(t, k, w) ==
     LET a == <<t, k>> IN
     /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
@@ -1063,6 +1075,7 @@ CancelRequestedAllocation(e) ==
 
 CoreActions ==
     \/ \E w \in WORKERS : RegisterWorker(w) \/ RegistrationFailure(w)
+          \/ RetryRegistration(w)
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
           \/ CorruptStaging(t) \/ RepairStaging(t)
     \/ \E t \in TASKS : BeginStageOut(t) \/ TransferOutputChunk(t)

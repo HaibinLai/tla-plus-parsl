@@ -108,6 +108,8 @@ requires outer rejection to be caused by a rejected inner Future.
 dispatches or emit heartbeats.
 `ParslRegistrationFailure.cfg` explores manager startup failure before registration and checks
 that no worker binding is created from the failed manager.
+`ParslRegistrationRecovery.cfg` adds reconnect/re-registration from a failed manager while
+preserving the unregistered gate before dispatch.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.
