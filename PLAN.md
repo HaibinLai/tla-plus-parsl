@@ -157,6 +157,9 @@ and running work. It now covers terminal provider failure both before manager re
 after a manager has become active.
 `ParslHeartbeatProvider.tla` separates transient provider `UNKNOWN` status from HTEX manager
 heartbeat expiry, and checks manager reconnect plus loss accounting after heartbeat timeout.
+`ParslResultRace.tla` separates physical attempt result production from callback delivery and
+checks retry selection, late success/failure races, stale callback suppression, and one-time
+Future resolution.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
