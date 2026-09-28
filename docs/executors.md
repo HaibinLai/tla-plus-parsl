@@ -150,6 +150,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledR
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_cancelled_result_runtime.py -v
 ```
 
+`ParslTaskVineFactory.tla` models the optional TaskVine factory process. The factory is created,
+configured with worker/factory timeouts and capacity limits, entered as a context manager, and
+kept alive until the executor stop event is set. The runtime probe patches the optional TaskVine
+SDK with a fake factory and checks the real `_taskvine_factory` configuration boundary.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineFactory.cfg models/executors/ParslTaskVineFactory.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_factory_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps

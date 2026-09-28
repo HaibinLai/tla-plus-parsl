@@ -653,6 +653,11 @@ when the TaskVine submit process dies. The model follows
 and the report construction in
 [`taskvine/manager.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/taskvine/manager.py).
 
+`ParslTaskVineFactory.tla` models the optional factory process around that executor. It checks
+factory construction, application of worker/factory timeout and capacity settings, context entry,
+and stop-signal-driven context exit. The runtime probe patches the optional SDK and invokes the
+real `_taskvine_factory` function.
+
 `ParslTaskVineDuplicateReport.tla` refines the TaskVine collector with a duplicate or late manager
 report. The current `tasks.pop(task_report.executor_id)` path raises `KeyError`, exits the
 collector, and lets final cleanup fail unrelated Futures. The fixed configuration ignores an
@@ -2799,6 +2804,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
 | `CancelBeforeBind` / `BindUnderlying` / `PublishCallback` | Flux cancellation versus late underlying-future binding | `FluxFutureWrapper.cancel` and `_complete_future` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
+| `CreateFactory` / `ConfigureFactory` / `EnterContext` / `RequestStop` / `ExitContext` | TaskVine factory process configuration and stop lifecycle | `taskvine.factory._taskvine_factory` |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `Cancel` / `LateDone` | Radical Pilot cancellation versus late result callback | `RadicalPilotExecutor.task_state_cb` terminal Future updates |
 | `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
