@@ -46,3 +46,15 @@ database loop continue until their queues are empty. TLC checks message conserva
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringShutdownDrain.cfg models/monitoring/ParslMonitoringShutdownDrain.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_shutdown_drain_runtime.py -v
 ```
+
+`ParslMonitoringShutdownRace.tla` isolates the complementary late-producer race: if
+`Queue.empty()` is observed after the kill event but a producer enqueues immediately afterward,
+the current migration loop can exit with a stranded message. The fixed branch requires producer
+closure before treating an empty queue as terminal. The runtime probe uses a deterministic fake
+queue to reproduce the ordering.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringShutdownRaceCurrent.cfg models/monitoring/ParslMonitoringShutdownRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringShutdownRaceFixed.cfg models/monitoring/ParslMonitoringShutdownRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_shutdown_race_runtime.py -v
+```
