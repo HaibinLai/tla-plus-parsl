@@ -207,6 +207,7 @@ and preserves the previously known resource status.
 `tests/test_serialization_runtime.py` exercises the current serialization facade against real
 closures, callable/data headers, three-part apply-message packing, and a deliberately failing
 object graph. It complements the finite TLA+ serialization-wire models with runtime evidence.
+It also checks closure snapshot timing and nested argument-object graph preservation.
 `tests/test_zip_file_transfer_runtime.py` executes the local `ZipFileStaging` byte path against
 real temporary files, including archive corruption before output publication. It complements the
 chunk/checksum and stage-out Future TLA+ models with concrete content evidence.

@@ -804,6 +804,7 @@ the wire models:
 
 The tests verify closure round-trip behavior, the `C2` callable and `02` data headers, three-part
 apply-message ordering, and rejection of an unserializable argument before a message is packed.
+They also verify closure snapshot semantics and nested argument-object graph round trips.
 
 The local zip staging implementation is exercised against actual bytes as well:
 
