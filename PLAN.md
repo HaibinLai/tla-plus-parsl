@@ -58,6 +58,7 @@ content token for declared output files.
 dependent task from consuming an input until repair returns it to `available`.
 The bounded `ParslTime.cfg` model adds logical ticking, heartbeat age, attempt start time, and
 timeout guards so TLC can explore timing-dependent worker loss and retry behavior.
+`ParslTimeoutTerminal.cfg` covers the terminal timeout case when no retries remain.
 `ParslMonitoring.cfg` adds a focused asynchronous monitoring/database status model with a
 monotonic per-task write version, and checks that persisted terminal statuses never precede the
 corresponding Future outcome. `MonitoringWriteFailure` models a transient write error and

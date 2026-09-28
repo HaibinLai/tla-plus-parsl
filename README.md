@@ -205,9 +205,11 @@ The model uses a bounded logical clock rather than wall-clock timestamps. `Tick`
 clock, `Heartbeat` records the latest manager heartbeat for a worker, and `StartAttemptTimed`
 records an attempt start time. `WorkerFailure` can therefore be enabled by a heartbeat age beyond
 `HEARTBEAT_TIMEOUT`, while `AttemptTimeout` can be enabled by an attempt age beyond
-`TASK_TIMEOUT`. The full workflow configurations set `MAX_TIME = 0` to avoid combining every
+`TASK_TIMEOUT`. A timeout on the final retry now rejects the Future and terminates the task rather
+than leaving it indefinitely running. The full workflow configurations set `MAX_TIME = 0` to avoid combining every
 workflow interleaving with clock values; `ParslTime.cfg` is a deliberately tiny one-task model
 that explores the time and timeout transitions with `MAX_TIME = 1`.
+`ParslTimeoutTerminal.cfg` uses `MAX_RETRIES = 0` to check the terminal-timeout path directly.
 
 Monitoring is modeled as `monitoringState`, a per-task database record containing the last
 persisted status and a monotonic write `version`. `PublishMonitor` may lag behind the logical
@@ -289,8 +291,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   a non-serializable grandchild object failed before dispatch while object-graph safety held.
 - `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
-- `ParslTime.cfg`: 606 states generated, 173 distinct states, depth 32;
+- `ParslTime.cfg`: 690 states generated, 198 distinct states, depth 36;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
+- `ParslTimeoutTerminal.cfg`: 859 states generated, 240 distinct states, depth 23;
+  a final-attempt timeout rejected the Future and still satisfied `EventuallySettled`.
 - `ParslMonitoring.cfg`: 167,482 states generated, 25,066 distinct states, depth 43;
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;

@@ -820,16 +820,25 @@ AttemptTimeout(t, k, w) ==
     LET a == <<t, k>> IN
     /\ (ALLOW_FAILURES \/ clock - attemptStart[a] >= TASK_TIMEOUT)
     /\ attemptState[a] = "running" /\ attemptWorker[a] = w
-    /\ currentAttempt[t] = k /\ retries[t] < MAX_RETRIES
+    /\ currentAttempt[t] = k /\ retries[t] <= MAX_RETRIES
     /\ attemptState' = [attemptState EXCEPT ![a] = "timed_out"]
-    /\ taskState' = [taskState EXCEPT ![t] = "retry_wait"]
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
     /\ workerState' = [workerState EXCEPT ![w] = "idle"]
     /\ workerAttempt' = [workerAttempt EXCEPT ![w] = NoAttempt]
     /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
-    /\ retries' = [retries EXCEPT ![t] = @ + 1]
-    /\ UNCHANGED <<futureState, currentAttempt, selectedExecutor, dataState,
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                  THEN [retries EXCEPT ![t] = @ + 1]
+                  ELSE retries
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES
+                   THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, executorState, providerState,
-                    providerTarget, providerBlocks, completed, rejected, outputs,
+                    providerTarget, providerBlocks, completed, outputs,
                     taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 WorkerFailure(w) ==
