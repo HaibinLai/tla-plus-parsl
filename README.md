@@ -842,7 +842,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 91 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 94 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1044,6 +1044,15 @@ Kubernetes pod cancellation is exercised with a fake delete API:
 An API exception propagates before the resource is changed, but a returned error object is ignored
 by the current `_delete_pod` wrapper and the resource is marked `CANCELLED`. The TLA+ fixed
 configuration treats a returned error as a failed cancellation that leaves the job `RUNNING`.
+
+Globus Compute configuration isolation is exercised with a fake SDK executor:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_runtime.py -v
+```
+
+The probe checks per-submit resource and endpoint overrides, restoration after SDK exceptions, and
+the current cross-submit race in which concurrent calls can observe another task's specification.
 
 The EC2 status boundary is exercised with a fake `describe_instances` client:
 

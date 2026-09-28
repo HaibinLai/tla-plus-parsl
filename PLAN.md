@@ -263,6 +263,9 @@ cleanup modeled by `ParslTaskVineResults.tla`.
 `tests/test_radical_results_runtime.py` drives RadicalPilot's real callback with fake RP constants
 and task objects, checking Bash/Python completion, cancellation, failures, master failure, and the
 invalid non-exception path modeled by `ParslRadicalPilotResults.tla`.
+`tests/test_globus_compute_runtime.py` drives Globus Compute's real wrapper submit method with a
+fake SDK executor, checking override restoration, exception cleanup, and the unsynchronized
+concurrent-specification race modeled by `ParslGlobusComputeConfig.tla`.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
