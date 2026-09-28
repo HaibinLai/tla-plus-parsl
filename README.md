@@ -280,6 +280,12 @@ The separate-task `_ftp_stage_in` path exhibits the same residual partial-file b
 the parent `DataFuture` as an input dependency, while stage-out passes the application Future to
 the transfer app. Neither transfer can begin before its corresponding producer is ready.
 
+`ParslGlobusTransferFailure.tla` models the terminal Globus transfer failure path. The current
+`Globus.transfer_file` assumes a failed transfer always has at least one diagnostic event and
+indexes `events.data[0]`; an empty event list therefore crashes with `IndexError` instead of
+reporting the transfer failure. The runtime probe uses a fake SDK and the fixed branch reports a
+failure without requiring diagnostic details.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -870,6 +876,10 @@ java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageFixed.cfg ParslFTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageSuccess.cfg ParslFTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslGlobusStageDependency.cfg ParslGlobusStageDependency.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslGlobusStageOutDependency.cfg ParslGlobusStageDependency.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureCurrentEmpty.cfg ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureCurrentEvent.cfg ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureFixedEmpty.cfg ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureSuccess.cfg ParslGlobusTransferFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
@@ -1053,6 +1063,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   could start only after the parent Future became ready.
 - `ParslGlobusStageOutDependency.cfg`: 19 states generated, 8 distinct states, depth 5; stage-out
   could start only after the application Future completed.
+- `ParslGlobusTransferFailureCurrentEmpty.cfg`: expected counterexample, 4 states generated; a
+  failed transfer with no diagnostic event reaches `events.data[0]` and crashes.
+- `ParslGlobusTransferFailureCurrentEvent.cfg`, `ParslGlobusTransferFailureFixedEmpty.cfg`, and
+  `ParslGlobusTransferFailureSuccess.cfg`: 6 states generated, 3 distinct states, depth 3;
+  event-bearing failures and event-free fixed failures are reported without a parser crash.
 - `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 690 states generated, 198 distinct states, depth 36;
@@ -1355,7 +1370,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 215 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 216 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2100,6 +2115,7 @@ failure result for each in-flight task.
 | `CorruptStaging` / `RepairStaging` / `FileStagingSafety` | damaged input transfer and repair before dependency release | `DataManager.stage_in` and transfer error paths |
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
+| `WaitReturnsTerminalFailure` / `ReadFailureEvent` / `NoDiagnosticCrash` | Globus terminal transfer failure reporting with optional diagnostics | `Globus.transfer_file` |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `GatherDependencies` / `RunWorker` | shallow versus recursive Future collection and unwrapping | `parsl/dataflow/dependency_resolvers.py` and `DataFlowKernel._unwrap_futures` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |

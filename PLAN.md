@@ -477,6 +477,9 @@ file. `ParslFTPStage.tla` models the cleanup contract.
 `tests/test_globus_staging_runtime.py` drives the real `GlobusStaging.stage_in` and `stage_out`
 dispatch paths with fake staging apps, checking that parent and application Future objects are
 passed through unchanged. `ParslGlobusStageDependency.tla` models the corresponding gates.
+`tests/test_globus_transfer_failure_runtime.py` drives `Globus.transfer_file` with a fake SDK and
+an empty terminal-failure event list, reproducing the current diagnostic-indexing exception
+modeled by `ParslGlobusTransferFailure.tla`.
 `tests/test_htex_result_queue_runtime.py` drives the real HTEX `_result_queue_worker` with a fake
 incoming queue, reproducing both the malformed-message orphaned-Future path and duplicate-result
 `KeyError` already modeled by `ParslHtexResultQueue.tla`.
@@ -609,7 +612,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 215 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 216 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
