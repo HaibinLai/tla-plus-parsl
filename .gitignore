@@ -3,3 +3,7 @@ runinfo/
 states/
 *.st
 *.fp
+
+# Python test/runtime artifacts
+__pycache__/
+*.py[cod]
