@@ -140,6 +140,8 @@ unresolved to the outer join until a final attempt succeeds or fails.
 `ParslTaskTransport.tla` connects object-graph serialization to task/result transport, including
 envelope corruption, decode rejection, dispatch gating, worker loss, retry correlation, and stale
 result suppression.
+`ParslProviderPolling.tla` refines provider behavior into submit/status/cancel calls, transient API
+errors, unknown status, cancellation rollback, and bounded polling/failure windows.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.

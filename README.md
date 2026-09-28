@@ -129,6 +129,11 @@ worker loss, retry correlation, result serialization failure, and stale results 
 physical attempt. `ParslTaskTransportFailure.cfg` uses a non-serializable object graph to exercise
 the pre-dispatch failure path.
 
+`ParslProviderPolling.tla` refines the provider side of the executor model into explicit
+`submit`, `status`, and `cancel` API calls. It distinguishes pending/running/unknown status,
+transient API errors, submit rejection, cancel failure rollback, and desired block-target updates;
+bounded poll/failure counters keep the state space finite.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -337,6 +342,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -418,6 +424,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   result serialization, correlation, and stale-result safety all passed.
 - `ParslTaskTransportFailure.cfg`: 56 states generated, 25 distinct states, depth 13;
   a non-serializable Python object graph was rejected before dispatch on each bounded attempt.
+- `ParslProviderPolling.cfg`: 2,861 states generated, 854 distinct states, depth 19;
+  provider submit/status/cancel outcomes, unknown-status failure, transient API errors, cancel
+  rollback, and block-target consistency all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -521,6 +530,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
 | `BeginEncode` / `FinishEncodeSuccess` / `DecodeTaskSuccess` | serialized callable/payload gating task transport | DFK serialization boundary, interchange task queue, worker decode |
 | `CorruptTaskEnvelope` / `DecodeTaskFailure` / `LoseAttempt` / `AcceptResult` | protocol corruption, worker loss, retry and stale result handling | HTEX message/result paths and DFK attempt correlation |
+| `SubmitBlock` / `SubmitAccepted` / `SubmitRejected` | provider submit API and target rollback | `ExecutionProvider.submit` and block scaling facade |
+| `BeginStatus` / `StatusPending` / `StatusRunning` / `StatusUnknown` | provider status polling and unknown-job failure | `ExecutionProvider.status` and `JobStatusPoller` |
+| `BeginCancel` / `CancelAccepted` / `CancelFailed` | provider cancellation and rollback | `ExecutionProvider.cancel` and scale-in handling |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces
