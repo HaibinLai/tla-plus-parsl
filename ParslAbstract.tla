@@ -928,7 +928,8 @@ CancelAllocation(e) ==
     /\ \A a \in AttemptIds : attemptExecutor[a] = e =>
           attemptState[a] \notin {"submitted", "serialized", "sent", "received",
                                    "decoded", "dispatched", "running"}
-    /\ providerState' = [providerState EXCEPT ![e] = "cancelled"]
+    /\ providerState' = [providerState EXCEPT ![e] =
+          IF providerBlocks[e] = 1 THEN "cancelled" ELSE "active"]
     /\ providerBlocks' = [providerBlocks EXCEPT ![e] = @ - 1]
     /\ providerTarget' = [providerTarget EXCEPT ![e] = @ - 1]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
@@ -1173,6 +1174,8 @@ ProviderExecutorConsistency ==
     /\ \A e \in EXECUTORS : providerState[e] = "active" =>
           executorState[e] \in {"up", "draining"} /\ providerBlocks[e] > 0
     /\ \A e \in EXECUTORS : providerState[e] = "failed" =>
+          providerBlocks[e] = 0 /\ providerTarget[e] = 0
+    /\ \A e \in EXECUTORS : providerState[e] = "cancelled" =>
           providerBlocks[e] = 0 /\ providerTarget[e] = 0
 
 JoinSafety ==

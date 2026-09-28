@@ -61,6 +61,9 @@ existing attempts may continue, and `ExecutorRecover` reopens submission.
 `RequestAllocation`, `AllocationSucceeds`, and `AllocationFails` abstract resource request,
 resource availability, and allocation failure. Memoization completes a task without creating
 an attempt or consuming a worker.
+Scale-in is block-granular: cancelling one of several active blocks keeps the provider active,
+while cancelling the final block transitions it to `cancelled`. `ParslScaleIn.cfg` exercises this
+multi-block case.
 
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
@@ -262,8 +265,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.
-- `ParslProviderFailure.cfg`: 2,566 states generated, 573 distinct states, depth 34;
+- `ParslProviderFailure.cfg`: 6,672 states generated, 1,240 distinct states, depth 37;
   provider failure, recovery request, and block-count consistency all passed.
+- `ParslScaleIn.cfg`: 15,434 states generated, 2,572 distinct states, depth 34;
+  partial scale-in preserved an active provider until its final block was cancelled.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
 - `ParslFileCorruptionSmall.cfg`: 60,824 states generated, 10,424 distinct states, depth 64;
