@@ -26,7 +26,7 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
                   "dispatched", "running", "result_serialized", "result_sent",
                   "result_received", "result_decoded",
                   "succeeded", "failed", "timed_out", "lost", "stale"}
-WorkerStates == {"idle", "busy", "failed"}
+WorkerStates == {"unregistered", "idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
 DataStates == {"unavailable", "staging", "available", "stageout", "transferred", "corrupt"}
 WireStates == {"none", "queued", "sent", "received", "duplicate", "consumed", "dropped"}
@@ -91,7 +91,7 @@ Init ==
     /\ attemptState = [a \in AttemptIds |-> "absent"]
     /\ attemptExecutor = [a \in AttemptIds |-> "none"]
     /\ attemptWorker = [a \in AttemptIds |-> "none"]
-    /\ workerState = [w \in WORKERS |-> "idle"]
+    /\ workerState = [w \in WORKERS |-> "unregistered"]
     /\ workerAttempt = [w \in WORKERS |-> NoAttempt]
     /\ executorState = [e \in EXECUTORS |-> "up"]
     /\ providerState = [e \in EXECUTORS |-> "none"]
@@ -383,6 +383,17 @@ DecodeAttempt(t, k) ==
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs, resultWireState,
                     taskEnvelope, resultEnvelope>>
+
+RegisterWorker(w) ==
+    /\ w \in WORKERS /\ workerState[w] = "unregistered"
+    /\ workerState' = [workerState EXCEPT ![w] = "idle"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, clock, lastHeartbeat,
+                    attemptStart, monitoringState, joinObserved,
+                    taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 DispatchAttempt(t, k, w) ==
     LET a == <<t, k>> IN
@@ -795,6 +806,7 @@ CancelAllocation(e) ==
                     taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 CoreActions ==
+    \/ \E w \in WORKERS : RegisterWorker(w)
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
     \/ \E t \in TASKS : BeginStageOut(t) \/ FinishStageOut(t)
           \/ CorruptStageOut(t) \/ RepairStageOut(t)
@@ -845,7 +857,7 @@ Tick ==
                     taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
 Heartbeat(w) ==
-    /\ w \in WORKERS /\ workerState[w] # "failed"
+    /\ w \in WORKERS /\ workerState[w] \in {"idle", "busy"}
     /\ lastHeartbeat' = [lastHeartbeat EXCEPT ![w] = clock]
     /\ UNCHANGED <<clock, attemptStart,
                     taskState, futureState, retries, currentAttempt,
@@ -982,6 +994,10 @@ WorkerBinding ==
           attemptWorker[workerAttempt[w]] = w
     /\ \A a \in AttemptIds : attemptWorker[a] # "none" =>
           workerAttempt[attemptWorker[a]] = a
+
+RegistrationSafety ==
+    \A w \in WORKERS : workerState[w] = "unregistered" =>
+        workerAttempt[w] = NoAttempt
 
 ValidRunningAttempt ==
     \A a \in AttemptIds : attemptState[a] = "running" =>

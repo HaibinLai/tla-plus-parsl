@@ -77,6 +77,8 @@ that stage-out transfers the token only after successful task completion.
 the larger three-task corruption configuration is retained for future state-space reduction.
 `ParslJoinInvalid.cfg` covers the `join_app` type-error branch. `SpecFair` now uses strong
 fairness for logical/attempt progress so duplicate-message discard loops cannot starve work.
+`ParslRegistration.cfg` adds explicit HTEX manager registration before a worker can receive
+dispatches or emit heartbeats.
 
 ### 3. Checked properties
 

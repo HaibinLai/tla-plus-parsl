@@ -52,7 +52,10 @@ Once an old attempt is replaced, a late result can only mark that physical attem
 `stale`; it cannot overwrite the logical Future or final result. This allows TLC to explore
 retry + late-result, timeout, worker-loss, and duplicate-completion scenarios.
 
-The provider uses `none/requested/active/failed/cancelled`; workers use `idle/busy/failed`.
+The provider uses `none/requested/active/failed/cancelled`; workers use
+`unregistered/idle/busy/failed`. Workers begin as `unregistered` and must pass through
+`RegisterWorker` before becoming idle, matching the HTEX interchange manager-registration
+boundary.
 `RequestAllocation`, `AllocationSucceeds`, and `AllocationFails` abstract resource request,
 resource availability, and allocation failure. Memoization completes a task without creating
 an attempt or consuming a worker.
@@ -198,6 +201,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslProviderFailure.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslJoin.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinInvalid.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistration.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
@@ -224,11 +228,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMemo.cfg`: 557,440 states generated, 81,233 distinct states, depth 65; all invariants passed.
 - `ParslSerializationFailure.cfg`: 3,901,406 states generated, 569,651 distinct states, depth 69;
   all safety invariants passed, including the pre-dispatch serialization-failure path.
-- `ParslNoFailures.cfg`: 11,458 states generated, 2,083 distinct states, depth 51;
+- `ParslNoFailures.cfg`: 17,742 states generated, 3,231 distinct states, depth 53;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
-- `ParslTime.cfg`: 562 states generated, 161 distinct states, depth 31;
+- `ParslTime.cfg`: 606 states generated, 173 distinct states, depth 32;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
-- `ParslMonitoring.cfg`: 43,700 states generated, 8,427 distinct states, depth 39;
+- `ParslMonitoring.cfg`: 43,775 states generated, 8,445 distinct states, depth 40;
   all monitoring consistency invariants passed.
 - `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.
@@ -238,11 +242,13 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
 - `ParslFileCorruptionSmall.cfg`: 24,084 states generated, 4,875 distinct states, depth 60;
   corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
-- `ParslJoin.cfg`: 225,414 states generated, 34,989 distinct states, depth 52;
+- `ParslRegistration.cfg`: 94 states generated, 29 distinct states, depth 18;
+  unregistered workers could not receive work or heartbeat until manager registration.
+- `ParslJoin.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
-- `ParslJoinSafety.cfg`: 225,414 states generated, 34,989 distinct states, depth 52;
+- `ParslJoinSafety.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
   join dependency and outer-Future safety invariants passed.
-- `ParslJoinInvalid.cfg`: 1,045 states generated, 258 distinct states, depth 31;
+- `ParslJoinInvalid.cfg`: 1,114 states generated, 276 distinct states, depth 32;
   invalid join return values rejected the outer Future without a false success.
 - `ParslMessaging.cfg`: 1,217,956 states generated, 169,491 distinct states, depth 44;
   task/result wire ordering, envelope validity, symbolic object-graph serialization, and
@@ -278,6 +284,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
+| `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
