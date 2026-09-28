@@ -149,6 +149,12 @@ Callbacks delivered again after a position has already been observed are harmles
 the list registration, all-done gate, ordered `future.result()` aggregation, and exception scan in
 [`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
 
+`ParslJoinMixedList.tla` isolates the list-shape validation boundary. A list containing only
+Futures is observed and aggregated in order, an empty list completes immediately, and a mixed
+list such as `[Future, 7]` fails with a TypeError-like result before any inner callback is
+registered. This follows the join branch in
+[`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
+
 `ParslJoinRetry.tla` refines that protocol with separate logical inner Futures and physical inner
 attempts. A retryable inner failure leaves the Future unresolved, so the outer join waits; only a
 final-attempt failure is propagated as `JoinError`, while a later successful retry contributes its
@@ -601,6 +607,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslNestedJoin.cfg ParslNestedJoin.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinDuplicates.cfg ParslJoinDuplicates.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedList.cfg ParslJoinMixedList.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedListValid.cfg ParslJoinMixedList.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
@@ -725,6 +733,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslJoinDuplicates.cfg`: 210 states generated, 49 distinct states, depth 7;
   duplicate Future references, callback-position observation, ordered duplicate results, repeated
   failure multiplicity, duplicate callback tolerance, and join-handle cleanup all passed.
+- `ParslJoinMixedList.cfg`: 4 states generated, 2 distinct states, depth 2; a mixed Future/non-
+  Future list fails immediately without registering callbacks.
+- `ParslJoinMixedListValid.cfg`: 76 states generated, 30 distinct states, depth 7; all-Future
+  list observation, ordered aggregation, and inner-failure propagation passed.
 - `ParslTaskTransport.cfg`: 859 states generated, 288 distinct states, depth 28;
   serialization-before-send, envelope/decode ordering, dispatch admission, worker-loss retry,
   result serialization, correlation, and stale-result safety all passed.
@@ -940,6 +952,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
 | `ObservePosition` / `DuplicateCallback` | ordered list-position callbacks and duplicate Future references | `DataFlowKernel.handle_join_update` list branch |
+| `ReturnJoinable` / `ReturnMixedList` / `RegisterEmptyCompletion` | list element validation, immediate empty-list completion, and mixed-list rejection | `DataFlowKernel.handle_exec_update` join branch |
 | `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
 | `StartNestedJoin` / `FinalizeNested` / `ObserveNestedResult` | nested join handle and result propagation | nested `join_app` callback composition |
 | `BeginEncode` / `FinishEncodeSuccess` / `DecodeTaskSuccess` | serialized callable/payload gating task transport | DFK serialization boundary, interchange task queue, worker decode |

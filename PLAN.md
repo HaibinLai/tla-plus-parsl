@@ -145,6 +145,9 @@ propagation. Inner retry policy remains below this join protocol, as in Parsl's 
 `ParslJoinDuplicates.tla` preserves list positions and duplicate Future references, checking that
 `[f1, f1, f2]` yields a duplicate ordered result and that repeated failed references contribute
 the corresponding multiplicity to `JoinError`.
+`ParslJoinMixedList.tla` adds the concrete mixed-list validation branch: only all-Future lists are
+registered for callbacks, while `[Future, non-Future]` fails immediately and an empty list
+completes without callbacks.
 `ParslJoinRetry.tla` adds physical inner attempts and verifies that retryable inner failures remain
 unresolved to the outer join until a final attempt succeeds or fails.
 `ParslNestedJoin.tla` adds a nested join layer and checks that leaf completion/failure propagates
