@@ -166,6 +166,9 @@ without finalizing, the final callback checks all inner Futures under a lock, fa
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
+`ParslJoinMonitoring.tla` connects join status events to the asynchronous monitoring radio and
+database, preserving join/data invariants across event reordering, write failure/retry, and
+terminal-record protection.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.

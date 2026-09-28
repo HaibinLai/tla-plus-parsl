@@ -210,6 +210,14 @@ This follows the `BasicMemoizer.check_memo` and `DataFuture.parent_callback` con
 [`memoization.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/memoization.py)
 and [`futures.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/app/futures.py).
 
+`ParslJoinMonitoring.tla` connects the resulting outer join status to the asynchronous monitoring
+radio/database model. It emits versioned `joining`, `succeeded`, and `failed` events, permits radio
+reordering and write failure/retry, and prevents an older/non-terminal event from overwriting a
+terminal database row. The join/data invariants remain active while monitoring delivery is delayed.
+The event categories correspond to the task-information channel in
+[`monitoring/message_type.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/monitoring/message_type.py)
+and the sender/receiver boundary in [`monitoring/radios/base.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/monitoring/radios/base.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -427,6 +435,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbea
 java -cp tla2tools.jar tlc2.TLC -config ParslResultRace.cfg ParslResultRace.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinCallbackRace.cfg ParslJoinCallbackRace.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMemoData.cfg ParslJoinMemoData.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinMonitoring.cfg ParslJoinMonitoring.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -530,6 +539,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslJoinMemoData.cfg`: 1,697 states generated, 496 distinct states, depth 13;
   memo-hit completion without an attempt, staging/readiness gating for a DataFuture, ordered join
   aggregation, callback locking, and inner-failure propagation all passed.
+- `ParslJoinMonitoring.cfg`: 7,545 states generated, 1,816 distinct states, depth 18;
+  join status emission, memoized/staged inner readiness, radio reordering, database write failure
+  and retry, version monotonicity, and terminal monitoring protection all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.
