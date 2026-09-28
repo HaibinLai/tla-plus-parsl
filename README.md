@@ -615,6 +615,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertPresent.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTorqueStatus.cfg ParslTorqueStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTorqueStatusFixed.cfg ParslTorqueStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTorqueStatusPresent.cfg ParslTorqueStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
@@ -747,6 +750,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   rejected instead of being reported as a successful submission.
 - `ParslPBSProSubmitPresent.cfg`: 4 states generated, 2 distinct states, depth 2; a normal job
   identifier satisfies the submission contract.
+- `ParslTorqueStatus.cfg`: expected counterexample, 4 states generated and 3 distinct states at
+  depth 3; a foreign qstat line reaches the direct resource-map lookup crash.
+- `ParslTorqueStatusFixed.cfg`: 6 states generated, 3 distinct states, depth 3; foreign lines
+  are ignored and known-job status remains safe.
+- `ParslTorqueStatusPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a known qstat
+  line updates the tracked job to completed.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
@@ -952,6 +961,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `SubmitSuccess` / `SubmitEmptyCurrent` / `SubmitEmptyFixed` | PBS Pro `qsub` output parsing and job/resource registration | `PBSProProvider.submit` |
+| `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |

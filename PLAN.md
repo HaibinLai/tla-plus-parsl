@@ -198,6 +198,9 @@ instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
 configuration exposes a `None` job identifier with no registered resource; fixed and non-empty
 output configurations check the provider/executor submission contract.
+`ParslTorqueStatus.tla` models Torque's qstat parser when a status line names a job outside the
+provider's resource map. The actual configuration exposes the direct dictionary-indexing crash;
+the fixed configuration ignores foreign scheduler lines, matching the safer LSF-style guard.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
