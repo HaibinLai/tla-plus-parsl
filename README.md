@@ -609,6 +609,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatBoundary.cfg ParslHeartbea
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDeferred.cfg ParslMonitoringDeferred.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsert.cfg ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertFixed.cfg ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertPresent.cfg ParslMonitoringDBInsert.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
@@ -728,6 +731,13 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMonitoringDeferred.cfg`: 36 states generated, 16 distinct states, depth 6;
   deferred first-message replay, duplicate-first replacement/discard, try-before-status foreign
   key ordering, and bounded monitoring cleanup all passed.
+- `ParslMonitoringDBInsert.cfg`: expected counterexample, 4 states generated and 3 distinct
+  states at depth 3; a duplicate STATUS key reaches the current generic-exception return path,
+  so the event is dropped while the pre-existing row remains.
+- `ParslMonitoringDBInsertFixed.cfg`: 6 states generated, 3 distinct states, depth 3; an
+  idempotent duplicate handler preserves the row and satisfies `DuplicatePersistence`.
+- `ParslMonitoringDBInsertPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a
+  non-duplicate STATUS insert passes the same invariants.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
@@ -948,6 +958,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `RetryLostAttempt` / `DeliverResult` | attempt deadline, manager-loss retry choice, and stale late result | DFK timeout/retry callbacks, HTEX manager-loss handling, and result completion path |
 | `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
 | `DeliverHead` / `ReorderRadio` / `WriteSuccess` / `WriteFailure` | asynchronous monitoring queue and database persistence | MonitoringHub/radio/database boundary |
+| `BeginInsert` / `InsertRow` / `DuplicateRejected` / `DuplicateIgnored` | STATUS-table primary-key collision, generic exception loss, and idempotent repair | `parsl/monitoring/db_manager.py` `STATUS` schema and `DatabaseManager._insert` |
 | `ReceiveFirstBeforeTry` / `InsertTaskAndTry` / `ReceiveFirstAfterTry` | deferred worker-task monitoring message replay and try-row ordering | `DatabaseManager.start` deferred-resource logic |
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
 | `StatusBatchSuccess` / `StatusBatchFailure` | bounded scheduler polling, atomic status update, and timeout/error preservation | `ClusterProvider.status`, `SlurmProvider._status`, and `execute_wait` |

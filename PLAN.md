@@ -136,6 +136,11 @@ database write failure/retry, queue reordering, stale-event suppression, and ter
 stability.
 `ParslMonitoringDeferred.tla` models the DB manager's deferred first worker-task message, replay
 after TASK/TRY insertion, duplicate-first replacement, and foreign-key ordering.
+`ParslMonitoringDBInsert.tla` refines the concrete STATUS-table insert boundary: the actual
+non-idempotent duplicate-key path is exposed as a dropped monitoring event, while the fixed
+configuration checks an idempotent duplicate handler. This is based on the current
+`DatabaseManager._insert` exception handling and the STATUS primary key in
+`parsl/monitoring/db_manager.py`.
 `ParslExecutorProvider.tla` models the HTEX executor/provider boundary: block request outcomes,
 manager registration, worker readiness, submit admission, draining/recovery, provider failure,
 and scale-in cleanup of queued/running tasks.
