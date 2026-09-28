@@ -176,6 +176,11 @@ which is used by `ClusterProvider.execute_wait`. The current path propagates `Ti
 without terminating the process; `tests/test_execute_wait_timeout_runtime.py` verifies this with a
 controlled fake `Popen` process. The fixed configuration performs process cleanup before raising.
 
+`ParslMemoDictOrdering.tla` models dictionary-key normalization in `BasicMemoizer`. Python allows
+heterogeneous dictionary keys, but the current `id_for_memo_dict` calls `sorted(dict)` directly,
+so a mixed `int`/`str` key dictionary raises `TypeError` while computing a memo key. The runtime
+probe and current TLC configuration reproduce this; the fixed branch uses a canonical ordering.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -823,6 +828,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMemoFunctionIdentityStable.cfg Pars
 java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutCurrent.cfg ParslExecuteWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutFixed.cfg ParslExecuteWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutSuccess.cfg ParslExecuteWaitTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingCurrent.cfg ParslMemoDictOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingFixed.cfg ParslMemoDictOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingHomogeneous.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -1016,6 +1024,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslExecuteWaitTimeoutFixed.cfg` and `ParslExecuteWaitTimeoutSuccess.cfg`: 4 states generated,
   2 distinct states, depth 2; timeout cleanup and normal completion satisfy
   `TimeoutCleanupSafety`.
+- `ParslMemoDictOrderingCurrent.cfg`: expected counterexample, 2 states generated; a mixed-key
+  dictionary reaches the memo-hash error state.
+- `ParslMemoDictOrderingFixed.cfg` and `ParslMemoDictOrderingHomogeneous.cfg`: 4 states generated,
+  2 distinct states, depth 2; canonical and homogeneous key ordering satisfy
+  `MixedDictHashSafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1157,7 +1170,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 198 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 199 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1910,6 +1923,7 @@ failure result for each in-flight task.
 | `AttemptFails` / `HandleFailure` / `RetryLimitSafety` | retry-handler failure-cost accounting and physical-attempt admission | `DataFlowKernel.handle_exec_update` |
 | `ChangeSource` / `MemoKeySafety` | function-body identity and memo-key invalidation | `BasicMemoizer.id_for_memo_function` |
 | `Complete` / `Timeout` / `TimeoutCleanupSafety` | scheduler command timeout and subprocess cleanup | `utils.execute_wait`, `ClusterProvider.execute_wait` |
+| `HashDict` / `MixedDictHashSafety` | heterogeneous dictionary-key normalization for memoization | `BasicMemoizer.id_for_memo_dict` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |

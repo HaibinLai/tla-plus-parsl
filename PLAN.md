@@ -187,6 +187,9 @@ probe creates same-identity functions with different results and observes the sa
 `ParslExecuteWaitTimeout.tla` models scheduler-command timeout cleanup in `utils.execute_wait`.
 The current path re-raises `TimeoutExpired` while leaving the subprocess alive; the runtime probe
 uses a fake process to verify that no kill/terminate operation occurs.
+`ParslMemoDictOrdering.tla` models dictionary-key normalization in `id_for_memo_dict`. The current
+direct `sorted(dict)` call rejects valid heterogeneous Python keys; the runtime probe reproduces
+the `TypeError`, while the fixed branch uses a canonical ordering.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
