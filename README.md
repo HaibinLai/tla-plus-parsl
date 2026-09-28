@@ -644,6 +644,11 @@ Future terminal and ignores duplicates. This follows
 [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py)
 around `_result_queue_worker` and `submit_payload`.
 
+`ParslHtexResultDecodeFailure.tla` refines the result path when the payload itself is corrupt. The
+current worker pops the Future before `deserialize(result)`, so a decode exception exits with a
+pending Future no longer present in `tasks`; the fixed branch delivers a deserialization failure
+and keeps the worker alive.
+
 `ParslHtexSubmitFailure.tla` covers the submit-side half of that lifecycle. If
 `outgoing_q.put` fails after `submit_payload` inserts its Future into `tasks`, the current path
 leaves a pending orphan; fixed behavior rolls back the map entry and fails the Future.
@@ -1017,6 +1022,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountFixed.cfg Pa
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountNormal.cfg ParslSerializationFrameCount.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureCurrent.cfg ParslHtexResultDecodeFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureFixed.cfg ParslHtexResultDecodeFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureNormal.cfg ParslHtexResultDecodeFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitFailure.cfg ParslHtexSubmitFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitFailureFixed.cfg ParslHtexSubmitFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitSuccess.cfg ParslHtexSubmitFailure.tla
@@ -1370,6 +1378,15 @@ unfinished when the worker raises `BadMessage`. It also sends the same valid res
 confirms the current second `tasks.pop` raises `KeyError`; both paths are represented by
 `ParslHtexResultQueue.cfg`.
 
+Corrupt result payload handling is exercised separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_decode_failure_runtime.py -v
+```
+
+The probe confirms that the current `deserialize(result)` exception leaves the Future pending
+after its task-map entry has already been removed.
+
 The heartbeat-to-Future failure path is also exercised end-to-end with local fake transport:
 
 ```bash
@@ -1405,7 +1422,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 218 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 219 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2081,6 +2098,11 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslHtexResultQueueFixed.cfg`: 17 states generated, 7 distinct states, depth 3; malformed
   message failure, duplicate-result handling, valid/exception result mapping, and interchange
   failure cleanup all passed.
+- `ParslHtexResultDecodeFailureCurrent.cfg`: expected counterexample, 2 states generated; a
+  corrupt result is removed from `tasks`, the worker exits, and its Future remains pending.
+- `ParslHtexResultDecodeFailureFixed.cfg` and `ParslHtexResultDecodeFailureNormal.cfg`: 4 states
+  generated, 2 distinct states, depth 2; decode failure becomes a terminal Future error without
+  orphaning the task.
 - `ParslHtexSubmitFailure.cfg`: expected counterexample at depth 2; a failed outgoing queue put
   leaves a pending Future in the task map.
 - `ParslHtexSubmitFailureFixed.cfg`: 4 states generated, 2 distinct states, depth 2; failed
@@ -2275,6 +2297,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
+| `DeliverCorruptResult` / `DecodeFailureSafety` / `NoOrphanedPendingFuture` | corrupt result deserialization after task-map removal | `HighThroughputExecutor._result_queue_worker` |
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
 | `Dispatch` / `Complete` / `Drain` / `Recover` | HTEX pending-task priority, manager capacity, and draining admission | `Interchange.process_task_incoming`, `get_tasks`, and `process_tasks_to_send` |
 | `Configure` / `Validate` / `DeriveRanks` / `Launch` | MPI resource-specification validation and derived rank counts | `MPIExecutor.validate_resource_spec` and `mpi_prefix_composer.validate_resource_spec` |

@@ -283,6 +283,10 @@ and unwrap before execution.
 `ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
 exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
 when the current pop-before-validation path exits the worker.
+`ParslHtexResultDecodeFailure.tla` separates corrupt result-payload decoding from malformed fields:
+the current `tasks.pop` before `deserialize(result)` can orphan a pending Future, while the fixed
+branch reports a terminal deserialization failure; `tests/test_htex_result_decode_failure_runtime.py`
+drives the real worker.
 `ParslHtexVersionMismatch.tla` models manager registration version rejection, the queued fatal
 `task_id=-1` result, and the admission window before the result thread sets executor bad state.
 `ParslHtexDispatchPriority.tla` models the HTEX `SortedList` priority order (`-priority`,
@@ -489,6 +493,8 @@ modeled by `ParslGlobusTransferFailure.tla`.
 `tests/test_htex_result_queue_runtime.py` drives the real HTEX `_result_queue_worker` with a fake
 incoming queue, reproducing both the malformed-message orphaned-Future path and duplicate-result
 `KeyError` already modeled by `ParslHtexResultQueue.tla`.
+`tests/test_htex_result_decode_failure_runtime.py` sends a corrupt serialized result and confirms
+the separate post-pop decode-failure orphaning path.
 `tests/test_htex_submit_runtime.py` drives the real `HighThroughputExecutor.submit_payload` with a
 failing outgoing queue, showing that current send failure leaves a pending Future in `tasks`; this
 is modeled by `ParslHtexSubmitFailure.tla`.
@@ -618,7 +624,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 218 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 219 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
