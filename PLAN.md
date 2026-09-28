@@ -193,6 +193,9 @@ the `TypeError`, while the fixed branch uses a canonical ordering.
 `ParslRsyncQuoting.tla` models shell argument construction in `RSyncStaging` in-task wrappers.
 The current string interpolation splits valid paths containing spaces; the runtime probe captures
 the resulting command words, while the fixed branch quotes each argument.
+`ParslCommandDeadline.tla` refines the HTEX command-client timeout boundary. If the deadline has
+already elapsed, the current implementation passes a negative timeout to ZMQ `poll`; the runtime
+probe records that argument, while the fixed branch clamps it to zero.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

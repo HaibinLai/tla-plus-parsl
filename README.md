@@ -186,6 +186,10 @@ in-task wrappers interpolate hostnames and paths directly into `os.system`, so a
 spaces is split into multiple shell words. `tests/test_rsync_quoting_runtime.py` captures that
 command; the fixed branch quotes each shell argument.
 
+`ParslCommandDeadline.tla` refines the HTEX `CommandClient.run` timeout boundary. When a deadline
+has already elapsed, the current path passes a negative timeout to ZMQ `poll`; the runtime probe
+records that value with a fake socket. The fixed branch clamps the poll timeout to zero.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -839,6 +843,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingHomogeneous.cfg Par
 java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingCurrent.cfg ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingFixed.cfg ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingNormal.cfg ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineCurrent.cfg ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineFixed.cfg ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineNormal.cfg ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -1041,6 +1048,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   builds an ambiguous shell command.
 - `ParslRsyncQuotingFixed.cfg` and `ParslRsyncQuotingNormal.cfg`: 4 states generated, 2 distinct
   states, depth 2; quoted and whitespace-free paths satisfy `PathQuotingSafety`.
+- `ParslCommandDeadlineCurrent.cfg`: expected counterexample, 2 states generated; an expired
+  command deadline forwards `pollTimeout = -1`.
+- `ParslCommandDeadlineFixed.cfg` and `ParslCommandDeadlineNormal.cfg`: 4 states generated,
+  2 distinct states, depth 2; clamped and non-expired deadlines satisfy `PollTimeoutSafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1182,7 +1193,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 200 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 201 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1937,6 +1948,7 @@ failure result for each in-flight task.
 | `Complete` / `Timeout` / `TimeoutCleanupSafety` | scheduler command timeout and subprocess cleanup | `utils.execute_wait`, `ClusterProvider.execute_wait` |
 | `HashDict` / `MixedDictHashSafety` | heterogeneous dictionary-key normalization for memoization | `BasicMemoizer.id_for_memo_dict` |
 | `BuildCommand` / `PathQuotingSafety` | shell-safe rsync command construction | `RSyncStaging.in_task_stage_in_wrapper` and `in_task_stage_out_wrapper` |
+| `ComputePollTimeout` / `PollTimeoutSafety` | nonnegative ZMQ poll deadline calculation | `high_throughput.zmq_pipes.CommandClient.run` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
