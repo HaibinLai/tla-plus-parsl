@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from parsl.data_provider.files import File
-from parsl.data_provider.http import in_task_transfer_wrapper
+from parsl.data_provider.http import _http_stage_in, in_task_transfer_wrapper
 
 
 class FakeResponse:
@@ -30,6 +30,16 @@ class HTTPStagingRuntimeTest(unittest.TestCase):
                 self.assertEqual(wrapped(), "result")
 
             self.assertEqual(calls, ["app"])
+            self.assertEqual(Path(file_obj.local_path).read_bytes(), b"error page")
+
+    def test_separate_stage_in_also_writes_non_success_body_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            file_obj = File("https://example.invalid/separate.txt")
+            file_obj.local_path = str(Path(directory) / "separate.txt")
+
+            with patch("requests.get", return_value=FakeResponse()):
+                _http_stage_in(directory, outputs=[file_obj])
+
             self.assertEqual(Path(file_obj.local_path).read_bytes(), b"error page")
 
 

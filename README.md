@@ -115,7 +115,8 @@ and successful configurations, backed by fake-`os.system` runtime probes.
 `ParslHTTPStage.tla` checks the analogous HTTP in-task boundary. The current wrapper streams any
 response body without checking its status code, so a non-success response can be written as an
 input file and still reach the user function. The current configuration preserves that depth-3
-counterexample; fixed and successful-response configurations require status validation.
+counterexample; fixed and successful-response configurations require status validation. The same
+unchecked response handling is present in the separate-task `_http_stage_in` path.
 
 `ParslFTPStage.tla` models partial-file cleanup for `FTPInTaskStaging`: a failed `retrbinary`
 transfer must not run the user function, and a corrected wrapper should remove bytes already
@@ -963,7 +964,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 121 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 122 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
