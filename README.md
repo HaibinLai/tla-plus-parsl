@@ -107,6 +107,11 @@ while the original user object remains unchanged. A dependent task is admitted o
 parent `DataFuture` is ready. The runtime counterpart is
 `test_stage_in_uses_clean_file_copy_and_preserves_parent` in `tests/test_datafuture_runtime.py`.
 
+`ParslRsyncStage.tla` models the in-task `RSyncStaging` wrappers. Stage-in transfers before the
+user function and blocks the function on a nonzero `rsync` result; stage-out runs the function
+first but propagates a later transfer failure. The model has separate in-failure, out-failure,
+and successful configurations, backed by fake-`os.system` runtime probes.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -638,6 +643,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationSnapshot.cfg ParslSerializationSnapshot.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureCopy.cfg ParslDataFutureCopy.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageInFail.cfg ParslRsyncStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageOutFail.cfg ParslRsyncStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageSuccess.cfg ParslRsyncStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
@@ -737,6 +745,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslDataFutureCopy.cfg`: 61 states generated, 26 distinct states, depth 7; clean staging
   copies preserved the original local-path annotation and dependency admission waited for the
   parent Future.
+- `ParslRsyncStageInFail.cfg`: 6 states generated, 3 distinct states, depth 3; stage-in failure
+  prevented user-function execution.
+- `ParslRsyncStageOutFail.cfg`: 8 states generated, 4 distinct states, depth 4; stage-out
+  failure was propagated after the user function ran.
+- `ParslRsyncStageSuccess.cfg`: 8 states generated, 4 distinct states, depth 4; successful
+  stage-in reached the user function and completed safely.
 - `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 690 states generated, 198 distinct states, depth 36;
@@ -911,7 +925,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 114 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 117 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
