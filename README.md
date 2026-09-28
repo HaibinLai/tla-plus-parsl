@@ -21,6 +21,14 @@ The model was based on the Parsl paper and the current source tree, especially:
   interfaces and scaling policy.
 - `parsl/data_provider/data_manager.py`: the data-staging abstraction boundary.
 
+## Repository layout
+
+The root contains the focused models that are still being migrated. The shared workflow
+abstraction and its first group of scenario configurations live under `models/core/`; each
+configuration remains next to the `ParslAbstract.tla` module it instantiates. Runtime probes
+remain under `tests/`. More model families will move into topic directories only after their
+TLC commands are updated and checked.
+
 ## Logical tasks and physical attempts
 
 The most important modeling decision is to keep a logical workflow task separate from a
@@ -899,28 +907,28 @@ workers, one retry, and one block per executor. Java and `tla2tools.jar` are req
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -deadlock -config parsl.cfg parsl.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMemo.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSerializationFailure.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslNoFailures.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTime.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMonitoring.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSubmitFailure.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslProviderFailure.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslJoin.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinInvalid.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistration.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslRegistrationFailure.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslIdleManagerTimeout.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslExecutorDrain.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMisroute.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslResultMisroute.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileContent.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileCorruptionSmall.cfg ParslAbstract.tla
-java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslNestedSerialization.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslMemo.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslSerializationFailure.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslNoFailures.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTime.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslMonitoring.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslSubmitFailure.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslProviderFailure.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslJoin.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslJoinSafety.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslJoinInvalid.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslRegistration.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslRegistrationFailure.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslIdleManagerTimeout.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslExecutorDrain.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslMisroute.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslResultMisroute.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslMessaging.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslMessageLoss.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslMessageDuplicate.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslFileContent.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslFileCorruptionSmall.cfg models/core/ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslNestedSerialization.cfg models/core/ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
