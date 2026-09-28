@@ -18,3 +18,12 @@ Future, duplicate-preserving Future lists, empty lists, invalid returns, `None`-
 results, and inner cancellation/failure. The current configuration exposes a
 `JoinResultSafety` counterexample by collapsing duplicate list positions; the fixed configuration
 preserves the sequence and checks 5,694 states with all six invariants passing.
+
+`ParslJoinFailureAggregation.tla` refines the failure side of list-valued joins. Once every
+inner Future is terminal, each failed Future contributes one exception entry in the original
+join-list order; successful inner results are omitted. The runtime probe uses two real failed
+Futures and checks the resulting `JoinError.dependent_exceptions_tids` sequence.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFailureAggregation.cfg models/dataflow/ParslJoinFailureAggregation.tla
+```
