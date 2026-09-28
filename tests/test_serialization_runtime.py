@@ -4,6 +4,7 @@ import unittest
 
 from parsl.serialize.facade import (
     pack_apply_message,
+    unpack_buffers,
     serialize,
     unpack_apply_message,
 )
@@ -22,6 +23,12 @@ def make_adder(offset):
 
 
 class SerializationRuntimeTest(unittest.TestCase):
+    def test_truncated_buffer_is_currently_accepted_by_unpacker(self):
+        # The framing model marks this as unsafe: the current implementation
+        # returns the short slice instead of rejecting the declared-length
+        # mismatch. This is a concrete counterexample for the fixed model.
+        self.assertEqual(unpack_buffers(b"5\nabc"), [b"abc"])
+
     def test_closure_and_apply_message_round_trip(self):
         func = make_adder(7)
         packed = pack_apply_message(func, (5,), {"unused": None})

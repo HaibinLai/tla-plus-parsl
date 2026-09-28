@@ -395,6 +395,11 @@ The configurations use the current identifiers (`C2` for callable dill and `02` 
 from [`serialize/facade.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/serialize/facade.py)
 and [`serialize/concretes.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/serialize/concretes.py).
 
+`ParslSerializationLength.tla` checks the declared-length framing boundary directly. The current
+`unpack_buffers` behavior accepts a truncated frame (`5\nabc`) as a three-byte buffer, violating
+`LengthSafety`; the fixed configuration models strict rejection. This is retained as an
+executable counterexample for a future parser-hardening change.
+
 `ParslSerializationZMQBridge.tla` connects those framed buffers to a bounded ZMQ-like route.
 Task and result messages carry an attempt id and serializer token; send/receive can drop, duplicate,
 or misroute a message; decode is required before task dispatch; and only a result for the current
@@ -685,6 +690,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslResourceScaling.cfg ParslResourceSc
 java -cp tla2tools.jar tlc2.TLC -config ParslPollerBadState.cfg ParslPollerBadState.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLength.cfg ParslSerializationLength.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLengthFixed.cfg ParslSerializationLength.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexVersionMismatchFixed.cfg ParslHtexVersionMismatch.tla
@@ -717,6 +724,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   a non-serializable grandchild object failed before dispatch while object-graph safety held.
 - `ParslSerializationSnapshot.cfg`: 18 states generated, 8 distinct states, depth 5; object
   mutation after serialization could not change the captured payload or decoded value.
+- `ParslSerializationLength.cfg`: expected counterexample at depth 2; the current unpacker accepts
+  a declared-length mismatch (`5` declared, `3` bytes received), violating `LengthSafety`.
+- `ParslSerializationLengthFixed.cfg`: 4 states generated, 2 distinct states, depth 2; strict
+  length validation rejects the truncated frame.
 - `ParslDataFutureCopy.cfg`: 61 states generated, 26 distinct states, depth 7; clean staging
   copies preserved the original local-path annotation and dependency admission waited for the
   parent Future.
@@ -865,6 +876,8 @@ the wire models:
 The tests verify closure round-trip behavior, the `C2` callable and `02` data headers, three-part
 apply-message ordering, and rejection of an unserializable argument before a message is packed.
 They also verify closure snapshot semantics and nested argument-object graph round trips.
+The truncated-frame probe records the current `unpack_buffers` behavior: a short slice is returned
+instead of being rejected, matching the TLA+ counterexample above.
 
 The local zip staging implementation is exercised against actual bytes as well:
 
@@ -892,7 +905,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 112 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 113 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
