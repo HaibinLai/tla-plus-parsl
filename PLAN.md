@@ -99,7 +99,8 @@ the larger three-task corruption configuration is retained for future state-spac
 fairness for logical/attempt progress so duplicate-message discard loops cannot starve work.
 Successful joins carry a distinct `join-result` marker, while `JoinSafety` still requires every
 inner Future to be resolved before the outer Future can succeed. `JoinResultSafety` additionally
-requires the complete inner-Future observation set before an aggregate result is exposed.
+requires the complete inner-Future observation set before an aggregate result is exposed, while
+`JoinHandleSafety` distinguishes the intermediate handle from the final aggregate.
 `ParslRegistration.cfg` adds explicit HTEX manager registration before a worker can receive
 dispatches or emit heartbeats.
 `ParslRegistrationFailure.cfg` explores manager startup failure before registration and checks
