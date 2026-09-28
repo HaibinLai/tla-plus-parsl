@@ -181,6 +181,13 @@ pre-manager `pending` phase or the post-registration phase. Terminal observation
 and worker capacity and account for queued/running work as lost. This cross-component model is
 intentionally small so a provider/executor inconsistency produces a short TLC trace.
 
+`ParslHeartbeatProvider.tla` adds the time boundary between provider status and HTEX manager
+health. A transient provider `unknown` state does not revoke an otherwise healthy manager;
+heartbeat age is advanced separately, and crossing the threshold removes the manager and marks
+its in-flight tasks lost. Provider terminal states still revoke the block independently. This
+matches the interchange's `last_heartbeat` update and expiry path in
+[`high_throughput/interchange.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/interchange.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -394,6 +401,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPo
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -491,6 +499,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.
+- `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
+  provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
+  provider cleanup all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;

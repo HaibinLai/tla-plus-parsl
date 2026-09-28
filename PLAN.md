@@ -154,6 +154,8 @@ unknown status, timeout distinction, cancellation failure, and CPU-per-task admi
 manager registration, worker capacity, unknown-status tolerance, and terminal cleanup of queued
 and running work. It now covers terminal provider failure both before manager registration and
 after a manager has become active.
+`ParslHeartbeatProvider.tla` separates transient provider `UNKNOWN` status from HTEX manager
+heartbeat expiry, and checks manager reconnect plus loss accounting after heartbeat timeout.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
