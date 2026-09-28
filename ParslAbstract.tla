@@ -1029,6 +1029,20 @@ CancelAllocation(e) ==
                     executorState, completed, rejected, outputs,
                     taskWireState, resultWireState, taskEnvelope, resultEnvelope>>
 
+CancelRequestedAllocation(e) ==
+    /\ ALLOW_FAILURES
+    /\ e \in EXECUTORS \ LocalExecutors
+    /\ providerState[e] = "requested"
+    /\ providerTarget[e] > providerBlocks[e]
+    /\ providerState' = [providerState EXCEPT ![e] =
+          IF providerBlocks[e] > 0 THEN "active" ELSE "cancelled"]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] = @ - 1]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt, selectedExecutor,
+                    dataState, attemptState, attemptExecutor, attemptWorker,
+                    workerState, workerAttempt, executorState, providerBlocks,
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
 CoreActions ==
     \/ \E w \in WORKERS : RegisterWorker(w) \/ RegistrationFailure(w)
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
@@ -1070,7 +1084,7 @@ CoreActions ==
     \/ \E e \in EXECUTORS : RequestAllocation(e) \/ AllocationFails(e)
     \/ \E e \in EXECUTORS : ProviderFailure(e)
     \/ \E e \in EXECUTORS, w \in WORKERS : AllocationSucceeds(e, w)
-    \/ \E e \in EXECUTORS : CancelAllocation(e)
+    \/ \E e \in EXECUTORS : CancelAllocation(e) \/ CancelRequestedAllocation(e)
 
 StartAttemptTimed(t, k, w) ==
     /\ StartAttempt(t, k, w)

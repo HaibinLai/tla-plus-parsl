@@ -68,7 +68,8 @@ Scale-in is block-granular: cancelling one of several active blocks keeps the pr
 while cancelling the final block transitions it to `cancelled`. `ParslScaleIn.cfg` exercises this
 multi-block case. Scale-out may also fail while an earlier block remains active; in that case the
 failed request is rolled back to the existing active target instead of taking the whole provider
-offline.
+offline. `CancelRequestedAllocation` covers cancelling a pending block request before it becomes
+active.
 
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
@@ -292,7 +293,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   submit rejection remained pre-dispatch and all retry/result invariants passed.
 - `ParslProviderFailure.cfg`: 6,868 states generated, 1,280 distinct states, depth 40;
   provider failure, recovery request, and block-count consistency all passed.
-- `ParslScaleIn.cfg`: 49,607 states generated, 7,236 distinct states, depth 37;
+- `ParslScaleIn.cfg`: 52,674 states generated, 7,371 distinct states, depth 37;
   multi-block scale-out, partial scale-in, and failed secondary allocation preserved provider
   block/target consistency.
 - `ParslLocalExecutor.cfg`: 80 states generated, 26 distinct states, depth 16;
@@ -371,6 +372,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
+| `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `LocalExecutors` / provider-free `SubmitAttempt` and `DispatchAttempt` | local executor path without resource provisioning | `ThreadPoolExecutor`/`HighThroughputExecutor` submission boundary |
 
 ## Representative traces
