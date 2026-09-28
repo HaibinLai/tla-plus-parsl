@@ -941,6 +941,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeliver
 The current branch exposes an older monitoring event overwriting a newer database record; the
 fixed branch preserves the version high-water mark and checks 1,978 states.
 
+The serializer registry check is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializerRegistry.cfg models/serialization/ParslSerializerRegistry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializerRegistryFixed.cfg models/serialization/ParslSerializerRegistry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializerRegistryNormal.cfg models/serialization/ParslSerializerRegistry.tla
+```
+
+The collision configuration finds the code-first dispatch counterexample in 4 states; the fixed
+and normal configurations pass in 6 states each.
+
 The combined `join_app` check is:
 
 ```bash
