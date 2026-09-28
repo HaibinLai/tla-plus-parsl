@@ -22,3 +22,14 @@ runtime probe invokes the real `DataFlowKernel.cleanup` with recording component
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataFlowCleanup.cfg models/core/ParslDataFlowCleanup.tla
 ```
+
+`ParslDataFlowWaitSnapshot.tla` models the documented race in
+`DataFlowKernel.wait_for_current_tasks`: the method snapshots task records before waiting, so a
+task inserted afterward can remain pending when the call returns. The current configuration
+exposes `NoPendingTaskAtReturn`; the fixed configuration adds a late-task drain/check. The runtime
+probe uses a dictionary that inserts a task immediately after the real snapshot operation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataFlowWaitSnapshotCurrent.cfg models/core/ParslDataFlowWaitSnapshot.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataFlowWaitSnapshotFixed.cfg models/core/ParslDataFlowWaitSnapshot.tla
+```

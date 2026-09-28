@@ -7,13 +7,13 @@ implementations or every detail in the paper.
 
 | Area | TLA+ coverage | Runtime evidence | Remaining coarse boundary |
 | --- | --- | --- | --- |
-| Core DFK lifecycle | ParslAbstract, ParslEndToEnd, ParslDataFlowCleanup | DataFlow cleanup and integration probes | Component internals remain bounded and symbolic |
+| Core DFK lifecycle | ParslAbstract, ParslEndToEnd, ParslDataFlowCleanup, ParslDataFlowWaitSnapshot | DataFlow cleanup, wait-snapshot, and integration probes | Component internals remain bounded and symbolic |
 | ZMQ and serialization | ParslZMQ, ParslSerializationWire, ParslZMQSerializationEndToEnd, HTEX manager identity boundary | test_zmq_serialization_runtime.py, manager-message, and serializer/frame-count probes | Bounded queues and symbolic bytes; no full distributed timing model |
 | Python functions and object contents | ParslPython, ParslSerializationSnapshot, ParslCallableClosureMemo | test_serialization_runtime.py, test_memo_closure_runtime.py, tools/cloudpickle_fixture.py | Object graphs are finite symbolic nodes rather than arbitrary Python heaps |
 | Files and transfer | ParslFileBytes, ParslDataFutureTransfer, ParslFilePathResolution, JobStatus output summaries, and staging-provider models | file, DataFuture, File path, output-summary, FTP/HTTP/Rsync/Zip/Globus probes | Chunk counts and content versions are bounded |
 | Time, heartbeat, timeout | ParslTimedHeartbeat, ParslHeartbeatClockJump, ParslHeartbeatClockRollback, ParslHeartbeatLateAck | heartbeat, deadline, and command-timeout probes | Logical time replaces OS scheduling and network latency |
 | Monitoring database | ParslMonitoringDelivery, ParslMonitoringDB, ParslMonitoringTaskRetry, HTEX monitoring-message boundary | monitoring DB retry, batching, atomicity, close, and HTEX payload probes | Database schema and transaction batches are reduced to finite records |
-| Executors/providers | lifecycle, HTEX, manager selection, manager drain, unknown-manager isolation, ClusterProvider script generation, Thread, WorkQueue, Flux, TaskVine, LocalProvider, `ParslBlockProviderBadState`, and scheduler-specific models under models/executors/ and models/providers/ | 257 local/fake-provider runtime tests | Not every backend implementation is modeled at identical depth |
+| Executors/providers | lifecycle, HTEX, manager selection, manager drain, unknown-manager isolation, ClusterProvider script generation, Thread, WorkQueue, Flux, TaskVine, LocalProvider, `ParslBlockProviderBadState`, and scheduler-specific models under models/executors/ and models/providers/ | 258 local/fake-provider runtime tests | Not every backend implementation is modeled at identical depth |
 | join_app | ParslJoinComplete, failure aggregation, callback/cancellation/mutation/nested/memo-data models | join, multi-failure, callback, cancellation, mutation, and None probes | Python exception identity and arbitrary user object graphs remain abstract |
 
 The next refinements should select one row, read the relevant source path, and add a focused
