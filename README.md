@@ -145,6 +145,8 @@ directions and their ordering without enumerating sockets, byte buffers, or mult
 The result direction additionally uses `acknowledged` between `received` and `consumed`, modeling
 a receiver-side consume acknowledgement before decode without claiming a particular ZMQ wire
 ack implementation.
+`ProtocolProgress` gives ACK transitions their own strong-fairness obligation; duplicate/discard
+traffic alone is not treated as useful progress, preventing a livelock from starving decode.
 The next refinement can add bounded drops, duplicate deliveries, and symbolic object graphs
 without changing the logical-task/physical-attempt boundary.
 
@@ -276,7 +278,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   an unencodable worker return failed after execution without resolving the Future.
 - `ParslNestedSerialization.cfg`: 559 states generated, 118 distinct states, depth 16;
   a non-serializable grandchild object failed before dispatch while object-graph safety held.
-- `ParslNoFailures.cfg`: 17,742 states generated, 3,231 distinct states, depth 53;
+- `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 606 states generated, 173 distinct states, depth 32;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
@@ -317,7 +319,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   stale-result invariants passed.
 - `ParslMessageLoss.cfg`: 3,696 states generated, 760 distinct states, depth 33;
   task/result message loss, worker cleanup, retry bounds, and Future consistency passed.
-- `ParslMessageDuplicate.cfg`: 97 states generated, 30 distinct states, depth 19;
+- `ParslMessageDuplicate.cfg`: 100 states generated, 31 distinct states, depth 20;
   duplicate task/result envelopes were explicitly discarded without duplicate completion.
 
 ## Source-to-model mapping

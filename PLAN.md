@@ -71,7 +71,8 @@ serialization, worker binding, and result protocol.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery
-after acknowledgement remains correlated with the same physical attempt.
+after acknowledgement remains correlated with the same physical attempt. `ProtocolProgress`
+uses a separate strong-fairness condition so duplicate/discard traffic cannot starve ACK/decode.
 Its object-graph constants model callable, argument, closure, and nested referenced objects;
 `ObjectGraphSafety` checks that a valid envelope cannot contain an unencodable object.
 The graph check covers two bounded reference levels, and `ParslNestedSerialization.cfg`

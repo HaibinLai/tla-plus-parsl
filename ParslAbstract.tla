@@ -404,9 +404,22 @@ DiscardTaskDuplicate(t, k) ==
                     completed, rejected, outputs, resultWireState,
                     taskEnvelope, resultEnvelope>>
 
+AcknowledgeTask(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "received"
+    /\ taskWireState[a] = "received"
+    /\ taskEnvelope[a] = "valid"
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "acknowledged"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
 DecodeAttempt(t, k) ==
     LET a == <<t, k>> IN
-    /\ attemptState[a] = "received" /\ taskWireState[a] = "received"
+    /\ attemptState[a] = "received" /\ taskWireState[a] = "acknowledged"
     /\ attemptState' = [attemptState EXCEPT ![a] = "decoded"]
     /\ taskWireState' = [taskWireState EXCEPT ![a] = "consumed"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
@@ -1003,7 +1016,8 @@ CoreActions ==
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
           SerializeAttempt(t, k) \/ SendAttempt(t, k)
           \/ ReceiveAttempt(t, k) \/ DuplicateTaskMessage(t, k)
-          \/ DiscardTaskDuplicate(t, k) \/ DecodeAttempt(t, k)
+          \/ DiscardTaskDuplicate(t, k) \/ AcknowledgeTask(t, k)
+          \/ DecodeAttempt(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           DispatchAttempt(t, k, w)
           \/ MisrouteAttempt(t, k, w)
@@ -1111,7 +1125,11 @@ Spec == Init /\ [][Next]_vars
 ProgressNext == NextCore /\
     (taskState' # taskState \/ futureState' # futureState \/
      attemptState' # attemptState \/ completed' # completed \/ rejected' # rejected)
-SpecFair == Init /\ [][Next]_vars /\ WF_vars(NextCore) /\ SF_vars(ProgressNext)
+ProtocolProgress == NextCore /\
+    (\E a \in AttemptIds : taskWireState'[a] = "acknowledged" \/
+                             resultWireState'[a] = "acknowledged")
+SpecFair == Init /\ [][Next]_vars /\ WF_vars(NextCore) /\
+           SF_vars(ProgressNext) /\ SF_vars(ProtocolProgress)
 
 TypeOK ==
     /\ taskState \in [TASKS -> TaskStates]
@@ -1158,6 +1176,9 @@ MessageSafety ==
           taskWireState[a] = "duplicate" =>
               taskEnvelope[a] = "valid" /\ attemptState[a] = "received"
     /\ \A a \in AttemptIds :
+          taskWireState[a] = "acknowledged" =>
+              taskEnvelope[a] = "valid" /\ attemptState[a] = "received"
+    /\ \A a \in AttemptIds :
           taskWireState[a] = "consumed" =>
               taskEnvelope[a] = "valid" /\
               attemptState[a] \in {"decoded", "dispatched", "running",
@@ -1188,7 +1209,7 @@ MessageSafety ==
 
 MessageCorrelationSafety ==
     /\ \A a \in AttemptIds : taskWireState[a] \in
-          {"queued", "sent", "received", "duplicate", "consumed"} =>
+          {"queued", "sent", "received", "duplicate", "acknowledged", "consumed"} =>
           currentAttempt[a[1]] = a[2] \/
           attemptState[a] \in {"succeeded", "failed", "timed_out", "lost", "stale"}
     /\ \A a \in AttemptIds : resultWireState[a] \in
