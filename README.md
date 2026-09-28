@@ -1009,7 +1009,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 137 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 140 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1119,6 +1119,16 @@ Grid Engine submission parsing is exercised with deterministic `qsub` output:
 
 The tests cover successful empty output returning `None` without a resource and normal job-id
 registration as `PENDING`.
+
+Grid Engine cancellation is exercised with deterministic `qdel` outcomes:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_cancel_runtime.py -v
+```
+
+`ParslGridEngineCancel.tla` models the provider's successful-cancel-to-`COMPLETED` convention,
+failed cancellation, and the current `KeyError` when a successful `qdel` names an id absent from
+the local resource map.
 
 Azure VM status handling is exercised with a fake compute client:
 
@@ -1637,6 +1647,7 @@ failure result for each in-flight task.
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Grid Engine qstat line length validation and update | `GridEngineProvider._status` |
+| `Cancel` | Grid Engine `qdel` cancellation and local resource-state update | `GridEngineProvider.cancel` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |

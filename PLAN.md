@@ -312,6 +312,8 @@ current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 line failure, normal state translation, foreign-job filtering, and missing-job fallback.
 `tests/test_grid_engine_submit_runtime.py` drives Grid Engine qsub submission with temporary
 scripts and deterministic output, checking empty-output and normal job registration.
+`tests/test_grid_engine_cancel_runtime.py` drives Grid Engine qdel success/failure and reproduces
+the current successful-cancel unknown-job `KeyError` boundary.
 `tests/test_azure_status_runtime.py` drives Azure VM status with a fake compute client, checking
 running translation, pending fallback, and cloud API error propagation.
 `tests/test_googlecloud_status_runtime.py` drives Google Compute Engine status with a fake
