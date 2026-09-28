@@ -174,6 +174,12 @@ This is a bounded status-mapping model, not a shell or Kubernetes API emulator. 
 [`providers/kubernetes/kube.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/kubernetes/kube.py),
 and [`jobs/states.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/states.py).
 
+`ParslProviderExecutorBridge.tla` connects those provider observations to executor admission.
+It models a pilot block moving from `pending` to `running`, manager registration, task submission,
+unknown status without immediate teardown, and terminal provider observations that revoke manager
+and worker capacity and account for queued/running work as lost. This cross-component model is
+intentionally small so a provider/executor inconsistency produces a short TLC trace.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -386,6 +392,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskT
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -480,6 +487,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, and resource admission
   all passed.
+- `ParslProviderExecutorBridge.cfg`: 2,791 states generated, 432 distinct states, depth 15;
+  provider-to-executor admission, manager registration, unknown-status tolerance, and terminal
+  provider cleanup of manager capacity and in-flight work all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
