@@ -938,6 +938,17 @@ They also verify closure snapshot semantics and nested argument-object graph rou
 The truncated-frame probe records the current `unpack_buffers` behavior: a short slice is returned
 instead of being rejected, matching the TLA+ counterexample above.
 
+The HTEX result-thread boundary is exercised without launching an interchange:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_queue_runtime.py -v
+```
+
+The probe sends a malformed result message to the real `_result_queue_worker` and confirms the
+current pop-before-validation behavior: the pending Future is removed from the task map but stays
+unfinished when the worker raises `BadMessage`. This is the runtime counterpart of
+`ParslHtexResultQueue.cfg`.
+
 The local zip staging implementation is exercised against actual bytes as well:
 
 ```bash
@@ -964,7 +975,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 122 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 123 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
