@@ -238,6 +238,8 @@ missing-instance behavior and normal instance-state translation.
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
 `tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
 admission paths, including accepted-work completion and resource-specification rejection.
+`tests/test_slurm_status_batch_runtime.py` drives Slurm's batched status method, checking scheduler
+command failure preservation and successful reported/missing-job application.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
 checking binary content readiness and dependent-task gating.
 It also wires a failed producer's output `DataFuture` into a consumer and checks `DependencyError`

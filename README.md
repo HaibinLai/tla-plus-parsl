@@ -873,6 +873,15 @@ The LSF provider status parser is exercised with deterministic `bjobs` output:
 The probe checks foreign-job filtering, unknown-state exposure, and the current missing-job
 fallback to `COMPLETED`.
 
+Slurm batched status handling is exercised with deterministic scheduler command results:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_status_batch_runtime.py -v
+```
+
+The tests check that a non-zero scheduler command preserves every previous status and that a
+successful batch updates reported jobs while applying the current missing-job `COMPLETED` fallback.
+
 The Kubernetes polling regression is also exercised with a mocked Kubernetes API client:
 
 ```bash
