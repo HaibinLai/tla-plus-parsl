@@ -144,6 +144,9 @@ envelope corruption, decode rejection, dispatch gating, worker loss, retry corre
 result suppression.
 `ParslProviderPolling.tla` refines provider behavior into submit/status/cancel calls, transient API
 errors, unknown status, cancellation rollback, and bounded polling/failure windows.
+`ParslExecutorKinds.tla` adds a contract matrix for provider-free thread execution and
+provider-backed HTEX/MPI/workqueue paths, including manager registration, resource-request
+rejection, admission, drain/recovery, and provider/executor failure cleanup.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.

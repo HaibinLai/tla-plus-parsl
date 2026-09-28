@@ -151,6 +151,16 @@ closure raised `TypeError`.
 transient API errors, submit rejection, cancel failure rollback, and desired block-target updates;
 bounded poll/failure counters keep the state space finite.
 
+`ParslExecutorKinds.tla` adds a small executor contract matrix. It distinguishes provider-free
+thread execution from provider-backed HTEX/MPI/workqueue-style paths, makes manager registration
+explicit where required, rejects unsupported resource specifications, and checks submit,
+drain/recovery, provider failure, and executor failure behavior. The model is based on the
+abstract executor lifecycle in [`base.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/base.py),
+the provider-free [`threads.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/threads.py),
+and the manager/provider boundary in
+[`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
+It is a contract-level comparison, not a full implementation of every executor.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -361,6 +371,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslNestedJoin.cfg ParslNestedJoin.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
+java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -448,6 +459,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslProviderPolling.cfg`: 2,861 states generated, 854 distinct states, depth 19;
   provider submit/status/cancel outcomes, unknown-status failure, transient API errors, cancel
   rollback, and block-target consistency all passed.
+- `ParslExecutorKinds.cfg`: 50,149,761 states generated, 3,533,824 distinct states, depth 52;
+  the bounded depth-10 executor contract run passed provider-free/provider-backed admission,
+  manager registration, resource-specification rejection, drain/recovery, and failure cleanup.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
