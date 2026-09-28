@@ -155,6 +155,9 @@ exception result decoding, malformed/duplicate messages, interchange failure, an
 when the current pop-before-validation path exits the worker.
 `ParslHtexVersionMismatch.tla` models manager registration version rejection, the queued fatal
 `task_id=-1` result, and the admission window before the result thread sets executor bad state.
+`ParslHtexDispatchPriority.tla` models the HTEX `SortedList` priority order (`-priority`,
+`-task_id`), manager capacity, draining/recovery admission, completion release, and in-flight
+cleanup on manager failure.
 `ParslProviderPolling.tla` refines provider behavior into submit/status/cancel calls, transient API
 errors, unknown status, cancellation rollback, and bounded polling/failure windows.
 `ParslExecutorKinds.tla` adds a contract matrix for provider-free thread execution and

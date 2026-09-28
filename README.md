@@ -333,6 +333,13 @@ the registration branch and fatal result construction in
 and the admission check in
 [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
 
+`ParslHtexDispatchPriority.tla` models the HTEX pending-task queue and manager dispatch boundary.
+It uses the current `SortedList` ordering (`-priority`, then `-task_id`), dispatches only while a
+manager has capacity and is not draining, releases capacity on completion, and clears in-flight
+work when the manager fails. This follows the queue insertion, `get_tasks`, and
+`process_tasks_to_send` paths in
+[`interchange.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/interchange.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -567,6 +574,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslS
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexVersionMismatchFixed.cfg ParslHtexVersionMismatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexDispatchPriority.cfg ParslHtexDispatchPriority.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -726,6 +734,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   distinct); a task is accepted after mismatch but before the fatal result is consumed.
 - `ParslHtexVersionMismatchFixed.cfg`: 30 states generated, 10 distinct states, depth 4; version
   mismatch rejection, fatal-result cleanup, and closed-interchange admission safety all passed.
+- `ParslHtexDispatchPriority.cfg`: 78 states generated, 26 distinct states, depth 8; priority
+  ordering, manager capacity, draining admission, completion release, and manager-failure
+  cleanup all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.
@@ -837,6 +848,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
+| `Dispatch` / `Complete` / `Drain` / `Recover` | HTEX pending-task priority, manager capacity, and draining admission | `Interchange.process_task_incoming`, `get_tasks`, and `process_tasks_to_send` |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
