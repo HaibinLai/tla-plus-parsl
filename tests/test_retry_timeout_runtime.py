@@ -26,6 +26,15 @@ def slow_app(walltime=None):
     return "finished"
 
 
+@python_app
+def catches_timeout(walltime=None):
+    try:
+        time.sleep(0.2)
+    except AppTimeout:
+        return "caught-timeout"
+    return "finished"
+
+
 class RetryTimeoutRuntimeTest(unittest.TestCase):
     def test_retry_uses_a_new_physical_attempt(self):
         attempt_counter["count"] = 0
@@ -43,6 +52,13 @@ class RetryTimeoutRuntimeTest(unittest.TestCase):
         with parsl.load(config):
             future = slow_app(walltime=0.01)
             self.assertIsInstance(future.exception(), AppTimeout)
+
+    def test_user_function_can_catch_injected_timeout_currently(self):
+        config = Config(executors=[ThreadPoolExecutor(max_threads=1)], retries=0)
+
+        with parsl.load(config):
+            future = catches_timeout(walltime=0.01)
+            self.assertEqual(future.result(), "caught-timeout")
 
 
 if __name__ == "__main__":

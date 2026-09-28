@@ -855,7 +855,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 107 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 108 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -887,6 +887,15 @@ Physical retry and Python app timeout behavior are checked against a local threa
 
 The tests confirm a first-attempt failure is followed by a second physical attempt, and that a
 task exceeding its `walltime` completes with `AppTimeout` when no retries remain.
+
+The Python timeout injection boundary is also exercised with a function that catches
+`AppTimeout`. The current implementation allows that function to return normally after the
+walltime signal, which is modeled by `ParslPythonTimeoutCatch.tla`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config ParslPythonTimeoutCatch.cfg ParslPythonTimeoutCatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPythonTimeoutCatchFixed.cfg ParslPythonTimeoutCatch.tla
+```
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 

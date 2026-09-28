@@ -228,6 +228,9 @@ controlled Futures, checking early-callback gating, ordered duplicate aggregatio
 callback suppression, and `JoinError` metadata modeled by `ParslJoinCallbackRace.tla`.
 `tests/test_retry_timeout_runtime.py` runs a retryable app and a walltime-limited app on the
 real thread executor, confirming distinct physical attempts and terminal `AppTimeout` behavior.
+It also runs a real Python app that catches the injected `AppTimeout` and returns normally; this
+current behavior is modeled by `ParslPythonTimeoutCatch.tla`, whose fixed configuration disallows
+successful completion after timeout injection.
 `tests/test_memoization_runtime.py` runs duplicate and distinct cached calls plus a dependent app,
 checking the real BasicMemoizer result path and execution count.
 `tests/test_lsf_status_runtime.py` drives the current LSF provider parser with deterministic
