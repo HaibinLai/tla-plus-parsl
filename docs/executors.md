@@ -129,6 +129,18 @@ The runtime probe calls `set_bad_state_and_fail_all` on a small concrete subclas
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadState.cfg models/executors/ParslBlockProviderBadState.tla
 ```
 
+`ParslBlockProviderBadStateOrdering.tla` refines that path with iteration order. The current
+implementation calls `set_exception` on every task Future without checking `done()`: a completed
+Future can raise `InvalidStateError` and prevent later pending tasks from being failed. TLC finds
+the two-state counterexample; the fixed branch skips terminal Futures. The runtime probe uses a
+completed entry followed by a pending entry to reproduce the partial failure sweep.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadStateOrderingCurrent.cfg models/executors/ParslBlockProviderBadStateOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadStateOrderingFixed.cfg models/executors/ParslBlockProviderBadStateOrdering.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_block_provider_bad_state_order_runtime.py -v
+```
+
 `ParslHtexManagerSelection.tla` abstracts the two manager selectors in
 `high_throughput/manager_selector.py`. Random selection is modeled as any permutation of ready
 managers; block-ID selection preserves the source ordering rule, including managers with no block
