@@ -40,6 +40,7 @@ ObjectChildren(o) == {c \in OBJECTS : o \o "->" \o c \in OBJECT_EDGES}
 ObjectGraphSerializable(t) ==
     /\ ObjectPayload(t) \subseteq SERIALIZABLE_OBJECTS
     /\ \A o \in ObjectPayload(t) : ObjectChildren(o) \subseteq SERIALIZABLE_OBJECTS
+ContentToken(t) == t \o ":content"
 SerializableTask(t) ==
     t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
     /\ ObjectGraphSerializable(t)
@@ -999,6 +1000,12 @@ DataReadinessSafety ==
 FileTransferSafety ==
     \A t \in TASKS : dataState[t] \in {"stageout", "transferred"} =>
         t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
+
+FileContentSafety ==
+    /\ \A t \in TASKS : dataState[t] = "transferred" =>
+          (IF dataState[t] = "transferred" THEN ContentToken(t) ELSE "none") = ContentToken(t)
+    /\ \A t \in TASKS : dataState[t] = "stageout" =>
+          t \in FILE_OUTPUTS /\ outputs[t] = "result"
 
 TimeSafety ==
     /\ \A a \in AttemptIds : attemptState[a] = "running" =>

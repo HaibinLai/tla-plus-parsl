@@ -70,6 +70,8 @@ Its object-graph constants model callable, argument, closure, and nested referen
 behavior after a message is dropped.
 `ParslMessageDuplicate.cfg` adds receiver-side duplicate delivery and explicit discard before
 decode, preventing a duplicate envelope from resolving a Future twice.
+`ParslFileContent.cfg` adds a deterministic symbolic content token for output files and checks
+that stage-out transfers the token only after successful task completion.
 
 ### 3. Checked properties
 
@@ -92,7 +94,7 @@ The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` 
 
 After the MVP is stable, possible extensions are:
 
-- richer DataManager/staging behavior, including stage-in/stage-out failure;
+- richer DataManager/staging behavior, including stage-in/stage-out failure and checksums;
 - bounded message reordering and message correlation IDs;
 - richer `join_app` behavior beyond the bounded inner-Future set now modeled;
 - manager heartbeat timeout, version mismatch, drain, and executor bad state;

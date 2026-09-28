@@ -84,6 +84,13 @@ completion without enumerating bytes, paths, or a particular staging provider. T
 configurations use task `C` as one representative output file to keep the finite state space
 small while still exercising both directions of the data path.
 
+The file-content refinement defines a deterministic symbolic token `task:content` for each
+logical output task. `FinishStageOut` therefore represents transfer of that task's content token,
+not just a boolean readiness flag. `FileContentSafety` checks that a transferred output has the
+correct logical token and that stage-out is only associated with a completed result. The token
+stands for bytes or a checksum at this level; later refinements can replace it with chunks,
+checksums, and corruption transitions.
+
 ## What is and is not modeled
 
 The current model covers the major control-flow effects represented in the paper's DFK,
@@ -187,12 +194,13 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstr
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileContent.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
 retry bounds, worker capacity/binding, valid assignments, executor availability for running
 attempts, attempt identity, Future result consistency, stale-result safety, serialization
-safety, data readiness, file-transfer safety, and time consistency.
+safety, data readiness, file-transfer safety, symbolic file-content identity, and time consistency.
 
 The purpose of these checks is bug finding, not only documentation. A model action is a small
 executable hypothesis about a Parsl transition; if an implementation change would permit a task
@@ -218,6 +226,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   submit rejection remained pre-dispatch and all retry/result invariants passed.
 - `ParslProviderFailure.cfg`: 890 states generated, 219 distinct states, depth 32;
   provider failure, recovery request, and block-count consistency all passed.
+- `ParslFileContent.cfg`: 11,458 states generated, 2,083 distinct states, depth 51;
+  dependency readiness, stage-out ordering, and symbolic output-content identity passed.
 - `ParslJoin.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
