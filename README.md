@@ -292,6 +292,12 @@ process/collector exits, the final cleanup action fails every remaining outstand
 follows `_collect_work_queue_results` in
 [`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py).
 
+`ParslWorkQueueSubmit.tla` models the submit-side ordering around the Work Queue process. The
+current implementation registers the Future in `_tasks` before checking process liveness; when the
+process is already dead, the raised `ExecutorError` leaves that map entry orphaned. The fixed
+configuration removes the mapping on this failure. The runtime probe reproduces the current
+ordering with a real `WorkQueueExecutor.submit` and fake filesystem/queue objects.
+
 `ParslFluxResult.tla` models the Flux executor's wrapped Future boundary. A Flux job must finish
 before the callback reads the result file; zero exit status still requires a valid serialized
 result, while missing/malformed files and task exceptions fail the Parsl Future. The actual
@@ -1028,7 +1034,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 153 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 156 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1715,6 +1721,7 @@ failure result for each in-flight task.
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
 | `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
+| `Validate` / `Register` / `CheckSubmitProcess` | WorkQueue resource validation and submit-process liveness ordering | `WorkQueueExecutor.submit` |
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |

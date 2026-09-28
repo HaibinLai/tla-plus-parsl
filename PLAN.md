@@ -299,6 +299,9 @@ construction for `mpiexec`, `srun`, and `aprun`, plus rejection of an unsupporte
 `tests/test_workqueue_results_runtime.py` drives the real WorkQueue collector method with fake
 queues and serialized files, checking valid values, app exceptions, corrupt results, and cleanup
 of outstanding Futures when the submit process exits.
+`tests/test_workqueue_submit_runtime.py` drives the real WorkQueue submit method in a fake local
+filesystem, reproducing the current orphaned `_tasks` Future when the submit process is already
+dead and checking resource-key rejection before mapping.
 `tests/test_flux_result_runtime.py` drives Flux's real result callback with serialized `TaskResult`
 files and fake underlying futures, checking result decoding, failure mapping, and the cancellation
 wrapper behavior modeled by `ParslFluxResult.tla`.
