@@ -110,6 +110,9 @@ dispatches or emit heartbeats.
 that no worker binding is created from the failed manager.
 `ParslRegistrationRecovery.cfg` adds reconnect/re-registration from a failed manager while
 preserving the unregistered gate before dispatch.
+`ParslStrategy.tla` is a separate small model of the source strategy policy: task pressure versus
+available slots, bounded scale-out, minimum-block floors, and idle-timeout scale-in. It is kept
+separate from the DFK protocol state machine so TLC can isolate scaling-policy counterexamples.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.

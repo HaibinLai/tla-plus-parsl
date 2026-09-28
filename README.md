@@ -73,6 +73,12 @@ offline. `CancelRequestedAllocation` covers cancelling a pending block request b
 active. The model now exposes a `MIN_BLOCKS` floor: active and pending scale-in cannot remove
 capacity below that floor. `ParslMinBlocks.cfg` exercises a provider that must retain one block.
 
+`ParslStrategy.tla` is a separate focused model of the core policy in Parsl's strategy layer:
+active-task pressure is compared with slots (`blocks * SLOTS_PER_BLOCK`), scale-out is bounded by
+`MAX_BLOCKS`, and idle scale-in stops at `MIN_BLOCKS` after `MAX_IDLE_TIME`. It is intentionally
+kept separate from the DFK protocol state machine so strategy bugs can be isolated with a small
+state space. The policy is based on `parsl/jobs/strategy.py` in the current Parsl source.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -267,6 +273,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg Pars
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileContent.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileCorruptionSmall.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslNestedSerialization.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -309,6 +316,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   block/target consistency.
 - `ParslMinBlocks.cfg`: 66,423 states generated, 9,612 distinct states, depth 37;
   scale-in could not remove the configured minimum one block.
+- `ParslStrategy.cfg`: 327 states generated, 114 distinct states, depth 13;
+  slot-pressure scale-out, idle-timer handling, minimum/maximum block bounds, and task-pressure
+  safety all passed in the focused strategy model.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -390,6 +400,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
+| `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces
