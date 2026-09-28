@@ -25,9 +25,9 @@ The model was based on the Parsl paper and the current source tree, especially:
 
 The root contains the focused models that are still being migrated. The shared workflow
 abstraction and its first group of scenario configurations live under `models/core/`; each
-configuration remains next to the `ParslAbstract.tla` module it instantiates. Runtime probes
-remain under `tests/`. More model families will move into topic directories only after their
-TLC commands are updated and checked.
+configuration remains next to the TLA+ module it instantiates. Serialization and transport
+models are under `models/serialization/`; runtime probes remain under `tests/`. More model
+families will move into topic directories only after their TLC commands are updated and checked.
 
 ## Logical tasks and physical attempts
 
@@ -930,12 +930,12 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslFileContent.c
 java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslFileCorruptionSmall.cfg models/core/ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslNestedSerialization.cfg models/core/ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPython.cfg ParslPython.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCallableSerializerCache.cfg ParslCallableSerializerCache.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCallableSerializerCacheFixed.cfg ParslCallableSerializerCache.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationSnapshot.cfg ParslSerializationSnapshot.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQ.cfg models/serialization/ParslZMQ.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPython.cfg models/serialization/ParslPython.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonFailure.cfg models/serialization/ParslPython.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCache.cfg models/serialization/ParslCallableSerializerCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCacheFixed.cfg models/serialization/ParslCallableSerializerCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationSnapshot.cfg models/serialization/ParslSerializationSnapshot.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureCopy.cfg ParslDataFutureCopy.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageInFail.cfg ParslRsyncStage.tla
@@ -1051,8 +1051,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedList.cfg ParslJoinMixedLis
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedListValid.cfg ParslJoinMixedList.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinNoneResultSingle.cfg ParslJoinNoneResult.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinNoneResultList.cfg ParslJoinNoneResult.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportFailure.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
@@ -1083,18 +1083,18 @@ java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmission.cfg ParslResource
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmissionAutolabel.cfg ParslResourceAdmission.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceScaling.cfg ParslResourceScaling.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPollerBadState.cfg ParslPollerBadState.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializationWire.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationPluginError.cfg ParslSerializationPluginError.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationPluginErrorFixed.cfg ParslSerializationPluginError.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLength.cfg ParslSerializationLength.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLengthFixed.cfg ParslSerializationLength.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountCurrent.cfg ParslSerializationFrameCount.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountFixed.cfg ParslSerializationFrameCount.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountNormal.cfg ParslSerializationFrameCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationWire.cfg models/serialization/ParslSerializationWire.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationWireFailure.cfg models/serialization/ParslSerializationWire.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginError.cfg models/serialization/ParslSerializationPluginError.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginErrorFixed.cfg models/serialization/ParslSerializationPluginError.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationLength.cfg models/serialization/ParslSerializationLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationLengthFixed.cfg models/serialization/ParslSerializationLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFrameCountCurrent.cfg models/serialization/ParslSerializationFrameCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFrameCountFixed.cfg models/serialization/ParslSerializationFrameCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFrameCountNormal.cfg models/serialization/ParslSerializationFrameCount.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslApplyMessageArity.cfg ParslApplyMessageArity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslApplyMessageArityFixed.cfg ParslApplyMessageArity.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationZMQBridge.cfg models/serialization/ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureCurrent.cfg ParslHtexResultDecodeFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultDecodeFailureFixed.cfg ParslHtexResultDecodeFailure.tla
@@ -1573,8 +1573,8 @@ The Python timeout injection boundary is also exercised with a function that cat
 walltime signal, which is modeled by `ParslPythonTimeoutCatch.tla`.
 
 ```bash
-java -cp tla2tools.jar tlc2.TLC -config ParslPythonTimeoutCatch.cfg ParslPythonTimeoutCatch.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPythonTimeoutCatchFixed.cfg ParslPythonTimeoutCatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonTimeoutCatch.cfg models/serialization/ParslPythonTimeoutCatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonTimeoutCatchFixed.cfg models/serialization/ParslPythonTimeoutCatch.tla
 ```
 
 The underlying timeout timer lifecycle is exercised directly:
