@@ -33,3 +33,12 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationF
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFallbackSecondary.cfg models/serialization/ParslSerializationFallback.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFallbackFailure.cfg models/serialization/ParslSerializationFallback.tla
 ```
+
+`ParslSerializationPluginCache.tla` models successful dynamic deserializer loading. The first
+unknown header imports and instantiates the plugin; subsequent payloads reuse the entry in
+`additional_methods_for_deserialization` without another import. The runtime probe uses a fake
+module and counts imports and plugin instances.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginCache.cfg models/serialization/ParslSerializationPluginCache.tla
+```
