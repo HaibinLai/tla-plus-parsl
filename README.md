@@ -159,6 +159,11 @@ queue, so it can return an empty batch while a message is waiting. The TLC curre
 produces that counterexample; fixed and positive-interval configurations preserve message
 collection. The runtime probe is `tests/test_monitoring_batch_runtime.py`.
 
+`ParslMonitoringBatchAtomicity.tla` models a second monitoring batch boundary: one duplicate
+STATUS key can make a SQLAlchemy bulk insert roll back the entire batch. The current manager then
+drops a valid sibling event along with the duplicate; fixed bookkeeping preserves valid messages.
+`tests/test_monitoring_batch_atomicity_runtime.py` reproduces this with a temporary SQLite DB.
+
 `ParslRetryHandler.tla` models the retry-budget boundary in `DataFlowKernel.handle_exec_update`.
 The current implementation adds the user handler's returned cost directly to `fail_cost`; a zero
 cost therefore permits another physical attempt even when `retries=0`. The current TLC
@@ -881,6 +886,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertPresent.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchCurrent.cfg ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchFixed.cfg ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchPositive.cfg ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicityCurrent.cfg ParslMonitoringBatchAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicityFixed.cfg ParslMonitoringBatchAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicitySuccess.cfg ParslMonitoringBatchAtomicity.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerCurrent.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerFixed.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerPositive.cfg ParslRetryHandler.tla
@@ -1113,6 +1121,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   message and zero interval, the batch action returns empty and leaves the message unread.
 - `ParslMonitoringBatchFixed.cfg` and `ParslMonitoringBatchPositive.cfg`: 4 states generated,
   2 distinct states, depth 2; queued-message collection satisfies `AvailableBatchSafety`.
+- `ParslMonitoringBatchAtomicityCurrent.cfg`: expected counterexample, 2 states generated; a
+  duplicate STATUS row rolls back a valid sibling in the same bulk insert.
+- `ParslMonitoringBatchAtomicityFixed.cfg` and `ParslMonitoringBatchAtomicitySuccess.cfg`: 4
+  states generated, 2 distinct states, depth 2; valid events are preserved with and without a
+  duplicate.
 - `ParslRetryHandlerCurrent.cfg`: expected counterexample, 3 distinct states; a zero-cost handler
   advances `tryId` to 1 despite `RETRIES=0`.
 - `ParslRetryHandlerFixed.cfg`: 3 distinct states, depth 3; minimum-cost charging preserves
@@ -1342,7 +1355,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 214 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 215 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2110,6 +2123,7 @@ failure result for each in-flight task.
 | `DeleteFails` / `DeleteSucceeds` | GCE cancellation result and local resource status | `GoogleCloudProvider.cancel` |
 | `Close` / `FinalizationSafety` | monitoring workflow finalization and shutdown drain | `DatabaseManager.close` |
 | `Batch` / `AvailableBatchSafety` | zero-interval queue-read boundary and message collection | `DatabaseManager._get_messages_in_batch` |
+| `InsertBatch` / `ValidMessagePreserved` | bulk STATUS rollback and valid-sibling preservation | `Database.insert` and `DatabaseManager._insert` |
 | `AttemptFails` / `HandleFailure` / `RetryLimitSafety` | retry-handler failure-cost accounting and physical-attempt admission | `DataFlowKernel.handle_exec_update` |
 | `ChangeSource` / `MemoKeySafety` | function-body identity and memo-key invalidation | `BasicMemoizer.id_for_memo_function` |
 | `Complete` / `Timeout` / `TimeoutCleanupSafety` | scheduler command timeout and subprocess cleanup | `utils.execute_wait`, `ClusterProvider.execute_wait` |
