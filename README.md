@@ -103,6 +103,12 @@ physical attempt is no longer current. A manager-lost attempt can now retry afte
 its late result is explicitly allowed to arrive but cannot resolve the Future.
 `ParslClockTerminal.cfg` fixes the retry budget at zero to exercise terminal timeout rejection.
 
+`ParslHeartbeatBoundary.tla` makes the HTEX heartbeat boundary explicit: expiration occurs only
+when `now - last_heartbeat > heartbeat_threshold`, a heartbeat received before the expiry check
+resets the timestamp, and expiration converts all manager in-flight tasks into failure reports.
+The finite model mirrors the main-loop ordering in
+[`interchange.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/interchange.py).
+
 `ParslMonitoringDB.tla` models a versioned monitoring radio queue and asynchronous database writer.
 The queue can reorder events, writes can fail and be retried, stale versions are ignored, and a
 terminal database record is not overwritten by an older event. `MAX_FAILURES` and queue bounds
@@ -518,6 +524,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslPythonFailure.cfg ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatBoundary.cfg ParslHeartbeatBoundary.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDeferred.cfg ParslMonitoringDeferred.tla
@@ -611,6 +618,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   retry selection, and stale late-result handling all passed.
 - `ParslClockTerminal.cfg`: 6,440 states generated, 1,574 distinct states, depth 13;
   terminal timeout rejection with no remaining retry passed the same time and result invariants.
+- `ParslHeartbeatBoundary.cfg`: 316 states generated, 93 distinct states, depth 10;
+  strict heartbeat threshold, heartbeat reset at the boundary, manager expiry, and in-flight
+  failure accounting all passed.
 - `ParslMonitoringDB.cfg`: 757 states generated, 291 distinct states, depth 11;
   asynchronous write failure/retry, version monotonicity, database consistency, and terminal
   record safety passed.
@@ -774,6 +784,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
+| `ExpireManager` / `Heartbeat` / `ExpirationAccounting` | strict heartbeat threshold and in-flight manager-loss cleanup | `Interchange.expire_bad_managers` and main polling loop |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
 | `RegisterWorker` / `RegistrationSafety` | manager registration before dispatch | `Interchange` manager registration and worker availability |

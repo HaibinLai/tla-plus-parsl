@@ -127,6 +127,8 @@ repair, source-version changes during stage-in, and atomic stage-in/stage-out pu
 timestamps, retry selection after timeout or manager loss, and stale late-result delivery. A
 zero-retry configuration checks the terminal timeout path explicitly; lost attempts can now retry
 after manager recovery while their late results remain stale.
+`ParslHeartbeatBoundary.tla` checks the strict HTEX expiration inequality, heartbeat reset ordering,
+and conversion of a manager's in-flight tasks into failure reports at expiry.
 `ParslMonitoringDB.tla` models the asynchronous monitoring radio queue, bounded event versions,
 database write failure/retry, queue reordering, stale-event suppression, and terminal-record
 stability.
