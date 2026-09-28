@@ -233,6 +233,11 @@ current `parent_callback` uses `if e`, so an exception whose `__bool__` returns 
 as a successful file result. `tests/test_datafuture_falsey_exception_runtime.py` reproduces this
 with real `Future` and `DataFuture` objects; the fixed branch checks `e is not None`.
 
+`ParslCondorStatusFailure.tla` refines the Condor status boundary with the `execute_wait` return
+code. The current `_status()` ignores a failed `condor_q` command, so failed stdout can overwrite a
+running resource or crash while being parsed. Fixed configurations return before parsing failed
+output.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -925,6 +930,11 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTorqueStatusPresent.cfg ParslTorque
 java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatus.cfg ParslCondorStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFixed.cfg ParslCondorStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusPresent.cfg ParslCondorStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureCurrentValid.cfg ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureCurrentMalformed.cfg ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureFixedValid.cfg ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureFixedMalformed.cfg ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureSuccess.cfg ParslCondorStatusFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
@@ -1184,6 +1194,13 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   ignored without changing the known resource status.
 - `ParslCondorStatusPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a valid
   two-field status line updates the tracked job.
+- `ParslCondorStatusFailureCurrentValid.cfg`: expected counterexample, 4 states generated; a
+  failed `condor_q` command still applies stale valid stdout and changes `RUNNING` to `COMPLETED`.
+- `ParslCondorStatusFailureCurrentMalformed.cfg`: expected counterexample, 4 states generated;
+  failed command output with one field reaches the unchecked `parts[1]` access.
+- `ParslCondorStatusFailureFixedValid.cfg`, `ParslCondorStatusFailureFixedMalformed.cfg`, and
+  `ParslCondorStatusFailureSuccess.cfg`: 6 states generated, 3 distinct states, depth 3; failed
+  commands preserve local state and successful commands still apply valid status output.
 - `ParslCondorSubmit.cfg`: expected counterexample at depth 3 (9 states generated, 7 distinct);
   empty successful submit output reaches an uncaught job-id indexing error.
 - `ParslCondorSubmitFixed.cfg`: 18 states generated, 9 distinct states, depth 3; malformed
@@ -1197,7 +1214,12 @@ deterministic scheduler stub (no Condor installation is required):
 ```
 
 The runtime probe confirms that a one-field `condor_q` line raises `IndexError`, while a valid
-two-field line updates the tracked resource.
+two-field line updates the tracked resource. A separate failure probe confirms that the current
+provider ignores a nonzero command return code in both cases:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_status_failure_runtime.py -v
+```
 
 Condor submission parsing is also exercised without a Condor installation:
 
@@ -2118,6 +2140,7 @@ failure result for each in-flight task.
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
 | `WriteScript` / `ExecuteQsub` / `ParseQsub` | Torque qsub submission and last non-empty job-id registration | `TorqueProvider.submit` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
+| `FailedCommandCrashes` / `FailedCommandUpdatesStale` / `FailedCommandIgnored` | Condor command return-code handling before status parsing | `CondorProvider._status` |
 | `CancelChunk` | Condor chunked `condor_rm` cancellation and unknown-job guard | `CondorProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Grid Engine qstat line length validation and update | `GridEngineProvider._status` |
 | `Cancel` | Grid Engine `qdel` cancellation and local resource-state update | `GridEngineProvider.cancel` |

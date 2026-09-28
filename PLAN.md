@@ -315,6 +315,9 @@ the fixed configuration ignores foreign scheduler lines, matching the safer LSF-
 `ParslCondorStatus.tla` models Condor status parsing for truncated scheduler output. The current
 two-field indexing path can crash on a malformed line; the fixed configuration skips short lines
 and preserves the previously known resource status.
+`ParslCondorStatusFailure.tla` refines that boundary with the `execute_wait` return code. The
+current provider parses failed `condor_q` stdout anyway, so stale output can overwrite a running
+resource or a truncated failure response can crash; fixed configurations preserve local state.
 `tests/test_serialization_runtime.py` exercises the current serialization facade against real
 closures, callable/data headers, three-part apply-message packing, and a deliberately failing
 object graph. It complements the finite TLA+ serialization-wire models with runtime evidence.
@@ -395,6 +398,8 @@ translation, scheduler failure preservation, and the current foreign-job `KeyErr
 `tests/test_pbspro_job_id_alias_runtime.py` drives the same parser with both `42` and
 `42.server` JSON keys, reproducing the current duplicate `jobs_missing.remove` failure modeled by
 `ParslPBSProJobIdAlias.tla`.
+`tests/test_condor_status_failure_runtime.py` drives failed `condor_q` responses with valid and
+truncated stdout, covering `ParslCondorStatusFailure.tla` without a Condor installation.
 `tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
 admission paths, including accepted-work completion and resource-specification rejection.
 `tests/test_future_cancellation_runtime.py` checks the concrete cancellation contract: AppFuture
