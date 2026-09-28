@@ -122,6 +122,10 @@ transfer must not run the user function, and a corrected wrapper should remove b
 written before the connection failure. The current configuration records the residual partial
 file; fixed and successful-transfer configurations pass the cleanup invariant.
 
+`ParslGlobusStageDependency.tla` models the Future wiring in `GlobusStaging`: stage-in preserves
+the parent `DataFuture` as an input dependency, while stage-out passes the application Future to
+the transfer app. Neither transfer can begin before its corresponding producer is ready.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -662,6 +666,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageSuccess.cfg ParslHTTPStage
 java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageCurrent.cfg ParslFTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageFixed.cfg ParslFTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageSuccess.cfg ParslFTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGlobusStageDependency.cfg ParslGlobusStageDependency.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGlobusStageOutDependency.cfg ParslGlobusStageDependency.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
@@ -779,6 +785,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   removed the partial artifact.
 - `ParslFTPStageSuccess.cfg`: 4 states generated, 2 distinct states, depth 2; successful FTP
   transfer produced the input artifact and ran the app.
+- `ParslGlobusStageDependency.cfg`: 19 states generated, 8 distinct states, depth 5; stage-in
+  could start only after the parent Future became ready.
+- `ParslGlobusStageOutDependency.cfg`: 19 states generated, 8 distinct states, depth 5; stage-out
+  could start only after the application Future completed.
 - `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 690 states generated, 198 distinct states, depth 36;
@@ -953,7 +963,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 119 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 121 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
