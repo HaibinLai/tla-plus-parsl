@@ -239,6 +239,8 @@ and deterministic `qsub` output, checking the empty-output and registered-job pa
 admission paths, including accepted-work completion and resource-specification rejection.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
 checking binary content readiness and dependent-task gating.
+It also wires a failed producer's output `DataFuture` into a consumer and checks `DependencyError`
+propagation without consumer execution.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of

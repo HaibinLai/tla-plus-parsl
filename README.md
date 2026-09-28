@@ -917,6 +917,8 @@ File/DataFuture readiness is exercised through a real two-task local dataflow:
 
 The producer writes binary output through a Parsl `File`, and the dependent consumer reads the
 same bytes only after the producer has completed.
+The same probe also checks that a consumer wired to the producer's output `DataFuture` receives a
+`DependencyError` and is never executed when the producer fails.
 
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 

@@ -6,6 +6,7 @@ import unittest
 
 import parsl
 from parsl import Config, python_app
+from parsl.dataflow.errors import DependencyError
 from parsl.data_provider.files import File
 from parsl.executors.threads import ThreadPoolExecutor
 
@@ -19,6 +20,20 @@ def produce_file(outputs=[]):
 
 @python_app
 def consume_file(inputs=[]):
+    return pathlib.Path(inputs[0].filepath).read_bytes()
+
+
+failure_consumer_calls = {"count": 0}
+
+
+@python_app
+def fail_to_produce(outputs=[]):
+    raise ValueError("producer failed")
+
+
+@python_app
+def consume_after_failure(inputs=[]):
+    failure_consumer_calls["count"] += 1
     return pathlib.Path(inputs[0].filepath).read_bytes()
 
 
@@ -37,6 +52,22 @@ class DataFutureRuntimeTest(unittest.TestCase):
                 self.assertEqual(consumer.result(), b"datafuture-ready\x00\xff")
 
             self.assertEqual(path.read_bytes(), b"datafuture-ready\x00\xff")
+
+    def test_failed_output_future_blocks_dependent_app(self):
+        failure_consumer_calls["count"] = 0
+        with tempfile.TemporaryDirectory() as directory:
+            path = pathlib.Path(directory) / "missing.bin"
+            config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
+
+            with parsl.load(config):
+                producer = fail_to_produce(outputs=[File(str(path))])
+                consumer = consume_after_failure(inputs=[producer.outputs[0]])
+
+                self.assertIsInstance(producer.exception(), ValueError)
+                self.assertIsInstance(consumer.exception(), DependencyError)
+
+            self.assertEqual(failure_consumer_calls["count"], 0)
+            self.assertFalse(path.exists())
 
 
 if __name__ == "__main__":
