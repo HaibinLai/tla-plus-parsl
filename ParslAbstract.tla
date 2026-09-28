@@ -269,6 +269,31 @@ SerializationFailure(t, k) ==
                     executorState, providerState, providerTarget, providerBlocks,
                     completed, outputs, resultWireState, resultEnvelope>>
 
+DropTaskMessage(t, k) ==
+    LET a == <<t, k>> IN
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ k \in 0..MAX_RETRIES
+    /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ attemptState[a] \in {"serialized", "sent", "received"}
+    /\ taskWireState[a] \in {"queued", "sent", "received"}
+    /\ attemptState' = [attemptState EXCEPT ![a] = "lost"]
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "dropped"]
+    /\ taskEnvelope' = [taskEnvelope EXCEPT ![a] = "invalid"]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks, completed,
+                    outputs, resultWireState, resultEnvelope>>
+
 SendAttempt(t, k) ==
     LET a == <<t, k>> IN
     /\ attemptState[a] = "serialized" /\ taskWireState[a] = "queued"
@@ -383,6 +408,34 @@ DecodeResult(t, k) ==
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs, taskWireState,
                     taskEnvelope, resultEnvelope>>
+
+DropResultMessage(t, k, w) ==
+    LET a == <<t, k>> IN
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
+    /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ attemptState[a] \in {"result_serialized", "result_sent", "result_received"}
+    /\ resultWireState[a] \in {"queued", "sent", "received"}
+    /\ attemptWorker[a] = w /\ workerState[w] = "busy"
+    /\ attemptState' = [attemptState EXCEPT ![a] = "lost"]
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "dropped"]
+    /\ resultEnvelope' = [resultEnvelope EXCEPT ![a] = "invalid"]
+    /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
+    /\ workerAttempt' = [workerAttempt EXCEPT ![w] = NoAttempt]
+    /\ workerState' = [workerState EXCEPT ![w] = "idle"]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState, attemptExecutor,
+                    executorState, providerState, providerTarget, providerBlocks,
+                    completed, outputs, taskWireState, taskEnvelope>>
 
 AttemptSuccess(t, k, w) ==
     LET a == <<t, k>> IN
@@ -662,6 +715,7 @@ CoreActions ==
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitAttempt(t, e)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitFailure(t, e)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : SerializationFailure(t, k)
+    \/ \E t \in TASKS, k \in 0..MAX_RETRIES : DropTaskMessage(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
           SerializeAttempt(t, k) \/ SendAttempt(t, k)
           \/ ReceiveAttempt(t, k) \/ DecodeAttempt(t, k)
@@ -672,6 +726,8 @@ CoreActions ==
           \/ AttemptTimeout(t, k, w)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
           SendResult(t, k) \/ ReceiveResult(t, k) \/ DecodeResult(t, k)
+    \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
+          DropResultMessage(t, k, w)
     \/ \E t \in TASKS : RetryTask(t)
     \/ \E w \in WORKERS : WorkerFailure(w)
     \/ \E e \in EXECUTORS, t \in TASKS, k \in 0..MAX_RETRIES :

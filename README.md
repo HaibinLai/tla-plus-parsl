@@ -112,6 +112,12 @@ directions and their ordering without enumerating sockets, byte buffers, or mult
 The next refinement can add bounded drops, duplicate deliveries, and symbolic object graphs
 without changing the logical-task/physical-attempt boundary.
 
+`DropTaskMessage` and `DropResultMessage` add a bounded network-loss hypothesis. A dropped task
+envelope never reaches a worker; a dropped result envelope releases the worker and turns the
+current attempt into `lost`, after which the ordinary retry or rejection path applies. The
+message-loss configuration checks that a dropped or invalid envelope cannot resolve a Future,
+leak a worker binding, or bypass the retry bound.
+
 The result path has the same shape after worker execution: `SerializeResult`, `SendResult`,
 `ReceiveResult`, and `DecodeResult` must occur before `AttemptSuccess` resolves the Future. A
 worker or executor failure can still replace an in-flight result with a retry, so a result from
@@ -175,6 +181,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslProviderFailure.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslJoin.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -210,9 +217,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
   join dependency and outer-Future safety invariants passed.
-- `ParslMessaging.cfg`: 443,612 states generated, 65,139 distinct states, depth 43;
+- `ParslMessaging.cfg`: 1,136,964 states generated, 159,871 distinct states, depth 44;
   task/result wire ordering, envelope validity, symbolic object-graph serialization, and
   stale-result invariants passed.
+- `ParslMessageLoss.cfg`: 1,582 states generated, 391 distinct states, depth 31;
+  task/result message loss, worker cleanup, retry bounds, and Future consistency passed.
 
 ## Source-to-model mapping
 
@@ -230,6 +239,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
 | `taskWireState` / `resultWireState` and `MessageSafety` | bounded ZMQ-like queues and envelope/attempt ordering | interchange task/result queues and manager socket message handling |
+| `DropTaskMessage` / `DropResultMessage` | transport loss before dispatch or Future resolution | interchange/socket failure boundary and retry handling |
 | `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
 | `JoinObserve` / `JoinComplete` / `JoinFailure` | wait for inner Futures and propagate join result/failure | `DataFlowKernel.handle_exec_update`, `handle_join_update`, and `join_app` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |

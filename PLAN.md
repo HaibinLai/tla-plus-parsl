@@ -66,6 +66,8 @@ requesting a replacement block without producing a negative target count.
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 Its object-graph constants model callable, argument, closure, and nested referenced objects;
 `ObjectGraphSafety` checks that a valid envelope cannot contain an unencodable object.
+`ParslMessageLoss.cfg` adds bounded task/result transport loss and checks cleanup plus retry
+behavior after a message is dropped.
 
 ### 3. Checked properties
 
@@ -89,7 +91,7 @@ The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` 
 After the MVP is stable, possible extensions are:
 
 - richer DataManager/staging behavior, including stage-in/stage-out failure;
-- bounded message drops and duplicate deliveries;
+- duplicate deliveries and bounded message reordering;
 - richer `join_app` behavior beyond the bounded inner-Future set now modeled;
 - manager heartbeat timeout, version mismatch, drain, and executor bad state;
 - monitoring as an abstract eventual event stream;
