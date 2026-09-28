@@ -219,6 +219,8 @@ deserialization, execution, and acknowledgement.
 `tests/test_monitoring_db_runtime.py` uses a temporary SQLite database to validate the concrete
 STATUS primary-key collision and the current `DatabaseManager._insert` generic-exception path
 that rolls back and silently drops the duplicate event.
+`tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
+executor, covering single Futures, ordered duplicate references, empty lists, and `JoinError`.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of

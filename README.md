@@ -825,6 +825,15 @@ sockets:
 The probe checks multipart frame count, route identity preservation, Parsl apply-message
 deserialization, task execution, and an ACK sent back over the routed socket.
 
+The concrete `join_app` protocol is exercised with a real local thread executor:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_runtime.py -v
+```
+
+This verifies single-Future propagation, ordered list results with duplicate Future references,
+empty-list completion without callbacks, and `JoinError` propagation from a failed inner app.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash
