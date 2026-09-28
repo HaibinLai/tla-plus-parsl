@@ -900,6 +900,15 @@ Azure VM status handling is exercised with a fake compute client:
 The tests check running-state translation, the current `IndexError`-to-`PENDING` path for missing
 instance-view status, and propagation of non-index cloud API errors.
 
+Google Compute Engine status handling is exercised with a fake discovery client:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_status_runtime.py -v
+```
+
+The probe checks normal `RUNNING` translation, propagation of API errors, and the current
+`KeyError` path for an unrecognized provider status.
+
 Torque cancellation outcomes are exercised with deterministic `qdel` results:
 
 ```bash

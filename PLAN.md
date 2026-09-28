@@ -246,6 +246,8 @@ current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 line failure, normal state translation, foreign-job filtering, and missing-job fallback.
 `tests/test_azure_status_runtime.py` drives Azure VM status with a fake compute client, checking
 running translation, pending fallback, and cloud API error propagation.
+`tests/test_googlecloud_status_runtime.py` drives Google Compute Engine status with a fake
+discovery client, checking normal translation, API error propagation, and unknown-state handling.
 `ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
