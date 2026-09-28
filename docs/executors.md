@@ -35,3 +35,12 @@ Run this focused check with:
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatLateAck.cfg models/executors/ParslHeartbeatLateAck.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatLateAckFixed.cfg models/executors/ParslHeartbeatLateAck.tla
 ```
+
+`ParslBlockProviderBadState.tla` captures the shared `BlockProviderExecutor` failure path:
+an unrecoverable provider error records the exception, fails every outstanding Future with a
+`BadStateException`, and rejects later submissions while preserving already terminal tasks.
+The runtime probe calls `set_bad_state_and_fail_all` on a small concrete subclass.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadState.cfg models/executors/ParslBlockProviderBadState.tla
+```
