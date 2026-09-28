@@ -696,7 +696,7 @@ JoinComplete(t) ==
     /\ taskState' = [taskState EXCEPT ![t] = "succeeded"]
     /\ futureState' = [futureState EXCEPT ![t] = "resolved"]
     /\ completed' = completed \cup {t}
-    /\ outputs' = [outputs EXCEPT ![t] = "result"]
+    /\ outputs' = [outputs EXCEPT ![t] = "join-result"]
     /\ UNCHANGED <<retries, currentAttempt, selectedExecutor, dataState,
                     attemptState, attemptExecutor, attemptWorker, workerState,
                     workerAttempt, executorState, providerState, providerTarget,
@@ -1064,7 +1064,8 @@ TypeOK ==
     /\ providerTarget \in [EXECUTORS -> 0..MAX_BLOCKS]
     /\ providerBlocks \in [EXECUTORS -> 0..MAX_BLOCKS]
     /\ completed \subseteq TASKS /\ rejected \subseteq TASKS
-    /\ outputs \in [TASKS -> {"absent", "memoized-output", "join-handle", "result"}]
+    /\ outputs \in [TASKS -> {"absent", "memoized-output", "join-handle", "result",
+                               "join-result"}]
     /\ clock \in 0..MAX_TIME
     /\ lastHeartbeat \in [WORKERS -> 0..MAX_TIME]
     /\ attemptStart \in [AttemptIds -> -1..MAX_TIME]
@@ -1186,6 +1187,7 @@ JoinSafety ==
     /\ \A t \in JOIN_TASKS : joinObserved[t] \subseteq JoinDeps(t)
     /\ \A t \in JOIN_TASKS : taskState[t] = "succeeded" =>
           JoinDeps(t) \subseteq {i \in TASKS : futureState[i] = "resolved"}
+          /\ outputs[t] = "join-result"
     /\ \A t \in JOIN_INVALID : taskState[t] = "failed" =>
           futureState[t] = "rejected" /\ t \in rejected
 
@@ -1223,7 +1225,7 @@ FileContentSafety ==
           (IF dataState[t] = "transferred" THEN ContentToken(t) ELSE "none") = ContentToken(t)
     /\ \A t \in TASKS : dataState[t] \in {"stageout", "stageout_chunk1",
                                              "stageout_chunk2"} =>
-          t \in FILE_OUTPUTS /\ outputs[t] \in {"result", "memoized-output"}
+          t \in FILE_OUTPUTS /\ outputs[t] \in {"result", "join-result", "memoized-output"}
 
 FileChunkSafety ==
     /\ \A t \in TASKS : dataState[t] \in {"stageout_chunk1", "stageout_chunk2"} =>

@@ -86,6 +86,8 @@ corrupted first or second chunk has a distinct state and repair restarts from th
 the larger three-task corruption configuration is retained for future state-space reduction.
 `ParslJoinInvalid.cfg` covers the `join_app` type-error branch. `SpecFair` now uses strong
 fairness for logical/attempt progress so duplicate-message discard loops cannot starve work.
+Successful joins carry a distinct `join-result` marker, while `JoinSafety` still requires every
+inner Future to be resolved before the outer Future can succeed.
 `ParslRegistration.cfg` adds explicit HTEX manager registration before a worker can receive
 dispatches or emit heartbeats.
 `ParslRegistrationFailure.cfg` explores manager startup failure before registration and checks

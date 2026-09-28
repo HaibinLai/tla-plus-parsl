@@ -170,6 +170,9 @@ returns a join handle rather than resolving the outer Future: the logical task e
 enabled, `JoinFailure` propagates a rejected inner Future to the outer task. This keeps the
 outer logical task separate from the physical attempt that produced the list of inner Futures,
 matching `DataFlowKernel.handle_exec_update` and `handle_join_update`.
+Successful joins carry a distinct symbolic `join-result` output marker, recording that the outer
+value is an aggregation rather than an ordinary task result while remaining independent of the
+concrete Python list/dict shape.
 
 `JOIN_INVALID` models a join app whose callable returns neither a Future nor a list of Futures.
 The physical attempt may finish successfully, but join unwrapping fails deterministically and
@@ -290,9 +293,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   wrong-executor dispatches were rejected without worker binding or false Future completion.
 - `ParslResultMisroute.cfg`: 371,765 states generated, 46,560 distinct states, depth 40;
   wrong-executor result envelopes were rejected before Future resolution.
-- `ParslJoin.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
+- `ParslJoin.cfg`: 308,488 states generated, 47,881 distinct states, depth 55;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
-- `ParslJoinSafety.cfg`: 308,418 states generated, 47,865 distinct states, depth 54;
+- `ParslJoinSafety.cfg`: 308,488 states generated, 47,881 distinct states, depth 55;
   join dependency and outer-Future safety invariants passed.
 - `ParslJoinInvalid.cfg`: 1,114 states generated, 276 distinct states, depth 32;
   invalid join return values rejected the outer Future without a false success.
