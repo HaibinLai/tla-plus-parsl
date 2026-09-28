@@ -22,3 +22,14 @@ current code-first behavior directly.
 progress, route checks, duplicate/drop handling, worker attempts, and result correlation. The
 current configuration finds a `ResultCorrelationSafety` counterexample; the fixed configuration
 classifies late or terminal results as stale and checks 562,641 states.
+
+`ParslSerializationFallback.tla` models the facade's serializer iteration: a failed registered
+serializer is suppressed while later serializers are tried, and the final serializer exception is
+re-raised only when every method fails. The runtime probe replaces the data registry with small
+real facade-compatible serializers and checks both fallback and all-failed paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFallbackPrimary.cfg models/serialization/ParslSerializationFallback.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFallbackSecondary.cfg models/serialization/ParslSerializationFallback.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFallbackFailure.cfg models/serialization/ParslSerializationFallback.tla
+```
