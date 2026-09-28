@@ -825,6 +825,16 @@ sockets:
 The probe checks multipart frame count, route identity preservation, Parsl apply-message
 deserialization, task execution, and an ACK sent back over the routed socket.
 
+All runtime probes can be run together as an integration baseline:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
+```
+
+The current baseline runs 28 tests covering serialization, ZMQ, files/DataFutures, retry and
+timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
+shutdown, and provider status/submit paths.
+
 The concrete `join_app` protocol is exercised with a real local thread executor:
 
 ```bash
