@@ -835,6 +835,15 @@ This verifies single-Future propagation, ordered list results with duplicate Fut
 empty-list completion without callbacks, and `JoinError` propagation from a failed inner app.
 It also checks nested join propagation and rejection of both scalar and mixed-list join returns.
 
+Physical retry and Python app timeout behavior are checked against a local thread executor:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_retry_timeout_runtime.py -v
+```
+
+The tests confirm a first-attempt failure is followed by a second physical attempt, and that a
+task exceeding its `walltime` completes with `AppTimeout` when no retries remain.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash
