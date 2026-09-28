@@ -544,11 +544,11 @@ configuration probes shutdown with a pending RP task, because the current `shutd
 session without an explicit sweep of `future_tasks`; the fixed configuration adds that sweep.
 This follows [`radical/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/radical/executor.py).
 
-`ParslGlobusComputeConfig.tla` models the thin Globus Compute wrapper's temporary resource
-configuration. Each submit copies a task-specific specification into the shared SDK executor,
-calls the underlying submit, and restores defaults in `finally`. The unsynchronized configuration
-finds cross-task specification use under interleaving submits; the serialized configuration
-captures the caller-side lock required to make the wrapper safe. This follows
+`ParslGlobusComputeConfig.tla` models the thin Globus Compute wrapper's temporary resource and
+endpoint configuration. Each submit copies task-specific values into the shared SDK executor,
+calls the underlying submit, and restores both defaults in `finally`. The unsynchronized
+configuration finds cross-task specification or endpoint use under interleaving submits; the
+serialized configuration captures the caller-side lock required to make the wrapper safe. This follows
 [`globus_compute.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/globus_compute.py).
 
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
