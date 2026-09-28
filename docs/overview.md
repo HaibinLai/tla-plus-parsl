@@ -178,6 +178,11 @@ the current orphaned-pending-task behavior.
 the `mpiexec -ppn` command. The fixed model rejects non-divisible allocations before launch;
 the runtime probe confirms the current command construction.
 
+`ParslMPINoResourceResult.tla` covers the MPI scheduler's unmapped-result path. A task without
+`num_nodes` is not entered into `_map_tasks_to_nodes`, but the current `get_result` assertion
+requires every result task to have an entry and aborts the scheduler (Issue #3427 in the source
+comment). The fixed model returns such a result without a node-reclamation step.
+
 `ParslWorkQueueCancelledResult.tla` models cancellation racing with a Work Queue collector
 report. The current collector removes a cancelled Future before `set_result`, so
 `InvalidStateError` exits the collector and its cleanup marks an unrelated pending Future with
@@ -1777,7 +1782,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 308 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 309 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

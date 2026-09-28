@@ -76,6 +76,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINonDivisibleRan
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_nondivisible_runtime.py -v
 ```
 
+`ParslMPINoResourceResult.tla` models the MPI scheduler result path for a task that did not
+request MPI nodes. Such tasks are valid but are not inserted into `_map_tasks_to_nodes`; the
+current `get_result` assertion nevertheless requires a mapping and aborts the scheduler. The
+fixed branch returns the result without reclaiming nodes. The runtime probe invokes the real
+method with an unmapped result payload.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINoResourceResultCurrent.cfg models/executors/ParslMPINoResourceResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINoResourceResultFixed.cfg models/executors/ParslMPINoResourceResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_mpi_no_resource_result_runtime.py -v
+```
+
 `ParslWorkQueueCancelledResult.tla` models a Work Queue collector result racing with cancellation.
 The current collector removes the cancelled Future and calls `set_result`, so `InvalidStateError`
 exits the collector; its `finally` block then marks an unrelated pending Future as
