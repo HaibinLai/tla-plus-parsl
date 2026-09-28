@@ -7,6 +7,7 @@ from concurrent.futures import Future
 
 from parsl.executors.errors import BadMessage
 from parsl.executors.high_throughput.executor import HighThroughputExecutor
+from parsl.serialize.facade import serialize
 
 
 class OneBatchQueue:
@@ -40,6 +41,25 @@ class HtexResultQueueRuntimeTest(unittest.TestCase):
         # The current worker pops before validating result/exception fields.
         self.assertNotIn(17, executor.tasks)
         self.assertFalse(task_future.done())
+
+    def test_duplicate_result_crashes_worker_currently(self):
+        executor = HighThroughputExecutor.__new__(HighThroughputExecutor)
+        task_future = Future()
+        executor._tasks = {23: task_future}
+        executor._executor_bad_state = threading.Event()
+        executor._result_queue_thread_exit = threading.Event()
+        executor.poll_period = 1
+        result = pickle.dumps({
+            "type": "result",
+            "task_id": 23,
+            "result": serialize("ok"),
+        })
+        executor.incoming_q = OneBatchQueue([result, result])
+
+        with self.assertRaises(KeyError):
+            executor._result_queue_worker()
+
+        self.assertEqual(task_future.result(), "ok")
 
 
 if __name__ == "__main__":

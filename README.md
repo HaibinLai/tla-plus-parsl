@@ -946,7 +946,8 @@ The HTEX result-thread boundary is exercised without launching an interchange:
 
 The probe sends a malformed result message to the real `_result_queue_worker` and confirms the
 current pop-before-validation behavior: the pending Future is removed from the task map but stays
-unfinished when the worker raises `BadMessage`. This is the runtime counterpart of
+unfinished when the worker raises `BadMessage`. It also sends the same valid result twice and
+confirms the current second `tasks.pop` raises `KeyError`; both paths are represented by
 `ParslHtexResultQueue.cfg`.
 
 The local zip staging implementation is exercised against actual bytes as well:
@@ -975,7 +976,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 123 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 124 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
