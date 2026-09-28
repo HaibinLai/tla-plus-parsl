@@ -1,6 +1,7 @@
 """Runtime probes for the concrete Parsl join_app callback protocol."""
 
 import unittest
+from concurrent.futures import Future
 
 import parsl
 from parsl import Config, join_app, python_app
@@ -59,6 +60,13 @@ def join_nested_outer():
     return join_nested_inner()
 
 
+@join_app
+def join_precompleted():
+    inner = Future()
+    inner.set_result(9)
+    return inner
+
+
 class JoinRuntimeTest(unittest.TestCase):
     def test_single_ordered_duplicate_empty_and_failure_semantics(self):
         config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
@@ -80,6 +88,11 @@ class JoinRuntimeTest(unittest.TestCase):
 
             mixed = join_mixed_list()
             self.assertIsInstance(mixed.exception(), TypeError)
+
+    def test_already_completed_inner_future_callback(self):
+        config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
+        with parsl.load(config):
+            self.assertEqual(join_precompleted().result(), 9)
 
 
 if __name__ == "__main__":

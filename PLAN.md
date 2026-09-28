@@ -239,6 +239,9 @@ nested joins, scalar-return rejection, and mixed-list rejection.
 `tests/test_join_callback_runtime.py` calls the real `DataFlowKernel.handle_join_update` with
 controlled Futures, checking early-callback gating, ordered duplicate aggregation, duplicate
 callback suppression, and `JoinError` metadata modeled by `ParslJoinCallbackRace.tla`.
+`tests/test_join_runtime.py` also returns an already-completed `concurrent.futures.Future` from a
+real `join_app`, checking the immediate `add_done_callback` registration path modeled by
+`ParslJoinImmediateCallback.tla`.
 `tests/test_retry_timeout_runtime.py` runs a retryable app and a walltime-limited app on the
 real thread executor, confirming distinct physical attempts and terminal `AppTimeout` behavior.
 It also runs a real Python app that catches the injected `AppTimeout` and returns normally; this
@@ -419,7 +422,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 113 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 114 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

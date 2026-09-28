@@ -165,6 +165,11 @@ Callbacks delivered again after a position has already been observed are harmles
 the list registration, all-done gate, ordered `future.result()` aggregation, and exception scan in
 [`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
 
+`ParslJoinImmediateCallback.tla` covers the registration race where a join body returns an
+already-completed Future. The callback may run immediately during `add_done_callback`, so the
+outer task must initialize its joining state and lock first; the runtime counterpart is
+`join_precompleted` in `tests/test_join_runtime.py`.
+
 `ParslJoinMixedList.tla` isolates the list-shape validation boundary. A list containing only
 Futures is observed and aggregated in order, an empty list completes immediately, and a mixed
 list such as `[Future, 7]` fails with a TypeError-like result before any inner callback is
@@ -660,6 +665,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslNestedJoin.cfg ParslNestedJoin.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinDuplicates.cfg ParslJoinDuplicates.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinImmediateCallback.cfg ParslJoinImmediateCallback.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedList.cfg ParslJoinMixedList.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMixedListValid.cfg ParslJoinMixedList.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
@@ -905,7 +911,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 113 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 114 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1276,6 +1282,9 @@ failure result for each in-flight task.
 - `ParslJoinDuplicates.cfg`: 210 states generated, 49 distinct states, depth 7;
   duplicate Future references, callback-position observation, ordered duplicate results, repeated
   failure multiplicity, duplicate callback tolerance, and join-handle cleanup all passed.
+- `ParslJoinImmediateCallback.cfg`: 25 states generated, 12 distinct states, depth 7; an
+  already-completed inner Future could invoke its callback immediately without violating join
+  registration or completion safety.
 - `ParslJoinMixedList.cfg`: 4 states generated, 2 distinct states, depth 2; a mixed Future/non-
   Future list fails immediately without registering callbacks.
 - `ParslJoinMixedListValid.cfg`: 76 states generated, 30 distinct states, depth 7; all-Future
