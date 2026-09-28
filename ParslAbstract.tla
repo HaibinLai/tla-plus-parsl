@@ -27,7 +27,7 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
                   "succeeded", "failed", "timed_out", "lost", "stale"}
 WorkerStates == {"idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
-DataStates == {"unavailable", "staging", "available", "stageout", "transferred"}
+DataStates == {"unavailable", "staging", "available", "stageout", "transferred", "corrupt"}
 WireStates == {"none", "queued", "sent", "received", "duplicate", "consumed", "dropped"}
 EnvelopeStates == {"none", "valid", "invalid"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
@@ -148,6 +148,32 @@ FinishStageOut(t) ==
     /\ taskState[t] \in {"succeeded", "memoized"}
     /\ dataState[t] = "stageout"
     /\ dataState' = [dataState EXCEPT ![t] = "transferred"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
+CorruptStageOut(t) ==
+    /\ ALLOW_FAILURES
+    /\ t \in FILE_OUTPUTS
+    /\ taskState[t] \in {"succeeded", "memoized"}
+    /\ dataState[t] \in {"stageout", "transferred"}
+    /\ dataState' = [dataState EXCEPT ![t] = "corrupt"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
+RepairStageOut(t) ==
+    /\ ALLOW_FAILURES
+    /\ t \in FILE_OUTPUTS
+    /\ taskState[t] \in {"succeeded", "memoized"}
+    /\ dataState[t] = "corrupt"
+    /\ dataState' = [dataState EXCEPT ![t] = "stageout"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
@@ -760,6 +786,7 @@ CancelAllocation(e) ==
 CoreActions ==
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
     \/ \E t \in TASKS : BeginStageOut(t) \/ FinishStageOut(t)
+          \/ CorruptStageOut(t) \/ RepairStageOut(t)
     \/ \E t \in TASKS : DependencyCheck(t) \/ MemoizationHit(t) \/ Enqueue(t)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitAttempt(t, e)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitFailure(t, e)
@@ -1005,7 +1032,11 @@ FileContentSafety ==
     /\ \A t \in TASKS : dataState[t] = "transferred" =>
           (IF dataState[t] = "transferred" THEN ContentToken(t) ELSE "none") = ContentToken(t)
     /\ \A t \in TASKS : dataState[t] = "stageout" =>
-          t \in FILE_OUTPUTS /\ outputs[t] = "result"
+          t \in FILE_OUTPUTS /\ outputs[t] \in {"result", "memoized-output"}
+
+FileCorruptionSafety ==
+    \A t \in TASKS : dataState[t] = "corrupt" =>
+        t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
 
 TimeSafety ==
     /\ \A a \in AttemptIds : attemptState[a] = "running" =>

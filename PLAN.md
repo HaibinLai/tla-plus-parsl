@@ -72,6 +72,8 @@ behavior after a message is dropped.
 decode, preventing a duplicate envelope from resolving a Future twice.
 `ParslFileContent.cfg` adds a deterministic symbolic content token for output files and checks
 that stage-out transfers the token only after successful task completion.
+`ParslFileCorruptionSmall.cfg` adds a minimal corrupted-output and repair/retransfer path;
+the larger three-task corruption configuration is retained for future state-space reduction.
 
 ### 3. Checked properties
 

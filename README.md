@@ -195,6 +195,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessaging.cfg ParslAbstra
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageLoss.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMessageDuplicate.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileContent.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileCorruptionSmall.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -228,6 +229,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   provider failure, recovery request, and block-count consistency all passed.
 - `ParslFileContent.cfg`: 11,458 states generated, 2,083 distinct states, depth 51;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
+- `ParslFileCorruptionSmall.cfg`: 24,084 states generated, 4,875 distinct states, depth 60;
+  corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
 - `ParslJoin.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
   `EventuallySettled` passed for an outer join task waiting on two inner Futures.
 - `ParslJoinSafety.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
