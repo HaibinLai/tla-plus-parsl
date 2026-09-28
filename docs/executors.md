@@ -78,3 +78,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainCu
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainFixed.cfg models/executors/ParslHtexManagerDrain.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainPresent.cfg models/executors/ParslHtexManagerDrain.tla
 ```
+
+`ParslHtexMonitoringMessage.tla` covers a manager result batch containing a monitoring payload.
+With monitoring enabled the payload is forwarded; the current disabled-monitoring path asserts
+that a radio exists and can crash, while the fixed path ignores the optional payload without
+changing task bookkeeping. The runtime probe sends the real pickled multipart message.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMessageCurrent.cfg models/executors/ParslHtexMonitoringMessage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMessageFixed.cfg models/executors/ParslHtexMonitoringMessage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMessageEnabled.cfg models/executors/ParslHtexMonitoringMessage.tla
+```
