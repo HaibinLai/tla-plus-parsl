@@ -842,7 +842,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 85 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 91 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1103,6 +1103,16 @@ The TaskVine collector is exercised without a TaskVine installation:
 The probe calls the real collector with manager reports and serialized result files, covering
 valid values, task exceptions, corrupt files, no-result/resource failures, and manager-exit cleanup
 of outstanding Futures.
+
+Radical Pilot callback mapping is exercised without a Radical Pilot installation:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_results_runtime.py -v
+```
+
+The probe supplies fake RP task objects and constants to the real callback, covering Bash exit
+codes, Python deserialization, cancellation, Bash failures, master failure propagation, and the
+current invalid non-exception failure path.
 
 File/DataFuture readiness is exercised through a real two-task local dataflow:
 
