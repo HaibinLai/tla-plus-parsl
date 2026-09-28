@@ -136,6 +136,9 @@ and scale-in cleanup of queued/running tasks.
 `ParslJoinApp.tla` models bounded `join_app` semantics for single/list/empty/invalid returns,
 inner Future observation, ordered aggregate results, join-handle lifetime, and inner-failure
 propagation. Inner retry policy remains below this join protocol, as in Parsl's callback path.
+`ParslJoinDuplicates.tla` preserves list positions and duplicate Future references, checking that
+`[f1, f1, f2]` yields a duplicate ordered result and that repeated failed references contribute
+the corresponding multiplicity to `JoinError`.
 `ParslJoinRetry.tla` adds physical inner attempts and verifies that retryable inner failures remain
 unresolved to the outer join until a final attempt succeeds or fails.
 `ParslNestedJoin.tla` adds a nested join layer and checks that leaf completion/failure propagates

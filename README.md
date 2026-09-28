@@ -120,6 +120,13 @@ all selected inner Futures are terminal; successful list results preserve input 
 inner failure becomes an outer join failure. Inner retries are intentionally owned by the inner
 tasks, matching Parsl's callback behavior.
 
+`ParslJoinDuplicates.tla` refines list joins beyond set-based dependency tracking. It models a
+joinable list shaped like `[I1, I1, I2]`, registers callbacks by list position, preserves the
+duplicate result in the aggregate, and counts a failed repeated Future once per list occurrence.
+Callbacks delivered again after a position has already been observed are harmless. This follows
+the list registration, all-done gate, ordered `future.result()` aggregation, and exception scan in
+[`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
+
 `ParslJoinRetry.tla` refines that protocol with separate logical inner Futures and physical inner
 attempts. A retryable inner failure leaves the Future unresolved, so the outer join waits; only a
 final-attempt failure is propagated as `JoinError`, while a later successful retry contributes its
@@ -510,6 +517,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorP
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslNestedJoin.cfg ParslNestedJoin.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinDuplicates.cfg ParslJoinDuplicates.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransport.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskTransportFailure.cfg ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
@@ -612,6 +620,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslNestedJoin.cfg`: 414 states generated, 126 distinct states, depth 11;
   nested leaf observation, nested handle lifetime, nested success/failure propagation, and outer
   completion gating all passed.
+- `ParslJoinDuplicates.cfg`: 210 states generated, 49 distinct states, depth 7;
+  duplicate Future references, callback-position observation, ordered duplicate results, repeated
+  failure multiplicity, duplicate callback tolerance, and join-handle cleanup all passed.
 - `ParslTaskTransport.cfg`: 859 states generated, 288 distinct states, depth 28;
   serialization-before-send, envelope/decode ordering, dispatch admission, worker-loss retry,
   result serialization, correlation, and stale-result safety all passed.
@@ -790,6 +801,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
+| `ObservePosition` / `DuplicateCallback` | ordered list-position callbacks and duplicate Future references | `DataFlowKernel.handle_join_update` list branch |
 | `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
 | `StartNestedJoin` / `FinalizeNested` / `ObserveNestedResult` | nested join handle and result propagation | nested `join_app` callback composition |
 | `BeginEncode` / `FinishEncodeSuccess` / `DecodeTaskSuccess` | serialized callable/payload gating task transport | DFK serialization boundary, interchange task queue, worker decode |
