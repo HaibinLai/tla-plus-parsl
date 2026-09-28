@@ -958,6 +958,15 @@ unfinished when the worker raises `BadMessage`. It also sends the same valid res
 confirms the current second `tasks.pop` raises `KeyError`; both paths are represented by
 `ParslHtexResultQueue.cfg`.
 
+The heartbeat-to-Future failure path is also exercised end-to-end with local fake transport:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_manager_loss_runtime.py -v
+```
+
+An expired manager produces the real serialized `RemoteExceptionWrapper` report, and the real HTEX
+result worker turns it into a `ManagerLost` exception on the corresponding Future.
+
 The local zip staging implementation is exercised against actual bytes as well:
 
 ```bash
@@ -984,7 +993,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 126 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 127 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
