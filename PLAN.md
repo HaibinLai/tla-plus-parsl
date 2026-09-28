@@ -140,6 +140,10 @@ extends `tests/test_thread_executor_runtime.py` with the non-blocking shutdown p
 write failure. The current path can leave a partial output after a failed direct write; the fixed
 configuration represents temporary-file plus atomic publication. The runtime probe injects a
 write failure into the real `_zip_stage_in` helper.
+`ParslZipStageOut.tla` models the complementary archive append and source-removal ordering. A
+successful archive write followed by failed source cleanup can be retried into duplicate archive
+members; its fixed configuration models idempotent replacement. The zip runtime probe reproduces
+the duplicate entry with a source-version change between attempts.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

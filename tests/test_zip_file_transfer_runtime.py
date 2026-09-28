@@ -111,6 +111,50 @@ class ZipFileTransferRuntimeTest(unittest.TestCase):
         self.assertTrue(provider.can_stage_out(File("file:///tmp/output")))
         self.assertFalse(provider.can_stage_in(File("zip:/tmp/a.zip/x")))
 
+    def test_stage_out_retry_can_leave_a_duplicate_archive_entry_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "source.bin"
+            archive = root / "payload.zip"
+            source.write_bytes(b"version-one")
+
+            # The staging module uses the process-wide os module; save the
+            # original function before patching it.
+            import os
+            real_remove = os.remove
+            calls = 0
+
+            def fail_once(path):
+                nonlocal calls
+                calls += 1
+                if calls == 1:
+                    raise OSError("source cleanup failed")
+                return real_remove(path)
+
+            with mock.patch("parsl.data_provider.zip.os.remove", side_effect=fail_once):
+                with self.assertRaises(OSError):
+                    _zip_stage_out(
+                        str(archive),
+                        "nested/result.bin",
+                        str(root),
+                        inputs=[File(str(source))],
+                    )
+
+            self.assertTrue(source.exists())
+            source.write_bytes(b"version-two")
+            _zip_stage_out(
+                str(archive),
+                "nested/result.bin",
+                str(root),
+                inputs=[File(str(source))],
+            )
+
+            with zipfile.ZipFile(archive, "r") as z:
+                self.assertEqual(z.namelist().count("nested/result.bin"), 2)
+                # Python's ZipFile lookup returns the latest duplicate, but
+                # the archive still contains two entries and emits a warning.
+                self.assertEqual(z.read("nested/result.bin"), b"version-two")
+
 
 if __name__ == "__main__":
     unittest.main()
