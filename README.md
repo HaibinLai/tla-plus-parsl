@@ -261,12 +261,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   join dependency and outer-Future safety invariants passed.
 - `ParslJoinInvalid.cfg`: 1,114 states generated, 276 distinct states, depth 32;
   invalid join return values rejected the outer Future without a false success.
-- `ParslMessaging.cfg`: 1,217,956 states generated, 169,491 distinct states, depth 44;
+- `ParslMessaging.cfg`: 5,728,457 states generated, 661,192 distinct states, depth 48;
   task/result wire ordering, envelope validity, symbolic object-graph serialization, and
   stale-result invariants passed.
-- `ParslMessageLoss.cfg`: 1,582 states generated, 391 distinct states, depth 31;
+- `ParslMessageLoss.cfg`: 3,696 states generated, 760 distinct states, depth 33;
   task/result message loss, worker cleanup, retry bounds, and Future consistency passed.
-- `ParslMessageDuplicate.cfg`: 75 states generated, 23 distinct states, depth 17;
+- `ParslMessageDuplicate.cfg`: 94 states generated, 29 distinct states, depth 18;
   duplicate task/result envelopes were explicitly discarded without duplicate completion.
 
 ## Source-to-model mapping
@@ -287,6 +287,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `taskWireState` / `resultWireState` and `MessageSafety` | bounded ZMQ-like queues and envelope/attempt ordering | interchange task/result queues and manager socket message handling |
 | `DropTaskMessage` / `DropResultMessage` | transport loss before dispatch or Future resolution | interchange/socket failure boundary and retry handling |
 | `DuplicateTaskMessage` / `DuplicateResultMessage` | duplicate delivery and receiver-side discard | interchange receive loop and result deduplication boundary |
+| `MessageCorrelationSafety` | bind task/result envelopes to `(task, retryAttempt)` | interchange message identity and DFK current-attempt checks |
 | `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
 | `JoinObserve` / `JoinComplete` / `JoinFailure` | wait for inner Futures and propagate join result/failure | `DataFlowKernel.handle_exec_update`, `handle_join_update`, and `join_app` |
 | `JOIN_INVALID` / `JoinSafety` | invalid `join_app` return and outer-Future rejection | `DataFlowKernel.handle_exec_update` joinable-type validation |

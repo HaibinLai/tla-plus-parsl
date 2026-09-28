@@ -85,6 +85,8 @@ that no worker binding is created from the failed manager.
 the associated provider/executor capacity.
 `ParslExecutorDrain.cfg` models an executor entering `draining`, rejecting new submissions while
 allowing existing attempts to finish, followed by explicit recovery.
+`MessageCorrelationSafety` now checks that queued, received, duplicate, and consumed envelopes
+remain associated with their logical task and retry attempt.
 
 ### 3. Checked properties
 

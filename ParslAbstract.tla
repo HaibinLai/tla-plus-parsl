@@ -1032,6 +1032,16 @@ MessageSafety ==
               resultEnvelope[a] = "valid" /\
               attemptState[a] \in {"result_decoded", "succeeded", "lost", "stale"}
 
+MessageCorrelationSafety ==
+    /\ \A a \in AttemptIds : taskWireState[a] \in
+          {"queued", "sent", "received", "duplicate", "consumed"} =>
+          currentAttempt[a[1]] = a[2] \/
+          attemptState[a] \in {"succeeded", "failed", "timed_out", "lost", "stale"}
+    /\ \A a \in AttemptIds : resultWireState[a] \in
+          {"queued", "sent", "received", "duplicate", "consumed"} =>
+          currentAttempt[a[1]] = a[2] \/
+          attemptState[a] \in {"succeeded", "failed", "timed_out", "lost", "stale"}
+
 DependencySafety ==
     \A t \in TASKS : taskState[t] = "running" =>
         Deps(t) \subseteq {d \in TASKS : futureState[d] = "resolved"}
