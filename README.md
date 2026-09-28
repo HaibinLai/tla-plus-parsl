@@ -207,6 +207,16 @@ the candidate positive-node admission guard. This follows
 [`mpi_executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/mpi_executor.py)
 and [`mpi_prefix_composer.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/mpi_prefix_composer.py).
 
+The corresponding validation path is exercised against the real MPI prefix composer:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_mpi_spec_runtime.py -v
+```
+
+The runtime probe confirms empty specifications are rejected, positive node counts derive the
+missing rank count, and `num_nodes=0` with `num_ranks` reproduces the current division-by-zero
+failure.
+
 `ParslExecutorShutdown.tla` makes the shutdown distinction executable. ThreadPool shutdown keeps
 accepted work eligible to complete before the executor reaches `stopped`; WorkQueue shutdown has
 an explicit collector-cleanup action that fails work left behind when its submit process exits;
@@ -832,7 +842,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 67 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 70 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

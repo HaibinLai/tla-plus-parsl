@@ -248,6 +248,9 @@ admission paths, including accepted-work completion and resource-specification r
 command failure preservation and successful reported/missing-job application.
 `tests/test_slurm_submit_runtime.py` drives Slurm `sbatch` submission with deterministic output,
 checking normal registration, empty-output rejection, and the custom-regex named-group failure.
+`tests/test_mpi_spec_runtime.py` drives the real MPI resource-specification validator, checking
+empty-spec rejection, positive-node rank derivation, and the zero-node division failure modeled by
+`ParslMPISpec.tla`.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
