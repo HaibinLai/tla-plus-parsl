@@ -12,12 +12,12 @@ EXTENDS Naturals, Integers, FiniteSets, Sequences
 
 CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
-          FILE_OUTPUTS, SUBMITTABLE_EXECUTORS,
+          FILE_OUTPUTS, SUBMITTABLE_EXECUTORS, JOIN_TASKS, JOIN_DEPS,
           MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES,
           MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MONITORING_ENABLED
 
 TaskStates == {"pending", "staging", "ready", "queued", "running",
-               "retry_wait", "succeeded", "memoized", "failed"}
+               "retry_wait", "joining", "succeeded", "memoized", "failed"}
 FutureStates == {"unresolved", "resolved", "rejected"}
 MonitorStates == {"none", "pending", "running", "retry_wait", "succeeded", "failed", "memoized"}
 AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "decoded",
@@ -30,6 +30,7 @@ DataStates == {"unavailable", "staging", "available", "stageout", "transferred"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
 NoAttempt == <<"none", -1>>
 Deps(t) == {d \in TASKS : d \o "->" \o t \in DEPS}
+JoinDeps(t) == {d \in TASKS : d \o "=>" \o t \in JOIN_DEPS}
 WorkerExec(w) == CHOOSE e \in EXECUTORS : w \o ":" \o e \in WORKER_EXECUTOR
 SerializableTask(t) == t \in CALLABLE_SERIALIZABLE /\ t \in PAYLOAD_SERIALIZABLE
 
@@ -38,14 +39,14 @@ VARIABLES taskState, futureState, retries, currentAttempt, selectedExecutor,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
           completed, rejected, outputs,
-          clock, lastHeartbeat, attemptStart, monitoringState
+          clock, lastHeartbeat, attemptStart, monitoringState, joinObserved
 
 vars == <<taskState, futureState, retries, currentAttempt, selectedExecutor,
           dataState, attemptState, attemptExecutor, attemptWorker,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
           completed, rejected, outputs,
-          clock, lastHeartbeat, attemptStart, monitoringState>>
+          clock, lastHeartbeat, attemptStart, monitoringState, joinObserved>>
 
 timeVars == <<clock, lastHeartbeat, attemptStart>>
 
@@ -56,8 +57,11 @@ Init ==
     /\ FILE_OUTPUTS \subseteq TASKS
     /\ SUBMITTABLE_EXECUTORS \subseteq EXECUTORS
     /\ DEPS \subseteq {d \o "->" \o t : d \in TASKS, t \in TASKS}
+    /\ JOIN_TASKS \subseteq TASKS
+    /\ JOIN_DEPS \subseteq {d \o "=>" \o t : d \in TASKS, t \in TASKS}
     /\ WORKER_EXECUTOR \subseteq {w \o ":" \o e : w \in WORKERS, e \in EXECUTORS}
     /\ \A t \in TASKS : t \notin Deps(t)
+    /\ \A t \in JOIN_TASKS : t \notin JoinDeps(t)
     /\ \A w \in WORKERS : \E e \in EXECUTORS : w \o ":" \o e \in WORKER_EXECUTOR
     /\ taskState = [t \in TASKS |-> "pending"]
     /\ futureState = [t \in TASKS |-> "unresolved"]
@@ -81,6 +85,7 @@ Init ==
     /\ lastHeartbeat = [w \in WORKERS |-> 0]
     /\ attemptStart = [a \in AttemptIds |-> -1]
     /\ monitoringState = [t \in TASKS |-> "none"]
+    /\ joinObserved = [t \in TASKS |-> {}]
 
 BeginStaging(t) ==
     /\ t \in TASKS /\ taskState[t] = "pending"
@@ -336,10 +341,15 @@ AttemptSuccess(t, k, w) ==
     /\ attemptState[a] = "result_decoded" /\ attemptWorker[a] = w
     /\ currentAttempt[t] = k /\ taskState[t] = "running"
     /\ attemptState' = [attemptState EXCEPT ![a] = "succeeded"]
-    /\ taskState' = [taskState EXCEPT ![t] = "succeeded"]
-    /\ futureState' = [futureState EXCEPT ![t] = "resolved"]
-    /\ completed' = completed \cup {t}
-    /\ outputs' = [outputs EXCEPT ![t] = "result"]
+    /\ taskState' = IF t \in JOIN_TASKS
+                    THEN [taskState EXCEPT ![t] = "joining"]
+                    ELSE [taskState EXCEPT ![t] = "succeeded"]
+    /\ futureState' = IF t \in JOIN_TASKS
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "resolved"]
+    /\ completed' = IF t \in JOIN_TASKS THEN completed ELSE completed \cup {t}
+    /\ outputs' = [outputs EXCEPT ![t] = IF t \in JOIN_TASKS
+                                      THEN "join-handle" ELSE "result"]
     /\ workerState' = [workerState EXCEPT ![w] = "idle"]
     /\ workerAttempt' = [workerAttempt EXCEPT ![w] = NoAttempt]
     /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
@@ -371,6 +381,47 @@ AttemptFailure(t, k, w) ==
     /\ UNCHANGED <<currentAttempt, selectedExecutor, dataState,
                     attemptExecutor, executorState, providerState,
                     providerTarget, providerBlocks, completed, outputs>>
+
+JoinObserve(t, i) ==
+    /\ t \in JOIN_TASKS /\ i \in JoinDeps(t)
+    /\ taskState[t] = "joining"
+    /\ futureState[i] \in {"resolved", "rejected"}
+    /\ i \notin joinObserved[t]
+    /\ joinObserved' = [joinObserved EXCEPT ![t] = @ \cup {i}]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, clock, lastHeartbeat,
+                    attemptStart, monitoringState>>
+
+JoinComplete(t) ==
+    /\ t \in JOIN_TASKS /\ taskState[t] = "joining"
+    /\ joinObserved[t] = JoinDeps(t)
+    /\ \A i \in JoinDeps(t) : futureState[i] = "resolved"
+    /\ taskState' = [taskState EXCEPT ![t] = "succeeded"]
+    /\ futureState' = [futureState EXCEPT ![t] = "resolved"]
+    /\ completed' = completed \cup {t}
+    /\ outputs' = [outputs EXCEPT ![t] = "result"]
+    /\ UNCHANGED <<retries, currentAttempt, selectedExecutor, dataState,
+                    attemptState, attemptExecutor, attemptWorker, workerState,
+                    workerAttempt, executorState, providerState, providerTarget,
+                    providerBlocks, rejected, clock, lastHeartbeat, attemptStart,
+                    monitoringState, joinObserved>>
+
+JoinFailure(t) ==
+    /\ ALLOW_FAILURES
+    /\ t \in JOIN_TASKS /\ taskState[t] = "joining"
+    /\ joinObserved[t] = JoinDeps(t)
+    /\ \E i \in JoinDeps(t) : futureState[i] = "rejected"
+    /\ taskState' = [taskState EXCEPT ![t] = "failed"]
+    /\ futureState' = [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = rejected \cup {t}
+    /\ UNCHANGED <<retries, currentAttempt, selectedExecutor, dataState,
+                    attemptState, attemptExecutor, attemptWorker, workerState,
+                    workerAttempt, executorState, providerState, providerTarget,
+                    providerBlocks, completed, outputs, clock, lastHeartbeat,
+                    attemptStart, monitoringState, joinObserved>>
 
 RetryTask(t) ==
     /\ t \in TASKS /\ taskState[t] = "retry_wait" /\ retries[t] <= MAX_RETRIES
@@ -567,7 +618,7 @@ CoreActions ==
 StartAttemptTimed(t, k, w) ==
     /\ StartAttempt(t, k, w)
     /\ attemptStart' = [attemptStart EXCEPT ![<<t, k>>] = clock]
-    /\ UNCHANGED <<clock, lastHeartbeat, monitoringState>>
+    /\ UNCHANGED <<clock, lastHeartbeat, monitoringState, joinObserved>>
 
 Tick ==
     /\ clock < MAX_TIME
@@ -577,7 +628,7 @@ Tick ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs, monitoringState>>
+                    completed, rejected, outputs, monitoringState, joinObserved>>
 
 Heartbeat(w) ==
     /\ w \in WORKERS /\ workerState[w] # "failed"
@@ -587,7 +638,7 @@ Heartbeat(w) ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs, monitoringState>>
+                    completed, rejected, outputs, monitoringState, joinObserved>>
 
 MonitorView(t) ==
     CASE taskState[t] = "memoized"  -> "memoized"
@@ -607,15 +658,17 @@ PublishMonitor(t) ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, joinObserved>>
 
 NextCore ==
-    \/ CoreActions /\ UNCHANGED <<timeVars, monitoringState>>
+    \/ CoreActions /\ UNCHANGED <<timeVars, monitoringState, joinObserved>>
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           StartAttemptTimed(t, k, w)
     \/ Tick
     \/ \E w \in WORKERS : Heartbeat(w)
     \/ \E t \in TASKS : PublishMonitor(t)
+    \/ \E t \in JOIN_TASKS, i \in TASKS : JoinObserve(t, i)
+    \/ \E t \in JOIN_TASKS : JoinComplete(t) \/ JoinFailure(t)
 
 Next == NextCore \/ UNCHANGED vars
 
@@ -639,11 +692,12 @@ TypeOK ==
     /\ providerTarget \in [EXECUTORS -> 0..MAX_BLOCKS]
     /\ providerBlocks \in [EXECUTORS -> 0..MAX_BLOCKS]
     /\ completed \subseteq TASKS /\ rejected \subseteq TASKS
-    /\ outputs \in [TASKS -> {"absent", "memoized-output", "result"}]
+    /\ outputs \in [TASKS -> {"absent", "memoized-output", "join-handle", "result"}]
     /\ clock \in 0..MAX_TIME
     /\ lastHeartbeat \in [WORKERS -> 0..MAX_TIME]
     /\ attemptStart \in [AttemptIds -> -1..MAX_TIME]
     /\ monitoringState \in [TASKS -> MonitorStates]
+    /\ joinObserved \in [TASKS -> SUBSET TASKS]
 
 DependencySafety ==
     \A t \in TASKS : taskState[t] = "running" =>
@@ -688,6 +742,13 @@ ProviderExecutorConsistency ==
           executorState[e] = "up" /\ providerBlocks[e] > 0
     /\ \A e \in EXECUTORS : providerState[e] = "failed" =>
           providerBlocks[e] = 0 /\ providerTarget[e] = 0
+
+JoinSafety ==
+    /\ \A t \in JOIN_TASKS : taskState[t] = "joining" =>
+          futureState[t] = "unresolved" /\ outputs[t] = "join-handle"
+    /\ \A t \in JOIN_TASKS : joinObserved[t] \subseteq JoinDeps(t)
+    /\ \A t \in JOIN_TASKS : taskState[t] = "succeeded" =>
+          JoinDeps(t) \subseteq {i \in TASKS : futureState[i] = "resolved"}
 
 ResultConsistency ==
     /\ completed \cap rejected = {}

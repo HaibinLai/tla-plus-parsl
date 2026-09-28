@@ -83,7 +83,7 @@ The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` 
 After the MVP is stable, possible extensions are:
 
 - richer DataManager/staging behavior, including stage-in/stage-out failure;
-- `join_app` and the `joining` state;
+- richer `join_app` behavior beyond the bounded inner-Future set now modeled;
 - manager heartbeat timeout, version mismatch, drain, and executor bad state;
 - monitoring as an abstract eventual event stream;
 - dynamic task creation while a workflow is running;

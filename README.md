@@ -101,6 +101,16 @@ The result path has the same shape after worker execution: `SerializeResult`, `S
 worker or executor failure can still replace an in-flight result with a retry, so a result from
 the old attempt remains eligible only for the explicit stale-result transition.
 
+## Join applications
+
+Tasks in `JOIN_TASKS` model Parsl `join_app` tasks. Their first successful physical attempt
+returns a join handle rather than resolving the outer Future: the logical task enters
+`joining`, and `JoinObserve` records completion of each inner Future listed in `JOIN_DEPS`.
+`JoinComplete` resolves the outer Future only after every inner Future succeeds; with failures
+enabled, `JoinFailure` propagates a rejected inner Future to the outer task. This keeps the
+outer logical task separate from the physical attempt that produced the list of inner Futures,
+matching `DataFlowKernel.handle_exec_update` and `handle_join_update`.
+
 ## Logical time and heartbeat failures
 
 The model uses a bounded logical clock rather than wall-clock timestamps. `Tick` advances the
@@ -146,6 +156,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTime.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMonitoring.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSubmitFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslProviderFailure.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoin.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslJoinSafety.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -171,12 +183,16 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 492 states generated, 145 distinct states, depth 31;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
-- `ParslMonitoring.cfg`: 3,311 states generated, 719 distinct states, depth 33;
+- `ParslMonitoring.cfg`: 4,387 states generated, 907 distinct states, depth 33;
   all monitoring consistency invariants passed.
-- `ParslSubmitFailure.cfg`: 121 states generated, 31 distinct states, depth 12;
+- `ParslSubmitFailure.cfg`: 185 states generated, 45 distinct states, depth 12;
   submit rejection remained pre-dispatch and all retry/result invariants passed.
 - `ParslProviderFailure.cfg`: 890 states generated, 219 distinct states, depth 32;
   provider failure, recovery request, and block-count consistency all passed.
+- `ParslJoin.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
+  `EventuallySettled` passed for an outer join task waiting on two inner Futures.
+- `ParslJoinSafety.cfg`: 145,240 states generated, 23,955 distinct states, depth 52;
+  join dependency and outer-Future safety invariants passed.
 
 ## Source-to-model mapping
 
@@ -193,6 +209,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
 | `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
+| `JoinObserve` / `JoinComplete` / `JoinFailure` | wait for inner Futures and propagate join result/failure | `DataFlowKernel.handle_exec_update`, `handle_join_update`, and `join_app` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
