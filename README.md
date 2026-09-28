@@ -665,10 +665,11 @@ executable counterexample for a future parser-hardening change.
 exactly three buffers, so a fourth frame can trigger deserializer work before rejection. The fixed
 configuration validates the frame count before decoding.
 
-`ParslApplyMessageArity.tla` checks the public `unpack_apply_message` boundary itself. The
-current function returns every decoded frame, so an extra fourth buffer is accepted until
-`execute_task` later fails tuple unpacking; the fixed configuration rejects any count other than
-three at the public boundary. `tests/test_apply_message_arity_runtime.py` drives the real facade.
+`ParslApplyMessageArity.tla` applies the exact-three-buffer contract to the public
+`unpack_apply_message` function. The current unpacker returns an extra decoded frame and leaves
+the failure to `execute_task` tuple assignment; the fixed configuration rejects non-three-frame
+messages at the unpack boundary. `tests/test_apply_message_arity_runtime.py` drives the real
+facade.
 
 `ParslSerializationZMQBridge.tla` connects those framed buffers to a bounded ZMQ-like route.
 Task and result messages carry an attempt id and serializer token; send/receive can drop, duplicate,
@@ -676,6 +677,12 @@ or misroute a message; decode is required before task dispatch; and only a resul
 attempt can resolve the Future. A result from an old attempt is explicitly stale even after a
 valid decode. This combines the concrete serialization facade with the ROUTER/DEALER-style
 correlation already abstracted in `ParslZMQ.tla`.
+
+`ParslSerializationPluginError.tla` models unknown serializer headers that dynamically import a
+class. The current facade wraps import/construction failures but lets an imported class without a
+`deserialize()` method leak `AttributeError`; the fixed branch wraps that interface failure as a
+`DeserializerPluginError`. `tests/test_serialization_plugin_error_runtime.py` contrasts both
+paths with a real `builtins.str` plugin header.
 
 `ParslHtexResultQueue.tla` probes the concrete HTEX result thread. It models successful result
 decoding, exception decoding, malformed result messages, duplicate task IDs, and the special
@@ -1070,6 +1077,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslResourceScaling.cfg ParslResourceSc
 java -cp tla2tools.jar tlc2.TLC -config ParslPollerBadState.cfg ParslPollerBadState.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationPluginError.cfg ParslSerializationPluginError.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationPluginErrorFixed.cfg ParslSerializationPluginError.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLength.cfg ParslSerializationLength.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLengthFixed.cfg ParslSerializationLength.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationFrameCountCurrent.cfg ParslSerializationFrameCount.tla
@@ -1502,7 +1511,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 230 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 231 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2203,6 +2212,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   dispatch gating, and corrupt-frame rejection all passed.
 - `ParslSerializationWireFailure.cfg`: 21 states generated, 8 distinct states, depth 4;
   an unserializable callable was rejected before framing or dispatch.
+- `ParslSerializationPluginError.cfg`: expected counterexample at depth 3 (4 states generated,
+  3 distinct); an importable non-plugin class leaks `AttributeError`.
+  `ParslSerializationPluginErrorFixed.cfg`: 6 states generated, 3 distinct states, depth 3;
+  plugin interface failures are wrapped.
 - `ParslSerializationZMQBridge.cfg`: 104,657 states generated, 20,320 distinct states, depth 39;
   serializer-token correlation, route validation, drop/duplicate handling, decode-before-dispatch,
   worker-loss retry, and stale result suppression all passed.

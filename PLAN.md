@@ -597,6 +597,9 @@ tasks, and suppression of later admission or scale-out.
 `ParslSerializationWire.tla` models concrete callable/args/kwargs serialization headers, decimal
 length framing, ordered unpack/decode, serializer failure, and corrupt-frame rejection before
 dispatch.
+`ParslSerializationPluginError.tla` models dynamic serializer headers: an importable class without
+`deserialize()` currently leaks an attribute error, while the fixed branch wraps that plugin
+interface failure.
 `ParslSerializationZMQBridge.tla` connects those frames to task/result transport, route checking,
 attempt correlation, duplicate/drop handling, worker-loss retry, and stale-result suppression.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
@@ -650,7 +653,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 230 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 231 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
