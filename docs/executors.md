@@ -50,6 +50,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueShutdown.
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_shutdown_runtime.py -v
 ```
 
+`ParslTaskVineShutdown.tla` models the corresponding TaskVine collector path. Its stop event and
+task map are separate from Work Queue's, and outstanding Futures receive `TaskVineManagerFailure`
+before the collector exits. `tests/test_taskvine_shutdown_runtime.py` invokes the real collector
+with a stopped flag and an outstanding Future.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineShutdown.cfg models/executors/ParslTaskVineShutdown.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_shutdown_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
