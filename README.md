@@ -440,6 +440,10 @@ Future terminal and ignores duplicates. This follows
 [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py)
 around `_result_queue_worker` and `submit_payload`.
 
+`ParslHtexSubmitFailure.tla` covers the submit-side half of that lifecycle. If
+`outgoing_q.put` fails after `submit_payload` inserts its Future into `tasks`, the current path
+leaves a pending orphan; fixed behavior rolls back the map entry and fails the Future.
+
 `ParslHtexVersionMismatch.tla` models registration rejection when manager Python/Parsl versions
 do not match. The actual configuration exposes a race: the interchange has already set its kill
 event and queued the `task_id=-1` fatal result, but the executor result thread has not yet set
@@ -731,6 +735,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLength.cfg ParslSerial
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationLengthFixed.cfg ParslSerializationLength.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitFailure.cfg ParslHtexSubmitFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitFailureFixed.cfg ParslHtexSubmitFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexSubmitSuccess.cfg ParslHtexSubmitFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexVersionMismatchFixed.cfg ParslHtexVersionMismatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexDispatchPriority.cfg ParslHtexDispatchPriority.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMPISpecFixed.cfg ParslMPISpec.tla
@@ -976,7 +983,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 124 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 125 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1470,6 +1477,12 @@ failure result for each in-flight task.
 - `ParslHtexResultQueueFixed.cfg`: 17 states generated, 7 distinct states, depth 3; malformed
   message failure, duplicate-result handling, valid/exception result mapping, and interchange
   failure cleanup all passed.
+- `ParslHtexSubmitFailure.cfg`: expected counterexample at depth 2; a failed outgoing queue put
+  leaves a pending Future in the task map.
+- `ParslHtexSubmitFailureFixed.cfg`: 4 states generated, 2 distinct states, depth 2; failed
+  submission rolls back the task map and fails the Future.
+- `ParslHtexSubmitSuccess.cfg`: 4 states generated, 2 distinct states, depth 2; successful
+  submission preserves the pending task mapping.
 - `ParslHtexVersionMismatch.cfg`: expected counterexample at depth 2 (27 states generated, 12
   distinct); a task is accepted after mismatch but before the fatal result is consumed.
 - `ParslHtexVersionMismatchFixed.cfg`: 30 states generated, 10 distinct states, depth 4; version
