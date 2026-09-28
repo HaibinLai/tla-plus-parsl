@@ -242,6 +242,13 @@ The configurations use the current identifiers (`C2` for callable dill and `02` 
 from [`serialize/facade.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/serialize/facade.py)
 and [`serialize/concretes.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/serialize/concretes.py).
 
+`ParslSerializationZMQBridge.tla` connects those framed buffers to a bounded ZMQ-like route.
+Task and result messages carry an attempt id and serializer token; send/receive can drop, duplicate,
+or misroute a message; decode is required before task dispatch; and only a result for the current
+attempt can resolve the Future. A result from an old attempt is explicitly stale even after a
+valid decode. This combines the concrete serialization facade with the ROUTER/DEALER-style
+correlation already abstracted in `ParslZMQ.tla`.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -465,6 +472,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmissionAutolabel.cfg Pars
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceScaling.cfg ParslResourceScaling.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -585,6 +593,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   dispatch gating, and corrupt-frame rejection all passed.
 - `ParslSerializationWireFailure.cfg`: 21 states generated, 8 distinct states, depth 4;
   an unserializable callable was rejected before framing or dispatch.
+- `ParslSerializationZMQBridge.cfg`: 104,657 states generated, 20,320 distinct states, depth 39;
+  serializer-token correlation, route validation, drop/duplicate handling, decode-before-dispatch,
+  worker-loss retry, and stale result suppression all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.

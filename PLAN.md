@@ -176,6 +176,8 @@ success/failure rollback, capacity-guarded dispatch, retryable pressure, and min
 `ParslSerializationWire.tla` models concrete callable/args/kwargs serialization headers, decimal
 length framing, ordered unpack/decode, serializer failure, and corrupt-frame rejection before
 dispatch.
+`ParslSerializationZMQBridge.tla` connects those frames to task/result transport, route checking,
+attempt correlation, duplicate/drop handling, worker-loss retry, and stale-result suppression.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
