@@ -113,6 +113,10 @@ preserving the unregistered gate before dispatch.
 `ParslStrategy.tla` is a separate small model of the source strategy policy: task pressure versus
 available slots, bounded scale-out, minimum-block floors, and idle-timeout scale-in. It is kept
 separate from the DFK protocol state machine so TLC can isolate scaling-policy counterexamples.
+`ParslZMQ.tla` adds a focused multipart transport abstraction with explicit header/body encoding,
+bounded queues, endpoint identities, disconnect/drop, reordering, duplicate delivery, route
+validation, and acknowledgement. The configuration is intentionally small so transport traces
+can be inspected before merging these states into the larger DFK model.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.

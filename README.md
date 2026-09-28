@@ -79,6 +79,12 @@ active-task pressure is compared with slots (`blocks * SLOTS_PER_BLOCK`), scale-
 kept separate from the DFK protocol state machine so strategy bugs can be isolated with a small
 state space. The policy is based on `parsl/jobs/strategy.py` in the current Parsl source.
 
+`ParslZMQ.tla` is the next focused transport model. It represents a multipart message as a
+header/body encoding protocol, a bounded outbound/inbound queue pair, ROUTER/DEALER-style endpoint
+identity and route checks, disconnect/drop, queue reordering, duplicate delivery, invalid payloads,
+and receiver-side correlation by `(task, attempt, kind)`. It is deliberately independent of the
+DFK model so transport counterexamples remain short and interpretable.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -274,6 +280,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileContent.cfg ParslAbst
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslFileCorruptionSmall.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslNestedSerialization.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStrategy.cfg ParslStrategy.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslZMQ.cfg ParslZMQ.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -319,6 +326,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslStrategy.cfg`: 327 states generated, 114 distinct states, depth 13;
   slot-pressure scale-out, idle-timer handling, minimum/maximum block bounds, and task-pressure
   safety all passed in the focused strategy model.
+- `ParslZMQ.cfg`: 33,321 states generated, 6,216 distinct states, depth 35;
+  multipart encoding order, bounded queues, disconnect/drop, route validation, duplicate discard,
+  correlation, and acknowledgement safety all passed in the focused transport model.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -401,6 +411,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |
+| `EncodeHeader` / `EncodeBody` / `FinishEncode` | multipart task/result serialization before transport | DFK/interchange task path and worker result encoding |
+| `Send` / `Deliver` / `DuplicateInbound` / `DropOutbound` | bounded ZMQ-like transport, reconnect loss, reordering, duplicate delivery | HTEX interchange and manager socket queues |
+| `ReceiveValid` / `RejectInvalid` / `Ack` | receiver validation, correlation, and consume acknowledgement | interchange manager message handling and DFK result path |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces
