@@ -17,7 +17,8 @@ TaskStates == {"pending", "staging", "ready", "queued", "running",
                "retry_wait", "succeeded", "memoized", "failed"}
 FutureStates == {"unresolved", "resolved", "rejected"}
 AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "decoded",
-                  "dispatched", "running",
+                  "dispatched", "running", "result_serialized", "result_sent",
+                  "result_received", "result_decoded",
                   "succeeded", "failed", "timed_out", "lost", "stale"}
 WorkerStates == {"idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
@@ -199,10 +200,52 @@ StartAttempt(t, k, w) ==
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs>>
 
-AttemptSuccess(t, k, w) ==
+SerializeResult(t, k, w) ==
     LET a == <<t, k>> IN
     /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
     /\ attemptState[a] = "running" /\ attemptWorker[a] = w
+    /\ currentAttempt[t] = k /\ taskState[t] = "running"
+    /\ attemptState' = [attemptState EXCEPT ![a] = "result_serialized"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+SendResult(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "result_serialized"
+    /\ attemptState' = [attemptState EXCEPT ![a] = "result_sent"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+ReceiveResult(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "result_sent"
+    /\ attemptState' = [attemptState EXCEPT ![a] = "result_received"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+DecodeResult(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "result_received"
+    /\ attemptState' = [attemptState EXCEPT ![a] = "result_decoded"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs>>
+
+AttemptSuccess(t, k, w) ==
+    LET a == <<t, k>> IN
+    /\ t \in TASKS /\ k \in 0..MAX_RETRIES /\ w \in WORKERS
+    /\ attemptState[a] = "result_decoded" /\ attemptWorker[a] = w
     /\ currentAttempt[t] = k /\ taskState[t] = "running"
     /\ attemptState' = [attemptState EXCEPT ![a] = "succeeded"]
     /\ taskState' = [taskState EXCEPT ![t] = "succeeded"]
@@ -269,7 +312,9 @@ WorkerFailure(w) ==
     /\ ALLOW_FAILURES
     /\ w \in WORKERS /\ workerState[w] = "busy"
     /\ LET a == workerAttempt[w] IN
-       /\ attemptState[a] \in {"submitted", "dispatched", "running"}
+       /\ attemptState[a] \in {"submitted", "dispatched", "running",
+                                "result_serialized", "result_sent",
+                                "result_received", "result_decoded"}
        /\ attemptState' = [attemptState EXCEPT ![a] = "lost"]
        /\ workerState' = [workerState EXCEPT ![w] = "failed"]
        /\ workerAttempt' = [workerAttempt EXCEPT ![w] = NoAttempt]
@@ -293,11 +338,15 @@ ExecutorFailure(e, t, k) ==
     /\ ALLOW_FAILURES
     /\ e \in EXECUTORS /\ t \in TASKS /\ k \in 0..MAX_RETRIES
     /\ executorState[e] = "up" /\ attemptExecutor[a] = e
-    /\ attemptState[a] = "running" /\ attemptWorker[a] \in WORKERS
+    /\ attemptState[a] \in {"running", "result_serialized", "result_sent",
+                             "result_received", "result_decoded"}
+    /\ attemptWorker[a] \in WORKERS
     /\ workerState[attemptWorker[a]] = "busy"
     /\ currentAttempt[t] = k /\ taskState[t] = "running"
     /\ Cardinality({x \in AttemptIds : attemptExecutor[x] = e /\
-                    attemptState[x] \in {"submitted", "dispatched", "running"}}) = 1
+                    attemptState[x] \in {"submitted", "dispatched", "running",
+                                         "result_serialized", "result_sent",
+                                         "result_received", "result_decoded"}}) = 1
     /\ attemptState' = [attemptState EXCEPT ![a] = "lost"]
     /\ attemptWorker' = [attemptWorker EXCEPT ![a] = "none"]
     /\ workerState' = [workerState EXCEPT ![attemptWorker[a]] = "failed"]
@@ -391,8 +440,11 @@ NextCore ==
           \/ ReceiveAttempt(t, k) \/ DecodeAttempt(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           DispatchAttempt(t, k, w) \/ StartAttempt(t, k, w)
+          \/ SerializeResult(t, k, w)
           \/ AttemptSuccess(t, k, w) \/ AttemptFailure(t, k, w)
           \/ AttemptTimeout(t, k, w)
+    \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
+          SendResult(t, k) \/ ReceiveResult(t, k) \/ DecodeResult(t, k)
     \/ \E t \in TASKS : RetryTask(t)
     \/ \E w \in WORKERS : WorkerFailure(w)
     \/ \E e \in EXECUTORS, t \in TASKS, k \in 0..MAX_RETRIES :

@@ -40,6 +40,8 @@ Physical attempt states:
 
 ```text
 absent -> submitted -> serialized -> sent -> received -> decoded -> dispatched -> running -> succeeded
+                                             \-> result_serialized -> result_sent
+                                                 -> result_received -> result_decoded -> succeeded
                                              \-> failed
                                              \-> timed_out
                                              \-> lost
@@ -74,6 +76,11 @@ interchange boundary, and `DecodeAttempt` represents reconstructing the work ite
 a worker is enabled only after decoding succeeds. Payload bytes and Python object contents remain
 abstract; this stage checks ordering and failure-safe handoff rather than ZMQ or pickle behavior.
 
+The result path has the same shape after worker execution: `SerializeResult`, `SendResult`,
+`ReceiveResult`, and `DecodeResult` must occur before `AttemptSuccess` resolves the Future. A
+worker or executor failure can still replace an in-flight result with a retry, so a result from
+the old attempt remains eligible only for the explicit stale-result transition.
+
 ## TLC verification
 
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
@@ -91,10 +98,10 @@ attempts, attempt identity, Future result consistency, and stale-result safety.
 
 Measured with TLC 2.19 and Java 17 on 2026-09-28:
 
-- `ParslAbstract.cfg`: 2,605,090 states generated, 518,645 distinct states, depth 73;
+- `ParslAbstract.cfg`: 3,400,082 states generated, 637,157 distinct states, depth 85;
   all invariants passed.
-- `ParslMemo.cfg`: 130,788 states generated, 28,611 distinct states, depth 55; all invariants passed.
-- `ParslNoFailures.cfg`: 3,242 states generated, 985 distinct states, depth 37;
+- `ParslMemo.cfg`: 162,340 states generated, 33,651 distinct states, depth 63; all invariants passed.
+- `ParslNoFailures.cfg`: 5,322 states generated, 1,625 distinct states, depth 49;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 
 ## Source-to-model mapping
@@ -107,7 +114,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
-| `StartAttempt` / `AttemptSuccess` | worker execution and result return | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
+| `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
+| `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
+| `AttemptSuccess` | accept the current decoded result and resolve the Future | `DataFlowKernel.handle_exec_update` |
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
