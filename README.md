@@ -111,6 +111,13 @@ records an attempt start time. `WorkerFailure` can therefore be enabled by a hea
 workflow interleaving with clock values; `ParslTime.cfg` is a deliberately tiny one-task model
 that explores the time and timeout transitions with `MAX_TIME = 1`.
 
+Monitoring is modeled as `monitoringState`, the last task status persisted by the monitoring
+radio/database. `PublishMonitor` may lag behind the logical task state, matching asynchronous
+monitoring delivery, but `MonitoringConsistency` forbids a persisted terminal success, memoized
+state, or failure from appearing before the corresponding logical outcome. As with time, the
+full workflow configurations disable event expansion and `ParslMonitoring.cfg` is the focused
+one-task exploration.
+
 ## TLC verification
 
 The checked configurations use three logical tasks (`A`, `B`, `C`), two executors, two
@@ -122,6 +129,7 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMemo.cfg ParslAbstract.tl
 java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslSerializationFailure.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslNoFailures.cfg ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTime.cfg ParslAbstract.tla
+java -cp tla2tools.jar tlc2.TLC -deadlock -config ParslMonitoring.cfg ParslAbstract.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -147,6 +155,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 492 states generated, 145 distinct states, depth 31;
   `EventuallySettled` passed with logical ticking and timeout transitions enabled.
+- `ParslMonitoring.cfg`: 3,311 states generated, 719 distinct states, depth 33;
+  all monitoring consistency invariants passed.
 
 ## Source-to-model mapping
 
@@ -166,6 +176,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
+| `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |

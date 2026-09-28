@@ -14,11 +14,12 @@ CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
           FILE_OUTPUTS,
           MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES,
-          MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT
+          MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MONITORING_ENABLED
 
 TaskStates == {"pending", "staging", "ready", "queued", "running",
                "retry_wait", "succeeded", "memoized", "failed"}
 FutureStates == {"unresolved", "resolved", "rejected"}
+MonitorStates == {"none", "pending", "running", "retry_wait", "succeeded", "failed", "memoized"}
 AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "decoded",
                   "dispatched", "running", "result_serialized", "result_sent",
                   "result_received", "result_decoded",
@@ -37,14 +38,14 @@ VARIABLES taskState, futureState, retries, currentAttempt, selectedExecutor,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
           completed, rejected, outputs,
-          clock, lastHeartbeat, attemptStart
+          clock, lastHeartbeat, attemptStart, monitoringState
 
 vars == <<taskState, futureState, retries, currentAttempt, selectedExecutor,
           dataState, attemptState, attemptExecutor, attemptWorker,
           workerState, workerAttempt, executorState,
           providerState, providerTarget, providerBlocks,
           completed, rejected, outputs,
-          clock, lastHeartbeat, attemptStart>>
+          clock, lastHeartbeat, attemptStart, monitoringState>>
 
 timeVars == <<clock, lastHeartbeat, attemptStart>>
 
@@ -78,6 +79,7 @@ Init ==
     /\ clock = 0
     /\ lastHeartbeat = [w \in WORKERS |-> 0]
     /\ attemptStart = [a \in AttemptIds |-> -1]
+    /\ monitoringState = [t \in TASKS |-> "none"]
 
 BeginStaging(t) ==
     /\ t \in TASKS /\ taskState[t] = "pending"
@@ -518,7 +520,7 @@ CoreActions ==
 StartAttemptTimed(t, k, w) ==
     /\ StartAttempt(t, k, w)
     /\ attemptStart' = [attemptStart EXCEPT ![<<t, k>>] = clock]
-    /\ UNCHANGED <<clock, lastHeartbeat>>
+    /\ UNCHANGED <<clock, lastHeartbeat, monitoringState>>
 
 Tick ==
     /\ clock < MAX_TIME
@@ -528,7 +530,7 @@ Tick ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
-                    completed, rejected, outputs>>
+                    completed, rejected, outputs, monitoringState>>
 
 Heartbeat(w) ==
     /\ w \in WORKERS /\ workerState[w] # "failed"
@@ -538,14 +540,35 @@ Heartbeat(w) ==
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, monitoringState>>
+
+MonitorView(t) ==
+    CASE taskState[t] = "memoized"  -> "memoized"
+      [] taskState[t] = "succeeded" -> "succeeded"
+      [] taskState[t] = "failed"    -> "failed"
+      [] taskState[t] = "running"   -> "running"
+      [] taskState[t] = "retry_wait" -> "retry_wait"
+      [] OTHER -> "pending"
+
+PublishMonitor(t) ==
+    /\ MONITORING_ENABLED
+    /\ t \in TASKS
+    /\ monitoringState[t] # MonitorView(t)
+    /\ monitoringState' = [monitoringState EXCEPT ![t] = MonitorView(t)]
+    /\ UNCHANGED <<clock, lastHeartbeat, attemptStart,
+                    taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs>>
 
 NextCore ==
-    \/ CoreActions /\ UNCHANGED timeVars
+    \/ CoreActions /\ UNCHANGED <<timeVars, monitoringState>>
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           StartAttemptTimed(t, k, w)
     \/ Tick
     \/ \E w \in WORKERS : Heartbeat(w)
+    \/ \E t \in TASKS : PublishMonitor(t)
 
 Next == NextCore \/ UNCHANGED vars
 
@@ -573,6 +596,7 @@ TypeOK ==
     /\ clock \in 0..MAX_TIME
     /\ lastHeartbeat \in [WORKERS -> 0..MAX_TIME]
     /\ attemptStart \in [AttemptIds -> -1..MAX_TIME]
+    /\ monitoringState \in [TASKS -> MonitorStates]
 
 DependencySafety ==
     \A t \in TASKS : taskState[t] = "running" =>
@@ -632,6 +656,14 @@ TimeSafety ==
     /\ \A a \in AttemptIds : attemptState[a] = "running" =>
           attemptStart[a] \in 0..clock
     /\ \A w \in WORKERS : lastHeartbeat[w] <= clock
+
+MonitoringConsistency ==
+    /\ \A t \in TASKS : monitoringState[t] = "succeeded" =>
+          taskState[t] \in {"succeeded", "memoized"}
+    /\ \A t \in TASKS : monitoringState[t] = "memoized" =>
+          taskState[t] = "memoized"
+    /\ \A t \in TASKS : monitoringState[t] = "failed" =>
+          taskState[t] = "failed"
 
 EventuallySettled ==
     \A t \in TASKS : <> (taskState[t] \in {"succeeded", "memoized", "failed"})
