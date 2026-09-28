@@ -832,7 +832,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 62 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 64 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1015,6 +1015,16 @@ The Kubernetes polling regression is also exercised with a mocked Kubernetes API
 The test reproduces the current read-error path that leaves a running job as `RUNNING`, and
 checks the normal `Succeeded` pod translation to `COMPLETED`.
 
+Kubernetes pod submission is exercised with a fake CoreV1 API client:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_submit_runtime.py -v
+```
+
+The probe checks successful pod creation and API failure propagation. The current source records
+newly created pods as `RUNNING` immediately; the corresponding TLA+ fixed configuration records
+the resource as `PENDING` until Kubernetes reports a phase.
+
 The EC2 status boundary is exercised with a fake `describe_instances` client:
 
 ```bash
@@ -1140,6 +1150,10 @@ failure result for each in-flight task.
 - `ParslKubernetesPollingFixed.cfg`: 85 states generated, 23 distinct states, depth 5;
   value-based error visibility, cancellation cleanup, phase translation, and terminal stability
   all passed.
+- `ParslKubernetesSubmit.cfg`: expected counterexample at depth 3 (5 states generated, 4
+  distinct); a successful pod create is recorded as `RUNNING` before Kubernetes phase polling.
+- `ParslKubernetesSubmitFixed.cfg`: 10 states generated, 5 distinct states, depth 3; successful
+  creation is represented as `PENDING`, while API failure registers no resource.
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.

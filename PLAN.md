@@ -232,6 +232,9 @@ checking the real BasicMemoizer result path and execution count.
 `tests/test_kubernetes_polling_runtime.py` drives the current Kubernetes polling method with a
 mock API client, reproducing the read-error identity-comparison path and checking normal terminal
 pod translation.
+`tests/test_kubernetes_submit_runtime.py` drives Kubernetes pod creation with a fake CoreV1 API,
+checking successful resource registration and API error propagation. The current source's initial
+`RUNNING` status is captured by `ParslKubernetesSubmit.tla`; the fixed model waits in `PENDING`.
 `tests/test_aws_status_runtime.py` drives `AWSProvider.status` with a fake EC2 client, checking
 missing-instance behavior and normal instance-state translation.
 `tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
