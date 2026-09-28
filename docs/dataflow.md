@@ -10,6 +10,8 @@ Files live in [`models/dataflow/`](../models/dataflow/).
 The deep resolver configurations pass with 10 distinct states each; the shallow dictionary
 configuration exposes `NoNestedFutureLeak` because the nested Future reaches the worker.
 The runtime dependency probe now checks both dictionary positions with the real resolver.
+It also checks recursive tuple and set traversal; each deep-container configuration passes the
+same dependency and no-leak invariants.
 
 `ParslJoinComplete.tla` combines the main `join_app` cases in one bounded model: a single
 Future, duplicate-preserving Future lists, empty lists, invalid returns, `None`-valued inner

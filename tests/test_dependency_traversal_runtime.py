@@ -28,6 +28,16 @@ def dict_key_value(payload):
     return next(iter(payload))
 
 
+@python_app
+def tuple_double(payload):
+    return payload[0] * 2
+
+
+@python_app
+def set_sum(payload):
+    return sum(payload)
+
+
 class DependencyTraversalRuntimeTest(unittest.TestCase):
     def test_deep_resolver_waits_and_unwraps_nested_list(self):
         config = Config(
@@ -75,6 +85,30 @@ class DependencyTraversalRuntimeTest(unittest.TestCase):
             result = dict_key_value({source: "value"})
 
             self.assertEqual(result.result(), 7)
+
+    def test_deep_resolver_unwraps_nested_tuple(self):
+        config = Config(
+            executors=[ThreadPoolExecutor(max_threads=2)],
+            dependency_resolver=DEEP_DEPENDENCY_RESOLVER,
+        )
+
+        with parsl.load(config):
+            source = traversal_source(8)
+            result = tuple_double((source,))
+
+            self.assertEqual(result.result(), 16)
+
+    def test_deep_resolver_unwraps_nested_set(self):
+        config = Config(
+            executors=[ThreadPoolExecutor(max_threads=2)],
+            dependency_resolver=DEEP_DEPENDENCY_RESOLVER,
+        )
+
+        with parsl.load(config):
+            source = traversal_source(9)
+            result = set_sum({source})
+
+            self.assertEqual(result.result(), 9)
 
 
 if __name__ == "__main__":

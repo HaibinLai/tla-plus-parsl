@@ -14,7 +14,7 @@ EXTENDS Naturals, Sequences, FiniteSets
 CONSTANTS MODE, SHAPE
 
 Modes == {"shallow", "deep"}
-Shapes == {"direct", "list", "dictValue", "dictKey"}
+Shapes == {"direct", "list", "dictValue", "dictKey", "tuple", "set"}
 FutureStates == {"pending", "succeeded", "failed"}
 TaskStates == {"new", "ready", "running", "succeeded", "failed"}
 

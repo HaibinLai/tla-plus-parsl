@@ -322,6 +322,8 @@ the worker receiving a nested Future object, while the deep configuration proves
 and unwrap before execution.
 `ParslDependencyTraversal.tla` now also checks deep traversal through dictionary values and keys,
 matching the resolver's recursive dict implementation and runtime probes.
+`ParslDependencyTraversal.tla` now includes tuple and set shapes as well; deep configurations
+match the resolver's registered container handlers and the runtime probes.
 `ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
 exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
 when the current pop-before-validation path exits the worker.
