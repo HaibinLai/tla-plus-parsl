@@ -240,6 +240,8 @@ and deterministic `qsub` output, checking the empty-output and registered-job pa
 admission paths, including accepted-work completion and resource-specification rejection.
 `tests/test_slurm_status_batch_runtime.py` drives Slurm's batched status method, checking scheduler
 command failure preservation and successful reported/missing-job application.
+`tests/test_slurm_submit_runtime.py` drives Slurm `sbatch` submission with deterministic output,
+checking normal registration, empty-output rejection, and the custom-regex named-group failure.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed

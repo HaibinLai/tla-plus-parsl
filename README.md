@@ -832,7 +832,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 59 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 62 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -881,6 +881,15 @@ Slurm batched status handling is exercised with deterministic scheduler command 
 
 The tests check that a non-zero scheduler command preserves every previous status and that a
 successful batch updates reported jobs while applying the current missing-job `COMPLETED` fallback.
+
+Slurm `sbatch` submission parsing is exercised with deterministic output:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_submit_runtime.py -v
+```
+
+The probe covers normal `Submitted batch job <id>` registration, empty-output rejection, and the
+current `IndexError` when a custom matching regex has no named `id` group.
 
 Grid Engine qstat parsing is exercised with deterministic output:
 
@@ -1192,6 +1201,10 @@ failure result for each in-flight task.
   a delayed zero `.ec` marker can turn a cancelled local job into `COMPLETED`.
 - `ParslLocalProviderFixed.cfg`: 31 states generated, 14 distinct states, depth 5; cancellation
   takes precedence over a late numeric exit marker.
+- `ParslSlurmSubmit.cfg`: expected counterexample at depth 3 (13 states generated, 9 distinct);
+  a matching custom regex without a named `id` group reaches the provider's uncaught error path.
+- `ParslSlurmSubmitFixed.cfg`: 18 states generated, 9 distinct states, depth 3; malformed or
+  incompatible submission output is rejected without registering a resource.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
 - `ParslInputCorruption.cfg`: 37,556 states generated, 7,024 distinct states, depth 66;
