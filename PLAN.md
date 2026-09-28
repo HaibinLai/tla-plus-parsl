@@ -132,6 +132,10 @@ fake Azure API objects.
 `ParslAzureCancel.tla` models Azure VM cancellation, including linger mode, cloud-delete failure,
 and the current `list.remove` race when a successful cloud deletion finds no local instance id.
 The fixed configuration treats that idempotent bookkeeping case as cancelled.
+`ParslThreadExecutor.tla` refines the provider-free thread executor: unsupported resource
+specifications are rejected before task creation, accepted work survives `shutdown(wait=False)`,
+and `shutdown(wait=True)` waits for the accepted task before becoming stopped. The runtime probe
+extends `tests/test_thread_executor_runtime.py` with the non-blocking shutdown path.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

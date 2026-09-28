@@ -2,6 +2,7 @@
 
 import time
 import unittest
+import threading
 
 from parsl.executors.errors import InvalidResourceSpecification
 from parsl.executors.threads import ThreadPoolExecutor
@@ -27,6 +28,20 @@ class ThreadExecutorRuntimeTest(unittest.TestCase):
                 executor.submit(lambda: 1, {"cores": 1})
         finally:
             executor.shutdown(block=True)
+
+    def test_nonblocking_shutdown_rejects_new_work_but_accepted_work_finishes(self):
+        executor = ThreadPoolExecutor(max_threads=1)
+        executor.start()
+        release = threading.Event()
+        future = executor.submit(lambda: (release.wait(1), 11)[1], {})
+
+        executor.shutdown(block=False)
+
+        with self.assertRaises(RuntimeError):
+            executor.submit(lambda: 12, {})
+
+        release.set()
+        self.assertEqual(future.result(timeout=2), 11)
 
 
 if __name__ == "__main__":

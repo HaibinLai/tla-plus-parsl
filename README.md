@@ -105,6 +105,10 @@ failure. Its current configuration exposes a bookkeeping race: if the cloud dele
 after the local `instances` list has already lost the VM id, `list.remove` raises and Parsl returns
 `False`; the fixed configuration makes this idempotent cleanup a successful cancellation.
 
+`ParslThreadExecutor.tla` refines the provider-free thread executor. It checks rejection of
+unsupported resource specifications, preservation of accepted work across `shutdown(wait=False)`,
+and the stronger wait-for-completion contract of `shutdown(wait=True)`.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1056,7 +1060,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 176 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 177 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1135,6 +1139,15 @@ Azure cancellation is also exercised against a fake compute API:
 
 The runtime probe reproduces the current false result when cloud deletion succeeds but local
 bookkeeping no longer contains the VM id.
+
+The concrete thread executor shutdown modes are exercised directly:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_runtime.py -v
+```
+
+The non-blocking case confirms that new submissions are rejected while already accepted work is
+still allowed to finish.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1755,6 +1768,7 @@ failure result for each in-flight task.
 | `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
 | `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
 | `IgnoreLinger` / `DeleteFails` / `DeleteSucceedsWithLocalId` / `DeleteSucceedsWithoutLocalId` | Azure VM cancellation and local instance bookkeeping | `AzureProvider.cancel` |
+| `Submit` / `RejectResource` / `BeginShutdown` / `CompleteTask` / `FinishShutdown` | provider-free thread executor admission and shutdown | `ThreadPoolExecutor.submit` and `ThreadPoolExecutor.shutdown` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
