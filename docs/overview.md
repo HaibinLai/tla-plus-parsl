@@ -962,6 +962,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializerRegi
 The collision configuration finds the code-first dispatch counterexample in 4 states; the fixed
 and normal configurations pass in 6 states each.
 
+The combined ZMQ/serialization check is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializationEndToEnd.cfg models/serialization/ParslZMQSerializationEndToEnd.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializationEndToEndFixed.cfg models/serialization/ParslZMQSerializationEndToEnd.tla
+```
+
+The current branch allows a decoded result from the wrong attempt to resolve the Future; the
+fixed branch preserves correlation and checks 562,641 states.
+
 The combined `join_app` check is:
 
 ```bash

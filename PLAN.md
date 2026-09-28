@@ -97,6 +97,9 @@ path rejection; the runtime probe confirms the current facade behavior.
 `ParslExecutorProviderLifecycle.tla` connects provider allocation and terminal cleanup to manager
 registration, executor drain, worker-slot admission, and scale-in. Its fixed branch enforces the
 provider `MIN_BLOCKS` floor.
+`ParslZMQSerializationEndToEnd.tla` combines concrete serializer headers and multipart ZMQ
+progress with worker-attempt correlation. Its current branch exposes wrong-attempt result
+resolution; the fixed branch classifies those messages as stale.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery

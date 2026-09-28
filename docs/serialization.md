@@ -12,3 +12,8 @@ colliding identifier, the current configuration decodes a data payload through t
 and violates `DispatchSafety`; the fixed configuration rejects the ambiguous header, while the
 normal `C2`/`02` configuration passes. `tests/test_serializer_registry_runtime.py` observes the
 current code-first behavior directly.
+
+`ParslZMQSerializationEndToEnd.tla` combines the default `C2`/`02` headers with multipart frame
+progress, route checks, duplicate/drop handling, worker attempts, and result correlation. The
+current configuration finds a `ResultCorrelationSafety` counterexample; the fixed configuration
+classifies late or terminal results as stale and checks 562,641 states.
