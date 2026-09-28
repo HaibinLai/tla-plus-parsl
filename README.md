@@ -1035,7 +1035,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 157 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 159 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1439,6 +1439,17 @@ Ordinary Future dependency propagation is checked separately:
 
 This verifies successful value propagation and failure blocking for non-file task dependencies.
 
+DataFuture cancellation propagation is checked separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_cancellation_runtime.py -v
+```
+
+`ParslDataFutureCancellation.tla` exposes the current callback boundary: a failed parent makes
+the DataFuture fail, but a cancelled parent currently makes it appear available because
+`parent_callback` checks `_exception` without checking `cancelled()`. The fixed configuration
+adds that cancellation guard.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash
@@ -1648,6 +1659,7 @@ failure result for each in-flight task.
 | TLA+ action | Parsl concept | Current source location |
 | --- | --- | --- |
 | `BeginStaging` / `FinishStaging` | data readiness/staging | `parsl/data_provider/data_manager.py` |
+| `ParentCancels` / `ParentCallback` | DataFuture parent success/failure/cancellation propagation | `DataFuture.parent_callback` |
 | `CorruptStaging` / `RepairStaging` / `FileStagingSafety` | damaged input transfer and repair before dependency release | `DataManager.stage_in` and transfer error paths |
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |

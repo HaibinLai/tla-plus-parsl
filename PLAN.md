@@ -383,6 +383,9 @@ pass.
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
 checking binary content readiness and dependent-task gating.
+`tests/test_datafuture_cancellation_runtime.py` drives the real `DataFuture.parent_callback`,
+showing that a failed parent propagates failure while a cancelled parent is currently published as
+available because cancellation is not checked.
 It also wires a failed producer's output `DataFuture` into a consumer and checks `DependencyError`
 propagation without consumer execution.
 `tests/test_dependency_runtime.py` separately exercises ordinary Future value propagation and
