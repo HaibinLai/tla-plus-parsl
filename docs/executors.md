@@ -76,6 +76,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINonDivisibleRan
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_nondivisible_runtime.py -v
 ```
 
+`ParslWorkQueueCancelledResult.tla` models a Work Queue collector result racing with cancellation.
+The current collector removes the cancelled Future and calls `set_result`, so `InvalidStateError`
+exits the collector; its `finally` block then marks an unrelated pending Future as
+`WorkQueueFailure`. The fixed branch discards the stale result and continues collecting. The
+runtime probe drives two fake reports through the real collector method.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledResultCurrent.cfg models/executors/ParslWorkQueueCancelledResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledResultFixed.cfg models/executors/ParslWorkQueueCancelledResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_cancelled_result_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
