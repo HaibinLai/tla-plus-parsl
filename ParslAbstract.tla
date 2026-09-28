@@ -12,7 +12,7 @@ EXTENDS Naturals, Integers, FiniteSets, Sequences
 
 CONSTANTS TASKS, EXECUTORS, WORKERS, DEPS, WORKER_EXECUTOR,
           MEMOIZED, CALLABLE_SERIALIZABLE, PAYLOAD_SERIALIZABLE,
-          FILE_OUTPUTS,
+          FILE_OUTPUTS, SUBMITTABLE_EXECUTORS,
           MAX_RETRIES, MAX_BLOCKS, ALLOW_FAILURES,
           MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MONITORING_ENABLED
 
@@ -54,6 +54,7 @@ Init ==
     /\ CALLABLE_SERIALIZABLE \subseteq TASKS
     /\ PAYLOAD_SERIALIZABLE \subseteq TASKS
     /\ FILE_OUTPUTS \subseteq TASKS
+    /\ SUBMITTABLE_EXECUTORS \subseteq EXECUTORS
     /\ DEPS \subseteq {d \o "->" \o t : d \in TASKS, t \in TASKS}
     /\ WORKER_EXECUTOR \subseteq {w \o ":" \o e : w \in WORKERS, e \in EXECUTORS}
     /\ \A t \in TASKS : t \notin Deps(t)
@@ -161,6 +162,7 @@ SubmitAttempt(t, e) ==
     /\ t \in TASKS /\ e \in EXECUTORS
     /\ taskState[t] = "queued" /\ executorState[e] = "up"
     /\ providerState[e] = "active"
+    /\ e \in SUBMITTABLE_EXECUTORS
     /\ retries[t] <= MAX_RETRIES /\ attemptState[a] = "absent"
     /\ taskState' = [taskState EXCEPT ![t] = "running"]
     /\ currentAttempt' = [currentAttempt EXCEPT ![t] = retries[t]]
@@ -171,6 +173,31 @@ SubmitAttempt(t, e) ==
                     workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs>>
+
+SubmitFailure(t, e) ==
+    LET a == <<t, retries[t]>> IN
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ e \in EXECUTORS
+    /\ taskState[t] = "queued" /\ executorState[e] = "up"
+    /\ providerState[e] = "active" /\ e \notin SUBMITTABLE_EXECUTORS
+    /\ retries[t] <= MAX_RETRIES /\ attemptState[a] = "absent"
+    /\ taskState' = IF retries[t] < MAX_RETRIES
+                    THEN [taskState EXCEPT ![t] = "retry_wait"]
+                    ELSE [taskState EXCEPT ![t] = "failed"]
+    /\ currentAttempt' = [currentAttempt EXCEPT ![t] = retries[t]]
+    /\ selectedExecutor' = [selectedExecutor EXCEPT ![t] = e]
+    /\ attemptState' = [attemptState EXCEPT ![a] = "failed"]
+    /\ attemptExecutor' = [attemptExecutor EXCEPT ![a] = e]
+    /\ retries' = IF retries[t] < MAX_RETRIES
+                    THEN [retries EXCEPT ![t] = @ + 1]
+                    ELSE retries
+    /\ futureState' = IF retries[t] < MAX_RETRIES
+                      THEN futureState
+                      ELSE [futureState EXCEPT ![t] = "rejected"]
+    /\ rejected' = IF retries[t] < MAX_RETRIES THEN rejected ELSE rejected \cup {t}
+    /\ UNCHANGED <<dataState, attemptWorker, workerState, workerAttempt,
+                    executorState, providerState, providerTarget, providerBlocks,
+                    completed, outputs>>
 
 SerializeAttempt(t, k) ==
     LET a == <<t, k>> IN
@@ -497,6 +524,7 @@ CoreActions ==
     \/ \E t \in TASKS : BeginStageOut(t) \/ FinishStageOut(t)
     \/ \E t \in TASKS : DependencyCheck(t) \/ MemoizationHit(t) \/ Enqueue(t)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitAttempt(t, e)
+    \/ \E t \in TASKS, e \in EXECUTORS : SubmitFailure(t, e)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : SerializationFailure(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
           SerializeAttempt(t, k) \/ SendAttempt(t, k)
@@ -628,6 +656,13 @@ NoRunningOnDownExecutor ==
 AttemptIdentity ==
     \A t \in TASKS : currentAttempt[t] # -1 =>
         attemptState[<<t, currentAttempt[t]>>] # "absent"
+
+SubmitSafety ==
+    \A a \in AttemptIds :
+      attemptState[a] \in {"submitted", "serialized", "sent", "received", "decoded",
+                            "dispatched", "running", "result_serialized", "result_sent",
+                            "result_received", "result_decoded", "succeeded"} =>
+          attemptExecutor[a] \in SUBMITTABLE_EXECUTORS
 
 ResultConsistency ==
     /\ completed \cap rejected = {}

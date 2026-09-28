@@ -58,6 +58,8 @@ The bounded `ParslTime.cfg` model adds logical ticking, heartbeat age, attempt s
 timeout guards so TLC can explore timing-dependent worker loss and retry behavior.
 `ParslMonitoring.cfg` adds a focused asynchronous monitoring/database status model and checks
 that persisted terminal statuses never precede the corresponding Future outcome.
+`ParslSubmitFailure.cfg` adds a focused executor/provider boundary model in which an active
+provider block does not imply that the executor accepts a new task submission.
 
 ### 3. Checked properties
 
