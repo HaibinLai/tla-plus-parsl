@@ -15,6 +15,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Dataflow, Future, Join, retry, and memoization models](docs/dataflow.md)
 - [Monitoring models](docs/monitoring.md)
 - [Clock and strategy models](docs/clock-strategy.md)
+- [Coverage matrix](docs/coverage-matrix.md)
 
 Runtime probes are under [`tests/`](tests/). The complete runtime baseline is 233 passing tests.
 TLC commands and measured state-space results are maintained in [`docs/overview.md`](docs/overview.md).
