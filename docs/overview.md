@@ -412,6 +412,13 @@ still raises from the list's `future.exception()` scan, so the current outer joi
 `joining`; the fixed branch converts the cancellation into terminal failure. The runtime probe
 uses the real `DataFlowKernel.handle_join_update` list path.
 
+`ParslJoinSingleCancellation.tla` checks the single-Future join path separately. A cancelled
+inner Future makes `future.exception()` raise `CancelledError`; in the current callback this
+escapes before terminalization and leaves the outer join in `joining`. The fixed branch maps it
+to terminal join failure. TLC reports the expected current counterexample and verifies the fixed
+model with 4 generated/2 distinct states. The direct runtime probe is
+`tests/test_join_single_cancellation_runtime.py`.
+
 `ParslNestedJoin.tla` adds a nested join: the outer join observes a direct Future and a Future
 produced by another join. The nested handle remains live until both leaf Futures are observed;
 nested success/failure then becomes the only state visible to the outer join.
@@ -1599,7 +1606,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 278 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 279 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1632,6 +1639,15 @@ The list-cancellation boundary is also exercised directly:
 ```
 
 The probe confirms that the current callback raises `CancelledError` and leaves a list-valued
+outer join in `joining`.
+
+The same cancellation boundary for a single inner Future is exercised directly:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_single_cancellation_runtime.py -v
+```
+
+This confirms that the current callback raises `CancelledError` and leaves the single-Future
 outer join in `joining`.
 
 The probe checks that early callbacks do not finalize an outer task, final callbacks preserve list
@@ -2539,6 +2555,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
 | `CompleteInner` / `HandleCallback` in `ParslJoinCancellation.tla` | cancelled inner Future handling and outer join termination | `DataFlowKernel.handle_join_update` |
 | `ObserveCancelled` / `CancellationTerminal` in `ParslJoinListCancellation.tla` | cancelled Future handling for list-valued joins | `DataFlowKernel.handle_join_update` list branch |
+| `ObserveCancelled` / `CancellationTerminal` in `ParslJoinSingleCancellation.tla` | cancelled single inner Future handling and terminal join failure | `DataFlowKernel.handle_join_update` single-Future branch |
 | `StartNestedJoin` / `FinalizeNested` / `ObserveNestedResult` | nested join handle and result propagation | nested `join_app` callback composition |
 | `BeginEncode` / `FinishEncodeSuccess` / `DecodeTaskSuccess` | serialized callable/payload gating task transport | DFK serialization boundary, interchange task queue, worker decode |
 | `CorruptTaskEnvelope` / `DecodeTaskFailure` / `LoseAttempt` / `AcceptResult` | protocol corruption, worker loss, retry and stale result handling | HTEX message/result paths and DFK attempt correlation |

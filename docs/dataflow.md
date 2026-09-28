@@ -19,6 +19,10 @@ results, and inner cancellation/failure. The current configuration exposes a
 `JoinResultSafety` counterexample by collapsing duplicate list positions; the fixed configuration
 preserves the sequence and checks 5,694 states with all six invariants passing.
 
+`ParslJoinSingleCancellation.tla` isolates cancellation of a single inner Future. The current
+callback lets `Future.exception()` raise `CancelledError`, leaving the outer join in `joining`;
+the fixed branch converts it into terminal failure. Its runtime probe calls the real callback.
+
 `ParslJoinFailureAggregation.tla` refines the failure side of list-valued joins. Once every
 inner Future is terminal, each failed Future contributes one exception entry in the original
 join-list order; successful inner results are omitted. The runtime probe uses two real failed
