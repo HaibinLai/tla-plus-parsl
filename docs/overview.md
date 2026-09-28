@@ -161,6 +161,12 @@ socket is not writable before any request is sent, `CommandClient.run` raises a 
 the client reusable; a later command may send and receive normally. The runtime probe is
 [`tests/test_command_send_timeout_runtime.py`](../tests/test_command_send_timeout_runtime.py).
 
+`ParslCommandClientMaxRetries.tla` audits the `max_retries` argument exposed by the same method.
+The current model and runtime probe show that a `send_pyobj` exception is attempted exactly once
+even when `max_retries=2`; TLC reaches the `RetryBudgetHonored` counterexample. The fixed model
+shows the candidate retry contract, but the repository does not claim that this policy is required
+by the Parsl paper.
+
 `ParslHtexManagerMessage.tla` models manager-to-interchange message decoding. Malformed multipart
 or pickle input is ignored without changing the manager record; a valid heartbeat updates its
 timestamp and produces the heartbeat reply.
@@ -1750,7 +1756,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 303 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 304 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

@@ -40,6 +40,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientSendT
 /tmp/parsl-venv/bin/python -m unittest tests/test_command_send_timeout_runtime.py -v
 ```
 
+`ParslCommandClientMaxRetries.tla` records a source-level audit finding: `CommandClient.run`
+accepts `max_retries`, but the current implementation does not read it. A transient
+`send_pyobj` exception therefore escapes after exactly one send for both `max_retries=0` and
+`max_retries=2`. The current TLC configuration violates `RetryBudgetHonored`; the fixed
+configuration models one retry and passes. This is an API/implementation mismatch, not an
+assumption that the paper requires a particular retry policy.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientMaxRetriesCurrent.cfg models/executors/ParslCommandClientMaxRetries.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientMaxRetriesFixed.cfg models/executors/ParslCommandClientMaxRetries.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_max_retries_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
