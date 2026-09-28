@@ -234,6 +234,14 @@ minimum block floor. This combines the resource-aware admission abstraction with
 rules in [`jobs/strategy.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/strategy.py)
 and block request handling in [`executors/status_handling.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/status_handling.py).
 
+`ParslSerializationWire.tla` models the concrete `pack_apply_message` wire shape: callable,
+args, and kwargs are serialized separately; callable/data serializer identifiers are placed before
+each body; decimal length prefixes frame the buffers in order; and unpack/decode cannot dispatch
+until all three buffers are valid. It also models serializer failure and corrupt-frame rejection.
+The configurations use the current identifiers (`C2` for callable dill and `02` for data dill)
+from [`serialize/facade.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/serialize/facade.py)
+and [`serialize/concretes.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/serialize/concretes.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -455,6 +463,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinMonitoring.cfg ParslJoinMonitor
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmission.cfg ParslResourceAdmission.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmissionAutolabel.cfg ParslResourceAdmission.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceScaling.cfg ParslResourceScaling.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializationWire.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -570,6 +580,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslResourceScaling.cfg`: 987 states generated, 292 distinct states, depth 21;
   resource-driven scale-out, pending allocation success/failure rollback, capacity-guarded
   dispatch, retryable scaling pressure, and minimum-block scale-in safety all passed.
+- `ParslSerializationWire.cfg`: 208 states generated, 73 distinct states, depth 14;
+  three-buffer serialization, serializer headers, decimal length framing, ordered unpack/decode,
+  dispatch gating, and corrupt-frame rejection all passed.
+- `ParslSerializationWireFailure.cfg`: 21 states generated, 8 distinct states, depth 4;
+  an unserializable callable was rejected before framing or dispatch.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.

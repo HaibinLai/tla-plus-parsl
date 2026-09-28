@@ -173,6 +173,9 @@ terminal-record protection.
 worker capacity accounting, with a companion autolabel configuration for partial specifications.
 `ParslResourceScaling.tla` connects per-task core demand to strategy scale-out, pending allocation
 success/failure rollback, capacity-guarded dispatch, retryable pressure, and minimum-block scale-in.
+`ParslSerializationWire.tla` models concrete callable/args/kwargs serialization headers, decimal
+length framing, ordered unpack/decode, serializer failure, and corrupt-frame rejection before
+dispatch.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
