@@ -207,6 +207,12 @@ and fixed branch make this behavior explicit.
 missing jobs, so duplicate rows raise `ValueError` on the second removal; the runtime probe and
 fixed branch make the operation idempotent.
 
+`ParslPBSProJobIdAlias.tla` models PBS Pro's short-to-qualified job-id normalization. Distinct
+JSON keys such as `42` and `42.server` can both normalize to the same local `42.server` resource;
+the current parser then removes that resource from `jobs_missing` twice and raises `ValueError`.
+The runtime probe drives the real JSON parser and provider method, while the fixed branch makes
+normalized-record bookkeeping idempotent.
+
 `ParslJoinListMutation.tla` models mutable aliasing in `join_app` list results. The current DFK
 stores the returned Future list directly in the task record; if that list is cleared before the
 callback, the outer join can complete with an empty result. The runtime probe calls the real
@@ -895,6 +901,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSlurmDuplicateStatusUnique.cfg Pars
 java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusCurrent.cfg ParslTorqueDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusFixed.cfg ParslTorqueDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusUnique.cfg ParslTorqueDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPBSProJobIdAliasCurrent.cfg ParslPBSProJobIdAlias.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPBSProJobIdAliasFixed.cfg ParslPBSProJobIdAlias.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPBSProJobIdAliasUnique.cfg ParslPBSProJobIdAlias.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationCurrent.cfg ParslJoinListMutation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationFixed.cfg ParslJoinListMutation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationStable.cfg ParslJoinListMutation.tla
@@ -1132,6 +1141,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslTorqueDuplicateStatusFixed.cfg` and `ParslTorqueDuplicateStatusUnique.cfg`: 6 states
   generated, 3 distinct states, depth 3; idempotent and unique status handling satisfy
   `DuplicateSafety`.
+- `ParslPBSProJobIdAliasCurrent.cfg`: expected counterexample, 4 states generated and 3 distinct
+  states at depth 3; short and fully qualified JSON keys normalize to one local resource and the
+  second missing-list removal crashes.
+- `ParslPBSProJobIdAliasFixed.cfg` and `ParslPBSProJobIdAliasUnique.cfg`: 6 states generated,
+  3 distinct states, depth 3; idempotent alias handling and a single short-id record satisfy
+  `AliasSafety` and `MissingBookkeepingSafety`.
 - `ParslJoinListMutationCurrent.cfg`: expected counterexample, 4 states generated; mutating the
   aliased join list lets the outer join finish with `resultCount = 0` instead of 2.
 - `ParslJoinListMutationFixed.cfg`: 6 states generated, 3 distinct states, depth 3; snapshotting
@@ -1292,7 +1307,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 209 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 211 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1704,6 +1719,15 @@ The PBS Pro JSON status path is exercised with deterministic `qstat` responses:
 current `KeyError` when JSON contains a foreign job id not present in `resources`. The fixed
 configuration ignores that foreign record.
 
+The PBS Pro short/qualified job-id alias boundary is exercised separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_job_id_alias_runtime.py -v
+```
+
+The probe reproduces the current `ValueError` when `42` and `42.server` both normalize to the
+same local resource.
+
 The concrete thread executor shutdown and admission contract is exercised directly:
 
 ```bash
@@ -2052,6 +2076,7 @@ failure result for each in-flight task.
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `LSFProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `SlurmProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with list removal | `TorqueProvider._status` |
+| `HandleShortId` / `HandleSecondRecord` / `AliasSafety` | PBS Pro short/qualified job-id normalization and idempotent missing-job bookkeeping | `PBSProProvider._status` |
 | `MutateBeforeCallback` / `Callback` / `JoinSnapshotSafety` | join Future-list snapshot and callback result stability | `DataFlowKernel.handle_join_update` |
 | `Transfer` / `TransferSuccess` / `FailureCleanupSafety` | FTP connection cleanup after stage-in failure | `FTPInTaskStaging.in_task_transfer_wrapper` |
 | `FirstChunk` / `LaterChunk` / `FailurePublicationSafety` | atomic HTTP destination publication after stream failure | `HTTPInTaskStaging.in_task_transfer_wrapper` |

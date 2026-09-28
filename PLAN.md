@@ -208,6 +208,9 @@ real provider parser.
 `ParslTorqueDuplicateStatus.tla` models the list-removal boundary in Torque `_status`. Duplicate
 qstat rows currently raise `ValueError`; the runtime parser probe and fixed idempotent branch cover
 the provider-specific path.
+`ParslPBSProJobIdAlias.tla` models PBS Pro's JSON job-id normalization boundary. A short id and a
+fully qualified id can both normalize to one local resource, causing a second list removal in the
+current parser; the runtime probe and fixed idempotent branch cover this alias collision.
 `ParslJoinListMutation.tla` models mutable aliasing of a `join_app` Future list between registration
 and callback. The current DFK stores the caller's list directly, so clearing it before the callback
 can make the outer result empty; the runtime probe exercises `handle_join_update` and the fixed
@@ -389,6 +392,9 @@ launch-response unpacking path modeled by `ParslAWSProviderSubmit.tla`.
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
 `tests/test_pbspro_status_runtime.py` drives PBS Pro's JSON status parser, checking known-job
 translation, scheduler failure preservation, and the current foreign-job `KeyError` boundary.
+`tests/test_pbspro_job_id_alias_runtime.py` drives the same parser with both `42` and
+`42.server` JSON keys, reproducing the current duplicate `jobs_missing.remove` failure modeled by
+`ParslPBSProJobIdAlias.tla`.
 `tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
 admission paths, including accepted-work completion and resource-specification rejection.
 `tests/test_future_cancellation_runtime.py` checks the concrete cancellation contract: AppFuture
