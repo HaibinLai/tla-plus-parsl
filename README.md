@@ -882,6 +882,15 @@ Slurm batched status handling is exercised with deterministic scheduler command 
 The tests check that a non-zero scheduler command preserves every previous status and that a
 successful batch updates reported jobs while applying the current missing-job `COMPLETED` fallback.
 
+Grid Engine qstat parsing is exercised with deterministic output:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_status_runtime.py -v
+```
+
+The probe reproduces the short-line `IndexError` boundary, checks `r` to `RUNNING` translation,
+and verifies foreign-job filtering with the missing-job `COMPLETED` fallback.
+
 Torque cancellation outcomes are exercised with deterministic `qdel` results:
 
 ```bash

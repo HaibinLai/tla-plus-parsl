@@ -242,6 +242,8 @@ admission paths, including accepted-work completion and resource-specification r
 command failure preservation and successful reported/missing-job application.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
+`tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
+line failure, normal state translation, foreign-job filtering, and missing-job fallback.
 `ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
