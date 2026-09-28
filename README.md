@@ -79,13 +79,14 @@ makes the failure cause explicit and gives TLC a concrete counterexample vocabul
 File-oriented data readiness is represented by `dataState`:
 
 ```text
-unavailable -> staging -> available -> stageout -> transferred
+unavailable -> staging -> available -> stageout_chunk1 -> stageout_chunk2 -> transferred
 ```
 
 `BeginStaging`/`FinishStaging` model input stage-in before dependency release. For tasks in
-`FILE_OUTPUTS`, `BeginStageOut`/`FinishStageOut` model the output file becoming a transferred
-content token after the logical task succeeds. The token stands for file contents and transfer
-completion without enumerating bytes, paths, or a particular staging provider. The checked
+`FILE_OUTPUTS`, `BeginStageOut` starts output transfer, `TransferOutputChunk` advances the first
+chunk, and `FinishStageOut` commits the second chunk as `transferred`. This prevents a model
+execution from claiming that a file is ready before all transfer stages complete. The token stands
+for file contents and transfer completion without enumerating bytes, paths, or a particular staging provider. The checked
 configurations use task `C` as one representative output file to keep the finite state space
 small while still exercising both directions of the data path.
 
@@ -93,8 +94,8 @@ The file-content refinement defines a deterministic symbolic token `task:content
 logical output task. `FinishStageOut` therefore represents transfer of that task's content token,
 not just a boolean readiness flag. `FileContentSafety` checks that a transferred output has the
 correct logical token and that stage-out is only associated with a completed result. The token
-stands for bytes or a checksum at this level; later refinements can replace it with chunks,
-checksums, and corruption transitions.
+stands for bytes or a checksum at this level; the two chunk states provide a bounded transfer
+protocol, while later refinements can replace them with checksums and richer corruption transitions.
 
 ## What is and is not modeled
 
@@ -252,9 +253,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   submit rejection remained pre-dispatch and all retry/result invariants passed.
 - `ParslProviderFailure.cfg`: 2,566 states generated, 573 distinct states, depth 34;
   provider failure, recovery request, and block-count consistency all passed.
-- `ParslFileContent.cfg`: 11,458 states generated, 2,083 distinct states, depth 51;
+- `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
-- `ParslFileCorruptionSmall.cfg`: 24,084 states generated, 4,875 distinct states, depth 60;
+- `ParslFileCorruptionSmall.cfg`: 52,888 states generated, 9,144 distinct states, depth 63;
   corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
 - `ParslRegistration.cfg`: 94 states generated, 29 distinct states, depth 18;
   unregistered workers could not receive work or heartbeat until manager registration.
@@ -287,7 +288,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | TLA+ action | Parsl concept | Current source location |
 | --- | --- | --- |
 | `BeginStaging` / `FinishStaging` | data readiness/staging | `parsl/data_provider/data_manager.py` |
-| `BeginStageOut` / `FinishStageOut` | output file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
+| `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |

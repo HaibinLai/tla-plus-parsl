@@ -28,7 +28,8 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
                   "succeeded", "failed", "timed_out", "lost", "stale"}
 WorkerStates == {"unregistered", "idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
-DataStates == {"unavailable", "staging", "available", "stageout", "transferred", "corrupt"}
+DataStates == {"unavailable", "staging", "available", "stageout",
+               "stageout_chunk1", "stageout_chunk2", "transferred", "corrupt"}
 WireStates == {"none", "queued", "sent", "received", "duplicate", "consumed", "dropped"}
 EnvelopeStates == {"none", "valid", "invalid"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
@@ -138,7 +139,7 @@ BeginStageOut(t) ==
     /\ t \in FILE_OUTPUTS
     /\ taskState[t] \in {"succeeded", "memoized"}
     /\ dataState[t] = "available"
-    /\ dataState' = [dataState EXCEPT ![t] = "stageout"]
+    /\ dataState' = [dataState EXCEPT ![t] = "stageout_chunk1"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
@@ -149,8 +150,20 @@ BeginStageOut(t) ==
 FinishStageOut(t) ==
     /\ t \in FILE_OUTPUTS
     /\ taskState[t] \in {"succeeded", "memoized"}
-    /\ dataState[t] = "stageout"
+    /\ dataState[t] = "stageout_chunk2"
     /\ dataState' = [dataState EXCEPT ![t] = "transferred"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, taskWireState, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
+TransferOutputChunk(t) ==
+    /\ t \in FILE_OUTPUTS
+    /\ taskState[t] \in {"succeeded", "memoized"}
+    /\ dataState[t] = "stageout_chunk1"
+    /\ dataState' = [dataState EXCEPT ![t] = "stageout_chunk2"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
@@ -162,7 +175,7 @@ CorruptStageOut(t) ==
     /\ ALLOW_FAILURES
     /\ t \in FILE_OUTPUTS
     /\ taskState[t] \in {"succeeded", "memoized"}
-    /\ dataState[t] \in {"stageout", "transferred"}
+    /\ dataState[t] \in {"stageout", "stageout_chunk1", "stageout_chunk2", "transferred"}
     /\ dataState' = [dataState EXCEPT ![t] = "corrupt"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, attemptState, attemptExecutor,
@@ -176,7 +189,7 @@ RepairStageOut(t) ==
     /\ t \in FILE_OUTPUTS
     /\ taskState[t] \in {"succeeded", "memoized"}
     /\ dataState[t] = "corrupt"
-    /\ dataState' = [dataState EXCEPT ![t] = "stageout"]
+    /\ dataState' = [dataState EXCEPT ![t] = "stageout_chunk1"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
@@ -916,8 +929,8 @@ CancelAllocation(e) ==
 CoreActions ==
     \/ \E w \in WORKERS : RegisterWorker(w) \/ RegistrationFailure(w)
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
-    \/ \E t \in TASKS : BeginStageOut(t) \/ FinishStageOut(t)
-          \/ CorruptStageOut(t) \/ RepairStageOut(t)
+    \/ \E t \in TASKS : BeginStageOut(t) \/ TransferOutputChunk(t)
+          \/ FinishStageOut(t) \/ CorruptStageOut(t) \/ RepairStageOut(t)
     \/ \E t \in TASKS : DependencyCheck(t) \/ MemoizationHit(t) \/ Enqueue(t)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitAttempt(t, e)
     \/ \E t \in TASKS, e \in EXECUTORS : SubmitFailure(t, e)
@@ -1185,14 +1198,20 @@ DataReadinessSafety ==
         dataState[t] \in {"available", "transferred"}
 
 FileTransferSafety ==
-    \A t \in TASKS : dataState[t] \in {"stageout", "transferred"} =>
+    \A t \in TASKS : dataState[t] \in {"stageout", "stageout_chunk1",
+                                         "stageout_chunk2", "transferred"} =>
         t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
 
 FileContentSafety ==
     /\ \A t \in TASKS : dataState[t] = "transferred" =>
           (IF dataState[t] = "transferred" THEN ContentToken(t) ELSE "none") = ContentToken(t)
-    /\ \A t \in TASKS : dataState[t] = "stageout" =>
+    /\ \A t \in TASKS : dataState[t] \in {"stageout", "stageout_chunk1",
+                                             "stageout_chunk2"} =>
           t \in FILE_OUTPUTS /\ outputs[t] \in {"result", "memoized-output"}
+
+FileChunkSafety ==
+    /\ \A t \in TASKS : dataState[t] \in {"stageout_chunk1", "stageout_chunk2"} =>
+          t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
 
 FileCorruptionSafety ==
     \A t \in TASKS : dataState[t] = "corrupt" =>
