@@ -231,6 +231,9 @@ real `Future` and `DataFuture`, while the fixed branch tests exception presence 
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
 paths, including stage-out failure/retry and dependent-task gating on the output `DataFuture`.
+`ParslMultiOutputStageOut.tla` extends the output protocol to two independently completing files
+sharing one application dependency. `tests/test_multi_output_stageout_runtime.py` exercises the
+real `DataManager.stage_out()` calls and verifies both parent-Future bindings.
 `ParslClock.tla` separates wall-clock ticks, heartbeat transport and expiry, attempt start/deadline
 timestamps, retry selection after timeout or manager loss, and stale late-result delivery. A
 zero-retry configuration checks the terminal timeout path explicitly; lost attempts can now retry
@@ -624,7 +627,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 219 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 220 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

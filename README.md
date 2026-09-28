@@ -295,6 +295,12 @@ published output is ready. This follows
 and the output handling in
 [`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
 
+`ParslMultiOutputStageOut.tla` extends that boundary to two output files. Each output has an
+independent staging Future and readiness state, but both stage-out operations receive the same
+application Future as their dependency. A failed output cannot publish itself or make its own
+dependent task run early. `tests/test_multi_output_stageout_runtime.py` drives the real
+`DataManager.stage_out()` wiring with two fake staging transfers.
+
 `ParslClock.tla` separates wall-clock progression from heartbeat delivery and attempt deadlines.
 It models heartbeat send/drop/delivery, manager expiry and recovery, per-attempt timeout, retry
 selection after both task timeout and manager loss, and a late result that is marked stale when its
@@ -898,6 +904,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureSuccess.cfg Pa
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMultiOutputStageOutCurrent.cfg ParslMultiOutputStageOut.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMultiOutputStageOutEarly.cfg ParslMultiOutputStageOut.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFutureWaitTimeout.cfg ParslFutureWaitTimeout.tla
@@ -1135,6 +1143,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   publication is tied to application completion.
 - `ParslStageOutNone.cfg`: 14 states generated, 7 distinct states, depth 5; the no-staging path
   correctly makes the application Future the output dependency.
+- `ParslMultiOutputStageOutCurrent.cfg`: 43 states generated, 17 distinct states, depth 6; two
+  outputs have independent publication and dependency gates while sharing the application gate.
+- `ParslMultiOutputStageOutEarly.cfg`: expected counterexample, 3 states generated; allowing an
+  output to publish before application completion violates `NoEarlyPublication`.
 - `ParslClock.cfg`: 179,383 states generated, 37,788 distinct states, depth 21;
   wall-clock bounds, heartbeat delivery/drop/expiry, attempt deadlines, timeout-or-manager-loss
   retry selection, and stale late-result handling all passed.
@@ -1406,6 +1418,15 @@ This verifies stage-out archive creation and source cleanup, stage-in byte prese
 on a corrupt archive before output publication, and the local-file scheme gate in
 `NoOpFileStaging`.
 
+The multi-output DataManager dependency wiring is exercised directly:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_multi_output_stageout_runtime.py -v
+```
+
+The probe confirms that both output staging Futures receive the same application Future while
+remaining independently completable.
+
 The ZMQ transport and serialization boundary is exercised with real in-process ROUTER/DEALER
 sockets:
 
@@ -1422,7 +1443,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 219 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 220 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2276,6 +2297,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `SendChunk` / `ReceiveChunk` / `RejectCorruptChunk` / `RepairChunk` | chunked content transfer, checksum validation, and retransmission | `DataManager.stage_in` / `stage_out` transfer paths |
 | `PublishStageIn` / `RejectStaleStageIn` / `PublishStageOut` | readiness and atomic file visibility after complete transfer | DataManager staging completion and file publication boundary |
 | `CompleteApp` / `StartStageOut` / `CompleteStageOut` / `RetryStageOut` | output `DataFuture` dependency on application or separate stage-out Future | `DataFlowKernel._add_output_deps` and `DataManager.stage_out` |
+| `PublishOutput1` / `PublishOutput2` / `NoEarlyPublication` | independent multi-output readiness with a shared application dependency | `DataManager.stage_out` and output `DataFuture` construction |
 | `Tick` / `SendHeartbeat` / `DeliverHeartbeat` / `ExpireManager` | wall-clock and manager heartbeat expiry | HTEX interchange heartbeat and manager health handling |
 | `StartAttempt` / `TimeoutAttempt` / `RetryAttempt` / `RetryLostAttempt` / `DeliverResult` | attempt deadline, manager-loss retry choice, and stale late result | DFK timeout/retry callbacks, HTEX manager-loss handling, and result completion path |
 | `AdvanceStatus` / `EmitEvent` | logical task status event generation | DFK task-state update and monitoring radio send |
