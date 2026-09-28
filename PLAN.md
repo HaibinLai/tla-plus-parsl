@@ -257,6 +257,8 @@ real `join_app`, checking the immediate `add_done_callback` registration path mo
 `ParslJoinImmediateCallback.tla`.
 `tests/test_retry_timeout_runtime.py` runs a retryable app and a walltime-limited app on the
 real thread executor, confirming distinct physical attempts and terminal `AppTimeout` behavior.
+`tests/test_timeout_timer_runtime.py` drives the real `timeout` wrapper directly, checking timer
+cleanup after fast return and ordinary function exception, plus timeout injection for a slow call.
 It also runs a real Python app that catches the injected `AppTimeout` and returns normally; this
 current behavior is modeled by `ParslPythonTimeoutCatch.tla`, whose fixed configuration disallows
 successful completion after timeout injection.

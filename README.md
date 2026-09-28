@@ -1042,7 +1042,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 168 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 171 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1085,6 +1085,16 @@ walltime signal, which is modeled by `ParslPythonTimeoutCatch.tla`.
 java -cp tla2tools.jar tlc2.TLC -config ParslPythonTimeoutCatch.cfg ParslPythonTimeoutCatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPythonTimeoutCatchFixed.cfg ParslPythonTimeoutCatch.tla
 ```
+
+The underlying timeout timer lifecycle is exercised directly:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_timeout_timer_runtime.py -v
+```
+
+`ParslTimeoutTimer.tla` checks that `AutoCancelTimer` is cancelled after a fast return or an
+ordinary function exception, while a slow function can still receive `AppTimeout` before it
+finishes.
 
 Memoization and cached-result dependency propagation are exercised with a real local executor:
 
@@ -1716,6 +1726,7 @@ failure result for each in-flight task.
 | `AttemptFailure` / `RetryTask` | retryable failure and resubmission | `DataFlowKernel.handle_exec_update` |
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
+| `Start` / `FunctionReturns` / `FunctionRaises` / `TimerFires` | Python app timeout timer lifecycle and cleanup | `parsl.app.python.timeout` and `AutoCancelTimer` |
 | `ExpireManager` / `Heartbeat` / `ExpirationAccounting` | strict heartbeat threshold and in-flight manager-loss cleanup | `Interchange.expire_bad_managers` and main polling loop |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
 | `monitoringState.version` / `MonitoringDatabaseSafety` | ordered monitoring database writes | `MonitoringHub`/radio persistence boundary |
