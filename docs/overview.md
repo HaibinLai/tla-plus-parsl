@@ -229,6 +229,14 @@ The real probe is [`tests/test_memo_exception_checkpoint_runtime.py`](../tests/t
 This records a semantic gap for review, not a claim that failure persistence is necessarily the
 intended Parsl policy.
 
+`ParslMemoCheckpointOrder.tla` models a duplicate-key recovery ordering issue. The helper
+`get_all_checkpoints` sorts UUID-named run directories lexically, but `BasicMemoizer` overwrites
+each repeated hash with the last checkpoint it loads. UUID lexical order does not encode run
+chronology: TLC finds a three-state current counterexample where `new` is loaded before `old`, and
+the old result wins. The chronological fixed configuration passes with 3 distinct states.
+[`tests/test_memo_checkpoint_order_runtime.py`](../tests/test_memo_checkpoint_order_runtime.py)
+reproduces the stale restoration using two UUID-like run directory names.
+
 `ParslMemoDictOrdering.tla` models dictionary-key normalization in `BasicMemoizer`. Python allows
 heterogeneous dictionary keys, but the current `id_for_memo_dict` calls `sorted(dict)` directly,
 so a mixed `int`/`str` key dictionary raises `TypeError` while computing a memo key. The runtime
@@ -1119,6 +1127,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerPositiv
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoFunctionIdentityCurrent.cfg models/dataflow/ParslMemoFunctionIdentity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoFunctionIdentityFixed.cfg models/dataflow/ParslMemoFunctionIdentity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoFunctionIdentityStable.cfg models/dataflow/ParslMemoFunctionIdentity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoExceptionCheckpointCurrent.cfg models/dataflow/ParslMemoExceptionCheckpoint.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoExceptionCheckpointFixed.cfg models/dataflow/ParslMemoExceptionCheckpoint.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoCheckpointOrderCurrent.cfg models/dataflow/ParslMemoCheckpointOrder.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoCheckpointOrderFixed.cfg models/dataflow/ParslMemoCheckpointOrder.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutCurrent.cfg models/executors/ParslExecuteWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutFixed.cfg models/executors/ParslExecuteWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutSuccess.cfg models/executors/ParslExecuteWaitTimeout.tla
@@ -1422,6 +1434,14 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMemoFunctionIdentityFixed.cfg` and `ParslMemoFunctionIdentityStable.cfg`: 4 states
   generated, 2 distinct states, depth 2; source-aware and unchanged-function cases satisfy
   `MemoKeySafety`.
+- `ParslMemoExceptionCheckpointCurrent.cfg`: expected counterexample at depth 4; a failed
+  in-memory memo entry is absent after checkpoint and restart.
+- `ParslMemoExceptionCheckpointFixed.cfg`: 6 states generated, 5 distinct states, depth 5;
+  persisted failures satisfy `FailureCheckpointRecovery`.
+- `ParslMemoCheckpointOrderCurrent.cfg`: expected counterexample at depth 3; lexical UUID order
+  loads `new` before `old`, then restores the old duplicate value.
+- `ParslMemoCheckpointOrderFixed.cfg`: 4 states generated, 3 distinct states, depth 3;
+  chronological loading satisfies `LatestCheckpointWins`.
 - `ParslExecuteWaitTimeoutCurrent.cfg`: expected counterexample, 2 states generated; a command
   timeout raises while the scheduler process remains alive.
 - `ParslExecuteWaitTimeoutFixed.cfg` and `ParslExecuteWaitTimeoutSuccess.cfg`: 4 states generated,
@@ -1669,7 +1689,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 290 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 291 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

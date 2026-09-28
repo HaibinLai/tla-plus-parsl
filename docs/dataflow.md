@@ -14,6 +14,16 @@ The real probe is [`tests/test_memo_exception_checkpoint_runtime.py`](../tests/t
 This records a semantic gap for review, not a claim that failure persistence is necessarily the
 intended Parsl policy.
 
+`ParslMemoCheckpointOrder.tla` models duplicate keys across checkpoint runs. `get_all_checkpoints`
+in [`parsl/utils.py`](https://github.com/Parsl/parsl/blob/master/parsl/utils.py) sorts UUID-named
+run directories lexically, while `_load_checkpoints` in
+[`parsl/dataflow/memoization.py`](https://github.com/Parsl/parsl/blob/master/parsl/dataflow/memoization.py)
+overwrites a key with every later file it reads. UUID order is not chronology, so an old value can
+overwrite a newer one. The current TLC configuration finds the three-state counterexample; the
+fixed configuration reads old then new and passes.
+[`tests/test_memo_checkpoint_order_runtime.py`](../tests/test_memo_checkpoint_order_runtime.py)
+creates two UUID-like directories and demonstrates the actual stale restoration.
+
 `ParslDependencyTraversal.tla` has explicit dictionary-value and dictionary-key configurations.
 The deep resolver configurations pass with 10 distinct states each; the shallow dictionary
 configuration exposes `NoNestedFutureLeak` because the nested Future reaches the worker.
