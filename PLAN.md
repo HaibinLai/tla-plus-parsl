@@ -184,6 +184,9 @@ attempt; the runtime probe reproduces this, and the fixed branch charges at leas
 `ParslMemoFunctionIdentity.tla` models function-body changes across memoized calls. The current
 `id_for_memo_function` key uses only module and name, so two different bodies collide; the runtime
 probe creates same-identity functions with different results and observes the same hash.
+`ParslExecuteWaitTimeout.tla` models scheduler-command timeout cleanup in `utils.execute_wait`.
+The current path re-raises `TimeoutExpired` while leaving the subprocess alive; the runtime probe
+uses a fake process to verify that no kill/terminate operation occurs.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
