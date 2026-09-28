@@ -36,3 +36,13 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLastMes
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLastMessageRaceFixed.cfg models/monitoring/ParslMonitoringLastMessageRace.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_last_message_runtime.py -v
 ```
+
+`ParslMonitoringShutdownDrain.tla` models the normal close boundary: setting the kill event does
+not discard messages already accepted by the external resource queue. The migration thread and
+database loop continue until their queues are empty. TLC checks message conservation, and
+`tests/test_monitoring_shutdown_drain_runtime.py` drives the real migration thread.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringShutdownDrain.cfg models/monitoring/ParslMonitoringShutdownDrain.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_shutdown_drain_runtime.py -v
+```
