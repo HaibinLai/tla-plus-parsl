@@ -794,6 +794,16 @@ the wire models:
 
 The tests verify closure round-trip behavior, the `C2` callable and `02` data headers, three-part
 apply-message ordering, and rejection of an unserializable argument before a message is packed.
+
+The local zip staging implementation is exercised against actual bytes as well:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
+```
+
+This verifies stage-out archive creation and source cleanup, stage-in byte preservation, failure
+on a corrupt archive before output publication, and the local-file scheme gate in
+`NoOpFileStaging`.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
