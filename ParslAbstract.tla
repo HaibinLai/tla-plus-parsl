@@ -28,7 +28,7 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
 WorkerStates == {"idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
 DataStates == {"unavailable", "staging", "available", "stageout", "transferred"}
-WireStates == {"none", "queued", "sent", "received", "consumed", "dropped"}
+WireStates == {"none", "queued", "sent", "received", "duplicate", "consumed", "dropped"}
 EnvelopeStates == {"none", "valid", "invalid"}
 AttemptIds == TASKS \X (0..MAX_RETRIES)
 NoAttempt == <<"none", -1>>
@@ -318,6 +318,30 @@ ReceiveAttempt(t, k) ==
                     completed, rejected, outputs, resultWireState,
                     taskEnvelope, resultEnvelope>>
 
+DuplicateTaskMessage(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "received" /\ taskWireState[a] = "received"
+    /\ taskEnvelope[a] = "valid"
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "duplicate"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
+DiscardTaskDuplicate(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "received" /\ taskWireState[a] = "duplicate"
+    /\ taskEnvelope[a] = "valid"
+    /\ taskWireState' = [taskWireState EXCEPT ![a] = "received"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, resultWireState,
+                    taskEnvelope, resultEnvelope>>
+
 DecodeAttempt(t, k) ==
     LET a == <<t, k>> IN
     /\ attemptState[a] = "received" /\ taskWireState[a] = "received"
@@ -392,6 +416,30 @@ ReceiveResult(t, k) ==
     /\ resultWireState' = [resultWireState EXCEPT ![a] = "received"]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, taskWireState,
+                    taskEnvelope, resultEnvelope>>
+
+DuplicateResultMessage(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "result_received" /\ resultWireState[a] = "received"
+    /\ resultEnvelope[a] = "valid"
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "duplicate"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
+                    attemptWorker, workerState, workerAttempt, executorState,
+                    providerState, providerTarget, providerBlocks,
+                    completed, rejected, outputs, taskWireState,
+                    taskEnvelope, resultEnvelope>>
+
+DiscardResultDuplicate(t, k) ==
+    LET a == <<t, k>> IN
+    /\ attemptState[a] = "result_received" /\ resultWireState[a] = "duplicate"
+    /\ resultEnvelope[a] = "valid"
+    /\ resultWireState' = [resultWireState EXCEPT ![a] = "received"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
+                    selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerState, workerAttempt, executorState,
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs, taskWireState,
@@ -718,14 +766,17 @@ CoreActions ==
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES : DropTaskMessage(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
           SerializeAttempt(t, k) \/ SendAttempt(t, k)
-          \/ ReceiveAttempt(t, k) \/ DecodeAttempt(t, k)
+          \/ ReceiveAttempt(t, k) \/ DuplicateTaskMessage(t, k)
+          \/ DiscardTaskDuplicate(t, k) \/ DecodeAttempt(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           DispatchAttempt(t, k, w)
           \/ SerializeResult(t, k, w)
           \/ AttemptSuccess(t, k, w) \/ AttemptFailure(t, k, w)
           \/ AttemptTimeout(t, k, w)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES :
-          SendResult(t, k) \/ ReceiveResult(t, k) \/ DecodeResult(t, k)
+          SendResult(t, k) \/ ReceiveResult(t, k)
+          \/ DuplicateResultMessage(t, k) \/ DiscardResultDuplicate(t, k)
+          \/ DecodeResult(t, k)
     \/ \E t \in TASKS, k \in 0..MAX_RETRIES, w \in WORKERS :
           DropResultMessage(t, k, w)
     \/ \E t \in TASKS : RetryTask(t)
@@ -842,6 +893,9 @@ MessageSafety ==
           taskWireState[a] = "received" =>
               taskEnvelope[a] = "valid" /\ attemptState[a] = "received"
     /\ \A a \in AttemptIds :
+          taskWireState[a] = "duplicate" =>
+              taskEnvelope[a] = "valid" /\ attemptState[a] = "received"
+    /\ \A a \in AttemptIds :
           taskWireState[a] = "consumed" =>
               taskEnvelope[a] = "valid" /\
               attemptState[a] \in {"decoded", "dispatched", "running",
@@ -858,6 +912,9 @@ MessageSafety ==
               resultEnvelope[a] = "valid" /\ attemptState[a] = "result_sent"
     /\ \A a \in AttemptIds :
           resultWireState[a] = "received" =>
+              resultEnvelope[a] = "valid" /\ attemptState[a] = "result_received"
+    /\ \A a \in AttemptIds :
+          resultWireState[a] = "duplicate" =>
               resultEnvelope[a] = "valid" /\ attemptState[a] = "result_received"
     /\ \A a \in AttemptIds :
           resultWireState[a] = "consumed" =>
