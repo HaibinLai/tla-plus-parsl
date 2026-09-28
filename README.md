@@ -93,11 +93,13 @@ File-oriented data readiness is represented by `dataState`:
 
 ```text
 unavailable -> staging -> available -> stageout_chunk1 -> stageout_chunk2 -> transferred
+              \-> staging_corrupt -> staging
                                       \-> stageout_chunk1_corrupt
                                       \-> stageout_chunk2_corrupt
 ```
 
-`BeginStaging`/`FinishStaging` model input stage-in before dependency release. For tasks in
+`BeginStaging`/`FinishStaging` model input stage-in before dependency release. `CorruptStaging`
+and `RepairStaging` model an input transfer that is damaged before it becomes available. For tasks in
 `FILE_OUTPUTS`, `BeginStageOut` starts output transfer, `TransferOutputChunk` advances the first
 chunk, and `FinishStageOut` commits the second chunk as `transferred`. This prevents a model
 execution from claiming that a file is ready before all transfer stages complete. The token stands
@@ -294,6 +296,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
   dependency readiness, stage-out ordering, and symbolic output-content identity passed.
+- `ParslInputCorruption.cfg`: 37,556 states generated, 7,024 distinct states, depth 66;
+  a corrupted stage-in could not release the dependent task until repaired.
 - `ParslFileCorruptionSmall.cfg`: 60,824 states generated, 10,424 distinct states, depth 64;
   corruption, repair/retransfer, and output-content safety passed for a minimal dependent DAG.
 - `ParslRegistration.cfg`: 94 states generated, 29 distinct states, depth 18;
@@ -327,6 +331,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | TLA+ action | Parsl concept | Current source location |
 | --- | --- | --- |
 | `BeginStaging` / `FinishStaging` | data readiness/staging | `parsl/data_provider/data_manager.py` |
+| `CorruptStaging` / `RepairStaging` / `FileStagingSafety` | damaged input transfer and repair before dependency release | `DataManager.stage_in` and transfer error paths |
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |

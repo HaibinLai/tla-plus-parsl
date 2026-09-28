@@ -30,6 +30,7 @@ AttemptStates == {"absent", "submitted", "serialized", "sent", "received", "deco
 WorkerStates == {"unregistered", "idle", "busy", "failed"}
 ProviderStates == {"none", "requested", "active", "failed", "cancelled"}
 DataStates == {"unavailable", "staging", "available", "stageout",
+               "staging_corrupt",
                "stageout_chunk1", "stageout_chunk1_corrupt",
                "stageout_chunk2", "stageout_chunk2_corrupt",
                "transferred", "corrupt"}
@@ -148,6 +149,28 @@ FinishStaging(t) ==
                     providerState, providerTarget, providerBlocks,
                     completed, rejected, outputs, taskWireState, resultWireState,
                     taskEnvelope, resultEnvelope>>
+
+CorruptStaging(t) ==
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ taskState[t] = "staging"
+    /\ dataState[t] = "staging"
+    /\ dataState' = [dataState EXCEPT ![t] = "staging_corrupt"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt, selectedExecutor,
+                    attemptState, attemptExecutor, attemptWorker, workerState,
+                    workerAttempt, executorState, providerState, providerTarget,
+                    providerBlocks, completed, rejected, outputs, taskWireState,
+                    resultWireState, taskEnvelope, resultEnvelope>>
+
+RepairStaging(t) ==
+    /\ ALLOW_FAILURES
+    /\ t \in TASKS /\ taskState[t] = "staging"
+    /\ dataState[t] = "staging_corrupt"
+    /\ dataState' = [dataState EXCEPT ![t] = "staging"]
+    /\ UNCHANGED <<taskState, futureState, retries, currentAttempt, selectedExecutor,
+                    attemptState, attemptExecutor, attemptWorker, workerState,
+                    workerAttempt, executorState, providerState, providerTarget,
+                    providerBlocks, completed, rejected, outputs, taskWireState,
+                    resultWireState, taskEnvelope, resultEnvelope>>
 
 BeginStageOut(t) ==
     /\ t \in FILE_OUTPUTS
@@ -1006,6 +1029,7 @@ CancelAllocation(e) ==
 CoreActions ==
     \/ \E w \in WORKERS : RegisterWorker(w) \/ RegistrationFailure(w)
     \/ \E t \in TASKS : BeginStaging(t) \/ FinishStaging(t)
+          \/ CorruptStaging(t) \/ RepairStaging(t)
     \/ \E t \in TASKS : BeginStageOut(t) \/ TransferOutputChunk(t)
           \/ FinishStageOut(t) \/ CorruptStageOut(t) \/ RepairStageOut(t)
     \/ \E t \in TASKS : DependencyCheck(t) \/ MemoizationHit(t) \/ Enqueue(t)
@@ -1314,6 +1338,10 @@ FileTransferSafety ==
     \A t \in TASKS : dataState[t] \in {"stageout", "stageout_chunk1",
                                          "stageout_chunk2", "transferred"} =>
         t \in FILE_OUTPUTS /\ taskState[t] \in {"succeeded", "memoized"}
+
+FileStagingSafety ==
+    \A t \in TASKS : dataState[t] = "staging_corrupt" =>
+        taskState[t] = "staging" /\ futureState[t] = "unresolved"
 
 FileContentSafety ==
     /\ \A t \in TASKS : dataState[t] = "transferred" =>

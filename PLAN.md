@@ -54,6 +54,8 @@ Task payloads now distinguish callable serializability from argument/closure ser
 an unencodable payload fails before worker dispatch and follows the bounded retry path.
 The data path now distinguishes input stage-in from output stage-out and records a transferred
 content token for declared output files.
+`ParslInputCorruption.cfg` adds a bounded damaged-stage-in path; `FileStagingSafety` prevents a
+dependent task from consuming an input until repair returns it to `available`.
 The bounded `ParslTime.cfg` model adds logical ticking, heartbeat age, attempt start time, and
 timeout guards so TLC can explore timing-dependent worker loss and retry behavior.
 `ParslMonitoring.cfg` adds a focused asynchronous monitoring/database status model with a
