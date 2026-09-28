@@ -920,6 +920,16 @@ Condor submission parsing is also exercised without a Condor installation:
 The probe covers valid cluster registration, nonzero command failure, and the current uncaught
 `IndexError` paths for empty or malformed successful `condor_submit` output.
 
+Condor cancellation is exercised with a fake scheduler and a one-job chunk size:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_cancel_runtime.py -v
+```
+
+`ParslCondorCancel.tla` checks that each chunk returns an independent Boolean result and that a
+successful cancellation of an unknown id is ignored locally rather than crashing, unlike the
+current LSF and Grid Engine cancellation paths.
+
 The Torque foreign-job counterexample has the same kind of source-level runtime probe:
 
 ```bash
@@ -1009,7 +1019,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 140 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 143 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1646,6 +1656,7 @@ failure result for each in-flight task.
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
+| `CancelChunk` | Condor chunked `condor_rm` cancellation and unknown-job guard | `CondorProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Grid Engine qstat line length validation and update | `GridEngineProvider._status` |
 | `Cancel` | Grid Engine `qdel` cancellation and local resource-state update | `GridEngineProvider.cancel` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |

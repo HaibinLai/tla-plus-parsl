@@ -306,6 +306,8 @@ concurrent-specification race modeled by `ParslGlobusComputeConfig.tla`.
 `tests/test_condor_submit_runtime.py` drives Condor submission with temporary scripts and fake
 `condor_submit` output, checking valid cluster registration, command failure, and malformed
 successful-output indexing modeled by `ParslCondorSubmit.tla`.
+`tests/test_condor_cancel_runtime.py` drives Condor's chunked `condor_rm` path, checking per-chunk
+results and the guarded handling of job ids absent from the local resource map.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
