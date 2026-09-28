@@ -171,6 +171,9 @@ success and API failure with a fake GCE client.
 `ParslMonitoringClose.tla` models `DatabaseManager.close`: abnormal exit finalizes a started
 workflow once, normal exit avoids duplicate finalization, and both paths switch to drain mode and
 signal the manager thread to stop. `tests/test_monitoring_close_runtime.py` exercises both paths.
+`ParslSlurmCancel.tla` adds Slurm `scancel` cancellation, including command failure, successful
+local cancellation, and the current foreign/local-resource mismatch path. The fixed configuration
+updates only known local resources.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

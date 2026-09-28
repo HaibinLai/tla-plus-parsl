@@ -149,6 +149,10 @@ remote deletion but leaves the local resource marked `RUNNING`; the fixed config
 workflow start message writes the final completion update once; a normal close does not duplicate
 it. Both paths switch batching to drain mode and signal the manager to stop.
 
+`ParslSlurmCancel.tla` models Slurm `scancel`: command failure preserves local state, while a
+successful command marks known resources `CANCELLED`; the current path can raise on a foreign ID,
+and the fixed path ignores that stale local entry.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -1100,7 +1104,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 191 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 193 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1849,6 +1853,7 @@ failure result for each in-flight task.
 | `IgnoreLinger` / `RemoteFailure` / `RemoteSuccessWithLocalState` / `RemoteSuccessWithoutLocalState` | AWS EC2 cancellation and local bookkeeping | `AWSProvider.cancel` |
 | `DeleteFails` / `DeleteSucceeds` | GCE cancellation result and local resource status | `GoogleCloudProvider.cancel` |
 | `Close` / `FinalizationSafety` | monitoring workflow finalization and shutdown drain | `DatabaseManager.close` |
+| `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
 | `SerializeResult` / `SendResult` / `ReceiveResult` / `DecodeResult` | encode, transport, and decode a worker result | `process_worker_pool.py`, `Interchange.process_manager_socket_message` |
