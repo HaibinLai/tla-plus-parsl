@@ -178,6 +178,8 @@ and cancellation propagation; its actual configuration preserves a cancellation-
 the fixed configuration checks the candidate propagation fix.
 `ParslTaskVineResults.tla` refines TaskVine's manager report and collector protocol, including
 result-file failure mapping and cleanup of all outstanding Futures after manager failure.
+`ParslRadicalPilotResults.tla` refines RadicalPilot callback mapping for Bash/Python/MPI tasks,
+master failure propagation, cancellation, and the shutdown pending-Future probe.
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.

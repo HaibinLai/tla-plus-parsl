@@ -234,6 +234,13 @@ when the TaskVine submit process dies. The model follows
 and the report construction in
 [`taskvine/manager.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/taskvine/manager.py).
 
+`ParslRadicalPilotResults.tla` models RadicalPilot task callbacks for Bash, Python, and MPI-like
+tasks: DONE maps to an exit code, deserialized value, or raw MPI return; CANCELED cancels the
+Future; FAILED sets an exception; and a master failure fails all outstanding tasks. The actual
+configuration probes shutdown with a pending RP task, because the current `shutdown()` closes the
+session without an explicit sweep of `future_tasks`; the fixed configuration adds that sweep.
+This follows [`radical/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/radical/executor.py).
+
 `ParslProviderKinds.tla` refines the provider side with concrete backend semantics. It models
 the common `ExecutionProvider` API (`submit`, `status`, and `cancel`), Slurm-like cluster status
 translation, Kubernetes pod status translation, scheduler command failure, missing-job behavior,
@@ -595,6 +602,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorS
 java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueResults.cfg ParslWorkQueueResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFluxResultFixed.cfg ParslFluxResult.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineResults.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
@@ -733,6 +741,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslTaskVineResults.cfg`: 56 states generated, 26 distinct states, depth 5; valid-result
   completion, missing/corrupt/exception/no-result failure mapping, and submit-process cleanup of
   outstanding Futures all passed.
+- `ParslRadicalPilotResults.cfg`: expected counterexample at depth 2 (73 states generated, 38
+  distinct); shutdown can leave a submitted RP task's Parsl Future pending.
+- `ParslRadicalPilotResultsFixed.cfg`: 79 states generated, 38 distinct states, depth 4; Bash,
+  Python, MPI, cancellation, task failure, master failure, and shutdown cleanup all passed.
 - `ParslProviderKinds.cfg`: 424,001 states generated, 40,000 distinct states, depth 15;
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
@@ -906,6 +918,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
+| `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
 | `Dispatch` / `Complete` / `Drain` / `Recover` | HTEX pending-task priority, manager capacity, and draining admission | `Interchange.process_task_incoming`, `get_tasks`, and `process_tasks_to_send` |
