@@ -73,6 +73,23 @@ class LocalProviderRuntimeTest(unittest.TestCase):
             with open(status.stdout_path) as stdout:
                 self.assertIn("local-provider-runtime", stdout.read())
 
+    def test_submit_collects_nonzero_exit_as_failed_resource(self):
+        with tempfile.TemporaryDirectory() as directory:
+            provider = LocalProvider()
+            provider.script_dir = directory
+            job_id = provider.submit("exit 3", tasks_per_node=1)
+
+            status = None
+            for _ in range(100):
+                status = provider.status([job_id])[0]
+                if status.terminal:
+                    break
+                time.sleep(0.02)
+
+            self.assertIsNotNone(status)
+            self.assertEqual(status.state, JobState.FAILED)
+            self.assertEqual(status.exit_code, 3)
+
 
 if __name__ == "__main__":
     unittest.main()
