@@ -775,6 +775,15 @@ deterministic scheduler stub (no Condor installation is required):
 
 The runtime probe confirms that a one-field `condor_q` line raises `IndexError`, while a valid
 two-field line updates the tracked resource.
+
+The Torque foreign-job counterexample has the same kind of source-level runtime probe:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_status_foreign.py -v
+```
+
+It confirms that an unregistered qstat job raises `KeyError`, while a known job line updates the
+tracked resource.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
