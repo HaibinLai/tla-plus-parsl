@@ -900,6 +900,15 @@ Azure VM status handling is exercised with a fake compute client:
 The tests check running-state translation, the current `IndexError`-to-`PENDING` path for missing
 instance-view status, and propagation of non-index cloud API errors.
 
+Azure VM cancellation is exercised with a fake asynchronous delete client:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_azure_cancel_runtime.py -v
+```
+
+The probe checks linger-mode refusal, delete-error rollback, and successful deletion/removal from
+the provider's instance list.
+
 Google Compute Engine status handling is exercised with a fake discovery client:
 
 ```bash

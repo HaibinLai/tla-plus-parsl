@@ -1,0 +1,59 @@
+"""Runtime probes for Azure VM cancellation lifecycle."""
+
+import unittest
+
+from parsl.providers.azure.azure import AzureProvider
+
+
+class FakeDeleteOperation:
+    def __init__(self, error=None):
+        self.error = error
+
+    def wait(self):
+        if self.error is not None:
+            raise self.error
+
+
+class FakeVirtualMachines:
+    def __init__(self, operation):
+        self.operation = operation
+
+    def delete(self, group_name, job_id):
+        return self.operation
+
+
+class FakeComputeClient:
+    def __init__(self, operation):
+        self.virtual_machines = FakeVirtualMachines(operation)
+
+
+class AzureCancelRuntimeTest(unittest.TestCase):
+    def provider_with(self, operation, linger=False):
+        provider = AzureProvider.__new__(AzureProvider)
+        provider.compute_client = FakeComputeClient(operation)
+        provider.group_name = "group"
+        provider.linger = linger
+        provider.instances = ["vm-1"]
+        return provider
+
+    def test_linger_mode_rejects_cancel(self):
+        provider = self.provider_with(FakeDeleteOperation(), linger=True)
+
+        self.assertEqual(provider.cancel(["vm-1"]), [False])
+        self.assertEqual(provider.instances, ["vm-1"])
+
+    def test_delete_error_returns_false_and_preserves_instance(self):
+        provider = self.provider_with(FakeDeleteOperation(RuntimeError("delete failed")))
+
+        self.assertEqual(provider.cancel(["vm-1"]), [False])
+        self.assertEqual(provider.instances, ["vm-1"])
+
+    def test_successful_delete_returns_true_and_removes_instance(self):
+        provider = self.provider_with(FakeDeleteOperation())
+
+        self.assertEqual(provider.cancel(["vm-1"]), [True])
+        self.assertEqual(provider.instances, [])
+
+
+if __name__ == "__main__":
+    unittest.main()
