@@ -669,6 +669,12 @@ The TLC model checks identity and terminal-result consistency, and
 [`tests/test_globus_compute_result_runtime.py`](../tests/test_globus_compute_result_runtime.py)
 verifies the behavior with a fake SDK executor.
 
+`ParslGlobusComputeSubmitRace.tla` models concurrent calls to the same Globus Compute wrapper.
+Because `GlobusComputeExecutor.submit` temporarily mutates shared SDK executor configuration,
+the current branch permits one task to observe another task's resource specification or the
+restored default. The fixed branch serializes the critical section. The runtime probe forces the
+interleaving with two threads and a blocking fake SDK executor.
+
 `ParslBlockProviderBadStateOrdering.tla` refines `BlockProviderExecutor.set_bad_state_and_fail_all`.
 The current loop calls `set_exception` without checking whether a Future is already terminal; a
 completed Future can raise `InvalidStateError` and leave later pending tasks unresolved. TLC finds
@@ -2762,6 +2768,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
+| `BeginA` / `BeginB` / `SubmitA` / `SubmitB` | concurrent Globus Compute configuration isolation and serialized fixed path | `GlobusComputeExecutor.submit` shared SDK executor mutation |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
 | `DeliverCorruptResult` / `DecodeFailureSafety` / `NoOrphanedPendingFuture` | corrupt result deserialization after task-map removal | `HighThroughputExecutor._result_queue_worker` |
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |

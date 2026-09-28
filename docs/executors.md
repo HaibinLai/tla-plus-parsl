@@ -212,6 +212,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResul
 /tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_result_runtime.py -v
 ```
 
+`ParslGlobusComputeSubmitRace.tla` refines the other side of that wrapper. The current
+`submit` implementation temporarily mutates one shared SDK executor before calling its
+`submit`; overlapping calls can therefore make task A observe task B's resource specification
+or the restored default. The current TLC branch finds that interleaving, while the fixed branch
+serializes the override/submit/restore critical section with a lock. The runtime probe uses two
+threads and a deterministic fake SDK executor to reproduce the wrong configuration observation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeSubmitRaceCurrent.cfg models/executors/ParslGlobusComputeSubmitRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeSubmitRaceFixed.cfg models/executors/ParslGlobusComputeSubmitRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_submit_race_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
