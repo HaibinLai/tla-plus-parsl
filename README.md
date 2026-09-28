@@ -118,6 +118,11 @@ all selected inner Futures are terminal; successful list results preserve input 
 inner failure becomes an outer join failure. Inner retries are intentionally owned by the inner
 tasks, matching Parsl's callback behavior.
 
+`ParslJoinRetry.tla` refines that protocol with separate logical inner Futures and physical inner
+attempts. A retryable inner failure leaves the Future unresolved, so the outer join waits; only a
+final-attempt failure is propagated as `JoinError`, while a later successful retry contributes its
+final result to the ordered aggregate.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -323,6 +328,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -396,6 +402,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslJoinApp.cfg`: 1,210 states generated, 331 distinct states, depth 10;
   single/list/empty join returns, invalid-return rejection, inner completion/failure observation,
   ordered aggregation, join-handle lifetime, and JoinError propagation all passed.
+- `ParslJoinRetry.cfg`: 840 states generated, 258 distinct states, depth 16;
+  logical-inner versus physical-attempt separation, retryable inner failure isolation, final failure
+  propagation, and ordered final-result aggregation all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -496,6 +505,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
+| `StartAttempt` / `FailAttempt` / `RetryAttempt` / `CompleteAttempt` in `ParslJoinRetry.tla` | inner Future retry lifecycle before join observation | DFK retry handling and inner Future callbacks |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces
