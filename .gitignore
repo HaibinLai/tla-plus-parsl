@@ -1,0 +1,5 @@
+# TLC-generated state and run logs
+runinfo/
+states/
+*.st
+*.fp
