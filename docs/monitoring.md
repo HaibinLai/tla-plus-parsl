@@ -59,6 +59,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringShutdow
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_shutdown_race_runtime.py -v
 ```
 
+`ParslMonitoringPersistentRetry.tla` models the persistent database-lock boundary. The current
+`DatabaseManager._insert` retries every `OperationalError` forever, so a lock that never clears
+can prevent the monitoring thread from completing shutdown. The fixed branch bounds retries and
+records an aborted write. The runtime probe uses a controllable always-locked fake database and a
+watchdog to confirm that the current loop does not return until externally interrupted.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringPersistentRetryCurrent.cfg models/monitoring/ParslMonitoringPersistentRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringPersistentRetryFixed.cfg models/monitoring/ParslMonitoringPersistentRetry.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_persistent_retry_runtime.py -v
+```
+
 `ParslFilesystemRadioAtomicity.tla` models the filesystem monitoring radio's publication
 protocol. The current direct-write branch lets a reader observe a partial message; the fixed
 branch writes under `tmp/` and atomically renames into `new/`. TLC finds the expected current

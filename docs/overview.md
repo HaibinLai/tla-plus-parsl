@@ -225,6 +225,11 @@ ignores foreign lines and preserves local resource state.
 rolled back and retried, while integrity errors are dropped after rollback. The runtime probe
 drives one transient database-lock failure through the real retry loop.
 
+`ParslMonitoringPersistentRetry.tla` isolates the persistent-lock case: the current retry loop
+has no attempt bound and can keep the monitoring thread from finishing shutdown indefinitely. The
+fixed branch aborts after a bounded number of failures. A watchdog-based runtime probe confirms
+the current `_insert` remains in the retry loop until externally interrupted.
+
 `ParslAWSProviderCancel.tla` models EC2 cancellation: `linger` rejection, remote termination
 failure, successful local cleanup, and the current exception when a successful remote terminate
 finds no local resource/instance record. The fixed configuration makes local cleanup idempotent.
@@ -1533,6 +1538,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   idempotent duplicate handler preserves the row and satisfies `DuplicatePersistence`.
 - `ParslMonitoringDBInsertPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a
   non-duplicate STATUS insert passes the same invariants.
+- `ParslMonitoringPersistentRetryCurrent.cfg`: expected counterexample at depth 5; a persistent
+  `OperationalError` keeps the retrying write at the attempt bound.
+- `ParslMonitoringPersistentRetryFixed.cfg`: 10 states generated, 7 distinct states, depth 5;
+  bounded failure transitions to `aborted` instead of spinning indefinitely.
 - `ParslFilesystemRadioAtomicityCurrent.cfg`: expected counterexample at depth 3; direct
   publication lets the reader consume a partial monitoring message.
 - `ParslFilesystemRadioAtomicityFixed.cfg`: 13 states generated, 6 distinct states, depth 6;
@@ -1823,7 +1832,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 311 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 318 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
