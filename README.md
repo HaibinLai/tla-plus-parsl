@@ -117,6 +117,11 @@ response body without checking its status code, so a non-success response can be
 input file and still reach the user function. The current configuration preserves that depth-3
 counterexample; fixed and successful-response configurations require status validation.
 
+`ParslFTPStage.tla` models partial-file cleanup for `FTPInTaskStaging`: a failed `retrbinary`
+transfer must not run the user function, and a corrected wrapper should remove bytes already
+written before the connection failure. The current configuration records the residual partial
+file; fixed and successful-transfer configurations pass the cleanup invariant.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -654,6 +659,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageSuccess.cfg ParslRsyncSta
 java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageCurrent.cfg ParslHTTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageFixed.cfg ParslHTTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageSuccess.cfg ParslHTTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageCurrent.cfg ParslFTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageFixed.cfg ParslFTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageSuccess.cfg ParslFTPStage.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
@@ -765,6 +773,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   responses failed before app execution.
 - `ParslHTTPStageSuccess.cfg`: 6 states generated, 3 distinct states, depth 3; successful HTTP
   staging reached the app safely.
+- `ParslFTPStageCurrent.cfg`: expected counterexample at depth 2; a failed transfer left a
+  partial local file even though the app did not run.
+- `ParslFTPStageFixed.cfg`: 4 states generated, 2 distinct states, depth 2; failed FTP staging
+  removed the partial artifact.
+- `ParslFTPStageSuccess.cfg`: 4 states generated, 2 distinct states, depth 2; successful FTP
+  transfer produced the input artifact and ran the app.
 - `ParslNoFailures.cfg`: 21,760 states generated, 3,969 distinct states, depth 60;
   `EventuallySettled` passed under `WF_vars(NextCore)`.
 - `ParslTime.cfg`: 690 states generated, 198 distinct states, depth 36;
@@ -939,7 +953,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 118 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 119 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
