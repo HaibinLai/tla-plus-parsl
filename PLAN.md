@@ -153,6 +153,8 @@ result suppression.
 `ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
 exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
 when the current pop-before-validation path exits the worker.
+`ParslHtexVersionMismatch.tla` models manager registration version rejection, the queued fatal
+`task_id=-1` result, and the admission window before the result thread sets executor bad state.
 `ParslProviderPolling.tla` refines provider behavior into submit/status/cancel calls, transient API
 errors, unknown status, cancellation rollback, and bounded polling/failure windows.
 `ParslExecutorKinds.tla` adds a contract matrix for provider-free thread execution and

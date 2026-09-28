@@ -323,6 +323,16 @@ Future terminal and ignores duplicates. This follows
 [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py)
 around `_result_queue_worker` and `submit_payload`.
 
+`ParslHtexVersionMismatch.tla` models registration rejection when manager Python/Parsl versions
+do not match. The actual configuration exposes a race: the interchange has already set its kill
+event and queued the `task_id=-1` fatal result, but the executor result thread has not yet set
+`bad_state_is_set`; `submit_payload` can therefore accept another task in that window. The fixed
+configuration adds an admission guard for the closed interchange/pending-fatal state. This follows
+the registration branch and fatal result construction in
+[`interchange.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/interchange.py)
+and the admission check in
+[`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -556,6 +566,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWire.cfg ParslSerializ
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationWireFailure.cfg ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslHtexVersionMismatchFixed.cfg ParslHtexVersionMismatch.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -711,6 +722,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslHtexResultQueueFixed.cfg`: 17 states generated, 7 distinct states, depth 3; malformed
   message failure, duplicate-result handling, valid/exception result mapping, and interchange
   failure cleanup all passed.
+- `ParslHtexVersionMismatch.cfg`: expected counterexample at depth 2 (27 states generated, 12
+  distinct); a task is accepted after mismatch but before the fatal result is consumed.
+- `ParslHtexVersionMismatchFixed.cfg`: 30 states generated, 10 distinct states, depth 4; version
+  mismatch rejection, fatal-result cleanup, and closed-interchange admission safety all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.
@@ -821,6 +836,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `BeginShutdown` / `Complete` / `WorkQueueCollectorFails` / `HtexInterchangeLoss` | concrete executor shutdown and outstanding-task cleanup | `threads.py`, `workqueue/executor.py`, and `high_throughput/executor.py` |
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
+| `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
