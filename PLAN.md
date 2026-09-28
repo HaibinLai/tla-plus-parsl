@@ -218,6 +218,9 @@ while the fixed branch closes it on failure.
 `ParslHTTPPartialCleanup.tla` models HTTP streaming publication. A later `iter_content` failure
 currently leaves earlier bytes at the destination path; the runtime probe observes the partial file,
 while the fixed branch removes the incomplete publication.
+`ParslDataFutureFalseyException.tla` models parent exception propagation through `DataFuture`.
+The current truthiness check treats a custom falsey exception as success; the runtime probe uses a
+real `Future` and `DataFuture`, while the fixed branch tests exception presence explicitly.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
