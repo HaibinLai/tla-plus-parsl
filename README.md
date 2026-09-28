@@ -194,7 +194,9 @@ outer task must initialize its joining state and lock first; the runtime counter
 `ParslJoinMixedList.tla` isolates the list-shape validation boundary. A list containing only
 Futures is observed and aggregated in order, an empty list completes immediately, and a mixed
 list such as `[Future, 7]` fails with a TypeError-like result before any inner callback is
-registered. This follows the join branch in
+registered. `ParslJoinValueList.cfg` adds a non-empty list containing only ordinary values, which
+is rejected by the same source branch rather than being treated like the valid empty-list case.
+This follows the join branch in
 [`dflow.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/dataflow/dflow.py).
 
 `ParslJoinRetry.tla` refines that protocol with separate logical inner Futures and physical inner
@@ -1035,7 +1037,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 163 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 164 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1047,7 +1049,8 @@ The concrete `join_app` protocol is exercised with a real local thread executor:
 
 This verifies single-Future propagation, ordered list results with duplicate Future references,
 empty-list completion without callbacks, and `JoinError` propagation from a failed inner app.
-It also checks nested join propagation and rejection of both scalar and mixed-list join returns.
+It also checks nested join propagation and rejection of scalar, mixed-list, and non-empty
+all-value-list join returns.
 
 The callback-level join gate is exercised directly against the real `DataFlowKernel` method:
 
@@ -1491,6 +1494,8 @@ failure result for each in-flight task.
   Future list fails immediately without registering callbacks.
 - `ParslJoinMixedListValid.cfg`: 76 states generated, 30 distinct states, depth 7; all-Future
   list observation, ordered aggregation, and inner-failure propagation passed.
+- `ParslJoinValueList.cfg`: 4 states generated, 2 distinct states, depth 2; a non-empty list of
+  ordinary values fails immediately without registering callbacks.
 - `ParslTaskTransport.cfg`: 859 states generated, 288 distinct states, depth 28;
   serialization-before-send, envelope/decode ordering, dispatch admission, worker-loss retry,
   result serialization, correlation, and stale-result safety all passed.

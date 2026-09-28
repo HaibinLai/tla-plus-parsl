@@ -51,6 +51,11 @@ def join_mixed_list():
 
 
 @join_app
+def join_nonfuture_list():
+    return [1, 2]
+
+
+@join_app
 def join_nested_inner():
     return join_value(6)
 
@@ -93,6 +98,11 @@ class JoinRuntimeTest(unittest.TestCase):
         config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
         with parsl.load(config):
             self.assertEqual(join_precompleted().result(), 9)
+
+    def test_nonempty_nonfuture_list_is_rejected(self):
+        config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
+        with parsl.load(config):
+            self.assertIsInstance(join_nonfuture_list().exception(), TypeError)
 
 
 if __name__ == "__main__":

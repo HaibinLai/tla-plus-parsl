@@ -6,12 +6,13 @@ EXTENDS Naturals, Sequences, FiniteSets
  *
  * DataFlowKernel accepts a list only when every element is a Future.  An empty
  * list is a valid immediately-completable join, while a mixed list such as
- * [Future, 7] fails with TypeError before any inner callback is registered.
+ * [Future, 7] or a non-empty value list such as [1, 2] fails with TypeError
+ * before any inner callback is registered.
  ***************************************************************************)
 
 CONSTANT LIST_SHAPE
 
-Shapes == {"all_futures", "empty", "mixed"}
+Shapes == {"all_futures", "empty", "mixed", "values"}
 OuterStates == {"executing", "joining", "succeeded", "failed"}
 InnerStates == {"unresolved", "succeeded", "failed"}
 
@@ -41,7 +42,7 @@ ReturnJoinable ==
     /\ UNCHANGED <<innerState, observed, output, failureCause>>
 
 ReturnMixedList ==
-    /\ LIST_SHAPE = "mixed"
+    /\ LIST_SHAPE \in {"mixed", "values"}
     /\ outerState = "executing"
     /\ outerState' = "failed"
     /\ failureCause' = "invalid"
@@ -124,7 +125,7 @@ TypeOK ==
     /\ validated \in BOOLEAN
 
 MixedListSafety ==
-    (validated /\ LIST_SHAPE = "mixed") =>
+    (validated /\ LIST_SHAPE \in {"mixed", "values"}) =>
        /\ outerState = "failed"
        /\ failureCause = "invalid"
        /\ ~callbacksRegistered

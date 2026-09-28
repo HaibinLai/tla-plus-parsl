@@ -152,7 +152,8 @@ propagation. Inner retry policy remains below this join protocol, as in Parsl's 
 the corresponding multiplicity to `JoinError`.
 `ParslJoinMixedList.tla` adds the concrete mixed-list validation branch: only all-Future lists are
 registered for callbacks, while `[Future, non-Future]` fails immediately and an empty list
-completes without callbacks.
+completes without callbacks. `ParslJoinValueList.cfg` adds the distinct non-empty all-value list
+shape, which is also rejected before callback registration.
 `ParslJoinRetry.tla` adds physical inner attempts and verifies that retryable inner failures remain
 unresolved to the outer join until a final attempt succeeds or fails.
 `ParslNestedJoin.tla` adds a nested join layer and checks that leaf completion/failure propagates
@@ -239,7 +240,8 @@ rejected. `ParslSerializationLengthFixed.cfg` records the strict parser behavior
 future hardening change.
 `tests/test_join_runtime.py` runs the actual `join_app` callback protocol on a local thread
 executor, covering single Futures, ordered duplicate references, empty lists, `JoinError`,
-nested joins, scalar-return rejection, and mixed-list rejection.
+nested joins, scalar-return rejection, mixed-list rejection, and non-empty all-value list
+rejection.
 `tests/test_dependency_traversal_runtime.py` runs the real default shallow resolver and the real
 `DEEP_DEPENDENCY_RESOLVER`, checking that a nested list Future is either unwrapped or reaches the
 callable unchanged according to configuration.
