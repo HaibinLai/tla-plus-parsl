@@ -195,6 +195,9 @@ backends: submit/status/cancel outcomes, backend-to-Parsl state translation, mis
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
+`ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
+configuration exposes a `None` job identifier with no registered resource; fixed and non-empty
+output configurations check the provider/executor submission contract.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of

@@ -612,6 +612,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDeferred.cfg ParslMonitor
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsert.cfg ParslMonitoringDBInsert.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertFixed.cfg ParslMonitoringDBInsert.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertPresent.cfg ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
@@ -738,6 +741,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   idempotent duplicate handler preserves the row and satisfies `DuplicatePersistence`.
 - `ParslMonitoringDBInsertPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a
   non-duplicate STATUS insert passes the same invariants.
+- `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
+  depth 2; successful empty `qsub` output returns `None` without registering a resource.
+- `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
+  rejected instead of being reported as a successful submission.
+- `ParslPBSProSubmitPresent.cfg`: 4 states generated, 2 distinct states, depth 2; a normal job
+  identifier satisfies the submission contract.
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
@@ -942,6 +951,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
+| `SubmitSuccess` / `SubmitEmptyCurrent` / `SubmitEmptyFixed` | PBS Pro `qsub` output parsing and job/resource registration | `PBSProProvider.submit` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |
