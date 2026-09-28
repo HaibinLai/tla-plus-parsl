@@ -882,6 +882,15 @@ Slurm batched status handling is exercised with deterministic scheduler command 
 The tests check that a non-zero scheduler command preserves every previous status and that a
 successful batch updates reported jobs while applying the current missing-job `COMPLETED` fallback.
 
+Torque cancellation outcomes are exercised with deterministic `qdel` results:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_cancel_runtime.py -v
+```
+
+The probe records the current distinction between a successful cancellation return and the
+provider's `COMPLETED`/exiting resource status, while failed cancellation preserves `RUNNING`.
+
 The Kubernetes polling regression is also exercised with a mocked Kubernetes API client:
 
 ```bash
