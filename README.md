@@ -262,6 +262,13 @@ and CPU-per-task admission. It also covers Slurm `SUSPENDED` to `HELD` and `REQU
 `PENDING` translations while preserving terminal-state stability.
 The missing-job rule intentionally preserves the current Slurm provider behavior (a job absent
 from `squeue` is treated as completed) while Kubernetes reports an unknown pod as `UNKNOWN`.
+
+`ParslAWSProviderStatus.tla` adds a cloud-provider-specific status boundary. It models EC2
+`pending`/`running`/`terminated` translation and the case where a requested instance ID is absent
+from the `describe_instances` response. The actual configuration preserves the current behavior
+and exposes an incomplete status result; the fixed configuration supplies a terminal completion
+mapping for the missing instance. This follows
+[`aws.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/aws/aws.py).
 This is a bounded status-mapping model, not a shell or Kubernetes API emulator. It is based on
 [`providers/base.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/base.py),
 [`providers/cluster_provider.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/cluster_provider.py),
@@ -620,6 +627,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineRe
 java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslGlobusComputeConfigFixed.cfg ParslGlobusComputeConfig.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatus.cfg ParslAWSProviderStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatusFixed.cfg ParslAWSProviderStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatusPresent.cfg ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
@@ -773,6 +783,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, scale-in terminal
   handling, and resource admission all passed.
+- `ParslAWSProviderStatus.cfg`: expected counterexample at depth 2 (4 states generated, 3
+  distinct); an absent EC2 instance response produces no returned provider status.
+- `ParslAWSProviderStatusFixed.cfg`: 11 states generated, 5 distinct states, depth 5; missing
+  instance completion mapping and status translation passed.
+- `ParslAWSProviderStatusPresent.cfg`: 11 states generated, 5 distinct states, depth 5; normal
+  EC2 running-instance status translation passed.
 - `ParslProviderStatusBatch.cfg`: 140,628 states generated, 17,672 distinct states, depth 6;
   bounded batch size, atomic status updates, scheduler-command failure preservation, missing-job
   completion mapping, and terminal-state stability all passed.
@@ -935,6 +951,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `ReceiveFirstBeforeTry` / `InsertTaskAndTry` / `ReceiveFirstAfterTry` | deferred worker-task monitoring message replay and try-row ordering | `DatabaseManager.start` deferred-resource logic |
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
 | `StatusBatchSuccess` / `StatusBatchFailure` | bounded scheduler polling, atomic status update, and timeout/error preservation | `ClusterProvider.status`, `SlurmProvider._status`, and `execute_wait` |
+| `BeginPoll` / `ReceiveEC2Response` / `Reset` | EC2 instance status translation and missing-instance handling | `AWSProvider.status` |
 | `PollError` / `ErrorVisibility` | Kubernetes pod-read exception and UNKNOWN-state exposure, including the identity-check regression probe | `KubernetesProvider._status` |
 | `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
