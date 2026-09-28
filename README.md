@@ -929,6 +929,17 @@ java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineStatusPresent.cfg ParslGr
 The current configuration finds an expected depth-3 counterexample (4 generated/3 distinct
 states); fixed and valid configurations each generate 6 states/3 distinct states at depth 3.
 
+The corresponding Google Cloud status TLA+ model can be checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudStatus.cfg ParslGoogleCloudStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudStatusFixed.cfg ParslGoogleCloudStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudStatusPresent.cfg ParslGoogleCloudStatus.tla
+```
+
+The current unknown-status configuration finds a depth-2 counterexample (2 generated/2 distinct
+states); fixed and known-status configurations each generate 4 states/2 distinct states at depth 2.
+
 Torque cancellation outcomes are exercised with deterministic `qdel` results:
 
 ```bash
@@ -1246,6 +1257,7 @@ failure result for each in-flight task.
 | `RequestBlock` / `AllocationSucceeds` / `AllocationFails` | provider request and block lifecycle | `ExecutionProvider` and `BlockProviderExecutor.scale_out_facade` |
 | `StatusBatchSuccess` / `StatusBatchFailure` | bounded scheduler polling, atomic status update, and timeout/error preservation | `ClusterProvider.status`, `SlurmProvider._status`, and `execute_wait` |
 | `BeginPoll` / `ReceiveEC2Response` / `Reset` | EC2 instance status translation and missing-instance handling | `AWSProvider.status` |
+| `TranslateKnown` / `UnknownStatusCurrent` / `UnknownStatusFixed` | Google Compute Engine status-table translation | `GoogleCloudProvider.status` |
 | `PollError` / `ErrorVisibility` | Kubernetes pod-read exception and UNKNOWN-state exposure, including the identity-check regression probe | `KubernetesProvider._status` |
 | `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |

@@ -252,6 +252,9 @@ discovery client, checking normal translation, API error propagation, and unknow
 checking linger refusal, failure rollback, and successful instance removal.
 `ParslGridEngineStatus.tla` models the Grid Engine malformed-qstat boundary. Its current
 configuration reproduces the short-line crash; fixed and valid-output configurations pass.
+`ParslGoogleCloudStatus.tla` models direct GCE status-table lookup: the current unknown-status
+configuration produces a depth-2 `KeyError`-style crash, while tolerant and known-status paths
+pass.
 `ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
