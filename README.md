@@ -1028,7 +1028,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 149 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 153 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1361,6 +1361,16 @@ Future cancellation contracts are exercised separately:
 `ParslFutureCancellation.tla` keeps public AppFuture/DataFuture cancellation distinct from the
 underlying `concurrent.futures.Future`: the former two explicitly raise `NotImplementedError`,
 while a queued thread Future can be cancelled before execution.
+
+Deferred Future projections are exercised separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_future_projection_runtime.py -v
+```
+
+`ParslFutureProjection.tla` models `AppFuture.__getitem__` and `__getattr__` as new internal
+tasks. Projection creation does not synchronously wait; the projection waits for source success,
+propagates source failure, and reports invalid keys as a projection exception.
 
 The WorkQueue collector result boundary is exercised directly without requiring a Work Queue
 installation:
@@ -1728,6 +1738,7 @@ failure result for each in-flight task.
 | `BeginCancel` / `CancelAccepted` / `CancelFailed` | provider cancellation and rollback | `ExecutionProvider.cancel` and scale-in handling |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 | `PublicCancel` / `Run` / `Finish` | AppFuture/DataFuture versus underlying Future cancellation behavior | `AppFuture.cancel`, `DataFuture.cancel`, and `ThreadPoolExecutor.submit` |
+| `CreateProjection` / `RunProjection` / `PropagateSourceFailure` | deferred item/attribute access over a Future | `AppFuture.__getitem__`, `AppFuture.__getattr__`, and `_parsl_internal` apps |
 
 ## Representative traces
 

@@ -284,6 +284,9 @@ admission paths, including accepted-work completion and resource-specification r
 `tests/test_future_cancellation_runtime.py` checks the concrete cancellation contract: AppFuture
 and DataFuture cancellation raise `NotImplementedError`, while an underlying queued thread Future
 can still be cancelled before it starts.
+`tests/test_future_projection_runtime.py` drives real `AppFuture.__getitem__` and `__getattr__`
+lifting, including deferred execution, source-failure propagation, invalid-key failure, and
+non-blocking projection construction.
 `tests/test_slurm_status_batch_runtime.py` drives Slurm's batched status method, checking scheduler
 command failure preservation and successful reported/missing-job application.
 `tests/test_slurm_submit_runtime.py` drives Slurm `sbatch` submission with deterministic output,
