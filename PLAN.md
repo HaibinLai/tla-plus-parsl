@@ -202,6 +202,9 @@ the duplicate-line failure, while the fixed branch ignores the second removal.
 `ParslLSFDuplicateStatus.tla` models the corresponding LSF `bjobs` boundary. Because LSF uses a
 set, duplicate records raise `KeyError` on the second removal in the current path; the runtime
 probe and fixed idempotent branch make this scheduler-specific difference explicit.
+`ParslSlurmDuplicateStatus.tla` models the same set-removal boundary in Slurm `_status`. Duplicate
+status rows currently raise `KeyError`; a fixed idempotent bookkeeping branch is checked with the
+real provider parser.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
