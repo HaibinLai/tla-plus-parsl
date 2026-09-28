@@ -212,6 +212,9 @@ the provider-specific path.
 and callback. The current DFK stores the caller's list directly, so clearing it before the callback
 can make the outer result empty; the runtime probe exercises `handle_join_update` and the fixed
 branch snapshots membership.
+`ParslFTPConnectionCleanup.tla` models FTP in-task stage-in connection lifetime. A failed
+`retrbinary` currently bypasses `ftp.quit()`; the runtime probe observes the open fake connection,
+while the fixed branch closes it on failure.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
