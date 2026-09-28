@@ -226,6 +226,14 @@ configuration checks that a partial specification is admitted only when autolabe
 This follows the validation and task tuple construction in
 [`workqueue/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/workqueue/executor.py).
 
+`ParslResourceScaling.tla` connects resource demand to provider block scaling. A task whose core
+demand exceeds current block capacity causes a pending block request; allocation success adds
+capacity, allocation failure rolls back only the pending request, and a later strategy step may
+retry. Dispatch remains guarded by aggregate core capacity, and scale-in cannot remove the
+minimum block floor. This combines the resource-aware admission abstraction with the slot-pressure
+rules in [`jobs/strategy.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/strategy.py)
+and block request handling in [`executors/status_handling.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/status_handling.py).
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -446,6 +454,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinMemoData.cfg ParslJoinMemoData.
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinMonitoring.cfg ParslJoinMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmission.cfg ParslResourceAdmission.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResourceAdmissionAutolabel.cfg ParslResourceAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslResourceScaling.cfg ParslResourceScaling.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -558,6 +567,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslResourceAdmissionAutolabel.cfg`: 1,640 states generated, 489 distinct states, depth 9;
   partial resource specifications were admitted only under the autolabel-enabled contract, with
   the same capacity invariants passing.
+- `ParslResourceScaling.cfg`: 987 states generated, 292 distinct states, depth 21;
+  resource-driven scale-out, pending allocation success/failure rollback, capacity-guarded
+  dispatch, retryable scaling pressure, and minimum-block scale-in safety all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.

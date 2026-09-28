@@ -171,6 +171,8 @@ database, preserving join/data invariants across event reordering, write failure
 terminal-record protection.
 `ParslResourceAdmission.tla` models WorkQueue-style cores/memory/disk/GPU resource validation and
 worker capacity accounting, with a companion autolabel configuration for partial specifications.
+`ParslResourceScaling.tla` connects per-task core demand to strategy scale-out, pending allocation
+success/failure rollback, capacity-guarded dispatch, retryable pressure, and minimum-block scale-in.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
