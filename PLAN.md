@@ -53,7 +53,9 @@ the possibility that a failed attempt's late result is rejected as stale.
 Task payloads now distinguish callable serializability from argument/closure serializability;
 an unencodable payload fails before worker dispatch and follows the bounded retry path.
 The data path now distinguishes input stage-in from output stage-out and records a transferred
-content token for declared output files.
+content token for declared output files. `ParslFilePathResolution.tla` separately checks the
+`File.filepath` resolution boundary: local file URLs, staging-provided `local_path` overrides,
+and rejection of unstaged remote URLs.
 `ParslInputCorruption.cfg` adds a bounded damaged-stage-in path; `FileStagingSafety` prevents a
 dependent task from consuming an input until repair returns it to `available`.
 The bounded `ParslTime.cfg` model adds logical ticking, heartbeat age, attempt start time, and
@@ -703,7 +705,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 233 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 240 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

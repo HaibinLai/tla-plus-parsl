@@ -27,3 +27,15 @@ Run the two checks with:
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataFutureTransfer.cfg models/staging/ParslDataFutureTransfer.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataFutureTransferFixed.cfg models/staging/ParslDataFutureTransfer.tla
 ```
+
+`ParslFilePathResolution.tla` isolates the lower-level `File.filepath` contract in
+`parsl/data_provider/files.py`. It checks that a `file:` URI resolves directly, that a
+`local_path` annotation takes precedence after staging, and that a remote URI without a
+local annotation is rejected rather than guessed as a POSIX path. The runtime probe in
+`tests/test_file_path_runtime.py` exercises the same three cases against the Python class.
+
+Run it with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFilePathResolution.cfg models/staging/ParslFilePathResolution.tla
+```
