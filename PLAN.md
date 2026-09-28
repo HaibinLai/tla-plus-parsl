@@ -1,96 +1,86 @@
-# Parsl TLA+ 抽象实现计划
+# Plan for the Parsl TLA+ Abstraction
 
-## 依据和边界
+## Basis and scope
 
-第一版以 Babuji 等人的 Parsl 论文（论文中的 DataFlowKernel 架构图和 HTEX
-执行路径）为基线，并以当前上游源码为行为依据。论文只提供高层组件关系，不能
-直接当作逐行实现规范；源码中实际的任务状态定义和消息处理优先级更高。
+The first version uses the Parsl paper's DataFlowKernel architecture and HTEX execution path
+as the conceptual baseline, and the current upstream source as the behavioral reference. The
+paper describes component relationships at a high level; source behavior takes precedence when
+the two differ.
 
-本计划先固定一个执行配置：`DataFlowKernel -> HighThroughputExecutor ->
-Interchange -> Manager/worker pool -> ExecutionProvider`。其他 executor 复用同一
-`ParslExecutor.submit()` 抽象，不在第一版同时建模。
+The primary configuration is:
 
-## 分阶段工作
+```text
+DataFlowKernel -> HighThroughputExecutor -> Interchange -> Manager/worker pool
+               -> ExecutionProvider
+```
 
-### 1. 建立行为基线
+Other executors can reuse the same abstract submission boundary, but are not modeled in full
+in the first version.
 
-整理源码到一张状态/消息表，作为 TLA+ 注释和测试依据：
+## Completed phases
 
-- 状态枚举包含 `pending`, `launched`, `running`, `running_ended`, `exec_done`,
-  `failed`, `dep_fail`, `fail_retryable`, `memo_done`, `joining`；需要特别保留源码的
-  语义区别：`running`/`running_ended`主要是监控侧观察到的状态，DFK 的典型成功路径
-  是 `pending -> launched -> exec_done`。
-- DFK 的关键路径：依赖计数与 future 解包、依赖失败传播、memoizer 查询、向
-  executor 提交、executor future 回调、成功/异常完成。
-- HTEX：executor 把任务放入 client-to-interchange 队列；interchange 按优先级放入
-  pending queue，按 manager capacity 分发；manager 用 heartbeat 注册、接收任务、
-  返回结果；丢失 manager 时为其未完成任务生成失败结果。
-- Provider/Strategy：`submit/status/cancel` 资源接口，以及
-  `min_blocks/init_blocks/max_blocks/parallelism` 驱动的 scale-out；HTEX 对空闲块
-  的 scale-in 只在 manager 无任务且达到 idle 条件时发生。
+### 1. Behavioral baseline
 
-### 2. TLA+ MVP（先验证安全性）
+The source audit covered:
 
-用有限集合替代 Python 对象、Future、序列化 payload 和真实时间：
+- DFK task states, dependency counting, Future unwrapping, dependency-failure propagation,
+  memoization, executor submission, retries, and completion callbacks.
+- HTEX client-to-interchange queues, manager capacity, registration, heartbeats, result return,
+  and manager loss.
+- Provider `submit/status/cancel`, block lifecycle, and scaling parameters.
+- DataManager as the boundary for data readiness/staging.
 
-- 常量：任务集合、`DEPS` DAG、executor、manager、每个 manager 的容量、重试上限、
-  provider block 上限。
-- 任务记录：状态、依赖、选择的 executor、分配的 manager、尝试次数、结果/异常。
-- 组件状态：DFK task table、ready/pending 队列、interchange queue、manager 空闲
-  容量和 in-flight 任务、provider target/actual blocks。
-- 动作：`DependencyCheck`、`MemoizationLookup/Complete`、`Enqueue`、
-  `ExecutorSubmit`、`InterchangeDispatch`、`ManagerAccept`、`TaskSuccess`、
-  `TaskRetry`、`DependencyFailure`、`TaskPermanentFailure`、provider
-  `ScaleOut/BlockRunning/ScaleIn`。
+### 2. Executable safety model
 
-第一版只使用离散事件，不模拟网络字节、Python 调度线程和墙钟时间；这能让 TLC
-穷举所有组件交错顺序。
+The model uses finite sets for tasks, executors, workers, dependencies, retry count, and block
+capacity. Python callables, Futures, serialized payloads, and wall-clock time are abstracted.
 
-### 3. 必须通过的性质
+The central design choice is to keep logical tasks and physical attempts separate:
 
-先检查 invariant，再在明确加入公平性后检查 liveness：
+```text
+Task A
+ ├── Attempt(A, 0)
+ ├── Attempt(A, 1)
+ └── Attempt(A, 2)
+```
 
-1. `TypeOK`：所有状态、队列、映射和计数都落在有限域内。
-2. 依赖安全：任务进入 `launched/running` 前，所有依赖必须为成功或 memo 完成；
-   失败依赖只能导致 `dep_fail`，不能执行用户函数。
-3. 单次完成：一个 task id 不能同时出现在成功和失败终态；终态不再重新提交。
-4. 容量安全：一个 manager 的 in-flight 数不超过 capacity；interchange 只向
-   active、非-draining、仍有 heartbeat 的 manager 分发。
-5. 重试边界：尝试次数不超过 `MAX_RETRIES + 1`，最终失败不会再次进入队列。
-6. memoization：命中只产生 `memo_done`/结果，不占用 manager 或 provider slot。
-7. scaling 安全：actual blocks 不超过 max，不低于 min；scale-in 不杀掉仍有任务的
-   block（HTEX 的强制 scale-in 作为单独配置测试）。
-8. 在 DAG 无环、manager 最终可用且公平调度的假设下，所有可成功任务最终达到
-   `exec_done` 或 `memo_done`。
+The model includes task/Future state, dependency gating, executor assignment, worker binding,
+provider allocation and failure, scale-in, memoization, data readiness, retries, timeout,
+worker loss, stale results, and final-result acceptance.
 
-### 4. 与 Python Parsl 示例对照
+### 3. Checked properties
 
-保留一个很小的 `A -> {B,C} -> D` Python workflow：它只验证任务图和结果依赖，
-不把 Python 执行结果直接当作 TLA+ 证明。另写一个 trace adapter（先用手工事件，
-再可选接 Parsl logging/monitoring）把 `task_id/status/executor` 投影成 TLA+ 事件，
-用于检查“实现轨迹满足抽象状态机”，而不是声称 TLC 已证明 Python 实现正确。
+The safety configurations check:
 
-### 5. 第二版扩展（MVP 稳定后）
+1. `TypeOK` for all finite domains and state mappings.
+2. Dependency safety: a task cannot run before all dependency Futures resolve.
+3. Terminal-state stability: a completed logical task remains resolved.
+4. Retry bounds.
+5. One-at-a-time worker capacity and bidirectional worker/attempt binding.
+6. Valid executor/worker assignment for running attempts.
+7. Attempt identity and Future result consistency.
+8. Stale-result safety: an old attempt cannot overwrite a newer logical result.
 
-- DataManager/staging：把文件传输建模为带依赖的内部 app，覆盖 stage-in/stage-out
-  失败和重试。
-- `join_app`：加入 `joining` 状态和 inner futures 全部完成/失败传播。
-- manager 心跳与版本不匹配、drain、executor bad state。
-- Monitoring：只建模“状态事件最终写入监控流”，不建模数据库和 UDP/ZMQ 细节。
-- 动态任务图：允许运行中的 app 产生新任务；单独设置状态空间上限。
+The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` fairness.
 
-## 验收方式
+## Planned extensions
 
-每个阶段都提供独立 `.cfg`：正常成功、memo 命中、一次重试后成功、永久失败、
-manager 丢失、scale-out/in。CI 中运行 TLC invariant；对每个安全性质保留一个故意
-违反该性质的变体，确认 TLC 能生成反例。最终 README 给出“源码组件 -> TLA+变量/动作
--> Python 示例”的映射表和复现实验命令。
+After the MVP is stable, possible extensions are:
 
-## 主要源码入口
+- richer DataManager/staging behavior, including stage-in/stage-out failure;
+- `join_app` and the `joining` state;
+- manager heartbeat timeout, version mismatch, drain, and executor bad state;
+- monitoring as an abstract eventual event stream;
+- dynamic task creation while a workflow is running;
+- additional executor/provider-specific models.
 
-- `parsl/dataflow/states.py`, `parsl/dataflow/dflow.py`
-- `parsl/executors/high_throughput/executor.py`
-- `parsl/executors/high_throughput/interchange.py`
-- `parsl/executors/high_throughput/process_worker_pool.py`
-- `parsl/providers/base.py`, `parsl/jobs/strategy.py`
-- `parsl/data_provider/data_manager.py`
+## Validation workflow
+
+Each meaningful stage should have its own commit and TLC configuration. The repository should
+retain normal-success, memoization-hit, retry-success, permanent-failure, provider-failure,
+worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
+broken variant can be added later to ensure TLC produces a counterexample.
+
+The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
+specified finite abstraction satisfies the listed properties; it does not prove that every
+implementation detail of Parsl is correct.
