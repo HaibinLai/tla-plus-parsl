@@ -88,6 +88,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINoResourceResul
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_no_resource_result_runtime.py -v
 ```
 
+`ParslMPIBacklogRetry.tla` models the MPI backlog scheduler when its head task needs more nodes
+than are currently free. The current `_schedule_backlog_tasks` requeues that task and immediately
+recurses, so an unchanged resource count eventually raises `RecursionError`. The fixed branch
+leaves the task queued until a result returns nodes. The runtime probe drives the real scheduler
+with one free node and a two-node request.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIBacklogRetryCurrent.cfg models/executors/ParslMPIBacklogRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIBacklogRetryFixed.cfg models/executors/ParslMPIBacklogRetry.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_mpi_backlog_retry_runtime.py -v
+```
+
 `ParslWorkQueueCancelledResult.tla` models a Work Queue collector result racing with cancellation.
 The current collector removes the cancelled Future and calls `set_result`, so `InvalidStateError`
 exits the collector; its `finally` block then marks an unrelated pending Future as

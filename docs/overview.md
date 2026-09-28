@@ -183,6 +183,11 @@ the runtime probe confirms the current command construction.
 requires every result task to have an entry and aborts the scheduler (Issue #3427 in the source
 comment). The fixed model returns such a result without a node-reclamation step.
 
+`ParslMPIBacklogRetry.tla` models the MPI scheduler's resource-starved backlog. The current
+`_schedule_backlog_tasks` requeues an oversized head task and recursively retries without a state
+change, eventually overflowing the Python call stack. The fixed branch stops the pass and leaves
+the task queued until resources are returned.
+
 `ParslWorkQueueCancelledResult.tla` models cancellation racing with a Work Queue collector
 report. The current collector removes a cancelled Future before `set_result`, so
 `InvalidStateError` exits the collector and its cleanup marks an unrelated pending Future with
@@ -1782,7 +1787,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 309 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 310 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
