@@ -1035,7 +1035,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 159 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 163 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1283,6 +1283,16 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTorqueCancelFailure.cfg ParslTorque
 successful cancel returns `success` while the current provider records `completed`. The fixed
 configuration generates 4 states/2 distinct states at depth 2; the failure configuration generates
 5 states/2 distinct states at depth 2, and both satisfy the invariants.
+
+Torque submission parsing is exercised with deterministic `qsub` output:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_submit_runtime.py -v
+```
+
+`ParslTorqueSubmit.tla` checks pending-resource registration for a job id, the empty-output and
+nonzero-command paths, and the current behavior of returning/registering the last non-empty line
+when a command prints multiple ids.
 
 The Kubernetes polling regression is also exercised with a mocked Kubernetes API client:
 
@@ -1703,6 +1713,7 @@ failure result for each in-flight task.
 | `Cancel` | LSF `bkill` cancellation and local resource-state update | `LSFProvider.cancel` |
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
+| `WriteScript` / `ExecuteQsub` / `ParseQsub` | Torque qsub submission and last non-empty job-id registration | `TorqueProvider.submit` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
 | `CancelChunk` | Condor chunked `condor_rm` cancellation and unknown-job guard | `CondorProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Grid Engine qstat line length validation and update | `GridEngineProvider._status` |

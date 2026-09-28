@@ -321,6 +321,8 @@ successful-output indexing modeled by `ParslCondorSubmit.tla`.
 results and the guarded handling of job ids absent from the local resource map.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
+`tests/test_torque_submit_runtime.py` drives Torque `qsub` output parsing, checking successful job
+registration, empty output, scheduler failure, and last-line selection for multiple ids.
 `tests/test_grid_engine_status_runtime.py` drives Grid Engine qstat parsing, checking malformed
 line failure, normal state translation, foreign-job filtering, and missing-job fallback.
 `tests/test_grid_engine_submit_runtime.py` drives Grid Engine qsub submission with temporary
