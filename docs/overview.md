@@ -173,6 +173,11 @@ terminate the thread before later results in the same batch are handled. The fix
 the cancelled result as stale and continues processing the batch; the runtime probe reproduces
 the current orphaned-pending-task behavior.
 
+`ParslMPINonDivisibleRanks.tla` audits MPI resource derivation. The current helper accepts
+`num_nodes=2, num_ranks=5`, derives the non-integral `ranks_per_node="2.5"`, and inserts it into
+the `mpiexec -ppn` command. The fixed model rejects non-divisible allocations before launch;
+the runtime probe confirms the current command construction.
+
 `ParslHtexManagerMessage.tla` models manager-to-interchange message decoding. Malformed multipart
 or pickle input is ignored without changing the manager record; a valid heartbeat updates its
 timestamp and produces the heartbeat reply.
@@ -1762,7 +1767,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 305 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 306 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

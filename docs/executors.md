@@ -65,6 +65,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResul
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_cancelled_result_runtime.py -v
 ```
 
+`ParslMPINonDivisibleRanks.tla` audits `MPIExecutor` resource derivation. With `num_nodes=2`
+and `num_ranks=5`, the current helper derives `ranks_per_node="2.5"` and emits that value in
+the `mpiexec -ppn` option. The current TLC model violates `IntegralRanksSafety`; the fixed branch
+rejects the allocation before launch. The runtime probe confirms the exact generated command.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINonDivisibleRanksCurrent.cfg models/executors/ParslMPINonDivisibleRanks.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINonDivisibleRanksFixed.cfg models/executors/ParslMPINonDivisibleRanks.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_mpi_nondivisible_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
