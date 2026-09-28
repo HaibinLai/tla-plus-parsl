@@ -221,6 +221,14 @@ which is used by `ClusterProvider.execute_wait`. The current path propagates `Ti
 without terminating the process; `tests/test_execute_wait_timeout_runtime.py` verifies this with a
 controlled fake `Popen` process. The fixed configuration performs process cleanup before raising.
 
+`ParslMemoExceptionCheckpoint.tla` models failure persistence across a memoizer restart. The
+current `BasicMemoizer` updates its in-memory cache with a failed `AppFuture`, but the checkpoint
+writer skips exception commands, leaving an empty `tasks.pkl`. TLC finds the four-state current
+counterexample (`RunAndFail -> Checkpoint -> Restart`); the fixed branch persists the failure.
+The real probe is [`tests/test_memo_exception_checkpoint_runtime.py`](../tests/test_memo_exception_checkpoint_runtime.py).
+This records a semantic gap for review, not a claim that failure persistence is necessarily the
+intended Parsl policy.
+
 `ParslMemoDictOrdering.tla` models dictionary-key normalization in `BasicMemoizer`. Python allows
 heterogeneous dictionary keys, but the current `id_for_memo_dict` calls `sorted(dict)` directly,
 so a mixed `int`/`str` key dictionary raises `TypeError` while computing a memo key. The runtime
@@ -1661,7 +1669,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 288 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 290 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

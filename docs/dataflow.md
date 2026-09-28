@@ -6,6 +6,14 @@ resource admission, and result races.
 
 Files live in [`models/dataflow/`](../models/dataflow/).
 
+`ParslMemoExceptionCheckpoint.tla` models failure persistence across a memoizer restart. The
+current `BasicMemoizer` updates its in-memory cache with a failed `AppFuture`, but the checkpoint
+writer skips exception commands, leaving an empty `tasks.pkl`. TLC finds the four-state current
+counterexample (`RunAndFail -> Checkpoint -> Restart`); the fixed branch persists the failure.
+The real probe is [`tests/test_memo_exception_checkpoint_runtime.py`](../tests/test_memo_exception_checkpoint_runtime.py).
+This records a semantic gap for review, not a claim that failure persistence is necessarily the
+intended Parsl policy.
+
 `ParslDependencyTraversal.tla` has explicit dictionary-value and dictionary-key configurations.
 The deep resolver configurations pass with 10 distinct states each; the shallow dictionary
 configuration exposes `NoNestedFutureLeak` because the nested Future reaches the worker.
