@@ -183,6 +183,11 @@ report. The current collector removes a cancelled Future before `set_result`, so
 `InvalidStateError` exits the collector and its cleanup marks an unrelated pending Future with
 `WorkQueueFailure`. The fixed model treats the report as stale and continues with later results.
 
+`ParslTaskVineCancelledResult.tla` models the corresponding TaskVine collector race. The current
+collector removes a cancelled Future before `set_result`, so `InvalidStateError` exits the
+collector and cleanup marks another outstanding Future with `TaskVineManagerFailure`. The fixed
+model ignores the stale report and continues processing result files.
+
 `ParslHtexManagerMessage.tla` models manager-to-interchange message decoding. Malformed multipart
 or pickle input is ignored without changing the manager record; a valid heartbeat updates its
 timestamp and produces the heartbeat reply.
@@ -1772,7 +1777,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 307 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 308 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

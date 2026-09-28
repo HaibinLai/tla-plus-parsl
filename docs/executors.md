@@ -88,6 +88,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelled
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_cancelled_result_runtime.py -v
 ```
 
+`ParslTaskVineCancelledResult.tla` covers the corresponding TaskVine collector race. A cancelled
+Future causes the current collector's unconditional `set_result` to raise after the report is
+removed; cleanup then marks another outstanding Future with `TaskVineManagerFailure`. The fixed
+branch ignores the stale report and continues. `tests/test_taskvine_cancelled_result_runtime.py`
+drives two real result-file reports through the collector boundary.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledResultCurrent.cfg models/executors/ParslTaskVineCancelledResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledResultFixed.cfg models/executors/ParslTaskVineCancelledResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_cancelled_result_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
