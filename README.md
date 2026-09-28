@@ -445,6 +445,15 @@ around `_result_queue_worker` and `submit_payload`.
 `outgoing_q.put` fails after `submit_payload` inserts its Future into `tasks`, the current path
 leaves a pending orphan; fixed behavior rolls back the map entry and fails the Future.
 
+The registration mismatch branch is exercised directly with a fake ROUTER socket:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_version_mismatch_runtime.py -v
+```
+
+The probe confirms that incompatible manager versions set the kill event, emit a fatal
+`task_id=-1` `VersionMismatch` result, and never enter `_ready_managers`.
+
 `ParslHtexVersionMismatch.tla` models registration rejection when manager Python/Parsl versions
 do not match. The actual configuration exposes a race: the interchange has already set its kill
 event and queued the `task_id=-1` fatal result, but the executor result thread has not yet set
@@ -993,7 +1002,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 127 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 128 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

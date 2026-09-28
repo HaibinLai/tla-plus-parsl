@@ -329,6 +329,9 @@ failing outgoing queue, showing that current send failure leaves a pending Futur
 is modeled by `ParslHtexSubmitFailure.tla`.
 `tests/test_htex_manager_loss_runtime.py` connects the real interchange expiry report to the real
 HTEX result worker, checking serialized `ManagerLost` propagation into the task Future.
+`tests/test_htex_version_mismatch_runtime.py` drives the real interchange registration parser with
+a fake ROUTER message, checking fatal `VersionMismatch` serialization, kill-event ordering, and
+rejection from the ready-manager set.
 `tests/test_azure_cancel_runtime.py` drives Azure VM cancellation with a fake async delete client,
 checking linger refusal, failure rollback, and successful instance removal.
 `tests/test_azure_submit_runtime.py` drives Azure VM submission with fake resource/network/compute
@@ -447,7 +450,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 127 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 128 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
