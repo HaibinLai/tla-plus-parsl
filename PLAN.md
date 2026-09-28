@@ -94,6 +94,9 @@ preserves the returned sequence.
 `ParslSerializerRegistry.tla` models the concrete code/data serializer registries and their
 code-first dispatch order. An identifier collision is a current-path counterexample and a fixed
 path rejection; the runtime probe confirms the current facade behavior.
+`ParslExecutorProviderLifecycle.tla` connects provider allocation and terminal cleanup to manager
+registration, executor drain, worker-slot admission, and scale-in. Its fixed branch enforces the
+provider `MIN_BLOCKS` floor.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery

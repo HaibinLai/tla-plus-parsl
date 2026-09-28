@@ -941,6 +941,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeliver
 The current branch exposes an older monitoring event overwriting a newer database record; the
 fixed branch preserves the version high-water mark and checks 1,978 states.
 
+The provider/executor lifecycle check is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorProviderLifecycle.cfg models/executors/ParslExecutorProviderLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorProviderLifecycleFixed.cfg models/executors/ParslExecutorProviderLifecycle.tla
+```
+
+The current branch exposes scale-in below `MIN_BLOCKS`; the fixed branch preserves the provider
+floor and checks 161 states.
+
 The serializer registry check is:
 
 ```bash
