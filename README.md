@@ -1028,7 +1028,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 146 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 149 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1351,6 +1351,16 @@ The concrete thread executor shutdown and admission contract is exercised direct
 
 The probe checks that accepted work completes before blocking shutdown returns, new submissions
 are rejected afterwards, and unsupported resource specifications are rejected at admission.
+
+Future cancellation contracts are exercised separately:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_future_cancellation_runtime.py -v
+```
+
+`ParslFutureCancellation.tla` keeps public AppFuture/DataFuture cancellation distinct from the
+underlying `concurrent.futures.Future`: the former two explicitly raise `NotImplementedError`,
+while a queued thread Future can be cancelled before execution.
 
 The WorkQueue collector result boundary is exercised directly without requiring a Work Queue
 installation:
@@ -1717,6 +1727,7 @@ failure result for each in-flight task.
 | `BeginStatus` / `StatusPending` / `StatusRunning` / `StatusUnknown` | provider status polling and unknown-job failure | `ExecutionProvider.status` and `JobStatusPoller` |
 | `BeginCancel` / `CancelAccepted` / `CancelFailed` | provider cancellation and rollback | `ExecutionProvider.cancel` and scale-in handling |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
+| `PublicCancel` / `Run` / `Finish` | AppFuture/DataFuture versus underlying Future cancellation behavior | `AppFuture.cancel`, `DataFuture.cancel`, and `ThreadPoolExecutor.submit` |
 
 ## Representative traces
 

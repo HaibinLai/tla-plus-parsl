@@ -281,6 +281,9 @@ launch-response unpacking path modeled by `ParslAWSProviderSubmit.tla`.
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
 `tests/test_thread_executor_runtime.py` drives the real ThreadPoolExecutor shutdown and submit
 admission paths, including accepted-work completion and resource-specification rejection.
+`tests/test_future_cancellation_runtime.py` checks the concrete cancellation contract: AppFuture
+and DataFuture cancellation raise `NotImplementedError`, while an underlying queued thread Future
+can still be cancelled before it starts.
 `tests/test_slurm_status_batch_runtime.py` drives Slurm's batched status method, checking scheduler
 command failure preservation and successful reported/missing-job application.
 `tests/test_slurm_submit_runtime.py` drives Slurm `sbatch` submission with deterministic output,
