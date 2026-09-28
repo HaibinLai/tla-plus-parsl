@@ -183,6 +183,15 @@ and the manager/provider boundary in
 [`high_throughput/executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/executor.py).
 It is a contract-level comparison, not a full implementation of every executor.
 
+`ParslMPISpec.tla` is the first MPI-specific refinement. It models the current MPI resource
+specification keys (`ranks_per_node`, `num_nodes`, `num_ranks`, and `launcher_options`), the
+derived-rank step, and the requirement that a provider use `SimpleLauncher`. The actual
+configuration preserves the current validation shape and finds a zero-node derivation path when
+`num_nodes=0` and `num_ranks` is supplied without `ranks_per_node`; the fixed configuration adds
+the candidate positive-node admission guard. This follows
+[`mpi_executor.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/mpi_executor.py)
+and [`mpi_prefix_composer.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/mpi_prefix_composer.py).
+
 `ParslExecutorShutdown.tla` makes the shutdown distinction executable. ThreadPool shutdown keeps
 accepted work eligible to complete before the executor reaches `stopped`; WorkQueue shutdown has
 an explicit collector-cleanup action that fails work left behind when its submit process exits;
@@ -575,6 +584,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSerializationZMQBridge.cfg ParslSer
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexResultQueueFixed.cfg ParslHtexResultQueue.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexVersionMismatchFixed.cfg ParslHtexVersionMismatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHtexDispatchPriority.cfg ParslHtexDispatchPriority.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMPISpecFixed.cfg ParslMPISpec.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -737,6 +747,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslHtexDispatchPriority.cfg`: 78 states generated, 26 distinct states, depth 8; priority
   ordering, manager capacity, draining admission, completion release, and manager-failure
   cleanup all passed.
+- `ParslMPISpec.cfg`: expected counterexample at depth 3 (21 states generated, 11 distinct);
+  zero `num_nodes` is accepted and reaches the rank-derivation error path.
+- `ParslMPISpecFixed.cfg`: 21 states generated, 10 distinct states, depth 6; empty-spec rejection,
+  positive-node validation, rank derivation, and valid MPI launch admission all passed.
 - `ParslHeartbeatProvider.cfg`: 588 states generated, 100 distinct states, depth 16;
   provider-unknown tolerance, heartbeat ticking/reset, manager expiry, reconnect, and terminal
   provider cleanup all passed.
@@ -849,6 +863,7 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
 | `RegisterMismatch` / `HandleFatalResult` | manager version rejection and pending-fatal admission race | `Interchange.process_manager_socket_message` and `HighThroughputExecutor.submit_payload` |
 | `Dispatch` / `Complete` / `Drain` / `Recover` | HTEX pending-task priority, manager capacity, and draining admission | `Interchange.process_task_incoming`, `get_tasks`, and `process_tasks_to_send` |
+| `Configure` / `Validate` / `DeriveRanks` / `Launch` | MPI resource-specification validation and derived rank counts | `MPIExecutor.validate_resource_spec` and `mpi_prefix_composer.validate_resource_spec` |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
 | `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
 | `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
