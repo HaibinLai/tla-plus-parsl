@@ -96,6 +96,11 @@ active-task pressure is compared with slots (`blocks * SLOTS_PER_BLOCK`), scale-
 kept separate from the DFK protocol state machine so strategy bugs can be isolated with a small
 state space. The policy is based on `parsl/jobs/strategy.py` in the current Parsl source.
 
+The runtime probe `tests/test_strategy_runtime.py` checks the same source boundary with a fake
+provider-backed executor: initialization requests are issued once, overloaded slots request
+bounded additional blocks, and idle scale-in waits for `max_idletime` while preserving
+`min_blocks`.
+
 `ParslZMQ.tla` is the next focused transport model. It represents a multipart message as a
 header/body encoding protocol, a bounded outbound/inbound queue pair, ROUTER/DEALER-style endpoint
 identity and route checks, disconnect/drop, queue reordering, duplicate delivery, invalid payloads,
@@ -1606,7 +1611,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 279 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 282 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
