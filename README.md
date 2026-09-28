@@ -871,6 +871,15 @@ The Kubernetes polling regression is also exercised with a mocked Kubernetes API
 The test reproduces the current read-error path that leaves a running job as `RUNNING`, and
 checks the normal `Succeeded` pod translation to `COMPLETED`.
 
+The EC2 status boundary is exercised with a fake `describe_instances` client:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_status_runtime.py -v
+```
+
+The probe checks the current missing-instance behavior (empty status list and unchanged resource)
+and normal `running` state translation.
+
 The HTEX heartbeat expiry path is also exercised without opening a real ZMQ socket:
 
 ```bash
