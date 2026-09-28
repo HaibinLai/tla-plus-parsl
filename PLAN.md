@@ -216,6 +216,9 @@ manager-loss reports without starting a real worker process.
 `tests/test_zmq_serialization_runtime.py` connects real in-process ROUTER/DEALER and PAIR sockets
 to Parsl's apply-message serialization, checking multipart framing, route identity, payload
 deserialization, execution, and acknowledgement.
+`tests/test_monitoring_db_runtime.py` uses a temporary SQLite database to validate the concrete
+STATUS primary-key collision and the current `DatabaseManager._insert` generic-exception path
+that rolls back and silently drops the duplicate event.
 It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor-driven
 `SCALED_IN` terminal cleanup with terminal-state invariants.
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of

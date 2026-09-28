@@ -785,6 +785,16 @@ The Torque foreign-job counterexample has the same kind of source-level runtime 
 It confirms that an unregistered qstat job raises `KeyError`, while a known job line updates the
 tracked resource.
 
+The monitoring STATUS insert path is checked against a real temporary SQLite database:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_db_runtime.py -v
+```
+
+The test confirms both the duplicate primary-key `IntegrityError` and the current
+`DatabaseManager._insert` behavior that catches, rolls back, and silently returns from that
+error, leaving only the original STATUS row.
+
 The real serialization facade is also exercised with the same callable/object boundary used by
 the wire models:
 
