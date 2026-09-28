@@ -196,6 +196,9 @@ the resulting command words, while the fixed branch quotes each argument.
 `ParslCommandDeadline.tla` refines the HTEX command-client timeout boundary. If the deadline has
 already elapsed, the current implementation passes a negative timeout to ZMQ `poll`; the runtime
 probe records that argument, while the fixed branch clamps it to zero.
+`ParslGridEngineDuplicateStatus.tla` models duplicate qstat records. The current `_status` path
+removes a known job from `jobs_missing` twice and raises `ValueError`; the runtime probe reproduces
+the duplicate-line failure, while the fixed branch ignores the second removal.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

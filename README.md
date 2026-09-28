@@ -190,6 +190,11 @@ command; the fixed branch quotes each shell argument.
 has already elapsed, the current path passes a negative timeout to ZMQ `poll`; the runtime probe
 records that value with a fake socket. The fixed branch clamps the poll timeout to zero.
 
+`ParslGridEngineDuplicateStatus.tla` models duplicate records in Grid Engine `qstat` output. The
+current `_status` implementation removes each job from `jobs_missing` without checking whether it
+was already removed, so duplicate lines raise `ValueError`. The runtime probe reproduces this and
+the fixed branch makes removal idempotent.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -846,6 +851,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingNormal.cfg ParslRsyncQu
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineCurrent.cfg ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineFixed.cfg ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineNormal.cfg ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusCurrent.cfg ParslGridEngineDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusFixed.cfg ParslGridEngineDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusUnique.cfg ParslGridEngineDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -1052,6 +1060,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   command deadline forwards `pollTimeout = -1`.
 - `ParslCommandDeadlineFixed.cfg` and `ParslCommandDeadlineNormal.cfg`: 4 states generated,
   2 distinct states, depth 2; clamped and non-expired deadlines satisfy `PollTimeoutSafety`.
+- `ParslGridEngineDuplicateStatusCurrent.cfg`: expected counterexample, 4 states generated; a
+  duplicate qstat line crashes while removing the same job twice.
+- `ParslGridEngineDuplicateStatusFixed.cfg` and `ParslGridEngineDuplicateStatusUnique.cfg`: 6
+  states generated, 3 distinct states, depth 3; idempotent and unique status handling satisfy
+  `DuplicateSafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1193,7 +1206,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 201 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 202 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1949,6 +1962,7 @@ failure result for each in-flight task.
 | `HashDict` / `MixedDictHashSafety` | heterogeneous dictionary-key normalization for memoization | `BasicMemoizer.id_for_memo_dict` |
 | `BuildCommand` / `PathQuotingSafety` | shell-safe rsync command construction | `RSyncStaging.in_task_stage_in_wrapper` and `in_task_stage_out_wrapper` |
 | `ComputePollTimeout` / `PollTimeoutSafety` | nonnegative ZMQ poll deadline calculation | `high_throughput.zmq_pipes.CommandClient.run` |
+| `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling | `GridEngineProvider._status` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
