@@ -174,6 +174,10 @@ signal the manager thread to stop. `tests/test_monitoring_close_runtime.py` exer
 `ParslSlurmCancel.tla` adds Slurm `scancel` cancellation, including command failure, successful
 local cancellation, and the current foreign/local-resource mismatch path. The fixed configuration
 updates only known local resources.
+`ParslMonitoringBatch.tla` models the batching boundary in `DatabaseManager._get_messages_in_batch`.
+With a zero interval, the current implementation checks elapsed time before reading the queue and
+can return an empty batch while an event is waiting; the fixed branch consumes the available event.
+The runtime probe and TLC counterexample document this starvation edge case.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

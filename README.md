@@ -153,6 +153,12 @@ it. Both paths switch batching to drain mode and signal the manager to stop.
 successful command marks known resources `CANCELLED`; the current path can raise on a foreign ID,
 and the fixed path ignores that stale local entry.
 
+`ParslMonitoringBatch.tla` models `DatabaseManager._get_messages_in_batch`. With
+`batching_interval=0`, the current implementation checks the time boundary before reading the
+queue, so it can return an empty batch while a message is waiting. The TLC current configuration
+produces that counterexample; fixed and positive-interval configurations preserve message
+collection. The runtime probe is `tests/test_monitoring_batch_runtime.py`.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -788,6 +794,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDeferred.cfg ParslMonitor
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsert.cfg ParslMonitoringDBInsert.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertFixed.cfg ParslMonitoringDBInsert.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertPresent.cfg ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchCurrent.cfg ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchFixed.cfg ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchPositive.cfg ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -963,6 +972,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   idempotent duplicate handler preserves the row and satisfies `DuplicatePersistence`.
 - `ParslMonitoringDBInsertPresent.cfg`: 6 states generated, 3 distinct states, depth 3; a
   non-duplicate STATUS insert passes the same invariants.
+- `ParslMonitoringBatchCurrent.cfg`: expected counterexample, 2 states generated; with a queued
+  message and zero interval, the batch action returns empty and leaves the message unread.
+- `ParslMonitoringBatchFixed.cfg` and `ParslMonitoringBatchPositive.cfg`: 4 states generated,
+  2 distinct states, depth 2; queued-message collection satisfies `AvailableBatchSafety`.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1104,7 +1117,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 193 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 195 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1853,6 +1866,7 @@ failure result for each in-flight task.
 | `IgnoreLinger` / `RemoteFailure` / `RemoteSuccessWithLocalState` / `RemoteSuccessWithoutLocalState` | AWS EC2 cancellation and local bookkeeping | `AWSProvider.cancel` |
 | `DeleteFails` / `DeleteSucceeds` | GCE cancellation result and local resource status | `GoogleCloudProvider.cancel` |
 | `Close` / `FinalizationSafety` | monitoring workflow finalization and shutdown drain | `DatabaseManager.close` |
+| `Batch` / `AvailableBatchSafety` | zero-interval queue-read boundary and message collection | `DatabaseManager._get_messages_in_batch` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
