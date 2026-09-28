@@ -40,6 +40,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotFailur
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotFailurePayloadFixed.cfg models/executors/ParslRadicalPilotFailurePayload.tla
 ```
 
+`ParslWorkQueueShutdown.tla` models the Work Queue collector's finalization contract. Shutdown
+sets the stop flag and waits for the collector; its `finally` block fails every accepted Future
+that has no result before the executor reaches `stopped`. The runtime probe invokes the real
+collector method with an already-set stop flag and an outstanding Future.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueShutdown.cfg models/executors/ParslWorkQueueShutdown.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_shutdown_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
