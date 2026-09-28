@@ -242,6 +242,8 @@ admission paths, including accepted-work completion and resource-specification r
 command failure preservation and successful reported/missing-job application.
 `tests/test_torque_cancel_runtime.py` drives Torque `qdel` success/failure handling, including the
 current successful-cancel-to-`COMPLETED` (exiting) resource status convention.
+`ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
+strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
 checking binary content readiness and dependent-task gating.
 It also wires a failed producer's output `DataFuture` into a consumer and checks `DependencyError`

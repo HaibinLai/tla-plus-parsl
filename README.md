@@ -891,6 +891,19 @@ Torque cancellation outcomes are exercised with deterministic `qdel` results:
 The probe records the current distinction between a successful cancellation return and the
 provider's `COMPLETED`/exiting resource status, while failed cancellation preserves `RUNNING`.
 
+The corresponding bounded TLA+ cancellation probe can be run with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config ParslTorqueCancel.cfg ParslTorqueCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTorqueCancelFixed.cfg ParslTorqueCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslTorqueCancelFailure.cfg ParslTorqueCancel.tla
+```
+
+`ParslTorqueCancel.cfg` intentionally finds a depth-2 counterexample (2 states generated): a
+successful cancel returns `success` while the current provider records `completed`. The fixed
+configuration generates 4 states/2 distinct states at depth 2; the failure configuration generates
+5 states/2 distinct states at depth 2, and both satisfy the invariants.
+
 The Kubernetes polling regression is also exercised with a mocked Kubernetes API client:
 
 ```bash
@@ -1162,6 +1175,7 @@ failure result for each in-flight task.
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `SubmitSuccess` / `SubmitEmptyCurrent` / `SubmitEmptyFixed` | PBS Pro `qsub` output parsing and job/resource registration | `PBSProProvider.submit` |
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
+| `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
