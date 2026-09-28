@@ -109,7 +109,8 @@ dispatches or emit heartbeats.
 `ParslRegistrationFailure.cfg` explores manager startup failure before registration and checks
 that no worker binding is created from the failed manager.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
-the associated provider/executor capacity.
+the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
+multiple managers sharing an executor, preserving remaining capacity after one manager expires.
 `ParslExecutorDrain.cfg` models an executor entering `draining`, rejecting new submissions while
 allowing existing attempts to finish, followed by explicit recovery.
 `MessageCorrelationSafety` now checks that queued, received, duplicate, and consumed envelopes

@@ -211,6 +211,8 @@ than leaving it indefinitely running. The full workflow configurations set `MAX_
 workflow interleaving with clock values; `ParslTime.cfg` is a deliberately tiny one-task model
 that explores the time and timeout transitions with `MAX_TIME = 1`.
 `ParslTimeoutTerminal.cfg` uses `MAX_RETRIES = 0` to check the terminal-timeout path directly.
+For an executor with multiple manager workers, `IdleManagerTimeout` removes only the expired
+manager's block; remaining managers and capacity stay active until the final expiry.
 
 Monitoring is modeled as `monitoringState`, a per-task database record containing the last
 persisted status and a monotonic write `version`. `PublishMonitor` may lag behind the logical
@@ -319,8 +321,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   unregistered workers could not receive work or heartbeat until manager registration.
 - `ParslRegistrationFailure.cfg`: 1,750 states generated, 429 distinct states, depth 32;
   failed manager registration left the worker unavailable without violating bindings or Future consistency.
-- `ParslIdleManagerTimeout.cfg`: 10,808 states generated, 2,479 distinct states, depth 34;
+- `ParslIdleManagerTimeout.cfg`: 27,639 states generated, 5,359 distinct states, depth 38;
   an idle manager exceeding the heartbeat age was removed with provider/executor capacity cleared.
+- `ParslMultiManagerTimeout.cfg`: 442,239 states generated, 59,892 distinct states, depth 40;
+  one manager expiry preserved another active block before the final expiry took the executor down.
 - `ParslExecutorDrain.cfg`: 3,696 states generated, 760 distinct states, depth 33;
   draining stopped new submissions while preserving safety for already submitted attempts.
 - `ParslMisroute.cfg`: 370,669 states generated, 46,560 distinct states, depth 40;

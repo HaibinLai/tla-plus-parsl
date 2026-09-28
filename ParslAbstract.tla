@@ -877,10 +877,14 @@ IdleManagerTimeout(w) ==
     /\ clock - lastHeartbeat[w] >= HEARTBEAT_TIMEOUT
     /\ providerState[e] = "active" /\ executorState[e] = "up"
     /\ workerState' = [workerState EXCEPT ![w] = "failed"]
-    /\ providerState' = [providerState EXCEPT ![e] = "failed"]
-    /\ executorState' = [executorState EXCEPT ![e] = "down"]
-    /\ providerTarget' = [providerTarget EXCEPT ![e] = 0]
-    /\ providerBlocks' = [providerBlocks EXCEPT ![e] = 0]
+    /\ providerState' = [providerState EXCEPT ![e] =
+          IF providerBlocks[e] > 1 THEN "active" ELSE "failed"]
+    /\ executorState' = [executorState EXCEPT ![e] =
+          IF providerBlocks[e] > 1 THEN "up" ELSE "down"]
+    /\ providerTarget' = [providerTarget EXCEPT ![e] =
+          IF providerBlocks[e] > 1 THEN @ - 1 ELSE 0]
+    /\ providerBlocks' = [providerBlocks EXCEPT ![e] =
+          IF providerBlocks[e] > 1 THEN @ - 1 ELSE 0]
     /\ UNCHANGED <<taskState, futureState, retries, currentAttempt,
                     selectedExecutor, dataState, attemptState, attemptExecutor,
                     attemptWorker, workerAttempt, completed, rejected, outputs,
