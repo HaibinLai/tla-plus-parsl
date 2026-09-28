@@ -1599,7 +1599,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 262 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 264 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -1666,6 +1666,15 @@ The underlying timeout timer lifecycle is exercised directly:
 `ParslTimeoutTimer.tla` checks that `AutoCancelTimer` is cancelled after a fast return or an
 ordinary function exception, while a slow function can still receive `AppTimeout` before it
 finishes.
+
+The shared periodic timer used by `JobStatusPoller` and checkpointing is modeled separately by
+`ParslPeriodicTimer.tla`. TLC checks that the first callback is immediate, callback exceptions do
+not terminate the timer, and `close()` leaves the timer quiescent. The runtime counterpart is:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPeriodicTimer.cfg models/clock/ParslPeriodicTimer.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_periodic_timer_runtime.py -v
+```
 
 The worker-side apply-message helper is exercised directly:
 
