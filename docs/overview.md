@@ -676,6 +676,12 @@ after a task is canceled, a late `DONE` callback currently calls `Future.set_res
 `InvalidStateError`. The fixed branch treats the callback as stale. The runtime probe reproduces
 the two callbacks against the real `task_state_cb` implementation.
 
+`ParslRadicalPilotBulkShutdown.tla` covers the bulk collector shutdown path. The current
+`shutdown()` sets `_terminate` before joining the collector, which makes the collector exit before
+submitting queued tasks; their Futures remain pending. The fixed branch flushes the bulk queue
+before collector exit. The runtime probe calls the real `_bulk_collector` with an already-set stop
+event and verifies that its queued item is left behind.
+
 `ParslGlobusComputeConfig.tla` models the thin Globus Compute wrapper's temporary resource and
 endpoint configuration. Each submit copies task-specific values into the shared SDK executor,
 calls the underlying submit, and restores both defaults in `finally`. The unsynchronized
@@ -2485,6 +2491,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   distinct); shutdown can leave a submitted RP task's Parsl Future pending.
 - `ParslRadicalPilotResultsFixed.cfg`: 79 states generated, 38 distinct states, depth 4; Bash,
   Python, MPI, cancellation, task failure, master failure, and shutdown cleanup all passed.
+- `ParslRadicalPilotBulkShutdownCurrent.cfg`: expected counterexample at depth 4; shutdown exits
+  the bulk collector with one queued task and a pending Future.
+- `ParslRadicalPilotBulkShutdownFixed.cfg`: 5 states generated, 4 distinct states, depth 4;
+  queued work is flushed before shutdown completes.
 - `ParslGlobusComputeConfig.cfg`: expected counterexample at depth 3 (38 states generated, 25
   distinct); interleaved submits can observe another task's temporary resource specification.
 - `ParslGlobusComputeConfigFixed.cfg`: 37 states generated, 16 distinct states, depth 8;
@@ -2807,6 +2817,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `CreateFactory` / `ConfigureFactory` / `EnterContext` / `RequestStop` / `ExitContext` | TaskVine factory process configuration and stop lifecycle | `taskvine.factory._taskvine_factory` |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `Cancel` / `LateDone` | Radical Pilot cancellation versus late result callback | `RadicalPilotExecutor.task_state_cb` terminal Future updates |
+| `RequestShutdown` / `FlushBulk` / `DropBulk` / `FinishShutdown` | Radical Pilot bulk-queue flush before shutdown | `RadicalPilotExecutor._bulk_collector` and `shutdown` |
 | `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
 | `BeginA` / `BeginB` / `SubmitA` / `SubmitB` | concurrent Globus Compute configuration isolation and serialized fixed path | `GlobusComputeExecutor.submit` shared SDK executor mutation |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |

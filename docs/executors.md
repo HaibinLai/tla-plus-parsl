@@ -183,6 +183,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotLateCa
 /tmp/parsl-venv/bin/python -m unittest tests/test_radical_late_callback_runtime.py -v
 ```
 
+`ParslRadicalPilotBulkShutdown.tla` models Radical Pilot bulk mode during shutdown. The current
+shutdown sets `_terminate` before joining the bulk collector; the collector exits without flushing
+its queue, leaving a queued task and its Future unresolved. The fixed branch flushes queued tasks
+before exit. The runtime probe invokes the real `_bulk_collector` with a stop event and one queued
+task.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotBulkShutdownCurrent.cfg models/executors/ParslRadicalPilotBulkShutdown.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotBulkShutdownFixed.cfg models/executors/ParslRadicalPilotBulkShutdown.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_bulk_shutdown_runtime.py -v
+```
+
 `ParslWorkQueueShutdown.tla` models the Work Queue collector's finalization contract. Shutdown
 sets the stop flag and waits for the collector; its `finally` block fails every accepted Future
 that has no result before the executor reaches `stopped`. The runtime probe invokes the real
