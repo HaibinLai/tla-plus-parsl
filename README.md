@@ -176,7 +176,8 @@ and [`jobs/states.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/pars
 
 `ParslProviderExecutorBridge.tla` connects those provider observations to executor admission.
 It models a pilot block moving from `pending` to `running`, manager registration, task submission,
-unknown status without immediate teardown, and terminal provider observations that revoke manager
+unknown status without immediate teardown, and terminal provider observations from either the
+pre-manager `pending` phase or the post-registration phase. Terminal observations revoke manager
 and worker capacity and account for queued/running work as lost. This cross-component model is
 intentionally small so a provider/executor inconsistency produces a short TLC trace.
 
@@ -487,9 +488,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   provider submit/status/cancel lifecycle, Slurm/Kubernetes status translation, missing-job
   handling, timeout-versus-failure distinction, cancellation outcomes, and resource admission
   all passed.
-- `ParslProviderExecutorBridge.cfg`: 2,791 states generated, 432 distinct states, depth 15;
-  provider-to-executor admission, manager registration, unknown-status tolerance, and terminal
-  provider cleanup of manager capacity and in-flight work all passed.
+- `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
+  provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
+  tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;

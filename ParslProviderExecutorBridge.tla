@@ -110,7 +110,7 @@ StatusFailure ==
                     queued, running, lost, submitRejected>>
 
 ProviderTerminal(kind) ==
-    /\ providerJob = "running"
+    /\ providerJob \in {"pending", "running", "unknown"}
     /\ kind \in {"completed", "failed", "timeout", "missing", "cancelled"}
     /\ providerJob' = kind
     /\ executorState' = "failed"

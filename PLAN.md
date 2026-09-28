@@ -152,7 +152,8 @@ backends: submit/status/cancel outcomes, backend-to-Parsl state translation, mis
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
 `ParslProviderExecutorBridge.tla` connects provider job observations to executor admission,
 manager registration, worker capacity, unknown-status tolerance, and terminal cleanup of queued
-and running work.
+and running work. It now covers terminal provider failure both before manager registration and
+after a manager has become active.
 `tools/cloudpickle_fixture.py` provides a real Python/cloudpickle observation for the symbolic
 object-graph model, including a successful closure round trip and a lock-containing closure that
 raises a serialization error. The recorded bytes/digest are explicitly versioned observations.
