@@ -570,6 +570,12 @@ translation branches. This follows the batching and `execute_wait` behavior in
 [`cluster_provider.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/cluster_provider.py)
 and [`slurm.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/slurm/slurm.py).
 
+`ParslClusterProviderUnknownJob.tla` checks the common `ClusterProvider.status` lookup contract.
+The current method raises `KeyError` when a requested scheduler job is absent from local
+`resources`, even after a successful poll. The fixed configuration returns an explicit `MISSING`
+state instead. The runtime probe uses a minimal concrete `ClusterProvider` subclass and invokes
+the real common method.
+
 `ParslProviderExecutorBridge.tla` connects those provider observations to executor admission.
 It models a pilot block moving from `pending` to `running`, manager registration, task submission,
 unknown status without immediate teardown, and terminal provider observations from either the
@@ -1037,6 +1043,8 @@ java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatus.cfg ParslAWSProvi
 java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatusFixed.cfg ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatusPresent.cfg ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslClusterProviderUnknownJob.cfg ParslClusterProviderUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslClusterProviderUnknownJobFixed.cfg ParslClusterProviderUnknownJob.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
@@ -2129,6 +2137,10 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslProviderStatusBatch.cfg`: 140,628 states generated, 17,672 distinct states, depth 6;
   bounded batch size, atomic status updates, scheduler-command failure preservation, missing-job
   completion mapping, and terminal-state stability all passed.
+- `ParslClusterProviderUnknownJob.cfg`: expected counterexample at depth 2 (2 states
+  generated, 2 distinct); an unknown requested job raises instead of returning a status.
+  `ParslClusterProviderUnknownJobFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  unknown IDs map to explicit `MISSING`.
 - `ParslKubernetesPolling.cfg`: expected counterexample at depth 1 (62 states generated, 22
   distinct); the actual exception branch fails `ErrorVisibility` because `RUNNING` is retained.
 - `ParslKubernetesPollingFixed.cfg`: 85 states generated, 23 distinct states, depth 5;

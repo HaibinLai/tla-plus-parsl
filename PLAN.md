@@ -558,6 +558,8 @@ It also covers Slurm suspended/requeued mappings (`HELD`/`PENDING`) and executor
 `ParslProviderStatusBatch.tla` models bounded scheduler status batches, atomic application of
 successful output, and preservation of the prior status map when a scheduler command fails or
 times out; missing Slurm jobs follow the current `COMPLETED` fallback behavior.
+`ParslClusterProviderUnknownJob.tla` adds the common `ClusterProvider.status` unknown-ID boundary:
+the current local-resource lookup raises `KeyError`, while the fixed branch returns `MISSING`.
 `ParslKubernetesPolling.tla` is a bug-finding probe for Kubernetes API read failures. Its actual
 configuration reproduces the source's `is JobStatus(...)` identity-check behavior and yields a
 counterexample in which a running pod remains `RUNNING` after a read error; the value-based fixed
@@ -643,7 +645,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 227 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 228 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
