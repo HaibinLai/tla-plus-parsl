@@ -208,6 +208,10 @@ real provider parser.
 `ParslTorqueDuplicateStatus.tla` models the list-removal boundary in Torque `_status`. Duplicate
 qstat rows currently raise `ValueError`; the runtime parser probe and fixed idempotent branch cover
 the provider-specific path.
+`ParslJoinListMutation.tla` models mutable aliasing of a `join_app` Future list between registration
+and callback. The current DFK stores the caller's list directly, so clearing it before the callback
+can make the outer result empty; the runtime probe exercises `handle_join_update` and the fixed
+branch snapshots membership.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging

@@ -207,6 +207,11 @@ and fixed branch make this behavior explicit.
 missing jobs, so duplicate rows raise `ValueError` on the second removal; the runtime probe and
 fixed branch make the operation idempotent.
 
+`ParslJoinListMutation.tla` models mutable aliasing in `join_app` list results. The current DFK
+stores the returned Future list directly in the task record; if that list is cleared before the
+callback, the outer join can complete with an empty result. The runtime probe calls the real
+`handle_join_update` path, while the fixed branch snapshots the list.
+
 `ParslSerializationSnapshot.tla` isolates the object-content boundary: serialization captures a
 versioned snapshot of the callable/argument graph, later mutation of the original Python object
 does not alter the captured payload, and decoding exposes the captured version. The runtime
@@ -875,6 +880,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslSlurmDuplicateStatusUnique.cfg Pars
 java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusCurrent.cfg ParslTorqueDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusFixed.cfg ParslTorqueDuplicateStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusUnique.cfg ParslTorqueDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationCurrent.cfg ParslJoinListMutation.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationFixed.cfg ParslJoinListMutation.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationStable.cfg ParslJoinListMutation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
@@ -1100,6 +1108,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslTorqueDuplicateStatusFixed.cfg` and `ParslTorqueDuplicateStatusUnique.cfg`: 6 states
   generated, 3 distinct states, depth 3; idempotent and unique status handling satisfy
   `DuplicateSafety`.
+- `ParslJoinListMutationCurrent.cfg`: expected counterexample, 4 states generated; mutating the
+  aliased join list lets the outer join finish with `resultCount = 0` instead of 2.
+- `ParslJoinListMutationFixed.cfg`: 6 states generated, 3 distinct states, depth 3; snapshotting
+  the join membership satisfies `JoinSnapshotSafety`. The stable-list configuration also passes.
 - `ParslPBSProSubmit.cfg`: expected counterexample, 2 states generated and 2 distinct states at
   depth 2; successful empty `qsub` output returns `None` without registering a resource.
 - `ParslPBSProSubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; empty output is
@@ -1241,7 +1253,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 205 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 206 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2001,6 +2013,7 @@ failure result for each in-flight task.
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `LSFProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `SlurmProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with list removal | `TorqueProvider._status` |
+| `MutateBeforeCallback` / `Callback` / `JoinSnapshotSafety` | join Future-list snapshot and callback result stability | `DataFlowKernel.handle_join_update` |
 | `CancelFailure` / `CancelSuccess` | Slurm scancel result and local resource cancellation | `SlurmProvider.cancel` |
 | `DispatchAttempt` | interchange sends work to a manager | `Interchange.process_tasks_to_send` |
 | `StartAttempt` | worker starts a decoded task | `process_worker_pool.py` |
