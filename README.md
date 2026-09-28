@@ -26,8 +26,9 @@ The model was based on the Parsl paper and the current source tree, especially:
 The root contains the focused models that are still being migrated. The shared workflow
 abstraction and its first group of scenario configurations live under `models/core/`; each
 configuration remains next to the TLA+ module it instantiates. Serialization and transport
-models are under `models/serialization/`; runtime probes remain under `tests/`. More model
-families will move into topic directories only after their TLC commands are updated and checked.
+models are under `models/serialization/`; monitoring models are under `models/monitoring/`; provider
+and scheduler models are under `models/providers/`; runtime probes remain under `tests/`. More
+model families will move into topic directories only after their TLC commands are updated and checked.
 
 ## Logical tasks and physical attempts
 
@@ -965,20 +966,20 @@ java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatBoundary.cfg ParslHeartbea
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpCurrent.cfg ParslHeartbeatClockJump.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpFixed.cfg ParslHeartbeatClockJump.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatClockJumpNormal.cfg ParslHeartbeatClockJump.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDeferred.cfg ParslMonitoringDeferred.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsert.cfg ParslMonitoringDBInsert.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertFixed.cfg ParslMonitoringDBInsert.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBInsertPresent.cfg ParslMonitoringDBInsert.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchCurrent.cfg ParslMonitoringBatch.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchFixed.cfg ParslMonitoringBatch.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchPositive.cfg ParslMonitoringBatch.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicityCurrent.cfg ParslMonitoringBatchAtomicity.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicityFixed.cfg ParslMonitoringBatchAtomicity.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringBatchAtomicitySuccess.cfg ParslMonitoringBatchAtomicity.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringThreshold.cfg ParslMonitoringThreshold.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringThresholdFixed.cfg ParslMonitoringThreshold.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDB.cfg models/monitoring/ParslMonitoringDB.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBReorder.cfg models/monitoring/ParslMonitoringDB.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeferred.cfg models/monitoring/ParslMonitoringDeferred.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsert.cfg models/monitoring/ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsertFixed.cfg models/monitoring/ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsertPresent.cfg models/monitoring/ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchCurrent.cfg models/monitoring/ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchFixed.cfg models/monitoring/ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchPositive.cfg models/monitoring/ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchAtomicityCurrent.cfg models/monitoring/ParslMonitoringBatchAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchAtomicityFixed.cfg models/monitoring/ParslMonitoringBatchAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchAtomicitySuccess.cfg models/monitoring/ParslMonitoringBatchAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringThreshold.cfg models/monitoring/ParslMonitoringThreshold.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringThresholdFixed.cfg models/monitoring/ParslMonitoringThreshold.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerCurrent.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerFixed.cfg ParslRetryHandler.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRetryHandlerPositive.cfg ParslRetryHandler.tla
@@ -997,21 +998,21 @@ java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingNormal.cfg ParslRsyncQu
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineCurrent.cfg ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineFixed.cfg ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineNormal.cfg ParslCommandDeadline.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusCurrent.cfg ParslGridEngineDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusFixed.cfg ParslGridEngineDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineDuplicateStatusUnique.cfg ParslGridEngineDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslLSFDuplicateStatusCurrent.cfg ParslLSFDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslLSFDuplicateStatusFixed.cfg ParslLSFDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslLSFDuplicateStatusUnique.cfg ParslLSFDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSlurmDuplicateStatusCurrent.cfg ParslSlurmDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSlurmDuplicateStatusFixed.cfg ParslSlurmDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslSlurmDuplicateStatusUnique.cfg ParslSlurmDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusCurrent.cfg ParslTorqueDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusFixed.cfg ParslTorqueDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueDuplicateStatusUnique.cfg ParslTorqueDuplicateStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPBSProJobIdAliasCurrent.cfg ParslPBSProJobIdAlias.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPBSProJobIdAliasFixed.cfg ParslPBSProJobIdAlias.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPBSProJobIdAliasUnique.cfg ParslPBSProJobIdAlias.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusCurrent.cfg models/providers/ParslGridEngineDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusFixed.cfg models/providers/ParslGridEngineDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineDuplicateStatusUnique.cfg models/providers/ParslGridEngineDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFDuplicateStatusCurrent.cfg models/providers/ParslLSFDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFDuplicateStatusFixed.cfg models/providers/ParslLSFDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFDuplicateStatusUnique.cfg models/providers/ParslLSFDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmDuplicateStatusCurrent.cfg models/providers/ParslSlurmDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmDuplicateStatusFixed.cfg models/providers/ParslSlurmDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmDuplicateStatusUnique.cfg models/providers/ParslSlurmDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateStatusCurrent.cfg models/providers/ParslTorqueDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateStatusFixed.cfg models/providers/ParslTorqueDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateStatusUnique.cfg models/providers/ParslTorqueDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProJobIdAliasCurrent.cfg models/providers/ParslPBSProJobIdAlias.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProJobIdAliasFixed.cfg models/providers/ParslPBSProJobIdAlias.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProJobIdAliasUnique.cfg models/providers/ParslPBSProJobIdAlias.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationCurrent.cfg ParslJoinListMutation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationFixed.cfg ParslJoinListMutation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationStable.cfg ParslJoinListMutation.tla
@@ -1024,20 +1025,20 @@ java -cp tla2tools.jar tlc2.TLC -config ParslHTTPPartialCleanupSuccess.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureFalseyExceptionCurrent.cfg ParslDataFutureFalseyException.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureFalseyExceptionFixed.cfg ParslDataFutureFalseyException.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureFalseyExceptionNormal.cfg ParslDataFutureFalseyException.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmit.cfg ParslPBSProSubmit.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitFixed.cfg ParslPBSProSubmit.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslPBSProSubmitPresent.cfg ParslPBSProSubmit.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueStatus.cfg ParslTorqueStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueStatusFixed.cfg ParslTorqueStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueStatusPresent.cfg ParslTorqueStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatus.cfg ParslCondorStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFixed.cfg ParslCondorStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusPresent.cfg ParslCondorStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureCurrentValid.cfg ParslCondorStatusFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureCurrentMalformed.cfg ParslCondorStatusFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureFixedValid.cfg ParslCondorStatusFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureFixedMalformed.cfg ParslCondorStatusFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslCondorStatusFailureSuccess.cfg ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProSubmit.cfg models/providers/ParslPBSProSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProSubmitFixed.cfg models/providers/ParslPBSProSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProSubmitPresent.cfg models/providers/ParslPBSProSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueStatus.cfg models/providers/ParslTorqueStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueStatusFixed.cfg models/providers/ParslTorqueStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueStatusPresent.cfg models/providers/ParslTorqueStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatus.cfg models/providers/ParslCondorStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFixed.cfg models/providers/ParslCondorStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusPresent.cfg models/providers/ParslCondorStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureCurrentValid.cfg models/providers/ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureCurrentMalformed.cfg models/providers/ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureFixedValid.cfg models/providers/ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureFixedMalformed.cfg models/providers/ParslCondorStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusFailureSuccess.cfg models/providers/ParslCondorStatusFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinRetry.cfg ParslJoinRetry.tla
@@ -1053,7 +1054,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslJoinNoneResultSingle.cfg ParslJoinN
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinNoneResultList.cfg ParslJoinNoneResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportFailure.cfg models/serialization/ParslTaskTransport.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslProviderPolling.cfg ParslProviderPolling.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPolling.cfg models/providers/ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config ParslExecutorKinds.cfg ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorShutdown.cfg ParslExecutorShutdown.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslWorkQueueResults.cfg ParslWorkQueueResults.tla
@@ -1065,14 +1066,14 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReport.cfg ParslTa
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReportFixed.cfg ParslTaskVineDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslGlobusComputeConfigFixed.cfg ParslGlobusComputeConfig.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslProviderKinds.cfg ParslProviderKinds.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatus.cfg ParslAWSProviderStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatusFixed.cfg ParslAWSProviderStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslAWSProviderStatusPresent.cfg ParslAWSProviderStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderKinds.cfg models/providers/ParslProviderKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatus.cfg models/providers/ParslAWSProviderStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatusFixed.cfg models/providers/ParslAWSProviderStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatusPresent.cfg models/providers/ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderStatusBatch.cfg ParslProviderStatusBatch.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslClusterProviderUnknownJob.cfg ParslClusterProviderUnknownJob.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslClusterProviderUnknownJobFixed.cfg ParslClusterProviderUnknownJob.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslKubernetesPollingFixed.cfg ParslKubernetesPolling.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterProviderUnknownJob.cfg models/providers/ParslClusterProviderUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterProviderUnknownJobFixed.cfg models/providers/ParslClusterProviderUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesPollingFixed.cfg models/providers/ParslKubernetesPolling.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslProviderExecutorBridge.cfg ParslProviderExecutorBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslHeartbeatProvider.cfg ParslHeartbeatProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslResultRace.cfg ParslResultRace.tla
@@ -1761,8 +1762,8 @@ path where a disk-attach failure leaves the instance list and resource map popul
 The corresponding bounded model can be checked with:
 
 ```bash
-java -cp tla2tools.jar tlc2.TLC -config ParslAzureProviderSubmit.cfg ParslAzureProviderSubmit.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslAzureProviderSubmitFixed.cfg ParslAzureProviderSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureProviderSubmit.cfg models/providers/ParslAzureProviderSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureProviderSubmitFixed.cfg models/providers/ParslAzureProviderSubmit.tla
 ```
 
 The current configuration finds the post-registration setup-failure counterexample; the fixed
@@ -1785,8 +1786,8 @@ The suite also starts a real `sleep` process, cancels its process group, and obs
 The corresponding LocalProvider model can be checked with TLC:
 
 ```bash
-java -cp tla2tools.jar tlc2.TLC -config ParslLocalProvider.cfg ParslLocalProvider.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslLocalProviderFixed.cfg ParslLocalProvider.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProvider.cfg models/providers/ParslLocalProvider.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderFixed.cfg models/providers/ParslLocalProvider.tla
 ```
 
 The model represents the `.ec` marker, process liveness, cancellation, malformed exit codes, and
@@ -1802,8 +1803,8 @@ requested resource. `tests/test_local_provider_status_scope_runtime.py` reproduc
 with the real provider method.
 
 ```bash
-java -cp tla2tools.jar tlc2.TLC -config ParslLocalProviderStatusScope.cfg ParslLocalProviderStatusScope.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslLocalProviderStatusScopeFixed.cfg ParslLocalProviderStatusScope.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderStatusScope.cfg models/providers/ParslLocalProviderStatusScope.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderStatusScopeFixed.cfg models/providers/ParslLocalProviderStatusScope.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_status_scope_runtime.py -v
 ```
 
@@ -1819,9 +1820,9 @@ The probe checks normal `RUNNING` translation, propagation of API errors, and th
 The corresponding Grid Engine qstat TLA+ model can be checked with:
 
 ```bash
-java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineStatus.cfg ParslGridEngineStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineStatusFixed.cfg ParslGridEngineStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGridEngineStatusPresent.cfg ParslGridEngineStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineStatus.cfg models/providers/ParslGridEngineStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineStatusFixed.cfg models/providers/ParslGridEngineStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineStatusPresent.cfg models/providers/ParslGridEngineStatus.tla
 ```
 
 The current configuration finds an expected depth-3 counterexample (4 generated/3 distinct
@@ -1830,9 +1831,9 @@ states); fixed and valid configurations each generate 6 states/3 distinct states
 The corresponding Google Cloud status TLA+ model can be checked with:
 
 ```bash
-java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudStatus.cfg ParslGoogleCloudStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudStatusFixed.cfg ParslGoogleCloudStatus.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudStatusPresent.cfg ParslGoogleCloudStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatus.cfg models/providers/ParslGoogleCloudStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatusFixed.cfg models/providers/ParslGoogleCloudStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatusPresent.cfg models/providers/ParslGoogleCloudStatus.tla
 ```
 
 The current unknown-status configuration finds a depth-2 counterexample (2 generated/2 distinct
@@ -1842,8 +1843,8 @@ The Google Cloud instance-creation bookkeeping boundary is checked separately:
 
 ```bash
 /tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_submit_runtime.py -v
-java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudSubmit.cfg ParslGoogleCloudSubmit.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGoogleCloudSubmitFixed.cfg ParslGoogleCloudSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudSubmit.cfg models/providers/ParslGoogleCloudSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudSubmitFixed.cfg models/providers/ParslGoogleCloudSubmit.tla
 ```
 
 The current probe reproduces a failed image/API request consuming `num_instances` before any VM
@@ -1862,9 +1863,9 @@ provider's `COMPLETED`/exiting resource status, while failed cancellation preser
 The corresponding bounded TLA+ cancellation probe can be run with:
 
 ```bash
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueCancel.cfg ParslTorqueCancel.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueCancelFixed.cfg ParslTorqueCancel.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslTorqueCancelFailure.cfg ParslTorqueCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueCancel.cfg models/providers/ParslTorqueCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueCancelFixed.cfg models/providers/ParslTorqueCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueCancelFailure.cfg models/providers/ParslTorqueCancel.tla
 ```
 
 `ParslTorqueCancel.cfg` intentionally finds a depth-2 counterexample (2 states generated): a
