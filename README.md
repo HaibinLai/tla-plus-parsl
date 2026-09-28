@@ -909,6 +909,15 @@ Azure VM cancellation is exercised with a fake asynchronous delete client:
 The probe checks linger-mode refusal, delete-error rollback, and successful deletion/removal from
 the provider's instance list.
 
+The provider-free LocalProvider exit-file state machine is exercised with temporary `.ec` files:
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_runtime.py -v
+```
+
+The tests cover running-marker/liveness, zero exit completion, malformed exit failure, and
+cancelled dead-process handling.
+
 Google Compute Engine status handling is exercised with a fake discovery client:
 
 ```bash
