@@ -27,8 +27,9 @@ The root contains the focused models that are still being migrated. The shared w
 abstraction and its first group of scenario configurations live under `models/core/`; each
 configuration remains next to the TLA+ module it instantiates. Serialization and transport
 models are under `models/serialization/`; monitoring models are under `models/monitoring/`; provider
-and scheduler models are under `models/providers/`; runtime probes remain under `tests/`. More
-model families will move into topic directories only after their TLC commands are updated and checked.
+and scheduler models are under `models/providers/`; staging and data-transfer models are under
+`models/staging/`; runtime probes remain under `tests/`. More model families will move into topic
+directories only after their TLC commands are updated and checked.
 
 ## Logical tasks and physical attempts
 
@@ -937,28 +938,28 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonFailure.
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCache.cfg models/serialization/ParslCallableSerializerCache.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCacheFixed.cfg models/serialization/ParslCallableSerializerCache.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationSnapshot.cfg models/serialization/ParslSerializationSnapshot.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFileBytes.cfg ParslFileBytes.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileBytes.cfg models/staging/ParslFileBytes.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureCopy.cfg ParslDataFutureCopy.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageInFail.cfg ParslRsyncStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageOutFail.cfg ParslRsyncStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslRsyncStageSuccess.cfg ParslRsyncStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageCurrent.cfg ParslHTTPStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageFixed.cfg ParslHTTPStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHTTPStageSuccess.cfg ParslHTTPStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageCurrent.cfg ParslFTPStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageFixed.cfg ParslFTPStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFTPStageSuccess.cfg ParslFTPStage.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGlobusStageDependency.cfg ParslGlobusStageDependency.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGlobusStageOutDependency.cfg ParslGlobusStageDependency.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureCurrentEmpty.cfg ParslGlobusTransferFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureCurrentEvent.cfg ParslGlobusTransferFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureFixedEmpty.cfg ParslGlobusTransferFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGlobusTransferFailureSuccess.cfg ParslGlobusTransferFailure.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslStageOutFuture.cfg ParslStageOutFuture.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg ParslStageOutFuture.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg ParslStageOutFuture.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMultiOutputStageOutCurrent.cfg ParslMultiOutputStageOut.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslMultiOutputStageOutEarly.cfg ParslMultiOutputStageOut.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncStageInFail.cfg models/staging/ParslRsyncStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncStageOutFail.cfg models/staging/ParslRsyncStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncStageSuccess.cfg models/staging/ParslRsyncStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStageCurrent.cfg models/staging/ParslHTTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStageFixed.cfg models/staging/ParslHTTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStageSuccess.cfg models/staging/ParslHTTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPStageCurrent.cfg models/staging/ParslFTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPStageFixed.cfg models/staging/ParslFTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPStageSuccess.cfg models/staging/ParslFTPStage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusStageDependency.cfg models/staging/ParslGlobusStageDependency.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusStageOutDependency.cfg models/staging/ParslGlobusStageDependency.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailureCurrentEmpty.cfg models/staging/ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailureCurrentEvent.cfg models/staging/ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailureFixedEmpty.cfg models/staging/ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailureSuccess.cfg models/staging/ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutFuture.cfg models/staging/ParslStageOutFuture.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslStageOutInTask.cfg models/staging/ParslStageOutFuture.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslStageOutNone.cfg models/staging/ParslStageOutFuture.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputStageOutCurrent.cfg models/staging/ParslMultiOutputStageOut.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputStageOutEarly.cfg models/staging/ParslMultiOutputStageOut.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClock.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslFutureWaitTimeout.cfg ParslFutureWaitTimeout.tla
@@ -992,9 +993,9 @@ java -cp tla2tools.jar tlc2.TLC -config ParslExecuteWaitTimeoutSuccess.cfg Parsl
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingCurrent.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingFixed.cfg ParslMemoDictOrdering.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMemoDictOrderingHomogeneous.cfg ParslMemoDictOrdering.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingCurrent.cfg ParslRsyncQuoting.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingFixed.cfg ParslRsyncQuoting.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslRsyncQuotingNormal.cfg ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingCurrent.cfg models/staging/ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingFixed.cfg models/staging/ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingNormal.cfg models/staging/ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineCurrent.cfg ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineFixed.cfg ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslCommandDeadlineNormal.cfg ParslCommandDeadline.tla
@@ -1016,12 +1017,12 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProJobIdAliasUn
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationCurrent.cfg ParslJoinListMutation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationFixed.cfg ParslJoinListMutation.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslJoinListMutationStable.cfg ParslJoinListMutation.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFTPConnectionCleanupCurrent.cfg ParslFTPConnectionCleanup.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFTPConnectionCleanupFixed.cfg ParslFTPConnectionCleanup.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslFTPConnectionCleanupSuccess.cfg ParslFTPConnectionCleanup.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHTTPPartialCleanupCurrent.cfg ParslHTTPPartialCleanup.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHTTPPartialCleanupFixed.cfg ParslHTTPPartialCleanup.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslHTTPPartialCleanupSuccess.cfg ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanupCurrent.cfg models/staging/ParslFTPConnectionCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanupFixed.cfg models/staging/ParslFTPConnectionCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanupSuccess.cfg models/staging/ParslFTPConnectionCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupCurrent.cfg models/staging/ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFixed.cfg models/staging/ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupSuccess.cfg models/staging/ParslHTTPPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureFalseyExceptionCurrent.cfg ParslDataFutureFalseyException.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureFalseyExceptionFixed.cfg ParslDataFutureFalseyException.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslDataFutureFalseyExceptionNormal.cfg ParslDataFutureFalseyException.tla
@@ -1065,7 +1066,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineResults.cfg ParslTaskVineRe
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReport.cfg ParslTaskVineDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslTaskVineDuplicateReportFixed.cfg ParslTaskVineDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslRadicalPilotResultsFixed.cfg ParslRadicalPilotResults.tla
-java -cp tla2tools.jar tlc2.TLC -config ParslGlobusComputeConfigFixed.cfg ParslGlobusComputeConfig.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusComputeConfigFixed.cfg models/staging/ParslGlobusComputeConfig.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderKinds.cfg models/providers/ParslProviderKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatus.cfg models/providers/ParslAWSProviderStatus.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderStatusFixed.cfg models/providers/ParslAWSProviderStatus.tla
