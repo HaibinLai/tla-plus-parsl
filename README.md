@@ -112,6 +112,12 @@ worker readiness, queued/running tasks, drain/recovery, and block-granular scale
 failure and scale-in explicitly clean up queued tasks for resubmission and mark running tasks
 lost; an active provider block alone never implies that `submit` is accepted.
 
+`ParslJoinApp.tla` models the bounded `join_app` result protocol. The outer app may return one
+Future, a list of Futures, an empty list, or an invalid value. A join handle remains live until
+all selected inner Futures are terminal; successful list results preserve input order, and any
+inner failure becomes an outer join failure. Inner retries are intentionally owned by the inner
+tasks, matching Parsl's callback behavior.
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -316,6 +322,7 @@ java -cp tla2tools.jar tlc2.TLC -config ParslClockTerminal.cfg ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDB.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslMonitoringDBReorder.cfg ParslMonitoringDB.tla
 java -cp tla2tools.jar tlc2.TLC -config ParslExecutorProvider.cfg ParslExecutorProvider.tla
+java -cp tla2tools.jar tlc2.TLC -config ParslJoinApp.cfg ParslJoinApp.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,
@@ -386,6 +393,9 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslExecutorProvider.cfg`: 47,002 states generated, 8,221 distinct states, depth 25;
   provider request/success/failure, manager registration, worker slots, submit rejection, executor
   drain/recovery, provider failure, and block-granular scale-in all passed.
+- `ParslJoinApp.cfg`: 1,210 states generated, 331 distinct states, depth 10;
+  single/list/empty join returns, invalid-return rejection, inner completion/failure observation,
+  ordered aggregation, join-handle lifetime, and JoinError propagation all passed.
 - `ParslLocalExecutor.cfg`: 59 states generated, 19 distinct states, depth 17;
   a provider-free local executor completed through the common task/result protocol.
 - `ParslFileContent.cfg`: 17,812 states generated, 3,247 distinct states, depth 54;
@@ -484,6 +494,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 | `RegisterManager` / `ReadyWorker` / `DispatchTask` | manager registration and worker-slot readiness | HTEX interchange/manager registration and worker pool |
 | `SubmitTask` / `RejectSubmit` / `DrainExecutor` | executor submit admission and drain behavior | `HighThroughputExecutor.submit` and executor bad-state handling |
 | `FailProvider` / `CancelAllocation` | provider failure and block-granular scale-in cleanup | `BlockProviderExecutor.handle_errors` and provider cancel/strategy paths |
+| `ReturnSingle` / `ReturnList` / `ReturnEmptyList` / `ReturnInvalid` | `join_app` return-shape validation | `DataFlowKernel.handle_exec_update` join branch |
+| `ObserveInner` / `FinalizeJoin` | inner Future callbacks, aggregate completion, and JoinError | `DataFlowKernel.handle_join_update` |
 | `LocalExecutors` / `LocalExecutorSafety` | local executor path without provider provisioning or manager registration | `ThreadPoolExecutor` submission boundary |
 
 ## Representative traces

@@ -132,6 +132,9 @@ stability.
 `ParslExecutorProvider.tla` models the HTEX executor/provider boundary: block request outcomes,
 manager registration, worker readiness, submit admission, draining/recovery, provider failure,
 and scale-in cleanup of queued/running tasks.
+`ParslJoinApp.tla` models bounded `join_app` semantics for single/list/empty/invalid returns,
+inner Future observation, ordered aggregate results, join-handle lifetime, and inner-failure
+propagation. Inner retry policy remains below this join protocol, as in Parsl's callback path.
 `ParslIdleManagerTimeout.cfg` covers heartbeat expiry for an idle registered manager and clears
 the associated provider/executor capacity. `ParslMultiManagerTimeout.cfg` refines this to
 multiple managers sharing an executor, preserving remaining capacity after one manager expires.
