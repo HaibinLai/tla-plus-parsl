@@ -324,6 +324,8 @@ not kill the shell/process group, leaving the timed-out command alive. The fixed
 cleanup before reporting the timeout. The runtime probe uses a fake `Popen` to verify that the
 current path makes no kill call.
 
+This process-lifetime mismatch is recorded as BUG-133.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBashTimeoutCleanupCurrent.cfg models/executors/ParslBashTimeoutCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBashTimeoutCleanupFixed.cfg models/executors/ParslBashTimeoutCleanup.tla

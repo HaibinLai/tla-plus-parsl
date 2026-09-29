@@ -184,3 +184,6 @@ Thread executor coverage also records non-mapping resource-specification validat
 
 Executor timeout coverage also records process cleanup after `execute_wait` timeout
 (`ParslExecuteWaitTimeout`, BUG-132).
+
+Bash executor coverage also records process cleanup after app walltime timeout
+(`ParslBashTimeoutCleanup`, BUG-133).
