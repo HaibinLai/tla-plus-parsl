@@ -6,6 +6,17 @@ resource admission, and result races.
 
 Files live in [`models/dataflow/`](../models/dataflow/).
 
+`ParslJoinFull.tla` is the integrated bounded join model. It combines single-Future joins,
+ordered list joins with duplicate positions, empty-list joins, invalid return handling, logical
+inner Futures with physical retries, cancellation, failure aggregation, and terminal result
+ordering. `MAX_RETRIES = 1` keeps the state space small while preserving the important attempt
+correlation and join-handle invariants.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFull.cfg models/dataflow/ParslJoinFull.tla
+PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_join*_runtime.py' -v
+```
+
 `ParslMemoExceptionCheckpoint.tla` models failure persistence across a memoizer restart. The
 current `BasicMemoizer` updates its in-memory cache with a failed `AppFuture`, but the checkpoint
 writer skips exception commands, leaving an empty `tasks.pkl`. TLC finds the four-state current
