@@ -78,3 +78,6 @@ HTEX result-path coverage also records malformed result-frame isolation
 
 HTEX result-path coverage also records stale/unknown task-result handling
 `ParslHtexUnknownTaskResult` (BUG-100).
+
+HTEX result-path coverage also records ambiguous frames carrying both result and exception
+payloads (`ParslHtexAmbiguousResult`, BUG-101).

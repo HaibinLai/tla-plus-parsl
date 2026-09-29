@@ -238,6 +238,10 @@ worker alive. The runtime probe sends the conflicting message through the concre
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAmbiguousResultCurrent.cfg models/executors/ParslHtexAmbiguousResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAmbiguousResultFixed.cfg models/executors/ParslHtexAmbiguousResult.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_ambiguous_result_runtime.py -v
+
+The runtime probe also records BUG-101: a result frame containing both `result` and
+`exception` is currently accepted with the result winning, silently dropping the exception
+payload.  The model's fixed branch rejects this ambiguous frame.
 ```
 
 `ParslMPINonDivisibleRanks.tla` audits `MPIExecutor` resource derivation. With `num_nodes=2`
