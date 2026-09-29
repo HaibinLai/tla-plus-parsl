@@ -129,6 +129,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmi
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_submit_cleanup_runtime.py -v
 ```
 
+`ParslGridEngineStatusBatch.tla` refines Grid Engine polling with a truncated `qstat` record
+followed by a valid record for the known job. The current parser indexes the missing state field
+and aborts before applying the valid record; the candidate fixed path skips only the malformed
+record and continues. The runtime probe drives the real `_status` parser with both records.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineStatusBatchCurrent.cfg models/providers/ParslGridEngineStatusBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineStatusBatchFixed.cfg models/providers/ParslGridEngineStatusBatch.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_status_batch_runtime.py -v
+```
+
 `ParslLocalProviderCancelUnknown.tla` models cancellation after a local job has already been
 removed from `resources`. The current `LocalProvider.cancel()` indexes the missing id and raises
 `KeyError`; the fixed branch treats the stale cancellation as an unsuccessful, non-throwing
