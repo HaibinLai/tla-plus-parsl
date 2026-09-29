@@ -224,3 +224,6 @@ Join coverage now includes the combined logical-Future/physical-attempt state ma
 
 AWS provider coverage also records status-list cardinality when EC2 omits a requested instance
 (`ParslAwsStatusMissingResult`, BUG-143).
+
+Work Queue and TaskVine coverage also records duplicate/late collector reports that crash the
+result thread (`ParslWorkQueueDuplicateReport` and `ParslTaskVineDuplicateReport`, BUG-145/146).
