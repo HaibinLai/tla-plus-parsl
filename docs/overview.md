@@ -488,6 +488,10 @@ launch. The provider writes the worker script before invoking the launcher; the 
 path leaves that file behind, while the fixed path removes it before raising. The runtime probe
 uses a temporary script directory and a fake failed launch command.
 
+`ParslTimeLimitedOpenTimeout.tla` models the missing-file branch of `time_limited_open`. The
+current wait context yields after its horizon and then lets `open()` raise `FileNotFoundError`;
+the fixed branch reports a timeout before opening. The runtime probe uses a missing temporary path.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1963,7 +1967,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 366 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 367 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2056,6 +2060,14 @@ normalization:
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationCurrent.cfg models/clock/ParslTimerIntervalValidation.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationFixed.cfg models/clock/ParslTimerIntervalValidation.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationValid.cfg models/clock/ParslTimerIntervalValidation.tla
+```
+
+`ParslTimeLimitedOpenTimeout.tla` checks the missing-file timeout boundary:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutCurrent.cfg models/clock/ParslTimeLimitedOpenTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutFixed.cfg models/clock/ParslTimeLimitedOpenTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutSuccess.cfg models/clock/ParslTimeLimitedOpenTimeout.tla
 ```
 
 The worker-side apply-message helper is exercised directly:
@@ -2901,6 +2913,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `Start` / `FunctionReturns` / `FunctionRaises` / `TimerFires` | Python app timeout timer lifecycle and cleanup | `parsl.app.python.timeout` and `AutoCancelTimer` |
 | `Validate` / `Callback` / `NegativeIntervalSafety` | periodic Timer interval admission and zero-delay behavior | `parsl.utils.Timer.__init__` / `_wake_up_timer` |
+| `WaitCompletes` / `MissingFileSafety` / `NoOpenAfterTimeout` | bounded file wait and open timeout boundary | `parsl.utils.wait_for_file` / `time_limited_open` |
 | `ExpireManager` / `Heartbeat` / `ExpirationAccounting` | strict heartbeat threshold and in-flight manager-loss cleanup | `Interchange.expire_bad_managers` and main polling loop |
 | `AdvanceClock` / `CheckExpiry` / `NoPrematureExpiry` | wall-clock jump versus monotonic heartbeat expiry | `Interchange.expire_bad_managers` |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |

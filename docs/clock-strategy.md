@@ -51,6 +51,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidatio
 /tmp/parsl-venv/bin/python -m unittest tests/test_timer_interval_validation_runtime.py -v
 ```
 
+`ParslTimeLimitedOpenTimeout.tla` connects the file wait loop to its open boundary. When the path
+never appears, the current `time_limited_open` yields and exposes a raw `FileNotFoundError`; the
+fixed branch returns an explicit timeout without attempting the open. The runtime probe uses a
+missing temporary path and a zero-second polling horizon.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutCurrent.cfg models/clock/ParslTimeLimitedOpenTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutFixed.cfg models/clock/ParslTimeLimitedOpenTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutSuccess.cfg models/clock/ParslTimeLimitedOpenTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_time_limited_open_timeout_runtime.py -v
+```
+
 `ParslTimerCloseTimeout.tla` refines the close boundary when a callback is still running. The
 current `Timer.close(timeout=...)` returns `None` after a timed join even while the daemon thread
 remains alive; the fixed branch represents that result as an explicit `closing` timeout rather
