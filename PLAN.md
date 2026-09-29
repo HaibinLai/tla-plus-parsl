@@ -203,6 +203,10 @@ Command send retry coverage is now included: the current `CommandClient.run` ign
 `max_retries` argument after a send exception, while the fixed branch consumes a bounded retry
 budget before returning a terminal send error or accepting a reply.
 
+TaskVine duplicate-report handling is now in the smoke sweep: a late manager report currently
+raises `KeyError`, exits the collector, and causes unrelated pending Futures to fail; the fixed
+branch ignores stale IDs and keeps collecting independent reports.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

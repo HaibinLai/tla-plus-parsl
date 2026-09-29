@@ -345,3 +345,9 @@ run_case command-client-retries-current counterexample \
 run_case command-client-retries-fixed pass \
     models/executors/ParslCommandClientMaxRetriesFixed.cfg \
     models/executors/ParslCommandClientMaxRetries.tla
+run_case taskvine-duplicate-report-current counterexample \
+    models/executors/ParslTaskVineDuplicateReport.cfg \
+    models/executors/ParslTaskVineDuplicateReport.tla
+run_case taskvine-duplicate-report-fixed pass \
+    models/executors/ParslTaskVineDuplicateReportFixed.cfg \
+    models/executors/ParslTaskVineDuplicateReport.tla
