@@ -69,6 +69,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryCur
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryFixed.cfg models/staging/ParslFileTransferRetry.tla
 ```
 
+The direct rsync wrapper boundary is also exercised by
+`tests/test_rsync_stageout_version_runtime.py`: a deterministic copy reads version 0, the source
+changes to version 1, and the current wrapper still reports success for the old bytes because it
+does not carry a source-version or checksum check.
+
 `BeginStageOut`, `SendChunk`, `ReceiveChunk`, and `Publish` correspond to the DataManager/provider
 stage-out Future and its temporary buffer; `StartConsumer` is the DFK DataFuture dependency gate.
 The concrete byte and DataFuture probes remain in `tests/test_datafuture_runtime.py`,
