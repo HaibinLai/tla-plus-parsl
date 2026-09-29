@@ -256,6 +256,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalUnknownJobSta
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_unknown_job_status_runtime.py -v
 ```
 
+`ParslLocalExitFileMissing.tla` models a live LocalProvider process whose `.ec` exit-code file is
+not visible yet. The current `status()` path reads that file before its parse exception guard, so a
+transient `FileNotFoundError` escapes and aborts the polling pass. The fixed branch records an
+explicit UNKNOWN observation and keeps polling. TLC finds the current two-state counterexample
+and checks the fixed two-state behavior; the runtime probe invokes the real provider with a
+missing-file double. This boundary is recorded as BUG-147.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalExitFileMissingCurrent.cfg models/providers/ParslLocalExitFileMissing.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalExitFileMissingFixed.cfg models/providers/ParslLocalExitFileMissing.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_exit_file_missing_runtime.py -v
+```
+
 `ParslWalltimeParsing.tla` models the provider walltime conversion in
 [`parsl/utils.py`](https://github.com/Parsl/Parsl/blob/master/parsl/utils.py). The current
 `wtime_to_minutes` implementation truncates seconds, so a positive request such as `00:00:59`

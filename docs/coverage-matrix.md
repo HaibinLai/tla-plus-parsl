@@ -227,3 +227,6 @@ AWS provider coverage also records status-list cardinality when EC2 omits a requ
 
 Work Queue and TaskVine coverage also records duplicate/late collector reports that crash the
 result thread (`ParslWorkQueueDuplicateReport` and `ParslTaskVineDuplicateReport`, BUG-145/146).
+
+Local provider coverage also records a missing live-job exit-code file during polling
+(`ParslLocalExitFileMissing`, BUG-147).
