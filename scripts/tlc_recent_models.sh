@@ -162,3 +162,12 @@ run_case gridengine-duplicate-current counterexample \
 run_case gridengine-duplicate-fixed pass \
     models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
     models/providers/ParslGridEngineDuplicateStatus.tla
+run_case torque-submit-success pass \
+    models/providers/ParslTorqueSubmit.cfg \
+    models/providers/ParslTorqueSubmit.tla
+run_case torque-submit-empty pass \
+    models/providers/ParslTorqueSubmitEmpty.cfg \
+    models/providers/ParslTorqueSubmit.tla
+run_case torque-submit-failure pass \
+    models/providers/ParslTorqueSubmitFailure.cfg \
+    models/providers/ParslTorqueSubmit.tla

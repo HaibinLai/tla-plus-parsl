@@ -97,6 +97,10 @@ Grid Engine polling now has a repeatable duplicate-record check: removing the sa
 crashes the current `jobs_missing` bookkeeping, while the fixed branch makes duplicate records
 idempotent. The real qstat parser probe exercises that duplicate line.
 
+Torque submit coverage now includes normal qsub registration plus empty-output and non-zero-command
+failure paths. The bounded model checks that only a parsed job ID creates a pending resource, and
+the real submit-script probes cover all three outcomes.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
