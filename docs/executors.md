@@ -521,6 +521,16 @@ update and TLC finds `FailureVisibility` at depth 3; the fixed branch reports th
 checks 10 distinct states. This is a compact bridge between `BlockProviderExecutor` status,
 strategy capacity, and DFK monitoring.
 
+`ParslProviderWorkerScaling.tla` refines the resource boundary one step further: a submitted or
+active provider block contributes no executor capacity until a manager registers its worker
+slots.  Scale-out preserves existing admission while provisioning another block; idle scale-in
+removes only free slots; provider failure revokes all registered capacity.  The bounded TLC run
+checks 73 generated/24 distinct states and all five safety invariants.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderWorkerScaling.cfg models/executors/ParslProviderWorkerScaling.tla
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProvisioningAdmissionMonitoringCurrent.cfg models/executors/ParslProvisioningAdmissionMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProvisioningAdmissionMonitoringFixed.cfg models/executors/ParslProvisioningAdmissionMonitoring.tla
