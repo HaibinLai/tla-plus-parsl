@@ -796,3 +796,8 @@ is exercised by `tests/test_bad_state_task_mutation_runtime.py`.
 clocks. The current branch can keep an overdue manager alive after a backward system-clock step;
 the fixed branch expires based on monotonic age. BUG-089 is exercised by the backward-clock probe
 in `tests/test_heartbeat_clock_jump_runtime.py`.
+
+`ParslResultsIncomingCloseRace.tla` refines the result-queue close boundary. The current
+`ResultsIncoming.get()` can poll a socket already closed by `close()`; the fixed branch makes that
+call a no-message no-op. This candidate issue is recorded as BUG-091 and tested by
+`tests/test_results_incoming_close_race_runtime.py`.

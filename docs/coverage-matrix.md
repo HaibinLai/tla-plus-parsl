@@ -45,3 +45,6 @@ which separates wall-clock reporting from monotonic expiry.
 
 Monitoring coverage includes the corresponding batch-deadline rollback boundary
 `ParslMonitoringBatchClock` (BUG-090).
+
+ZMQ executor coverage also includes `ParslResultsIncomingCloseRace` (BUG-091), modeling
+post-close result polling as a quiescent boundary.
