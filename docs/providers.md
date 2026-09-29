@@ -101,11 +101,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCance
 ```
 
 ParslLocalUnknownJobStatus.tla models the analogous stale-id boundary in LocalProvider.status().
-After a local resource has been cleaned up, a polling pass can still request its old id; the
-current result comprehension indexes the missing entry and raises KeyError. The fixed branch
-returns an explicit UNKNOWN status. TLC finds the current PollDoesNotCrash counterexample (2
-states generated) and checks the fixed branch (4 states generated). The runtime probe invokes the
-real provider with an empty resource map.
+The refined lifecycle explicitly removes a resource before a polling pass requests its old id;
+the current result comprehension then indexes the missing entry and raises KeyError. The fixed
+branch returns an explicit UNKNOWN status. TLC finds the current PollDoesNotCrash counterexample
+(4 states generated) and checks the fixed branch (6 states generated). The runtime probe invokes
+the real provider after removing a local resource entry.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalUnknownJobStatusCurrent.cfg models/providers/ParslLocalUnknownJobStatus.tla

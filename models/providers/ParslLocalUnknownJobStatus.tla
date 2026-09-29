@@ -11,29 +11,40 @@ EXTENDS Naturals
 
 CONSTANT USE_FIXED
 
-VARIABLES state, returned
-vars == <<state, returned>>
+VARIABLES state, returned, resourcePresent
+vars == <<state, returned, resourcePresent>>
 
 Init ==
     /\ USE_FIXED \in BOOLEAN
-    /\ state = "requested"
+    /\ state = "active"
     /\ returned = "none"
+    /\ resourcePresent = TRUE
+
+Cleanup ==
+    /\ state = "active"
+    /\ state' = "cleaned"
+    /\ resourcePresent' = FALSE
+    /\ UNCHANGED returned
 
 Lookup ==
-    /\ state = "requested"
+    /\ state = "cleaned"
     /\ state' = IF USE_FIXED THEN "unknown" ELSE "crashed"
     /\ returned' = IF USE_FIXED THEN "unknown" ELSE "none"
+    /\ UNCHANGED resourcePresent
 
-Next == Lookup \/ UNCHANGED vars
+Next == Cleanup \/ Lookup \/ UNCHANGED vars
 Spec == Init /\ [][Next]_vars
 
 TypeOK ==
     /\ USE_FIXED \in BOOLEAN
-    /\ state \in {"requested", "unknown", "crashed"}
+    /\ state \in {"active", "cleaned", "unknown", "crashed"}
     /\ returned \in {"none", "unknown"}
+    /\ resourcePresent \in BOOLEAN
 
 UnknownStatusSafety == state = "unknown" => returned = "unknown"
 
 PollDoesNotCrash == state # "crashed"
+
+CleanupBoundary == state = "cleaned" => ~resourcePresent
 
 =============================================================================
