@@ -34,6 +34,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorReso
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_resource_spec_runtime.py -v
 ```
 
+`ParslHtexManagerEligibility.tla` separates manager ordering from dispatch admission. The
+selector may return inactive or draining managers as candidates, but the interchange must check
+`active` and `draining` again before sending a task. The bounded model skips `m0` (inactive) and
+`m1` (draining) and sends only to `m2`; the runtime probe drives the real
+`Interchange.process_tasks_to_send` method with a deterministic selector and recording socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerEligibility.cfg models/executors/ParslHtexManagerEligibility.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_manager_eligibility_runtime.py -v
+```
+
 `ParslPoolExecutorMap.tla` models the concrete `parsl.concurrent.ParslPoolExecutor.map` wrapper.
 The pool submits all inputs eagerly, consumes results in input order, and treats `timeout` as a
 deadline for the result iterator. A timeout does not cancel already-submitted Parsl Futures, and

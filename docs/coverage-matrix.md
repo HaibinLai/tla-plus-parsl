@@ -172,3 +172,6 @@ Monitoring database coverage also records TASK-row bookkeeping before insert suc
 
 Slurm provider coverage also records malformed status-line isolation
 (`ParslSlurmMalformedLine`, BUG-130).
+
+HTEX executor coverage now includes manager selector/dispatch eligibility separation
+(`ParslHtexManagerEligibility` and `test_htex_manager_eligibility_runtime.py`).
