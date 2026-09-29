@@ -77,3 +77,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageOutO
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerStageOutOrderingFixed.cfg models/staging/ParslDataManagerStageOutOrdering.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_data_manager_stage_out_ordering_runtime.py -v
 ```
+
+`ParslFTPPartialCleanup.tla` models FTP stage-in failure after a response chunk has already been
+written. The current `_ftp_stage_in` path leaves the partial destination visible when
+`retrbinary` raises; the fixed branch removes it before reporting failure. The runtime probe
+injects a fake FTP connection into the real staging function.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupCurrent.cfg models/staging/ParslFTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFixed.cfg models/staging/ParslFTPPartialCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_ftp_partial_cleanup_runtime.py -v
+```
