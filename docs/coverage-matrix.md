@@ -123,3 +123,6 @@ HTEX executor coverage also records explicit zero address-probe-timeout propagat
 
 LSF provider coverage also records negative core-capacity derivation
 (`ParslLSFResourceValidation`, BUG-115).
+
+Local provider coverage also records stale cancellation-id handling
+(`ParslLocalProviderCancelUnknown`, BUG-116).

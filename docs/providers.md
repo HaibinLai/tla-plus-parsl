@@ -213,6 +213,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCance
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_cancel_unknown_runtime.py -v
 ```
 
+This cancellation-idempotence boundary is recorded as BUG-116: a stale local job ID raises
+`KeyError` instead of being handled as a cancellation miss.
+
 ParslLocalUnknownJobStatus.tla models the analogous stale-id boundary in LocalProvider.status().
 The refined lifecycle explicitly removes a resource before a polling pass requests its old id;
 the current result comprehension then indexes the missing entry and raises KeyError. The fixed
