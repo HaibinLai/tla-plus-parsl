@@ -1909,7 +1909,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 353 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 354 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2977,6 +2977,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobFi
 
 The current configuration reaches the stale-id `KeyError`; the fixed configuration returns
 UNKNOWN and completes in 4 generated / 2 distinct states.
+
+The heartbeat-parameter refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterValidationCurrent.cfg models/clock/ParslHeartbeatParameterValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterValidationFixed.cfg models/clock/ParslHeartbeatParameterValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterValidationValid.cfg models/clock/ParslHeartbeatParameterValidation.tla
+```
+
+The current configuration accepts invalid non-positive values and violates `ParameterSafety`;
+the fixed configuration rejects them (5 generated / 2 distinct states).
 
 ## Concrete Parsl example
 

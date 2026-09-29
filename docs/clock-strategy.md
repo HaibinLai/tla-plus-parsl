@@ -8,6 +8,18 @@ manager, while the monotonic fixed branch expires once elapsed time reaches the 
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
 
+`ParslHeartbeatParameterValidation.tla` models HTEX heartbeat configuration admission. The
+current executor stores a zero period or non-positive threshold and proceeds; the fixed branch
+rejects those values before launching workers. The runtime probe constructs the real
+`HighThroughputExecutor` with `heartbeat_period=0` and `heartbeat_threshold=-1`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterValidationCurrent.cfg models/clock/ParslHeartbeatParameterValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterValidationFixed.cfg models/clock/ParslHeartbeatParameterValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterValidationValid.cfg models/clock/ParslHeartbeatParameterValidation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_heartbeat_parameter_validation_runtime.py -v
+```
+
 `ParslStrategyBlockCapacity.tla` isolates configuration admission for the strategy's overload
 calculation. The current path accepts `nodes_per_block=0` and then divides by the zero capacity
 when it tries to determine an additional-block request. The fixed branch rejects that
