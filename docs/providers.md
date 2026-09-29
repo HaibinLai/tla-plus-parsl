@@ -311,6 +311,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedLine
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_malformed_line_runtime.py -v
 ```
 
+`ParslSlurmDuplicateStatus.tla` models duplicate scheduler rows for the same Slurm job. The
+current missing-job bookkeeping removes the ID twice and raises `KeyError`; the fixed branch
+ignores the duplicate and continues polling. TLC checks six generated/three distinct states in
+the fixed and unique-row configurations.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmDuplicateStatusCurrent.cfg models/providers/ParslSlurmDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmDuplicateStatusFixed.cfg models/providers/ParslSlurmDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmDuplicateStatusUnique.cfg models/providers/ParslSlurmDuplicateStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_duplicate_status_runtime.py -v
+```
+
 `ParslSlurmBatchStrict.tla` models the Python-version fallback for Slurm's `batched` helper.
 On Python versions before 3.12, the fallback accepts `strict=True` but yields a short final
 batch instead of raising for an incomplete batch. The fixed branch enforces the standard strict
