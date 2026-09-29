@@ -72,3 +72,6 @@ HTEX task admission coverage also records the non-mapping resource-specification
 
 HTEX task admission coverage also records malformed task-envelope handling
 `ParslHtexTaskMessageMalformed` (BUG-098).
+
+HTEX result-path coverage also records malformed result-frame isolation
+`ParslHtexResultMessageMalformed` (BUG-099).
