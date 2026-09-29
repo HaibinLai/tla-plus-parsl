@@ -17,6 +17,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 These models cover asynchronous monitoring records, database insertion, batching, retry and
 atomicity, deferred events, close behavior, and batching-threshold edge cases.
 
+`ParslMonitoringDispatchEnvelope.tla` models the outer queue tuple consumed by
+`DatabaseManager._dispatch_to_internal`. The current assertion lets a tuple with the wrong
+length escape and terminate the migration thread; the fixed branch rejects it while preserving
+the manager loop. The runtime probe calls the concrete dispatch method with a malformed tuple.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDispatchEnvelopeCurrent.cfg models/monitoring/ParslMonitoringDispatchEnvelope.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDispatchEnvelopeFixed.cfg models/monitoring/ParslMonitoringDispatchEnvelope.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDispatchEnvelopeValid.cfg models/monitoring/ParslMonitoringDispatchEnvelope.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_dispatch_envelope_runtime.py -v
+```
+
 Files live in [`models/monitoring/`](../models/monitoring/).
 
 `ParslMonitoringMalformedWorkerMessage.tla` models worker-task monitoring input whose `first_msg`

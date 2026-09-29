@@ -1909,7 +1909,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 350 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 351 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2946,6 +2946,17 @@ observed by monitoring while the DFK success path is `pending -> launched -> exe
 the real HTEX heartbeat, batching, and ZMQ message protocol are compressed into discrete
 `DispatchAttempt` and `WorkerFailure` events. The model also prevents scale-in from silently
 removing a provider block with an in-flight attempt.
+
+The monitoring dispatch-envelope refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDispatchEnvelopeCurrent.cfg models/monitoring/ParslMonitoringDispatchEnvelope.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDispatchEnvelopeFixed.cfg models/monitoring/ParslMonitoringDispatchEnvelope.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDispatchEnvelopeValid.cfg models/monitoring/ParslMonitoringDispatchEnvelope.tla
+```
+
+The current configuration reaches the malformed-tuple assertion; fixed and valid configurations
+complete in 4 generated / 2 distinct states and preserve `MalformedIsolation`.
 
 ## Concrete Parsl example
 
