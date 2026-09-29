@@ -57,6 +57,23 @@ publication after a single received chunk and violates `AtomicPublishSafety`; th
 fixed configuration requires every chunk to pass checksum validation before the
 consumer can run.
 
+`ParslFileTransferRetry.tla` adds source-content versions to that protocol. If the source file
+changes while an asynchronous stage-out is transferring, the current branch publishes the old
+captured version and marks the DataFuture ready. TLC finds a `PublicationSafety` counterexample
+at depth 8 (133 states generated). The fixed branch marks the transfer stale, retries from the
+new source version, and checks 54 distinct states. `ParslFileBytes.tla` contains the more detailed
+multi-file byte/checksum abstraction; this model focuses on the version/publication boundary.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryCurrent.cfg models/staging/ParslFileTransferRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryFixed.cfg models/staging/ParslFileTransferRetry.tla
+```
+
+`BeginStageOut`, `SendChunk`, `ReceiveChunk`, and `Publish` correspond to the DataManager/provider
+stage-out Future and its temporary buffer; `StartConsumer` is the DFK DataFuture dependency gate.
+The concrete byte and DataFuture probes remain in `tests/test_datafuture_runtime.py`,
+`tests/test_multi_output_stageout_runtime.py`, and the staging-provider runtime tests.
+
 The action mapping follows the current source structure:
 
 - `StartStageOut`/`PublishStageOut` abstract `DataManager.stage_out` and the
