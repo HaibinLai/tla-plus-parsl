@@ -131,6 +131,10 @@ The HTEX watchdog/result publication race is also in the smoke sweep. The curren
 queue success before removing its in-progress mapping, allowing the watchdog to enqueue a second
 `WorkerLost` result; the fixed branch treats an already-published result as terminal.
 
+Radical-Pilot bulk shutdown is now covered too. The current collector exits as soon as the
+termination flag is set and can leave a queued Future pending; the fixed branch drains or
+explicitly completes queued work before collector exit.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

@@ -228,3 +228,9 @@ run_case htex-watchdog-result-current counterexample \
 run_case htex-watchdog-result-fixed pass \
     models/executors/ParslHtexWatchdogResultRaceFixed.cfg \
     models/executors/ParslHtexWatchdogResultRace.tla
+run_case radical-bulk-shutdown-current counterexample \
+    models/executors/ParslRadicalPilotBulkShutdownCurrent.cfg \
+    models/executors/ParslRadicalPilotBulkShutdown.tla
+run_case radical-bulk-shutdown-fixed pass \
+    models/executors/ParslRadicalPilotBulkShutdownFixed.cfg \
+    models/executors/ParslRadicalPilotBulkShutdown.tla
