@@ -114,3 +114,6 @@ Condor provider coverage also records nonpositive scheduler command chunk-size a
 
 Local provider coverage also records zero `tasks_per_node` admission
 (`ParslLocalTasksPerNode`, BUG-112).
+
+HTEX executor coverage also records zero `cores_per_worker` capacity derivation
+(`ParslHtexCoresPerWorker`, BUG-113).

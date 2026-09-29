@@ -56,6 +56,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorker
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_cores_per_worker_runtime.py -v
 ```
 
+This worker-capacity admission boundary is recorded as BUG-113: zero `cores_per_worker` reaches
+the capacity division and raises `ZeroDivisionError` during executor construction.
+
 `ParslHtexAddressProbeTimeout.tla` models propagation of an explicit
 `address_probe_timeout` into the worker launch command. The current
 `initialize_scaling()` uses a truthiness check, so a configured zero is omitted
