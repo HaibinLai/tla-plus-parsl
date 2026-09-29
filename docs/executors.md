@@ -19,6 +19,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThre
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_thread_count_runtime.py -v
 ```
 
+`ParslHtexCoresPerWorker.tla` models HTEX worker-capacity calculation when a provider advertises
+`cores_per_node`. The current constructor allows `cores_per_worker=0` to reach the division used
+to compute CPU slots and raises `ZeroDivisionError`; the fixed branch rejects the non-positive
+configuration before capacity calculation. The runtime probe uses a real `LocalProvider` with a
+CPU hint and the real `HighThroughputExecutor` constructor.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorkerCurrent.cfg models/executors/ParslHtexCoresPerWorker.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorkerFixed.cfg models/executors/ParslHtexCoresPerWorker.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorkerValid.cfg models/executors/ParslHtexCoresPerWorker.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_cores_per_worker_runtime.py -v
+```
+
 `ParslProbeAddresses.tla` abstracts the HTEX `probe_addresses` helper. It distinguishes an empty
 candidate set (`ValueError`), a successful probe reply selecting an address, and timeout without a
 reply (`ConnectionError`). The runtime probe uses the real pyzmq context for the empty and

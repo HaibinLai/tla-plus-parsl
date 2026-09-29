@@ -1679,6 +1679,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   returns the first task's mutated callable object.
 - `ParslCallableDeserializeCacheFixed.cfg`: 8 states generated, 4 distinct states, depth 4;
   repeated payloads receive fresh callable objects.
+- `ParslHtexCoresPerWorkerCurrent.cfg`: expected counterexample at depth 1; zero
+  `cores_per_worker` reaches the provider CPU-slot division.
+- `ParslHtexCoresPerWorkerFixed.cfg`: 4 states generated, 2 distinct states, depth 2; invalid
+  zero capacity is rejected before the division.
+- `ParslHtexCoresPerWorkerValid.cfg`: 4 states generated, 2 distinct states, depth 2; one core
+  per worker produces a safe capacity.
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
@@ -3065,6 +3071,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `MisrouteAttempt` | reject decoded work sent to the wrong manager/executor | `Interchange` dispatch routing and manager registration |
 | `MisrouteResult` | reject result envelopes claiming the wrong executor | interchange result routing and DFK completion boundary |
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
+| `Construct` / `Reject` / `CapacitySafety` | HTEX CPU-slot capacity derived from provider cores and `cores_per_worker` | `HighThroughputExecutor.__init__` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
@@ -3233,6 +3240,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThre
 
 The current configuration reaches the delayed start error; fixed and valid configurations
 preserve `ThreadCountSafety`.
+
+The HTEX `cores_per_worker` refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorkerCurrent.cfg models/executors/ParslHtexCoresPerWorker.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorkerFixed.cfg models/executors/ParslHtexCoresPerWorker.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorkerValid.cfg models/executors/ParslHtexCoresPerWorker.tla
+```
+
+The current configuration reaches the division error for zero cores per worker; fixed and valid
+configurations preserve `NoDivisionError`.
 
 The LocalProvider `tasks_per_node` refinement is checked with:
 
