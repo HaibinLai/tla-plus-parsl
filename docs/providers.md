@@ -20,6 +20,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudZoneSel
 /tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_zone_selection_runtime.py -v
 ```
 
+`ParslGoogleCloudCancel.tla` models the GCE cancellation bookkeeping boundary. The current
+provider returns success after the remote delete but leaves the local resource marked `RUNNING`;
+the fixed branch marks it `COMPLETED`. TLC finds the two-state `DeleteStatusSafety` counterexample
+in the current configuration and checks four generated/two distinct states in the fixed branch.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudCancel.cfg models/providers/ParslGoogleCloudCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudCancelFixed.cfg models/providers/ParslGoogleCloudCancel.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_cancel_runtime.py -v
+```
+
 `ParslPollerCloseScaleInRace.tla` refines the `JobStatusPoller.close(timeout)` lifecycle. The
 current implementation calls `Timer.close`, then scales in every executor even when the timer
 thread is still running a provider-status callback after the join timeout. The fixed branch keeps
