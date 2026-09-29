@@ -762,3 +762,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleInCancelShape
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleInCancelShapeFixed.cfg models/executors/ParslScaleInCancelShape.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_scale_in_cancel_shape_runtime.py -v
 ```
+
+`ParslProviderStatusShape.tla` covers the complementary status-poll contract. The current
+`BlockProviderExecutor.status` mapping assumes one `JobStatus` for every requested block; a short
+provider response raises `IndexError` and aborts the poll. The fixed branch retains the returned
+statuses and represents missing entries as an explicit partial observation. The runtime probe
+invokes the real status facade with a provider returning one status for two jobs.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderStatusShapeCurrent.cfg models/executors/ParslProviderStatusShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderStatusShapeFixed.cfg models/executors/ParslProviderStatusShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_provider_status_shape_runtime.py -v
+```

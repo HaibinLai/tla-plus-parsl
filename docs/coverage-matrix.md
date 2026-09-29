@@ -27,3 +27,6 @@ the model isolates return-shape validation from ordinary Future aggregation.
 
 The files/transfer row also includes `ParslHTTPConnectionCleanup` and its streaming-response
 failure probe; response lifetime is modeled separately from partial destination publication.
+
+The executor/provider row also includes `ParslProviderStatusShape` and its short-status runtime
+probe; status-response cardinality is modeled separately from cancellation-response shape.
