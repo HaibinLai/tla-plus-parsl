@@ -6,6 +6,17 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslAzureStatusBookkeeping.tla` checks consistency between the status returned by Azure and
+the provider's local `resources` map. The current `status()` method translates `VM running` but
+does not write that value back, leaving local bookkeeping at PENDING. The fixed branch records
+the translated status. The runtime probe uses a fake Azure VM response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureStatusBookkeepingCurrent.cfg models/providers/ParslAzureStatusBookkeeping.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureStatusBookkeepingFixed.cfg models/providers/ParslAzureStatusBookkeeping.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_azure_status_bookkeeping_runtime.py -v
+```
+
 `ParslTorqueStatusFailure.tla` models the return-code boundary around `qstat`. The current
 Torque parser ignores a non-zero command result and still consumes stdout, so stale output can
 overwrite a running local resource. The fixed branch returns early and preserves the known
