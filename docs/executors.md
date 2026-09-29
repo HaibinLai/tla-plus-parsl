@@ -184,6 +184,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitFixe
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_submit_runtime.py -v
 ```
 
+`ParslScaleOutFailureMonitoring.tla` models a provider rejection during
+`BlockProviderExecutor.scale_out_facade`. The current implementation stores the failed block in
+`_status` and notifies the monitoring radio, but the BLOCK_INFO payload is empty because only
+successful pending blocks are added to `monitoring_status_changes`. The fixed branch includes the
+failed block in that payload. The runtime probe uses a real `BlockProviderExecutor` subclass and
+a provider whose `submit` call raises.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleOutFailureMonitoringCurrent.cfg models/executors/ParslScaleOutFailureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleOutFailureMonitoringFixed.cfg models/executors/ParslScaleOutFailureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_scale_out_failure_monitoring_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
