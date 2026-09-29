@@ -70,6 +70,9 @@ TypeOK ==
 CancelSafety ==
     cancelState = "cancelled" => ~instancePresent
 
+SuccessfulDeleteSafety ==
+    DELETE_SUCCEEDS /\ ~LINGER => cancelState # "failed"
+
 LingerSafety ==
     cancelState = "ignored" => LINGER
 
