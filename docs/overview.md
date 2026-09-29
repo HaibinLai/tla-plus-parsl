@@ -2003,7 +2003,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 372 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 373 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2212,6 +2212,17 @@ Slurm batched status handling is exercised with deterministic scheduler command 
 
 The tests check that a non-zero scheduler command preserves every previous status and that a
 successful batch updates reported jobs while applying the current missing-job `COMPLETED` fallback.
+
+`ParslSlurmBatchStrict.tla` checks the Python-version fallback used by Slurm status batching.
+The current pre-3.12 helper ignores `strict=True` and accepts an incomplete final tuple; the
+fixed branch rejects that input before scheduler records are consumed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictCurrent.cfg models/providers/ParslSlurmBatchStrict.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictFixed.cfg models/providers/ParslSlurmBatchStrict.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictValid.cfg models/providers/ParslSlurmBatchStrict.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_batch_strict_runtime.py -v
+```
 
 Slurm `sbatch` submission parsing is exercised with deterministic output:
 
@@ -2927,6 +2938,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `DecodeMalformed` / `DecodeHeartbeat` / `UpdateHeartbeat` / `ReplyHeartbeat` | manager message decoding and heartbeat reply | `Interchange.process_manager_socket_message` |
 | `WriteScript` / `SubmitCommand` / `CommandFails` / `EmptySuccess` / `RegisterJob` | Grid Engine qsub submission and resource registration | `GridEngineProvider.submit` |
 | `BeginPoll` / `HandleReportedJob` | Slurm batch status translation, foreign-job handling, and missing-job completion | `SlurmProvider._status` |
+| `Batch` / `StrictBatchSafety` | Slurm Python-version batching and incomplete-final-batch validation | `parsl.providers.slurm.slurm.batched` |
 | `BeginInsert` / `OperationalFailure` / `RetryInsert` / `InsertSuccess` / `IntegrityFailure` | monitoring database retry and duplicate/error handling | `DatabaseManager._insert` |
 | `FirstDecode` / `MutateFirst` / `SecondDecode` | callable deserialization cache aliasing and fresh-object safety | `DillCallableSerializer.deserialize` |
 | `IgnoreLinger` / `RemoteFailure` / `RemoteSuccessWithLocalState` / `RemoteSuccessWithoutLocalState` | AWS EC2 cancellation and local bookkeeping | `AWSProvider.cancel` |

@@ -100,6 +100,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedLine
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_malformed_line_runtime.py -v
 ```
 
+`ParslSlurmBatchStrict.tla` models the Python-version fallback for Slurm's `batched` helper.
+On Python versions before 3.12, the fallback accepts `strict=True` but yields a short final
+batch instead of raising for an incomplete batch. The fixed branch enforces the standard strict
+contract. The runtime probe calls the real helper with three items and a batch size of two.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictCurrent.cfg models/providers/ParslSlurmBatchStrict.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictFixed.cfg models/providers/ParslSlurmBatchStrict.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictValid.cfg models/providers/ParslSlurmBatchStrict.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_batch_strict_runtime.py -v
+```
+
 `ParslSlurmForeignJob.tla` audits the status parser's local-resource boundary. Slurm output can
 contain a job id that is already forgotten locally or belongs to another submission; the current
 implementation indexes it directly and raises `KeyError`. The fixed branch ignores foreign
