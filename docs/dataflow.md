@@ -100,6 +100,17 @@ until the inner join is terminal; successful inner list order is preserved, and 
 wrapped and propagated through both join layers. `tests/test_nested_join_runtime.py` exercises
 both paths with the real decorators and ThreadPool executor.
 
+`ParslDataFutureFalseyException.tla` covers the DataFuture parent callback boundary. The current
+truthiness check misclassifies an exception whose `__bool__` returns false as a successful file
+publication; the fixed branch checks exception presence explicitly. This is BUG-092 and is
+exercised by `tests/test_datafuture_falsey_exception_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDataFutureFalseyExceptionCurrent.cfg models/dataflow/ParslDataFutureFalseyException.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDataFutureFalseyExceptionFixed.cfg models/dataflow/ParslDataFutureFalseyException.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_falsey_exception_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslNestedJoin.cfg models/dataflow/ParslNestedJoin.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_nested_join_runtime.py -v

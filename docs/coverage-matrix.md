@@ -51,3 +51,6 @@ post-close result polling as a quiescent boundary.
 
 Join coverage also includes a concrete nested-join runtime probe for `ParslNestedJoin`, covering
 ordered success and failure propagation through two join layers.
+
+DataFuture coverage also includes the falsey-exception propagation boundary
+`ParslDataFutureFalseyException` (BUG-092).
