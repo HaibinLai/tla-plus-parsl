@@ -222,6 +222,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoing.cfg 
 /tmp/parsl-venv/bin/python -m unittest tests/test_tasks_outgoing_runtime.py -v
 ```
 
+`ParslTasksOutgoingCloseRace.tla` refines that lifecycle with the close boundary. The current
+`put()` path can reach a socket already terminated by `close()`; the fixed branch rejects the
+message before touching the transport. The runtime probe is
+`tests/test_tasks_outgoing_close_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoingCloseRaceCurrent.cfg models/executors/ParslTasksOutgoingCloseRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoingCloseRaceFixed.cfg models/executors/ParslTasksOutgoingCloseRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_tasks_outgoing_close_runtime.py -v
+```
+
 `ParslFluxCancelUnderlyingState.tla` isolates a second Flux cancellation boundary. If the
 underlying Flux future is already cancelled, the current `FluxFutureWrapper.cancel()` returns
 `True` without transitioning the Parsl wrapper, leaving the user-visible Future pending. The

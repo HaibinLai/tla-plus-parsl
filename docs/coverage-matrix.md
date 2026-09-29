@@ -250,3 +250,6 @@ result thread (`ParslWorkQueueDuplicateReport` and `ParslTaskVineDuplicateReport
 
 Local provider coverage also records a missing live-job exit-code file during polling
 (`ParslLocalExitFileMissing`, BUG-147).
+
+ZMQ executor coverage also includes `ParslTasksOutgoingCloseRace` (BUG-165), which checks that
+task submission cannot reach a terminated DEALER socket.
