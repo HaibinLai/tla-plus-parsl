@@ -212,5 +212,8 @@ HTEX executor coverage also models the watchdog/result publication race
 Monitoring database coverage also models TRY-row bookkeeping after failed insertion
 (`ParslMonitoringTryInsertBookkeeping`, BUG-140).
 
+Monitoring database coverage also models WORKFLOW-row bookkeeping after failed insertion
+(`ParslMonitoringWorkflowInsertBookkeeping`, BUG-141).
+
 Join coverage now includes the combined logical-Future/physical-attempt state machine
 (`ParslJoinEndToEnd`).

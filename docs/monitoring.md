@@ -54,6 +54,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTryInse
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_try_insert_bookkeeping_runtime.py -v
 ```
 
+`ParslMonitoringWorkflowInsertBookkeeping.tla` applies the same success-before-bookkeeping rule
+to the workflow start row. The current path records `workflow_start_message` even when the
+WORKFLOW insert fails, so abnormal close later attempts an UPDATE against a missing row. The
+fixed branch records the marker only after insertion succeeds. The runtime probe drives the real
+`DatabaseManager.start` and `close` methods with a failing WORKFLOW insert. This is recorded as
+BUG-141.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflowInsertBookkeepingCurrent.cfg models/monitoring/ParslMonitoringWorkflowInsertBookkeeping.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflowInsertBookkeepingFixed.cfg models/monitoring/ParslMonitoringWorkflowInsertBookkeeping.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_workflow_insert_bookkeeping_runtime.py -v
+```
+
 `ParslMonitoringHubClose.tla` models the outer `MonitoringHub.close()` lifecycle. Closing signals
 the DB process, waits for it, closes the resource queue, and joins the queue thread. The active
 flag makes repeated close calls idempotent. The runtime probe uses the real method with counting
