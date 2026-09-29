@@ -238,3 +238,28 @@ exception `__cause__` and string representation.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinErrorRootCause.cfg models/dataflow/ParslJoinErrorRootCause.tla
 ```
+
+`ParslRetryHandlerNegativeCost.tla` audits the retry-budget boundary in
+`DataFlowKernel.handle_exec_update`. The current implementation adds the value returned by a
+user `retry_handler` directly to `fail_cost`; a negative value makes every failure remain within
+the retry budget and can cause unbounded physical attempts. The fixed branch rejects a negative
+cost as a terminal handler error. The runtime probe uses a zero retry budget and stops the real
+workflow after several otherwise-unbounded attempts. This is recorded as BUG-150.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNegativeCostCurrent.cfg models/dataflow/ParslRetryHandlerNegativeCost.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNegativeCostFixed.cfg models/dataflow/ParslRetryHandlerNegativeCost.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_retry_handler_negative_cost_runtime.py -v
+```
+
+`ParslRetryHandlerNonNumericCost.tla` covers the adjacent type boundary. A callable retry handler
+that returns a string or other non-numeric value raises while updating `fail_cost`; the current
+callback path can leave the outer AppFuture pending, while the fixed path reports terminal
+handler failure. The runtime probe reproduces the pending Future with a one-second timeout. This
+is recorded as BUG-151.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNonNumericCostCurrent.cfg models/dataflow/ParslRetryHandlerNonNumericCost.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNonNumericCostFixed.cfg models/dataflow/ParslRetryHandlerNonNumericCost.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_retry_handler_non_numeric_cost_runtime.py -v
+```

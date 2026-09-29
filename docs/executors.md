@@ -897,6 +897,17 @@ in `tests/test_heartbeat_clock_jump_runtime.py`.
 call a no-message no-op. This candidate issue is recorded as BUG-091 and tested by
 `tests/test_results_incoming_close_race_runtime.py`.
 
+`ParslNegativeScaleIn.tla` audits the generic `BlockProviderExecutor.scale_in` argument boundary.
+The current implementation accepts a negative block count and Python's slice semantics select all
+but the last active block. The fixed branch rejects negative counts before calling the provider.
+This is BUG-152 and is checked by `tests/test_negative_scale_in_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslNegativeScaleInCurrent.cfg models/executors/ParslNegativeScaleIn.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslNegativeScaleInFixed.cfg models/executors/ParslNegativeScaleIn.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_negative_scale_in_runtime.py -v
+```
+
 `ParslHtexDuplicateRegistration.tla` models a manager registering twice under the same ROUTER
 identity. The current `Interchange` replaces the existing `ManagerRecord`, dropping its in-flight
 task list without producing terminal results. The fixed branch preserves task ownership until the

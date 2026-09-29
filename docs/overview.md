@@ -332,6 +332,22 @@ cost therefore permits another physical attempt even when `retries=0`. The curre
 configuration and `tests/test_retry_handler_runtime.py` reproduce that behavior, while the fixed
 configuration charges a minimum cost of one.
 
+`ParslRetryHandlerNegativeCost.tla` extends this audit to negative handler costs. Because the
+current path accepts the value without validation, each failure can decrease `fail_cost` and keep
+the task within budget indefinitely. The fixed branch rejects negative costs before retry
+accounting. This is BUG-150 and is exercised by
+`tests/test_retry_handler_negative_cost_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNegativeCostCurrent.cfg models/dataflow/ParslRetryHandlerNegativeCost.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNegativeCostFixed.cfg models/dataflow/ParslRetryHandlerNegativeCost.tla
+```
+
+`ParslRetryHandlerNonNumericCost.tla` covers a retry handler returning a non-numeric value. The
+current `fail_cost += cost` operation raises inside the execution callback and can leave the
+outer AppFuture pending; the fixed branch turns invalid handler output into terminal failure.
+This is BUG-151 and is exercised by `tests/test_retry_handler_non_numeric_cost_runtime.py`.
+
 `ParslMemoFunctionIdentity.tla` models the function identity used by `BasicMemoizer`. The current
 `id_for_memo_function` implementation hashes only `__name__` and `__module__`, so a changed body
 can reuse an old checkpoint. `tests/test_memo_function_identity_runtime.py` constructs two
@@ -1856,6 +1872,14 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   advances `tryId` to 1 despite `RETRIES=0`.
 - `ParslRetryHandlerFixed.cfg`: 3 distinct states, depth 3; minimum-cost charging preserves
   `RetryLimitSafety`. `ParslRetryHandlerPositive.cfg` also passes with a one-unit budget.
+- `ParslRetryHandlerNegativeCostCurrent.cfg`: expected counterexample after the first retry;
+  negative handler cost lets attempts exceed the zero retry budget.
+- `ParslRetryHandlerNegativeCostFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  negative cost is rejected as a terminal handler failure.
+- `ParslRetryHandlerNonNumericCostCurrent.cfg`: expected counterexample; a callback arithmetic
+  error leaves the outer Future pending.
+- `ParslRetryHandlerNonNumericCostFixed.cfg`: TLC rerun is pending because this environment
+  currently forbids the local RMI socket used by TLC workers.
 - `ParslMemoFunctionIdentityCurrent.cfg`: expected counterexample, 2 states generated; changing
   the symbolic function source leaves the memo key unchanged.
 - `ParslMemoFunctionIdentityFixed.cfg` and `ParslMemoFunctionIdentityStable.cfg`: 4 states
