@@ -318,6 +318,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleOutFailureMon
 /tmp/parsl-venv/bin/python -m unittest tests/test_scale_out_failure_monitoring_runtime.py -v
 ```
 
+`ParslProvisioningAdmissionMonitoring.tla` connects block provisioning to executor admission and
+monitoring. A queued task is admitted only with an active provider block; failed scale-out or
+block loss moves the task toward retry. The current branch drops the failed-block monitoring
+update and TLC finds `FailureVisibility` at depth 3; the fixed branch reports the failure and
+checks 10 distinct states. This is a compact bridge between `BlockProviderExecutor` status,
+strategy capacity, and DFK monitoring.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProvisioningAdmissionMonitoringCurrent.cfg models/executors/ParslProvisioningAdmissionMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProvisioningAdmissionMonitoringFixed.cfg models/executors/ParslProvisioningAdmissionMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_scale_out_failure_monitoring_runtime.py tests/test_htex_force_scale_in_runtime.py tests/test_provider_poll_clock_runtime.py -v
+```
+
 `ParslHtexResultMessageMalformed.tla` covers a corrupt pickle frame inside an otherwise valid
 HTEX manager result batch. `process_manager_socket_message` parses the batch metadata but the
 current loop calls `pickle.loads` on each payload without a per-frame guard, so a malformed frame
