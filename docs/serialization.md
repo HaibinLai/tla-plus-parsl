@@ -117,6 +117,18 @@ not resolve a Future that is already rejected. The concrete HTEX result-worker p
 `tests/test_htex_result_queue_runtime.py` shows the current `Future.set_result` failure for a
 cancelled Future after the task bookkeeping entry has already been removed.
 
+`ParslTaskTransport.tla` is the smaller cross-layer companion: a bounded callable/argument object
+graph must finish serialization before task transport, decoding must precede worker dispatch, and
+results are correlated with the current physical attempt. TLC checks 859 generated/288 distinct
+states for the default one-retry configuration. `tests/test_task_transport_runtime.py` sends a
+real `pack_apply_message` payload through an in-process ZMQ pair, decodes it with the real facade,
+and invokes the reconstructed closure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_task_transport_runtime.py -v
+```
+
 `ParslSerializationFallback.tla` models the facade's serializer iteration: a failed registered
 serializer is suppressed while later serializers are tried, and the final serializer exception is
 re-raised only when every method fails. The runtime probe replaces the data registry with small
