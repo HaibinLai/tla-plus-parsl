@@ -219,6 +219,10 @@ Google Cloud cancellation bookkeeping is now covered: successful remote deletion
 the local resource `RUNNING`; the fixed branch marks it terminal, while a remote failure preserves
 the running state and returns failure.
 
+Monitoring TASK insert bookkeeping is now covered: the current path marks a task ID as inserted
+before the SQL insert succeeds, so a later observation is misclassified as UPDATE; the fixed branch
+records bookkeeping only after success and retries the failed insert path.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

@@ -372,3 +372,9 @@ run_case googlecloud-cancel-fixed pass \
 run_case googlecloud-cancel-failure pass \
     models/providers/ParslGoogleCloudCancelFailure.cfg \
     models/providers/ParslGoogleCloudCancel.tla
+run_case monitoring-task-insert-current counterexample \
+    models/monitoring/ParslMonitoringTaskInsertBookkeepingCurrent.cfg \
+    models/monitoring/ParslMonitoringTaskInsertBookkeeping.tla
+run_case monitoring-task-insert-fixed pass \
+    models/monitoring/ParslMonitoringTaskInsertBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringTaskInsertBookkeeping.tla
