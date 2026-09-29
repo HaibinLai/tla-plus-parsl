@@ -201,3 +201,9 @@ run_case flux-cleanup-current counterexample \
 run_case flux-cleanup-fixed pass \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
+run_case poller-scalein-current counterexample \
+    models/providers/ParslPollerCloseScaleInRaceCurrent.cfg \
+    models/providers/ParslPollerCloseScaleInRace.tla
+run_case poller-scalein-fixed pass \
+    models/providers/ParslPollerCloseScaleInRaceFixed.cfg \
+    models/providers/ParslPollerCloseScaleInRace.tla

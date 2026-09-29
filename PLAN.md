@@ -113,6 +113,10 @@ Flux executor cleanup now joins the smoke sweep: a cancelled first Future makes 
 `_error_out_jobs` drain abort and strand a later pending Future; the fixed branch skips terminal
 entries and continues draining, matching the real cancellation probe.
 
+Poller shutdown/scale-in is now included too: the current timeout close can scale in while a status
+callback is still running, while the fixed branch requires callback quiescence before scale-in.
+The real `JobStatusPoller.close` runtime probe exercises that race.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
