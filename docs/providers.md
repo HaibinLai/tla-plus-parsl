@@ -17,6 +17,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJ
 /tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_unknown_job_runtime.py -v
 ```
 
+`ParslCondorUnknownJob.tla` covers the same stale-id boundary in Condor's status path. The
+current provider raises `KeyError` when the requested id is absent from `resources`; the fixed
+branch returns UNKNOWN. The runtime probe isolates the lookup with an empty resource map.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobCurrent.cfg models/providers/ParslCondorUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobFixed.cfg models/providers/ParslCondorUnknownJob.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_unknown_job_runtime.py -v
+```
+
 `ParslAzureStatusBookkeeping.tla` checks consistency between the status returned by Azure and
 the provider's local `resources` map. The current `status()` method translates `VM running` but
 does not write that value back, leaving local bookkeeping at PENDING. The fixed branch records

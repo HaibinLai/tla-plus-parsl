@@ -1909,7 +1909,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 352 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 353 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2966,6 +2966,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJ
 ```
 
 The current configuration reaches the `KeyError` crash outcome; the fixed configuration returns
+UNKNOWN and completes in 4 generated / 2 distinct states.
+
+The analogous Condor lookup refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobCurrent.cfg models/providers/ParslCondorUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobFixed.cfg models/providers/ParslCondorUnknownJob.tla
+```
+
+The current configuration reaches the stale-id `KeyError`; the fixed configuration returns
 UNKNOWN and completes in 4 generated / 2 distinct states.
 
 ## Concrete Parsl example
