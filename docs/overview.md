@@ -3428,3 +3428,7 @@ the result was accepted by the abstract DFK.
 python3 -m pip install parsl
 python3 parsl_demo.py
 ```
+
+Concrete findings are tracked in the [bug ledger](bug-ledger.md), which records the current source
+behavior, model configuration, runtime probe, and candidate safety condition for each reproduced
+boundary.
