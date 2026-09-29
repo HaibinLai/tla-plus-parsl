@@ -125,6 +125,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureStatusBookkee
 /tmp/parsl-venv/bin/python -m unittest tests/test_azure_status_bookkeeping_runtime.py -v
 ```
 
+`ParslAwsUnknownInstance.tla` models an EC2 status response containing an instance absent from
+`AWSProvider.resources`. The current status loop indexes the local map directly, so a stale or
+externally-created instance raises `KeyError` and aborts the poll. The fixed branch records an
+explicit UNKNOWN observation and keeps the polling pass alive. TLC finds the current
+`PollDoesNotCrash` counterexample (2 states generated) and checks the fixed branch (4 states
+generated). The runtime probe invokes the real AWS provider method with a fake EC2 response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownInstanceCurrent.cfg models/providers/ParslAwsUnknownInstance.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownInstanceFixed.cfg models/providers/ParslAwsUnknownInstance.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_unknown_instance_runtime.py -v
+```
+
 `ParslTorqueStatusFailure.tla` models the return-code boundary around `qstat`. The current
 Torque parser ignores a non-zero command result and still consumes stdout, so stale output can
 overwrite a running local resource. The fixed branch returns early and preserves the known
