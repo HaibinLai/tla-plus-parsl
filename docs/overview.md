@@ -2347,6 +2347,14 @@ The runtime probe also checks the `bsub < script` redirection option.
 configuration intentionally produces a depth-2 counterexample: the current implementation
 returns from the scheduler successfully and then indexes `resources[jid]`, which raises
 `KeyError` when the local resource map has no such id. The runtime probe reproduces that boundary.
+The fixed configuration treats the stale cancellation as a non-throwing observation and checks
+five generated states.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFCancelUnknown.cfg models/providers/ParslLSFCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFCancelFixed.cfg models/providers/ParslLSFCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFCancelValid.cfg models/providers/ParslLSFCancel.tla
+```
 
 `ParslLSFResourceValidation.tla` models core-based LSF resource derivation. The current
 constructor rejects zero `cores_per_node` but accepts a negative value and computes a negative
@@ -2414,7 +2422,14 @@ Grid Engine cancellation is exercised with deterministic `qdel` outcomes:
 
 `ParslGridEngineCancel.tla` models the provider's successful-cancel-to-`COMPLETED` convention,
 failed cancellation, and the current `KeyError` when a successful `qdel` names an id absent from
-the local resource map.
+the local resource map. `ParslGridEngineCancelFixed.cfg` models the candidate idempotent stale
+cancellation and checks five generated states.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineCancelUnknown.cfg models/providers/ParslGridEngineCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineCancelFixed.cfg models/providers/ParslGridEngineCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineCancelValid.cfg models/providers/ParslGridEngineCancel.tla
+```
 
 Azure VM status handling is exercised with a fake compute client:
 

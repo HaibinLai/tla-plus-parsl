@@ -10,7 +10,7 @@ EXTENDS Naturals
  * reaches a direct dictionary lookup and can crash.
  ***************************************************************************)
 
-CONSTANTS API_SUCCESS, JOB_PRESENT
+CONSTANTS API_SUCCESS, JOB_PRESENT, USE_FIXED
 
 States == {"running", "completed", "failed", "crashed"}
 
@@ -20,6 +20,7 @@ vars == <<resourceState, cancelResult>>
 Init ==
     /\ API_SUCCESS \in BOOLEAN
     /\ JOB_PRESENT \in BOOLEAN
+    /\ USE_FIXED \in BOOLEAN
     /\ resourceState = "running"
     /\ cancelResult = "none"
 
@@ -31,6 +32,9 @@ Cancel ==
        ELSE IF JOB_PRESENT THEN
            /\ resourceState' = "completed"
            /\ cancelResult' = "success"
+       ELSE IF USE_FIXED THEN
+           /\ resourceState' = "running"
+           /\ cancelResult' = "stale"
        ELSE
            /\ resourceState' = "crashed"
            /\ cancelResult' = "none"
@@ -43,7 +47,7 @@ Spec == Init /\ [][Next]_vars
 
 TypeOK ==
     /\ resourceState \in States
-    /\ cancelResult \in {"none", "success", "failure"}
+    /\ cancelResult \in {"none", "success", "failure", "stale"}
 
 NoUnknownIdCrash == resourceState # "crashed"
 
