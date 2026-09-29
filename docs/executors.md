@@ -786,3 +786,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderStatusShap
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderStatusShapeFixed.cfg models/executors/ParslProviderStatusShape.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_provider_status_shape_runtime.py -v
 ```
+
+`ParslBadStateTaskMutation.tla` covers executor failure fan-out. The current implementation can
+raise `dictionary changed size during iteration` when a synchronous Future callback removes a
+task entry; the fixed branch snapshots task entries before completing them. This is BUG-088 and
+is exercised by `tests/test_bad_state_task_mutation_runtime.py`.

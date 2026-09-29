@@ -33,3 +33,6 @@ probe; status-response cardinality is modeled separately from cancellation-respo
 
 The ZMQ/time row also includes `ParslCommandDeadline` and its expired-deadline poll probe; the
 model separates timeout arithmetic from command-socket poisoning.
+
+The executor/provider coverage also includes `ParslBadStateTaskMutation` (BUG-088), which checks
+that Future callbacks cannot abort executor-failure propagation by mutating the task registry.
