@@ -1242,6 +1242,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEndFixed.cfg model
 The first command is an intentional counterexample configuration: an old attempt can resolve the
 Future. The fixed configuration rejects that result as stale and passes all six invariants.
 
+The task/stage-out/monitoring boundary is checked separately:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTaskStagingMonitoringCurrent.cfg models/core/ParslTaskStagingMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTaskStagingMonitoringFixed.cfg models/core/ParslTaskStagingMonitoring.tla
+```
+
+`ParslTaskStagingMonitoring.tla` combines logical producer completion, chunked
+`DataManager`/`DataFuture` publication, dependent-consumer admission, and monitoring database
+delivery. The current branch permits a success observation before all chunks arrive; the fixed
+branch gates monitoring success and consumer admission on complete publication (21 distinct
+states checked).
+
 The combined clock/heartbeat check is:
 
 ```bash

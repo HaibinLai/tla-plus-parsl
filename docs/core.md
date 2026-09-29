@@ -12,6 +12,21 @@ results. `ParslEndToEnd.cfg` intentionally permits an old attempt to resolve the
 finds a `StaleResultSafety` counterexample. `ParslEndToEndFixed.cfg` rejects that result as stale;
 TLC checks 207 states with all invariants passing.
 
+`ParslTaskStagingMonitoring.tla` combines producer task completion, chunked stage-out/DataFuture
+publication, dependent-consumer admission, and asynchronous monitoring persistence. The current
+configuration permits a success row (and a ready DataFuture) before all chunks are received;
+the fixed configuration gates both observations on complete stage-out and checks 21 states.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTaskStagingMonitoringCurrent.cfg models/core/ParslTaskStagingMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTaskStagingMonitoringFixed.cfg models/core/ParslTaskStagingMonitoring.tla
+```
+
+`FinishProducer` represents the DFK logical result, `PublishStageOut` the DataManager/DataFuture
+readiness boundary, `StartConsumer` dependency admission, and the monitoring actions event and
+database delivery. The focused chunk protocol remains in
+`models/staging/ParslDataFutureTransfer.tla`.
+
 The detailed action-to-Parsl mapping and TLC results are in [the overview](overview.md).
 
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
