@@ -106,6 +106,10 @@ rejected, a response selects one candidate, and a poll timeout without a respons
 connection failure. `tests/test_probe_addresses_runtime.py` checks the empty and unresponsive
 paths with the real pyzmq helper.
 
+`ParslCurveZMQCertificateMode.tla` adds the file-permission guard around CurveZMQ credentials:
+only a private certificate directory with a secret key can enter the loaded state. The runtime
+probe uses `create_certificates` and the real `_load_certificate` helper.
+
 `ParslStrategyBlockCapacity.tla` refines strategy configuration admission. An overloaded poll
 with `nodes_per_block=0` reaches the current division by zero in the excess-block calculation;
 the fixed branch rejects zero capacity before polling. The runtime probe demonstrates the current
@@ -1229,6 +1233,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapaci
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddresses.cfg models/executors/ParslProbeAddresses.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddressesEmpty.cfg models/executors/ParslProbeAddresses.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddressesSuccess.cfg models/executors/ParslProbeAddresses.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCurveZMQCertificateModeValid.cfg models/serialization/ParslCurveZMQCertificateMode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCurveZMQCertificateModeInvalid.cfg models/serialization/ParslCurveZMQCertificateMode.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQ.cfg models/serialization/ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPython.cfg models/serialization/ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonFailure.cfg models/serialization/ParslPython.tla
@@ -1534,6 +1540,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   candidate set is rejected.
 - `ParslProbeAddressesSuccess.cfg`: 6 states generated, 3 distinct states, depth 3; a probe
   response selects an address.
+- `ParslCurveZMQCertificateModeValid.cfg`: 4 states generated, 2 distinct states, depth 2; a
+  private directory and secret key load safely.
+- `ParslCurveZMQCertificateModeInvalid.cfg`: 4 states generated, 2 distinct states, depth 2; a
+  non-private directory is rejected.
 - `ParslZMQ.cfg`: 33,321 states generated, 6,216 distinct states, depth 35;
   multipart encoding order, bounded queues, disconnect/drop, route validation, duplicate discard,
   correlation, and acknowledgement safety all passed in the focused transport model.
@@ -1899,7 +1909,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 349 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 350 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

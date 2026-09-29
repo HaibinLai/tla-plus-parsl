@@ -12,6 +12,17 @@ arity.
 Files live in [`models/serialization/`](../models/serialization/). Runtime probes are in
 `tests/test_*serialization*runtime.py` and `tests/test_zmq_serialization_runtime.py`.
 
+`ParslCurveZMQCertificateMode.tla` models the certificate-loading guard in `parsl.curvezmq`.
+Only a private (0700) certificate directory with a secret key may load a CurveZMQ key. The
+runtime probe creates real pyzmq certificates, loads a valid key, and confirms that changing the
+directory to 0755 is rejected.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCurveZMQCertificateModeValid.cfg models/serialization/ParslCurveZMQCertificateMode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCurveZMQCertificateModeInvalid.cfg models/serialization/ParslCurveZMQCertificateMode.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_curvezmq_certificate_runtime.py -v
+```
+
 `ParslSerializationEnvelopeMalformed.tla` models the outer serializer envelope. The current
 `deserialize` path assumes a header/body newline and lets a missing separator raise a raw
 `ValueError`; the fixed branch rejects malformed framing as a decode failure before plugin lookup.
