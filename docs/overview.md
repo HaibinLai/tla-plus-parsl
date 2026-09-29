@@ -140,6 +140,13 @@ identical payload, so a mutation by one task becomes visible to a later task. Th
 violates `FreshSecondDecode`; the fixed model uses a fresh decode. The runtime probe is
 `tests/test_callable_deserialize_cache_runtime.py`.
 
+`ParslCallableArgumentAlias.tla` models a cross-root identity boundary.  A closure and an
+argument may reference the same mutable object before submission, but the current
+`pack_apply_message` path serializes them independently and reconstructs two non-identical
+objects.  The current configuration violates `AliasSafety`; the fixed configuration represents
+a bundled object graph that preserves the alias.  The runtime probe confirms the current result
+with a real closure and argument.
+
 `ParslExecuteTask.tla` models the next worker-side boundary in `parsl.executors.execute_task`:
 the packed apply message must decode before the callable is invoked, a user exception becomes a
 failed execution result, and malformed input is rejected without invoking user code. The three
@@ -1320,6 +1327,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCurveZMQCertif
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQ.cfg models/serialization/ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPython.cfg models/serialization/ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonFailure.cfg models/serialization/ParslPython.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableArgumentAliasCurrent.cfg models/serialization/ParslCallableArgumentAlias.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableArgumentAliasFixed.cfg models/serialization/ParslCallableArgumentAlias.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCache.cfg models/serialization/ParslCallableSerializerCache.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableSerializerCacheFixed.cfg models/serialization/ParslCallableSerializerCache.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeserializeCacheCurrent.cfg models/serialization/ParslCallableDeserializeCache.tla
@@ -1556,6 +1565,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   an unencodable worker return failed after execution without resolving the Future.
 - `ParslNestedSerialization.cfg`: 559 states generated, 118 distinct states, depth 16;
   a non-serializable grandchild object failed before dispatch while object-graph safety held.
+- `ParslCallableArgumentAliasCurrent.cfg`: expected counterexample at depth 2; independently
+  serialized closure and argument roots lose Python object identity.
+- `ParslCallableArgumentAliasFixed.cfg`: 6 states generated, 3 distinct states, depth 3; a
+  bundled graph preserves the shared alias.
 - `ParslSerializationSnapshot.cfg`: 18 states generated, 8 distinct states, depth 5; object
   mutation after serialization could not change the captured payload or decoded value.
 - `ParslSerializationLength.cfg`: expected counterexample at depth 2; the current unpacker accepts
@@ -2025,7 +2038,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 378 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 379 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -3078,6 +3091,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `Send` / `Deliver` / `DuplicateInbound` / `DropOutbound` | bounded ZMQ-like transport, reconnect loss, reordering, duplicate delivery | HTEX interchange and manager socket queues |
 | `ReceiveValid` / `RejectInvalid` / `Ack` | receiver validation, correlation, and consume acknowledgement | interchange manager message handling and DFK result path |
 | `StartEncode` / `EncodeObject` / `FinishEncode` | callable, globals, defaults, closure, and argument object serialization | DFK task serialization and executor submission boundary |
+| `Serialize` / `Decode` / `AliasSafety` | identity shared between a closure object and an argument object | `serialize.facade.pack_apply_message` callable/argument boundary |
 | `StartDecode` / `DecodeObject` / `FinishDecode` | reconstructing a callable/payload only after a complete encoded graph | worker-side task deserialization |
 | `ValidateFrameCount` / `DecodeExtraFrames` / `ExtraDecodeSafety` | apply-message frame-count validation before deserialization | `serialize.facade.unpack_and_deserialize` |
 | `MutateObject` / `RepairObject` | object content becoming unencodable before submission | Python object/payload serialization failure path |

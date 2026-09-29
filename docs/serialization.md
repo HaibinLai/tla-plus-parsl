@@ -9,6 +9,17 @@ These models cover Python callable/object serialization, framed buffers, seriali
 ZMQ-style transport, task/result correlation, duplicate or stale messages, and apply-message
 arity.
 
+`ParslCallableArgumentAlias.tla` models identity shared by a closure and an argument.  The
+current `pack_apply_message` path serializes those roots independently, so decoding produces
+two equal but non-identical mutable objects; the fixed branch represents a bundled graph that
+preserves the alias.  The runtime probe demonstrates the current behavior with a real closure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableArgumentAliasCurrent.cfg models/serialization/ParslCallableArgumentAlias.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableArgumentAliasFixed.cfg models/serialization/ParslCallableArgumentAlias.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_callable_argument_alias_runtime.py -v
+```
+
 `ParslSerializationBinaryPayload.tla` checks that length-prefixed framing preserves raw payload
 bytes even when they contain newline, NUL, and non-ASCII values. The runtime probe exercises the
 real `pack_buffers` and `unpack_buffers` helpers with the same binary content.
