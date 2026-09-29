@@ -109,6 +109,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableMutati
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_mutation_cache_runtime.py -v
 ```
 
+`ParslObjectSnapshotRetry.tla` connects mutable Python object contents to physical retries. The
+current cache reuses the first serialized object version for a retry after mutation; TLC finds
+`SnapshotSafety` at depth 7 (26 states generated). The fixed branch captures the object graph at
+each retry boundary and checks 18 distinct states. This refines the concrete mutable-callable
+probe above toward task-attempt semantics.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslObjectSnapshotRetryCurrent.cfg models/serialization/ParslObjectSnapshotRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslObjectSnapshotRetryFixed.cfg models/serialization/ParslObjectSnapshotRetry.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_callable_mutation_cache_runtime.py tests/test_serialization_runtime.py -v
+```
+
 `ParslCallableDeserializeCache.tla` checks the other side of the same cache. The current
 `DillCallableSerializer.deserialize` cache can return the same mutable callable instance for
 repeated identical payloads; a mutation made by one task is then visible to the next task. The
