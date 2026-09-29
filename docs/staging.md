@@ -211,6 +211,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanup
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_connection_cleanup_runtime.py -v
 ```
 
+`ParslHTTPPartialCleanup.tla` models HTTP response streaming into a destination file. The current
+path publishes the first chunk before a later read failure; the fixed branch removes the partial
+bytes before reporting failure. TLC finds the three-state `FailurePublicationSafety`
+counterexample and checks six generated/three distinct states in the fixed and success
+configurations.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupCurrent.cfg models/staging/ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFixed.cfg models/staging/ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupSuccess.cfg models/staging/ParslHTTPPartialCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_partial_cleanup_runtime.py -v
+```
+
 `ParslHTTPStatusValidation.tla` models the HTTP response-status boundary. The current in-task
 wrapper writes a 404 response body and starts the user task because it never checks the status
 code; the fixed branch rejects non-2xx responses before publication. The runtime probe uses a
