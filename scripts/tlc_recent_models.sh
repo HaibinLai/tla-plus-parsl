@@ -96,3 +96,9 @@ run_case data-ready-current counterexample \
 run_case data-ready-fixed pass \
     models/core/ParslDataReadyExecutionFixed.cfg \
     models/core/ParslDataReadyExecution.tla
+run_case monitoring-retry-current counterexample \
+    models/monitoring/ParslMonitoringTaskRetry.cfg \
+    models/monitoring/ParslMonitoringTaskRetry.tla
+run_case monitoring-retry-fixed pass \
+    models/monitoring/ParslMonitoringTaskRetryFixed.cfg \
+    models/monitoring/ParslMonitoringTaskRetry.tla

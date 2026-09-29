@@ -14,6 +14,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRetryFixed.cfg models/monitoring/ParslMonitoringTaskRetry.tla
 ```
 
+This retry/high-water model is included in `scripts/tlc_recent_models.sh`. Together with
+`test_monitoring_status_history_runtime.py`, it connects asynchronous retry events to the real
+SQLite status-history ordering: an older attempt must not replace a newer terminal record.
+
 These models cover asynchronous monitoring records, database insertion, batching, retry and
 atomicity, deferred events, close behavior, and batching-threshold edge cases.
 

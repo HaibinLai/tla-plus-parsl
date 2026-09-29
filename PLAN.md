@@ -55,6 +55,10 @@ during bounded stage-in produce a current stale-publication counterexample, whil
 retries before admitting the dependent task. Existing runtime probes verify actual binary bytes and
 dependency blocking through `DataFuture`.
 
+The monitoring retry/high-water model is now in the same sweep. Its current branch permits an old
+attempt event to overwrite a newer database view; the fixed branch preserves terminal status and
+version monotonicity, complementing the real SQLite status-history bridge.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
