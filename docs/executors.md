@@ -72,6 +72,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAddressProbeTi
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_address_probe_timeout_runtime.py -v
 ```
 
+This timeout-propagation boundary is recorded as BUG-114: an explicit zero is omitted from the
+worker command by a truthiness check and replaced by the worker default.
+
 `ParslProbeAddresses.tla` abstracts the HTEX `probe_addresses` helper. It distinguishes an empty
 candidate set (`ValueError`), a successful probe reply selecting an address, and timeout without a
 reply (`ConnectionError`). The runtime probe uses the real pyzmq context for the empty and

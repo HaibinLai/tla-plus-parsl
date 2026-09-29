@@ -117,3 +117,6 @@ Local provider coverage also records zero `tasks_per_node` admission
 
 HTEX executor coverage also records zero `cores_per_worker` capacity derivation
 (`ParslHtexCoresPerWorker`, BUG-113).
+
+HTEX executor coverage also records explicit zero address-probe-timeout propagation
+(`ParslHtexAddressProbeTimeout`, BUG-114).
