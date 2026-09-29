@@ -6,6 +6,17 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslPBSProMalformedJSON.tla` covers the parser boundary before PBS Pro job-id lookup. A
+malformed `qstat -x -F json` response currently lets `json.loads` raise out of `_status`, while
+the fixed branch preserves the last known status for the next polling cycle. The runtime probe
+invokes the real PBS Pro status method with truncated JSON.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedJSONCurrent.cfg models/providers/ParslPBSProMalformedJSON.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedJSONFixed.cfg models/providers/ParslPBSProMalformedJSON.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_malformed_json_runtime.py -v
+```
+
 `ParslProviderPollClockRollback.tla` models `BlockProviderExecutor.poll_facade` from
 [`executors/status_handling.py`](https://github.com/Parsl/Parsl/blob/master/parsl/executors/status_handling.py).
 The current wall-clock guard can suppress provider status polling after `time.time()` moves
