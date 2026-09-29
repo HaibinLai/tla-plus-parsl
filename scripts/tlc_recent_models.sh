@@ -339,3 +339,9 @@ run_case join-list-mutation-fixed pass \
 run_case join-list-mutation-stable pass \
     models/dataflow/ParslJoinListMutationStable.cfg \
     models/dataflow/ParslJoinListMutation.tla
+run_case command-client-retries-current counterexample \
+    models/executors/ParslCommandClientMaxRetriesCurrent.cfg \
+    models/executors/ParslCommandClientMaxRetries.tla
+run_case command-client-retries-fixed pass \
+    models/executors/ParslCommandClientMaxRetriesFixed.cfg \
+    models/executors/ParslCommandClientMaxRetries.tla

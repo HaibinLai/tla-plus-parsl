@@ -199,6 +199,10 @@ Mutable `join_app` list aliasing is now in the smoke sweep: the current callback
 mutation and can complete with an empty or shortened result, while the fixed branch snapshots list
 membership at join registration. A stable no-mutation configuration remains covered as a baseline.
 
+Command send retry coverage is now included: the current `CommandClient.run` ignores its
+`max_retries` argument after a send exception, while the fixed branch consumes a bounded retry
+budget before returning a terminal send error or accepting a reply.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
