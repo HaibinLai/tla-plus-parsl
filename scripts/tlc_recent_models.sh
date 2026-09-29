@@ -156,3 +156,9 @@ run_case condor-malformed-line-current counterexample \
 run_case condor-malformed-line-fixed pass \
     models/providers/ParslCondorMalformedStatusLineFixed.cfg \
     models/providers/ParslCondorMalformedStatusLine.tla
+run_case gridengine-duplicate-current counterexample \
+    models/providers/ParslGridEngineDuplicateStatusCurrent.cfg \
+    models/providers/ParslGridEngineDuplicateStatus.tla
+run_case gridengine-duplicate-fixed pass \
+    models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
+    models/providers/ParslGridEngineDuplicateStatus.tla

@@ -93,6 +93,10 @@ Condor polling is now included as well: a successful `condor_q` command containi
 record crashes the current parser, while the fixed branch ignores it and preserves known state.
 The real Condor parser probe covers that malformed line.
 
+Grid Engine polling now has a repeatable duplicate-record check: removing the same job twice
+crashes the current `jobs_missing` bookkeeping, while the fixed branch makes duplicate records
+idempotent. The real qstat parser probe exercises that duplicate line.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
