@@ -57,3 +57,6 @@ DataFuture coverage also includes the falsey-exception propagation boundary
 
 Radical-Pilot executor coverage also records the missing failure-payload boundary
 `ParslRadicalPilotFailurePayload` (BUG-093).
+
+Flux executor coverage also records the empty provider-status response boundary
+`ParslFluxProviderStatusEmpty` (BUG-094).
