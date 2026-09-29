@@ -22,6 +22,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObject
 /tmp/parsl-venv/bin/python -m unittest tests/test_function_object_transport_runtime.py -v
 ```
 
+`ParslCallableRetryTransport.tla` composes that snapshot boundary with physical retry and
+task/result correlation.  Attempt 0 and attempt 1 can capture different closure versions; a
+late result from the failed attempt is classified as stale in the fixed configuration.  TLC
+finds the current 42-state late-result counterexample and checks 190 generated/73 distinct fixed
+states.  The runtime bridge packs two real callable payloads and verifies that they retain their
+per-attempt closure contents.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableRetryTransportCurrent.cfg models/serialization/ParslCallableRetryTransport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableRetryTransportFixed.cfg models/serialization/ParslCallableRetryTransport.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_callable_retry_transport_runtime.py -v
+```
+
 `ParslCallableArgumentAlias.tla` models identity shared by a closure and an argument.  The
 current `pack_apply_message` path serializes those roots independently, so decoding produces
 two equal but non-identical mutable objects; the fixed branch represents a bundled graph that
