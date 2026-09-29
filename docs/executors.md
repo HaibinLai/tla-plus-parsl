@@ -12,6 +12,9 @@ Files live in [`models/executors/`](../models/executors/). The full TLC command 
 creates the underlying pool; the fixed branch rejects non-positive counts immediately. The
 runtime probe exercises the real constructor/start boundary.
 
+This delayed validation is recorded as BUG-127: an invalid executor configuration can survive
+construction and fail only when the workflow starts.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountCurrent.cfg models/executors/ParslThreadExecutorThreadCount.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountFixed.cfg models/executors/ParslThreadExecutorThreadCount.tla
