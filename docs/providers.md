@@ -52,6 +52,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmi
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_submit_cleanup_runtime.py -v
 ```
 
+`ParslLocalProviderCancelUnknown.tla` models cancellation after a local job has already been
+removed from `resources`. The current `LocalProvider.cancel()` indexes the missing id and raises
+`KeyError`; the fixed branch treats the stale cancellation as an unsuccessful, non-throwing
+result. The runtime probe calls the real provider with an empty resource map.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCancelUnknownCurrent.cfg models/providers/ParslLocalProviderCancelUnknown.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCancelUnknownFixed.cfg models/providers/ParslLocalProviderCancelUnknown.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_cancel_unknown_runtime.py -v
+```
+
 `ParslWalltimeParsing.tla` models the provider walltime conversion in
 [`parsl/utils.py`](https://github.com/Parsl/Parsl/blob/master/parsl/utils.py). The current
 `wtime_to_minutes` implementation truncates seconds, so a positive request such as `00:00:59`

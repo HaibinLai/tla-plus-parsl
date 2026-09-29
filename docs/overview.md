@@ -525,6 +525,11 @@ launch. The provider writes the worker script before invoking the launcher; the 
 path leaves that file behind, while the fixed path removes it before raising. The runtime probe
 uses a temporary script directory and a fake failed launch command.
 
+`ParslLocalProviderCancelUnknown.tla` models a cancellation arriving after polling has removed a
+local job from `resources`. The current `cancel()` path raises `KeyError`; the fixed branch treats
+the stale request as a non-throwing unsuccessful cancellation. The runtime probe uses the real
+provider with an empty resource map.
+
 `ParslWalltimeParsing.tla` models the provider utility `wtime_to_minutes`. A positive
 sub-minute walltime is currently truncated to zero minutes; the fixed branch rounds it up to one
 minute. This is a small provider-input boundary rather than a scheduler-specific model.
@@ -2050,7 +2055,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 379 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 382 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2399,6 +2404,13 @@ prioritizes cancellation during polling.
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupCurrent.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupFixed.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupSuccess.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
+```
+
+The stale LocalProvider cancellation refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCancelUnknownCurrent.cfg models/providers/ParslLocalProviderCancelUnknown.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCancelUnknownFixed.cfg models/providers/ParslLocalProviderCancelUnknown.tla
 ```
 
 `ParslLocalProviderStatusScope.tla` checks a separate query-scope boundary. The implementation
@@ -2938,6 +2950,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   2 distinct); an unrequested resource can abort a requested status query. The fixed
   configuration has 4 states generated, 2 distinct states, depth 2 and limits polling to the
   requested resource.
+- `ParslLocalProviderCancelUnknownCurrent.cfg`: expected counterexample at depth 1; cancelling
+  an already-removed local job raises `KeyError`.
+- `ParslLocalProviderCancelUnknownFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  stale cancellation returns a non-throwing unsuccessful result.
 - `ParslSlurmSubmit.cfg`: expected counterexample at depth 3 (13 states generated, 9 distinct);
   a matching custom regex without a named `id` group reaches the provider's uncaught error path.
 - `ParslSlurmSubmitFixed.cfg`: 18 states generated, 9 distinct states, depth 3; malformed or
@@ -3079,6 +3095,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `SubmitFailure` | executor bad-state/submit rejection before worker dispatch | `BlockProviderExecutor.bad_state_is_set`, `HighThroughputExecutor.submit` |
 | `Construct` / `Reject` / `CapacitySafety` | HTEX CPU-slot capacity derived from provider cores and `cores_per_worker` | `HighThroughputExecutor.__init__` |
 | `ProviderFailure` | active provider block failure and executor/provider recovery | `JobStatusPoller`, `BlockProviderExecutor.handle_errors`, provider status/cancel paths |
+| `Cancel` / `NoStaleCancellationCrash` | stale LocalProvider cancellation after resource removal | `LocalProvider.cancel` |
 | `ExecutorFailure` | executor/provider loss while an attempt is running | executor bad-state/error handling plus provider block failure |
 | `RequestAllocation` / `AllocationSucceeds` / `AllocationFails` | provider submit/status and block lifecycle | `ExecutionProvider`, `BlockProviderExecutor.scale_out_facade` |
 | `SubmitSuccess` / `SubmitEmptyCurrent` / `SubmitEmptyFixed` | PBS Pro `qsub` output parsing and job/resource registration | `PBSProProvider.submit` |
