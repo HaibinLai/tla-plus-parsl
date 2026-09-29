@@ -141,3 +141,6 @@ Provider walltime coverage also records positive sub-minute truncation
 
 Local provider coverage also records failed-launch script cleanup
 (`ParslLocalProviderSubmitCleanup`, BUG-121).
+
+Poller lifecycle coverage also records close/scale-in overlap
+(`ParslPollerCloseScaleInRace`, BUG-122).

@@ -80,6 +80,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerCloseScaleIn
 /tmp/parsl-venv/bin/python -m unittest tests/test_poller_close_scale_in_runtime.py -v
 ```
 
+This shutdown/concurrency boundary is recorded as BUG-122: scale-in can begin while the poller
+callback thread remains alive after a timed join.
+
 `ParslPollerDuplicateExecutor.tla` models repeated calls to
 `JobStatusPoller.add_executors`. The current list-based registration appends the same pollable
 executor more than once, so one timer tick can poll and later scale in it repeatedly. The fixed
