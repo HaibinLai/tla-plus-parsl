@@ -79,3 +79,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationP
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginFailureCacheFixed.cfg models/serialization/ParslSerializationPluginFailureCache.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_plugin_failure_cache_runtime.py -v
 ```
+
+`ParslPoolExecutorCallableCache.tla` models the callable cache in
+`parsl.concurrent.ParslPoolExecutor.get_app`. The current dictionary lookup rejects an otherwise
+valid callable object whose `__hash__` is `None`; the fixed branch uses an identity-compatible
+cache path. The runtime probe invokes the real cache lookup with an unhashable callable object.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPoolExecutorCallableCacheCurrent.cfg models/serialization/ParslPoolExecutorCallableCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPoolExecutorCallableCacheFixed.cfg models/serialization/ParslPoolExecutorCallableCache.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pool_executor_callable_cache_runtime.py -v
+```
