@@ -571,6 +571,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotBulkSh
 /tmp/parsl-venv/bin/python -m unittest tests/test_radical_bulk_shutdown_runtime.py -v
 ```
 
+This shutdown queue-loss behavior is recorded as BUG-136 in the bug ledger.
+
 `ParslWorkQueueShutdown.tla` models the Work Queue collector's finalization contract. Shutdown
 sets the stop flag and waits for the collector; its `finally` block fails every accepted Future
 that has no result before the executor reaches `stopped`. The runtime probe invokes the real

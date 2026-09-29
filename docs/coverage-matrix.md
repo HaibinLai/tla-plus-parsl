@@ -193,3 +193,6 @@ Clock/file-wait coverage also records explicit timeout handling before `open()`
 
 Radical-Pilot executor coverage also records late terminal callbacks after cancellation
 (`ParslRadicalPilotLateCallback`, BUG-135).
+
+Radical-Pilot executor coverage also records queued-task loss during bulk shutdown
+(`ParslRadicalPilotBulkShutdown`, BUG-136).
