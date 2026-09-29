@@ -207,6 +207,10 @@ TaskVine duplicate-report handling is now in the smoke sweep: a late manager rep
 raises `KeyError`, exits the collector, and causes unrelated pending Futures to fail; the fixed
 branch ignores stale IDs and keeps collecting independent reports.
 
+Work Queue duplicate-report handling is now covered in parallel: the current collector has the same
+stale-ID `KeyError` and unrelated-Future cleanup failure, while the fixed branch keeps the result
+thread alive and ignores the duplicate report.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

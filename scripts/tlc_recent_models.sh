@@ -351,3 +351,9 @@ run_case taskvine-duplicate-report-current counterexample \
 run_case taskvine-duplicate-report-fixed pass \
     models/executors/ParslTaskVineDuplicateReportFixed.cfg \
     models/executors/ParslTaskVineDuplicateReport.tla
+run_case workqueue-duplicate-report-current counterexample \
+    models/executors/ParslWorkQueueDuplicateReport.cfg \
+    models/executors/ParslWorkQueueDuplicateReport.tla
+run_case workqueue-duplicate-report-fixed pass \
+    models/executors/ParslWorkQueueDuplicateReportFixed.cfg \
+    models/executors/ParslWorkQueueDuplicateReport.tla
