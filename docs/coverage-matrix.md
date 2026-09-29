@@ -90,3 +90,6 @@ Python serialization coverage also records mutable callable-instance aliasing on
 
 Python serialization coverage also records failed dynamic-plugin cache retention
 (`ParslSerializationPluginFailureCache`, BUG-104).
+
+File-transfer coverage also records FTP partial-destination publication on stream failure
+(`ParslFTPPartialCleanup`, BUG-105).

@@ -198,6 +198,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFix
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_partial_cleanup_runtime.py -v
 ```
 
+This file-publication boundary is recorded as BUG-105: a failed FTP stream leaves partial bytes
+at the final destination instead of cleaning up or publishing atomically.
+
 `ParslFTPConnectionCleanup.tla` models the FTP socket lifetime around `retrbinary`. The current
 failure path leaves the connection open when transfer raises; the fixed branch closes it before
 reporting failure. TLC finds the two-state `FailureCleanupSafety` counterexample and checks four
