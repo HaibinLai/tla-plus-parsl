@@ -424,6 +424,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexExecutorResult
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_executor_result_frame_continuation_runtime.py -v
 ```
 
+`ParslHtexWorkerTaskFrameContinuation.tla` covers the manager-side task socket. A corrupt outer
+pickle frame is followed by a valid task batch; the current `Manager.interchange_communicator`
+lets the decode exception escape and stops receiving, while the candidate fixed path discards the
+bad frame and accepts the later batch. The runtime probe drives the real communicator with a
+controlled ZMQ-socket double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerTaskFrameContinuationCurrent.cfg models/executors/ParslHtexWorkerTaskFrameContinuation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerTaskFrameContinuationFixed.cfg models/executors/ParslHtexWorkerTaskFrameContinuation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_task_frame_continuation_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
