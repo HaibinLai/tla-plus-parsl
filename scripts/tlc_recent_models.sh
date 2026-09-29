@@ -171,3 +171,15 @@ run_case torque-submit-empty pass \
 run_case torque-submit-failure pass \
     models/providers/ParslTorqueSubmitFailure.cfg \
     models/providers/ParslTorqueSubmit.tla
+run_case workqueue-submit-current counterexample \
+    models/executors/ParslWorkQueueSubmitFailure.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-fixed pass \
+    models/executors/ParslWorkQueueSubmitFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-serialization-current counterexample \
+    models/executors/ParslWorkQueueSubmitSerializationFailure.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-serialization-fixed pass \
+    models/executors/ParslWorkQueueSubmitSerializationFailureFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla

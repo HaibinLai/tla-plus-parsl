@@ -101,6 +101,10 @@ Torque submit coverage now includes normal qsub registration plus empty-output a
 failure paths. The bounded model checks that only a parsed job ID creates a pending resource, and
 the real submit-script probes cover all three outcomes.
 
+Work Queue submit coverage now includes both process-admission and serialization failures. The
+current branch leaves a pending Future/task-map entry orphaned in each case; fixed configurations
+roll the mapping back, matching the real Work Queue submit probes.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
