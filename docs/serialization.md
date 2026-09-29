@@ -151,6 +151,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.
 /tmp/parsl-venv/bin/python -m unittest tests/test_task_transport_runtime.py -v
 ```
 
+`ParslFunctionObjectContents.tla` is the smallest callable-content model. It snapshots a
+closure's captured value and the argument value at their two serialization boundaries, permits
+the submitter to mutate its source object afterward, then decodes and runs the captured content.
+The `MutationIsolation` invariant checks that post-serialization mutation cannot alter the
+worker's result. The runtime probe performs the same check with the real `dill`-backed facade.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObjectContents.cfg models/serialization/ParslFunctionObjectContents.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_function_object_contents_runtime.py -v
+```
+
 `ParslSerializationFallback.tla` models the facade's serializer iteration: a failed registered
 serializer is suppressed while later serializers are tried, and the final serializer exception is
 re-raised only when every method fails. The runtime probe replaces the data registry with small
