@@ -39,6 +39,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskIdTypeFixe
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_id_type_runtime.py -v
 ```
 
+`ParslHtexTaskContextType.tla` checks the outer `context` mapping before the ingress path calls
+`.get('resource_spec')`. A decoded list/scalar context currently raises `AttributeError`; the
+fixed branch rejects it without touching the pending task queue.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskContextTypeCurrent.cfg models/executors/ParslHtexTaskContextType.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskContextTypeFixed.cfg models/executors/ParslHtexTaskContextType.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_context_type_runtime.py -v
+```
+
 `ParslThreadExecutorThreadCount.tla` models `ThreadPoolExecutor` admission of
 `max_threads`. The current wrapper accepts zero at construction and fails only when `start()`
 creates the underlying pool; the fixed branch rejects non-positive counts immediately. The
