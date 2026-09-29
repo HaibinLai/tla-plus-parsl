@@ -75,3 +75,6 @@ HTEX task admission coverage also records malformed task-envelope handling
 
 HTEX result-path coverage also records malformed result-frame isolation
 `ParslHtexResultMessageMalformed` (BUG-099).
+
+HTEX result-path coverage also records stale/unknown task-result handling
+`ParslHtexUnknownTaskResult` (BUG-100).
