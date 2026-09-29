@@ -90,6 +90,15 @@ at depth 8 (133 states generated). The fixed branch marks the transfer stale, re
 new source version, and checks 54 distinct states. `ParslFileBytes.tla` contains the more detailed
 multi-file byte/checksum abstraction; this model focuses on the version/publication boundary.
 
+The symbolic byte/checksum path is also exercised against a real local archive transfer by
+`tests/test_file_bytes_transfer_runtime.py`.  The probe splits binary content into bounded chunks,
+records a SHA-256 checksum for each chunk, stages the file through the real Zip provider, and
+checks both byte-for-byte equality and per-chunk checksums after stage-in.
+
+```bash
+/tmp/parsl-venv/bin/python -m unittest tests/test_file_bytes_transfer_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryCurrent.cfg models/staging/ParslFileTransferRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryFixed.cfg models/staging/ParslFileTransferRetry.tla
