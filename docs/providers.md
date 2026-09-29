@@ -31,6 +31,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudCancelF
 /tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_cancel_runtime.py -v
 ```
 
+`ParslGoogleCloudStatus.tla` models status-table evolution at the GCE polling boundary. The
+current implementation indexes the translation table directly, so an unknown provider state
+crashes polling; the fixed branch maps it to `UNKNOWN`. TLC finds the two-state
+`PollingSafety` counterexample in the current configuration and checks four generated/two
+distinct states in both the fixed and known-state configurations.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatus.cfg models/providers/ParslGoogleCloudStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatusFixed.cfg models/providers/ParslGoogleCloudStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatusPresent.cfg models/providers/ParslGoogleCloudStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_status_runtime.py -v
+```
+
 `ParslPollerCloseScaleInRace.tla` refines the `JobStatusPoller.close(timeout)` lifecycle. The
 current implementation calls `Timer.close`, then scales in every executor even when the timer
 thread is still running a provider-status callback after the join timeout. The fixed branch keeps
