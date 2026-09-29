@@ -6,6 +6,21 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslAwsStatusMissingResult.tla` checks the result-cardinality contract of
+`AWSProvider.status`. When EC2 returns no reservation for a requested instance (for example,
+after termination), the current method returns an empty list rather than one status per requested
+ID. TLC finds the current two-state `CardinalitySafety` counterexample and checks the fixed
+branch, which returns an explicit `UNKNOWN` status. The runtime probe uses the real provider with
+an empty EC2 response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsStatusMissingResultCurrent.cfg models/providers/ParslAwsStatusMissingResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsStatusMissingResultFixed.cfg models/providers/ParslAwsStatusMissingResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_status_missing_result_runtime.py -v
+```
+
+This missing-result cardinality boundary is recorded as BUG-143.
+
 `ParslClusterStatusRequest.tla` captures the common `ClusterProvider.status` projection. A single
 provider-specific `_status()` poll updates local resources, then the public method projects those
 records back in the caller's requested order, including duplicate job IDs. The runtime probe uses

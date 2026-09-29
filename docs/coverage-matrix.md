@@ -220,3 +220,6 @@ Monitoring database coverage also models WORKFLOW end-update bookkeeping after f
 
 Join coverage now includes the combined logical-Future/physical-attempt state machine
 (`ParslJoinEndToEnd`).
+
+AWS provider coverage also records status-list cardinality when EC2 omits a requested instance
+(`ParslAwsStatusMissingResult`, BUG-143).
