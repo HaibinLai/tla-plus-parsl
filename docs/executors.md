@@ -526,9 +526,12 @@ active provider block contributes no executor capacity until a manager registers
 slots.  Scale-out preserves existing admission while provisioning another block; idle scale-in
 removes only free slots; provider failure revokes all registered capacity.  The bounded TLC run
 checks 73 generated/24 distinct states and all five safety invariants.
+The concrete `BlockProviderExecutor.scale_out_facade`/`scale_in_facade` mapping is exercised by
+`tests/test_provider_worker_scaling_runtime.py`.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderWorkerScaling.cfg models/executors/ParslProviderWorkerScaling.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_provider_worker_scaling_runtime.py -v
 ```
 
 ```bash

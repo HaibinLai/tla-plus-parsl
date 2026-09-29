@@ -23,7 +23,8 @@ reject them before scheduler insertion.
 
 The executor/provider runtime list also retains the PBS Pro job-ID alias and malformed-JSON
 checks; the scaling model above is an additional symbolic admission layer rather than a replacement
-for backend-specific probes.
+for backend-specific probes. The provider-worker scaling bridge is corroborated by
+`tests/test_provider_worker_scaling_runtime.py`.
 
 Executor-selection coverage also includes `ParslExecutorSelection`, which isolates the empty-list
 validation boundary before `random.choice`.
