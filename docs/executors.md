@@ -172,6 +172,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientLockT
 /tmp/parsl-venv/bin/python -m unittest tests/test_command_lock_timeout_runtime.py -v
 ```
 
+`ParslCommandDeadline.tla` covers the expired-deadline arithmetic inside each REQ/REP poll. The
+current path forwards a negative remaining duration to `zmq.Socket.poll`; the fixed branch clamps
+the value to zero before deciding that the command has timed out. The existing runtime probe
+records the negative timeout passed by the real `CommandClient`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineCurrent.cfg models/executors/ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineFixed.cfg models/executors/ParslCommandDeadline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineNormal.cfg models/executors/ParslCommandDeadline.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_deadline_runtime.py -v
+```
+
 `ParslCommandClientMaxRetries.tla` records a source-level audit finding: `CommandClient.run`
 accepts `max_retries`, but the current implementation does not read it. A transient
 `send_pyobj` exception therefore escapes after exactly one send for both `max_retries=0` and
