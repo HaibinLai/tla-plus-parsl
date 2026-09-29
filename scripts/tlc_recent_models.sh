@@ -183,3 +183,15 @@ run_case workqueue-serialization-current counterexample \
 run_case workqueue-serialization-fixed pass \
     models/executors/ParslWorkQueueSubmitSerializationFailureFixed.cfg \
     models/executors/ParslWorkQueueSubmit.tla
+run_case taskvine-submit-current counterexample \
+    models/executors/ParslTaskVineSubmitCurrent.cfg \
+    models/executors/ParslTaskVineSubmit.tla
+run_case taskvine-submit-fixed pass \
+    models/executors/ParslTaskVineSubmitFixed.cfg \
+    models/executors/ParslTaskVineSubmit.tla
+run_case taskvine-serialization-current counterexample \
+    models/executors/ParslTaskVineSubmitSerializationFailure.cfg \
+    models/executors/ParslTaskVineSubmit.tla
+run_case taskvine-serialization-fixed pass \
+    models/executors/ParslTaskVineSubmitSerializationFailureFixed.cfg \
+    models/executors/ParslTaskVineSubmit.tla

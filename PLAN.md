@@ -105,6 +105,10 @@ Work Queue submit coverage now includes both process-admission and serialization
 current branch leaves a pending Future/task-map entry orphaned in each case; fixed configurations
 roll the mapping back, matching the real Work Queue submit probes.
 
+TaskVine submit coverage now mirrors those two failure paths. The current model leaves a mapped
+pending task after process or serialization failure; the fixed configurations remove it, matching
+the real TaskVine submit probes.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
