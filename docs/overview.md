@@ -980,6 +980,12 @@ The abstraction follows [`jobs/job_status_poller.py`](https://raw.githubusercont
 [`jobs/error_handlers.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/jobs/error_handlers.py),
 and [`executors/status_handling.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/status_handling.py).
 
+`ParslPollerCloseScaleInRace.tla` refines the shutdown side of that poller. `Timer.close(timeout)`
+can return while a status callback is still running, but the current `JobStatusPoller.close` then
+scales in providers immediately. TLC finds `ScaleInAfterPollQuiescence`; the fixed branch waits
+for callback quiescence before scale-in. The runtime probe drives the concrete close method with a
+controlled live-thread double.
+
 `ParslSerializationWire.tla` models the concrete `pack_apply_message` wire shape: callable,
 args, and kwargs are serialized separately; callable/data serializer identifiers are placed before
 each body; decimal length prefixes frame the buffers in order; and unpack/decode cannot dispatch
@@ -2108,7 +2114,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 387 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 388 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2947,6 +2953,9 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslPollerBadState.cfg`: 6,699 states generated, 936 distinct states, depth 12;
   status-poll ordering, `FAILED`/`MISSING` threshold handling, bad-state task failure, and
   suppression of later admission/scale-out all passed.
+- `ParslPollerCloseScaleInRaceCurrent.cfg`: expected counterexample for scale-in during a live
+  callback; `ParslPollerCloseScaleInRaceFixed.cfg`: 23 states generated, 8 distinct states, depth
+  6; provider scale-in waits for poller quiescence.
 - `ParslSerializationWire.cfg`: 208 states generated, 73 distinct states, depth 14;
   three-buffer serialization, serializer headers, decimal length framing, ordered unpack/decode,
   dispatch gating, and corrupt-frame rejection all passed.

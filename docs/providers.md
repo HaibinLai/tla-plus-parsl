@@ -6,6 +6,19 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslPollerCloseScaleInRace.tla` refines the `JobStatusPoller.close(timeout)` lifecycle. The
+current implementation calls `Timer.close`, then scales in every executor even when the timer
+thread is still running a provider-status callback after the join timeout. The fixed branch keeps
+the timer in a stopping state until the callback is quiescent and checks `ScaleInAfterPollQuiescence`.
+The runtime probe uses the real `JobStatusPoller.close` method with a controlled live-thread and
+executor double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerCloseScaleInRaceCurrent.cfg models/providers/ParslPollerCloseScaleInRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerCloseScaleInRaceFixed.cfg models/providers/ParslPollerCloseScaleInRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_poller_close_scale_in_runtime.py -v
+```
+
 `ParslKubernetesUnknownJob.tla` models a status request for an id absent from the provider's
 local resource map. The current `status()` path raises `KeyError`; the fixed branch returns an
 explicit UNKNOWN status. The runtime probe isolates the concrete lookup with an empty resource
