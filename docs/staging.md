@@ -100,6 +100,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFix
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_partial_cleanup_runtime.py -v
 ```
 
+`ParslHTTPStatusValidation.tla` models the HTTP response-status boundary. The current in-task
+wrapper writes a 404 response body and starts the user task because it never checks the status
+code; the fixed branch rejects non-2xx responses before publication. The runtime probe uses a
+fake 404 `requests` response against the real wrapper.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStatusValidationCurrent.cfg models/staging/ParslHTTPStatusValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStatusValidationFixed.cfg models/staging/ParslHTTPStatusValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStatusValidationSuccess.cfg models/staging/ParslHTTPStatusValidation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_status_validation_runtime.py -v
+```
+
 `ParslZipPathValidation.tla` models malformed `zip:` URLs. The current provider checks only the
 scheme, so a path without the required `.zip/` separator is accepted and `zip_path_split` derives
 truncated archive and member paths. The fixed branch rejects the URL before staging. The runtime

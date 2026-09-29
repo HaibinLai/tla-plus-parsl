@@ -363,6 +363,11 @@ the current wrapper leaves earlier bytes at the destination path. `tests/test_ht
 reproduces the partial file, while the fixed branch removes incomplete output before propagating the
 failure.
 
+`ParslHTTPStatusValidation.tla` models HTTP response validation. The current
+`HTTPInTaskStaging` wrapper accepts a non-2xx response, publishes its body, and starts the user
+task; the fixed branch rejects the response before publication. The runtime probe confirms this
+behavior with a fake 404 response.
+
 `ParslDataFutureFalseyException.tla` models parent exception propagation in `DataFuture`. The
 current `parent_callback` uses `if e`, so an exception whose `__bool__` returns `False` is treated
 as a successful file result. `tests/test_datafuture_falsey_exception_runtime.py` reproduces this
@@ -1308,6 +1313,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanup
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupCurrent.cfg models/staging/ParslHTTPPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFixed.cfg models/staging/ParslHTTPPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupSuccess.cfg models/staging/ParslHTTPPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStatusValidationCurrent.cfg models/staging/ParslHTTPStatusValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStatusValidationFixed.cfg models/staging/ParslHTTPStatusValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStatusValidationSuccess.cfg models/staging/ParslHTTPStatusValidation.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDataFutureFalseyExceptionCurrent.cfg models/dataflow/ParslDataFutureFalseyException.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDataFutureFalseyExceptionFixed.cfg models/dataflow/ParslDataFutureFalseyException.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDataFutureFalseyExceptionNormal.cfg models/dataflow/ParslDataFutureFalseyException.tla
@@ -1672,6 +1680,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslHTTPPartialCleanupFixed.cfg` and `ParslHTTPPartialCleanupSuccess.cfg`: 6 states generated,
   3 distinct states, depth 3; failed-stream cleanup and successful transfer satisfy
   `FailurePublicationSafety`.
+- `ParslHTTPStatusValidationCurrent.cfg`: expected counterexample; a 404 response reaches the
+  task with a published error body.
+- `ParslHTTPStatusValidationFixed.cfg`: 6 states generated, 3 distinct states, depth 3;
+  non-2xx response rejection preserves `StatusSafety`.
+- `ParslHTTPStatusValidationSuccess.cfg`: 10 states generated, 5 distinct states, depth 5; a
+  200 response satisfies status and publication safety.
 - `ParslDataFutureFalseyExceptionCurrent.cfg`: expected counterexample, 2 states generated; a
   failed parent with a falsey exception resolves the DataFuture as success.
 - `ParslDataFutureFalseyExceptionFixed.cfg` and `ParslDataFutureFalseyExceptionNormal.cfg`: 4
@@ -1857,7 +1871,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 345 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 346 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
