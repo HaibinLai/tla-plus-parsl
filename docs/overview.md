@@ -464,6 +464,11 @@ branch and `tests/test_file_clean_copy_runtime.py` confirm the isolation contrac
 non-ASCII bytes through `pack_buffers` and `unpack_buffers`. Its length and byte sequence remain
 unchanged at the decode boundary, matching the serializer's real byte-oriented framing.
 
+`ParslMonitoringBatchClock.tla` models the monitoring batch deadline with a wall-clock rollback.
+The current `DatabaseManager._get_messages_in_batch` uses `time.time()`, so a backwards clock
+jump can admit another message after the configured interval; the fixed branch uses monotonic
+elapsed time. The runtime probe drives the real helper with a deterministic rollback sequence.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1301,6 +1306,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInser
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchCurrent.cfg models/monitoring/ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchFixed.cfg models/monitoring/ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchPositive.cfg models/monitoring/ParslMonitoringBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchClockCurrent.cfg models/monitoring/ParslMonitoringBatchClock.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchClockFixed.cfg models/monitoring/ParslMonitoringBatchClock.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchAtomicityCurrent.cfg models/monitoring/ParslMonitoringBatchAtomicity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchAtomicityFixed.cfg models/monitoring/ParslMonitoringBatchAtomicity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchAtomicitySuccess.cfg models/monitoring/ParslMonitoringBatchAtomicity.tla
@@ -1930,7 +1937,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 361 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 362 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2799,6 +2806,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `ObjectGraphSerializable` / `ObjectGraphSafety` | callable, argument, closure, and nested-object serializability | Python callable/payload serialization boundary in `DataFlowKernel` and executor |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `Pack` / `Unpack` / `BinaryContentSafety` | length-prefixed raw-byte payload framing | `parsl.serialize.facade.pack_buffers` / `unpack_buffers` |
+| `ReadMessage` / `StopAtDeadline` / `NoOverdueBatch` | monitoring batch collection and clock-based deadline | `DatabaseManager._get_messages_in_batch` |
 | `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
 | `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
 | `IgnoreLinger` / `DeleteFails` / `DeleteSucceedsWithLocalId` / `DeleteSucceedsWithoutLocalId` | Azure VM cancellation and local instance bookkeeping | `AzureProvider.cancel` |

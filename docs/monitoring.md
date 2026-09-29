@@ -17,6 +17,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 These models cover asynchronous monitoring records, database insertion, batching, retry and
 atomicity, deferred events, close behavior, and batching-threshold edge cases.
 
+`ParslMonitoringBatchClock.tla` isolates the clock source used by
+`DatabaseManager._get_messages_in_batch`. With the current `time.time()` path, a wall-clock
+rollback makes elapsed time negative and allows a batch to consume messages beyond its one-second
+deadline. The fixed branch uses monotonic time and stops at the deadline. The runtime probe uses
+a deterministic clock sequence against the real batching helper.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchClockCurrent.cfg models/monitoring/ParslMonitoringBatchClock.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchClockFixed.cfg models/monitoring/ParslMonitoringBatchClock.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_batch_clock_runtime.py -v
+```
+
 `ParslMonitoringDispatchEnvelope.tla` models the outer queue tuple consumed by
 `DatabaseManager._dispatch_to_internal`. The current assertion lets a tuple with the wrong
 length escape and terminate the migration thread; the fixed branch rejects it while preserving
