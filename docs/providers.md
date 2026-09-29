@@ -100,6 +100,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCance
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_cancel_unknown_runtime.py -v
 ```
 
+ParslLocalUnknownJobStatus.tla models the analogous stale-id boundary in LocalProvider.status().
+After a local resource has been cleaned up, a polling pass can still request its old id; the
+current result comprehension indexes the missing entry and raises KeyError. The fixed branch
+returns an explicit UNKNOWN status. TLC finds the current PollDoesNotCrash counterexample (2
+states generated) and checks the fixed branch (4 states generated). The runtime probe invokes the
+real provider with an empty resource map.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalUnknownJobStatusCurrent.cfg models/providers/ParslLocalUnknownJobStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalUnknownJobStatusFixed.cfg models/providers/ParslLocalUnknownJobStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_unknown_job_status_runtime.py -v
+```
+
 `ParslWalltimeParsing.tla` models the provider walltime conversion in
 [`parsl/utils.py`](https://github.com/Parsl/Parsl/blob/master/parsl/utils.py). The current
 `wtime_to_minutes` implementation truncates seconds, so a positive request such as `00:00:59`
