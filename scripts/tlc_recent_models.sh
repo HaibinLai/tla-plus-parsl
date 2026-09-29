@@ -276,3 +276,9 @@ run_case globus-transfer-timeout-current counterexample \
 run_case globus-transfer-timeout-fixed pass \
     models/staging/ParslGlobusTransferTimeoutFixed.cfg \
     models/staging/ParslGlobusTransferTimeout.tla
+run_case join-duplicate-failure-current counterexample \
+    models/dataflow/ParslJoinDuplicateFailureAggregationCurrent.cfg \
+    models/dataflow/ParslJoinDuplicateFailureAggregation.tla
+run_case join-duplicate-failure-fixed pass \
+    models/dataflow/ParslJoinDuplicateFailureAggregationFixed.cfg \
+    models/dataflow/ParslJoinDuplicateFailureAggregation.tla

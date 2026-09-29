@@ -163,6 +163,10 @@ Globus transfer timeout coverage is now in the smoke sweep: repeated per-poll ti
 an `ACTIVE` transfer pending forever in the current path; the fixed branch turns the bounded poll
 budget into an explicit terminal timeout.
 
+`join_app` duplicate-failure aggregation is now in the smoke sweep: a repeated reference to the
+same failed inner Future must contribute one `JoinError` dependency entry per list position; the
+fixed branch preserves that multiplicity and order.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
