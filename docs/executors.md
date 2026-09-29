@@ -791,3 +791,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderStatusShap
 raise `dictionary changed size during iteration` when a synchronous Future callback removes a
 task entry; the fixed branch snapshots task entries before completing them. This is BUG-088 and
 is exercised by `tests/test_bad_state_task_mutation_runtime.py`.
+
+`ParslHeartbeatClockRollback.tla` models HTEX manager expiry with separate wall and monotonic
+clocks. The current branch can keep an overdue manager alive after a backward system-clock step;
+the fixed branch expires based on monotonic age. BUG-089 is exercised by the backward-clock probe
+in `tests/test_heartbeat_clock_jump_runtime.py`.

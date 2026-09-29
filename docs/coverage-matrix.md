@@ -39,3 +39,6 @@ that Future callbacks cannot abort executor-failure propagation by mutating the 
 
 The provider baseline also includes `ParslClusterStatusRequest`, which checks one backend poll and
 ordered/duplicate projection of the public status response.
+
+Heartbeat coverage also includes the rollback branch of `ParslHeartbeatClockRollback` (BUG-089),
+which separates wall-clock reporting from monotonic expiry.
