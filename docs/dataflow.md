@@ -17,9 +17,12 @@ Each inner logical Future has per-attempt captured content, task/result wire sta
 late-result handling. The outer join only finalizes after both logical Futures succeed, then
 constructs the ordered `<<I1, I2, I1>>` result, preserving the duplicate position. TLC checks
 16,113 generated/3,559 distinct states.
+The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
+inner Python apps and verifies the duplicate Future position in the outer result.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCallableTransport.cfg models/dataflow/ParslJoinCallableTransport.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_callable_transport_runtime.py -v
 ```
 
 ```bash
