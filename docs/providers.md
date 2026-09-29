@@ -288,6 +288,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateSta
 /tmp/parsl-venv/bin/python -m unittest tests/test_torque_duplicate_status_runtime.py -v
 ```
 
+`ParslLSFDuplicateStatus.tla` covers the analogous LSF `bjobs` response. The current set-based
+bookkeeping raises `KeyError` on a duplicate job line; the fixed branch ignores the second line.
+TLC checks six generated/three distinct states in the fixed and unique-row configurations.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFDuplicateStatusCurrent.cfg models/providers/ParslLSFDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFDuplicateStatusFixed.cfg models/providers/ParslLSFDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFDuplicateStatusUnique.cfg models/providers/ParslLSFDuplicateStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_lsf_duplicate_status_runtime.py -v
+```
+
 `ParslSlurmMalformedLine.tla` covers truncated non-empty records from `sacct` or `squeue`.
 The current parser unpacks every line into a job id and state, so a line missing the state token
 raises `ValueError` and aborts the polling pass. The fixed branch skips malformed records and
