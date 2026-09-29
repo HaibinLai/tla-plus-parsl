@@ -175,6 +175,10 @@ AWS cancellation cleanup is now covered: after a successful remote terminate, th
 raise on a stale local instance/resource ID; the fixed branch treats missing local bookkeeping as
 an idempotent successful cancellation.
 
+Azure provisioning rollback is now covered: the current submit path can leave instance and
+resource bookkeeping after a post-creation disk/start/worker-command failure; the fixed branch
+rolls back partial local state before reporting the setup error.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

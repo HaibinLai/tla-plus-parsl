@@ -294,3 +294,9 @@ run_case aws-cancel-missing-current counterexample \
 run_case aws-cancel-missing-fixed pass \
     models/providers/ParslAWSProviderCancelMissingFixed.cfg \
     models/providers/ParslAWSProviderCancel.tla
+run_case azure-submit-current counterexample \
+    models/providers/ParslAzureProviderSubmit.cfg \
+    models/providers/ParslAzureProviderSubmit.tla
+run_case azure-submit-fixed pass \
+    models/providers/ParslAzureProviderSubmitFixed.cfg \
+    models/providers/ParslAzureProviderSubmit.tla
