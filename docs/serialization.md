@@ -128,6 +128,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationF
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFallbackFailure.cfg models/serialization/ParslSerializationFallback.tla
 ```
 
+`ParslSerializationEmptyRegistry.tla` covers the no-method boundary. With an empty selected
+registry, the current `facade.serialize` loop reaches its final result check without assigning
+`result`, leaking `UnboundLocalError`. The fixed branch rejects the request explicitly. The
+runtime probe clears the real data registry and restores it in a `finally` block.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationEmptyRegistryCurrent.cfg models/serialization/ParslSerializationEmptyRegistry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationEmptyRegistryFixed.cfg models/serialization/ParslSerializationEmptyRegistry.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_empty_registry_runtime.py -v
+```
+
 `ParslSerializationPluginCache.tla` models successful dynamic deserializer loading. The first
 unknown header imports and instantiates the plugin; subsequent payloads reuse the entry in
 `additional_methods_for_deserialization` without another import. The runtime probe uses a fake
