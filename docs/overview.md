@@ -1909,7 +1909,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 355 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 356 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2999,6 +2999,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThre
 
 The current configuration reaches the delayed start error; fixed and valid configurations
 preserve `ThreadCountSafety`.
+
+The LocalProvider `tasks_per_node` refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeCurrent.cfg models/providers/ParslLocalTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeFixed.cfg models/providers/ParslLocalTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeValid.cfg models/providers/ParslLocalTasksPerNode.tla
+```
+
+The current configuration reaches the failed-launch outcome; fixed and valid configurations
+preserve `NoInvalidProcess`.
 
 ## Concrete Parsl example
 

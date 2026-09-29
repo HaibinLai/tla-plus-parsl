@@ -27,6 +27,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobFi
 /tmp/parsl-venv/bin/python -m unittest tests/test_condor_unknown_job_runtime.py -v
 ```
 
+`ParslLocalTasksPerNode.tla` models the LocalProvider resource-input boundary. A zero
+`tasks_per_node` value currently creates a process that fails in the generated launcher script;
+the fixed branch rejects it before launch. The runtime probe submits `true` to a real local
+provider and observes the failed job.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeCurrent.cfg models/providers/ParslLocalTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeFixed.cfg models/providers/ParslLocalTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeValid.cfg models/providers/ParslLocalTasksPerNode.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_tasks_per_node_runtime.py -v
+```
+
 `ParslAzureStatusBookkeeping.tla` checks consistency between the status returned by Azure and
 the provider's local `resources` map. The current `status()` method translates `VM running` but
 does not write that value back, leaving local bookkeeping at PENDING. The fixed branch records
