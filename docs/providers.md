@@ -6,6 +6,18 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslSlurmMalformedLine.tla` covers truncated non-empty records from `sacct` or `squeue`.
+The current parser unpacks every line into a job id and state, so a line missing the state token
+raises `ValueError` and aborts the polling pass. The fixed branch skips malformed records and
+preserves known local state. The runtime probe invokes the concrete Slurm parser with a one-token
+line.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedLineCurrent.cfg models/providers/ParslSlurmMalformedLine.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedLineFixed.cfg models/providers/ParslSlurmMalformedLine.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_malformed_line_runtime.py -v
+```
+
 `ParslSlurmForeignJob.tla` audits the status parser's local-resource boundary. Slurm output can
 contain a job id that is already forgotten locally or belongs to another submission; the current
 implementation indexes it directly and raises `KeyError`. The fixed branch ignores foreign
