@@ -191,6 +191,14 @@ thread after removing the cancelled task, so later results in the same batch rem
 fixed branch discards the cancelled result and continues. `tests/test_htex_cancelled_result_runtime.py`
 reproduces the current failure with two messages in one batch.
 
+`ParslHtexDuplicateResult.tla` is the focused duplicate-delivery abstraction for an
+already-completed task result. `ParslHtexResultQueue.tla` also covers this path alongside
+malformed and terminal results.
+The current worker has removed the task from `_tasks`, so a second frame raises `KeyError` and
+terminates the result thread. The candidate fixed branch treats the frame as stale and keeps the
+worker alive for unrelated tasks. The duplicate-result case is exercised by
+`test_htex_result_queue_runtime.py`.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResultCurrent.cfg models/executors/ParslHtexCancelledResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResultFixed.cfg models/executors/ParslHtexCancelledResult.tla
