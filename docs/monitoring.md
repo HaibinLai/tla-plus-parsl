@@ -64,6 +64,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringZMQRout
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_zmq_router_failure_runtime.py -v
 ```
 
+This persistent-failure boundary is recorded as BUG-124: the router retries a broken receive
+channel until external shutdown without a bounded/backoff policy.
+
 `ParslMonitoringBatchClock.tla` isolates the clock source used by
 `DatabaseManager._get_messages_in_batch`. With the current `time.time()` path, a wall-clock
 rollback makes elapsed time negative and allows a batch to consume messages beyond its one-second

@@ -147,3 +147,6 @@ Poller lifecycle coverage also records close/scale-in overlap
 
 Poller lifecycle coverage also records duplicate executor registration
 (`ParslPollerDuplicateExecutor`, BUG-123).
+
+Monitoring/ZMQ coverage also records unbounded persistent receive-failure retry
+(`ParslMonitoringZMQRouterFailure`, BUG-124).
