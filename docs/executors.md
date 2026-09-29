@@ -7,6 +7,18 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslHtexTaskMessageMalformed.tla` covers malformed Python objects arriving on the HTEX task
+socket. The current interchange path indexes `task_id` and `context` without a validation guard,
+so a missing field raises out of the polling loop. The fixed branch discards the malformed task
+and keeps the interchange alive. The runtime probe invokes the concrete task-message handler with
+a fake ZMQ socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskMessageMalformedCurrent.cfg models/executors/ParslHtexTaskMessageMalformed.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskMessageMalformedFixed.cfg models/executors/ParslHtexTaskMessageMalformed.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_message_malformed_runtime.py -v
+```
+
 `ParslResultsIncoming.tla` models the concrete `ResultsIncoming` DEALER wrapper in
 `high_throughput/zmq_pipes.py`: a readable socket yields one multipart message, a poll timeout
 returns `None`, and `close()` shuts down both the socket and its ZMQ context. The two configurations
