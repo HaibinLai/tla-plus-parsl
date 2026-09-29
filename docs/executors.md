@@ -32,6 +32,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorker
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_cores_per_worker_runtime.py -v
 ```
 
+`ParslHtexAddressProbeTimeout.tla` models propagation of an explicit
+`address_probe_timeout` into the worker launch command. The current
+`initialize_scaling()` uses a truthiness check, so a configured zero is omitted
+and the worker-side default is used instead; the fixed branch preserves every
+non-`None` value. The runtime probe composes the real HTEX command.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAddressProbeTimeoutCurrent.cfg models/executors/ParslHtexAddressProbeTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAddressProbeTimeoutFixed.cfg models/executors/ParslHtexAddressProbeTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAddressProbeTimeoutValid.cfg models/executors/ParslHtexAddressProbeTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_address_probe_timeout_runtime.py -v
+```
+
 `ParslProbeAddresses.tla` abstracts the HTEX `probe_addresses` helper. It distinguishes an empty
 candidate set (`ValueError`), a successful probe reply selecting an address, and timeout without a
 reply (`ConnectionError`). The runtime probe uses the real pyzmq context for the empty and

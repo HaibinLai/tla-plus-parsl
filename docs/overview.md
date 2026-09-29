@@ -1685,6 +1685,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   zero capacity is rejected before the division.
 - `ParslHtexCoresPerWorkerValid.cfg`: 4 states generated, 2 distinct states, depth 2; one core
   per worker produces a safe capacity.
+- `ParslHtexAddressProbeTimeoutCurrent.cfg`: expected counterexample at depth 1; an explicit
+  zero timeout is omitted from the worker command.
+- `ParslHtexAddressProbeTimeoutFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  explicit zero is preserved.
+- `ParslHtexAddressProbeTimeoutValid.cfg`: 4 states generated, 2 distinct states, depth 2;
+  positive timeout is preserved.
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
@@ -3251,6 +3257,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorker
 
 The current configuration reaches the division error for zero cores per worker; fixed and valid
 configurations preserve `NoDivisionError`.
+
+The HTEX address-probe-timeout propagation refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAddressProbeTimeoutCurrent.cfg models/executors/ParslHtexAddressProbeTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAddressProbeTimeoutFixed.cfg models/executors/ParslHtexAddressProbeTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAddressProbeTimeoutValid.cfg models/executors/ParslHtexAddressProbeTimeout.tla
+```
+
+The current configuration drops an explicit zero from the worker command; fixed and valid
+configurations preserve the configured timeout.
 
 The LocalProvider `tasks_per_node` refinement is checked with:
 
