@@ -161,6 +161,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueResourceC
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_submit_runtime.py -v
 ```
 
+`ParslFluxProviderStatusEmpty.tla` audits the provider polling boundary used before a Flux
+instance becomes reachable. `_check_provider_job` currently indexes the first element of
+`provider.status([job_id])` without checking that the provider returned a status record. An
+empty response therefore raises `IndexError` in the submission thread; the fixed branch treats
+the empty response as an explicit provider failure. The runtime probe drives the current helper
+with a fake provider returning an empty list.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxProviderStatusEmptyCurrent.cfg models/executors/ParslFluxProviderStatusEmpty.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxProviderStatusEmptyFixed.cfg models/executors/ParslFluxProviderStatusEmpty.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_provider_status_empty_runtime.py -v
+```
+
 `ParslTaskVineCancelledResult.tla` covers the corresponding TaskVine collector race. A cancelled
 Future causes the current collector's unconditional `set_result` to raise after the report is
 removed; cleanup then marks another outstanding Future with `TaskVineManagerFailure`. The fixed
