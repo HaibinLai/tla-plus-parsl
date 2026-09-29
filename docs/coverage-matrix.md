@@ -60,3 +60,6 @@ Radical-Pilot executor coverage also records the missing failure-payload boundar
 
 Flux executor coverage also records the empty provider-status response boundary
 `ParslFluxProviderStatusEmpty` (BUG-094).
+
+Work Queue coverage also records the unreachable category-resource branch
+`ParslWorkQueueResourceCategory` (BUG-095).
