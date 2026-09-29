@@ -222,3 +222,9 @@ run_case htex-manager-drain-fixed pass \
 run_case htex-manager-drain-present pass \
     models/executors/ParslHtexManagerDrainPresent.cfg \
     models/executors/ParslHtexManagerDrain.tla
+run_case htex-watchdog-result-current counterexample \
+    models/executors/ParslHtexWatchdogResultRaceCurrent.cfg \
+    models/executors/ParslHtexWatchdogResultRace.tla
+run_case htex-watchdog-result-fixed pass \
+    models/executors/ParslHtexWatchdogResultRaceFixed.cfg \
+    models/executors/ParslHtexWatchdogResultRace.tla

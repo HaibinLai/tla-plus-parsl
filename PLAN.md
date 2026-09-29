@@ -127,6 +127,10 @@ The smoke sweep also covers stale IDs during HTEX drain cleanup. The current
 poll; the fixed branch ignores the stale ID while preserving the normal drained-manager removal
 and acknowledgement behavior.
 
+The HTEX watchdog/result publication race is also in the smoke sweep. The current worker path can
+queue success before removing its in-progress mapping, allowing the watchdog to enqueue a second
+`WorkerLost` result; the fixed branch treats an already-published result as terminal.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
