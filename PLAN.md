@@ -44,6 +44,19 @@ PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
   /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test*_runtime.py' -q
 ```
 
+The recent cross-layer TLC sweep is also clean on fixed/specification configurations:
+
+| Model | Configuration | TLC result |
+| --- | --- | --- |
+| `ParslCallableRetryTransport` | `Fixed` | 190 generated / 73 distinct |
+| `ParslHeartbeatTimeoutPersistence` | `Fixed` | 1,408 generated / 400 distinct |
+| `ParslMonitoringStatusHistory` | normal | 150 generated / 53 distinct |
+| `ParslProviderWorkerScaling` | normal | 73 generated / 24 distinct |
+| `ParslJoinCallableTransport` | normal | 16,113 generated / 3,559 distinct |
+
+The corresponding `Current` configurations for callable retry and heartbeat intentionally return
+TLC exit 12 with their documented stale-result counterexamples.
+
 ### 1. Behavioral baseline
 
 The source audit covered:
