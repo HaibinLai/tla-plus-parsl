@@ -17,6 +17,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 These models cover asynchronous monitoring records, database insertion, batching, retry and
 atomicity, deferred events, close behavior, and batching-threshold edge cases.
 
+`ParslMonitoringDBInsert.tla` isolates duplicate `STATUS` primary-key handling. The current
+configuration rolls back and drops a duplicate event; the fixed branch treats it as an idempotent
+already-stored row. The normal configuration confirms that a non-duplicate insert remains stored.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsert.cfg models/monitoring/ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsertFixed.cfg models/monitoring/ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsertPresent.cfg models/monitoring/ParslMonitoringDBInsert.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_db_runtime.py -v
+```
+
 `ParslMonitoringHubClose.tla` models the outer `MonitoringHub.close()` lifecycle. Closing signals
 the DB process, waits for it, closes the resource queue, and joins the queue thread. The active
 flag makes repeated close calls idempotent. The runtime probe uses the real method with counting
