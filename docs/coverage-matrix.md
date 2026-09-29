@@ -153,3 +153,6 @@ Monitoring/ZMQ coverage also records unbounded persistent receive-failure retry
 
 HTEX manager lifecycle coverage also records stale drained-manager isolation
 (`ParslHtexManagerDrain`, BUG-125).
+
+Kubernetes admission coverage also records the Pending-pod/Running-job mismatch
+(`ParslKubernetesAdmission`, BUG-126).

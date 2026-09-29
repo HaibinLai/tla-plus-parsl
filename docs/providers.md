@@ -128,6 +128,9 @@ be admitted before Kubernetes observes a Running pod. TLC finds `JobPhaseSafety`
 fixed branch keeps the job PENDING until `PollRunning` and checks 11 distinct states. The submit,
 polling, and stale-job runtime probes cover the concrete provider methods.
 
+This admission mismatch is recorded as BUG-126: the provider's local status can advertise
+capacity before the pod is actually runnable.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesAdmissionCurrent.cfg models/providers/ParslKubernetesAdmission.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesAdmissionFixed.cfg models/providers/ParslKubernetesAdmission.tla
