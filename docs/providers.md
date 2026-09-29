@@ -275,6 +275,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueStatusFailur
 /tmp/parsl-venv/bin/python -m unittest tests/test_torque_status_failure_runtime.py -v
 ```
 
+`ParslTorqueDuplicateStatus.tla` models duplicate scheduler rows in the same `qstat` response.
+The current parser removes the same local job twice and raises `ValueError`; the fixed branch
+ignores the duplicate while preserving polling progress. TLC finds the three-state
+`DuplicateSafety` counterexample in the current configuration and checks six generated/three
+distinct states in both fixed and unique-row configurations.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateStatusCurrent.cfg models/providers/ParslTorqueDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateStatusFixed.cfg models/providers/ParslTorqueDuplicateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateStatusUnique.cfg models/providers/ParslTorqueDuplicateStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_duplicate_status_runtime.py -v
+```
+
 `ParslSlurmMalformedLine.tla` covers truncated non-empty records from `sacct` or `squeue`.
 The current parser unpacks every line into a job id and state, so a line missing the state token
 raises `ValueError` and aborts the polling pass. The fixed branch skips malformed records and
