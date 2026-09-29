@@ -1267,6 +1267,18 @@ executor loss, provider recovery, retry admission, and a late result from the lo
 current branch resolves the logical Future with that late result; the fixed branch rejects it as
 stale and checks 79 distinct states.
 
+The result-deserialization/retry boundary is modeled by:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslResultDecodeRetryCurrent.cfg models/core/ParslResultDecodeRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslResultDecodeRetryFixed.cfg models/core/ParslResultDecodeRetry.tla
+```
+
+`ParslResultDecodeRetry.tla` represents a corrupt result payload, retry admission, and an old
+frame arriving after the new attempt starts. The fixed branch rejects the old frame and checks 18
+distinct states. Runtime probes are `test_htex_result_decode_failure_runtime.py` and
+`test_htex_result_queue_runtime.py`.
+
 The combined clock/heartbeat check is:
 
 ```bash

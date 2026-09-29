@@ -34,6 +34,13 @@ checks 79 distinct states. This corresponds to provider status/failure handling,
 physical-attempt bookkeeping, and the retry path. The Python retry baseline is exercised by
 `tests/test_retry_timeout_runtime.py` and `tests/test_retry_handler_runtime.py`.
 
+`ParslResultDecodeRetry.tla` adds the ZMQ/result boundary: a completed worker result can be
+corrupt at deserialization, causing the physical attempt to be retried while the old frame is
+still deliverable. Current TLC finds the stale-resolution violation at depth 5; Fixed rejects
+the old frame and checks 18 distinct states. The concrete corrupt-result behavior is covered by
+`tests/test_htex_result_decode_failure_runtime.py` and
+`tests/test_htex_result_queue_runtime.py`.
+
 The detailed action-to-Parsl mapping and TLC results are in [the overview](overview.md).
 
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
