@@ -641,6 +641,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMess
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMessageEnabled.cfg models/executors/ParslHtexMonitoringMessage.tla
 ```
 
+`ParslHtexMonitoringBatchContinuation.tla` refines this boundary to a mixed batch: an optional
+monitoring frame is followed by a valid task result. The current disabled-monitoring assertion
+aborts before the task result is handled; the candidate fixed path ignores the optional frame and
+continues. The runtime probe sends both real pickled payloads in one multipart message.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringBatchContinuationCurrent.cfg models/executors/ParslHtexMonitoringBatchContinuation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringBatchContinuationFixed.cfg models/executors/ParslHtexMonitoringBatchContinuation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_monitoring_batch_continuation_runtime.py -v
+```
+
 `ParslHtexManagerLoss.tla` refines manager-loss handling across the two HTEX components: heartbeat
 expiry in the interchange emits a synthetic result envelope for each in-flight task, and the
 executor result worker resolves the matching Future with `ManagerLost`. The current regression
