@@ -215,6 +215,10 @@ thread alive and ignores the duplicate report.
 socket after close, while the fixed branch exposes a closed guard and returns a quiescent no-message
 result.
 
+Google Cloud cancellation bookkeeping is now covered: successful remote deletion currently leaves
+the local resource `RUNNING`; the fixed branch marks it terminal, while a remote failure preserves
+the running state and returns failure.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

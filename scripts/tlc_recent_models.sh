@@ -363,3 +363,12 @@ run_case results-incoming-close-current counterexample \
 run_case results-incoming-close-fixed pass \
     models/executors/ParslResultsIncomingCloseRaceFixed.cfg \
     models/executors/ParslResultsIncomingCloseRace.tla
+run_case googlecloud-cancel-current counterexample \
+    models/providers/ParslGoogleCloudCancel.cfg \
+    models/providers/ParslGoogleCloudCancel.tla
+run_case googlecloud-cancel-fixed pass \
+    models/providers/ParslGoogleCloudCancelFixed.cfg \
+    models/providers/ParslGoogleCloudCancel.tla
+run_case googlecloud-cancel-failure pass \
+    models/providers/ParslGoogleCloudCancelFailure.cfg \
+    models/providers/ParslGoogleCloudCancel.tla
