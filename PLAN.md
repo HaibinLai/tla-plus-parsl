@@ -64,6 +64,10 @@ objects produce a current interchange-crash counterexample, while the fixed bran
 and keeps the task-incoming loop alive. The existing runtime probe uses the real interchange
 message-processing method.
 
+The matching result direction is now in the smoke sweep through `ParslHtexResultMessageMalformed`:
+the current branch aborts on a corrupt pickle frame, while the fixed branch ignores that frame and
+continues to forward a later valid result.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

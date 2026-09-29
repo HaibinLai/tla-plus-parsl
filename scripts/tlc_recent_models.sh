@@ -108,3 +108,9 @@ run_case htex-task-message-current counterexample \
 run_case htex-task-message-fixed pass \
     models/executors/ParslHtexTaskMessageMalformedFixed.cfg \
     models/executors/ParslHtexTaskMessageMalformed.tla
+run_case htex-result-message-current counterexample \
+    models/executors/ParslHtexResultMessageMalformedCurrent.cfg \
+    models/executors/ParslHtexResultMessageMalformed.tla
+run_case htex-result-message-fixed pass \
+    models/executors/ParslHtexResultMessageMalformedFixed.cfg \
+    models/executors/ParslHtexResultMessageMalformed.tla
