@@ -84,3 +84,6 @@ payloads (`ParslHtexAmbiguousResult`, BUG-101).
 
 Python serialization coverage also records the unhashable-callable cache-key boundary
 (`ParslCallableSerializerCache`, BUG-102).
+
+Python serialization coverage also records mutable callable-instance aliasing on repeated decode
+(`ParslCallableDeserializeCache`, BUG-103).

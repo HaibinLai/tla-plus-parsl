@@ -224,6 +224,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeseri
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_deserialize_cache_runtime.py -v
 ```
 
+This mutable-instance alias is recorded as BUG-103: repeated task decodes can observe a prior
+task's callable mutation when the deserializer cache returns the same object.
+
 `ParslCallableSerializerCache.tla` models the cache-key boundary for callable serialization.
 `DillCallableSerializer.serialize` uses an `lru_cache`, so an otherwise serializable callable
 with `__hash__ = None` fails before dill is reached. The candidate fixed branch bypasses the
