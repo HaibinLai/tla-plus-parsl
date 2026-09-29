@@ -259,3 +259,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageOutRetry.cfg
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageOutRetryFixed.cfg models/staging/ParslZipStageOut.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
 ```
+
+`ParslZipStageIn.tla` models the corresponding archive-member write boundary. The current path
+leaves a partial final output after a write failure; the fixed branch discards it. TLC finds the
+three-state `AtomicPublishSafety` counterexample in the current configuration and checks six
+generated/three distinct states in the fixed branch.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInCurrent.cfg models/staging/ParslZipStageIn.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInFixed.cfg models/staging/ParslZipStageIn.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
+```

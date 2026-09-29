@@ -55,6 +55,6 @@ CorruptArchiveSafety ==
     ~ARCHIVE_VALID => visible = "none"
 
 AtomicPublishSafety ==
-    FIXED /\ phase = "failed" => visible = "none"
+    phase = "failed" => visible = "none"
 
 =============================================================================
