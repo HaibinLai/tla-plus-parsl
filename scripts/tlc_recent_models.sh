@@ -75,3 +75,6 @@ run_case apply-dispatch-current counterexample \
 run_case apply-dispatch-fixed pass \
     models/serialization/ParslApplyDispatchBoundaryFixed.cfg \
     models/serialization/ParslApplyDispatchBoundary.tla
+run_case htex-shutdown-timeout pass \
+    models/clock/ParslHtexShutdownTimeout.cfg \
+    models/clock/ParslHtexShutdownTimeout.tla

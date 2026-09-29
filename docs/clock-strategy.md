@@ -8,6 +8,15 @@ manager, while the monotonic fixed branch expires once elapsed time reaches the 
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
 
+`ParslHtexShutdownTimeout.tla` models the HTEX shutdown deadline: terminate, wait, kill only
+after `TimeoutExpired`, then close communication pipes and allow the result thread to exit. The
+runtime bridge uses a fake interchange process and real `HighThroughputExecutor.shutdown()`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexShutdownTimeout.cfg models/clock/ParslHtexShutdownTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_shutdown_timeout_runtime.py -v
+```
+
 `ParslPythonTimeoutParameter.tla` models the delay passed by the Python-app `timeout` decorator.
 The current wrapper accepts a negative delay and immediately injects `AppTimeout` through
 `threading.Timer`; the fixed branch rejects non-positive delays before execution. The runtime

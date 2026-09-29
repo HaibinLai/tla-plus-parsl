@@ -44,6 +44,9 @@ which exercise queued-versus-running cancellation and shutdown waiting on a real
 Serialization coverage also includes `ParslApplyDispatchBoundary`, which links real framed
 payloads to worker invocation arity and records the current late rejection boundary.
 
+Clock/executor coverage also includes `ParslHtexShutdownTimeout`, which checks deadline-driven
+interchange kill ordering before ZMQ pipe closure.
+
 The executor/provider row also includes `ParslScaleInCancelShape` and its short-provider-cancel
 runtime probe; the model isolates malformed cancellation cardinality from normal scale-in policy.
 
