@@ -77,6 +77,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationS
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_short_frame_count_runtime.py -v
 ```
 
+`ParslSerializationTruncatedLength.tla` covers a different truncation: a frame declares five
+bytes but only three remain. The current slicer passes the short `b"abc"` payload to
+`deserialize` before the later apply-message count assertion; the fixed branch rejects the
+length mismatch before invoking a deserializer. TLC finds the current `TruncatedDecodeSafety`
+counterexample (4 states generated) and checks the fixed branch (4 states generated). The runtime
+probe patches the real facade deserializer and records the truncated payload.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationTruncatedLengthCurrent.cfg models/serialization/ParslSerializationTruncatedLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationTruncatedLengthFixed.cfg models/serialization/ParslSerializationTruncatedLength.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_truncated_length_runtime.py -v
+```
+
 `ParslSerializerRegistry.tla` models the concrete `facade.deserialize` registry order. With a
 colliding identifier, the current configuration decodes a data payload through the code registry
 and violates `DispatchSafety`; the fixed configuration rejects the ambiguous header, while the
