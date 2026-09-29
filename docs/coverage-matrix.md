@@ -215,5 +215,8 @@ Monitoring database coverage also models TRY-row bookkeeping after failed insert
 Monitoring database coverage also models WORKFLOW-row bookkeeping after failed insertion
 (`ParslMonitoringWorkflowInsertBookkeeping`, BUG-141).
 
+Monitoring database coverage also models WORKFLOW end-update bookkeeping after failure
+(`ParslMonitoringWorkflowEndBookkeeping`, BUG-142).
+
 Join coverage now includes the combined logical-Future/physical-attempt state machine
 (`ParslJoinEndToEnd`).

@@ -67,6 +67,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflo
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_workflow_insert_bookkeeping_runtime.py -v
 ```
 
+`ParslMonitoringWorkflowEndBookkeeping.tla` covers the close-side counterpart. The current loop
+sets `workflow_end` after a failed WORKFLOW update, so later `close()` calls skip the missing
+update; the fixed branch keeps the end marker false until persistence succeeds. The runtime
+probe observes a failed update and confirms that close performs no retry. This is recorded as
+BUG-142.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflowEndBookkeepingCurrent.cfg models/monitoring/ParslMonitoringWorkflowEndBookkeeping.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflowEndBookkeepingFixed.cfg models/monitoring/ParslMonitoringWorkflowEndBookkeeping.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_workflow_end_bookkeeping_runtime.py -v
+```
+
 `ParslMonitoringHubClose.tla` models the outer `MonitoringHub.close()` lifecycle. Closing signals
 the DB process, waits for it, closes the resource queue, and joins the queue thread. The active
 flag makes repeated close calls idempotent. The runtime probe uses the real method with counting
