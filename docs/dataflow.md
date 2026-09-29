@@ -117,10 +117,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinInternalExecuto
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_runtime.py -v
 ```
 
-The same join runtime probe also exercises `join_app(cache=True)`: the outer join body runs once,
-its completed result is stored by the memoizer, and a second identical call returns the memoized
-join result without re-running the body. This supplies concrete evidence for the memo-hit branch
-of `ParslJoinMemoData.tla`.
+The same join runtime probe also exercises `join_app(cache=True)`: both a single-Future result and
+an ordered Future-list result run their outer join body once, are stored by the memoizer, and return
+the same result on a second identical call without re-running the body. This supplies concrete
+evidence for the memo-hit and ordered-list branches of `ParslJoinMemoData.tla`.
 
 `ParslJoinSingleCancellation.tla` isolates cancellation of a single inner Future. The current
 callback lets `Future.exception()` raise `CancelledError`, leaving the outer join in `joining`;

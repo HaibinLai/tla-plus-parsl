@@ -81,6 +81,15 @@ def join_cached():
     return join_value(11)
 
 
+join_list_cache_calls = {"count": 0}
+
+
+@join_app(cache=True)
+def join_cached_list():
+    join_list_cache_calls["count"] += 1
+    return [join_value(12), join_value(13)]
+
+
 class JoinRuntimeTest(unittest.TestCase):
     def test_join_app_uses_internal_executor(self):
         self.assertEqual(join_single.executors, ["_parsl_internal"])
@@ -119,6 +128,15 @@ class JoinRuntimeTest(unittest.TestCase):
             self.assertEqual(join_cached().result(), 11)
 
         self.assertEqual(join_cache_calls["count"], 1)
+
+    def test_memoized_join_list_preserves_order(self):
+        join_list_cache_calls["count"] = 0
+        config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
+        with parsl.load(config):
+            self.assertEqual(join_cached_list().result(), [12, 13])
+            self.assertEqual(join_cached_list().result(), [12, 13])
+
+        self.assertEqual(join_list_cache_calls["count"], 1)
 
     def test_nonempty_nonfuture_list_is_rejected(self):
         config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
