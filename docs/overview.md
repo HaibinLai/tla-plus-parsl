@@ -101,6 +101,11 @@ provider-backed executor: initialization requests are issued once, overloaded sl
 bounded additional blocks, and idle scale-in waits for `max_idletime` while preserving
 `min_blocks`.
 
+`ParslProbeAddresses.tla` covers the concrete HTEX ZMQ address probe. Empty candidate sets are
+rejected, a response selects one candidate, and a poll timeout without a response becomes a
+connection failure. `tests/test_probe_addresses_runtime.py` checks the empty and unresponsive
+paths with the real pyzmq helper.
+
 `ParslStrategyBlockCapacity.tla` refines strategy configuration admission. An overloaded poll
 with `nodes_per_block=0` reaches the current division by zero in the excess-block calculation;
 the fixed branch rejects zero capacity before polling. The runtime probe demonstrates the current
@@ -1221,6 +1226,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategy.cfg models
 java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacityCurrent.cfg models/strategy/ParslStrategyBlockCapacity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacityFixed.cfg models/strategy/ParslStrategyBlockCapacity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacitySuccess.cfg models/strategy/ParslStrategyBlockCapacity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddresses.cfg models/executors/ParslProbeAddresses.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddressesEmpty.cfg models/executors/ParslProbeAddresses.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddressesSuccess.cfg models/executors/ParslProbeAddresses.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQ.cfg models/serialization/ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPython.cfg models/serialization/ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonFailure.cfg models/serialization/ParslPython.tla
@@ -1520,6 +1528,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   zero capacity is rejected before polling.
 - `ParslStrategyBlockCapacitySuccess.cfg`: 6 states generated, 3 distinct states, depth 3; a
   valid capacity produces a safe scale request.
+- `ParslProbeAddresses.cfg`: 6 states generated, 3 distinct states, depth 3; an unresponsive
+  candidate reaches the timeout failure outcome.
+- `ParslProbeAddressesEmpty.cfg`: 4 states generated, 2 distinct states, depth 2; an empty
+  candidate set is rejected.
+- `ParslProbeAddressesSuccess.cfg`: 6 states generated, 3 distinct states, depth 3; a probe
+  response selects an address.
 - `ParslZMQ.cfg`: 33,321 states generated, 6,216 distinct states, depth 35;
   multipart encoding order, bounded queues, disconnect/drop, route validation, duplicate discard,
   correlation, and acknowledgement safety all passed in the focused transport model.
@@ -1885,7 +1899,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 346 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 349 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2831,6 +2845,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |
 | `AcceptConfiguration` / `RejectConfiguration` / `ComputeScaleRequest` | reject zero block capacity before strategy overload calculation | `parsl/jobs/strategy.py` |
+| `RejectEmpty` / `ReceiveProbeReply` / `ProbeTimeout` | HTEX candidate-address probing and timeout outcomes | `parsl/executors/high_throughput/probe.py` |
 | `EncodeHeader` / `EncodeBody` / `FinishEncode` | multipart task/result serialization before transport | DFK/interchange task path and worker result encoding |
 | `Send` / `Deliver` / `DuplicateInbound` / `DropOutbound` | bounded ZMQ-like transport, reconnect loss, reordering, duplicate delivery | HTEX interchange and manager socket queues |
 | `ReceiveValid` / `RejectInvalid` / `Ack` | receiver validation, correlation, and consume acknowledgement | interchange manager message handling and DFK result path |

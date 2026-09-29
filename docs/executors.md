@@ -7,6 +7,18 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslProbeAddresses.tla` abstracts the HTEX `probe_addresses` helper. It distinguishes an empty
+candidate set (`ValueError`), a successful probe reply selecting an address, and timeout without a
+reply (`ConnectionError`). The runtime probe uses the real pyzmq context for the empty and
+unresponsive-address paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddresses.cfg models/executors/ParslProbeAddresses.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddressesEmpty.cfg models/executors/ParslProbeAddresses.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProbeAddressesSuccess.cfg models/executors/ParslProbeAddresses.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_probe_addresses_runtime.py -v
+```
+
 `ParslHtexTaskPriorityType.tla` covers a decoded task whose `resource_spec.priority` is not
 numeric. The current queue key uses unary negation and raises `TypeError`; the fixed branch
 rejects the task before insertion. The runtime probe exercises this object-type boundary with a
