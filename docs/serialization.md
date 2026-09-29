@@ -20,6 +20,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableArgume
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_argument_alias_runtime.py -v
 ```
 
+`ParslPythonCyclic.cfg` extends the object-graph model with a self-referential argument object.
+The visited-set walk terminates on the cycle while preserving the internal alias after decoding.
+The runtime probe `tests/test_python_cyclic_object_runtime.py` checks this property through the
+real Parsl serializer and `dill`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonCyclic.cfg models/serialization/ParslPython.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_python_cyclic_object_runtime.py -v
+```
+
 `ParslSerializationBinaryPayload.tla` checks that length-prefixed framing preserves raw payload
 bytes even when they contain newline, NUL, and non-ASCII values. The runtime probe exercises the
 real `pack_buffers` and `unpack_buffers` helpers with the same binary content.
