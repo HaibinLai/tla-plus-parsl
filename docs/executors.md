@@ -412,6 +412,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultBatchCon
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_batch_continuation_runtime.py -v
 ```
 
+`ParslHtexExecutorResultFrameContinuation.tla` covers the corresponding executor-side boundary.
+The result queue can contain a corrupt outer pickle frame followed by a valid frame for another
+task. The current `_result_queue_worker` lets `pickle.loads` escape and leaves both Futures
+pending; the candidate fixed path discards the corrupt frame and continues. The runtime probe
+uses real Parsl serialization for the valid result.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexExecutorResultFrameContinuationCurrent.cfg models/executors/ParslHtexExecutorResultFrameContinuation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexExecutorResultFrameContinuationFixed.cfg models/executors/ParslHtexExecutorResultFrameContinuation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_executor_result_frame_continuation_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
