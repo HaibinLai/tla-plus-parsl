@@ -157,6 +157,19 @@ the current branch; TLC finds the `TerminalCauseSafety` counterexample at depth 
 generated). The fixed branch keeps the timeout/lost terminal cause and records the late result as
 stale, checking 715 distinct states.
 
+`ParslHeartbeatTimeoutPersistence.tla` is a smaller source-aligned version of that composition.
+It uses the strict `>` heartbeat comparison from `Interchange.expire_bad_managers`, an independent
+task deadline, and a single monitoring persistence event.  The current configuration exposes the
+accepted-late-completion counterexample (78 states generated); the fixed configuration rejects
+the late completion as stale (1,408 states generated, 400 distinct).  The concrete strict-boundary
+and manager-expiry behavior is exercised by `tests/test_htex_heartbeat_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutPersistenceCurrent.cfg models/clock/ParslHeartbeatTimeoutPersistence.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutPersistenceFixed.cfg models/clock/ParslHeartbeatTimeoutPersistence.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_heartbeat_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeoutMonitoringCurrent.cfg models/clock/ParslTimeoutMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeoutMonitoringFixed.cfg models/clock/ParslTimeoutMonitoring.tla
