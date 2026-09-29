@@ -159,6 +159,10 @@ Monitoring update retention is now in the smoke sweep: the current `_update` pat
 permanent database error after the batch has been drained, while the fixed branch retains the
 message for a later retry or explicit dead-letter decision.
 
+Globus transfer timeout coverage is now in the smoke sweep: repeated per-poll timeouts can leave
+an `ACTIVE` transfer pending forever in the current path; the fixed branch turns the bounded poll
+budget into an explicit terminal timeout.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

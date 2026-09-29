@@ -270,3 +270,9 @@ run_case monitoring-update-permanent-current counterexample \
 run_case monitoring-update-permanent-fixed pass \
     models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
+run_case globus-transfer-timeout-current counterexample \
+    models/staging/ParslGlobusTransferTimeoutCurrent.cfg \
+    models/staging/ParslGlobusTransferTimeout.tla
+run_case globus-transfer-timeout-fixed pass \
+    models/staging/ParslGlobusTransferTimeoutFixed.cfg \
+    models/staging/ParslGlobusTransferTimeout.tla
