@@ -1091,6 +1091,17 @@ work when the manager fails. This follows the queue insertion, `get_tasks`, and
 `process_tasks_to_send` paths in
 [`interchange.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/interchange.py).
 
+`ParslHtexDuplicateRegistration.tla` models a second registration frame for an already-known
+manager identity. The current registration path replaces the existing `ManagerRecord`, including
+its in-flight task list, without producing terminal results for those tasks. The fixed branch
+preserves the old ownership until it is explicitly resolved. This is recorded as BUG-149 and is
+checked by `tests/test_htex_duplicate_registration_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDuplicateRegistrationCurrent.cfg models/executors/ParslHtexDuplicateRegistration.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDuplicateRegistrationFixed.cfg models/executors/ParslHtexDuplicateRegistration.tla
+```
+
 Each logical task also has two abstract serialization capabilities: membership in
 `CALLABLE_SERIALIZABLE` represents whether the Python function can be encoded, while
 membership in `PAYLOAD_SERIALIZABLE` represents whether its arguments or closure object graph
@@ -3035,6 +3046,10 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslHtexDispatchPriority.cfg`: 78 states generated, 26 distinct states, depth 8; priority
   ordering, manager capacity, draining admission, completion release, and manager-failure
   cleanup all passed.
+- `ParslHtexDuplicateRegistrationCurrent.cfg`: expected counterexample after the second
+  registration; the replacement record drops one in-flight task.
+- `ParslHtexDuplicateRegistrationFixed.cfg`: 6 states generated, 3 distinct states, depth 3;
+  duplicate registration preserves task ownership and terminal resolution.
 - `ParslMPISpec.cfg`: expected counterexample at depth 3 (21 states generated, 11 distinct);
   zero `num_nodes` is accepted and reaches the rank-derivation error path.
 - `ParslMPISpecFixed.cfg`: 21 states generated, 10 distinct states, depth 6; empty-spec rejection,

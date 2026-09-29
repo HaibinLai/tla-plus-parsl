@@ -896,3 +896,15 @@ in `tests/test_heartbeat_clock_jump_runtime.py`.
 `ResultsIncoming.get()` can poll a socket already closed by `close()`; the fixed branch makes that
 call a no-message no-op. This candidate issue is recorded as BUG-091 and tested by
 `tests/test_results_incoming_close_race_runtime.py`.
+
+`ParslHtexDuplicateRegistration.tla` models a manager registering twice under the same ROUTER
+identity. The current `Interchange` replaces the existing `ManagerRecord`, dropping its in-flight
+task list without producing terminal results. The fixed branch preserves task ownership until the
+old record is explicitly resolved. This is BUG-149 and is checked by
+`tests/test_htex_duplicate_registration_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDuplicateRegistrationCurrent.cfg models/executors/ParslHtexDuplicateRegistration.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDuplicateRegistrationFixed.cfg models/executors/ParslHtexDuplicateRegistration.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_duplicate_registration_runtime.py -v
+```
