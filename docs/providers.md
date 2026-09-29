@@ -77,6 +77,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobFi
 /tmp/parsl-venv/bin/python -m unittest tests/test_condor_unknown_job_runtime.py -v
 ```
 
+`ParslCondorMalformedStatusLine.tla` refines Condor polling to a successful command with a
+truncated scheduler line. The current parser still indexes the missing state token and raises
+`IndexError`; the fixed branch skips the malformed record and preserves the known RUNNING state.
+TLC finds the current `NoParserCrash` counterexample (2 states generated) and checks the fixed
+branch (4 states generated). The runtime probe drives the real parser with return code zero and a
+one-token line.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorMalformedStatusLineCurrent.cfg models/providers/ParslCondorMalformedStatusLine.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorMalformedStatusLineFixed.cfg models/providers/ParslCondorMalformedStatusLine.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_malformed_status_line_runtime.py -v
+```
+
 `ParslLocalTasksPerNode.tla` models the LocalProvider resource-input boundary. A zero
 `tasks_per_node` value currently creates a process that fails in the generated launcher script;
 the fixed branch rejects it before launch. The runtime probe submits `true` to a real local
