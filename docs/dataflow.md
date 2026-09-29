@@ -54,6 +54,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetry.cfg model
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_retry_runtime.py -v
 ```
 
+`ParslJoinRetryDuplicates.tla` combines physical inner retries with duplicate-preserving input
+ordering. The current branch collapses `<<I1, I2, I1>>` to two result positions; TLC finds
+`ResultOrderSafety` at depth 9 (72 distinct states). The fixed branch preserves all three
+positions and checks 131 distinct states. The concrete probe is
+`tests/test_join_retry_duplicates_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetryDuplicatesCurrent.cfg models/dataflow/ParslJoinRetryDuplicates.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetryDuplicatesFixed.cfg models/dataflow/ParslJoinRetryDuplicates.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_retry_duplicates_runtime.py -v
+```
+
 `ParslTaskStatusFutureOrdering.tla` keeps logical task status separate from the public Future.
 Parsl publishes `exec_done` before `AppFuture.set_result`, allowing monitoring to observe a
 terminal task during the small callback-delivery window. The strict Current configuration
