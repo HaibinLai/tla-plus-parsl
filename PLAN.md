@@ -85,6 +85,10 @@ Slurm scheduler polling is now included as well: a truncated non-empty status re
 current batch parser, while the fixed branch skips that record and retains known job state. The
 real parser probe covers the same malformed line.
 
+PBS Pro polling is now included alongside Slurm: malformed qstat JSON crashes the current parser,
+while the fixed branch preserves the last known job status. The real PBS Pro parser probe confirms
+the same failure boundary.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

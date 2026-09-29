@@ -144,3 +144,9 @@ run_case slurm-malformed-line-current counterexample \
 run_case slurm-malformed-line-fixed pass \
     models/providers/ParslSlurmMalformedLineFixed.cfg \
     models/providers/ParslSlurmMalformedLine.tla
+run_case pbspro-malformed-json-current counterexample \
+    models/providers/ParslPBSProMalformedJSONCurrent.cfg \
+    models/providers/ParslPBSProMalformedJSON.tla
+run_case pbspro-malformed-json-fixed pass \
+    models/providers/ParslPBSProMalformedJSONFixed.cfg \
+    models/providers/ParslPBSProMalformedJSON.tla
