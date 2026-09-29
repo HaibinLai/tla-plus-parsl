@@ -14,6 +14,18 @@ the fact that callback exceptions are logged without stopping the timer, and the
 boundary after `close()`. `tests/test_periodic_timer_runtime.py` probes the same behavior against
 the real timer implementation.
 
+`ParslTimerCloseTimeout.tla` refines the close boundary when a callback is still running. The
+current `Timer.close(timeout=...)` returns `None` after a timed join even while the daemon thread
+remains alive; the fixed branch represents that result as an explicit `closing` timeout rather
+than a completed close. The runtime probe blocks the immediate callback and observes the real
+thread after `close` returns.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerCloseTimeoutCurrent.cfg models/clock/ParslTimerCloseTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerCloseTimeoutFixed.cfg models/clock/ParslTimerCloseTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_timer_close_timeout_runtime.py -v
+```
+
 `ParslWorkerContactTimeout.tla` models the HTEX worker-side clock: periodic heartbeat emission,
 contact timestamp refresh on incoming messages, and self-stop when a no-message poll reaches the
 heartbeat threshold. A message at the exact threshold wins because the source handles `POLLIN`
