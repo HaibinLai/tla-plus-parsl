@@ -243,6 +243,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslWalltimeParsingVal
 /tmp/parsl-venv/bin/python -m unittest tests/test_walltime_parsing_runtime.py -v
 ```
 
+This duration-conversion boundary is recorded as BUG-120: a positive sub-minute walltime is
+truncated to zero scheduler minutes.
+
 `ParslAzureStatusBookkeeping.tla` checks consistency between the status returned by Azure and
 the provider's local `resources` map. The current `status()` method translates `VM running` but
 does not write that value back, leaving local bookkeeping at PENDING. The fixed branch records

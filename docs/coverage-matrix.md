@@ -135,3 +135,6 @@ Provider timing coverage also records wall-clock rollback suppression in `poll_f
 
 Torque provider coverage also records negative `tasks_per_node` admission
 (`ParslTorqueTasksPerNode`, BUG-119).
+
+Provider walltime coverage also records positive sub-minute truncation
+(`ParslWalltimeParsing`, BUG-120).
