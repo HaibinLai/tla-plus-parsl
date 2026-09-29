@@ -167,6 +167,10 @@ budget into an explicit terminal timeout.
 same failed inner Future must contribute one `JoinError` dependency entry per list position; the
 fixed branch preserves that multiplicity and order.
 
+Azure status bookkeeping is now included: the current provider returns a translated `RUNNING`
+status without updating its local resource entry, while the fixed branch keeps returned and local
+state consistent for subsequent polling and scaling decisions.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

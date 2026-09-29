@@ -282,3 +282,9 @@ run_case join-duplicate-failure-current counterexample \
 run_case join-duplicate-failure-fixed pass \
     models/dataflow/ParslJoinDuplicateFailureAggregationFixed.cfg \
     models/dataflow/ParslJoinDuplicateFailureAggregation.tla
+run_case azure-status-bookkeeping-current counterexample \
+    models/providers/ParslAzureStatusBookkeepingCurrent.cfg \
+    models/providers/ParslAzureStatusBookkeeping.tla
+run_case azure-status-bookkeeping-fixed pass \
+    models/providers/ParslAzureStatusBookkeepingFixed.cfg \
+    models/providers/ParslAzureStatusBookkeeping.tla
