@@ -6,6 +6,18 @@ blocking, workers, executors, providers, retries, memoization, data readiness, a
 Files live in [`models/core/`](../models/core/). Start with `ParslAbstract.tla` and its scenario
 configurations such as `ParslNoFailures.cfg`, `ParslTime.cfg`, and `ParslProviderFailure.cfg`.
 
+`ParslDataReadyExecution.tla` is the cross-layer data-readiness model: stage-in captures a source
+version, transfers bounded chunks, publishes a ready DataFuture, and only then admits a dependent
+task. The current branch can publish a stale captured version if the source changes during
+transfer; the fixed branch marks the transfer stale and retries. The real byte-level dependency
+bridge is `tests/test_datafuture_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyExecutionCurrent.cfg models/core/ParslDataReadyExecution.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyExecutionFixed.cfg models/core/ParslDataReadyExecution.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_runtime.py -v
+```
+
 For a fast executable smoke check, `ParslAbstractSmoke.cfg` reduces the abstraction to one local
 task, one worker, no dependencies, no retries, and no provider blocks. It is useful for validating
 changes to the shared model before launching the much larger multi-task configuration.

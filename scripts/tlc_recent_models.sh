@@ -90,3 +90,9 @@ run_case join-list-cancellation-current counterexample \
 run_case join-list-cancellation-fixed pass \
     models/dataflow/ParslJoinListCancellationFixed.cfg \
     models/dataflow/ParslJoinListCancellation.tla
+run_case data-ready-current counterexample \
+    models/core/ParslDataReadyExecutionCurrent.cfg \
+    models/core/ParslDataReadyExecution.tla
+run_case data-ready-fixed pass \
+    models/core/ParslDataReadyExecutionFixed.cfg \
+    models/core/ParslDataReadyExecution.tla

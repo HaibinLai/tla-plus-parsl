@@ -50,6 +50,11 @@ The same bridge now covers list-valued joins: a successful member plus a cancell
 the same non-terminal callback path in the current implementation, matching
 `ParslJoinListCancellation` and its fixed terminal-failure branch.
 
+The data-readiness model is now part of the repeatable recent-model sweep: source-version changes
+during bounded stage-in produce a current stale-publication counterexample, while the fixed branch
+retries before admitting the dependent task. Existing runtime probes verify actual binary bytes and
+dependency blocking through `DataFuture`.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
