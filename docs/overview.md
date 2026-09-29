@@ -469,6 +469,10 @@ The current `DatabaseManager._get_messages_in_batch` uses `time.time()`, so a ba
 jump can admit another message after the configured interval; the fixed branch uses monotonic
 elapsed time. The runtime probe drives the real helper with a deterministic rollback sequence.
 
+`ParslJoinReturnShape.tla` isolates the `join_app` return contract: only one Future, a
+Future-only list, or an empty list may enter the joining state. Tuple, scalar, and mixed-list
+returns fail before callbacks are registered, matching the validation in `DataFlowKernel`.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1393,6 +1397,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinDuplicates.cfg 
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinImmediateCallback.cfg models/dataflow/ParslJoinImmediateCallback.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinMixedList.cfg models/dataflow/ParslJoinMixedList.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinMixedListValid.cfg models/dataflow/ParslJoinMixedList.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeFuture.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeList.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeEmpty.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeTuple.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeMixed.cfg models/dataflow/ParslJoinReturnShape.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinNoneResultSingle.cfg models/dataflow/ParslJoinNoneResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinNoneResultList.cfg models/dataflow/ParslJoinNoneResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
@@ -1937,7 +1946,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 362 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 363 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2800,6 +2809,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `GatherDependencies` / `RunWorker` | shallow versus recursive Future collection and unwrapping | `parsl/dataflow/dependency_resolvers.py` and `DataFlowKernel._unwrap_futures` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
+| `ValidateReturn` / `InvalidShapeSafety` | admit valid `join_app` return shapes and reject tuple/scalar/mixed values before callbacks | `DataFlowKernel.handle_exec_update` |
 | `SubmitAttempt` | select an executor and call `submit` | `DataFlowKernel.launch_task` |
 | `SerializationFailure` | callable/argument serialization failure before dispatch | `DataFlowKernel.launch_task` and executor serialization boundary |
 | `ResultSerializationFailure` / `ResultSerializationSafety` | worker return-value serialization failure before transport | worker result encoding and executor/interchange result boundary |

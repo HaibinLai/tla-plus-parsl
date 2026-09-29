@@ -44,6 +44,20 @@ results, and inner cancellation/failure. The current configuration exposes a
 `JoinResultSafety` counterexample by collapsing duplicate list positions; the fixed configuration
 preserves the sequence and checks 5,694 states with all six invariants passing.
 
+`ParslJoinReturnShape.tla` makes the admission boundary explicit: a single Future, a Future-only
+list, and an empty list enter `joining`; tuples, scalar values, and mixed lists fail before any
+join callback is registered. The runtime probe exercises the real `join_app` decorator with a
+tuple return.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeFuture.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeList.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeEmpty.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeTuple.cfg models/dataflow/ParslJoinReturnShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeMixed.cfg models/dataflow/ParslJoinReturnShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_return_shape_runtime.py -v
+```
+
 `ParslJoinSingleCancellation.tla` isolates cancellation of a single inner Future. The current
 callback lets `Future.exception()` raise `CancelledError`, leaving the outer join in `joining`;
 the fixed branch converts it into terminal failure. Its runtime probe calls the real callback.
