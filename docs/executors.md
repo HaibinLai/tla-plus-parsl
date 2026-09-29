@@ -331,6 +331,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProvisioningAdmiss
 /tmp/parsl-venv/bin/python -m unittest tests/test_scale_out_failure_monitoring_runtime.py tests/test_htex_force_scale_in_runtime.py tests/test_provider_poll_clock_runtime.py -v
 ```
 
+`ParslScaleInRetryMonitoring.tla` connects busy-worker scale-in to retry and monitoring. The
+current branch cancels a block with a running task, then accepts the old worker's late completion
+as success; TLC finds `LostTaskSafety` at depth 4. The fixed branch protects busy capacity and
+classifies the late result as stale (5 distinct states checked).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleInRetryMonitoringCurrent.cfg models/executors/ParslScaleInRetryMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleInRetryMonitoringFixed.cfg models/executors/ParslScaleInRetryMonitoring.tla
+```
+
 `ParslHtexResultMessageMalformed.tla` covers a corrupt pickle frame inside an otherwise valid
 HTEX manager result batch. `process_manager_socket_message` parses the batch metadata but the
 current loop calls `pickle.loads` on each payload without a per-frame guard, so a malformed frame
