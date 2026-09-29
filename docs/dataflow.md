@@ -51,6 +51,17 @@ includes a symbolic source/version identity. The runtime probe
 reproduces the collision with two functions that share name/module metadata. This is recorded as
 the function-body refinement of BUG-024 rather than a separate duplicate finding.
 
+`ParslMemoIgnoreKey.tla` models validation of `ignore_for_cache` before memo-key construction.
+The current `BasicMemoizer.make_hash` path deletes unknown names directly and exposes a raw
+`KeyError`; the fixed branch rejects an unknown name before mutating the filtered keyword map.
+The runtime probe is [`tests/test_memo_ignore_key_runtime.py`](../tests/test_memo_ignore_key_runtime.py).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoIgnoreKeyCurrent.cfg models/dataflow/ParslMemoIgnoreKey.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoIgnoreKeyFixed.cfg models/dataflow/ParslMemoIgnoreKey.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_memo_ignore_key_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoFunctionIdentityCurrent.cfg models/dataflow/ParslMemoFunctionIdentity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoFunctionIdentityFixed.cfg models/dataflow/ParslMemoFunctionIdentity.tla

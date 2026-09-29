@@ -24,6 +24,9 @@ reject them before scheduler insertion.
 Executor-selection coverage also includes `ParslExecutorSelection`, which isolates the empty-list
 validation boundary before `random.choice`.
 
+Memoization coverage also includes `ParslMemoIgnoreKey`, which isolates unknown
+`ignore_for_cache` names before cache-key construction.
+
 The next refinements should select one row, read the relevant source path, and add a focused
 model plus a runtime probe before expanding the state space.
 
