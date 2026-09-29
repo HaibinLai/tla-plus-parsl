@@ -67,3 +67,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeseri
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableDeserializeCacheFixed.cfg models/serialization/ParslCallableDeserializeCache.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_deserialize_cache_runtime.py -v
 ```
+
+`ParslSerializationPluginFailureCache.tla` models a failed dynamically loaded deserializer. The
+current `facade.deserialize` inserts the plugin into `additional_methods_for_deserialization`
+before invoking its `deserialize` method, so a decode exception leaves the failing instance
+cached. The fixed branch evicts it, allowing a later request to reload a healthy plugin. The
+runtime probe injects a fake plugin and observes the current cache entry.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginFailureCacheCurrent.cfg models/serialization/ParslSerializationPluginFailureCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginFailureCacheFixed.cfg models/serialization/ParslSerializationPluginFailureCache.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_plugin_failure_cache_runtime.py -v
+```
