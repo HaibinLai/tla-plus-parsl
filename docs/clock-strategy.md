@@ -118,6 +118,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslWorkerContactTimeout.c
 /tmp/parsl-venv/bin/python -m unittest tests/test_worker_pool_heartbeat_runtime.py -v
 ```
 
+`ParslWorkerContactClockRollback.tla` refines the same worker loop under a backward system-clock
+step. The current `interchange_communicator` uses wall-clock readings for both the saved contact
+time and expiry check, so the worker can remain running after the elapsed heartbeat threshold.
+The fixed branch uses monotonic elapsed time. The runtime probe executes the real communicator
+method with a minimal fake ZMQ context and records that only external cleanup stops the current
+loop. This is recorded as BUG-137.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslWorkerContactClockRollbackCurrent.cfg models/clock/ParslWorkerContactClockRollback.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslWorkerContactClockRollbackFixed.cfg models/clock/ParslWorkerContactClockRollback.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_worker_contact_clock_rollback_runtime.py -v
+```
+
 `ParslWorkerPoolControlFrame.tla` refines that boundary to the actual pickled control records.
 The worker emits distinct `{"type": "heartbeat"}` and `{"type": "drain"}` frames. The current
 receive path calls `pickle.loads` without validating the frame, so a malformed control frame can
