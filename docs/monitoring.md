@@ -183,6 +183,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringPersist
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_persistent_retry_runtime.py -v
 ```
 
+`ParslMonitoringUpdatePersistentRetry.tla` applies the bounded-retry abstraction to the separate
+`_update` path. The source has an independent `OperationalError` loop, so a permanent lock can
+strand update processing even when insert handling is considered separately. The runtime probe
+uses a real `DatabaseManager._update` call with an always-locked fake database and a controlled
+stop signal.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringUpdatePersistentRetryCurrent.cfg models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringUpdatePersistentRetryFixed.cfg models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_update_persistent_retry_runtime.py -v
+```
+
 `ParslMonitoringDBPermanentError.tla` models a non-retryable database failure in
 `DatabaseManager._insert`. The current implementation rolls back and swallows the exception
 after the batch has been drained from its queue, so the monitoring message is lost. The fixed
