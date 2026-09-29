@@ -324,3 +324,9 @@ run_case lsf-duplicate-fixed pass \
 run_case lsf-duplicate-unique pass \
     models/providers/ParslLSFDuplicateStatusUnique.cfg \
     models/providers/ParslLSFDuplicateStatus.tla
+run_case timer-close-timeout-current counterexample \
+    models/clock/ParslTimerCloseTimeoutCurrent.cfg \
+    models/clock/ParslTimerCloseTimeout.tla
+run_case timer-close-timeout-fixed pass \
+    models/clock/ParslTimerCloseTimeoutFixed.cfg \
+    models/clock/ParslTimerCloseTimeout.tla

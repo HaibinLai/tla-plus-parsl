@@ -191,6 +191,10 @@ LSF duplicate status handling is now in the smoke sweep: duplicate `bjobs` lines
 `jobs_missing` bookkeeping, while the fixed branch makes removal idempotent and preserves the
 polling pass.
 
+Timer close quiescence is now in the smoke sweep: the current timeout close returns a completed
+looking result while its callback thread remains alive; the fixed branch exposes an explicit
+closing/timeout outcome until callback quiescence.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
