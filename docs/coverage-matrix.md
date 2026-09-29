@@ -178,3 +178,6 @@ HTEX executor coverage now includes manager selector/dispatch eligibility separa
 
 Join coverage now documents the already-completed-inner-Future callback registration race
 (`ParslJoinImmediateCallback` and `test_join_runtime.py::test_already_completed_inner_future_callback`).
+
+Thread executor coverage also records non-mapping resource-specification validation
+(`ParslThreadExecutorResourceSpec`, BUG-131).

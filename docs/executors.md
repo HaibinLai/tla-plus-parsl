@@ -28,6 +28,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThre
 that exception. A truthy non-mapping value therefore raises `AttributeError`; the fixed branch
 rejects it through the same controlled path. The runtime probe exercises both concrete inputs.
 
+This type-validation escape is recorded as BUG-131.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecCurrent.cfg models/executors/ParslThreadExecutorResourceSpec.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecFixed.cfg models/executors/ParslThreadExecutorResourceSpec.tla
