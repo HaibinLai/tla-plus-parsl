@@ -25,6 +25,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCallableTranspo
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_callable_transport_runtime.py -v
 ```
 
+`ParslJoinCancellation.tla` isolates cancelled inner Futures. `Future.exception()` raises
+`CancelledError` in the current callback path, so a decorated outer `join_app` can remain in
+`joining`; the fixed branch converts cancellation into a terminal join failure. The direct and
+end-to-end runtime probes cover both the callback method and a real decorated join.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCancellationCurrent.cfg models/dataflow/ParslJoinCancellation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCancellationFixed.cfg models/dataflow/ParslJoinCancellation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_cancellation_end_to_end_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFull.cfg models/dataflow/ParslJoinFull.tla
 PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_join*_runtime.py' -v

@@ -78,3 +78,9 @@ run_case apply-dispatch-fixed pass \
 run_case htex-shutdown-timeout pass \
     models/clock/ParslHtexShutdownTimeout.cfg \
     models/clock/ParslHtexShutdownTimeout.tla
+run_case join-cancellation-current counterexample \
+    models/dataflow/ParslJoinCancellationCurrent.cfg \
+    models/dataflow/ParslJoinCancellation.tla
+run_case join-cancellation-fixed pass \
+    models/dataflow/ParslJoinCancellationFixed.cfg \
+    models/dataflow/ParslJoinCancellation.tla
