@@ -204,6 +204,10 @@ executor task map. The current `tasks.pop(task_id)` raises `KeyError` and termin
 worker, leaving later valid results unprocessed. The fixed branch discards the stale result and
 continues the batch; the runtime probe drives the concrete result worker with both messages.
 
+`ParslHtexAmbiguousResult.tla` models a result message carrying both `result` and `exception`.
+The current worker silently prefers `result`; the fixed branch rejects the malformed combination
+instead of resolving a Future as successful. The runtime probe confirms the current precedence.
+
 `ParslMPINonDivisibleRanks.tla` audits MPI resource derivation. The current helper accepts
 `num_nodes=2, num_ranks=5`, derives the non-integral `ranks_per_node="2.5"`, and inserts it into
 the `mpiexec -ppn` command. The fixed model rejects non-divisible allocations before launch;
@@ -2130,7 +2134,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 392 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 393 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

@@ -209,6 +209,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownTaskRes
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_unknown_task_result_runtime.py -v
 ```
 
+`ParslHtexAmbiguousResult.tla` models a malformed HTEX result carrying both `result` and
+`exception` fields. The current worker checks `result` first and silently resolves the Future,
+discarding the exception payload; the fixed branch rejects the ambiguous frame while keeping the
+worker alive. The runtime probe sends the conflicting message through the concrete result worker.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAmbiguousResultCurrent.cfg models/executors/ParslHtexAmbiguousResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexAmbiguousResultFixed.cfg models/executors/ParslHtexAmbiguousResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_ambiguous_result_runtime.py -v
+```
+
 `ParslMPINonDivisibleRanks.tla` audits `MPIExecutor` resource derivation. With `num_nodes=2`
 and `num_ranks=5`, the current helper derives `ranks_per_node="2.5"` and emits that value in
 the `mpiexec -ppn` option. The current TLC model violates `IntegralRanksSafety`; the fixed branch
