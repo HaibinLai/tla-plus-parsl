@@ -234,3 +234,9 @@ run_case radical-bulk-shutdown-current counterexample \
 run_case radical-bulk-shutdown-fixed pass \
     models/executors/ParslRadicalPilotBulkShutdownFixed.cfg \
     models/executors/ParslRadicalPilotBulkShutdown.tla
+run_case aws-unknown-instance-current counterexample \
+    models/providers/ParslAwsUnknownInstanceCurrent.cfg \
+    models/providers/ParslAwsUnknownInstance.tla
+run_case aws-unknown-instance-fixed pass \
+    models/providers/ParslAwsUnknownInstanceFixed.cfg \
+    models/providers/ParslAwsUnknownInstance.tla

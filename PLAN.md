@@ -135,6 +135,10 @@ Radical-Pilot bulk shutdown is now covered too. The current collector exits as s
 termination flag is set and can leave a queued Future pending; the fixed branch drains or
 explicitly completes queued work before collector exit.
 
+AWS provider polling now has a focused stale-instance case: an EC2 observation absent from the
+local resource map crashes the current status path, while the fixed branch converts it to an
+explicit `UNKNOWN` observation and keeps polling.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
