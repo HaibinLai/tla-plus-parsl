@@ -48,3 +48,6 @@ Monitoring coverage includes the corresponding batch-deadline rollback boundary
 
 ZMQ executor coverage also includes `ParslResultsIncomingCloseRace` (BUG-091), modeling
 post-close result polling as a quiescent boundary.
+
+Join coverage also includes a concrete nested-join runtime probe for `ParslNestedJoin`, covering
+ordered success and failure propagation through two join layers.

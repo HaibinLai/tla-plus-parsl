@@ -95,6 +95,16 @@ list, and an empty list enter `joining`; tuples, scalar values, and mixed lists 
 join callback is registered. The runtime probe exercises the real `join_app` decorator with a
 tuple return.
 
+`ParslNestedJoin.tla` models composition of two join callbacks. The outer join cannot complete
+until the inner join is terminal; successful inner list order is preserved, and a leaf failure is
+wrapped and propagated through both join layers. `tests/test_nested_join_runtime.py` exercises
+both paths with the real decorators and ThreadPool executor.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslNestedJoin.cfg models/dataflow/ParslNestedJoin.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_nested_join_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeFuture.cfg models/dataflow/ParslJoinReturnShape.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeList.cfg models/dataflow/ParslJoinReturnShape.tla
