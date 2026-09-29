@@ -240,4 +240,8 @@ FutureSafety ==
     futureState = "resolved" =>
         \E m \in Messages : m.kind = "result" /\ frameState[m] = "resolved"
 
+TerminalResultSafety ==
+    futureState = "rejected" =>
+        \A m \in Messages : frameState[m] # "resolved"
+
 =============================================================================

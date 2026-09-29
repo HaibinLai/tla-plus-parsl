@@ -99,7 +99,11 @@ current code-first behavior directly.
 `ParslZMQSerializationEndToEnd.tla` combines the default `C2`/`02` headers with multipart frame
 progress, route checks, duplicate/drop handling, worker attempts, and result correlation. The
 current configuration finds a `ResultCorrelationSafety` counterexample; the fixed configuration
-classifies late or terminal results as stale and checks 562,641 states.
+classifies late or terminal results as stale and checks 562,641 generated states (118,496 distinct
+states). `TerminalResultSafety` makes the terminal-Future boundary explicit: a result frame must
+not resolve a Future that is already rejected. The concrete HTEX result-worker probe in
+`tests/test_htex_result_queue_runtime.py` shows the current `Future.set_result` failure for a
+cancelled Future after the task bookkeeping entry has already been removed.
 
 `ParslSerializationFallback.tla` models the facade's serializer iteration: a failed registered
 serializer is suppressed while later serializers are tried, and the final serializer exception is
