@@ -19,6 +19,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerCloseScaleIn
 /tmp/parsl-venv/bin/python -m unittest tests/test_poller_close_scale_in_runtime.py -v
 ```
 
+`ParslPollerDuplicateExecutor.tla` models repeated calls to
+`JobStatusPoller.add_executors`. The current list-based registration appends the same pollable
+executor more than once, so one timer tick can poll and later scale in it repeatedly. The fixed
+branch makes registration idempotent. The runtime probe calls the concrete registration method
+twice with the same executor double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerDuplicateExecutorCurrent.cfg models/providers/ParslPollerDuplicateExecutor.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerDuplicateExecutorFixed.cfg models/providers/ParslPollerDuplicateExecutor.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_poller_duplicate_executor_runtime.py -v
+```
+
 `ParslKubernetesUnknownJob.tla` models a status request for an id absent from the provider's
 local resource map. The current `status()` path raises `KeyError`; the fixed branch returns an
 explicit UNKNOWN status. The runtime probe isolates the concrete lookup with an empty resource
