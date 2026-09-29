@@ -190,3 +190,6 @@ Bash executor coverage also records process cleanup after app walltime timeout
 
 Clock/file-wait coverage also records explicit timeout handling before `open()`
 (`ParslTimeLimitedOpenTimeout`, BUG-134).
+
+Radical-Pilot executor coverage also records late terminal callbacks after cancellation
+(`ParslRadicalPilotLateCallback`, BUG-135).
