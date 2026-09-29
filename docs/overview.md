@@ -455,6 +455,11 @@ directory should be accepted. The current implementation rejects that valid desc
 it compares `local_path` directly with `os.path.commonpath`; the current TLC configuration and
 runtime probe expose this counterexample, while the fixed configuration accepts it.
 
+`ParslFileCleanCopy.tla` models `File.cleancopy()` at the DataFuture staging boundary. The URL is
+immutable global metadata, while `local_path` is site-local mutable metadata and must be cleared
+in a copy. The unsafe branch aliases the old path and violates `LocalPathIsClean`; the fixed
+branch and `tests/test_file_clean_copy_runtime.py` confirm the isolation contract.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1269,6 +1274,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailur
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathCurrent.cfg models/staging/ParslGlobusEndpointPath.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathFixed.cfg models/staging/ParslGlobusEndpointPath.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathValid.cfg models/staging/ParslGlobusEndpointPath.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileCleanCopyCurrent.cfg models/staging/ParslFileCleanCopy.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileCleanCopyFixed.cfg models/staging/ParslFileCleanCopy.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutFuture.cfg models/staging/ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutInTask.cfg models/staging/ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutNone.cfg models/staging/ParslStageOutFuture.tla
@@ -1918,7 +1925,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 359 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 360 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2777,6 +2784,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
 | `WaitReturnsTerminalFailure` / `ReadFailureEvent` / `NoDiagnosticCrash` | Globus terminal transfer failure reporting with optional diagnostics | `Globus.transfer_file` |
 | `ResolveEndpoint` / `AllowedPathSafety` | Globus executor working-directory and endpoint-path validation | `GlobusStaging._get_globus_endpoint` |
+| `CreateCleanCopy` / `LocalPathIsClean` | Preserve global File URL while clearing site-local staging metadata | `File.cleancopy` and `DataManager.optionally_stage_in` |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `GatherDependencies` / `RunWorker` | shallow versus recursive Future collection and unwrapping | `parsl/dataflow/dependency_resolvers.py` and `DataFlowKernel._unwrap_futures` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
