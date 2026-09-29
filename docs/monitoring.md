@@ -125,6 +125,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLastMes
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_last_message_runtime.py -v
 ```
 
+`ParslMonitoringDeferredMultiplicity.tla` refines the first-message deferral boundary to two
+observations for the same task/try before the `TRY` row exists. The current one-entry dictionary
+overwrites the earlier observation; the candidate fixed path retains both until replay. TLC finds
+the current `NoDeferredLoss` counterexample (5 generated/4 distinct states) and checks 18
+generated/9 distinct fixed states. The runtime probe uses the real SQLite-backed manager and
+checks that only the later hostname survives today.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeferredMultiplicityCurrent.cfg models/monitoring/ParslMonitoringDeferredMultiplicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeferredMultiplicityFixed.cfg models/monitoring/ParslMonitoringDeferredMultiplicity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_deferred_multiplicity_runtime.py -v
+```
+
 `ParslMonitoringShutdownDrain.tla` models the normal close boundary: setting the kill event does
 not discard messages already accepted by the external resource queue. The migration thread and
 database loop continue until their queues are empty. TLC checks message conservation, and
