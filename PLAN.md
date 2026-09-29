@@ -34,6 +34,10 @@ The ThreadPool refinement adds `ParslThreadExecutorFutureLifecycle`, modeling qu
 Future cancellation and shutdown waiting. A real one-worker executor confirms that queued work can
 be cancelled while a running callable continues to completion.
 
+The serialization refinement adds `ParslApplyDispatchBoundary`, connecting length-prefixed facade
+unpacking to worker-side `execute_task` arity. The current model exposes malformed extra frames at
+the worker boundary; the fixed branch rejects them immediately after framing.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
@@ -50,7 +54,7 @@ Recent focused models now connect the previously separate boundaries:
   stale results, and ordered duplicate positions in an outer `join_app`; a real Parsl runtime
   bridge exercises the same result shape.
 
-The runtime suite currently contains 481 probes and passes as a whole:
+The runtime suite currently contains 482 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -757,7 +761,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 481 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 482 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

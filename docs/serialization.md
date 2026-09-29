@@ -9,6 +9,17 @@ These models cover Python callable/object serialization, framed buffers, seriali
 ZMQ-style transport, task/result correlation, duplicate or stale messages, and apply-message
 arity.
 
+`ParslApplyDispatchBoundary.tla` connects the framing layer to worker invocation. The current
+facade returns every length-prefixed buffer, while `execute_task` expects exactly function, args,
+and kwargs; the fixed branch rejects malformed arity before worker dispatch. The runtime bridge
+uses a real serialized callable plus an extra frame and observes the same boundary.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyDispatchBoundaryCurrent.cfg models/serialization/ParslApplyDispatchBoundary.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyDispatchBoundaryFixed.cfg models/serialization/ParslApplyDispatchBoundary.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_apply_dispatch_boundary_runtime.py -v
+```
+
 `ParslFunctionObjectTransport.tla` is the smallest executable snapshot model for a Python
 callable and the object content it closes over.  Serialization captures a bounded source
 version before the message is queued; source mutation is allowed while the frame is in flight,
