@@ -7,6 +7,18 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslHtexSubmitCounterRace.tla` models concurrent `HighThroughputExecutor.submit_payload`
+calls. The current implementation updates `_task_counter` and `tasks` as separate unsynchronized
+operations, so two callers can allocate the same task ID and overwrite one Future. The runtime
+probe forces the read/modify/write interleaving and observes two queued messages with ID `1` but
+only one entry in `tasks`. A fixed implementation must serialize allocation and insertion.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitCounterRaceCurrent.cfg models/executors/ParslHtexSubmitCounterRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitCounterRaceFixed.cfg models/executors/ParslHtexSubmitCounterRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_submit_counter_race_runtime.py -v
+```
+
 `ParslThreadExecutorThreadCount.tla` models `ThreadPoolExecutor` admission of
 `max_threads`. The current wrapper accepts zero at construction and fails only when `start()`
 creates the underlying pool; the fixed branch rejects non-positive counts immediately. The
