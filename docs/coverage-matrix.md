@@ -144,3 +144,6 @@ Local provider coverage also records failed-launch script cleanup
 
 Poller lifecycle coverage also records close/scale-in overlap
 (`ParslPollerCloseScaleInRace`, BUG-122).
+
+Poller lifecycle coverage also records duplicate executor registration
+(`ParslPollerDuplicateExecutor`, BUG-123).

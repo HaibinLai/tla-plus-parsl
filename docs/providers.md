@@ -95,6 +95,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerDuplicateExe
 /tmp/parsl-venv/bin/python -m unittest tests/test_poller_duplicate_executor_runtime.py -v
 ```
 
+This registration-idempotence boundary is recorded as BUG-123: repeated registration appends the
+same executor and duplicates poller/strategy work.
+
 `ParslKubernetesUnknownJob.tla` models a status request for an id absent from the provider's
 local resource map. The current `status()` path raises `KeyError`; the fixed branch returns an
 explicit UNKNOWN status. The runtime probe isolates the concrete lookup with an empty resource
