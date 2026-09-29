@@ -14,6 +14,15 @@ changes to the shared model before launching the much larger multi-task configur
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslAbstractSmoke.cfg models/core/ParslAbstract.tla
 ```
 
+`ParslAbstractJoinSmoke.cfg` is the corresponding join-focused smoke check. It keeps two inner
+tasks and one outer join task while removing provider, file, monitoring, retry, and failure
+branching. This gives a small regression target for the join state transitions before running the
+full `ParslJoinSafety.cfg` composition.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslAbstractJoinSmoke.cfg models/core/ParslAbstract.tla
+```
+
 `ParslEndToEnd.tla` is the deliberately small integration model. It connects dependency release,
 task serialization, wire delivery, worker execution, result delivery, retry/timeout, and late
 results. `ParslEndToEnd.cfg` intentionally permits an old attempt to resolve the Future and TLC
