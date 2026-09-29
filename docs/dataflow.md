@@ -12,6 +12,16 @@ inner Futures with physical retries, cancellation, failure aggregation, and term
 ordering. `MAX_RETRIES = 1` keeps the state space small while preserving the important attempt
 correlation and join-handle invariants.
 
+`ParslJoinCallableTransport.tla` adds the serialized callable boundary to that join semantics.
+Each inner logical Future has per-attempt captured content, task/result wire state, and stale
+late-result handling. The outer join only finalizes after both logical Futures succeed, then
+constructs the ordered `<<I1, I2, I1>>` result, preserving the duplicate position. TLC checks
+16,113 generated/3,559 distinct states.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCallableTransport.cfg models/dataflow/ParslJoinCallableTransport.tla
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFull.cfg models/dataflow/ParslJoinFull.tla
 PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_join*_runtime.py' -v
