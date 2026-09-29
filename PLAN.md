@@ -21,6 +21,11 @@ in the first version.
 
 ### Recent cross-layer refinements and regression baseline
 
+The latest app-boundary refinement adds `ParslBashAppOutcome`: shell exit status, stdout side
+effects, declared-output validation, and Future success/failure are modeled as separate phases.
+The real `bash_app` bridge confirms that non-zero exits become `BashExitFailure`, while successful
+apps resolve only after declared output files exist.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
@@ -37,7 +42,7 @@ Recent focused models now connect the previously separate boundaries:
   stale results, and ordered duplicate positions in an outer `join_app`; a real Parsl runtime
   bridge exercises the same result shape.
 
-The runtime suite currently contains 476 probes and passes as a whole:
+The runtime suite currently contains 478 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \

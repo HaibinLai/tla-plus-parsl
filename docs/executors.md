@@ -7,6 +7,17 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslBashAppOutcome.tla` is a compact app-level boundary model. It separates shell exit,
+stdout side effects, declared-output validation, and Future resolution: a non-zero exit resolves
+the Future with `BashExitFailure`, while a successful exit must pass output validation first.
+The runtime bridge is `tests/test_bash_app_outcome_runtime.py`, which executes real `bash_app`
+functions through a thread executor and checks both stdout bytes and declared output files.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBashAppOutcome.cfg models/executors/ParslBashAppOutcome.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_bash_app_outcome_runtime.py -v
+```
+
 `ParslHtexSubmitCounterRace.tla` models concurrent `HighThroughputExecutor.submit_payload`
 calls. The current implementation updates `_task_counter` and `tasks` as separate unsynchronized
 operations, so two callers can allocate the same task ID and overwrite one Future. The runtime

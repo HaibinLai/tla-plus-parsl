@@ -60,3 +60,6 @@ run_case provider-worker-scaling pass \
 run_case join-callable-transport pass \
     models/dataflow/ParslJoinCallableTransport.cfg \
     models/dataflow/ParslJoinCallableTransport.tla
+run_case bash-app-outcome pass \
+    models/executors/ParslBashAppOutcome.cfg \
+    models/executors/ParslBashAppOutcome.tla
