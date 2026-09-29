@@ -15,14 +15,17 @@ helper and records the current rejection.
 
 `ParslFileCleanCopy.tla` models `File.cleancopy()`, which preserves immutable URL metadata while
 clearing mutable site-local staging metadata. The current/unsafe branch aliases the old
-`local_path` into the copy; the fixed branch produces a clean object. The runtime probe checks
-that the real implementation preserves the original annotation and gives the copy no local
-path.
+`local_path` into the copy; the fixed branch produces a clean object. TLC finds the current
+two-state `LocalPathIsClean` counterexample and checks four generated/two distinct states in the
+fixed branch. The runtime probe checks that the real implementation preserves the original
+annotation and gives the copy no local path.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathCurrent.cfg models/staging/ParslGlobusEndpointPath.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathFixed.cfg models/staging/ParslGlobusEndpointPath.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathValid.cfg models/staging/ParslGlobusEndpointPath.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileCleanCopyCurrent.cfg models/staging/ParslFileCleanCopy.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileCleanCopyFixed.cfg models/staging/ParslFileCleanCopy.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_globus_endpoint_path_runtime.py -v
 /tmp/parsl-venv/bin/python -m unittest tests/test_file_clean_copy_runtime.py -v
 ```
