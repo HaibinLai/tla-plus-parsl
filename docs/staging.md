@@ -224,6 +224,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupSu
 /tmp/parsl-venv/bin/python -m unittest tests/test_http_partial_cleanup_runtime.py -v
 ```
 
+`ParslHTTPConnectionCleanup.tla` isolates response lifetime from destination publication. The
+current HTTP wrapper does not close a streaming `requests.Response` when `iter_content` raises;
+the fixed branch closes it in a finally-equivalent path. The runtime probe uses a response double
+that yields one chunk and then fails, checking both the leaked response and partial destination.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPConnectionCleanupCurrent.cfg models/staging/ParslHTTPConnectionCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPConnectionCleanupFixed.cfg models/staging/ParslHTTPConnectionCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_connection_cleanup_runtime.py -v
+```
+
 `ParslHTTPStatusValidation.tla` models the HTTP response-status boundary. The current in-task
 wrapper writes a 404 response body and starts the user task because it never checks the status
 code; the fixed branch rejects non-2xx responses before publication. The runtime probe uses a

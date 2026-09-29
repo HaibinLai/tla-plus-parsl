@@ -24,3 +24,6 @@ runtime probe; the model isolates malformed cancellation cardinality from normal
 
 The `join_app` row also includes `ParslJoinReturnEquality` and its hostile-`__eq__` runtime probe;
 the model isolates return-shape validation from ordinary Future aggregation.
+
+The files/transfer row also includes `ParslHTTPConnectionCleanup` and its streaming-response
+failure probe; response lifetime is modeled separately from partial destination publication.
