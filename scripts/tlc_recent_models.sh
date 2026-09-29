@@ -246,3 +246,9 @@ run_case command-client-close-current counterexample \
 run_case command-client-close-fixed pass \
     models/executors/ParslCommandClientCloseRaceFixed.cfg \
     models/executors/ParslCommandClientCloseRace.tla
+run_case kubernetes-admission-current counterexample \
+    models/providers/ParslKubernetesAdmissionCurrent.cfg \
+    models/providers/ParslKubernetesAdmission.tla
+run_case kubernetes-admission-fixed pass \
+    models/providers/ParslKubernetesAdmissionFixed.cfg \
+    models/providers/ParslKubernetesAdmission.tla

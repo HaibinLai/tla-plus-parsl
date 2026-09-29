@@ -143,6 +143,10 @@ The command-client close race is now in the smoke sweep: the current `CommandCli
 terminates the socket while leaving the health flag true, so a later `run()` touches a closed ZMQ
 socket; the fixed branch rejects the command before transport use.
 
+Kubernetes admission is now covered alongside polling: the current submit path records a newly
+created Pending pod as `RUNNING`, allowing task admission too early; the fixed branch keeps the
+job Pending until a poll observes the Running phase.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
