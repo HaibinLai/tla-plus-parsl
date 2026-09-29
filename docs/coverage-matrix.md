@@ -99,3 +99,6 @@ Monitoring coverage also records malformed worker-message isolation
 
 Clock/heartbeat coverage also records invalid HTEX heartbeat-parameter admission
 (`ParslHeartbeatParameterValidation`, BUG-107).
+
+Clock/timeout coverage also records negative Python-app timeout admission
+(`ParslPythonTimeoutParameter`, BUG-108).

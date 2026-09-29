@@ -20,6 +20,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPythonTimeoutParameter
 /tmp/parsl-venv/bin/python -m unittest tests/test_python_timeout_parameter_runtime.py -v
 ```
 
+This timeout-admission boundary is recorded as BUG-108: a negative delay becomes an immediate
+application failure instead of a construction-time validation error.
+
 `ParslHeartbeatParameterValidation.tla` models HTEX heartbeat configuration admission. The
 current executor stores a zero period or non-positive threshold and proceeds; the fixed branch
 rejects those values before launching workers. The runtime probe constructs the real
