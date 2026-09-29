@@ -6,6 +6,19 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslAWSProviderCancel.tla` models EC2 cancellation after the remote termination call. The
+current path can raise when local `resources`/`instances` bookkeeping has already forgotten the
+ID; the fixed branch makes that cleanup idempotent. TLC finds the two-state `RemoteSuccessSafety`
+counterexample in the stale-ID configuration and checks four generated/two distinct states in the
+fixed and linger configurations.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderCancelMissingCurrent.cfg models/providers/ParslAWSProviderCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderCancelMissingFixed.cfg models/providers/ParslAWSProviderCancel.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAWSProviderCancelLinger.cfg models/providers/ParslAWSProviderCancel.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_cancel_runtime.py -v
+```
+
 `ParslGoogleCloudZoneSelection.tla` models the region-to-zone lookup performed by
 `GoogleCloudProvider.get_zone`. The current implementation silently returns `None` when no UP
 zone matches the requested region, allowing construction to continue until a later API request

@@ -67,4 +67,7 @@ TypeOK ==
 TerminationSafety ==
     state = "terminated" => ~localPresent
 
+RemoteSuccessSafety ==
+    TERMINATE_SUCCEEDS /\ ~LINGER => state \in {"ready", "terminated"}
+
 =============================================================================
