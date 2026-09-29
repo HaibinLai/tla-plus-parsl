@@ -30,6 +30,12 @@ publication, dependent-consumer admission, and asynchronous monitoring persisten
 configuration permits a success row (and a ready DataFuture) before all chunks are received;
 the fixed configuration gates both observations on complete stage-out and checks 21 states.
 
+The combined join configuration `models/core/ParslJoinSafety.cfg` has also been checked against
+the shared `ParslAbstract` module. It explores 427,320 generated states (66,459 distinct states,
+depth 61) with dependency, Future, retry, join-result, join-handle, and join-failure invariants
+all passing. This is a bounded composition check; the focused `models/dataflow/` join models
+remain preferable for larger duplicate, cancellation, memoization, and callback-race scenarios.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTaskStagingMonitoringCurrent.cfg models/core/ParslTaskStagingMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTaskStagingMonitoringFixed.cfg models/core/ParslTaskStagingMonitoring.tla
