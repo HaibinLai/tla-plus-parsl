@@ -359,6 +359,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitFixe
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_submit_runtime.py -v
 ```
 
+`ParslWorkQueueSubmit.tla` applies the same submit-lifecycle boundary to Work Queue. The current
+executor registers a Future before callable serialization and before checking the submit process;
+both failures can leave an orphaned pending mapping. The fixed branch rolls back that mapping.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueSubmitFailure.cfg models/executors/ParslWorkQueueSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueSubmitFixed.cfg models/executors/ParslWorkQueueSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueSubmitSerializationFailure.cfg models/executors/ParslWorkQueueSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueSubmitSerializationFailureFixed.cfg models/executors/ParslWorkQueueSubmit.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_submit_runtime.py -v
+```
+
 `ParslScaleOutFailureMonitoring.tla` models partial provisioning during
 `BlockProviderExecutor.scale_out_facade`: one block succeeds and a later provider submission
 fails. The current implementation stores the failed block in `_status` and notifies the
