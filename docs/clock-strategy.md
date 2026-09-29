@@ -87,6 +87,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerCloseTimeoutFixed
 /tmp/parsl-venv/bin/python -m unittest tests/test_timer_close_timeout_runtime.py -v
 ```
 
+`ParslTimerReentrantClose.tla` covers the separate re-entrant boundary: a callback calling
+`Timer.close()` attempts to join the timer's own thread in the current implementation and raises
+`RuntimeError`. The fixed branch treats the callback-side close as a kill-event request without a
+self-join. The runtime probe invokes the real `Timer` callback and captures the exception.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerReentrantCloseCurrent.cfg models/clock/ParslTimerReentrantClose.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerReentrantCloseFixed.cfg models/clock/ParslTimerReentrantClose.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_timer_reentrant_close_runtime.py -v
+```
+
 `ParslWorkerContactTimeout.tla` models the HTEX worker-side clock: periodic heartbeat emission,
 contact timestamp refresh on incoming messages, and self-stop when a no-message poll reaches the
 heartbeat threshold. A message at the exact threshold wins because the source handles `POLLIN`
