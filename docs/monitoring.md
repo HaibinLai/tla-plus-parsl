@@ -19,6 +19,18 @@ atomicity, deferred events, close behavior, and batching-threshold edge cases.
 
 Files live in [`models/monitoring/`](../models/monitoring/).
 
+`ParslMonitoringMalformedWorkerMessage.tla` models worker-task monitoring input whose `first_msg`
+and `last_msg` flags are both false. The current database-manager loop raises `RuntimeError` and
+terminates its processing thread; the fixed branch discards the malformed message and keeps the
+worker alive. The runtime probe drives the real manager in a short-lived thread and captures the
+uncaught exception.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringMalformedWorkerMessageCurrent.cfg models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringMalformedWorkerMessageFixed.cfg models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_malformed_worker_message_runtime.py -v
+```
+
 `ParslMonitoringDelivery.tla` is the compact end-to-end event path. It models logical status
 versions, an asynchronous queue, reordering, and database writes. The current configuration finds
 a `DatabaseMonotonic` counterexample when an older event overwrites a newer record. The fixed
