@@ -194,6 +194,9 @@ Clock/file-wait coverage also records explicit timeout handling before `open()`
 Clock/heartbeat coverage also records worker contact expiry suppressed by wall-clock rollback
 (`ParslWorkerContactClockRollback`, BUG-137).
 
+Staging coverage also records loss of an existing good destination during failed HTTP replacement
+(`ParslHTTPExistingDestination`, BUG-138).
+
 Radical-Pilot executor coverage also records late terminal callbacks after cancellation
 (`ParslRadicalPilotLateCallback`, BUG-135).
 

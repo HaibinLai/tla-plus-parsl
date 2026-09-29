@@ -227,6 +227,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupSu
 /tmp/parsl-venv/bin/python -m unittest tests/test_http_partial_cleanup_runtime.py -v
 ```
 
+`ParslHTTPExistingDestination.tla` refines the same boundary when the destination already holds
+a valid previous version. The current `open(..., "wb")` truncates that version before the stream
+completes, so a later read failure leaves only the new partial bytes. The fixed branch preserves
+the old version until a completed transfer can be atomically published. The runtime probe uses a
+real HTTP staging wrapper and an existing temporary file.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPExistingDestinationCurrent.cfg models/staging/ParslHTTPExistingDestination.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPExistingDestinationFixed.cfg models/staging/ParslHTTPExistingDestination.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_existing_destination_runtime.py -v
+```
+
+This content-preservation boundary is recorded as BUG-138.
+
 `ParslHTTPConnectionCleanup.tla` isolates response lifetime from destination publication. The
 current HTTP wrapper does not close a streaming `requests.Response` when `iter_content` raises;
 the fixed branch closes it in a finally-equivalent path. The runtime probe uses a response double
