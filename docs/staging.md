@@ -145,6 +145,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslInputListMutationFi
 /tmp/parsl-venv/bin/python -m unittest tests/test_input_list_mutation_runtime.py -v
 ```
 
+`ParslOutputListMutation.tla` covers the corresponding caller-owned collection boundary in
+`DataFlowKernel._add_output_deps`. The current implementation rewrites the `outputs` list in
+place while replacing descriptors with clean copies for stage-out; the candidate fixed branch
+copies the list before rewriting. TLC finds the current two-state `CallerListPreserved`
+counterexample and checks the fixed four-state model. The runtime probe invokes the real DFK
+helper with a staging double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslOutputListMutationCurrent.cfg models/dataflow/ParslOutputListMutation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslOutputListMutationFixed.cfg models/dataflow/ParslOutputListMutation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_output_list_mutation_runtime.py -v
+```
+
 `ParslDataManagerStageOutOrdering.tla` checks the analogous output path in
 `DataFlowKernel._add_output_deps`: `stage_out` starts a separate transfer before
 `replace_task_stage_out` constructs the application wrapper. A wrapper exception can therefore
