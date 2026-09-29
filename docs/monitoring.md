@@ -28,6 +28,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInser
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_db_runtime.py -v
 ```
 
+`ParslMonitoringTaskInsertBookkeeping.tla` models a separate TASK-table failure boundary. The
+current `DatabaseManager.start` loop records a task ID in `inserted_tasks` before the SQL insert
+has succeeded. If the insert fails, the next message is routed to UPDATE even though the row is
+absent. The fixed branch commits the bookkeeping bit only after insertion and retries the insert
+path. This is recorded as BUG-129. The runtime probe runs the real start loop with a database
+double that rejects TASK inserts and observes one insert followed by an incorrect update.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskInsertBookkeepingCurrent.cfg models/monitoring/ParslMonitoringTaskInsertBookkeeping.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskInsertBookkeepingFixed.cfg models/monitoring/ParslMonitoringTaskInsertBookkeeping.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_task_insert_bookkeeping_runtime.py -v
+```
+
 `ParslMonitoringHubClose.tla` models the outer `MonitoringHub.close()` lifecycle. Closing signals
 the DB process, waits for it, closes the resource queue, and joins the queue thread. The active
 flag makes repeated close calls idempotent. The runtime probe uses the real method with counting

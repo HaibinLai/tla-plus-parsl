@@ -166,3 +166,6 @@ Thread executor coverage also records delayed zero-thread-count validation
 
 Timer coverage also records close returning before callback quiescence
 (`ParslTimerCloseTimeout`, BUG-128).
+
+Monitoring database coverage also records TASK-row bookkeeping before insert success
+(`ParslMonitoringTaskInsertBookkeeping`, BUG-129).
