@@ -6,6 +6,17 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslTorqueStatusFailure.tla` models the return-code boundary around `qstat`. The current
+Torque parser ignores a non-zero command result and still consumes stdout, so stale output can
+overwrite a running local resource. The fixed branch returns early and preserves the known
+status. The runtime probe supplies a failed command with a stale completion line.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueStatusFailureCurrent.cfg models/providers/ParslTorqueStatusFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueStatusFailureFixed.cfg models/providers/ParslTorqueStatusFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_status_failure_runtime.py -v
+```
+
 `ParslSlurmMalformedLine.tla` covers truncated non-empty records from `sacct` or `squeue`.
 The current parser unpacks every line into a job id and state, so a line missing the state token
 raises `ValueError` and aborts the polling pass. The fixed branch skips malformed records and
