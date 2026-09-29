@@ -111,3 +111,6 @@ ZMQ command coverage also records lock acquisition outside the command deadline
 
 Condor provider coverage also records nonpositive scheduler command chunk-size admission
 (`ParslCondorChunkSize`, BUG-111).
+
+Local provider coverage also records zero `tasks_per_node` admission
+(`ParslLocalTasksPerNode`, BUG-112).

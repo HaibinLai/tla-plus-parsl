@@ -175,6 +175,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeV
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_tasks_per_node_runtime.py -v
 ```
 
+This resource-admission boundary is recorded as BUG-112: zero `tasks_per_node` is accepted and
+only surfaces as a failed local job after launch.
+
 `ParslLocalProviderSubmitCleanup.tla` models the failed-launch path after
 `LocalProvider.submit` has written its worker script. The current provider raises `SubmitException`
 but leaves the newly-created `.sh` file in `script_dir`; the fixed branch removes the script
