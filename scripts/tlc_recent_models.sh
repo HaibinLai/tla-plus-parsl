@@ -84,3 +84,9 @@ run_case join-cancellation-current counterexample \
 run_case join-cancellation-fixed pass \
     models/dataflow/ParslJoinCancellationFixed.cfg \
     models/dataflow/ParslJoinCancellation.tla
+run_case join-list-cancellation-current counterexample \
+    models/dataflow/ParslJoinListCancellationCurrent.cfg \
+    models/dataflow/ParslJoinListCancellation.tla
+run_case join-list-cancellation-fixed pass \
+    models/dataflow/ParslJoinListCancellationFixed.cfg \
+    models/dataflow/ParslJoinListCancellation.tla

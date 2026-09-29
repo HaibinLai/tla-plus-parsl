@@ -36,6 +36,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCancellationFix
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_cancellation_end_to_end_runtime.py -v
 ```
 
+The list-valued cancellation model is also corroborated by
+`tests/test_join_list_cancellation_end_to_end_runtime.py`: one successful member and one cancelled
+member leave the decorated outer join unresolved in the current path.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFull.cfg models/dataflow/ParslJoinFull.tla
 PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_join*_runtime.py' -v

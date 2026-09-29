@@ -46,6 +46,10 @@ The join refinement adds an end-to-end cancelled-inner-Future bridge. The curren
 `join_app` path reproduce the callback exception that leaves the outer Future in `joining`; the
 fixed branch maps cancellation into a terminal join failure.
 
+The same bridge now covers list-valued joins: a successful member plus a cancelled member reaches
+the same non-terminal callback path in the current implementation, matching
+`ParslJoinListCancellation` and its fixed terminal-failure branch.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
@@ -62,7 +66,7 @@ Recent focused models now connect the previously separate boundaries:
   stale results, and ordered duplicate positions in an outer `join_app`; a real Parsl runtime
   bridge exercises the same result shape.
 
-The runtime suite currently contains 484 probes and passes as a whole:
+The runtime suite currently contains 485 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -769,7 +773,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 484 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 485 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

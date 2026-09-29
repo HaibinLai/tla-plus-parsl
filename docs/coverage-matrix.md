@@ -50,6 +50,9 @@ interchange kill ordering before ZMQ pipe closure.
 Join coverage also includes the end-to-end cancelled-inner-Future bridge for `ParslJoinCancellation`;
 the current branch intentionally reproduces the non-terminal outer join state.
 
+The list-valued cancellation path is likewise bridged end to end by
+`test_join_list_cancellation_end_to_end_runtime.py` and `ParslJoinListCancellation`.
+
 The executor/provider row also includes `ParslScaleInCancelShape` and its short-provider-cancel
 runtime probe; the model isolates malformed cancellation cardinality from normal scale-in policy.
 
