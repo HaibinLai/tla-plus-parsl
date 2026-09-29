@@ -6,6 +6,18 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslSlurmForeignJob.tla` audits the status parser's local-resource boundary. Slurm output can
+contain a job id that is already forgotten locally or belongs to another submission; the current
+implementation indexes it directly and raises `KeyError`. The fixed branch ignores foreign
+records and keeps polling local jobs. The runtime probe drives the real `_status` method with a
+foreign scheduler line.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmForeignJobCurrent.cfg models/providers/ParslSlurmForeignJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmForeignJobFixed.cfg models/providers/ParslSlurmForeignJob.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_foreign_job_runtime.py -v
+```
+
 `ParslPBSProMalformedJSON.tla` covers the parser boundary before PBS Pro job-id lookup. A
 malformed `qstat -x -F json` response currently lets `json.loads` raise out of `_status`, while
 the fixed branch preserves the last known status for the next polling cycle. The runtime probe
