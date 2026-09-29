@@ -136,6 +136,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNode
 /tmp/parsl-venv/bin/python -m unittest tests/test_torque_tasks_per_node_runtime.py -v
 ```
 
+`ParslCondorChunkSize.tla` models Condor's `cmd_chunk_size` batching parameter. The current
+`_chunker` helper silently treats a zero size as an unbounded chunk; the fixed branch rejects
+non-positive sizes before scheduler polling or cancellation. The runtime probe calls the real
+helper with two job ids and a zero size.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorChunkSizeCurrent.cfg models/providers/ParslCondorChunkSize.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorChunkSizeFixed.cfg models/providers/ParslCondorChunkSize.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorChunkSizeValid.cfg models/providers/ParslCondorChunkSize.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_chunk_size_runtime.py -v
+```
+
 `ParslSlurmForeignJob.tla` audits the status parser's local-resource boundary. Slurm output can
 contain a job id that is already forgotten locally or belongs to another submission; the current
 implementation indexes it directly and raises `KeyError`. The fixed branch ignores foreign

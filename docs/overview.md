@@ -1887,6 +1887,17 @@ Condor cancellation is exercised with a fake scheduler and a one-job chunk size:
 successful cancellation of an unknown id is ignored locally rather than crashing, unlike the
 current LSF and Grid Engine cancellation paths.
 
+`ParslCondorChunkSize.tla` models the `cmd_chunk_size` input to Condor scheduler commands. The
+current `_chunker` silently turns a zero size into one unbounded chunk; the fixed branch rejects
+non-positive sizes before status or cancellation batching.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorChunkSizeCurrent.cfg models/providers/ParslCondorChunkSize.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorChunkSizeFixed.cfg models/providers/ParslCondorChunkSize.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorChunkSizeValid.cfg models/providers/ParslCondorChunkSize.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_chunk_size_runtime.py -v
+```
+
 The Torque foreign-job counterexample has the same kind of source-level runtime probe:
 
 ```bash
@@ -2003,7 +2014,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 375 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 376 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -3023,6 +3034,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `SubmitSuccess` / `SubmitEmptyCurrent` / `SubmitEmptyFixed` | PBS Pro `qsub` output parsing and job/resource registration | `PBSProProvider.submit` |
 | `BeginStatus` / `HandleForeignJob` | PBS Pro JSON status translation and foreign-job handling | `PBSProProvider._status` |
 | `WriteScript` / `ExecuteBsub` / `ParseBsub` | LSF `bsub` submission and resource registration | `LSFProvider.submit` |
+| `Validate` / `ChunkSizeSafety` | Condor scheduler command chunk-size validation | `CondorProvider._chunker` / `CondorProvider.__init__` |
 | `Cancel` | LSF `bkill` cancellation and local resource-state update | `LSFProvider.cancel` |
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
