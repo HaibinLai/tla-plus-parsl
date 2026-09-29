@@ -39,6 +39,18 @@ the fact that callback exceptions are logged without stopping the timer, and the
 boundary after `close()`. `tests/test_periodic_timer_runtime.py` probes the same behavior against
 the real timer implementation.
 
+`ParslTimerIntervalValidation.tla` checks the timer parameter boundary. The current constructor
+silently maps a negative interval to zero, creating a no-wait timer loop; the fixed branch rejects
+negative input before starting its thread. The runtime probe confirms the current normalization
+on the real `Timer` class.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationCurrent.cfg models/clock/ParslTimerIntervalValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationFixed.cfg models/clock/ParslTimerIntervalValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationValid.cfg models/clock/ParslTimerIntervalValidation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_timer_interval_validation_runtime.py -v
+```
+
 `ParslTimerCloseTimeout.tla` refines the close boundary when a callback is still running. The
 current `Timer.close(timeout=...)` returns `None` after a timed join even while the daemon thread
 remains alive; the fixed branch represents that result as an explicit `closing` timeout rather

@@ -473,6 +473,11 @@ elapsed time. The runtime probe drives the real helper with a deterministic roll
 Future-only list, or an empty list may enter the joining state. Tuple, scalar, and mixed-list
 returns fail before callbacks are registered, matching the validation in `DataFlowKernel`.
 
+`ParslTimerIntervalValidation.tla` models the `Timer` constructor's interval guard. The current
+`max(0, interval)` normalization turns a negative interval into a zero-delay periodic loop; the
+fixed branch rejects that configuration before starting the timer thread. The runtime probe
+observes the current normalized value directly.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1946,7 +1951,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 363 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 364 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2030,6 +2035,15 @@ not terminate the timer, and `close()` leaves the timer quiescent. The runtime c
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPeriodicTimer.cfg models/clock/ParslPeriodicTimer.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_periodic_timer_runtime.py -v
+```
+
+`ParslTimerIntervalValidation.tla` checks negative interval admission and the current zero-delay
+normalization:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationCurrent.cfg models/clock/ParslTimerIntervalValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationFixed.cfg models/clock/ParslTimerIntervalValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerIntervalValidationValid.cfg models/clock/ParslTimerIntervalValidation.tla
 ```
 
 The worker-side apply-message helper is exercised directly:
@@ -2866,6 +2880,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `Start` / `FunctionReturns` / `FunctionRaises` / `TimerFires` | Python app timeout timer lifecycle and cleanup | `parsl.app.python.timeout` and `AutoCancelTimer` |
+| `Validate` / `Callback` / `NegativeIntervalSafety` | periodic Timer interval admission and zero-delay behavior | `parsl.utils.Timer.__init__` / `_wake_up_timer` |
 | `ExpireManager` / `Heartbeat` / `ExpirationAccounting` | strict heartbeat threshold and in-flight manager-loss cleanup | `Interchange.expire_bad_managers` and main polling loop |
 | `AdvanceClock` / `CheckExpiry` / `NoPrematureExpiry` | wall-clock jump versus monotonic heartbeat expiry | `Interchange.expire_bad_managers` |
 | `PublishMonitor` | persist an asynchronous task status update | `DataFlowKernel._update_task_state`, `MonitoringHub`, and monitoring radios |
