@@ -6,6 +6,16 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslClusterStatusRequest.tla` captures the common `ClusterProvider.status` projection. A single
+provider-specific `_status()` poll updates local resources, then the public method projects those
+records back in the caller's requested order, including duplicate job IDs. The runtime probe uses
+the real base-class method with a provider double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterStatusRequest.cfg models/providers/ParslClusterStatusRequest.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_cluster_status_request_runtime.py -v
+```
+
 `ParslAWSProviderCancel.tla` models EC2 cancellation after the remote termination call. The
 current path can raise when local `resources`/`instances` bookkeeping has already forgotten the
 ID; the fixed branch makes that cleanup idempotent. TLC finds the two-state `RemoteSuccessSafety`

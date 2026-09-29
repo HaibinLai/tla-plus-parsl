@@ -36,3 +36,6 @@ model separates timeout arithmetic from command-socket poisoning.
 
 The executor/provider coverage also includes `ParslBadStateTaskMutation` (BUG-088), which checks
 that Future callbacks cannot abort executor-failure propagation by mutating the task registry.
+
+The provider baseline also includes `ParslClusterStatusRequest`, which checks one backend poll and
+ordered/duplicate projection of the public status response.
