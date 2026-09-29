@@ -29,6 +29,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientClose
 /tmp/parsl-venv/bin/python -m unittest tests/test_command_client_close_runtime.py -v
 ```
 
+`ParslHtexTaskIdType.tla` covers the decoded task-envelope ID boundary. The current ingress path
+uses unary negation while constructing its priority tuple, so a non-numeric ID can escape the
+interchange loop. The fixed branch rejects the malformed envelope before queue insertion.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskIdTypeCurrent.cfg models/executors/ParslHtexTaskIdType.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskIdTypeFixed.cfg models/executors/ParslHtexTaskIdType.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_id_type_runtime.py -v
+```
+
 `ParslThreadExecutorThreadCount.tla` models `ThreadPoolExecutor` admission of
 `max_threads`. The current wrapper accepts zero at construction and fails only when `start()`
 creates the underlying pool; the fixed branch rejects non-positive counts immediately. The
