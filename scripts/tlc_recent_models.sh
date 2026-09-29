@@ -126,3 +126,9 @@ run_case htex-resource-spec-current counterexample \
 run_case htex-resource-spec-fixed pass \
     models/executors/ParslHtexTaskResourceSpecTypeFixed.cfg \
     models/executors/ParslHtexTaskResourceSpecType.tla
+run_case aws-status-cardinality-current counterexample \
+    models/providers/ParslAwsStatusMissingResultCurrent.cfg \
+    models/providers/ParslAwsStatusMissingResult.tla
+run_case aws-status-cardinality-fixed pass \
+    models/providers/ParslAwsStatusMissingResultFixed.cfg \
+    models/providers/ParslAwsStatusMissingResult.tla

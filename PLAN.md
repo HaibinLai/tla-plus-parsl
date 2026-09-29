@@ -73,6 +73,10 @@ the `TypeError`/`AttributeError` paths for non-numeric priority and non-mapping 
 while fixed models reject both before queue insertion. Their real interchange probes remain the
 runtime counterparts.
 
+Provider coverage now includes the AWS status-cardinality boundary: when EC2 omits a requested
+instance, the current model returns no status, while the fixed branch returns one explicit
+`UNKNOWN` observation. The real provider probe exercises the same missing-instance response.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
