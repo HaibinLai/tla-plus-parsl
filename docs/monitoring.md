@@ -171,6 +171,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBPerma
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_db_permanent_error_runtime.py -v
 ```
 
+`ParslMonitoringDBUpdatePermanentError.tla` applies the same retention property to
+`DatabaseManager._update`. A permanent non-locking database error is rolled back and swallowed by
+the current implementation after the update batch has been drained; the fixed branch retains the
+message for a later retry. The runtime probe invokes the concrete update path with a failing
+database double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBUpdatePermanentErrorCurrent.cfg models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_db_update_permanent_error_runtime.py -v
+```
+
 `ParslFilesystemRadioAtomicity.tla` models the filesystem monitoring radio's publication
 protocol. The current direct-write branch lets a reader observe a partial message; the fixed
 branch writes under `tmp/` and atomically renames into `new/`. TLC finds the expected current
