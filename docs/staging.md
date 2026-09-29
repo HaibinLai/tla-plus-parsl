@@ -198,6 +198,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFix
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_partial_cleanup_runtime.py -v
 ```
 
+`ParslFTPConnectionCleanup.tla` models the FTP socket lifetime around `retrbinary`. The current
+failure path leaves the connection open when transfer raises; the fixed branch closes it before
+reporting failure. TLC finds the two-state `FailureCleanupSafety` counterexample and checks four
+generated/two distinct states in the fixed and success configurations. The runtime probe injects
+a failing FTP connection and observes the missing `quit()` call.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanupCurrent.cfg models/staging/ParslFTPConnectionCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanupFixed.cfg models/staging/ParslFTPConnectionCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPConnectionCleanupSuccess.cfg models/staging/ParslFTPConnectionCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_ftp_connection_cleanup_runtime.py -v
+```
+
 `ParslHTTPStatusValidation.tla` models the HTTP response-status boundary. The current in-task
 wrapper writes a 404 response body and starts the user task because it never checks the status
 code; the fixed branch rejects non-2xx responses before publication. The runtime probe uses a
