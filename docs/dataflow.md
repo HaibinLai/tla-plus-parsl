@@ -115,6 +115,16 @@ until the inner join is terminal; successful inner list order is preserved, and 
 wrapped and propagated through both join layers. `tests/test_nested_join_runtime.py` exercises
 both paths with the real decorators and ThreadPool executor.
 
+`ParslJoinImmediateCallback.tla` models the already-completed inner Future race. The DFK must
+enter `joining` and install `join_lock` before calling `add_done_callback`, because Python may
+invoke that callback synchronously during registration. TLC checks the two callback interleavings
+and the runtime `test_already_completed_inner_future_callback` exercises the real decorator.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinImmediateCallback.cfg models/dataflow/ParslJoinImmediateCallback.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_runtime.py -v
+```
+
 `ParslDataFutureFalseyException.tla` covers the DataFuture parent callback boundary. The current
 truthiness check misclassifies an exception whose `__bool__` returns false as a successful file
 publication; the fixed branch checks exception presence explicitly. This is BUG-092 and is
