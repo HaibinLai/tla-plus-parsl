@@ -44,6 +44,19 @@ results, and inner cancellation/failure. The current configuration exposes a
 `JoinResultSafety` counterexample by collapsing duplicate list positions; the fixed configuration
 preserves the sequence and checks 5,694 states with all six invariants passing.
 
+`ParslTaskStatusFutureOrdering.tla` keeps logical task status separate from the public Future.
+Parsl publishes `exec_done` before `AppFuture.set_result`, allowing monitoring to observe a
+terminal task during the small callback-delivery window. The strict Current configuration
+exposes that ordering; Fixed and Valid allow it while preserving the rule that a completed Future
+always has a terminal task.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTaskStatusFutureOrderingCurrent.cfg models/dataflow/ParslTaskStatusFutureOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTaskStatusFutureOrderingFixed.cfg models/dataflow/ParslTaskStatusFutureOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTaskStatusFutureOrderingValid.cfg models/dataflow/ParslTaskStatusFutureOrdering.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_task_status_future_ordering_runtime.py -v
+```
+
 `ParslJoinReturnShape.tla` makes the admission boundary explicit: a single Future, a Future-only
 list, and an empty list enter `joining`; tuples, scalar values, and mixed lists fail before any
 join callback is registered. The runtime probe exercises the real `join_app` decorator with a

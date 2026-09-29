@@ -1971,7 +1971,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 368 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 369 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2491,6 +2491,21 @@ Deferred Future projections are exercised separately:
 tasks. Projection creation does not synchronously wait; the projection waits for source success,
 propagates source failure, and reports invalid keys as a projection exception.
 
+`ParslTaskStatusFutureOrdering.tla` separates the logical DFK task state from the public
+`AppFuture`. The completion path publishes `exec_done` before calling `set_result`, so a short
+status lag is allowed while Future callbacks are still pending. The runtime probe invokes the
+real `_complete_task_result` ordering with a recording Future.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTaskStatusFutureOrderingCurrent.cfg models/dataflow/ParslTaskStatusFutureOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTaskStatusFutureOrderingFixed.cfg models/dataflow/ParslTaskStatusFutureOrdering.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTaskStatusFutureOrderingValid.cfg models/dataflow/ParslTaskStatusFutureOrdering.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_task_status_future_ordering_runtime.py -v
+```
+
+The strict Current configuration reports the two-state status-lag counterexample; Fixed and Valid
+complete in 6 generated / 3 distinct states and preserve `FutureCompletionSafety`.
+
 The WorkQueue collector result boundary is exercised directly without requiring a Work Queue
 installation:
 
@@ -2850,6 +2865,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `StartTransferCurrent` / `PrepareWrapperCurrent` | stage-out transfer started before wrapper failure | `DataFlowKernel._add_output_deps` and `DataManager.replace_task_stage_out` |
 | `PrepareWrapperFixed` / `StartTransferFixed` | failure-safe output wrapper-before-transfer ordering | proposed ordering around `_add_output_deps` |
 | `ParentCancels` / `ParentCallback` | DataFuture parent success/failure/cancellation propagation | `DataFuture.parent_callback` |
+| `PublishTaskStatus` / `PublishFutureResult` / `FutureCompletionSafety` | publish logical `exec_done` before resolving the public Future | `DataFlowKernel._complete_task_result` |
 | `CorruptStaging` / `RepairStaging` / `FileStagingSafety` | damaged input transfer and repair before dependency release | `DataManager.stage_in` and transfer error paths |
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
