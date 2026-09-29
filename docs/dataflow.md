@@ -66,6 +66,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetryDuplicates
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_retry_duplicates_runtime.py -v
 ```
 
+`ParslJoinRetryCancellation.tla` combines retry-wait with list-join cancellation. The current
+callback lets `CancelledError` escape after an inner retry is cancelled; TLC finds
+`NoUnexpectedCallback` after 30 states. The fixed branch records cancellation as terminal inner
+failure and checks 484 distinct states. The concrete cancellation callback behavior is covered by
+`tests/test_join_list_cancellation_runtime.py` and `tests/test_join_single_cancellation_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetryCancellationCurrent.cfg models/dataflow/ParslJoinRetryCancellation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetryCancellationFixed.cfg models/dataflow/ParslJoinRetryCancellation.tla
+```
+
 `ParslTaskStatusFutureOrdering.tla` keeps logical task status separate from the public Future.
 Parsl publishes `exec_done` before `AppFuture.set_result`, allowing monitoring to observe a
 terminal task during the small callback-delivery window. The strict Current configuration
