@@ -19,6 +19,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThre
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_thread_count_runtime.py -v
 ```
 
+`ParslThreadExecutorResourceSpec.tla` models the unsupported-resource boundary in
+`ThreadPoolExecutor.submit`. A non-empty mapping is rejected with
+`InvalidResourceSpecification`, but the current implementation calls `.keys()` before building
+that exception. A truthy non-mapping value therefore raises `AttributeError`; the fixed branch
+rejects it through the same controlled path. The runtime probe exercises both concrete inputs.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecCurrent.cfg models/executors/ParslThreadExecutorResourceSpec.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecFixed.cfg models/executors/ParslThreadExecutorResourceSpec.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_resource_spec_runtime.py -v
+```
+
 `ParslPoolExecutorMap.tla` models the concrete `parsl.concurrent.ParslPoolExecutor.map` wrapper.
 The pool submits all inputs eagerly, consumes results in input order, and treats `timeout` as a
 deadline for the result iterator. A timeout does not cancel already-submitted Parsl Futures, and

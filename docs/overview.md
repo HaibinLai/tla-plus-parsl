@@ -165,6 +165,11 @@ after the local `instances` list has already lost the VM id, `list.remove` raise
 unsupported resource specifications, preservation of accepted work across `shutdown(wait=False)`,
 and the stronger wait-for-completion contract of `shutdown(wait=True)`.
 
+`ParslThreadExecutorResourceSpec.tla` refines the input-validation path. The current
+`ThreadPoolExecutor.submit` raises `AttributeError` for a truthy non-mapping resource value before
+it can construct `InvalidResourceSpecification`; the fixed branch keeps this rejection controlled.
+The runtime probe exercises a list and a mapping against the concrete executor.
+
 `ParslZipStageIn.tla` refines `ZipFileStaging.stage_in`: archive validation happens before output
 creation, but the current direct write can expose a partial output if the destination write fails.
 The fixed configuration uses a temporary output and atomic publication.
@@ -2114,7 +2119,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 388 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 390 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2831,6 +2836,9 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslExecutorShutdown.cfg`: 394,010 states generated, 74,431 distinct states, depth 28;
   shutdown admission rejection, ThreadPool completion-before-stop, WorkQueue collector failure
   cleanup, HTEX interchange closure, and in-flight cleanup all passed.
+- `ParslThreadExecutorResourceSpecCurrent.cfg`: expected `AttributeError` counterexample for a
+  truthy non-mapping resource value; `ParslThreadExecutorResourceSpecFixed.cfg`: 29 states
+  generated, 8 distinct states, depth 4; invalid values are rejected without creating a Future.
 - `ParslWorkQueueResults.cfg`: 606 states generated, 225 distinct states, depth 9;
   valid-result completion, corrupt/exception/no-result failure mapping, collector shutdown
   cleanup, and terminal-result consistency all passed.
@@ -3325,6 +3333,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThre
 
 The current configuration reaches the delayed start error; fixed and valid configurations
 preserve `ThreadCountSafety`.
+
+The ThreadPoolExecutor resource-specification refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecCurrent.cfg models/executors/ParslThreadExecutorResourceSpec.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecFixed.cfg models/executors/ParslThreadExecutorResourceSpec.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_resource_spec_runtime.py -v
+```
 
 The HTEX `cores_per_worker` refinement is checked with:
 
