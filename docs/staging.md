@@ -174,3 +174,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipPathValidationCur
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipPathValidationFixed.cfg models/staging/ParslZipPathValidation.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_zip_path_validation_runtime.py -v
 ```
+
+`ParslZipStageOut.tla` models archive publication followed by source cleanup. If cleanup fails,
+the current retry appends a second member with the same name; the fixed branch replaces the
+existing member atomically. The model now checks `NoDuplicateArchiveEntry` in both configurations:
+the retry/current configuration produces a counterexample, while the fixed configuration passes.
+The real `tests/test_zip_file_transfer_runtime.py` probe observes two archive entries after the
+cleanup failure and retry, while preserving the latest bytes on normal ZIP lookup.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageOutRetry.cfg models/staging/ParslZipStageOut.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageOutRetryFixed.cfg models/staging/ParslZipStageOut.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
+```

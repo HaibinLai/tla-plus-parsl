@@ -68,7 +68,7 @@ TypeOK ==
 ArchiveSafety ==
     phase = "completed" => archiveEntries > 0
 
-FixedNoDuplicate ==
-    FIXED => archiveEntries <= 1
+NoDuplicateArchiveEntry ==
+    FIXED \/ archiveEntries <= 1
 
 =============================================================================
