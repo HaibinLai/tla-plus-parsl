@@ -52,6 +52,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmi
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_submit_cleanup_runtime.py -v
 ```
 
+`ParslWalltimeParsing.tla` models the provider walltime conversion in
+[`parsl/utils.py`](https://github.com/Parsl/Parsl/blob/master/parsl/utils.py). The current
+`wtime_to_minutes` implementation truncates seconds, so a positive request such as `00:00:59`
+becomes zero minutes. The fixed branch rounds a positive sub-minute request up to one minute;
+the valid branch covers zero and whole-minute durations. The runtime probe checks the current
+conversion against the real helper.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslWalltimeParsingCurrent.cfg models/providers/ParslWalltimeParsing.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslWalltimeParsingFixed.cfg models/providers/ParslWalltimeParsing.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslWalltimeParsingValid.cfg models/providers/ParslWalltimeParsing.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_walltime_parsing_runtime.py -v
+```
+
 `ParslAzureStatusBookkeeping.tla` checks consistency between the status returned by Azure and
 the provider's local `resources` map. The current `status()` method translates `VM running` but
 does not write that value back, leaving local bookkeeping at PENDING. The fixed branch records

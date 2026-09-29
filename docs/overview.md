@@ -488,6 +488,10 @@ launch. The provider writes the worker script before invoking the launcher; the 
 path leaves that file behind, while the fixed path removes it before raising. The runtime probe
 uses a temporary script directory and a fake failed launch command.
 
+`ParslWalltimeParsing.tla` models the provider utility `wtime_to_minutes`. A positive
+sub-minute walltime is currently truncated to zero minutes; the fixed branch rounds it up to one
+minute. This is a small provider-input boundary rather than a scheduler-specific model.
+
 `ParslTimeLimitedOpenTimeout.tla` models the missing-file branch of `time_limited_open`. The
 current wait context yields after its horizon and then lets `open()` raise `FileNotFoundError`;
 the fixed branch reports a timeout before opening. The runtime probe uses a missing temporary path.
@@ -1967,7 +1971,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 367 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 368 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2865,6 +2869,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `ReadMessage` / `StopAtDeadline` / `NoOverdueBatch` | monitoring batch collection and clock-based deadline | `DatabaseManager._get_messages_in_batch` |
 | `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
 | `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
+| `Parse` / `PositiveDurationSafety` | provider walltime conversion and sub-minute rounding | `parsl.utils.wtime_to_minutes` |
 | `IgnoreLinger` / `DeleteFails` / `DeleteSucceedsWithLocalId` / `DeleteSucceedsWithoutLocalId` | Azure VM cancellation and local instance bookkeeping | `AzureProvider.cancel` |
 | `Submit` / `RejectResource` / `BeginShutdown` / `CompleteTask` / `FinishShutdown` | provider-free thread executor admission and shutdown | `ThreadPoolExecutor.submit` and `ThreadPoolExecutor.shutdown` |
 | `OpenArchive` / `WriteOutput` | zip archive stage-in validation and atomic output publication | `ZipFileStaging._zip_stage_in` |
@@ -3102,6 +3107,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeV
 
 The current configuration reaches the failed-launch outcome; fixed and valid configurations
 preserve `NoInvalidProcess`.
+
+The provider walltime refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslWalltimeParsingCurrent.cfg models/providers/ParslWalltimeParsing.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslWalltimeParsingFixed.cfg models/providers/ParslWalltimeParsing.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslWalltimeParsingValid.cfg models/providers/ParslWalltimeParsing.tla
+```
+
+The current configuration reaches the zero-minute sub-minute outcome and violates
+`PositiveDurationSafety`; fixed and valid configurations complete in 4 generated / 2 distinct
+states. The runtime probe is `tests/test_walltime_parsing_runtime.py`.
 
 ## Concrete Parsl example
 
