@@ -240,3 +240,9 @@ run_case aws-unknown-instance-current counterexample \
 run_case aws-unknown-instance-fixed pass \
     models/providers/ParslAwsUnknownInstanceFixed.cfg \
     models/providers/ParslAwsUnknownInstance.tla
+run_case command-client-close-current counterexample \
+    models/executors/ParslCommandClientCloseRaceCurrent.cfg \
+    models/executors/ParslCommandClientCloseRace.tla
+run_case command-client-close-fixed pass \
+    models/executors/ParslCommandClientCloseRaceFixed.cfg \
+    models/executors/ParslCommandClientCloseRace.tla

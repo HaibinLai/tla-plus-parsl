@@ -139,6 +139,10 @@ AWS provider polling now has a focused stale-instance case: an EC2 observation a
 local resource map crashes the current status path, while the fixed branch converts it to an
 explicit `UNKNOWN` observation and keeps polling.
 
+The command-client close race is now in the smoke sweep: the current `CommandClient.close()`
+terminates the socket while leaving the health flag true, so a later `run()` touches a closed ZMQ
+socket; the fixed branch rejects the command before transport use.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
