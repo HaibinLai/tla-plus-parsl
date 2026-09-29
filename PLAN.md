@@ -151,6 +151,10 @@ Callable serialization coverage now includes equal-but-distinct Python objects: 
 `DillCallableSerializer` cache can reuse the first payload when custom equality and hashing collide;
 the fixed branch requires identity/content-sensitive cache behavior.
 
+Zip stage-in write-failure coverage is now in the smoke sweep: the current path writes directly to
+the final destination and exposes partial bytes after a failure; the fixed branch writes to a
+temporary path and publishes only after the complete member is available.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

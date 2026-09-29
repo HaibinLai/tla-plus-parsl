@@ -258,3 +258,9 @@ run_case callable-equal-cache-current counterexample \
 run_case callable-equal-cache-fixed pass \
     models/serialization/ParslCallableEqualCacheFixed.cfg \
     models/serialization/ParslCallableEqualCache.tla
+run_case zip-stagein-write-current counterexample \
+    models/staging/ParslZipStageInWriteFailure.cfg \
+    models/staging/ParslZipStageIn.tla
+run_case zip-stagein-write-fixed pass \
+    models/staging/ParslZipStageInWriteFailureFixed.cfg \
+    models/staging/ParslZipStageIn.tla
