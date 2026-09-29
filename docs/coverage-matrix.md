@@ -63,3 +63,6 @@ Flux executor coverage also records the empty provider-status response boundary
 
 Work Queue coverage also records the unreachable category-resource branch
 `ParslWorkQueueResourceCategory` (BUG-095).
+
+HTEX task admission coverage also records the non-numeric priority boundary
+`ParslHtexTaskPriorityType` (BUG-096).
