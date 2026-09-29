@@ -69,3 +69,6 @@ HTEX task admission coverage also records the non-numeric priority boundary
 
 HTEX task admission coverage also records the non-mapping resource-specification boundary
 `ParslHtexTaskResourceSpecType` (BUG-097).
+
+HTEX task admission coverage also records malformed task-envelope handling
+`ParslHtexTaskMessageMalformed` (BUG-098).
