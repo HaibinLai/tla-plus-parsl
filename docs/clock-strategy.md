@@ -8,6 +8,19 @@ manager, while the monotonic fixed branch expires once elapsed time reaches the 
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
 
+`ParslStrategyBlockCapacity.tla` isolates configuration admission for the strategy's overload
+calculation. The current path accepts `nodes_per_block=0` and then divides by the zero capacity
+when it tries to determine an additional-block request. The fixed branch rejects that
+configuration before polling; a valid one-node configuration still emits a scale request. The
+runtime probe invokes the real `Strategy._general_strategy` with a fake provider-backed executor.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacityCurrent.cfg models/strategy/ParslStrategyBlockCapacity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacityFixed.cfg models/strategy/ParslStrategyBlockCapacity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacitySuccess.cfg models/strategy/ParslStrategyBlockCapacity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_strategy_runtime.py -v
+```
+
 `ParslPeriodicTimer.tla` models the shared `parsl.utils.Timer` lifecycle used by the job-status
 poller and periodic checkpointing. It captures the immediate first callback, periodic callbacks,
 the fact that callback exceptions are logged without stopping the timer, and the quiescent

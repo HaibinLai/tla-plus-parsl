@@ -91,6 +91,17 @@ class StrategyRuntimeTest(unittest.TestCase):
 
         self.assertEqual(executor.scale_in_calls, [(2, {})])
 
+    def test_zero_nodes_per_block_crashes_overloaded_strategy_currently(self):
+        provider = FakeProvider(nodes_per_block=0, parallelism=1.0)
+        executor = FakeExecutor(provider, outstanding_tasks=1)
+        strategy = Strategy(strategy="simple", max_idletime=10)
+        strategy.add_executors([executor])
+
+        with self.assertRaises(ZeroDivisionError):
+            strategy.strategize([executor])
+
+        self.assertEqual(executor.scale_out_calls, [0])
+
 
 if __name__ == "__main__":
     unittest.main()

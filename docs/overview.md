@@ -101,6 +101,11 @@ provider-backed executor: initialization requests are issued once, overloaded sl
 bounded additional blocks, and idle scale-in waits for `max_idletime` while preserving
 `min_blocks`.
 
+`ParslStrategyBlockCapacity.tla` refines strategy configuration admission. An overloaded poll
+with `nodes_per_block=0` reaches the current division by zero in the excess-block calculation;
+the fixed branch rejects zero capacity before polling. The runtime probe demonstrates the current
+`ZeroDivisionError` using the real strategy method.
+
 `ParslZMQ.tla` is the next focused transport model. It represents a multipart message as a
 header/body encoding protocol, a bounded outbound/inbound queue pair, ROUTER/DEALER-style endpoint
 identity and route checks, disconnect/drop, queue reordering, duplicate delivery, invalid payloads,
@@ -1213,6 +1218,9 @@ java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslFileContent.c
 java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslFileCorruptionSmall.cfg models/core/ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -deadlock -config models/core/ParslNestedSerialization.cfg models/core/ParslAbstract.tla
 java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategy.cfg models/strategy/ParslStrategy.tla
+java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacityCurrent.cfg models/strategy/ParslStrategyBlockCapacity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacityFixed.cfg models/strategy/ParslStrategyBlockCapacity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapacitySuccess.cfg models/strategy/ParslStrategyBlockCapacity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQ.cfg models/serialization/ParslZMQ.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPython.cfg models/serialization/ParslPython.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonFailure.cfg models/serialization/ParslPython.tla
@@ -1506,6 +1514,12 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslStrategy.cfg`: 327 states generated, 114 distinct states, depth 13;
   slot-pressure scale-out, idle-timer handling, minimum/maximum block bounds, and task-pressure
   safety all passed in the focused strategy model.
+- `ParslStrategyBlockCapacityCurrent.cfg`: expected counterexample, 4 states generated; a
+  zero-capacity provider reaches the strategy's division-by-zero path.
+- `ParslStrategyBlockCapacityFixed.cfg`: 4 states generated, 2 distinct states, depth 2; invalid
+  zero capacity is rejected before polling.
+- `ParslStrategyBlockCapacitySuccess.cfg`: 6 states generated, 3 distinct states, depth 3; a
+  valid capacity produces a safe scale request.
 - `ParslZMQ.cfg`: 33,321 states generated, 6,216 distinct states, depth 35;
   multipart encoding order, bounded queues, disconnect/drop, route validation, duplicate discard,
   correlation, and acknowledgement safety all passed in the focused transport model.
@@ -2816,6 +2830,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `CancelAllocation` | scale-in of an idle block | `HighThroughputExecutor.scale_in`, `jobs/strategy.py` |
 | `CancelRequestedAllocation` | cancel a pending provider block request | provider strategy cancellation boundary |
 | `ScaleOut` / `StartIdleTimer` / `ScaleIn` in `ParslStrategy.tla` | slot-pressure scaling and idle-timeout policy | `parsl/jobs/strategy.py` |
+| `AcceptConfiguration` / `RejectConfiguration` / `ComputeScaleRequest` | reject zero block capacity before strategy overload calculation | `parsl/jobs/strategy.py` |
 | `EncodeHeader` / `EncodeBody` / `FinishEncode` | multipart task/result serialization before transport | DFK/interchange task path and worker result encoding |
 | `Send` / `Deliver` / `DuplicateInbound` / `DropOutbound` | bounded ZMQ-like transport, reconnect loss, reordering, duplicate delivery | HTEX interchange and manager socket queues |
 | `ReceiveValid` / `RejectInvalid` / `Ack` | receiver validation, correlation, and consume acknowledgement | interchange manager message handling and DFK result path |
