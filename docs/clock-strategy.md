@@ -98,6 +98,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslWorkerContactTimeout.c
 /tmp/parsl-venv/bin/python -m unittest tests/test_worker_pool_heartbeat_runtime.py -v
 ```
 
+`ParslWorkerPoolControlFrame.tla` refines that boundary to the actual pickled control records.
+The worker emits distinct `{"type": "heartbeat"}` and `{"type": "drain"}` frames. The current
+receive path calls `pickle.loads` without validating the frame, so a malformed control frame can
+crash the communicator; the fixed branch discards malformed input before applying a control
+action. TLC finds the current `MalformedDecodeSafety` counterexample (10 states generated) and
+checks the fixed branch (17 states generated). The runtime probe checks both real Manager emitters
+and that malformed bytes are not a decodable control record.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslWorkerPoolControlFrameCurrent.cfg models/serialization/ParslWorkerPoolControlFrame.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslWorkerPoolControlFrameFixed.cfg models/serialization/ParslWorkerPoolControlFrame.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_worker_pool_control_frame_runtime.py -v
+```
+
 `ParslTimedHeartbeat.tla` is the compact combined abstraction. It uses one logical clock for
 heartbeat age and task deadlines, models manager expiry and task timeout separately, and allows a
 late result after either event. `ParslTimedHeartbeat.cfg` intentionally violates `ResultSafety`
