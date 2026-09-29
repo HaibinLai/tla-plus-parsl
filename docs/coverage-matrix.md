@@ -108,3 +108,6 @@ ZMQ command coverage also records the ignored `CommandClient.max_retries` contra
 
 ZMQ command coverage also records lock acquisition outside the command deadline
 (`ParslCommandClientLockTimeout`, BUG-110).
+
+Condor provider coverage also records nonpositive scheduler command chunk-size admission
+(`ParslCondorChunkSize`, BUG-111).

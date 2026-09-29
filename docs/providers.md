@@ -381,6 +381,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorChunkSizeVal
 /tmp/parsl-venv/bin/python -m unittest tests/test_condor_chunk_size_runtime.py -v
 ```
 
+This provider-configuration boundary is recorded as BUG-111: nonpositive `cmd_chunk_size` values
+are accepted and collapse batching into one unbounded scheduler command.
+
 `ParslSlurmForeignJob.tla` audits the status parser's local-resource boundary. Slurm output can
 contain a job id that is already forgotten locally or belongs to another submission; the current
 implementation indexes it directly and raises `KeyError`. The fixed branch ignores foreign
