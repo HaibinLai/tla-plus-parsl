@@ -112,6 +112,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictVa
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_batch_strict_runtime.py -v
 ```
 
+`ParslLSFResourceValidation.tla` models LSF's core-based resource derivation. The current
+constructor rejects zero `cores_per_node` but accepts a negative value and computes a negative
+`nodes_per_block`; the fixed branch rejects all non-positive values. The runtime probe invokes
+the real constructor with `request_by_nodes=False`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidationCurrent.cfg models/providers/ParslLSFResourceValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidationFixed.cfg models/providers/ParslLSFResourceValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidationValid.cfg models/providers/ParslLSFResourceValidation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_lsf_resource_validation_runtime.py -v
+```
+
 `ParslSlurmForeignJob.tla` audits the status parser's local-resource boundary. Slurm output can
 contain a job id that is already forgotten locally or belongs to another submission; the current
 implementation indexes it directly and raises `KeyError`. The fixed branch ignores foreign

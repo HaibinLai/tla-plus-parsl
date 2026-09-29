@@ -2003,7 +2003,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 373 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 374 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2203,6 +2203,17 @@ The runtime probe also checks the `bsub < script` redirection option.
 configuration intentionally produces a depth-2 counterexample: the current implementation
 returns from the scheduler successfully and then indexes `resources[jid]`, which raises
 `KeyError` when the local resource map has no such id. The runtime probe reproduces that boundary.
+
+`ParslLSFResourceValidation.tla` models core-based LSF resource derivation. The current
+constructor rejects zero `cores_per_node` but accepts a negative value and computes a negative
+`nodes_per_block`; the fixed branch rejects every non-positive value.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidationCurrent.cfg models/providers/ParslLSFResourceValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidationFixed.cfg models/providers/ParslLSFResourceValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidationValid.cfg models/providers/ParslLSFResourceValidation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_lsf_resource_validation_runtime.py -v
+```
 
 Slurm batched status handling is exercised with deterministic scheduler command results:
 
@@ -2957,6 +2968,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling | `GridEngineProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `LSFProvider._status` |
 | `MissingJob` / `MissingJobSafety` | missing LSF scheduler record versus explicit terminal status | `LSFProvider._status` |
+| `Validate` / `ResourceSafety` | LSF core-based resource validation before node-count derivation | `LSFProvider.__init__` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with set removal | `SlurmProvider._status` |
 | `HandleFirstLine` / `HandleSecondLine` / `DuplicateSafety` | duplicate scheduler-record handling with list removal | `TorqueProvider._status` |
 | `HandleShortId` / `HandleSecondRecord` / `AliasSafety` | PBS Pro short/qualified job-id normalization and idempotent missing-job bookkeeping | `PBSProProvider._status` |
