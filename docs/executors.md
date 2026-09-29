@@ -436,6 +436,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerTaskFram
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_task_frame_continuation_runtime.py -v
 ```
 
+`ParslHtexWorkerTaskBatchShape.tla` refines task admission after outer pickle decoding. A
+pickleable dictionary is not a valid task list, but the current communicator proceeds with list
+operations and task-field indexing, allowing a `TypeError`/`KeyError` to stop the loop. The
+candidate fixed branch validates the batch shape and continues to a later valid list. The runtime
+probe uses real pickle payloads and the concrete communicator method.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerTaskBatchShapeCurrent.cfg models/executors/ParslHtexWorkerTaskBatchShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerTaskBatchShapeFixed.cfg models/executors/ParslHtexWorkerTaskBatchShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_task_batch_shape_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
