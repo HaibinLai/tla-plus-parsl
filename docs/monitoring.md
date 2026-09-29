@@ -17,6 +17,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 These models cover asynchronous monitoring records, database insertion, batching, retry and
 atomicity, deferred events, close behavior, and batching-threshold edge cases.
 
+`ParslMonitoringHubClose.tla` models the outer `MonitoringHub.close()` lifecycle. Closing signals
+the DB process, waits for it, closes the resource queue, and joins the queue thread. The active
+flag makes repeated close calls idempotent. The runtime probe uses the real method with counting
+process/event/queue doubles.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubClose.cfg models/monitoring/ParslMonitoringHubClose.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_runtime.py -v
+```
+
 `ParslMonitoringBatchClock.tla` isolates the clock source used by
 `DatabaseManager._get_messages_in_batch`. With the current `time.time()` path, a wall-clock
 rollback makes elapsed time negative and allows a batch to consume messages beyond its one-second

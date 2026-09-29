@@ -256,6 +256,15 @@ remote deletion but leaves the local resource marked `RUNNING`; the fixed config
 workflow start message writes the final completion update once; a normal close does not duplicate
 it. Both paths switch batching to drain mode and signal the manager to stop.
 
+`ParslMonitoringHubClose.tla` models the outer `MonitoringHub.close()` resource lifecycle. It
+signals the DB process, waits for termination, closes and joins the multiprocessing queue, and
+keeps the operation idempotent when called again.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubClose.cfg models/monitoring/ParslMonitoringHubClose.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_runtime.py -v
+```
+
 `ParslSlurmCancel.tla` models Slurm `scancel`: command failure preserves local state, while a
 successful command marks known resources `CANCELLED`; the current path can raise on a foreign ID,
 and the fixed path ignores that stale local entry.
@@ -1984,7 +1993,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 370 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 371 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2913,6 +2922,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `IgnoreLinger` / `RemoteFailure` / `RemoteSuccessWithLocalState` / `RemoteSuccessWithoutLocalState` | AWS EC2 cancellation and local bookkeeping | `AWSProvider.cancel` |
 | `DeleteFails` / `DeleteSucceeds` | GCE cancellation result and local resource status | `GoogleCloudProvider.cancel` |
 | `Close` / `FinalizationSafety` | monitoring workflow finalization and shutdown drain | `DatabaseManager.close` |
+| `Close` / `RepeatedClose` / `IdempotentClose` | MonitoringHub process and queue cleanup with repeat-call safety | `MonitoringHub.close` |
 | `Batch` / `AvailableBatchSafety` | zero-interval queue-read boundary and message collection | `DatabaseManager._get_messages_in_batch` |
 | `InsertBatch` / `ValidMessagePreserved` | bulk STATUS rollback and valid-sibling preservation | `Database.insert` and `DatabaseManager._insert` |
 | `AttemptFails` / `HandleFailure` / `RetryLimitSafety` | retry-handler failure-cost accounting and physical-attempt admission | `DataFlowKernel.handle_exec_update` |
