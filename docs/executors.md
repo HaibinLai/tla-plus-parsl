@@ -723,6 +723,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainFi
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerDrainPresent.cfg models/executors/ParslHtexManagerDrain.tla
 ```
 
+The runtime probe is `tests/test_htex_manager_drain_runtime.py`; this stale-manager boundary is
+recorded as BUG-125.
+
 `ParslHtexMonitoringMessage.tla` covers a manager result batch containing a monitoring payload.
 With monitoring enabled the payload is forwarded; the current disabled-monitoring path asserts
 that a radio exists and can crash, while the fixed path ignores the optional payload without

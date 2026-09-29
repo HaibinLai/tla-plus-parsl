@@ -150,3 +150,6 @@ Poller lifecycle coverage also records duplicate executor registration
 
 Monitoring/ZMQ coverage also records unbounded persistent receive-failure retry
 (`ParslMonitoringZMQRouterFailure`, BUG-124).
+
+HTEX manager lifecycle coverage also records stale drained-manager isolation
+(`ParslHtexManagerDrain`, BUG-125).
