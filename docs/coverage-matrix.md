@@ -126,3 +126,6 @@ LSF provider coverage also records negative core-capacity derivation
 
 Local provider coverage also records stale cancellation-id handling
 (`ParslLocalProviderCancelUnknown`, BUG-116).
+
+Slurm provider coverage also records strict-batch fallback compatibility
+(`ParslSlurmBatchStrict`, BUG-117).

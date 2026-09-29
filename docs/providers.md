@@ -351,6 +351,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictVa
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_batch_strict_runtime.py -v
 ```
 
+This compatibility-boundary finding is recorded as BUG-117: the fallback accepts an incomplete
+final batch even when `strict=True`.
+
 `ParslLSFResourceValidation.tla` models LSF's core-based resource derivation. The current
 constructor rejects zero `cores_per_node` but accepts a negative value and computes a negative
 `nodes_per_block`; the fixed branch rejects all non-positive values. The runtime probe invokes
