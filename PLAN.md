@@ -59,6 +59,11 @@ The monitoring retry/high-water model is now in the same sweep. Its current bran
 attempt event to overwrite a newer database view; the fixed branch preserves terminal status and
 version monotonicity, complementing the real SQLite status-history bridge.
 
+The HTEX protocol baseline now includes `ParslHtexTaskMessageMalformed`: malformed decoded task
+objects produce a current interchange-crash counterexample, while the fixed branch discards them
+and keeps the task-incoming loop alive. The existing runtime probe uses the real interchange
+message-processing method.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

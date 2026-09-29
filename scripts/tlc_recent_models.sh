@@ -102,3 +102,9 @@ run_case monitoring-retry-current counterexample \
 run_case monitoring-retry-fixed pass \
     models/monitoring/ParslMonitoringTaskRetryFixed.cfg \
     models/monitoring/ParslMonitoringTaskRetry.tla
+run_case htex-task-message-current counterexample \
+    models/executors/ParslHtexTaskMessageMalformedCurrent.cfg \
+    models/executors/ParslHtexTaskMessageMalformed.tla
+run_case htex-task-message-fixed pass \
+    models/executors/ParslHtexTaskMessageMalformedFixed.cfg \
+    models/executors/ParslHtexTaskMessageMalformed.tla
