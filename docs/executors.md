@@ -198,6 +198,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleOutFailureMon
 /tmp/parsl-venv/bin/python -m unittest tests/test_scale_out_failure_monitoring_runtime.py -v
 ```
 
+`ParslHtexResultMessageMalformed.tla` covers a corrupt pickle frame inside an otherwise valid
+HTEX manager result batch. `process_manager_socket_message` parses the batch metadata but the
+current loop calls `pickle.loads` on each payload without a per-frame guard, so a malformed frame
+escapes the interchange processing path. The fixed branch discards the bad frame and keeps the
+manager protocol alive. The runtime probe sends the malformed frame through the real method.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultMessageMalformedCurrent.cfg models/executors/ParslHtexResultMessageMalformed.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultMessageMalformedFixed.cfg models/executors/ParslHtexResultMessageMalformed.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_message_malformed_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
