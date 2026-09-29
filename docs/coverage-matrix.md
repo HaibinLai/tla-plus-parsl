@@ -63,6 +63,9 @@ Monitoring coverage includes the corresponding batch-deadline rollback boundary
 Worker-side monitoring coverage also includes `ParslResourceMonitorClock` (BUG-162), which
 separates periodic sampling deadlines from wall-clock timestamps.
 
+Provider coverage also includes `ParslDuplicateJobId` (BUG-163), which checks that scale-out
+reverse ownership remains one-to-one when a provider returns duplicate job IDs.
+
 ZMQ executor coverage also includes `ParslResultsIncomingCloseRace` (BUG-091), modeling
 post-close result polling as a quiescent boundary.
 

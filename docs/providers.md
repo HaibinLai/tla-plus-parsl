@@ -6,6 +6,18 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslDuplicateJobId.tla` models the reverse ownership maps maintained by
+`BlockProviderExecutor.scale_out_facade`. The current path accepts a duplicate provider job ID
+and overwrites `job_ids_to_block`, so one of two launched blocks is no longer addressable by its
+job. The fixed branch rejects the duplicate before publishing it. The runtime probe uses a
+provider double that intentionally returns the same ID twice.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslDuplicateJobIdCurrent.cfg models/providers/ParslDuplicateJobId.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslDuplicateJobIdFixed.cfg models/providers/ParslDuplicateJobId.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_duplicate_job_id_runtime.py -v
+```
+
 `ParslAwsStatusMissingResult.tla` checks the result-cardinality contract of
 `AWSProvider.status`. When EC2 returns no reservation for a requested instance (for example,
 after termination), the current method returns an empty list rather than one status per requested
