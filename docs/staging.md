@@ -158,6 +158,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslOutputListMutationF
 /tmp/parsl-venv/bin/python -m unittest tests/test_output_list_mutation_runtime.py -v
 ```
 
+`ParslStagingProviderDispatch.tla` models the provider-selection contract in
+`DataManager.stage_in` and `stage_out`: providers are checked in configured order, the first
+capable provider owns the operation, and a `None` result means that provider completed setup
+without creating a wait Future. A Future result creates a dependency gate before the task runs;
+no capable provider is an explicit error. `tests/test_staging_provider_dispatch_runtime.py`
+exercises these paths against the real `DataManager` with small provider doubles. This stage did
+not reproduce a new defect; it makes the dispatch and DataFuture readiness boundary executable.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingProviderDispatchCurrent.cfg models/staging/ParslStagingProviderDispatch.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_staging_provider_dispatch_runtime.py -v
+```
+
 `ParslDataManagerStageOutOrdering.tla` checks the analogous output path in
 `DataFlowKernel._add_output_deps`: `stage_out` starts a separate transfer before
 `replace_task_stage_out` constructs the application wrapper. A wrapper exception can therefore
