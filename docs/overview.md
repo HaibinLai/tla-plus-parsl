@@ -199,6 +199,11 @@ terminate the thread before later results in the same batch are handled. The fix
 the cancelled result as stale and continues processing the batch; the runtime probe reproduces
 the current orphaned-pending-task behavior.
 
+`ParslHtexUnknownTaskResult.tla` models a result whose task id has already been removed from the
+executor task map. The current `tasks.pop(task_id)` raises `KeyError` and terminates the result
+worker, leaving later valid results unprocessed. The fixed branch discards the stale result and
+continues the batch; the runtime probe drives the concrete result worker with both messages.
+
 `ParslMPINonDivisibleRanks.tla` audits MPI resource derivation. The current helper accepts
 `num_nodes=2, num_ranks=5`, derives the non-integral `ranks_per_node="2.5"`, and inserts it into
 the `mpiexec -ppn` command. The fixed model rejects non-divisible allocations before launch;
@@ -2119,7 +2124,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 390 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 391 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2836,6 +2841,9 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslExecutorShutdown.cfg`: 394,010 states generated, 74,431 distinct states, depth 28;
   shutdown admission rejection, ThreadPool completion-before-stop, WorkQueue collector failure
   cleanup, HTEX interchange closure, and in-flight cleanup all passed.
+- `ParslHtexUnknownTaskResultCurrent.cfg`: expected `KeyError` counterexample when a stale task id
+  is popped from the result map; `ParslHtexUnknownTaskResultFixed.cfg`: 7 states generated, 4
+  distinct states, depth 3; unknown results are discarded and later live results complete.
 - `ParslThreadExecutorResourceSpecCurrent.cfg`: expected `AttributeError` counterexample for a
   truthy non-mapping resource value; `ParslThreadExecutorResourceSpecFixed.cfg`: 29 states
   generated, 8 distinct states, depth 4; invalid values are rejected without creating a Future.

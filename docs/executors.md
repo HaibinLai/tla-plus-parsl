@@ -197,6 +197,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResul
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_cancelled_result_runtime.py -v
 ```
 
+`ParslHtexUnknownTaskResult.tla` covers a stale result whose `task_id` is no longer present in
+the executor task map. The current result worker calls `pop` unconditionally, so a `KeyError`
+terminates the result loop and strands later valid results in the same batch. The fixed branch
+discards the unknown result and continues. The runtime probe sends one stale and one live result
+through the concrete HTEX result worker.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownTaskResultCurrent.cfg models/executors/ParslHtexUnknownTaskResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownTaskResultFixed.cfg models/executors/ParslHtexUnknownTaskResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_unknown_task_result_runtime.py -v
+```
+
 `ParslMPINonDivisibleRanks.tla` audits `MPIExecutor` resource derivation. With `num_nodes=2`
 and `num_ranks=5`, the current helper derives `ranks_per_node="2.5"` and emits that value in
 the `mpiexec -ppn` option. The current TLC model violates `IntegralRanksSafety`; the fixed branch
