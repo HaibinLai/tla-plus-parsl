@@ -39,6 +39,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalTasksPerNodeV
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_tasks_per_node_runtime.py -v
 ```
 
+`ParslLocalProviderSubmitCleanup.tla` models the failed-launch path after
+`LocalProvider.submit` has written its worker script. The current provider raises `SubmitException`
+but leaves the newly-created `.sh` file in `script_dir`; the fixed branch removes the script
+before reporting failure. The runtime probe patches only the launch command and calls the real
+provider method.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupCurrent.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupFixed.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupSuccess.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_submit_cleanup_runtime.py -v
+```
+
 `ParslAzureStatusBookkeeping.tla` checks consistency between the status returned by Azure and
 the provider's local `resources` map. The current `status()` method translates `VM running` but
 does not write that value back, leaving local bookkeeping at PENDING. The fixed branch records

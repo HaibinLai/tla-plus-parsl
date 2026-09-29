@@ -483,6 +483,11 @@ already cancelled. The current wrapper returns success without cancelling the Pa
 so it remains pending; the fixed branch enforces terminal cancellation. The runtime probe uses the
 real `FluxFutureWrapper` with a fake already-cancelled future.
 
+`ParslLocalProviderSubmitCleanup.tla` models script ownership across a failed LocalProvider
+launch. The provider writes the worker script before invoking the launcher; the current failure
+path leaves that file behind, while the fixed path removes it before raising. The runtime probe
+uses a temporary script directory and a fake failed launch command.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1958,7 +1963,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 365 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 366 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2259,6 +2264,14 @@ The model represents the `.ec` marker, process liveness, cancellation, malformed
 a delayed zero exit marker. The current implementation configuration exposes a counterexample:
 a late numeric marker can make a cancelled process appear `COMPLETED`; the fixed configuration
 prioritizes cancellation during polling.
+
+`ParslLocalProviderSubmitCleanup.tla` checks failed launch cleanup:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupCurrent.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupFixed.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmitCleanupSuccess.cfg models/providers/ParslLocalProviderSubmitCleanup.tla
+```
 
 `ParslLocalProviderStatusScope.tla` checks a separate query-scope boundary. The implementation
 loops over every resource in `self.resources` even when `status(job_ids)` requests one job, so a
@@ -2949,6 +2962,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `Validate` / `Register` / `CheckSubmitProcess` | WorkQueue resource validation and submit-process liveness ordering | `WorkQueueExecutor.submit` |
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
 | `CancelWrapper` / `CancellationConsistency` | propagate an already-terminal underlying Flux cancellation to the wrapper Future | `FluxFutureWrapper.cancel` |
+| `WriteScript` / `Launch` / `FailedCleanupSafety` | LocalProvider worker-script ownership across launch failure | `LocalProvider.submit` |
 | `CancelBeforeBind` / `BindUnderlying` / `PublishCallback` | Flux cancellation versus late underlying-future binding | `FluxFutureWrapper.cancel` and `_complete_future` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `CreateFactory` / `ConfigureFactory` / `EnterContext` / `RequestStop` / `ExitContext` | TaskVine factory process configuration and stop lifecycle | `taskvine.factory._taskvine_factory` |
