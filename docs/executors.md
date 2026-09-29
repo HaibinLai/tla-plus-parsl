@@ -172,6 +172,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientLockT
 /tmp/parsl-venv/bin/python -m unittest tests/test_command_lock_timeout_runtime.py -v
 ```
 
+This lock/deadline boundary is recorded as BUG-110: waiting for the Python lock can consume the
+entire command deadline, yet the current path still sends the request after acquisition.
+
 `ParslCommandDeadline.tla` covers the expired-deadline arithmetic inside each REQ/REP poll. The
 current path forwards a negative remaining duration to `zmq.Socket.poll`; the fixed branch clamps
 the value to zero before deciding that the command has timed out. The existing runtime probe

@@ -105,3 +105,6 @@ Clock/timeout coverage also records negative Python-app timeout admission
 
 ZMQ command coverage also records the ignored `CommandClient.max_retries` contract
 (`ParslCommandClientMaxRetries`, BUG-109).
+
+ZMQ command coverage also records lock acquisition outside the command deadline
+(`ParslCommandClientLockTimeout`, BUG-110).
