@@ -17,7 +17,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Clock and strategy models](docs/clock-strategy.md)
 - [Coverage matrix](docs/coverage-matrix.md)
 
-Runtime probes are under [`tests/`](tests/). The complete runtime baseline is 407 passing tests.
+Runtime probes are under [`tests/`](tests/). The complete runtime baseline is 476 passing tests.
 TLC commands and measured state-space results are maintained in [`docs/overview.md`](docs/overview.md).
 
 ## Quick start
@@ -27,3 +27,10 @@ TLC commands and measured state-space results are maintained in [`docs/overview.
 ```
 
 For TLC, install Java 17 and `tla2tools.jar`, then use the commands in the full overview.
+
+To rerun the recent cross-layer TLC smoke set (including the intentional current-branch
+counterexamples), use:
+
+```bash
+JAVA_BIN=/path/to/java TLA_JAR=/path/to/tla2tools.jar ./scripts/tlc_recent_models.sh
+```

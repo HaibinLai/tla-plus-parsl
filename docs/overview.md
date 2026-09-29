@@ -1285,6 +1285,14 @@ allocation can become active.
 
 ## TLC verification
 
+The repository includes a smoke runner for the recent cross-layer models. It expects the two
+`Current` configurations to find their intentional counterexamples and all fixed/normal
+configurations to pass:
+
+```bash
+JAVA_BIN=/path/to/java TLA_JAR=/path/to/tla2tools.jar ./scripts/tlc_recent_models.sh
+```
+
 The compact integration check is:
 
 ```bash
