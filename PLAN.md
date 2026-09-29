@@ -183,6 +183,10 @@ LocalProvider submit cleanup is now covered: a failed launcher can leave the gen
 script and partial resource state in the current path; the fixed branch removes newly-created
 artifacts before surfacing the launch failure, while the success path retains the script/resource.
 
+Globus Compute submit concurrency is now in the smoke sweep: the current wrapper mutates one shared
+SDK executor during override/submit/restore, so overlapping calls can observe another task's
+resource specification; the fixed branch serializes that critical section.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

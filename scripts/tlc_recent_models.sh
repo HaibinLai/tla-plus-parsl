@@ -309,3 +309,9 @@ run_case local-submit-cleanup-fixed pass \
 run_case local-submit-cleanup-success pass \
     models/providers/ParslLocalProviderSubmitCleanupSuccess.cfg \
     models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case globus-compute-submit-current counterexample \
+    models/executors/ParslGlobusComputeSubmitRaceCurrent.cfg \
+    models/executors/ParslGlobusComputeSubmitRace.tla
+run_case globus-compute-submit-fixed pass \
+    models/executors/ParslGlobusComputeSubmitRaceFixed.cfg \
+    models/executors/ParslGlobusComputeSubmitRace.tla
