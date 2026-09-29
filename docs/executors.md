@@ -7,6 +7,17 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslHtexTaskResourceSpecType.tla` refines task-object validation beyond missing fields. A
+decoded task whose `context.resource_spec` is a list (or another non-mapping object) currently
+raises `AttributeError` when the interchange calls `.get`. The fixed branch rejects the object
+before queue insertion. The runtime probe exercises this type boundary with a fake socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskResourceSpecTypeCurrent.cfg models/executors/ParslHtexTaskResourceSpecType.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskResourceSpecTypeFixed.cfg models/executors/ParslHtexTaskResourceSpecType.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_resource_spec_type_runtime.py -v
+```
+
 `ParslHtexTaskMessageMalformed.tla` covers malformed Python objects arriving on the HTEX task
 socket. The current interchange path indexes `task_id` and `context` without a validation guard,
 so a missing field raises out of the polling loop. The fixed branch discards the malformed task
