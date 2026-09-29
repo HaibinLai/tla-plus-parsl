@@ -117,6 +117,11 @@ Poller shutdown/scale-in is now included too: the current timeout close can scal
 callback is still running, while the fixed branch requires callback quiescence before scale-in.
 The real `JobStatusPoller.close` runtime probe exercises that race.
 
+HTEX duplicate manager registration is included as well: the current interchange path replaces an
+existing manager record and can discard its in-flight task list, while the fixed branch preserves
+ownership until recovery or completion. The matching runtime probe drives two registration frames
+through the real `Interchange.process_manager_socket_message` path.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

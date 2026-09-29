@@ -207,3 +207,9 @@ run_case poller-scalein-current counterexample \
 run_case poller-scalein-fixed pass \
     models/providers/ParslPollerCloseScaleInRaceFixed.cfg \
     models/providers/ParslPollerCloseScaleInRace.tla
+run_case htex-duplicate-registration-current counterexample \
+    models/executors/ParslHtexDuplicateRegistrationCurrent.cfg \
+    models/executors/ParslHtexDuplicateRegistration.tla
+run_case htex-duplicate-registration-fixed pass \
+    models/executors/ParslHtexDuplicateRegistrationFixed.cfg \
+    models/executors/ParslHtexDuplicateRegistration.tla
