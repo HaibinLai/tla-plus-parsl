@@ -121,6 +121,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslObjectSnapshot
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_mutation_cache_runtime.py tests/test_serialization_runtime.py -v
 ```
 
+`ParslZMQObjectSnapshot.tla` connects that object snapshot boundary to a queued multipart frame.
+The current branch lets mutation after serialization change the in-flight payload; TLC finds
+`PayloadImmutability` after 5 states. The fixed branch keeps the captured bytes immutable through
+receive/decode and checks 9 distinct states. The concrete round-trip evidence is in
+`tests/test_zmq_serialization_runtime.py` and `tests/test_serialization_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQObjectSnapshotCurrent.cfg models/serialization/ParslZMQObjectSnapshot.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQObjectSnapshotFixed.cfg models/serialization/ParslZMQObjectSnapshot.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialization_runtime.py tests/test_serialization_runtime.py tests/test_serialization_binary_payload_runtime.py -v
+```
+
 `ParslCallableDeserializeCache.tla` checks the other side of the same cache. The current
 `DillCallableSerializer.deserialize` cache can return the same mutable callable instance for
 repeated identical payloads; a mutation made by one task is then visible to the next task. The
