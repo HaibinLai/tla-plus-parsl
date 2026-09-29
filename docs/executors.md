@@ -172,6 +172,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineFactory.cf
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_factory_runtime.py -v
 ```
 
+`ParslTaskVineSubmit.tla` models TaskVine submission ordering. The current executor inserts the
+Future into its task map before serializing the callable and before checking submit-process
+liveness, so either failure leaves an orphaned Future; the fixed branch rolls that map entry back.
+The runtime probe drives both failures through the real `TaskVineExecutor.submit` with fake queues,
+process state, and serialization.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitCurrent.cfg models/executors/ParslTaskVineSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitFixed.cfg models/executors/ParslTaskVineSubmit.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_submit_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps

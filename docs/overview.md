@@ -663,6 +663,11 @@ factory construction, application of worker/factory timeout and capacity setting
 and stop-signal-driven context exit. The runtime probe patches the optional SDK and invokes the
 real `_taskvine_factory` function.
 
+`ParslTaskVineSubmit.tla` refines TaskVine submission ordering. The current path registers a
+Future before callable/argument serialization and before checking manager-process liveness, so
+both failures can leave an orphaned task-map entry. The fixed branch rolls back the entry. The
+runtime probe drives both failures through the concrete `TaskVineExecutor.submit` method.
+
 `ParslTaskVineDuplicateReport.tla` refines the TaskVine collector with a duplicate or late manager
 report. The current `tasks.pop(task_report.executor_id)` path raises `KeyError`, exits the
 collector, and lets final cleanup fail unrelated Futures. The fixed configuration ignores an
@@ -2496,6 +2501,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   4 distinct); a duplicate report kills the collector and exposes unrelated task failure.
   `ParslTaskVineDuplicateReportFixed.cfg`: 22 states generated, 7 distinct states, depth 4;
   stale reports are ignored while active unrelated tasks remain pending.
+- `ParslTaskVineSubmitCurrent.cfg`: expected counterexample at depth 4; a dead submit process
+  leaves the registered Future mapped after failure.
+- `ParslTaskVineSubmitFixed.cfg`: 5 states generated, 4 distinct states, depth 4; failed
+  serialization or process liveness checks roll back the task map.
 - `ParslRadicalPilotResults.cfg`: expected counterexample at depth 2 (73 states generated, 38
   distinct); shutdown can leave a submitted RP task's Parsl Future pending.
 - `ParslRadicalPilotResultsFixed.cfg`: 79 states generated, 38 distinct states, depth 4; Bash,
@@ -2824,6 +2833,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `CancelBeforeBind` / `BindUnderlying` / `PublishCallback` | Flux cancellation versus late underlying-future binding | `FluxFutureWrapper.cancel` and `_complete_future` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `CreateFactory` / `ConfigureFactory` / `EnterContext` / `RequestStop` / `ExitContext` | TaskVine factory process configuration and stop lifecycle | `taskvine.factory._taskvine_factory` |
+| `Register` / `Serialize` / `CheckProcess` | TaskVine Future registration and submit failure rollback | `TaskVineExecutor.submit` |
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `Cancel` / `LateDone` | Radical Pilot cancellation versus late result callback | `RadicalPilotExecutor.task_state_cb` terminal Future updates |
 | `RequestShutdown` / `FlushBulk` / `DropBulk` / `FinishShutdown` | Radical Pilot bulk-queue flush before shutdown | `RadicalPilotExecutor._bulk_collector` and `shutdown` |
