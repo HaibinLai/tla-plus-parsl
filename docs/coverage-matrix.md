@@ -96,3 +96,6 @@ File-transfer coverage also records FTP partial-destination publication on strea
 
 Monitoring coverage also records malformed worker-message isolation
 (`ParslMonitoringMalformedWorkerMessage`, BUG-106).
+
+Clock/heartbeat coverage also records invalid HTEX heartbeat-parameter admission
+(`ParslHeartbeatParameterValidation`, BUG-107).

@@ -32,6 +32,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterVali
 /tmp/parsl-venv/bin/python -m unittest tests/test_heartbeat_parameter_validation_runtime.py -v
 ```
 
+This configuration-admission boundary is recorded as BUG-107: nonpositive heartbeat values are
+currently accepted and only fail semantically once liveness logic starts.
+
 `ParslStrategyBlockCapacity.tla` isolates configuration admission for the strategy's overload
 calculation. The current path accepts `nodes_per_block=0` and then divides by the zero capacity
 when it tries to determine an additional-block request. The fixed branch rejects that
