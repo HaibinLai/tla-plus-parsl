@@ -4,14 +4,31 @@ import unittest
 
 import zmq
 
-from parsl.serialize.facade import pack_apply_message, unpack_apply_message
+from parsl.serialize.facade import (
+    pack_apply_message,
+    unpack_apply_message,
+    unpack_buffers,
+)
 
 
-def increment(value):
+def increment(value, label=None):
     return value + 1
 
 
 class ZmqSerializationRuntimeTest(unittest.TestCase):
+    def test_apply_message_has_three_length_prefixed_serializer_buffers(self):
+        payload = pack_apply_message(increment, (41,), {"label": "wire"})
+        buffers = unpack_buffers(payload)
+
+        self.assertEqual(len(buffers), 3)
+        self.assertTrue(buffers[0].startswith(b"C2\n"))
+        self.assertTrue(buffers[1].startswith(b"02\n"))
+        self.assertTrue(buffers[2].startswith(b"02\n"))
+        # The public unpacker must decode the same three logical values in order.
+        decoded_func, decoded_args, decoded_kwargs = unpack_apply_message(payload)
+        self.assertEqual(decoded_func(*decoded_args, **decoded_kwargs), 42)
+        self.assertEqual(decoded_kwargs, {"label": "wire"})
+
     def test_router_dealer_round_trip_preserves_route_and_payload(self):
         context = zmq.Context()
         router = context.socket(zmq.ROUTER)

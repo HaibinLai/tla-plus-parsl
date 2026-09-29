@@ -156,3 +156,7 @@ HTEX manager lifecycle coverage also records stale drained-manager isolation
 
 Kubernetes admission coverage also records the Pending-pod/Running-job mismatch
 (`ParslKubernetesAdmission`, BUG-126).
+
+Serialization coverage now includes an explicit runtime check that `pack_apply_message` emits
+three ordered serializer buffers (`ParslSerializationWire` and
+`test_zmq_serialization_runtime.py::test_apply_message_has_three_length_prefixed_serializer_buffers`).
