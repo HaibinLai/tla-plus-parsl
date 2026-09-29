@@ -36,6 +36,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorReso
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_resource_spec_runtime.py -v
 ```
 
+`ParslExecuteWaitTimeout.tla` models the scheduler-command timeout boundary in
+`parsl.utils.execute_wait`. The current implementation starts a process group but re-raises
+`TimeoutExpired` without terminating or reaping it; the fixed branch performs cleanup before
+reporting the timeout. This is recorded as BUG-132 and is exercised with a process double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutCurrent.cfg models/executors/ParslExecuteWaitTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecuteWaitTimeoutFixed.cfg models/executors/ParslExecuteWaitTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_execute_wait_timeout_runtime.py -v
+```
+
 `ParslHtexManagerEligibility.tla` separates manager ordering from dispatch admission. The
 selector may return inactive or draining managers as candidates, but the interchange must check
 `active` and `draining` again before sending a task. The bounded model skips `m0` (inactive) and

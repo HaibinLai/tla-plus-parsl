@@ -181,3 +181,6 @@ Join coverage now documents the already-completed-inner-Future callback registra
 
 Thread executor coverage also records non-mapping resource-specification validation
 (`ParslThreadExecutorResourceSpec`, BUG-131).
+
+Executor timeout coverage also records process cleanup after `execute_wait` timeout
+(`ParslExecuteWaitTimeout`, BUG-132).
