@@ -109,6 +109,10 @@ TaskVine submit coverage now mirrors those two failure paths. The current model 
 pending task after process or serialization failure; the fixed configurations remove it, matching
 the real TaskVine submit probes.
 
+Flux executor cleanup now joins the smoke sweep: a cancelled first Future makes the current
+`_error_out_jobs` drain abort and strand a later pending Future; the fixed branch skips terminal
+entries and continues draining, matching the real cancellation probe.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

@@ -195,3 +195,9 @@ run_case taskvine-serialization-current counterexample \
 run_case taskvine-serialization-fixed pass \
     models/executors/ParslTaskVineSubmitSerializationFailureFixed.cfg \
     models/executors/ParslTaskVineSubmit.tla
+run_case flux-cleanup-current counterexample \
+    models/executors/ParslFluxErrorCleanupCancellationCurrent.cfg \
+    models/executors/ParslFluxErrorCleanupCancellation.tla
+run_case flux-cleanup-fixed pass \
+    models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
+    models/executors/ParslFluxErrorCleanupCancellation.tla
