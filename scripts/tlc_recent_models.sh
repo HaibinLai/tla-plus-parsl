@@ -264,3 +264,9 @@ run_case zip-stagein-write-current counterexample \
 run_case zip-stagein-write-fixed pass \
     models/staging/ParslZipStageInWriteFailureFixed.cfg \
     models/staging/ParslZipStageIn.tla
+run_case monitoring-update-permanent-current counterexample \
+    models/monitoring/ParslMonitoringDBUpdatePermanentErrorCurrent.cfg \
+    models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
+run_case monitoring-update-permanent-fixed pass \
+    models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
+    models/monitoring/ParslMonitoringDBUpdatePermanentError.tla

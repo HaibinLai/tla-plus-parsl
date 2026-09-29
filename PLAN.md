@@ -155,6 +155,10 @@ Zip stage-in write-failure coverage is now in the smoke sweep: the current path 
 the final destination and exposes partial bytes after a failure; the fixed branch writes to a
 temporary path and publishes only after the complete member is available.
 
+Monitoring update retention is now in the smoke sweep: the current `_update` path can swallow a
+permanent database error after the batch has been drained, while the fixed branch retains the
+message for a later retry or explicit dead-letter decision.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
