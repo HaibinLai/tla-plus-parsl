@@ -77,6 +77,10 @@ Provider coverage now includes the AWS status-cardinality boundary: when EC2 omi
 instance, the current model returns no status, while the fixed branch returns one explicit
 `UNKNOWN` observation. The real provider probe exercises the same missing-instance response.
 
+Kubernetes polling is now also in the sweep: a pod-read error leaves a running job falsely
+`RUNNING` in the current identity-comparison path, while the fixed branch exposes `UNKNOWN`.
+The mock Kubernetes API runtime probe verifies the same error translation.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

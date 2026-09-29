@@ -132,3 +132,9 @@ run_case aws-status-cardinality-current counterexample \
 run_case aws-status-cardinality-fixed pass \
     models/providers/ParslAwsStatusMissingResultFixed.cfg \
     models/providers/ParslAwsStatusMissingResult.tla
+run_case kubernetes-polling-current counterexample \
+    models/providers/ParslKubernetesPolling.cfg \
+    models/providers/ParslKubernetesPolling.tla
+run_case kubernetes-polling-fixed pass \
+    models/providers/ParslKubernetesPollingFixed.cfg \
+    models/providers/ParslKubernetesPolling.tla
