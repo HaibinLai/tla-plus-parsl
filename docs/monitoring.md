@@ -96,6 +96,22 @@ versions, an asynchronous queue, reordering, and database writes. The current co
 a `DatabaseMonotonic` counterexample when an older event overwrites a newer record. The fixed
 configuration ignores that stale event and checks 1,978 states with all four invariants passing.
 
+`ParslFileTransferMonitoring.tla` connects that database path to output-file publication. A
+terminal event carries the stage-out's captured file version. The current configuration can write
+success before stage-out or with an obsolete version; TLC finds a `MonitoringFileSafety`
+counterexample at depth 4 (33 states generated). The fixed configuration requires version-matched
+DataFuture readiness before emitting or persisting success and checks 42 distinct states.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslFileTransferMonitoringCurrent.cfg models/monitoring/ParslFileTransferMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslFileTransferMonitoringFixed.cfg models/monitoring/ParslFileTransferMonitoring.tla
+```
+
+`StartStageOut`, `PublishStageOut`, and `EmitSuccess` correspond to DFK/DataManager output
+completion and monitoring status emission; `PersistSuccess` abstracts the SQLite status write.
+The related concrete probes are the DataFuture/stage-out tests and monitoring database delivery
+tests under `tests/`.
+
 `ParslMonitoringLastMessageRace.tla` covers the complementary ordering race in
 `DatabaseManager._db_mgmt_loop`: first worker messages are deferred until their `TRY` row exists,
 but last worker messages are currently inserted into `STATUS` immediately. The current
