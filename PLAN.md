@@ -122,6 +122,11 @@ existing manager record and can discard its in-flight task list, while the fixed
 ownership until recovery or completion. The matching runtime probe drives two registration frames
 through the real `Interchange.process_manager_socket_message` path.
 
+The smoke sweep also covers stale IDs during HTEX drain cleanup. The current
+`expire_drained_managers` path can index a manager removed by another cleanup path and abort the
+poll; the fixed branch ignores the stale ID while preserving the normal drained-manager removal
+and acknowledgement behavior.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

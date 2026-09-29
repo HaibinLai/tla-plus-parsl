@@ -213,3 +213,12 @@ run_case htex-duplicate-registration-current counterexample \
 run_case htex-duplicate-registration-fixed pass \
     models/executors/ParslHtexDuplicateRegistrationFixed.cfg \
     models/executors/ParslHtexDuplicateRegistration.tla
+run_case htex-manager-drain-current counterexample \
+    models/executors/ParslHtexManagerDrainCurrent.cfg \
+    models/executors/ParslHtexManagerDrain.tla
+run_case htex-manager-drain-fixed pass \
+    models/executors/ParslHtexManagerDrainFixed.cfg \
+    models/executors/ParslHtexManagerDrain.tla
+run_case htex-manager-drain-present pass \
+    models/executors/ParslHtexManagerDrainPresent.cfg \
+    models/executors/ParslHtexManagerDrain.tla
