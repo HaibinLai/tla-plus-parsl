@@ -19,6 +19,31 @@ in the first version.
 
 ## Completed phases
 
+### Recent cross-layer refinements and regression baseline
+
+Recent focused models now connect the previously separate boundaries:
+
+- `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
+  snapshots across serialized ZMQ task frames, physical retries, and stale result correlation.
+- `ParslFileBytes` is corroborated by a real binary Zip stage-out/stage-in probe with per-chunk
+  SHA-256 checksums.
+- `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
+  late completion, and monitoring persistence.
+- `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,
+  with a real SQLite insertion/query bridge.
+- `ParslProviderWorkerScaling` separates provider blocks from registered executor worker slots and
+  is bridged to the real `BlockProviderExecutor` block/job mapping.
+- `ParslJoinCallableTransport` combines serialized inner callable snapshots, retry attempts,
+  stale results, and ordered duplicate positions in an outer `join_app`; a real Parsl runtime
+  bridge exercises the same result shape.
+
+The runtime suite currently contains 476 probes and passes as a whole:
+
+```bash
+PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
+  /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test*_runtime.py' -q
+```
+
 ### 1. Behavioral baseline
 
 The source audit covered:
