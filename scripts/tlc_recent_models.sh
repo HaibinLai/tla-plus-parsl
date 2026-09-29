@@ -330,3 +330,12 @@ run_case timer-close-timeout-current counterexample \
 run_case timer-close-timeout-fixed pass \
     models/clock/ParslTimerCloseTimeoutFixed.cfg \
     models/clock/ParslTimerCloseTimeout.tla
+run_case join-list-mutation-current counterexample \
+    models/dataflow/ParslJoinListMutationCurrent.cfg \
+    models/dataflow/ParslJoinListMutation.tla
+run_case join-list-mutation-fixed pass \
+    models/dataflow/ParslJoinListMutationFixed.cfg \
+    models/dataflow/ParslJoinListMutation.tla
+run_case join-list-mutation-stable pass \
+    models/dataflow/ParslJoinListMutationStable.cfg \
+    models/dataflow/ParslJoinListMutation.tla

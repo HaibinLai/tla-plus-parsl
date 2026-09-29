@@ -195,6 +195,10 @@ Timer close quiescence is now in the smoke sweep: the current timeout close retu
 looking result while its callback thread remains alive; the fixed branch exposes an explicit
 closing/timeout outcome until callback quiescence.
 
+Mutable `join_app` list aliasing is now in the smoke sweep: the current callback observes caller
+mutation and can complete with an empty or shortened result, while the fixed branch snapshots list
+membership at join registration. A stable no-mutation configuration remains covered as a baseline.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
