@@ -315,3 +315,12 @@ run_case globus-compute-submit-current counterexample \
 run_case globus-compute-submit-fixed pass \
     models/executors/ParslGlobusComputeSubmitRaceFixed.cfg \
     models/executors/ParslGlobusComputeSubmitRace.tla
+run_case lsf-duplicate-current counterexample \
+    models/providers/ParslLSFDuplicateStatusCurrent.cfg \
+    models/providers/ParslLSFDuplicateStatus.tla
+run_case lsf-duplicate-fixed pass \
+    models/providers/ParslLSFDuplicateStatusFixed.cfg \
+    models/providers/ParslLSFDuplicateStatus.tla
+run_case lsf-duplicate-unique pass \
+    models/providers/ParslLSFDuplicateStatusUnique.cfg \
+    models/providers/ParslLSFDuplicateStatus.tla

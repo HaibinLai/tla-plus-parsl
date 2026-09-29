@@ -187,6 +187,10 @@ Globus Compute submit concurrency is now in the smoke sweep: the current wrapper
 SDK executor during override/submit/restore, so overlapping calls can observe another task's
 resource specification; the fixed branch serializes that critical section.
 
+LSF duplicate status handling is now in the smoke sweep: duplicate `bjobs` lines crash the current
+`jobs_missing` bookkeeping, while the fixed branch makes removal idempotent and preserves the
+polling pass.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
