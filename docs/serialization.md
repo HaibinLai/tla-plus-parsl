@@ -12,6 +12,17 @@ arity.
 Files live in [`models/serialization/`](../models/serialization/). Runtime probes are in
 `tests/test_*serialization*runtime.py` and `tests/test_zmq_serialization_runtime.py`.
 
+`ParslSerializationEnvelopeMalformed.tla` models the outer serializer envelope. The current
+`deserialize` path assumes a header/body newline and lets a missing separator raise a raw
+`ValueError`; the fixed branch rejects malformed framing as a decode failure before plugin lookup.
+The runtime probe calls the real facade with a truncated payload.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationEnvelopeMalformedCurrent.cfg models/serialization/ParslSerializationEnvelopeMalformed.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationEnvelopeMalformedFixed.cfg models/serialization/ParslSerializationEnvelopeMalformed.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_envelope_malformed_runtime.py -v
+```
+
 `ParslSerializerRegistry.tla` models the concrete `facade.deserialize` registry order. With a
 colliding identifier, the current configuration decodes a data payload through the code registry
 and violates `DispatchSafety`; the fixed configuration rejects the ambiguous header, while the
