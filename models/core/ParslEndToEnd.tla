@@ -102,7 +102,7 @@ LateResult(t, k) ==
 DeliverResult(t, k) ==
     /\ resultWire[Id(t, k)] = "queued"
     /\ resultWire' = [resultWire EXCEPT ![Id(t, k)] = "consumed"]
-    /\ IF k = currentAttempt[t]
+    /\ IF k = currentAttempt[t] /\ attemptState[Id(t, k)] = "succeeded"
           THEN /\ taskState' = [taskState EXCEPT ![t] = "succeeded"]
                /\ futureState' = [futureState EXCEPT ![t] = "resolved"]
           ELSE IF USE_FIXED
@@ -112,7 +112,9 @@ DeliverResult(t, k) ==
                ELSE /\ taskState' = [taskState EXCEPT ![t] = "succeeded"]
                     /\ futureState' = [futureState EXCEPT ![t] = "resolved"]
                     /\ attemptState' = attemptState
-    /\ IF k = currentAttempt[t] THEN attemptState' = attemptState ELSE TRUE
+    /\ IF k = currentAttempt[t] /\ attemptState[Id(t, k)] = "succeeded"
+          THEN attemptState' = attemptState
+          ELSE TRUE
     /\ UNCHANGED <<currentAttempt, taskWire, attemptResult, workerState, workerAttempt>>
 
 FailAttempt(t, k) ==
@@ -183,6 +185,17 @@ StaleResultSafety ==
     \A t \in TASKS, k \in 0..MAX_RETRIES :
         resultWire[Id(t, k)] = "consumed" /\ k # currentAttempt[t]
         => attemptState[Id(t, k)] = "stale"
+
+(***************************************************************************
+ * A result from an attempt that has already timed out or failed must not
+ * resolve its Future, even when that attempt is still the current retry
+ * number.  The current branch accepts this same-attempt late result; the
+ * fixed branch classifies it as stale.
+ ***************************************************************************)
+CurrentAttemptResultSafety ==
+    \A t \in TASKS :
+        futureState[t] = "resolved"
+        => attemptState[Id(t, currentAttempt[t])] = "succeeded"
 
 TerminalStability ==
     \A t \in TASKS : futureState[t] = "rejected" => taskState[t] = "failed"

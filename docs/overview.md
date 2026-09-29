@@ -1266,7 +1266,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEndFixed.cfg model
 ```
 
 The first command is an intentional counterexample configuration: an old attempt can resolve the
-Future. The fixed configuration rejects that result as stale and passes all six invariants.
+Future, including a late result from an attempt that has already timed out. The fixed configuration
+rejects both forms of stale result and passes all seven invariants (`CurrentAttemptResultSafety`
+included).
 
 The task/stage-out/monitoring boundary is checked separately:
 
@@ -2134,7 +2136,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 407 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 408 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

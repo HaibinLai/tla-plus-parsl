@@ -10,7 +10,12 @@ configurations such as `ParslNoFailures.cfg`, `ParslTime.cfg`, and `ParslProvide
 task serialization, wire delivery, worker execution, result delivery, retry/timeout, and late
 results. `ParslEndToEnd.cfg` intentionally permits an old attempt to resolve the Future and TLC
 finds a `StaleResultSafety` counterexample. `ParslEndToEndFixed.cfg` rejects that result as stale;
-TLC checks 207 states with all invariants passing.
+TLC checks 198 states with all invariants passing. The model also checks
+`CurrentAttemptResultSafety`: a result arriving after the current physical attempt has timed out
+or failed must not resolve the logical Future merely because its retry number still matches
+`currentAttempt`. The current configuration reaches this counterexample in 23 states; the fixed
+configuration classifies the result as stale. This complements the retry/timeout probes in
+`tests/test_retry_timeout_runtime.py` while keeping logical tasks separate from physical attempts.
 
 `ParslTaskStagingMonitoring.tla` combines producer task completion, chunked stage-out/DataFuture
 publication, dependent-consumer admission, and asynchronous monitoring persistence. The current
