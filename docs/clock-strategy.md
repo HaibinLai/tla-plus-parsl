@@ -74,6 +74,8 @@ never appears, the current `time_limited_open` yields and exposes a raw `FileNot
 fixed branch returns an explicit timeout without attempting the open. The runtime probe uses a
 missing temporary path and a zero-second polling horizon.
 
+This timeout/error distinction is recorded as BUG-134.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutCurrent.cfg models/clock/ParslTimeLimitedOpenTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeoutFixed.cfg models/clock/ParslTimeLimitedOpenTimeout.tla

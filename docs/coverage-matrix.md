@@ -187,3 +187,6 @@ Executor timeout coverage also records process cleanup after `execute_wait` time
 
 Bash executor coverage also records process cleanup after app walltime timeout
 (`ParslBashTimeoutCleanup`, BUG-133).
+
+Clock/file-wait coverage also records explicit timeout handling before `open()`
+(`ParslTimeLimitedOpenTimeout`, BUG-134).
