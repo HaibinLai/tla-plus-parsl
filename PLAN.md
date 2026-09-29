@@ -179,6 +179,10 @@ Azure provisioning rollback is now covered: the current submit path can leave in
 resource bookkeeping after a post-creation disk/start/worker-command failure; the fixed branch
 rolls back partial local state before reporting the setup error.
 
+LocalProvider submit cleanup is now covered: a failed launcher can leave the generated worker
+script and partial resource state in the current path; the fixed branch removes newly-created
+artifacts before surfacing the launch failure, while the success path retains the script/resource.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

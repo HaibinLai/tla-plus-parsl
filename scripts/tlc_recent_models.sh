@@ -300,3 +300,12 @@ run_case azure-submit-current counterexample \
 run_case azure-submit-fixed pass \
     models/providers/ParslAzureProviderSubmitFixed.cfg \
     models/providers/ParslAzureProviderSubmit.tla
+run_case local-submit-cleanup-current counterexample \
+    models/providers/ParslLocalProviderSubmitCleanupCurrent.cfg \
+    models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-submit-cleanup-fixed pass \
+    models/providers/ParslLocalProviderSubmitCleanupFixed.cfg \
+    models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-submit-cleanup-success pass \
+    models/providers/ParslLocalProviderSubmitCleanupSuccess.cfg \
+    models/providers/ParslLocalProviderSubmitCleanup.tla
