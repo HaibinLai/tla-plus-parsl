@@ -360,6 +360,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidat
 /tmp/parsl-venv/bin/python -m unittest tests/test_lsf_resource_validation_runtime.py -v
 ```
 
+This resource-derivation boundary is recorded as BUG-115: a negative `cores_per_node` produces
+negative node capacity instead of a configuration error.
+
 `ParslTorqueTasksPerNode.tla` models Torque's documented `tasks_per_node` constraint. The
 current `submit()` path forwards a zero or negative value to the launcher and generated job
 configuration; the fixed branch rejects non-positive values before script construction. The

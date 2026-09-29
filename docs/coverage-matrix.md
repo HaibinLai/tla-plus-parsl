@@ -120,3 +120,6 @@ HTEX executor coverage also records zero `cores_per_worker` capacity derivation
 
 HTEX executor coverage also records explicit zero address-probe-timeout propagation
 (`ParslHtexAddressProbeTimeout`, BUG-114).
+
+LSF provider coverage also records negative core-capacity derivation
+(`ParslLSFResourceValidation`, BUG-115).
