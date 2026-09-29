@@ -146,6 +146,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinDuplicateFailur
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_duplicate_failure_aggregation_runtime.py -v
 ```
 
+`ParslJoinListMutation.tla` covers the object-identity boundary at join registration. The current
+DFK stores the caller-owned Future list directly, so clearing or changing that list before the
+join callback runs changes the outer result; the fixed branch snapshots the membership. TLC finds
+the current `JoinSnapshotSafety` counterexample (4 generated/3 distinct states), checks 6
+generated/3 distinct fixed states, and the runtime probe demonstrates the current empty result.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinListMutationCurrent.cfg models/dataflow/ParslJoinListMutation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinListMutationFixed.cfg models/dataflow/ParslJoinListMutation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinListMutationStable.cfg models/dataflow/ParslJoinListMutation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_list_mutation_runtime.py -v
+```
+
 `ParslJoinErrorRootCause.tla` captures `PropagatedException` metadata used by `JoinError`: the
 first dependent exception is followed recursively to a non-propagated root, and sibling failures
 are marked with `(+ others)` in the representative path. The runtime probe checks the actual
