@@ -7,6 +7,18 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslThreadExecutorThreadCount.tla` models `ThreadPoolExecutor` admission of
+`max_threads`. The current wrapper accepts zero at construction and fails only when `start()`
+creates the underlying pool; the fixed branch rejects non-positive counts immediately. The
+runtime probe exercises the real constructor/start boundary.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountCurrent.cfg models/executors/ParslThreadExecutorThreadCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountFixed.cfg models/executors/ParslThreadExecutorThreadCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountValid.cfg models/executors/ParslThreadExecutorThreadCount.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_thread_count_runtime.py -v
+```
+
 `ParslProbeAddresses.tla` abstracts the HTEX `probe_addresses` helper. It distinguishes an empty
 candidate set (`ValueError`), a successful probe reply selecting an address, and timeout without a
 reply (`ConnectionError`). The runtime probe uses the real pyzmq context for the empty and

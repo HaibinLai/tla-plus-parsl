@@ -1909,7 +1909,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 354 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 355 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2988,6 +2988,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatParameterVali
 
 The current configuration accepts invalid non-positive values and violates `ParameterSafety`;
 the fixed configuration rejects them (5 generated / 2 distinct states).
+
+The ThreadPoolExecutor thread-count refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountCurrent.cfg models/executors/ParslThreadExecutorThreadCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountFixed.cfg models/executors/ParslThreadExecutorThreadCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThreadCountValid.cfg models/executors/ParslThreadExecutorThreadCount.tla
+```
+
+The current configuration reaches the delayed start error; fixed and valid configurations
+preserve `ThreadCountSafety`.
 
 ## Concrete Parsl example
 
