@@ -211,6 +211,10 @@ Work Queue duplicate-report handling is now covered in parallel: the current col
 stale-ID `KeyError` and unrelated-Future cleanup failure, while the fixed branch keeps the result
 thread alive and ignores the duplicate report.
 
+`ResultsIncoming` close/get behavior is now covered: the current wrapper can poll a terminated ZMQ
+socket after close, while the fixed branch exposes a closed guard and returns a quiescent no-message
+result.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

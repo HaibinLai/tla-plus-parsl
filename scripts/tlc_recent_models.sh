@@ -357,3 +357,9 @@ run_case workqueue-duplicate-report-current counterexample \
 run_case workqueue-duplicate-report-fixed pass \
     models/executors/ParslWorkQueueDuplicateReportFixed.cfg \
     models/executors/ParslWorkQueueDuplicateReport.tla
+run_case results-incoming-close-current counterexample \
+    models/executors/ParslResultsIncomingCloseRaceCurrent.cfg \
+    models/executors/ParslResultsIncomingCloseRace.tla
+run_case results-incoming-close-fixed pass \
+    models/executors/ParslResultsIncomingCloseRaceFixed.cfg \
+    models/executors/ParslResultsIncomingCloseRace.tla
