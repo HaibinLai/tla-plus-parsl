@@ -5,6 +5,21 @@ partial cleanup, corruption, retries, and multi-output publication.
 
 Files live in [`models/staging/`](../models/staging/).
 
+`ParslGlobusEndpointPath.tla` models the working-directory and endpoint-path guard in
+`GlobusStaging._get_globus_endpoint`. The current code accepts the working directory itself but
+rejects a valid absolute `local_path` below it because it compares the local path with the common
+path rather than accepting descendants. The current configuration produces a counterexample;
+the fixed configuration accepts the descendant path while still rejecting a missing working
+directory or an unrelated path. `tests/test_globus_endpoint_path_runtime.py` probes the real
+helper and records the current rejection.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathCurrent.cfg models/staging/ParslGlobusEndpointPath.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathFixed.cfg models/staging/ParslGlobusEndpointPath.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathValid.cfg models/staging/ParslGlobusEndpointPath.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_endpoint_path_runtime.py -v
+```
+
 `ParslRsyncPartialCleanup.tla` models a failed RSync stage-in after a destination has received
 partial bytes. The current wrapper raises on the non-zero `rsync` result but leaves the partial
 path in place; the fixed branch removes it before reporting failure. The runtime probe exercises

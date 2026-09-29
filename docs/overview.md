@@ -449,6 +449,12 @@ indexes `events.data[0]`; an empty event list therefore crashes with `IndexError
 reporting the transfer failure. The runtime probe uses a fake SDK and the fixed branch reports a
 failure without requiring diagnostic details.
 
+`ParslGlobusEndpointPath.tla` models `GlobusStaging._get_globus_endpoint`. A missing executor
+working directory and an unrelated local path are rejected, while a local path below the working
+directory should be accepted. The current implementation rejects that valid descendant because
+it compares `local_path` directly with `os.path.commonpath`; the current TLC configuration and
+runtime probe expose this counterexample, while the fixed configuration accepts it.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1260,6 +1266,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailur
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailureCurrentEvent.cfg models/staging/ParslGlobusTransferFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailureFixedEmpty.cfg models/staging/ParslGlobusTransferFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferFailureSuccess.cfg models/staging/ParslGlobusTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathCurrent.cfg models/staging/ParslGlobusEndpointPath.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathFixed.cfg models/staging/ParslGlobusEndpointPath.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathValid.cfg models/staging/ParslGlobusEndpointPath.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutFuture.cfg models/staging/ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutInTask.cfg models/staging/ParslStageOutFuture.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutNone.cfg models/staging/ParslStageOutFuture.tla
@@ -1909,7 +1918,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 356 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 359 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2767,6 +2776,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
 | `WaitReturnsTerminalFailure` / `ReadFailureEvent` / `NoDiagnosticCrash` | Globus terminal transfer failure reporting with optional diagnostics | `Globus.transfer_file` |
+| `ResolveEndpoint` / `AllowedPathSafety` | Globus executor working-directory and endpoint-path validation | `GlobusStaging._get_globus_endpoint` |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |
 | `GatherDependencies` / `RunWorker` | shallow versus recursive Future collection and unwrapping | `parsl/dataflow/dependency_resolvers.py` and `DataFlowKernel._unwrap_futures` |
 | `MemoizationHit` | complete a Future from cache | `DataFlowKernel.launch_task` |
