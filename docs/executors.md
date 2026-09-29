@@ -13,6 +13,16 @@ operations, so two callers can allocate the same task ID and overwrite one Futur
 probe forces the read/modify/write interleaving and observes two queued messages with ID `1` but
 only one entry in `tasks`. A fixed implementation must serialize allocation and insertion.
 
+`ParslExecutorSelection.tla` models the pre-launch executor-selection boundary. The current
+`DataFlowKernel.submit` path accepts `executors=[]` and exposes the `IndexError` from
+`random.choice`; the fixed branch rejects the empty list before selection. The runtime probe is
+`tests/test_executor_selection_runtime.py`.
+
+```text
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorSelectionCurrent.cfg models/executors/ParslExecutorSelection.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorSelectionFixed.cfg models/executors/ParslExecutorSelection.tla
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitCounterRaceCurrent.cfg models/executors/ParslHtexSubmitCounterRace.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitCounterRaceFixed.cfg models/executors/ParslHtexSubmitCounterRace.tla

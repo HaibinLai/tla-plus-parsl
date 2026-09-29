@@ -21,6 +21,9 @@ ID/context validation to the HTEX executor coverage. Their runtime probes confir
 IDs or non-mapping contexts currently escape `Interchange.process_task_incoming`; the fixed models
 reject them before scheduler insertion.
 
+Executor-selection coverage also includes `ParslExecutorSelection`, which isolates the empty-list
+validation boundary before `random.choice`.
+
 The next refinements should select one row, read the relevant source path, and add a focused
 model plus a runtime probe before expanding the state space.
 
