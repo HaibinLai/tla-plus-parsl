@@ -591,3 +591,15 @@ exercise both unknown heartbeat and unknown result messages.
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownManagerHeartbeat.cfg models/executors/ParslHtexUnknownManagerMessage.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownManagerResult.cfg models/executors/ParslHtexUnknownManagerMessage.tla
 ```
+
+`ParslHtexManagerTaskAdmission.tla` connects manager registration to task queue admission. A
+queued task may exist before a manager registers, but dispatch must wait for a ready manager;
+heartbeat expiry then loses a running attempt and enables retry. The current branch admits queued
+work without a manager and TLC finds `AdmissionSafety` at depth 4. The fixed branch checks 133
+distinct states and rejects late results from the lost attempt.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerTaskAdmissionCurrent.cfg models/executors/ParslHtexManagerTaskAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerTaskAdmissionFixed.cfg models/executors/ParslHtexManagerTaskAdmission.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_manager_selection_runtime.py tests/test_htex_submit_runtime.py tests/test_htex_heartbeat_runtime.py tests/test_htex_manager_loss_runtime.py tests/test_retry_timeout_runtime.py -v
+```
