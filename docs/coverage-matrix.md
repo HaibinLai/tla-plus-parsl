@@ -54,3 +54,6 @@ ordered success and failure propagation through two join layers.
 
 DataFuture coverage also includes the falsey-exception propagation boundary
 `ParslDataFutureFalseyException` (BUG-092).
+
+Radical-Pilot executor coverage also records the missing failure-payload boundary
+`ParslRadicalPilotFailurePayload` (BUG-093).
