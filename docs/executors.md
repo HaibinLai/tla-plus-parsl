@@ -629,6 +629,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMess
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexMonitoringMessageEnabled.cfg models/executors/ParslHtexMonitoringMessage.tla
 ```
 
+`ParslHtexManagerLoss.tla` refines manager-loss handling across the two HTEX components: heartbeat
+expiry in the interchange emits a synthetic result envelope for each in-flight task, and the
+executor result worker resolves the matching Future with `ManagerLost`. The current regression
+branch drops that envelope and violates `ExpiredTaskSafety` after 4 states; the fixed branch
+delivers the failure and checks 7 states. `tests/test_htex_manager_loss_runtime.py` drives the
+real expiry and result-worker path and verifies the Future exception.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerLossCurrent.cfg models/executors/ParslHtexManagerLoss.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerLossFixed.cfg models/executors/ParslHtexManagerLoss.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_manager_loss_runtime.py -v
+```
+
 `ParslHtexUnknownManagerMessage.tla` checks the identity guard before processing manager traffic:
 unknown heartbeat and result messages are ignored without a reply, task update, or ready-manager
 mutation; registration remains the only message that can create a manager record. Runtime probes
