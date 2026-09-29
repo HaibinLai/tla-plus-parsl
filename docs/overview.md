@@ -2003,7 +2003,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 374 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 375 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2430,6 +2430,17 @@ Torque submission parsing is exercised with deterministic `qsub` output:
 `ParslTorqueSubmit.tla` checks pending-resource registration for a job id, the empty-output and
 nonzero-command paths, and the current behavior of returning/registering the last non-empty line
 when a command prints multiple ids.
+
+`ParslTorqueTasksPerNode.tla` checks the documented `tasks_per_node` admission rule. The current
+submit path forwards a zero or negative value to the launcher; the fixed branch rejects
+non-positive values before generating a Torque script.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNodeCurrent.cfg models/providers/ParslTorqueTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNodeFixed.cfg models/providers/ParslTorqueTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNodeValid.cfg models/providers/ParslTorqueTasksPerNode.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_tasks_per_node_runtime.py -v
+```
 
 The Kubernetes polling regression is also exercised with a mocked Kubernetes API client:
 
@@ -3016,6 +3027,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `ForeignLineCrashes` / `ForeignLineIgnored` / `KnownLineUpdates` | Torque qstat foreign-job handling and status update | `TorqueProvider._status` |
 | `CancelSuccess` / `CancelFailure` | Torque qdel outcome and resource-state convention | `TorqueProvider.cancel` |
 | `WriteScript` / `ExecuteQsub` / `ParseQsub` | Torque qsub submission and last non-empty job-id registration | `TorqueProvider.submit` |
+| `Submit` / `TaskAdmissionSafety` | Torque `tasks_per_node` validation before launcher invocation | `TorqueProvider.submit` |
 | `MalformedLineCrashes` / `MalformedLineIgnored` / `ValidLineUpdates` | Condor status line length validation and update | `CondorProvider._status` |
 | `FailedCommandCrashes` / `FailedCommandUpdatesStale` / `FailedCommandIgnored` | Condor command return-code handling before status parsing | `CondorProvider._status` |
 | `CancelChunk` | Condor chunked `condor_rm` cancellation and unknown-job guard | `CondorProvider.cancel` |

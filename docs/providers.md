@@ -124,6 +124,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFResourceValidat
 /tmp/parsl-venv/bin/python -m unittest tests/test_lsf_resource_validation_runtime.py -v
 ```
 
+`ParslTorqueTasksPerNode.tla` models Torque's documented `tasks_per_node` constraint. The
+current `submit()` path forwards a zero or negative value to the launcher and generated job
+configuration; the fixed branch rejects non-positive values before script construction. The
+runtime probe uses the real provider with a recording launcher and a failed scheduler command.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNodeCurrent.cfg models/providers/ParslTorqueTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNodeFixed.cfg models/providers/ParslTorqueTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNodeValid.cfg models/providers/ParslTorqueTasksPerNode.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_tasks_per_node_runtime.py -v
+```
+
 `ParslSlurmForeignJob.tla` audits the status parser's local-resource boundary. Slurm output can
 contain a job id that is already forgotten locally or belongs to another submission; the current
 implementation indexes it directly and raises `KeyError`. The fixed branch ignores foreign
