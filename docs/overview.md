@@ -1909,7 +1909,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 351 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 352 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2957,6 +2957,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDispatc
 
 The current configuration reaches the malformed-tuple assertion; fixed and valid configurations
 complete in 4 generated / 2 distinct states and preserve `MalformedIsolation`.
+
+The Kubernetes unknown-job refinement is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJobCurrent.cfg models/providers/ParslKubernetesUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJobFixed.cfg models/providers/ParslKubernetesUnknownJob.tla
+```
+
+The current configuration reaches the `KeyError` crash outcome; the fixed configuration returns
+UNKNOWN and completes in 4 generated / 2 distinct states.
 
 ## Concrete Parsl example
 

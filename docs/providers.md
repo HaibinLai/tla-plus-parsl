@@ -6,6 +6,17 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslKubernetesUnknownJob.tla` models a status request for an id absent from the provider's
+local resource map. The current `status()` path raises `KeyError`; the fixed branch returns an
+explicit UNKNOWN status. The runtime probe isolates the concrete lookup with an empty resource
+map.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJobCurrent.cfg models/providers/ParslKubernetesUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJobFixed.cfg models/providers/ParslKubernetesUnknownJob.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_unknown_job_runtime.py -v
+```
+
 `ParslAzureStatusBookkeeping.tla` checks consistency between the status returned by Azure and
 the provider's local `resources` map. The current `status()` method translates `VM running` but
 does not write that value back, leaving local bookkeeping at PENDING. The fixed branch records
