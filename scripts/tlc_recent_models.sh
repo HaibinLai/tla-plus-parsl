@@ -252,3 +252,9 @@ run_case kubernetes-admission-current counterexample \
 run_case kubernetes-admission-fixed pass \
     models/providers/ParslKubernetesAdmissionFixed.cfg \
     models/providers/ParslKubernetesAdmission.tla
+run_case callable-equal-cache-current counterexample \
+    models/serialization/ParslCallableEqualCacheCurrent.cfg \
+    models/serialization/ParslCallableEqualCache.tla
+run_case callable-equal-cache-fixed pass \
+    models/serialization/ParslCallableEqualCacheFixed.cfg \
+    models/serialization/ParslCallableEqualCache.tla

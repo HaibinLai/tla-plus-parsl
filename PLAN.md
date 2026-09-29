@@ -147,6 +147,10 @@ Kubernetes admission is now covered alongside polling: the current submit path r
 created Pending pod as `RUNNING`, allowing task admission too early; the fixed branch keeps the
 job Pending until a poll observes the Running phase.
 
+Callable serialization coverage now includes equal-but-distinct Python objects: the current
+`DillCallableSerializer` cache can reuse the first payload when custom equality and hashing collide;
+the fixed branch requires identity/content-sensitive cache behavior.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
