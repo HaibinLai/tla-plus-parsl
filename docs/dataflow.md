@@ -44,6 +44,16 @@ results, and inner cancellation/failure. The current configuration exposes a
 `JoinResultSafety` counterexample by collapsing duplicate list positions; the fixed configuration
 preserves the sequence and checks 5,694 states with all six invariants passing.
 
+`ParslJoinRetry.tla` refines this with physical attempts for each inner Future. A failed
+non-final attempt leaves the logical Future unresolved, so `join_app` waits for retry rather than
+failing early. The model checks 258 distinct states with retry isolation and ordered aggregation;
+the concrete probe is `tests/test_join_retry_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetry.cfg models/dataflow/ParslJoinRetry.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_retry_runtime.py -v
+```
+
 `ParslTaskStatusFutureOrdering.tla` keeps logical task status separate from the public Future.
 Parsl publishes `exec_done` before `AppFuture.set_result`, allowing monitoring to observe a
 terminal task during the small callback-delivery window. The strict Current configuration
