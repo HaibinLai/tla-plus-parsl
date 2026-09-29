@@ -87,6 +87,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoing.cfg 
 /tmp/parsl-venv/bin/python -m unittest tests/test_tasks_outgoing_runtime.py -v
 ```
 
+`ParslFluxCancelUnderlyingState.tla` isolates a second Flux cancellation boundary. If the
+underlying Flux future is already cancelled, the current `FluxFutureWrapper.cancel()` returns
+`True` without transitioning the Parsl wrapper, leaving the user-visible Future pending. The
+fixed branch propagates the terminal cancellation; the runtime probe drives the real wrapper with
+an already-cancelled fake future.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelUnderlyingStateCurrent.cfg models/executors/ParslFluxCancelUnderlyingState.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelUnderlyingStateFixed.cfg models/executors/ParslFluxCancelUnderlyingState.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_cancel_underlying_state_runtime.py -v
+```
+
 `ParslCommandClientSendTimeout.tla` adds the pre-send timeout branch of the HTEX REQ/REP command
 client. A `POLLOUT` timeout occurs before any request is put on the socket, so it leaves
 `client.ok` true and a later command can safely retry; this contrasts with a post-send reply

@@ -478,6 +478,11 @@ returns fail before callbacks are registered, matching the validation in `DataFl
 fixed branch rejects that configuration before starting the timer thread. The runtime probe
 observes the current normalized value directly.
 
+`ParslFluxCancelUnderlyingState.tla` refines Flux cancellation when the underlying future is
+already cancelled. The current wrapper returns success without cancelling the Parsl-facing Future,
+so it remains pending; the fixed branch enforces terminal cancellation. The runtime probe uses the
+real `FluxFutureWrapper` with a fake already-cancelled future.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1418,6 +1423,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueResults.c
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueDuplicateReport.cfg models/executors/ParslWorkQueueDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueDuplicateReportFixed.cfg models/executors/ParslWorkQueueDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxResultFixed.cfg models/executors/ParslFluxResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelUnderlyingStateCurrent.cfg models/executors/ParslFluxCancelUnderlyingState.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelUnderlyingStateFixed.cfg models/executors/ParslFluxCancelUnderlyingState.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineResults.cfg models/executors/ParslTaskVineResults.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineDuplicateReport.cfg models/executors/ParslTaskVineDuplicateReport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineDuplicateReportFixed.cfg models/executors/ParslTaskVineDuplicateReport.tla
@@ -1951,7 +1958,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 364 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 365 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2941,6 +2948,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `Report` / `DecodeReport` / `CollectorFinallyFailsOutstanding` | WorkQueue result-file decoding and collector-exit Future cleanup | `WorkQueueExecutor._collect_work_queue_results` |
 | `Validate` / `Register` / `CheckSubmitProcess` | WorkQueue resource validation and submit-process liveness ordering | `WorkQueueExecutor.submit` |
 | `FluxSucceeds` / `PrepareResult` / `CompleteCallback` / `FluxCancels` | Flux job completion, result-file decoding, and wrapped-Future cancellation | `FluxExecutor._complete_future` and `FluxFutureWrapper.cancel` |
+| `CancelWrapper` / `CancellationConsistency` | propagate an already-terminal underlying Flux cancellation to the wrapper Future | `FluxFutureWrapper.cancel` |
 | `CancelBeforeBind` / `BindUnderlying` / `PublishCallback` | Flux cancellation versus late underlying-future binding | `FluxFutureWrapper.cancel` and `_complete_future` |
 | `Submit` / `Report` / `Collect` / `ManagerFails` / `CollectorCleanup` | TaskVine task submission, result report mapping, and manager-loss Future cleanup | `TaskVineExecutor.submit`, `_collect_taskvine_results`, and TaskVine manager report generation |
 | `CreateFactory` / `ConfigureFactory` / `EnterContext` / `RequestStop` / `ExitContext` | TaskVine factory process configuration and stop lifecycle | `taskvine.factory._taskvine_factory` |
