@@ -1743,6 +1743,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   explicit zero is preserved.
 - `ParslHtexAddressProbeTimeoutValid.cfg`: 4 states generated, 2 distinct states, depth 2;
   positive timeout is preserved.
+- `ParslPoolExecutorMap.cfg`: 146 states generated, 53 distinct states, depth 6; map consumes
+  results in input order, times out at its deadline, and never cancels submitted Futures.
 - `ParslFileBytes.cfg`: 630 states generated, 201 distinct states, depth 14;
   chunk checksums, corruption repair, stale source-version detection, and atomic stage-in/stage-out
   publication all passed.
@@ -2106,7 +2108,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 385 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 387 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -3325,6 +3327,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCoresPerWorker
 
 The current configuration reaches the division error for zero cores per worker; fixed and valid
 configurations preserve `NoDivisionError`.
+
+The `ParslPoolExecutor.map` timeout and no-cancellation contract is checked with:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslPoolExecutorMap.cfg models/executors/ParslPoolExecutorMap.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pool_executor_map_runtime.py -v
+```
+
+The bounded model checks input-order result consumption, deadline timeout, and preservation of
+already-submitted Futures after timeout. The runtime probe also checks the advisory
+`cancel_futures` shutdown behavior.
 
 The HTEX address-probe-timeout propagation refinement is checked with:
 

@@ -19,6 +19,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorThre
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_thread_count_runtime.py -v
 ```
 
+`ParslPoolExecutorMap.tla` models the concrete `parsl.concurrent.ParslPoolExecutor.map` wrapper.
+The pool submits all inputs eagerly, consumes results in input order, and treats `timeout` as a
+deadline for the result iterator. A timeout does not cancel already-submitted Parsl Futures, and
+those Futures may complete after the iterator has stopped. The runtime probe uses real
+`concurrent.futures.Future` objects with the Parsl wrapper and also checks that
+`shutdown(cancel_futures=True)` is advisory, as documented by Parsl.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslPoolExecutorMap.cfg models/executors/ParslPoolExecutorMap.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pool_executor_map_runtime.py -v
+```
+
 `ParslHtexCoresPerWorker.tla` models HTEX worker-capacity calculation when a provider advertises
 `cores_per_node`. The current constructor allows `cores_per_worker=0` to reach the division used
 to compute CPU slots and raises `ZeroDivisionError`; the fixed branch rejects the non-positive
