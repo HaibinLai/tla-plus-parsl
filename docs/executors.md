@@ -359,6 +359,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitFixe
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_submit_runtime.py -v
 ```
 
+The TaskVine submit model also checks serialization failure independently from process failure.
+`ParslTaskVineSubmitSerializationFailure.cfg` reproduces the orphaned mapping, while the fixed
+configuration rolls it back.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitSerializationFailure.cfg models/executors/ParslTaskVineSubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitSerializationFailureFixed.cfg models/executors/ParslTaskVineSubmit.tla
+```
+
 `ParslWorkQueueSubmit.tla` applies the same submit-lifecycle boundary to Work Queue. The current
 executor registers a Future before callable serialization and before checking the submit process;
 both failures can leave an orphaned pending mapping. The fixed branch rolls back that mapping.
