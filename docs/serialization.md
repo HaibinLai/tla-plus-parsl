@@ -9,6 +9,19 @@ These models cover Python callable/object serialization, framed buffers, seriali
 ZMQ-style transport, task/result correlation, duplicate or stale messages, and apply-message
 arity.
 
+`ParslFunctionObjectTransport.tla` is the smallest executable snapshot model for a Python
+callable and the object content it closes over.  Serialization captures a bounded source
+version before the message is queued; source mutation is allowed while the frame is in flight,
+but decode and execution must use the captured version.  This corresponds to
+`pack_apply_message` producing immutable bytes before `TasksOutgoing`/ZMQ transport.  The
+runtime probe uses a real closure, mutates its source dictionary after packing, and verifies that
+the decoded callable still observes the packed value.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObjectTransport.cfg models/serialization/ParslFunctionObjectTransport.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_function_object_transport_runtime.py -v
+```
+
 `ParslCallableArgumentAlias.tla` models identity shared by a closure and an argument.  The
 current `pack_apply_message` path serializes those roots independently, so decoding produces
 two equal but non-identical mutable objects; the fixed branch represents a bundled graph that
