@@ -81,6 +81,10 @@ Kubernetes polling is now also in the sweep: a pod-read error leaves a running j
 `RUNNING` in the current identity-comparison path, while the fixed branch exposes `UNKNOWN`.
 The mock Kubernetes API runtime probe verifies the same error translation.
 
+Slurm scheduler polling is now included as well: a truncated non-empty status record crashes the
+current batch parser, while the fixed branch skips that record and retains known job state. The
+real parser probe covers the same malformed line.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
