@@ -27,6 +27,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubClos
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_runtime.py -v
 ```
 
+`ParslMonitoringZMQRouterFailure.tla` models a permanently broken receive channel in the
+monitoring ZMQ router. The current loop catches the receive exception and retries indefinitely
+until an external exit event arrives; the fixed branch stops after the first unrecoverable
+failure. The runtime probe drives the real `MonitoringRouter.start` loop with a receiver that
+always raises.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringZMQRouterFailureCurrent.cfg models/monitoring/ParslMonitoringZMQRouterFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringZMQRouterFailureFixed.cfg models/monitoring/ParslMonitoringZMQRouterFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringZMQRouterFailureValid.cfg models/monitoring/ParslMonitoringZMQRouterFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_zmq_router_failure_runtime.py -v
+```
+
 `ParslMonitoringBatchClock.tla` isolates the clock source used by
 `DatabaseManager._get_messages_in_batch`. With the current `time.time()` path, a wall-clock
 rollback makes elapsed time negative and allows a batch to consume messages beyond its one-second
