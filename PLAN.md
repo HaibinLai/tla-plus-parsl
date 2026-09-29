@@ -68,6 +68,11 @@ The matching result direction is now in the smoke sweep through `ParslHtexResult
 the current branch aborts on a corrupt pickle frame, while the fixed branch ignores that frame and
 continues to forward a later valid result.
 
+HTEX task admission now also has repeatable priority/resource-shape checks: current models expose
+the `TypeError`/`AttributeError` paths for non-numeric priority and non-mapping resource specs,
+while fixed models reject both before queue insertion. Their real interchange probes remain the
+runtime counterparts.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

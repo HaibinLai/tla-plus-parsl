@@ -114,3 +114,15 @@ run_case htex-result-message-current counterexample \
 run_case htex-result-message-fixed pass \
     models/executors/ParslHtexResultMessageMalformedFixed.cfg \
     models/executors/ParslHtexResultMessageMalformed.tla
+run_case htex-priority-current counterexample \
+    models/executors/ParslHtexTaskPriorityTypeCurrent.cfg \
+    models/executors/ParslHtexTaskPriorityType.tla
+run_case htex-priority-fixed pass \
+    models/executors/ParslHtexTaskPriorityTypeFixed.cfg \
+    models/executors/ParslHtexTaskPriorityType.tla
+run_case htex-resource-spec-current counterexample \
+    models/executors/ParslHtexTaskResourceSpecTypeCurrent.cfg \
+    models/executors/ParslHtexTaskResourceSpecType.tla
+run_case htex-resource-spec-fixed pass \
+    models/executors/ParslHtexTaskResourceSpecTypeFixed.cfg \
+    models/executors/ParslHtexTaskResourceSpecType.tla
