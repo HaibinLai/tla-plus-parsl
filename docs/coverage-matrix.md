@@ -87,3 +87,6 @@ Python serialization coverage also records the unhashable-callable cache-key bou
 
 Python serialization coverage also records mutable callable-instance aliasing on repeated decode
 (`ParslCallableDeserializeCache`, BUG-103).
+
+Python serialization coverage also records failed dynamic-plugin cache retention
+(`ParslSerializationPluginFailureCache`, BUG-104).

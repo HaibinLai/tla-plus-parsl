@@ -251,6 +251,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationP
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_plugin_failure_cache_runtime.py -v
 ```
 
+This failure-cache boundary is recorded as BUG-104: a plugin that raises during decoding remains
+in the deserializer cache and can poison subsequent requests.
+
 `ParslPoolExecutorCallableCache.tla` models the callable cache in
 `parsl.concurrent.ParslPoolExecutor.get_app`. The current dictionary lookup rejects an otherwise
 valid callable object whose `__hash__` is `None`; the fixed branch uses an identity-compatible
