@@ -950,6 +950,12 @@ The callback for the final done Future performs the all-done check under a model
 Failures therefore propagate as `JoinError` only after every selected Future is done, and duplicate
 callbacks after outer termination are harmless. Ordered list results remain tied to input order.
 
+`ParslJoinDuplicateFailureAggregation.tla` extends failure aggregation to duplicate list
+positions. The same failed Future appearing twice must contribute two entries to
+`JoinError.dependent_exceptions_tids`, because the concrete callback scans the list rather than a
+set of Future identities. The current configuration loses one entry; the fixed configuration and
+runtime probe preserve both.
+
 `ParslJoinMemoData.tla` connects that callback protocol to two real DFK boundaries: a memoization
 hit returns an already-completed Future without launching an executor attempt, while a file-valued
 `DataFuture` remains unresolved through staging until data readiness is published. The outer join
@@ -2124,7 +2130,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 391 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 392 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 

@@ -117,6 +117,17 @@ Futures and checks the resulting `JoinError.dependent_exceptions_tids` sequence.
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFailureAggregation.cfg models/dataflow/ParslJoinFailureAggregation.tla
 ```
 
+`ParslJoinDuplicateFailureAggregation.tla` extends that rule to duplicate list positions. If the
+same failed Future occurs twice in the input list, the current set-oriented abstraction loses one
+`dependent_exceptions_tids` entry; the fixed branch scans list positions and preserves both. The
+runtime probe calls the concrete callback with the same failed Future in both positions.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinDuplicateFailureAggregationCurrent.cfg models/dataflow/ParslJoinDuplicateFailureAggregation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinDuplicateFailureAggregationFixed.cfg models/dataflow/ParslJoinDuplicateFailureAggregation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_duplicate_failure_aggregation_runtime.py -v
+```
+
 `ParslJoinErrorRootCause.tla` captures `PropagatedException` metadata used by `JoinError`: the
 first dependent exception is followed recursively to a non-propagated root, and sibling failures
 are marked with `(+ others)` in the representative path. The runtime probe checks the actual
