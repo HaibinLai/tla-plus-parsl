@@ -773,9 +773,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownManager
 
 `ParslHtexManagerTaskAdmission.tla` connects manager registration to task queue admission. A
 queued task may exist before a manager registers, but dispatch must wait for a ready manager;
-heartbeat expiry then loses a running attempt and enables retry. The current branch admits queued
-work without a manager and TLC finds `AdmissionSafety` at depth 4. The fixed branch checks 133
-distinct states and rejects late results from the lost attempt.
+heartbeat expiry then loses a running attempt and enables retry. During source review, the first
+version of this model incorrectly allowed the current branch to dispatch without a manager. The
+actual `Interchange.process_tasks_to_send` guard requires a non-empty `interesting_managers` set,
+so both configurations now enforce the ready-manager precondition. TLC still checks the retry and
+late-result paths; `USE_FIXED=TRUE` rejects late results from the lost attempt.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerTaskAdmissionCurrent.cfg models/executors/ParslHtexManagerTaskAdmission.tla

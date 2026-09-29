@@ -6,9 +6,9 @@ EXTENDS Naturals
  *
  * DFK submission may queue a task before a manager registers.  Dispatch must
  * wait for a live manager.  If heartbeat expiry loses a running attempt, a
- * retry can be queued while the old result remains in flight.  The current
- * branch admits queued work without a manager and accepts the old result; the
- * fixed branch gates dispatch and rejects stale completion.
+ * retry can be queued while the old result remains in flight.  Dispatch uses
+ * that ready-manager precondition in both configurations; USE_FIXED controls
+ * stale-result handling below.
  ***************************************************************************)
 
 CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, MAX_RETRIES, USE_FIXED
@@ -62,7 +62,7 @@ ExpireManager ==
 
 Dispatch ==
     /\ task = "queued"
-    /\ IF USE_FIXED THEN manager = "ready" ELSE TRUE
+    /\ manager = "ready"
     /\ task' = "running"
     /\ UNCHANGED <<now, manager, lastHeartbeat, currentAttempt,
                     resultState, future>>
