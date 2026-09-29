@@ -27,6 +27,9 @@ validation boundary before `random.choice`.
 Memoization coverage also includes `ParslMemoIgnoreKey`, which isolates unknown
 `ignore_for_cache` names before cache-key construction.
 
+It also includes `ParslMemoIgnoreOutputs`, which checks idempotent handling of the special
+`outputs` key when it appears in the ignore list.
+
 The next refinements should select one row, read the relevant source path, and add a focused
 model plus a runtime probe before expanding the state space.
 

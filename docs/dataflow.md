@@ -56,10 +56,18 @@ The current `BasicMemoizer.make_hash` path deletes unknown names directly and ex
 `KeyError`; the fixed branch rejects an unknown name before mutating the filtered keyword map.
 The runtime probe is [`tests/test_memo_ignore_key_runtime.py`](../tests/test_memo_ignore_key_runtime.py).
 
+`ParslMemoIgnoreOutputs.tla` covers the special `outputs` key. The current hash path can delete
+that key once through `ignore_for_cache` and a second time while constructing the output reference,
+whereas the fixed branch makes the operation idempotent. The runtime probe is
+[`tests/test_memo_ignore_outputs_runtime.py`](../tests/test_memo_ignore_outputs_runtime.py).
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoIgnoreKeyCurrent.cfg models/dataflow/ParslMemoIgnoreKey.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoIgnoreKeyFixed.cfg models/dataflow/ParslMemoIgnoreKey.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_memo_ignore_key_runtime.py -v
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoIgnoreOutputsCurrent.cfg models/dataflow/ParslMemoIgnoreOutputs.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoIgnoreOutputsFixed.cfg models/dataflow/ParslMemoIgnoreOutputs.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_memo_ignore_outputs_runtime.py -v
 ```
 
 ```bash
