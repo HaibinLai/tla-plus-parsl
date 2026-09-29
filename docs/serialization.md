@@ -258,3 +258,6 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPoolExecutorCa
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPoolExecutorCallableCacheFixed.cfg models/serialization/ParslPoolExecutorCallableCache.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_pool_executor_callable_cache_runtime.py -v
 ```
+
+This callable-cache boundary is recorded as BUG-102: an otherwise serializable callable with
+`__hash__ = None` is rejected by the current hash-keyed cache before dill is attempted.

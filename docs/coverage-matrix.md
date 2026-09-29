@@ -81,3 +81,6 @@ HTEX result-path coverage also records stale/unknown task-result handling
 
 HTEX result-path coverage also records ambiguous frames carrying both result and exception
 payloads (`ParslHtexAmbiguousResult`, BUG-101).
+
+Python serialization coverage also records the unhashable-callable cache-key boundary
+(`ParslCallableSerializerCache`, BUG-102).
