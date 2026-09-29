@@ -20,6 +20,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableArgume
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_argument_alias_runtime.py -v
 ```
 
+`ParslCallableEqualCache.tla` models a related object-content boundary in
+`DillCallableSerializer`: its `lru_cache` uses Python equality/hash semantics. Two distinct
+callable instances that compare equal can therefore reuse the first serialized payload. The fixed
+branch uses an identity/content-safe key. The runtime probe is
+[`tests/test_callable_equal_cache_runtime.py`](../tests/test_callable_equal_cache_runtime.py).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableEqualCacheCurrent.cfg models/serialization/ParslCallableEqualCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableEqualCacheFixed.cfg models/serialization/ParslCallableEqualCache.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_callable_equal_cache_runtime.py -v
+```
+
 `ParslPythonCyclic.cfg` extends the object-graph model with a self-referential argument object.
 The visited-set walk terminates on the cycle while preserving the internal alias after decoding.
 The runtime probe `tests/test_python_cyclic_object_runtime.py` checks this property through the
