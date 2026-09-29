@@ -145,6 +145,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslObjectSnapshot
 /tmp/parsl-venv/bin/python -m unittest tests/test_callable_mutation_cache_runtime.py tests/test_serialization_runtime.py -v
 ```
 
+The serialization runtime probe also checks the corresponding data-root boundary: a mutable
+argument graph is captured by `pack_apply_message`, so mutating the caller's dictionary after
+packing does not change the queued payload. This is the concrete argument-side evidence for the
+object snapshot abstraction (alongside the closure snapshot test).
+
 `ParslZMQObjectSnapshot.tla` connects that object snapshot boundary to a queued multipart frame.
 The current branch lets mutation after serialization change the in-flight payload; TLC finds
 `PayloadImmutability` after 5 states. The fixed branch keeps the captured bytes immutable through

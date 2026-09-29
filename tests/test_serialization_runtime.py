@@ -65,6 +65,15 @@ class SerializationRuntimeTest(unittest.TestCase):
 
         self.assertEqual(decoded_func(decoded_args[0]), nested)
 
+    def test_argument_graph_captures_snapshot_at_serialization_time(self):
+        argument = {"value": 3}
+        packed = pack_apply_message(lambda value: value["value"], (argument,), {})
+        argument["value"] = 99
+
+        decoded_func, decoded_args, _ = unpack_apply_message(packed)
+
+        self.assertEqual(decoded_func(decoded_args[0]), 3)
+
 
 if __name__ == "__main__":
     unittest.main()
