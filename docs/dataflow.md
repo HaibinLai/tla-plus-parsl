@@ -59,6 +59,17 @@ results, and inner cancellation/failure. The current configuration exposes a
 `JoinResultSafety` counterexample by collapsing duplicate list positions; the fixed configuration
 preserves the sequence and checks 5,694 states with all six invariants passing.
 
+`ParslJoinEndToEnd.tla` is the cross-layer join model. It keeps logical inner Futures separate
+from physical attempts, allows one retry, models cancellation/final failure, and reconstructs
+the duplicate-preserving outer list. The TLC configuration checks retry bounds, physical/logical
+consistency, wait-for-all completion, terminal failure, and result shape. The concrete retry and
+duplicate-list probes provide the corresponding Parsl runtime evidence.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinEndToEnd.cfg models/dataflow/ParslJoinEndToEnd.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_retry_runtime.py tests/test_join_retry_duplicates_runtime.py tests/test_join_single_cancellation_runtime.py -v
+```
+
 `ParslJoinRetry.tla` refines this with physical attempts for each inner Future. A failed
 non-final attempt leaves the logical Future unresolved, so `join_app` waits for retry rather than
 failing early. The model checks 258 distinct states with retry isolation and ordered aggregation;

@@ -208,3 +208,6 @@ HTEX executor coverage now separates worker watchdog restart from logical task f
 
 HTEX executor coverage also models the watchdog/result publication race
 (`ParslHtexWatchdogResultRace`, BUG-139).
+
+Join coverage now includes the combined logical-Future/physical-attempt state machine
+(`ParslJoinEndToEnd`).
