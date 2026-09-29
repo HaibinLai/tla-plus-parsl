@@ -88,3 +88,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupCur
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFixed.cfg models/staging/ParslFTPPartialCleanup.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_partial_cleanup_runtime.py -v
 ```
+
+`ParslZipPathValidation.tla` models malformed `zip:` URLs. The current provider checks only the
+scheme, so a path without the required `.zip/` separator is accepted and `zip_path_split` derives
+truncated archive and member paths. The fixed branch rejects the URL before staging. The runtime
+probe exercises the real `ZipFileStaging` and `zip_path_split` functions.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipPathValidationCurrent.cfg models/staging/ParslZipPathValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipPathValidationFixed.cfg models/staging/ParslZipPathValidation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zip_path_validation_runtime.py -v
+```
