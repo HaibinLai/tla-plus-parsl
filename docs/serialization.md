@@ -43,6 +43,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationE
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_envelope_malformed_runtime.py -v
 ```
 
+`ParslSerializationNegativeLength.tla` covers a malformed decimal length header. A negative
+length currently performs a Python negative slice and then crashes while parsing the leftover
+byte; the fixed branch rejects the header before slicing. The runtime probe uses the real
+`unpack_buffers` helper and records the current `ValueError` boundary.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationNegativeLengthCurrent.cfg models/serialization/ParslSerializationNegativeLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationNegativeLengthFixed.cfg models/serialization/ParslSerializationNegativeLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationNegativeLengthValid.cfg models/serialization/ParslSerializationNegativeLength.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_negative_length_runtime.py -v
+```
+
 `ParslSerializerRegistry.tla` models the concrete `facade.deserialize` registry order. With a
 colliding identifier, the current configuration decodes a data payload through the code registry
 and violates `DispatchSafety`; the fixed configuration rejects the ambiguous header, while the

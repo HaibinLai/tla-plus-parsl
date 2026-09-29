@@ -941,6 +941,11 @@ and [`serialize/concretes.py`](https://raw.githubusercontent.com/Parsl/Parsl/mas
 `LengthSafety`; the fixed configuration models strict rejection. This is retained as an
 executable counterexample for a future parser-hardening change.
 
+`ParslSerializationNegativeLength.tla` checks the signed-length boundary. A negative header
+currently performs a Python negative slice and then reaches a second parse failure on the
+leftover byte; the fixed configuration rejects the malformed declaration before slicing. The
+runtime probe records the real `ValueError` behavior.
+
 `ParslSerializationFrameCount.tla` checks the complementary extra-frame boundary. The current
 `unpack_and_deserialize` decodes every framed buffer before asserting that an apply message has
 exactly three buffers, so a fourth frame can trigger deserializer work before rejection. The fixed
@@ -1477,6 +1482,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationP
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginErrorFixed.cfg models/serialization/ParslSerializationPluginError.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationLength.cfg models/serialization/ParslSerializationLength.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationLengthFixed.cfg models/serialization/ParslSerializationLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationNegativeLengthCurrent.cfg models/serialization/ParslSerializationNegativeLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationNegativeLengthFixed.cfg models/serialization/ParslSerializationNegativeLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationNegativeLengthValid.cfg models/serialization/ParslSerializationNegativeLength.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFrameCountCurrent.cfg models/serialization/ParslSerializationFrameCount.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFrameCountFixed.cfg models/serialization/ParslSerializationFrameCount.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationFrameCountNormal.cfg models/serialization/ParslSerializationFrameCount.tla
@@ -1524,6 +1532,11 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   a declared-length mismatch (`5` declared, `3` bytes received), violating `LengthSafety`.
 - `ParslSerializationLengthFixed.cfg`: 4 states generated, 2 distinct states, depth 2; strict
   length validation rejects the truncated frame.
+- `ParslSerializationNegativeLengthCurrent.cfg`: expected counterexample at depth 2; a negative
+  length reaches the malformed leftover-byte parse and violates `NegativeLengthSafety`.
+- `ParslSerializationNegativeLengthFixed.cfg` and `ParslSerializationNegativeLengthValid.cfg`:
+  4 states generated, 2 distinct states, depth 2; negative declarations are rejected while a
+  zero-length frame remains valid.
 - `ParslSerializationFrameCountCurrent.cfg`: expected counterexample, 4 states generated; an
   extra frame is deserialized before the three-buffer assertion rejects the message.
 - `ParslSerializationFrameCountFixed.cfg` and `ParslSerializationFrameCountNormal.cfg`: 4 states
@@ -1971,7 +1984,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 369 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 370 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2882,6 +2895,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `ObjectGraphSerializable` / `ObjectGraphSafety` | callable, argument, closure, and nested-object serializability | Python callable/payload serialization boundary in `DataFlowKernel` and executor |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
 | `Pack` / `Unpack` / `BinaryContentSafety` | length-prefixed raw-byte payload framing | `parsl.serialize.facade.pack_buffers` / `unpack_buffers` |
+| `ParseFrame` / `NegativeLengthSafety` | reject signed negative frame lengths before slicing | `parsl.serialize.facade.unpack_buffers` |
 | `ReadMessage` / `StopAtDeadline` / `NoOverdueBatch` | monitoring batch collection and clock-based deadline | `DatabaseManager._get_messages_in_batch` |
 | `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
 | `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
