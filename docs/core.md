@@ -6,6 +6,14 @@ blocking, workers, executors, providers, retries, memoization, data readiness, a
 Files live in [`models/core/`](../models/core/). Start with `ParslAbstract.tla` and its scenario
 configurations such as `ParslNoFailures.cfg`, `ParslTime.cfg`, and `ParslProviderFailure.cfg`.
 
+For a fast executable smoke check, `ParslAbstractSmoke.cfg` reduces the abstraction to one local
+task, one worker, no dependencies, no retries, and no provider blocks. It is useful for validating
+changes to the shared model before launching the much larger multi-task configuration.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslAbstractSmoke.cfg models/core/ParslAbstract.tla
+```
+
 `ParslEndToEnd.tla` is the deliberately small integration model. It connects dependency release,
 task serialization, wire delivery, worker execution, result delivery, retry/timeout, and late
 results. `ParslEndToEnd.cfg` intentionally permits an old attempt to resolve the Future and TLC
