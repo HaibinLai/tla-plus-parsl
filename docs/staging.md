@@ -5,6 +5,17 @@ partial cleanup, corruption, retries, and multi-output publication.
 
 Files live in [`models/staging/`](../models/staging/).
 
+The compact cross-layer model [`ParslDataReadyExecution`](../models/core/ParslDataReadyExecution.tla)
+connects the staging abstraction to task execution. It transfers bounded symbolic chunks, detects
+a source-version change during stage-in, exposes a DataFuture only after publication, and blocks a
+dependent task until that Future is ready. Its current branch intentionally publishes the captured
+old version; the fixed branch marks the transfer stale and retries before execution.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyExecutionCurrent.cfg models/core/ParslDataReadyExecution.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyExecutionFixed.cfg models/core/ParslDataReadyExecution.tla
+```
+
 `ParslGlobusEndpointPath.tla` models the working-directory and endpoint-path guard in
 `GlobusStaging._get_globus_endpoint`. The current code accepts the working directory itself but
 rejects a valid absolute `local_path` below it because it compares the local path with the common
