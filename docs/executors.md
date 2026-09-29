@@ -7,6 +7,16 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslThreadExecutorFutureLifecycle.tla` models the underlying thread-pool Future boundary: a
+queued Future can be cancelled, a running callable cannot be interrupted by `cancel()`, and
+shutdown waits without converting accepted work into cancellation. The runtime bridge forces one
+running and one queued task through the real `ThreadPoolExecutor`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorFutureLifecycle.cfg models/executors/ParslThreadExecutorFutureLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_future_lifecycle_runtime.py -v
+```
+
 `ParslBashAppOutcome.tla` is a compact app-level boundary model. It separates shell exit,
 stdout side effects, declared-output validation, and Future resolution: a non-zero exit resolves
 the Future with `BashExitFailure`, while a successful exit must pass output validation first.

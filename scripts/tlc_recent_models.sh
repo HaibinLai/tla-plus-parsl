@@ -66,3 +66,6 @@ run_case bash-app-outcome pass \
 run_case local-provider-exit-status pass \
     models/providers/ParslLocalProviderExitStatus.cfg \
     models/providers/ParslLocalProviderExitStatus.tla
+run_case thread-future-lifecycle pass \
+    models/executors/ParslThreadExecutorFutureLifecycle.cfg \
+    models/executors/ParslThreadExecutorFutureLifecycle.tla
