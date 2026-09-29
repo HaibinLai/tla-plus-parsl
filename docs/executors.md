@@ -400,6 +400,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultMessageM
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_message_malformed_runtime.py -v
 ```
 
+`ParslHtexResultBatchContinuation.tla` makes the consequence explicit: a malformed frame is
+followed by a valid result for another task. The current branch aborts before forwarding the
+valid frame; the candidate fixed branch discards only the malformed frame and forwards the valid
+one. The runtime probe uses one real `recv_multipart` batch with both payloads and checks that the
+current loop leaves the valid task outstanding after the decode exception.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultBatchContinuationCurrent.cfg models/executors/ParslHtexResultBatchContinuation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultBatchContinuationFixed.cfg models/executors/ParslHtexResultBatchContinuation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_batch_continuation_runtime.py -v
+```
+
 `ParslRadicalPilotFailurePayload.tla` refines the RADICAL-Pilot callback mapping. If a failed
 Python task has no serialized exception payload, the current callback passes a string to
 `Future.set_exception`, which produces a callback-level `TypeError`; the fixed configuration wraps
