@@ -63,3 +63,6 @@ run_case join-callable-transport pass \
 run_case bash-app-outcome pass \
     models/executors/ParslBashAppOutcome.cfg \
     models/executors/ParslBashAppOutcome.tla
+run_case local-provider-exit-status pass \
+    models/providers/ParslLocalProviderExitStatus.cfg \
+    models/providers/ParslLocalProviderExitStatus.tla

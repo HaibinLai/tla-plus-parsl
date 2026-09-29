@@ -26,6 +26,10 @@ effects, declared-output validation, and Future success/failure are modeled as s
 The real `bash_app` bridge confirms that non-zero exits become `BashExitFailure`, while successful
 apps resolve only after declared output files exist.
 
+The provider-boundary refinement adds `ParslLocalProviderExitStatus`, connecting the local
+provider's `.ec` marker, process liveness, cancellation flag, and cached terminal status. TLC and
+the runtime bridge confirm that numeric exit markers take precedence over cancellation/liveness.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
@@ -749,7 +753,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 262 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 478 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the

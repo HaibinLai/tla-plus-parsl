@@ -6,6 +6,17 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslLocalProviderExitStatus.tla` models the local provider's `.ec` exit-marker protocol. It
+separates an in-flight `-` marker from numeric and malformed markers, process liveness, and a
+prior cancellation request. Numeric exit codes take precedence over liveness/cancellation, and
+the runtime bridge checks completion precedence and terminal-status caching against the real
+`LocalProvider.status()` implementation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderExitStatus.cfg models/providers/ParslLocalProviderExitStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_exit_status_runtime.py -v
+```
+
 `ParslDuplicateJobId.tla` models the reverse ownership maps maintained by
 `BlockProviderExecutor.scale_out_facade`. The current path accepts a duplicate provider job ID
 and overwrites `job_ids_to_block`, so one of two launched blocks is no longer addressable by its
