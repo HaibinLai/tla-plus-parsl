@@ -42,6 +42,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJ
 /tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_unknown_job_runtime.py -v
 ```
 
+`ParslKubernetesCancelUnknownJob.tla` covers the corresponding cancellation race. If cleanup has
+removed a pod from the local resource map before `cancel()` arrives, the current `_get_pod_name`
+lookup raises `KeyError`; the fixed branch treats the stale cancel as a non-throwing no-op. TLC
+finds the current `CancelDoesNotCrash` counterexample (4 states generated) and checks the fixed
+branch (6 states generated). The runtime probe invokes the real provider with an empty resource
+map.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesCancelUnknownJobCurrent.cfg models/providers/ParslKubernetesCancelUnknownJob.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesCancelUnknownJobFixed.cfg models/providers/ParslKubernetesCancelUnknownJob.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_cancel_unknown_runtime.py -v
+```
+
 `ParslKubernetesAdmission.tla` connects pod phases to executor admission. `submit()` creates a
 Pending pod, but the current provider records the local job as RUNNING immediately, so a task can
 be admitted before Kubernetes observes a Running pod. TLC finds `JobPhaseSafety` at depth 2. The
