@@ -89,6 +89,10 @@ PBS Pro polling is now included alongside Slurm: malformed qstat JSON crashes th
 while the fixed branch preserves the last known job status. The real PBS Pro parser probe confirms
 the same failure boundary.
 
+Condor polling is now included as well: a successful `condor_q` command containing a truncated
+record crashes the current parser, while the fixed branch ignores it and preserves known state.
+The real Condor parser probe covers that malformed line.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure

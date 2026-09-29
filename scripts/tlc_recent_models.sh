@@ -150,3 +150,9 @@ run_case pbspro-malformed-json-current counterexample \
 run_case pbspro-malformed-json-fixed pass \
     models/providers/ParslPBSProMalformedJSONFixed.cfg \
     models/providers/ParslPBSProMalformedJSON.tla
+run_case condor-malformed-line-current counterexample \
+    models/providers/ParslCondorMalformedStatusLineCurrent.cfg \
+    models/providers/ParslCondorMalformedStatusLine.tla
+run_case condor-malformed-line-fixed pass \
+    models/providers/ParslCondorMalformedStatusLineFixed.cfg \
+    models/providers/ParslCondorMalformedStatusLine.tla
