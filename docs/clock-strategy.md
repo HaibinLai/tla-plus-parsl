@@ -103,3 +103,19 @@ heartbeat age and task deadlines, models manager expiry and task timeout separat
 late result after either event. `ParslTimedHeartbeat.cfg` intentionally violates `ResultSafety`
 by accepting that late result; `ParslTimedHeartbeatFixed.cfg` classifies it as stale and passes all
 six invariants (3,061 states generated, 848 distinct states).
+
+`ParslTimeoutMonitoring.tla` adds the monitoring database to that clock boundary. A late worker
+completion after heartbeat expiry or task timeout can be emitted and persisted as `succeeded` in
+the current branch; TLC finds the `TerminalCauseSafety` counterexample at depth 8 (553 states
+generated). The fixed branch keeps the timeout/lost terminal cause and records the late result as
+stale, checking 715 distinct states.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeoutMonitoringCurrent.cfg models/clock/ParslTimeoutMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeoutMonitoringFixed.cfg models/clock/ParslTimeoutMonitoring.tla
+```
+
+`Tick`, `Heartbeat`, `ExpireManager`, and `TimeoutTask` abstract the logical clock and HTEX
+contact/deadline checks. `EmitStatus` and `PersistStatus` abstract DFK monitoring event and
+database delivery. Runtime evidence comes from the heartbeat, retry/timeout, and monitoring
+database probes under `tests/`.
