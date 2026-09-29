@@ -5,6 +5,17 @@ partial cleanup, corruption, retries, and multi-output publication.
 
 Files live in [`models/staging/`](../models/staging/).
 
+`ParslRsyncPartialCleanup.tla` models a failed RSync stage-in after a destination has received
+partial bytes. The current wrapper raises on the non-zero `rsync` result but leaves the partial
+path in place; the fixed branch removes it before reporting failure. The runtime probe exercises
+the real wrapper with a temporary destination and a failed command.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupCurrent.cfg models/staging/ParslRsyncPartialCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupFixed.cfg models/staging/ParslRsyncPartialCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_rsync_partial_cleanup_runtime.py -v
+```
+
 `ParslDataFutureTransfer.tla` connects producer completion, chunked stage-out,
 `DataFuture` readiness, and consumer admission. The current configuration allows
 publication after a single received chunk and violates `AtomicPublishSafety`; the
