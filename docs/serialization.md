@@ -77,6 +77,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationS
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_short_frame_count_runtime.py -v
 ```
 
+`ParslApplyMessageArity.tla` models the complementary extra-frame case. The public
+`unpack_apply_message` currently returns all decoded frames, although the worker contract is
+exactly `(func, args, kwargs)`. The current four-frame configuration violates `AritySafety`; the
+candidate fixed configuration rejects the message at the boundary. The runtime probe uses the
+real framing and facade helpers.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyMessageArity.cfg models/serialization/ParslApplyMessageArity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyMessageArityFixed.cfg models/serialization/ParslApplyMessageArity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_apply_message_arity_runtime.py -v
+```
+
 `ParslSerializationTruncatedLength.tla` covers a different truncation: a frame declares five
 bytes but only three remain. The current slicer passes the short `b"abc"` payload to
 `deserialize` before the later apply-message count assertion; the fixed branch rejects the
