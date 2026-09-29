@@ -17,6 +17,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesUnknownJ
 /tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_unknown_job_runtime.py -v
 ```
 
+`ParslKubernetesAdmission.tla` connects pod phases to executor admission. `submit()` creates a
+Pending pod, but the current provider records the local job as RUNNING immediately, so a task can
+be admitted before Kubernetes observes a Running pod. TLC finds `JobPhaseSafety` at depth 2. The
+fixed branch keeps the job PENDING until `PollRunning` and checks 11 distinct states. The submit,
+polling, and stale-job runtime probes cover the concrete provider methods.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesAdmissionCurrent.cfg models/providers/ParslKubernetesAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesAdmissionFixed.cfg models/providers/ParslKubernetesAdmission.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_submit_runtime.py tests/test_kubernetes_polling_runtime.py tests/test_kubernetes_unknown_job_runtime.py -v
+```
+
 `ParslCondorUnknownJob.tla` covers the same stale-id boundary in Condor's status path. The
 current provider raises `KeyError` when the requested id is absent from `resources`; the fixed
 branch returns UNKNOWN. The runtime probe isolates the lookup with an empty resource map.
