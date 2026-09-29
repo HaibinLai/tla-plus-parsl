@@ -584,6 +584,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerWatchdog
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_watchdog_runtime.py -v
 ```
 
+`ParslHtexWatchdogResultRace.tla` models the ordering in the concrete worker loop where a result
+is placed on `pending_result_queue` before the worker removes its entry from `_tasks_in_progress`.
+If the process dies in that interval, the current watchdog emits an additional `WorkerLost`
+result for the same task. The current model violates `NoDuplicateResult`; the fixed branch treats
+an already-published result as terminal. The runtime probe preloads a real watchdog queue with a
+success frame and observes the extra failure frame produced by `Manager.worker_watchdog`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWatchdogResultRaceCurrent.cfg models/executors/ParslHtexWatchdogResultRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWatchdogResultRaceFixed.cfg models/executors/ParslHtexWatchdogResultRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_watchdog_result_race_runtime.py -v
+```
+
+This duplicate-result race is recorded as BUG-139.
+
 `ParslWorkQueueShutdown.tla` models the Work Queue collector's finalization contract. Shutdown
 sets the stop flag and waits for the collector; its `finally` block fails every accepted Future
 that has no result before the executor reaches `stopped`. The runtime probe invokes the real

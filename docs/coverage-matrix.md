@@ -205,3 +205,6 @@ Radical-Pilot executor coverage also records queued-task loss during bulk shutdo
 
 HTEX executor coverage now separates worker watchdog restart from logical task failure
 (`ParslHtexWorkerWatchdog`).
+
+HTEX executor coverage also models the watchdog/result publication race
+(`ParslHtexWatchdogResultRace`, BUG-139).
