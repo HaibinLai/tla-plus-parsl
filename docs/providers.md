@@ -6,6 +6,20 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslGoogleCloudZoneSelection.tla` models the region-to-zone lookup performed by
+`GoogleCloudProvider.get_zone`. The current implementation silently returns `None` when no UP
+zone matches the requested region, allowing construction to continue until a later API request
+uses an invalid zone. The current configuration reaches `ZoneSelectionSafety` after two states;
+the fixed configuration rejects the missing zone and checks four generated states. The runtime
+probe uses a fake Compute Engine zones response and observes the current `None` result.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudZoneSelectionCurrent.cfg models/providers/ParslGoogleCloudZoneSelection.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudZoneSelectionFixed.cfg models/providers/ParslGoogleCloudZoneSelection.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudZoneSelectionValid.cfg models/providers/ParslGoogleCloudZoneSelection.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_zone_selection_runtime.py -v
+```
+
 `ParslPollerCloseScaleInRace.tla` refines the `JobStatusPoller.close(timeout)` lifecycle. The
 current implementation calls `Timer.close`, then scales in every executor even when the timer
 thread is still running a provider-status callback after the join timeout. The fixed branch keeps
