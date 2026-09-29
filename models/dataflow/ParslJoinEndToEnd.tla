@@ -126,8 +126,17 @@ RetryBound ==
     \A i \in INNER : currentAttempt[i] <= MAX_RETRIES
 
 PhysicalLogicalSafety ==
-    \A i \in INNER : logicalState[i] = "succeeded"
-        => attemptState[i][currentAttempt[i]] = "succeeded"
+    \A i \in INNER :
+        IF logicalState[i] = "succeeded"
+           THEN attemptState[i][currentAttempt[i]] = "succeeded"
+           ELSE IF logicalState[i] = "failed"
+                THEN attemptState[i][currentAttempt[i]] = "failed"
+                ELSE IF logicalState[i] = "cancelled"
+                     THEN attemptState[i][currentAttempt[i]] = "cancelled"
+                     ELSE TRUE
+
+ObservedTerminalSafety ==
+    \A i \in observed : logicalState[i] \in {"succeeded", "failed", "cancelled"}
 
 JoinWaitSafety ==
     outerState = "succeeded" => observed = INNER /\ AllLogicalTerminal
@@ -138,5 +147,9 @@ JoinResultShapeSafety ==
 FailureSafety ==
     outerState = "failed" =>
         \E i \in INNER : logicalState[i] \in {"failed", "cancelled"}
+
+TerminalOuterSafety ==
+    outerState \in {"succeeded", "failed"} =>
+        observed = INNER /\ AllLogicalTerminal
 
 =============================================================================

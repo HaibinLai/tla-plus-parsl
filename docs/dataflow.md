@@ -63,7 +63,9 @@ preserves the sequence and checks 5,694 states with all six invariants passing.
 from physical attempts, allows one retry, models cancellation/final failure, and reconstructs
 the duplicate-preserving outer list. The TLC configuration checks retry bounds, physical/logical
 consistency, wait-for-all completion, terminal failure, and result shape. The concrete retry and
-duplicate-list probes provide the corresponding Parsl runtime evidence.
+duplicate-list probes provide the corresponding Parsl runtime evidence. Additional invariants tie
+every terminal logical state to its terminal physical attempt and prevent callbacks from
+observing a non-terminal inner Future.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinEndToEnd.cfg models/dataflow/ParslJoinEndToEnd.tla
