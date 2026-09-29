@@ -31,6 +31,21 @@ accepts the UUID directory. [`tests/test_last_checkpoint_uuid_runtime.py`](../te
 confirms the current helper returns `[]` for a UUID directory while retaining the legacy numeric
 behavior.
 
+`ParslMemoFunctionIdentity.tla` is the source-version refinement of the closure memoization
+boundary. `id_for_memo_function` currently hashes only `__name__` and `__module__`, so replacing a
+function body behind the same public entry point keeps the old memo key even when the serialized
+callable changes. The current TLC configuration violates `MemoKeySafety`; the fixed configuration
+includes a symbolic source/version identity. The runtime probe
+[`tests/test_memo_function_identity_runtime.py`](../tests/test_memo_function_identity_runtime.py)
+reproduces the collision with two functions that share name/module metadata. This is recorded as
+the function-body refinement of BUG-024 rather than a separate duplicate finding.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoFunctionIdentityCurrent.cfg models/dataflow/ParslMemoFunctionIdentity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoFunctionIdentityFixed.cfg models/dataflow/ParslMemoFunctionIdentity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_memo_function_identity_runtime.py -v
+```
+
 `ParslDependencyTraversal.tla` has explicit dictionary-value and dictionary-key configurations.
 The deep resolver configurations pass with 10 distinct states each; the shallow dictionary
 configuration exposes `NoNestedFutureLeak` because the nested Future reaches the worker.
