@@ -7,6 +7,17 @@ RadicalPilot result handling.
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 
+`ParslHtexTaskPriorityType.tla` covers a decoded task whose `resource_spec.priority` is not
+numeric. The current queue key uses unary negation and raises `TypeError`; the fixed branch
+rejects the task before insertion. The runtime probe exercises this object-type boundary with a
+fake task socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskPriorityTypeCurrent.cfg models/executors/ParslHtexTaskPriorityType.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskPriorityTypeFixed.cfg models/executors/ParslHtexTaskPriorityType.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_priority_type_runtime.py -v
+```
+
 `ParslHtexTaskResourceSpecType.tla` refines task-object validation beyond missing fields. A
 decoded task whose `context.resource_spec` is a list (or another non-mapping object) currently
 raises `AttributeError` when the interchange calls `.get`. The fixed branch rejects the object
