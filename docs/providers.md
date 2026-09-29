@@ -81,6 +81,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesAdmissio
 /tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_submit_runtime.py tests/test_kubernetes_polling_runtime.py tests/test_kubernetes_unknown_job_runtime.py -v
 ```
 
+`ParslKubernetesPolling.tla` refines the provider's read-error path. When a running pod cannot
+be read, the current identity comparison fails to translate the local status to `UNKNOWN`; the
+candidate fixed branch uses value-based state handling and exposes the uncertainty. TLC finds the
+current `ErrorVisibility` counterexample (7 generated states) and checks 85 generated/23 distinct
+fixed states. The runtime probe uses a real provider object with a failing Kubernetes client.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesPolling.cfg models/providers/ParslKubernetesPolling.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesPollingFixed.cfg models/providers/ParslKubernetesPolling.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_polling_runtime.py -v
+```
+
 `ParslCondorUnknownJob.tla` covers the same stale-id boundary in Condor's status path. The
 current provider raises `KeyError` when the requested id is absent from `resources`; the fixed
 branch returns UNKNOWN. The runtime probe isolates the lookup with an empty resource map.
