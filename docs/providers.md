@@ -191,6 +191,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderSubmi
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_submit_cleanup_runtime.py -v
 ```
 
+This failed-provisioning cleanup boundary is recorded as BUG-121: a failed launch leaves the
+newly-created LocalProvider submit script behind.
+
 `ParslGridEngineStatusBatch.tla` refines Grid Engine polling with a truncated `qstat` record
 followed by a valid record for the known job. The current parser indexes the missing state field
 and aborts before applying the valid record; the candidate fixed path skips only the malformed

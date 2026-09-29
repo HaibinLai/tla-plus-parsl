@@ -138,3 +138,6 @@ Torque provider coverage also records negative `tasks_per_node` admission
 
 Provider walltime coverage also records positive sub-minute truncation
 (`ParslWalltimeParsing`, BUG-120).
+
+Local provider coverage also records failed-launch script cleanup
+(`ParslLocalProviderSubmitCleanup`, BUG-121).
