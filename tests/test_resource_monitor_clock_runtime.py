@@ -1,6 +1,7 @@
 """Runtime probe for wall-clock rollback in the resource monitor."""
 
 import collections
+import itertools
 import sys
 import types
 import unittest
@@ -84,7 +85,10 @@ class ResourceMonitorClockRuntimeTest(unittest.TestCase):
         radio = _FakeRadio()
         # initial next_send=100; first sample is sent, then the wall clock
         # rolls back before the next sample's due time of 110.
-        clock = iter([100.0, 100.0, 99.0, 99.5, 99.5])
+        clock = itertools.chain(
+            [100.0, 100.0, 99.0, 99.5, 99.5],
+            itertools.repeat(99.5),
+        )
         with mock.patch.dict(sys.modules, {"psutil": fake_psutil}), \
                 mock.patch.object(remote.time, "time", side_effect=clock), \
                 mock.patch("parsl.utils.setproctitle"):

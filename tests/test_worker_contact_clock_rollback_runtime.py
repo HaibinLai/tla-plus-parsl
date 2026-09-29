@@ -1,6 +1,7 @@
 """Runtime probe for worker-side heartbeat expiry after a wall-clock rollback."""
 
 import threading
+import itertools
 import unittest
 from unittest.mock import patch
 
@@ -97,7 +98,10 @@ class WorkerContactClockRollbackRuntimeTest(unittest.TestCase):
         # The first reading initializes last_interchange_contact at 100; the
         # timeout check then sees 90, despite two units of elapsed logical
         # time in the model.
-        readings = iter([100.0, 100.0, 90.0, 90.0, 90.0, 90.0])
+        readings = itertools.chain(
+            [100.0, 100.0, 90.0, 90.0, 90.0, 90.0],
+            itertools.repeat(90.0),
+        )
         with patch.object(pool.time, "time", side_effect=lambda: next(readings)):
             # Capture the interchange socket created by the fake context.
             def poller_factory():
