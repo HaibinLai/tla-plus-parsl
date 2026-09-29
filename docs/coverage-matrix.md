@@ -132,3 +132,6 @@ Slurm provider coverage also records strict-batch fallback compatibility
 
 Provider timing coverage also records wall-clock rollback suppression in `poll_facade`
 (`ParslProviderPollClockRollback`, BUG-118).
+
+Torque provider coverage also records negative `tasks_per_node` admission
+(`ParslTorqueTasksPerNode`, BUG-119).

@@ -381,6 +381,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNode
 /tmp/parsl-venv/bin/python -m unittest tests/test_torque_tasks_per_node_runtime.py -v
 ```
 
+This resource-admission boundary is recorded as BUG-119: negative `tasks_per_node` reaches the
+Torque launcher instead of being rejected before script construction.
+
 `ParslCondorChunkSize.tla` models Condor's `cmd_chunk_size` batching parameter. The current
 `_chunker` helper silently treats a zero size as an unbounded chunk; the fixed branch rejects
 non-positive sizes before scheduler polling or cancellation. The runtime probe calls the real
