@@ -2025,7 +2025,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 377 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 378 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2101,6 +2101,17 @@ The underlying timeout timer lifecycle is exercised directly:
 `ParslTimeoutTimer.tla` checks that `AutoCancelTimer` is cancelled after a fast return or an
 ordinary function exception, while a slow function can still receive `AppTimeout` before it
 finishes.
+
+`ParslPythonTimeoutParameter.tla` checks timeout-delay admission separately. A negative delay is
+accepted by the current decorator and fires `AppTimeout` immediately; the fixed branch rejects
+non-positive delays before starting the timer.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPythonTimeoutParameterCurrent.cfg models/clock/ParslPythonTimeoutParameter.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPythonTimeoutParameterFixed.cfg models/clock/ParslPythonTimeoutParameter.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPythonTimeoutParameterValid.cfg models/clock/ParslPythonTimeoutParameter.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_python_timeout_parameter_runtime.py -v
+```
 
 The shared periodic timer used by `JobStatusPoller` and checkpointing is modeled separately by
 `ParslPeriodicTimer.tla`. TLC checks that the first callback is immediate, callback exceptions do
@@ -3026,6 +3037,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `WorkerFailure` / `LateResult` | worker/manager loss and old-attempt results | `Interchange.expire_bad_managers`; stale-result behavior is explicit in the abstraction |
 | `Tick` / `Heartbeat` / `AttemptTimeout` | logical time, manager heartbeat, and task timeout | `Interchange` heartbeat expiration and executor/worker timeout paths |
 | `Start` / `FunctionReturns` / `FunctionRaises` / `TimerFires` | Python app timeout timer lifecycle and cleanup | `parsl.app.python.timeout` and `AutoCancelTimer` |
+| `Start` / `InjectImmediateTimeout` / `TimeoutParameterSafety` | reject non-positive Python-app timeout delays | `parsl.app.python.timeout` |
 | `Validate` / `Callback` / `NegativeIntervalSafety` | periodic Timer interval admission and zero-delay behavior | `parsl.utils.Timer.__init__` / `_wake_up_timer` |
 | `WaitCompletes` / `MissingFileSafety` / `NoOpenAfterTimeout` | bounded file wait and open timeout boundary | `parsl.utils.wait_for_file` / `time_limited_open` |
 | `ExpireManager` / `Heartbeat` / `ExpirationAccounting` | strict heartbeat threshold and in-flight manager-loss cleanup | `Interchange.expire_bad_managers` and main polling loop |

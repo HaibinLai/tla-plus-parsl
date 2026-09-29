@@ -8,6 +8,18 @@ manager, while the monotonic fixed branch expires once elapsed time reaches the 
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
 
+`ParslPythonTimeoutParameter.tla` models the delay passed by the Python-app `timeout` decorator.
+The current wrapper accepts a negative delay and immediately injects `AppTimeout` through
+`threading.Timer`; the fixed branch rejects non-positive delays before execution. The runtime
+probe calls the real decorator with a negative timeout.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPythonTimeoutParameterCurrent.cfg models/clock/ParslPythonTimeoutParameter.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPythonTimeoutParameterFixed.cfg models/clock/ParslPythonTimeoutParameter.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslPythonTimeoutParameterValid.cfg models/clock/ParslPythonTimeoutParameter.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_python_timeout_parameter_runtime.py -v
+```
+
 `ParslHeartbeatParameterValidation.tla` models HTEX heartbeat configuration admission. The
 current executor stores a zero period or non-positive threshold and proceeds; the fixed branch
 rejects those values before launching workers. The runtime probe constructs the real
