@@ -129,3 +129,6 @@ Local provider coverage also records stale cancellation-id handling
 
 Slurm provider coverage also records strict-batch fallback compatibility
 (`ParslSlurmBatchStrict`, BUG-117).
+
+Provider timing coverage also records wall-clock rollback suppression in `poll_facade`
+(`ParslProviderPollClockRollback`, BUG-118).

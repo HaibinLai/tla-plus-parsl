@@ -423,14 +423,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedJSO
 [`executors/status_handling.py`](https://github.com/Parsl/Parsl/blob/master/parsl/executors/status_handling.py).
 The current wall-clock guard can suppress provider status polling after `time.time()` moves
 backward; TLC finds the two-state rollback counterexample. The fixed branch resets its polling
-baseline on rollback. [`tests/test_provider_poll_clock_runtime.py`](../tests/test_provider_poll_clock_runtime.py)
-reproduces the current behavior with a fake provider and also checks the normal elapsed-time path.
+baseline on rollback. [`tests/test_provider_poll_clock_rollback_runtime.py`](../tests/test_provider_poll_clock_rollback_runtime.py)
+reproduces the current behavior with a fake provider and a backward wall-clock step.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollClockRollbackCurrent.cfg models/providers/ParslProviderPollClockRollback.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollClockRollbackFixed.cfg models/providers/ParslProviderPollClockRollback.tla
-/tmp/parsl-venv/bin/python -m unittest tests/test_provider_poll_clock_runtime.py -v
+/tmp/parsl-venv/bin/python -m unittest tests/test_provider_poll_clock_rollback_runtime.py -v
 ```
+
+The concrete wall-clock probe is recorded as BUG-118: a backward clock step suppresses a due
+provider poll until the old wall-clock baseline is reached.
 
 `ParslLocalProvider.tla` models the `.ec` exit marker, process liveness, cancellation marker, and
 status polling race. The current configuration allows a late successful exit marker to override a
