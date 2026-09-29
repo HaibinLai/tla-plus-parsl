@@ -184,12 +184,13 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineSubmitFixe
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_submit_runtime.py -v
 ```
 
-`ParslScaleOutFailureMonitoring.tla` models a provider rejection during
-`BlockProviderExecutor.scale_out_facade`. The current implementation stores the failed block in
-`_status` and notifies the monitoring radio, but the BLOCK_INFO payload is empty because only
-successful pending blocks are added to `monitoring_status_changes`. The fixed branch includes the
-failed block in that payload. The runtime probe uses a real `BlockProviderExecutor` subclass and
-a provider whose `submit` call raises.
+`ParslScaleOutFailureMonitoring.tla` models partial provisioning during
+`BlockProviderExecutor.scale_out_facade`: one block succeeds and a later provider submission
+fails. The current implementation stores the failed block in `_status` and notifies the
+monitoring radio, but the BLOCK_INFO payload contains only the successful pending block because
+only that branch adds to `monitoring_status_changes`. The fixed branch includes the failed block
+in the payload. The runtime probe uses a real `BlockProviderExecutor` subclass and a provider
+that succeeds once before raising.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleOutFailureMonitoringCurrent.cfg models/executors/ParslScaleOutFailureMonitoring.tla

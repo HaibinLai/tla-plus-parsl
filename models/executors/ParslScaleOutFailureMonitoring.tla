@@ -9,40 +9,46 @@ EXTENDS Naturals
  * monitoring delta, so the failed block can be invisible to monitoring.
  ***************************************************************************)
 
-CONSTANTS SUBMIT_OK, USE_FIXED
+CONSTANTS BLOCKS, SUBMIT_OK, USE_FIXED
 
 BlockStates == {"none", "pending", "failed"}
 VARIABLES blockState, monitoring
 vars == <<blockState, monitoring>>
 
 Init ==
-    /\ SUBMIT_OK \in BOOLEAN
+    /\ BLOCKS \in Nat
+    /\ BLOCKS > 0
+    /\ SUBMIT_OK \subseteq 1..BLOCKS
     /\ USE_FIXED \in BOOLEAN
-    /\ blockState = "none"
+    /\ blockState = [i \in 1..BLOCKS |-> "none"]
     /\ monitoring = {}
 
-ScaleOut ==
-    /\ blockState = "none"
-    /\ IF SUBMIT_OK THEN
-           /\ blockState' = "pending"
-           /\ monitoring' = {"pending"}
+ScaleOut(i) ==
+    /\ i \in 1..BLOCKS
+    /\ blockState[i] = "none"
+    /\ IF i \in SUBMIT_OK THEN
+           /\ blockState' = [blockState EXCEPT ![i] = "pending"]
+           /\ monitoring' = monitoring \cup {i}
        ELSE
-           /\ blockState' = "failed"
-           /\ monitoring' = IF USE_FIXED THEN {"failed"} ELSE {}
+           /\ blockState' = [blockState EXCEPT ![i] = "failed"]
+           /\ monitoring' = IF USE_FIXED THEN monitoring \cup {i} ELSE monitoring
 
 Next ==
-    \/ ScaleOut
+    \/ \E i \in 1..BLOCKS : ScaleOut(i)
     \/ UNCHANGED vars
 
 Spec == Init /\ [][Next]_vars
 
 TypeOK ==
-    /\ SUBMIT_OK \in BOOLEAN
+    /\ BLOCKS \in Nat
+    /\ BLOCKS > 0
+    /\ SUBMIT_OK \subseteq 1..BLOCKS
     /\ USE_FIXED \in BOOLEAN
-    /\ blockState \in BlockStates
-    /\ monitoring \subseteq {"pending", "failed"}
+    /\ blockState \in [1..BLOCKS -> BlockStates]
+    /\ monitoring \subseteq 1..BLOCKS
 
 FailureReportSafety ==
-    blockState = "failed" => "failed" \in monitoring
+    \A i \in 1..BLOCKS :
+        blockState[i] = "failed" => i \in monitoring
 
 =============================================================================
