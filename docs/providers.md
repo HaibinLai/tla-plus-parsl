@@ -336,6 +336,9 @@ raises `ValueError` and aborts the polling pass. The fixed branch skips malforme
 preserves known local state. The runtime probe invokes the concrete Slurm parser with a one-token
 line.
 
+This malformed-record boundary is recorded as BUG-130 because one bad scheduler line can abort
+the entire status poll.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedLineCurrent.cfg models/providers/ParslSlurmMalformedLine.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedLineFixed.cfg models/providers/ParslSlurmMalformedLine.tla

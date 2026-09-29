@@ -169,3 +169,6 @@ Timer coverage also records close returning before callback quiescence
 
 Monitoring database coverage also records TASK-row bookkeeping before insert success
 (`ParslMonitoringTaskInsertBookkeeping`, BUG-129).
+
+Slurm provider coverage also records malformed status-line isolation
+(`ParslSlurmMalformedLine`, BUG-130).
