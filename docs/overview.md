@@ -468,6 +468,17 @@ indexes `events.data[0]`; an empty event list therefore crashes with `IndexError
 reporting the transfer failure. The runtime probe uses a fake SDK and the fixed branch reports a
 failure without requiring diagnostic details.
 
+`ParslGlobusTokenFileAtomicity.tla` models the OAuth token cache write. The current helper opens
+the old token file before JSON encoding, so an encoder failure destroys the last valid contents;
+the fixed branch publishes a temporary file only after a complete encode.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityCurrent.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityFixed.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityValid.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_token_file_atomicity_runtime.py -v
+```
+
 `ParslGlobusEndpointPath.tla` models `GlobusStaging._get_globus_endpoint`. A missing executor
 working directory and an unrelated local path are rejected, while a local path below the working
 directory should be accepted. The current implementation rejects that valid descendant because
@@ -2014,7 +2025,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 376 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 377 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2946,6 +2957,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `BeginStageOut` / `TransferOutputChunk` / `FinishStageOut` | staged output-file transfer after task completion | `DataFlowKernel` stage-out hooks and `DataManager.stage_out` |
 | `FileChunkSafety` / `CorruptStageOut` / `RepairStageOut` | bounded transfer integrity and retransfer after corruption | `DataManager.stage_out` and provider/file-transfer error paths |
 | `WaitReturnsTerminalFailure` / `ReadFailureEvent` / `NoDiagnosticCrash` | Globus terminal transfer failure reporting with optional diagnostics | `Globus.transfer_file` |
+| `SerializeFailure` / `FailurePreservesLastValidTokens` | atomic Globus OAuth token-file publication | `Globus._save_tokens_to_file` |
 | `ResolveEndpoint` / `AllowedPathSafety` | Globus executor working-directory and endpoint-path validation | `GlobusStaging._get_globus_endpoint` |
 | `CreateCleanCopy` / `LocalPathIsClean` | Preserve global File URL while clearing site-local staging metadata | `File.cleancopy` and `DataManager.optionally_stage_in` |
 | `DependencyCheck` | wait for dependencies and unwrap Futures | `DataFlowKernel._launch_if_ready_async` |

@@ -27,6 +27,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusEndpointPathVa
 /tmp/parsl-venv/bin/python -m unittest tests/test_file_clean_copy_runtime.py -v
 ```
 
+`ParslGlobusTokenFileAtomicity.tla` models the Globus OAuth token cache. The current
+`Globus._save_tokens_to_file` opens the destination with `"w"` before JSON serialization, so a
+serialization failure truncates the last valid token file. The fixed branch serializes to a
+temporary file and replaces the destination only after success. The runtime probe uses a real
+temporary file and the real classmethod with a failing JSON encoder.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityCurrent.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityFixed.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityValid.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_token_file_atomicity_runtime.py -v
+```
+
 `ParslRsyncPartialCleanup.tla` models a failed RSync stage-in after a destination has received
 partial bytes. The current wrapper raises on the non-zero `rsync` result but leaves the partial
 path in place; the fixed branch removes it before reporting failure. The runtime probe exercises
