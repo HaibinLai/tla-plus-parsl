@@ -93,3 +93,6 @@ Python serialization coverage also records failed dynamic-plugin cache retention
 
 File-transfer coverage also records FTP partial-destination publication on stream failure
 (`ParslFTPPartialCleanup`, BUG-105).
+
+Monitoring coverage also records malformed worker-message isolation
+(`ParslMonitoringMalformedWorkerMessage`, BUG-106).

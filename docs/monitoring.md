@@ -105,6 +105,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringMalform
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_malformed_worker_message_runtime.py -v
 ```
 
+This malformed-input boundary is recorded as BUG-106 because the current exception escapes the
+monitoring worker thread.
+
 `ParslMonitoringDelivery.tla` is the compact end-to-end event path. It models logical status
 versions, an asynchronous queue, reordering, and database writes. The current configuration finds
 a `DatabaseMonotonic` counterexample when an older event overwrites a newer record. The fixed
