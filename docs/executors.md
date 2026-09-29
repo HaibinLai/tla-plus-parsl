@@ -197,6 +197,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientMaxRe
 /tmp/parsl-venv/bin/python -m unittest tests/test_command_max_retries_runtime.py -v
 ```
 
+This API/implementation mismatch is recorded as BUG-109: `max_retries` is accepted but ignored
+when `send_pyobj` raises.
+
 `ParslHtexCancelledResult.tla` covers a result arriving after a user cancelled its Future. The
 current HTEX result thread calls `set_result` unconditionally; `InvalidStateError` terminates the
 thread after removing the cancelled task, so later results in the same batch remain pending. The

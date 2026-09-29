@@ -102,3 +102,6 @@ Clock/heartbeat coverage also records invalid HTEX heartbeat-parameter admission
 
 Clock/timeout coverage also records negative Python-app timeout admission
 (`ParslPythonTimeoutParameter`, BUG-108).
+
+ZMQ command coverage also records the ignored `CommandClient.max_retries` contract
+(`ParslCommandClientMaxRetries`, BUG-109).
