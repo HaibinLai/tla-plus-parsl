@@ -19,6 +19,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitCounterR
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_submit_counter_race_runtime.py -v
 ```
 
+`ParslCommandClientCloseRace.tla` models the ZMQ command client's close lifecycle. The current
+`close()` terminates the socket without changing `ok`, so a later `run()` reaches the terminated
+socket. The fixed branch marks the client unusable and rejects the command before sending.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientCloseRaceCurrent.cfg models/executors/ParslCommandClientCloseRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandClientCloseRaceFixed.cfg models/executors/ParslCommandClientCloseRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_client_close_runtime.py -v
+```
+
 `ParslThreadExecutorThreadCount.tla` models `ThreadPoolExecutor` admission of
 `max_threads`. The current wrapper accepts zero at construction and fails only when `start()`
 creates the underlying pool; the fixed branch rejects non-positive counts immediately. The
