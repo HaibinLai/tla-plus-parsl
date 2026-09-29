@@ -9,6 +9,15 @@ These models cover Python callable/object serialization, framed buffers, seriali
 ZMQ-style transport, task/result correlation, duplicate or stale messages, and apply-message
 arity.
 
+`ParslSerializationBinaryPayload.tla` checks that length-prefixed framing preserves raw payload
+bytes even when they contain newline, NUL, and non-ASCII values. The runtime probe exercises the
+real `pack_buffers` and `unpack_buffers` helpers with the same binary content.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationBinaryPayload.cfg models/serialization/ParslSerializationBinaryPayload.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_binary_payload_runtime.py -v
+```
+
 Files live in [`models/serialization/`](../models/serialization/). Runtime probes are in
 `tests/test_*serialization*runtime.py` and `tests/test_zmq_serialization_runtime.py`.
 

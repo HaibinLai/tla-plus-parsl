@@ -460,6 +460,10 @@ immutable global metadata, while `local_path` is site-local mutable metadata and
 in a copy. The unsafe branch aliases the old path and violates `LocalPathIsClean`; the fixed
 branch and `tests/test_file_clean_copy_runtime.py` confirm the isolation contract.
 
+`ParslSerializationBinaryPayload.tla` follows a bounded payload containing newline, NUL, and
+non-ASCII bytes through `pack_buffers` and `unpack_buffers`. Its length and byte sequence remain
+unchanged at the decode boundary, matching the serializer's real byte-oriented framing.
+
 `ParslStageOutFuture.tla` refines the DataManager/DataFlowKernel output boundary. It distinguishes
 separate stage-out (the output `DataFuture` follows a returned staging Future), in-task stage-out
 (the wrapper makes publication part of application completion), and the no-staging `None` path.
@@ -1427,6 +1431,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslResourceScaling.cfg
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerBadState.cfg models/providers/ParslPollerBadState.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationWire.cfg models/serialization/ParslSerializationWire.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationWireFailure.cfg models/serialization/ParslSerializationWire.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationBinaryPayload.cfg models/serialization/ParslSerializationBinaryPayload.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginError.cfg models/serialization/ParslSerializationPluginError.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationPluginErrorFixed.cfg models/serialization/ParslSerializationPluginError.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationLength.cfg models/serialization/ParslSerializationLength.tla
@@ -1925,7 +1930,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 360 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 361 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
@@ -2793,6 +2798,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `ResultSerializationFailure` / `ResultSerializationSafety` | worker return-value serialization failure before transport | worker result encoding and executor/interchange result boundary |
 | `ObjectGraphSerializable` / `ObjectGraphSafety` | callable, argument, closure, and nested-object serializability | Python callable/payload serialization boundary in `DataFlowKernel` and executor |
 | `SerializeAttempt` / `SendAttempt` / `ReceiveAttempt` / `DecodeAttempt` | encode, transport, and decode a task message | `DataFlowKernel` submit path, interchange task transport, manager message handling |
+| `Pack` / `Unpack` / `BinaryContentSafety` | length-prefixed raw-byte payload framing | `parsl.serialize.facade.pack_buffers` / `unpack_buffers` |
 | `Decode` / `Invoke` / `ReturnValue` / `RaiseException` | worker-side apply-message decode and callable execution | `parsl.executors.execute_task.execute_task` |
 | `Query` / `TranslateRunning` / `TranslateCompleted` / `TranslateShortView` / `TranslateUnknown` | Azure VM status polling and state translation | `AzureProvider.status` |
 | `IgnoreLinger` / `DeleteFails` / `DeleteSucceedsWithLocalId` / `DeleteSucceedsWithoutLocalId` | Azure VM cancellation and local instance bookkeeping | `AzureProvider.cancel` |
