@@ -27,6 +27,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubClos
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_runtime.py -v
 ```
 
+`ParslMonitoringCloseIdempotence.tla` models repeated abnormal
+`DatabaseManager.close()` calls. The current implementation leaves
+`workflow_end` false after finalization, so each close emits another workflow
+update; the fixed branch records the finalization and makes later closes
+no-ops. The runtime probe calls the real method twice with a controlled update
+callback.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringCloseIdempotenceCurrent.cfg models/monitoring/ParslMonitoringCloseIdempotence.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringCloseIdempotenceFixed.cfg models/monitoring/ParslMonitoringCloseIdempotence.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_close_idempotence_runtime.py -v
+```
+
 `ParslMonitoringZMQRouterFailure.tla` models a permanently broken receive channel in the
 monitoring ZMQ router. The current loop catches the receive exception and retries indefinitely
 until an external exit event arrives; the fixed branch stops after the first unrecoverable

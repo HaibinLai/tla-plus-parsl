@@ -9,6 +9,7 @@ class HeartbeatParameterValidationRuntimeTest(unittest.TestCase):
     def test_constructor_accepts_nonpositive_heartbeat_values_currently(self):
         executor = HighThroughputExecutor(
             encrypted=False,
+            address="127.0.0.1",
             heartbeat_period=0,
             heartbeat_threshold=-1,
         )

@@ -14,6 +14,7 @@ class HtexCoresPerWorkerRuntimeTest(unittest.TestCase):
         with self.assertRaises(ZeroDivisionError):
             HighThroughputExecutor(
                 provider=provider,
+                address="127.0.0.1",
                 cores_per_worker=0,
                 encrypted=False,
             )

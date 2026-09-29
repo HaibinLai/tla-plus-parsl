@@ -272,6 +272,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubClos
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_runtime.py -v
 ```
 
+`ParslMonitoringCloseIdempotence.tla` refines the inner `DatabaseManager.close()` boundary. On
+an abnormal workflow, the current method emits the workflow-finalization update again on every
+close call because it does not record that finalization; the fixed branch makes repeated calls
+no-ops. The runtime probe calls the real method twice.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringCloseIdempotenceCurrent.cfg models/monitoring/ParslMonitoringCloseIdempotence.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringCloseIdempotenceFixed.cfg models/monitoring/ParslMonitoringCloseIdempotence.tla
+```
+
 `ParslMonitoringZMQRouterFailure.tla` models a receive channel that remains broken. The current
 router catches the exception and keeps retrying until an external exit event is set; the fixed
 branch stops after the first unrecoverable channel failure.
@@ -1733,6 +1743,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslMonitoringDeferred.cfg`: 36 states generated, 16 distinct states, depth 6;
   deferred first-message replay, duplicate-first replacement/discard, try-before-status foreign
   key ordering, and bounded monitoring cleanup all passed.
+- `ParslMonitoringCloseIdempotenceCurrent.cfg`: expected counterexample at depth 2; repeated
+  abnormal closes emit duplicate workflow-finalization updates.
+- `ParslMonitoringCloseIdempotenceFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  a second close is a no-op after finalization.
 - `ParslMonitoringDBInsert.cfg`: expected counterexample, 4 states generated and 3 distinct
   states at depth 3; a duplicate STATUS key reaches the current generic-exception return path,
   so the event is dropped while the pre-existing row remains.
@@ -2055,7 +2069,7 @@ All runtime probes can be run together as an integration baseline:
 /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_*runtime.py' -v
 ```
 
-The current baseline runs 382 tests covering serialization, ZMQ, files/DataFutures, retry and
+The current baseline runs 383 tests covering serialization, ZMQ, files/DataFutures, retry and
 timeouts, heartbeat expiry, monitoring SQLite writes, join semantics, memoization, executor
 shutdown, and provider status/submit paths.
 
