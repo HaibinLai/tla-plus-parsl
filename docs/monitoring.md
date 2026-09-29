@@ -290,3 +290,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslFilesystemRadioAt
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslFilesystemRadioAtomicityFixed.cfg models/monitoring/ParslFilesystemRadioAtomicity.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_filesystem_radio_runtime.py -v
 ```
+
+`ParslResourceMonitorClock.tla` covers the worker-side resource monitor in
+`parsl.monitoring.remote`. The current loop uses `time.time()` for periodic sampling; a backward
+wall-clock step can suppress an already-due intermediate resource message. The fixed branch uses
+elapsed monotonic time for scheduling while leaving wall-clock timestamps in monitoring records.
+The source-level fake-process probe is
+[`tests/test_resource_monitor_clock_runtime.py`](../tests/test_resource_monitor_clock_runtime.py).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslResourceMonitorClockCurrent.cfg models/clock/ParslResourceMonitorClock.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslResourceMonitorClockFixed.cfg models/clock/ParslResourceMonitorClock.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_resource_monitor_clock_runtime.py -v
+```
