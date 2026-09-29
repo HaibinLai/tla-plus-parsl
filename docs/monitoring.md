@@ -76,6 +76,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchCl
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_batch_clock_runtime.py -v
 ```
 
+This batching-clock boundary is recorded as BUG-090: the current implementation is sensitive to
+wall-clock rollback, while the candidate fixed model uses a monotonic deadline.
+
 `ParslMonitoringDispatchEnvelope.tla` models the outer queue tuple consumed by
 `DatabaseManager._dispatch_to_internal`. The current assertion lets a tuple with the wrong
 length escape and terminate the migration thread; the fixed branch rejects it while preserving

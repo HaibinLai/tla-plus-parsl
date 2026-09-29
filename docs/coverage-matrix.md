@@ -42,3 +42,6 @@ ordered/duplicate projection of the public status response.
 
 Heartbeat coverage also includes the rollback branch of `ParslHeartbeatClockRollback` (BUG-089),
 which separates wall-clock reporting from monotonic expiry.
+
+Monitoring coverage includes the corresponding batch-deadline rollback boundary
+`ParslMonitoringBatchClock` (BUG-090).
