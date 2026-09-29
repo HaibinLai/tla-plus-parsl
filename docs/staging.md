@@ -36,11 +36,23 @@ serialization failure truncates the last valid token file. The fixed branch seri
 temporary file and replaces the destination only after success. The runtime probe uses a real
 temporary file and the real classmethod with a failing JSON encoder.
 
+`ParslGlobusTransferTimeout.tla` models a Globus transfer that remains `ACTIVE`. The current
+`Globus.transfer_file` passes a 60-second timeout to each `task_wait` call but has no overall poll
+deadline, so the stage Future can remain pending forever. The fixed branch turns a bounded poll
+budget into an explicit timeout outcome. `tests/test_globus_transfer_timeout_runtime.py` stops
+the real loop after several active polls to demonstrate the missing outer bound.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityCurrent.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityFixed.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomicityValid.cfg models/staging/ParslGlobusTokenFileAtomicity.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_globus_token_file_atomicity_runtime.py -v
+```
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferTimeoutCurrent.cfg models/staging/ParslGlobusTransferTimeout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferTimeoutFixed.cfg models/staging/ParslGlobusTransferTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_transfer_timeout_runtime.py -v
 ```
 
 `ParslRsyncPartialCleanup.tla` models a failed RSync stage-in after a destination has received
