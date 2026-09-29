@@ -150,6 +150,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelled
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_cancelled_result_runtime.py -v
 ```
 
+`ParslWorkQueueResourceCategory.tla` models the Work Queue resource specification schema. The
+current `submit` method has a `category` handling branch, but omits `category` from
+`acceptable_fields`, so a valid category is rejected before task mapping. The fixed branch accepts
+the key. The runtime probe drives the real `WorkQueueExecutor.submit` validation path.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueResourceCategoryCurrent.cfg models/executors/ParslWorkQueueResourceCategory.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueResourceCategoryFixed.cfg models/executors/ParslWorkQueueResourceCategory.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_submit_runtime.py -v
+```
+
 `ParslTaskVineCancelledResult.tla` covers the corresponding TaskVine collector race. A cancelled
 Future causes the current collector's unconditional `set_result` to raise after the report is
 removed; cleanup then marks another outstanding Future with `TaskVineManagerFailure`. The fixed

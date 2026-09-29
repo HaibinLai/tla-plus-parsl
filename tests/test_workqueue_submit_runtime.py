@@ -85,6 +85,13 @@ class WorkQueueSubmitRuntimeTest(unittest.TestCase):
                 executor.submit(lambda: 1, {"unsupported": 1})
             self.assertEqual(executor._tasks, {})
 
+    def test_category_resource_key_is_currently_rejected_despite_submit_branch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            executor = self.make_executor(directory, alive=False)
+            with self.assertRaises(Exception):
+                executor.submit(lambda: 1, {"category": "priority"})
+            self.assertEqual(executor._tasks, {})
+
 
 if __name__ == "__main__":
     unittest.main()
