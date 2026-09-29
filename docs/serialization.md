@@ -66,6 +66,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationN
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_negative_length_runtime.py -v
 ```
 
+`ParslSerializationShortFrameCount.tla` covers a truncated apply message with only two framed
+buffers. The current `unpack_and_deserialize` path deserializes both buffers before its final
+three-frame assertion; the fixed branch validates the count before decoding. The runtime probe
+records the two current deserializer calls.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationShortFrameCountCurrent.cfg models/serialization/ParslSerializationShortFrameCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationShortFrameCountFixed.cfg models/serialization/ParslSerializationShortFrameCount.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_serialization_short_frame_count_runtime.py -v
+```
+
 `ParslSerializerRegistry.tla` models the concrete `facade.deserialize` registry order. With a
 colliding identifier, the current configuration decodes a data payload through the code registry
 and violates `DispatchSafety`; the fixed configuration rejects the ambiguous header, while the
