@@ -288,3 +288,9 @@ run_case azure-status-bookkeeping-current counterexample \
 run_case azure-status-bookkeeping-fixed pass \
     models/providers/ParslAzureStatusBookkeepingFixed.cfg \
     models/providers/ParslAzureStatusBookkeeping.tla
+run_case aws-cancel-missing-current counterexample \
+    models/providers/ParslAWSProviderCancelMissingCurrent.cfg \
+    models/providers/ParslAWSProviderCancel.tla
+run_case aws-cancel-missing-fixed pass \
+    models/providers/ParslAWSProviderCancelMissingFixed.cfg \
+    models/providers/ParslAWSProviderCancel.tla

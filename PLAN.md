@@ -171,6 +171,10 @@ Azure status bookkeeping is now included: the current provider returns a transla
 status without updating its local resource entry, while the fixed branch keeps returned and local
 state consistent for subsequent polling and scaling decisions.
 
+AWS cancellation cleanup is now covered: after a successful remote terminate, the current path can
+raise on a stale local instance/resource ID; the fixed branch treats missing local bookkeeping as
+an idempotent successful cancellation.
+
 Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
