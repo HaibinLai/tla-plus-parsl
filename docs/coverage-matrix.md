@@ -21,3 +21,6 @@ model plus a runtime probe before expanding the state space.
 
 The executor/provider row also includes `ParslScaleInCancelShape` and its short-provider-cancel
 runtime probe; the model isolates malformed cancellation cardinality from normal scale-in policy.
+
+The `join_app` row also includes `ParslJoinReturnEquality` and its hostile-`__eq__` runtime probe;
+the model isolates return-shape validation from ordinary Future aggregation.

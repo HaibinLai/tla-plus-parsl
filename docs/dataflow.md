@@ -159,6 +159,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinListMutationSta
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_list_mutation_runtime.py -v
 ```
 
+`ParslJoinReturnEquality.tla` covers a return-validation hazard before the normal join callback.
+The current implementation compares an arbitrary join-body result with `[]` before checking its
+type; a user-defined `__eq__` can raise and strand the outer Future. The fixed branch performs
+type validation first and reaches the ordinary terminal `TypeError` path. The runtime probe uses a
+real `join_app` whose return object raises from `__eq__` and observes the current pending Future.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnEqualityCurrent.cfg models/dataflow/ParslJoinReturnEquality.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnEqualityFixed.cfg models/dataflow/ParslJoinReturnEquality.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_return_equality_runtime.py -v
+```
+
 `ParslJoinErrorRootCause.tla` captures `PropagatedException` metadata used by `JoinError`: the
 first dependent exception is followed recursively to a non-propagated root, and sibling failures
 are marked with `(+ others)` in the representative path. The runtime probe checks the actual
