@@ -202,3 +202,6 @@ Radical-Pilot executor coverage also records late terminal callbacks after cance
 
 Radical-Pilot executor coverage also records queued-task loss during bulk shutdown
 (`ParslRadicalPilotBulkShutdown`, BUG-136).
+
+HTEX executor coverage now separates worker watchdog restart from logical task failure
+(`ParslHtexWorkerWatchdog`).

@@ -573,6 +573,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotBulkSh
 
 This shutdown queue-loss behavior is recorded as BUG-136 in the bug ledger.
 
+`ParslHtexWorkerWatchdog.tla` separates a physical HTEX worker from the logical task attempt it
+was executing. When a busy worker dies, the watchdog emits a serialized `WorkerLost` result and
+replaces the worker; an idle worker is simply restarted. The runtime probe invokes the real
+`Manager.worker_watchdog` with a dead worker double and decodes the queued result.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerWatchdog.cfg models/executors/ParslHtexWorkerWatchdog.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerWatchdogIdle.cfg models/executors/ParslHtexWorkerWatchdog.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_watchdog_runtime.py -v
+```
+
 `ParslWorkQueueShutdown.tla` models the Work Queue collector's finalization contract. Shutdown
 sets the stop flag and waits for the collector; its `finally` block fails every accepted Future
 that has no result before the executor reaches `stopped`. The runtime probe invokes the real
