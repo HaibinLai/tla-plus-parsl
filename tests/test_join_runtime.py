@@ -73,6 +73,9 @@ def join_precompleted():
 
 
 class JoinRuntimeTest(unittest.TestCase):
+    def test_join_app_uses_internal_executor(self):
+        self.assertEqual(join_single.executors, ["_parsl_internal"])
+
     def test_single_ordered_duplicate_empty_and_failure_semantics(self):
         config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
         with parsl.load(config):

@@ -104,6 +104,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeMixe
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_return_shape_runtime.py -v
 ```
 
+`ParslJoinInternalExecutor.tla` models the executor admission boundary before the join callback
+protocol starts. DFK initialization creates `_parsl_internal`, and `join_app` must target that
+executor explicitly. The current configuration represents a regression to the ordinary `all`
+executor set and violates `InternalExecutorSafety`; the fixed configuration checks the internal
+target. The runtime join probe asserts the real decorated function carries the internal executor
+label.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinInternalExecutorCurrent.cfg models/dataflow/ParslJoinInternalExecutor.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinInternalExecutorFixed.cfg models/dataflow/ParslJoinInternalExecutor.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_runtime.py -v
+```
+
 `ParslJoinSingleCancellation.tla` isolates cancellation of a single inner Future. The current
 callback lets `Future.exception()` raise `CancelledError`, leaving the outer join in `joining`;
 the fixed branch converts it into terminal failure. Its runtime probe calls the real callback.
