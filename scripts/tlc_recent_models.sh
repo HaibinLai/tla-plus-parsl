@@ -378,3 +378,9 @@ run_case monitoring-task-insert-current counterexample \
 run_case monitoring-task-insert-fixed pass \
     models/monitoring/ParslMonitoringTaskInsertBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringTaskInsertBookkeeping.tla
+run_case monitoring-try-insert-current counterexample \
+    models/monitoring/ParslMonitoringTryInsertBookkeepingCurrent.cfg \
+    models/monitoring/ParslMonitoringTryInsertBookkeeping.tla
+run_case monitoring-try-insert-fixed pass \
+    models/monitoring/ParslMonitoringTryInsertBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringTryInsertBookkeeping.tla

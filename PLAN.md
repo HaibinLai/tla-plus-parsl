@@ -910,6 +910,10 @@ event, while the fixed branch preserves the database high-water mark and termina
 closures differ when their captured values differ, while the current name/module-only key
 collides and can return the first closure's result.
 
+The monitoring TRY-row bookkeeping model is now included in the recurring TLC smoke sweep:
+the current configuration produces the failed-insert counterexample, while the fixed
+configuration verifies that an unsuccessful insert does not poison the retry classification.
+
 ### 3. Checked properties
 
 The safety configurations check:
