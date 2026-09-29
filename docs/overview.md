@@ -1255,6 +1255,18 @@ delivery. The current branch permits a success observation before all chunks arr
 branch gates monitoring success and consumer admission on complete publication (21 distinct
 states checked).
 
+The provider-failure/retry boundary is also modeled:
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslProviderFailureRetryCurrent.cfg models/core/ParslProviderFailureRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslProviderFailureRetryFixed.cfg models/core/ParslProviderFailureRetry.tla
+```
+
+`ParslProviderFailureRetry.tla` models a provider block disappearing during a physical attempt,
+executor loss, provider recovery, retry admission, and a late result from the lost worker. The
+current branch resolves the logical Future with that late result; the fixed branch rejects it as
+stale and checks 79 distinct states.
+
 The combined clock/heartbeat check is:
 
 ```bash

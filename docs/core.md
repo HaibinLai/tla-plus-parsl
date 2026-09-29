@@ -27,6 +27,13 @@ readiness boundary, `StartConsumer` dependency admission, and the monitoring act
 database delivery. The focused chunk protocol remains in
 `models/staging/ParslDataFutureTransfer.tla`.
 
+`ParslProviderFailureRetry.tla` connects provider block failure to executor attempt loss and
+retry. It permits an old worker result to arrive after a retry begins. The current configuration
+violates `FutureSafety` at depth 6; the fixed configuration classifies that result as stale and
+checks 79 distinct states. This corresponds to provider status/failure handling, executor
+physical-attempt bookkeeping, and the retry path. The Python retry baseline is exercised by
+`tests/test_retry_timeout_runtime.py` and `tests/test_retry_handler_runtime.py`.
+
 The detailed action-to-Parsl mapping and TLC results are in [the overview](overview.md).
 
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
