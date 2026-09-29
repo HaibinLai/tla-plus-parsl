@@ -138,6 +138,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownInstance
 /tmp/parsl-venv/bin/python -m unittest tests/test_aws_unknown_instance_runtime.py -v
 ```
 
+`ParslAwsSubmitEmptyResponse.tla` models an EC2 launch response with no instances. The current
+`submit()` destructures the empty list before checking the result, raising `ValueError`; the fixed
+branch treats it as a failed submission and leaves `resources` unchanged. TLC finds the current
+`SubmitDoesNotCrash` counterexample (2 states generated) and checks the fixed branch (4 states
+generated). `tests/test_aws_submit_runtime.py` drives the real method and reproduces the empty
+response exception.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsSubmitEmptyResponseCurrent.cfg models/providers/ParslAwsSubmitEmptyResponse.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsSubmitEmptyResponseFixed.cfg models/providers/ParslAwsSubmitEmptyResponse.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_submit_runtime.py -v
+```
+
 `ParslTorqueStatusFailure.tla` models the return-code boundary around `qstat`. The current
 Torque parser ignores a non-zero command result and still consumes stdout, so stale output can
 overwrite a running local resource. The fixed branch returns early and preserves the known
