@@ -17,6 +17,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 These models cover asynchronous monitoring records, database insertion, batching, retry and
 atomicity, deferred events, close behavior, and batching-threshold edge cases.
 
+`ParslMonitoringStatusHistory.tla` is the append-only status-history abstraction.  It permits
+event delivery to be reordered but keeps every `(task, run, status, timestamp)` event as a row;
+the latest status is derived from the greatest event version rather than insertion order.  The
+TLC model checks 150 generated/53 distinct states.  The runtime bridge inserts the same three
+events into the real SQLite-backed `Database` in a deliberately non-chronological order and
+verifies the ordered history and terminal row.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringStatusHistory.cfg models/monitoring/ParslMonitoringStatusHistory.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_status_history_runtime.py -v
+```
+
 `ParslMonitoringDBInsert.tla` isolates duplicate `STATUS` primary-key handling. The current
 configuration rolls back and drops a duplicate event; the fixed branch treats it as an idempotent
 already-stored row. The normal configuration confirms that a non-duplicate insert remains stored.
