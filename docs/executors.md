@@ -573,6 +573,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotBulkSh
 
 This shutdown queue-loss behavior is recorded as BUG-136 in the bug ledger.
 
+`ParslRadicalPilotUnknownCallback.tla` models a callback whose RP task UID has already been
+removed from `future_tasks` by cancellation, cleanup, or an earlier terminal callback. The current
+callback handler indexes the dictionary before checking membership and raises `KeyError`; the
+fixed branch classifies the callback as stale and continues. TLC finds the two-state current
+counterexample and checks the fixed configuration's two distinct states. The runtime probe invokes
+the real callback with an empty Future map.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotUnknownCallbackCurrent.cfg models/executors/ParslRadicalPilotUnknownCallback.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotUnknownCallbackFixed.cfg models/executors/ParslRadicalPilotUnknownCallback.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_unknown_callback_runtime.py -v
+```
+
+This unknown-callback isolation boundary is recorded as BUG-144.
+
 `ParslHtexWorkerWatchdog.tla` separates a physical HTEX worker from the logical task attempt it
 was executing. When a busy worker dies, the watchdog emits a serialized `WorkerLost` result and
 replaces the worker; an idle worker is simply restarted. The runtime probe invokes the real
