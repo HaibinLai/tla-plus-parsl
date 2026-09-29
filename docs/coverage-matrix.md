@@ -163,3 +163,6 @@ three ordered serializer buffers (`ParslSerializationWire` and
 
 Thread executor coverage also records delayed zero-thread-count validation
 (`ParslThreadExecutorThreadCount`, BUG-127).
+
+Timer coverage also records close returning before callback quiescence
+(`ParslTimerCloseTimeout`, BUG-128).

@@ -85,7 +85,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeLimitedOpenTimeout
 current `Timer.close(timeout=...)` returns `None` after a timed join even while the daemon thread
 remains alive; the fixed branch represents that result as an explicit `closing` timeout rather
 than a completed close. The runtime probe blocks the immediate callback and observes the real
-thread after `close` returns.
+thread after `close` returns. This is recorded as BUG-128 because the return value does not
+communicate callback quiescence.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimerCloseTimeoutCurrent.cfg models/clock/ParslTimerCloseTimeout.tla
