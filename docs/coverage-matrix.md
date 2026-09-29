@@ -18,3 +18,6 @@ implementations or every detail in the paper.
 
 The next refinements should select one row, read the relevant source path, and add a focused
 model plus a runtime probe before expanding the state space.
+
+The executor/provider row also includes `ParslScaleInCancelShape` and its short-provider-cancel
+runtime probe; the model isolates malformed cancellation cardinality from normal scale-in policy.

@@ -751,3 +751,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerTaskAdm
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexManagerTaskAdmissionFixed.cfg models/executors/ParslHtexManagerTaskAdmission.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_manager_selection_runtime.py tests/test_htex_submit_runtime.py tests/test_htex_heartbeat_runtime.py tests/test_htex_manager_loss_runtime.py tests/test_retry_timeout_runtime.py -v
 ```
+`ParslScaleInCancelShape.tla` covers the provider/executor cancellation contract. The current
+`BlockProviderExecutor.scale_in` path asserts that the provider returns one boolean per requested
+job; a short response raises before successful cancellations can be retained. The fixed branch
+keeps the successful prefix and exposes a partial cancellation outcome. The runtime probe invokes
+the real executor method with a provider double returning one result for two requested blocks.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleInCancelShapeCurrent.cfg models/executors/ParslScaleInCancelShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslScaleInCancelShapeFixed.cfg models/executors/ParslScaleInCancelShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_scale_in_cancel_shape_runtime.py -v
+```
