@@ -1581,6 +1581,11 @@ expiry, task timeout, physical retry, and a late completion. The current configu
 counterexample for accepting a late result after timeout; the fixed configuration uses monotonic
 heartbeat age and stale-result classification and checks 100,001 simulated states successfully.
 
+The monitoring source/model map is now documented in docs/monitoring-model.md. It ties
+DataFlowKernel._send_task_info, DatabaseManager.start, _insert, _update, batching, and cleanup
+to the logical-task/physical-try/event-queue abstraction, and explicitly records where the
+current source uses unbounded database retry or deferred worker-message bookkeeping.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
