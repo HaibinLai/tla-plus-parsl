@@ -1438,6 +1438,14 @@ produces the expected strict-cancellation counterexample. Runtime probes cover r
 launch/status/cancel behavior and failed-launch cleanup, while the AWS configurations pass TLC
 simulation.
 
+The Flux executor boundary is now represented by four focused models. `ParslFluxCancelSubmitRace`
+covers cancellation before the underlying Flux future is bound; `ParslFluxCancelUnderlyingState`
+propagates an already-cancelled underlying future; `ParslFluxProviderStatusEmpty` handles an empty
+provider status response; and `ParslFluxResult` covers result-file validity, nonzero/task exceptions,
+shutdown, and cancellation propagation to the Parsl-facing wrapper. Runtime probes cover ten Flux
+paths. All four current configurations produce the expected cancellation/status counterexamples,
+while fixed configurations pass TLC simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

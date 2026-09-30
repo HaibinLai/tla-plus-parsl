@@ -288,6 +288,30 @@ run_case aws-provider-cancel-linger pass \
 run_case local-provider-current counterexample \
     models/providers/ParslLocalProvider.cfg \
     models/providers/ParslLocalProvider.tla
+run_case flux-cancel-submit-race-current counterexample \
+    models/executors/ParslFluxCancelSubmitRaceCurrent.cfg \
+    models/executors/ParslFluxCancelSubmitRace.tla
+run_case flux-cancel-submit-race-fixed pass \
+    models/executors/ParslFluxCancelSubmitRaceFixed.cfg \
+    models/executors/ParslFluxCancelSubmitRace.tla
+run_case flux-cancel-underlying-current counterexample \
+    models/executors/ParslFluxCancelUnderlyingStateCurrent.cfg \
+    models/executors/ParslFluxCancelUnderlyingState.tla
+run_case flux-cancel-underlying-fixed pass \
+    models/executors/ParslFluxCancelUnderlyingStateFixed.cfg \
+    models/executors/ParslFluxCancelUnderlyingState.tla
+run_case flux-provider-status-empty-current counterexample \
+    models/executors/ParslFluxProviderStatusEmptyCurrent.cfg \
+    models/executors/ParslFluxProviderStatusEmpty.tla
+run_case flux-provider-status-empty-fixed pass \
+    models/executors/ParslFluxProviderStatusEmptyFixed.cfg \
+    models/executors/ParslFluxProviderStatusEmpty.tla
+run_case flux-result-current counterexample \
+    models/executors/ParslFluxResult.cfg \
+    models/executors/ParslFluxResult.tla
+run_case flux-result-fixed pass \
+    models/executors/ParslFluxResultFixed.cfg \
+    models/executors/ParslFluxResult.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
