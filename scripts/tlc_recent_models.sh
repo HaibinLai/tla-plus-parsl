@@ -504,6 +504,12 @@ run_case file-transfer-retry-current counterexample \
 run_case file-transfer-retry-fixed pass \
     models/staging/ParslFileTransferRetryFixed.cfg \
     models/staging/ParslFileTransferRetry.tla
+run_case datafuture-transfer-current counterexample \
+    models/staging/ParslDataFutureTransfer.cfg \
+    models/staging/ParslDataFutureTransfer.tla
+run_case datafuture-transfer-fixed pass \
+    models/staging/ParslDataFutureTransferFixed.cfg \
+    models/staging/ParslDataFutureTransfer.tla
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla
