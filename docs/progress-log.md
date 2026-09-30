@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `64b6560` (`Promote join composition runtime coverage`).
-- Foundational smoke inventory: 369 TLC cases and 265 Python runtime probes.
+- Latest pushed commit: pending (cross-component executor and join coverage).
+- Foundational smoke inventory: 369 TLC cases and 270 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -120,6 +120,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted four join-composition runtime bridges into the foundational gate. The
   probes cover serialized callable values, nested error-root selection, callback-time list mutation,
   and duplicate input positions across retry attempts.
+- Current stage: promoted five cross-component runtime bridges into the foundational gate. The
+  probes cover HTEX result decode failure, result-forwarding ownership loss, optional monitoring
+  message handling, scheduler-command timeout cleanup, and negative provider scale-in behavior.
 
 ### Verification convention
 
