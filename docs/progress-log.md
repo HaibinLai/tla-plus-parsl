@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `f6eaf0e` (`Add join monitoring database model`).
-- Foundational smoke inventory: 374 TLC cases and 270 Python runtime probes.
+- Latest pushed commit: pending (provider/executor lifecycle runtime coverage).
+- Foundational smoke inventory: 374 TLC cases and 278 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -141,6 +141,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslJoinMonitoringDB`, connecting terminal join status to queued and
   persisted monitoring rows. The Current branch loses terminal status on a duplicate write; the
   Fixed branch treats duplicates idempotently and passed standalone TLC.
+- Current stage: promoted eight concrete provider/executor runtime bridges into the foundational
+  gate: Flux cancellation races, Globus Compute submit overlap, HTEX cancellation admission,
+  Local PID admission, poller close/duplicate registration, and scale-in result shape.
 
 ### Verification convention
 

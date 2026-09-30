@@ -167,6 +167,14 @@ tests=(
     tests/test_htex_monitoring_message_runtime.py
     tests/test_execute_wait_timeout_runtime.py
     tests/test_negative_scale_in_runtime.py
+    tests/test_flux_cancel_submit_race_runtime.py
+    tests/test_flux_cancel_underlying_state_runtime.py
+    tests/test_globus_compute_submit_race_runtime.py
+    tests/test_htex_cancellation_admission_runtime.py
+    tests/test_local_pid_admission_runtime.py
+    tests/test_poller_close_scale_in_runtime.py
+    tests/test_poller_duplicate_executor_runtime.py
+    tests/test_scale_in_cancel_shape_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py
