@@ -396,3 +396,8 @@ Join coverage also includes `ParslJoinThreeList`, which keeps three distinct inn
 four ordered list positions (including a duplicate) separate in the outer result, and
 `ParslJoinThreeCancellation`, which exercises a three-element cancelled-inner list, backed by
 `tests/test_join_three_list_runtime.py` and `tests/test_join_list_cancellation_runtime.py`.
+
+The current `join_app` source audit maps `DataFlowKernel.handle_join_update` to the join models
+for ordered list membership, duplicate callbacks, callback locking, cancellation, failure
+aggregation, mutable-list snapshots, and nested joins. The remaining coarse boundary is Python
+exception/object identity and unconstrained thread scheduling, not an unexamined join state.
