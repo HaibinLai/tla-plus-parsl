@@ -714,6 +714,9 @@ run_case executor-provider-lifecycle-current counterexample \
 run_case executor-provider-lifecycle-fixed pass \
     models/executors/ParslExecutorProviderLifecycleFixed.cfg \
     models/executors/ParslExecutorProviderLifecycle.tla
+run_case flux-submission-failure pass \
+    models/executors/ParslFluxSubmissionFailure.cfg \
+    models/executors/ParslFluxSubmissionFailure.tla
 run_case join-full pass \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla

@@ -693,6 +693,9 @@ candidate uncached path that still reaches `dill.dumps`.
 `ParslFluxResult.tla` refines FluxExecutor's wrapped Future, result-file decoding, abnormal exit,
 and cancellation propagation; its actual configuration preserves a cancellation-orphan probe and
 the fixed configuration checks the candidate propagation fix.
+`ParslFluxSubmissionFailure.tla` is now in the smoke sweep and checks that a submit-thread
+exception drains every queued Future before Flux shutdown completes; the real bridge is
+`tests/test_flux_submission_failure_runtime.py`.
 `ParslTaskVineResults.tla` refines TaskVine's manager report and collector protocol, including
 result-file failure mapping and cleanup of all outstanding Futures after manager failure.
 `ParslTaskVineDuplicateReport.tla` adds the stale-report interleaving to that collector. It
