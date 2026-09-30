@@ -437,6 +437,15 @@ run_case radical-unknown-callback \
 run_case radical-bulk-shutdown \
     models/executors/ParslRadicalPilotBulkShutdownFixed.cfg \
     models/executors/ParslRadicalPilotBulkShutdown.tla
+run_case resource-admission \
+    models/dataflow/ParslResourceAdmission.cfg \
+    models/dataflow/ParslResourceAdmission.tla
+run_case resource-admission-autolabel \
+    models/dataflow/ParslResourceAdmissionAutolabel.cfg \
+    models/dataflow/ParslResourceAdmission.tla
+run_case resource-scaling \
+    models/dataflow/ParslResourceScaling.cfg \
+    models/dataflow/ParslResourceScaling.tla
 run_case dynamic-task-chain \
     models/dataflow/ParslDynamicTaskChain.cfg \
     models/dataflow/ParslDynamicTaskChain.tla
@@ -482,6 +491,12 @@ run_case memo-function-identity \
 run_case memo-dict-ordering \
     models/dataflow/ParslMemoDictOrderingFixed.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-dict-ordering-homogeneous \
+    models/dataflow/ParslMemoDictOrderingHomogeneous.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-function-identity-stable \
+    models/dataflow/ParslMemoFunctionIdentityStable.cfg \
+    models/dataflow/ParslMemoFunctionIdentity.tla
 run_case memo-ignore-key \
     models/dataflow/ParslMemoIgnoreKeyFixed.cfg \
     models/dataflow/ParslMemoIgnoreKey.tla
