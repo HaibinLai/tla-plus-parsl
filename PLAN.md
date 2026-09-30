@@ -234,6 +234,8 @@ Recent focused models now connect the previously separate boundaries:
   dispatch when one buffer is not serializable.
 - `ParslMessageLoss` and `ParslMessageDuplicate` are now in the smoke sweep, connecting bounded
   transport loss/duplicate delivery to retry, correlation, cleanup, and terminal-result safety.
+- `ParslMisroute` and `ParslResultMisroute` are now in the smoke sweep, rejecting task/result
+  envelopes delivered through the wrong executor-manager binding.
 - `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,
   traversing callable roots, globals/defaults/closures, nested arguments, failed object graphs,
   and self-referential cycles with visited-set protection.

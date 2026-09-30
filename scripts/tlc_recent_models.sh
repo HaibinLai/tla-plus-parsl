@@ -60,6 +60,12 @@ run_case message-loss pass \
 run_case message-duplicate pass \
     models/core/ParslMessageDuplicate.cfg \
     models/core/ParslAbstract.tla
+run_case message-misroute pass \
+    models/core/ParslMisroute.cfg \
+    models/core/ParslAbstract.tla
+run_case result-misroute pass \
+    models/core/ParslResultMisroute.cfg \
+    models/core/ParslAbstract.tla
 run_case python-object-graph pass \
     models/serialization/ParslPython.cfg \
     models/serialization/ParslPython.tla
