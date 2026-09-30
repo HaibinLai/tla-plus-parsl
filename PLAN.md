@@ -785,6 +785,10 @@ stale local job IDs, submit output parsing, and chunked cancellation. The curren
 bookkeeping failures are retained as counterexample configurations beside the fixed candidates;
 the Condor runtime probes exercise these concrete scheduler boundaries without requiring a live
 HTCondor installation.
+Grid Engine coverage now includes qstat malformed-record handling, malformed-record continuation
+within a batch, duplicate status lines, qsub empty/failure/success output, and qdel handling for
+known and unknown jobs. These models preserve the scheduler-specific terminal-state conventions
+while making the parser and local-resource failure paths explicit.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

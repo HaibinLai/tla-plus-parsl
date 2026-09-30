@@ -1146,6 +1146,54 @@ run_case condor-unknown-job-current counterexample \
 run_case condor-unknown-job-fixed pass \
     models/providers/ParslCondorUnknownJobFixed.cfg \
     models/providers/ParslCondorUnknownJob.tla
+run_case grid-cancel pass \
+    models/providers/ParslGridEngineCancel.cfg \
+    models/providers/ParslGridEngineCancel.tla
+run_case grid-cancel-failure pass \
+    models/providers/ParslGridEngineCancelFailure.cfg \
+    models/providers/ParslGridEngineCancel.tla
+run_case grid-cancel-fixed pass \
+    models/providers/ParslGridEngineCancelFixed.cfg \
+    models/providers/ParslGridEngineCancel.tla
+run_case grid-cancel-unknown-current counterexample \
+    models/providers/ParslGridEngineCancelUnknown.cfg \
+    models/providers/ParslGridEngineCancel.tla
+run_case grid-cancel-valid pass \
+    models/providers/ParslGridEngineCancelValid.cfg \
+    models/providers/ParslGridEngineCancel.tla
+run_case grid-duplicate-status-current counterexample \
+    models/providers/ParslGridEngineDuplicateStatusCurrent.cfg \
+    models/providers/ParslGridEngineDuplicateStatus.tla
+run_case grid-duplicate-status-fixed pass \
+    models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
+    models/providers/ParslGridEngineDuplicateStatus.tla
+run_case grid-duplicate-status-unique pass \
+    models/providers/ParslGridEngineDuplicateStatusUnique.cfg \
+    models/providers/ParslGridEngineDuplicateStatus.tla
+run_case grid-status-current counterexample \
+    models/providers/ParslGridEngineStatus.cfg \
+    models/providers/ParslGridEngineStatus.tla
+run_case grid-status-fixed pass \
+    models/providers/ParslGridEngineStatusFixed.cfg \
+    models/providers/ParslGridEngineStatus.tla
+run_case grid-status-present pass \
+    models/providers/ParslGridEngineStatusPresent.cfg \
+    models/providers/ParslGridEngineStatus.tla
+run_case grid-status-batch-current counterexample \
+    models/providers/ParslGridEngineStatusBatchCurrent.cfg \
+    models/providers/ParslGridEngineStatusBatch.tla
+run_case grid-status-batch-fixed pass \
+    models/providers/ParslGridEngineStatusBatchFixed.cfg \
+    models/providers/ParslGridEngineStatusBatch.tla
+run_case grid-submit-empty pass \
+    models/providers/ParslGridEngineSubmitEmpty.cfg \
+    models/providers/ParslGridEngineSubmit.tla
+run_case grid-submit-failure pass \
+    models/providers/ParslGridEngineSubmitFailure.cfg \
+    models/providers/ParslGridEngineSubmit.tla
+run_case grid-submit-job pass \
+    models/providers/ParslGridEngineSubmitJob.cfg \
+    models/providers/ParslGridEngineSubmit.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
