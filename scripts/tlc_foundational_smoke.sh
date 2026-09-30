@@ -347,6 +347,12 @@ run_case aws-empty-submit \
 run_case aws-reservation-shape \
     models/providers/ParslAwsStatusReservationShapeFixed.cfg \
     models/providers/ParslAwsStatusReservationShape.tla
+run_case aws-status-missing-result \
+    models/providers/ParslAwsStatusMissingResultFixed.cfg \
+    models/providers/ParslAwsStatusMissingResult.tla
+run_case aws-status-ordering \
+    models/providers/ParslAwsStatusOrderingFixed.cfg \
+    models/providers/ParslAwsStatusOrdering.tla
 run_case azure-submit \
     models/providers/ParslAzureProviderSubmitFixed.cfg \
     models/providers/ParslAzureProviderSubmit.tla
@@ -356,6 +362,15 @@ run_case azure-cancel \
 run_case azure-status-bookkeeping \
     models/providers/ParslAzureStatusBookkeepingFixed.cfg \
     models/providers/ParslAzureStatusBookkeeping.tla
+run_case azure-status-ordering \
+    models/providers/ParslAzureStatusOrderingFixed.cfg \
+    models/providers/ParslAzureStatusOrdering.tla
+run_case azure-status-remote-failure \
+    models/providers/ParslAzureStatusRemoteFailureFixed.cfg \
+    models/providers/ParslAzureStatusRemoteFailure.tla
+run_case azure-status-shape \
+    models/providers/ParslAzureStatusShapeFixed.cfg \
+    models/providers/ParslAzureStatusShape.tla
 run_case google-submit \
     models/providers/ParslGoogleCloudSubmitFixed.cfg \
     models/providers/ParslGoogleCloudSubmit.tla
@@ -371,6 +386,12 @@ run_case google-status \
 run_case google-status-remote-failure \
     models/providers/ParslGoogleCloudStatusRemoteFailureFixed.cfg \
     models/providers/ParslGoogleCloudStatusRemoteFailure.tla
+run_case google-unknown-local-status \
+    models/providers/ParslGoogleCloudUnknownLocalStatusFixed.cfg \
+    models/providers/ParslGoogleCloudUnknownLocalStatus.tla
+run_case google-zone-selection \
+    models/providers/ParslGoogleCloudZoneSelectionFixed.cfg \
+    models/providers/ParslGoogleCloudZoneSelection.tla
 run_case provider-provisioning-lifecycle \
     models/executors/ParslProviderProvisioningLifecycle.cfg \
     models/executors/ParslProviderProvisioningLifecycle.tla

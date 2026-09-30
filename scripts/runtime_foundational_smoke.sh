@@ -158,6 +158,8 @@ tests=(
     tests/test_slurm_empty_job_id_runtime.py
     tests/test_lsf_duplicate_status_runtime.py
     tests/test_aws_unknown_instance_runtime.py
+    tests/test_aws_status_missing_result_runtime.py
+    tests/test_aws_status_response_shape_runtime.py
     tests/test_local_unknown_job_status_runtime.py
     tests/test_local_cancel_failure_runtime.py
     tests/test_local_exit_file_missing_runtime.py
@@ -165,6 +167,10 @@ tests=(
     tests/test_torque_cancel_unknown_runtime.py
     tests/test_azure_cancel_bookkeeping_runtime.py
     tests/test_pbspro_status_shape_runtime.py
+    tests/test_azure_status_ordering_runtime.py
+    tests/test_azure_status_remote_failure_runtime.py
+    tests/test_googlecloud_status_remote_failure_runtime.py
+    tests/test_googlecloud_zone_selection_runtime.py
     tests/test_htex_worker_restart_failure_runtime.py
     tests/test_pbspro_missing_status_runtime.py
     tests/test_mpi_nondivisible_runtime.py
