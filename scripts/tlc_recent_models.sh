@@ -1441,6 +1441,12 @@ run_case aws-status-ordering-current counterexample \
 run_case aws-status-ordering-fixed pass \
     models/providers/ParslAwsStatusOrderingFixed.cfg \
     models/providers/ParslAwsStatusOrdering.tla
+run_case aws-status-response-shape-current counterexample \
+    models/providers/ParslAwsStatusResponseShapeCurrent.cfg \
+    models/providers/ParslAwsStatusResponseShape.tla
+run_case aws-status-response-shape-fixed pass \
+    models/providers/ParslAwsStatusResponseShapeFixed.cfg \
+    models/providers/ParslAwsStatusResponseShape.tla
 run_case azure-status-shape-current counterexample \
     models/providers/ParslAzureStatusShapeCurrent.cfg \
     models/providers/ParslAzureStatusShape.tla

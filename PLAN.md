@@ -2160,3 +2160,6 @@ the current branch reproduces the post-success `KeyError`.
 The following PBS Pro refinement is `ParslPbsproStatusShape` (BUG-204). It models malformed JSON
 job-record shapes and verifies that the fixed path preserves the polling loop with an explicit
 UNKNOWN observation instead of exposing `AttributeError`.
+
+The AWS provider refinement `ParslAwsStatusResponseShape` records BUG-205. It models validation of
+the EC2 status envelope and preserves an explicit UNKNOWN observation when `Reservations` is absent.

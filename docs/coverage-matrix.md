@@ -137,6 +137,9 @@ successful remote cancellation remains successful when local polling has already
 PBS Pro provider coverage also includes `ParslPbsproStatusShape` (BUG-204), which checks that a
 non-mapping JSON job record cannot abort the status poll.
 
+AWS provider coverage also includes `ParslAwsStatusResponseShape` (BUG-205), which checks that a
+missing top-level `Reservations` field cannot abort status polling.
+
 It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
 HTEX connection probe cannot fall through to a blocking receive.
 
