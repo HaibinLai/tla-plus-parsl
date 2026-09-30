@@ -217,6 +217,10 @@ memoization function identity/dict ordering/ignore-key handling, and task-status
 publication ordering. These preserve logical dependency safety as the graph grows after runtime
 submission.
 
+The generic provider cases cover bad-state ordering and mutation, unknown cluster jobs, LocalProvider
+submit/cancel cleanup and PID-shape admission, plus poller close/duplicate-executor races. They
+model lifecycle ownership independently of scheduler-specific response parsing.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The

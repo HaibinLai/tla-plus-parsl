@@ -344,5 +344,29 @@ run_case memo-ignore-key \
 run_case task-status-future-ordering \
     models/dataflow/ParslTaskStatusFutureOrderingFixed.cfg \
     models/dataflow/ParslTaskStatusFutureOrdering.tla
+run_case block-provider-bad-state-ordering \
+    models/executors/ParslBlockProviderBadStateOrderingFixed.cfg \
+    models/executors/ParslBlockProviderBadStateOrdering.tla
+run_case block-provider-bad-state-mutation \
+    models/executors/ParslBlockProviderBadStateMutationFixed.cfg \
+    models/executors/ParslBlockProviderBadStateMutation.tla
+run_case cluster-provider-unknown-job \
+    models/providers/ParslClusterProviderUnknownJobFixed.cfg \
+    models/providers/ParslClusterProviderUnknownJob.tla
+run_case local-provider-submit-cleanup \
+    models/providers/ParslLocalProviderSubmitCleanupFixed.cfg \
+    models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-provider-cancel-unknown \
+    models/providers/ParslLocalProviderCancelUnknownFixed.cfg \
+    models/providers/ParslLocalProviderCancelUnknown.tla
+run_case local-submit-pid-shape \
+    models/providers/ParslLocalSubmitPidShapeFixed.cfg \
+    models/providers/ParslLocalSubmitPidShape.tla
+run_case poller-close-scale-in \
+    models/providers/ParslPollerCloseScaleInRaceFixed.cfg \
+    models/providers/ParslPollerCloseScaleInRace.tla
+run_case poller-duplicate-executor \
+    models/providers/ParslPollerDuplicateExecutorFixed.cfg \
+    models/providers/ParslPollerDuplicateExecutor.tla
 
 echo "Foundational TLC smoke suite passed."
