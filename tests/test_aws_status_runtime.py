@@ -42,6 +42,23 @@ class AwsStatusRuntimeTest(unittest.TestCase):
         self.assertEqual(statuses[0].state, JobState.RUNNING)
         self.assertEqual(provider.resources["i-1"]["status"].state, JobState.RUNNING)
 
+    def test_reversed_ec2_reservations_return_states_in_response_order_currently(self):
+        provider = AWSProvider.__new__(AWSProvider)
+        provider.client = FakeEc2Client(
+            reservation("i-2", "stopped") + reservation("i-1", "running")
+        )
+        provider.resources = {
+            "i-1": {"status": JobStatus(JobState.PENDING)},
+            "i-2": {"status": JobStatus(JobState.PENDING)},
+        }
+
+        statuses = provider.status(["i-1", "i-2"])
+
+        # The current implementation appends EC2's reservation order rather
+        # than projecting each result back onto the requested ID positions.
+        self.assertEqual([status.state for status in statuses],
+                         [JobState.COMPLETED, JobState.RUNNING])
+
 
 if __name__ == "__main__":
     unittest.main()

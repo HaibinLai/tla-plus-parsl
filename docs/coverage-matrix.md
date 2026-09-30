@@ -84,7 +84,9 @@ The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), 
 required HTEX manager-registration fields before manager state is published.
 
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
-duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception.
+duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
+and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2
+reservations.
 
 The ZMQ/time row also includes `ParslCommandDeadline` and its expired-deadline poll probe; the
 model separates timeout arithmetic from command-socket poisoning.

@@ -1393,6 +1393,12 @@ run_case aws-cancel-duplicates-fixed pass \
 run_case aws-cancel-duplicates-unique pass \
     models/providers/ParslAwsCancelDuplicatesUnique.cfg \
     models/providers/ParslAwsCancelDuplicates.tla
+run_case aws-status-ordering-current counterexample \
+    models/providers/ParslAwsStatusOrderingCurrent.cfg \
+    models/providers/ParslAwsStatusOrdering.tla
+run_case aws-status-ordering-fixed pass \
+    models/providers/ParslAwsStatusOrderingFixed.cfg \
+    models/providers/ParslAwsStatusOrdering.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla

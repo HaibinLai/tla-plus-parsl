@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 508 probes and passes as a whole:
+The runtime suite currently contains 509 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1821,6 +1821,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   manager state mutation, with BUG-173 runtime evidence.
 - `ParslAwsCancelDuplicates` now models duplicate AWS cancellation IDs and the distinction
   between remote termination success and local idempotent cleanup, with BUG-174 runtime evidence.
+- `ParslAwsStatusOrdering` now models ID-keyed AWS status projection when EC2 returns reservations
+  out of request order, with BUG-175 runtime evidence.
 
 ## Validation workflow
 
@@ -1829,7 +1831,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 508 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 509 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1881,6 +1883,8 @@ The HTEX registration-envelope probe then completed 507 tests in 12.954 seconds 
 including malformed-field isolation and valid manager-message paths.
 The AWS duplicate-cancellation probe then completed 508 tests in 13.262 seconds with `OK`,
 including remote-success/local-cleanup divergence for repeated IDs.
+The AWS status-ordering probe then completed 509 tests in 13.265 seconds with `OK`,
+including out-of-order EC2 reservation projection back onto requested IDs.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
