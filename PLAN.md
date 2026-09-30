@@ -286,6 +286,8 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMonitoringPersistentRetry` now covers the matching `_insert` loop, with a bounded fixed
   retry budget and explicit aborted-write state; the runtime bridge uses an always-locked SQLite
   double to verify the current non-terminating behavior.
+- `ParslMonitoringBatchAtomicity` now joins the sweep, checking that a duplicate STATUS row does
+  not discard valid sibling events; the SQLite batch probe records the current rollback behavior.
 - `ParslSlurmStatus` is now in the smoke sweep, checking that foreign scheduler job rows do not
   crash the status poll and that known resource state remains available.
 - `ParslMonitoringZMQRouterFailure` is now in the smoke sweep, connecting the monitoring receive

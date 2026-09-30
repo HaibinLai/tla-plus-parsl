@@ -594,6 +594,15 @@ run_case monitoring-insert-retry-current counterexample \
 run_case monitoring-insert-retry-fixed pass \
     models/monitoring/ParslMonitoringPersistentRetryFixed.cfg \
     models/monitoring/ParslMonitoringPersistentRetry.tla
+run_case monitoring-batch-atomicity-current counterexample \
+    models/monitoring/ParslMonitoringBatchAtomicityCurrent.cfg \
+    models/monitoring/ParslMonitoringBatchAtomicity.tla
+run_case monitoring-batch-atomicity-fixed pass \
+    models/monitoring/ParslMonitoringBatchAtomicityFixed.cfg \
+    models/monitoring/ParslMonitoringBatchAtomicity.tla
+run_case monitoring-batch-atomicity-success pass \
+    models/monitoring/ParslMonitoringBatchAtomicitySuccess.cfg \
+    models/monitoring/ParslMonitoringBatchAtomicity.tla
 run_case monitoring-zmq-router-current counterexample \
     models/monitoring/ParslMonitoringZMQRouterFailureCurrent.cfg \
     models/monitoring/ParslMonitoringZMQRouterFailure.tla
