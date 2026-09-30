@@ -766,6 +766,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueShutdown.
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_shutdown_runtime.py -v
 ```
 
+`ParslWorkQueueStartTimeoutCleanup.tla` models the startup port-announcement boundary. The
+current `WorkQueueExecutor.start` starts the submit process and collector before waiting on the
+port mailbox; a timeout raises without stopping either component. The fixed branch terminally
+stops both components on startup failure. The runtime probe uses fake process/thread objects and
+an empty mailbox.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueStartTimeoutCleanupCurrent.cfg models/executors/ParslWorkQueueStartTimeoutCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueStartTimeoutCleanupFixed.cfg models/executors/ParslWorkQueueStartTimeoutCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_start_timeout_cleanup_runtime.py -v
+```
+
 `ParslTaskVineShutdown.tla` models the corresponding TaskVine collector path. Its stop event and
 task map are separate from Work Queue's, and outstanding Futures receive `TaskVineManagerFailure`
 before the collector exits. `tests/test_taskvine_shutdown_runtime.py` invokes the real collector

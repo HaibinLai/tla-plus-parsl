@@ -1918,6 +1918,12 @@ run_case taskvine-resource-spec-shape-current counterexample \
 run_case taskvine-resource-spec-shape-fixed pass \
     models/executors/ParslTaskVineResourceSpecShapeFixed.cfg \
     models/executors/ParslTaskVineResourceSpecShape.tla
+run_case workqueue-start-timeout-cleanup-current counterexample \
+    models/executors/ParslWorkQueueStartTimeoutCleanupCurrent.cfg \
+    models/executors/ParslWorkQueueStartTimeoutCleanup.tla
+run_case workqueue-start-timeout-cleanup-fixed pass \
+    models/executors/ParslWorkQueueStartTimeoutCleanupFixed.cfg \
+    models/executors/ParslWorkQueueStartTimeoutCleanup.tla
 run_case workqueue-duplicate-report-current counterexample \
     models/executors/ParslWorkQueueDuplicateReport.cfg \
     models/executors/ParslWorkQueueDuplicateReport.tla

@@ -3038,6 +3038,10 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslWorkQueueResults.cfg`: 606 states generated, 225 distinct states, depth 9;
   valid-result completion, corrupt/exception/no-result failure mapping, collector shutdown
   cleanup, and terminal-result consistency all passed.
+- `ParslWorkQueueStartTimeoutCleanupCurrent.cfg`: expected startup-failure counterexample; a
+  missing port announcement leaves the submit process and collector running.
+- `ParslWorkQueueStartTimeoutCleanupFixed.cfg`: 8 states generated, 4 distinct states, depth 4;
+  startup failure stops both components before the exception is returned.
 - `ParslWorkQueueDuplicateReport.cfg`: expected counterexample at depth 3 (5 states
   generated, 4 distinct); a duplicate report kills the collector and exposes unrelated task
   failure. `ParslWorkQueueDuplicateReportFixed.cfg`: 22 states generated, 7 distinct states,
