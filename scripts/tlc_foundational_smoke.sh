@@ -74,6 +74,9 @@ run_case join-provider-monitoring \
 run_case join-zmq-retry \
     models/core/ParslJoinZMQRetryFixed.cfg \
     models/core/ParslJoinZMQRetry.tla
+run_case join-file-staging \
+    models/core/ParslJoinFileStagingFixed.cfg \
+    models/core/ParslJoinFileStaging.tla
 run_case integrated-abstract \
     models/core/ParslAbstractSmoke.cfg \
     models/core/ParslAbstract.tla

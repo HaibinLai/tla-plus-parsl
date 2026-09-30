@@ -141,7 +141,7 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 372 TLC cases and 270 Python runtime test files.
+The current repository smoke runner enumerates 373 TLC cases and 270 Python runtime test files.
 On 2026-09-30, all 313 TLC cases passed in segmented runs with `TLC_SIMULATE=10`, and the
 complete runtime suite passed with 196 files; the subsequently added cases were also run
 individually as they were introduced, including the PBS Pro status-batch isolation and
@@ -190,6 +190,10 @@ The `(task, attempt)` correlation is retained across timeout and late-result del
 fixed branch can reject stale or corrupt frames without changing the logical Future.
 It also tracks a mutable Python-object version, the serialized capture version, and the worker
 dispatch version; `DispatchSnapshotSafety` requires the latter two to agree.
+
+`ParslJoinFileStaging.tla` isolates the file-content gate before join execution. Two chunks carry
+checksum state and a source version; publication requires a complete, valid snapshot in the
+Fixed configuration, so corrupt or stale bytes cannot make a dependent Future runnable.
 
 The monitoring cases cover the next database refinement: all-or-nothing batch publication,
 persistent retry of transient writes, and explicit terminal handling for permanent insert/update

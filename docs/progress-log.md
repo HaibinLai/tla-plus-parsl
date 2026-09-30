@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `75b9d80` (`Model serialized object snapshots`).
-- Foundational smoke inventory: 372 TLC cases and 270 Python runtime probes.
+- Latest pushed commit: pending (join file-staging model).
+- Foundational smoke inventory: 373 TLC cases and 270 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -135,6 +135,9 @@ are recorded here in English and committed with the model changes.
   passed standalone TLC and the Current branch produced the intended stale-result violation.
   The model now also tracks mutable Python-object versions and serialization snapshots, with a
   dispatch invariant that catches live-object substitution after serialization.
+- Current stage: added `ParslJoinFileStaging`, a two-chunk content/checksum/source-version model
+  that gates join execution on safe publication. The Current branch publishes corrupt bytes and
+  violates readiness/content safety; the Fixed branch passed standalone TLC.
 
 ### Verification convention
 
