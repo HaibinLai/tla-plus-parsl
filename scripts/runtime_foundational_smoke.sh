@@ -42,6 +42,12 @@ tests=(
     tests/test_command_send_timeout_runtime.py
     tests/test_command_lock_timeout_runtime.py
     tests/test_command_max_retries_runtime.py
+    tests/test_worker_pool_control_frame_runtime.py
+    tests/test_htex_monitoring_batch_continuation_runtime.py
+    tests/test_htex_result_batch_continuation_runtime.py
+    tests/test_htex_manager_eligibility_runtime.py
+    tests/test_htex_manager_selection_runtime.py
+    tests/test_htex_manager_message_runtime.py
     tests/test_pool_executor_callable_cache_runtime.py
     tests/test_results_incoming_close_race_runtime.py
     tests/test_workqueue_malformed_report_runtime.py

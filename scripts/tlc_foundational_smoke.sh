@@ -260,6 +260,30 @@ run_case command-client-send-timeout \
 run_case command-client-lock-timeout \
     models/executors/ParslCommandClientLockTimeoutFixed.cfg \
     models/executors/ParslCommandClientLockTimeout.tla
+run_case worker-pool-control-frame \
+    models/serialization/ParslWorkerPoolControlFrameFixed.cfg \
+    models/serialization/ParslWorkerPoolControlFrame.tla
+run_case htex-registration-state-poisoning \
+    models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
+    models/serialization/ParslHtexRegistrationStatePoisoning.tla
+run_case htex-registration-types \
+    models/serialization/ParslHtexRegistrationTypesFixed.cfg \
+    models/serialization/ParslHtexRegistrationTypes.tla
+run_case htex-monitoring-batch-continuation \
+    models/executors/ParslHtexMonitoringBatchContinuationFixed.cfg \
+    models/executors/ParslHtexMonitoringBatchContinuation.tla
+run_case htex-result-batch-continuation \
+    models/executors/ParslHtexResultBatchContinuationFixed.cfg \
+    models/executors/ParslHtexResultBatchContinuation.tla
+run_case htex-manager-eligibility \
+    models/executors/ParslHtexManagerEligibility.cfg \
+    models/executors/ParslHtexManagerEligibility.tla
+run_case htex-manager-selection \
+    models/executors/ParslHtexManagerSelection.cfg \
+    models/executors/ParslHtexManagerSelection.tla
+run_case htex-manager-selection-block \
+    models/executors/ParslHtexManagerSelectionBlock.cfg \
+    models/executors/ParslHtexManagerSelection.tla
 run_case pool-executor-callable-cache \
     models/serialization/ParslPoolExecutorCallableCacheFixed.cfg \
     models/serialization/ParslPoolExecutorCallableCache.tla
