@@ -359,6 +359,13 @@ run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
 
+run_case googlecloud-status-remote-failure-current counterexample \
+    models/providers/ParslGoogleCloudStatusRemoteFailureCurrent.cfg \
+    models/providers/ParslGoogleCloudStatusRemoteFailure.tla
+run_case googlecloud-status-remote-failure-fixed pass \
+    models/providers/ParslGoogleCloudStatusRemoteFailureFixed.cfg \
+    models/providers/ParslGoogleCloudStatusRemoteFailure.tla
+
 run_case appfuture-stream-none pass \
     models/dataflow/ParslAppFutureOutputStreamsNone.cfg \
     models/dataflow/ParslAppFutureOutputStreams.tla

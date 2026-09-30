@@ -531,3 +531,9 @@ The current `join_app` source audit maps `DataFlowKernel.handle_join_update` to 
 for ordered list membership, duplicate callbacks, callback locking, cancellation, failure
 aggregation, mutable-list snapshots, and nested joins. The remaining coarse boundary is Python
 exception/object identity and unconstrained thread scheduling, not an unexamined join state.
+
+Provider coverage also includes `ParslGoogleCloudStatusRemoteFailure` (BUG-252), which models
+per-job Google Compute Engine status failures as isolated UNKNOWN observations so a transient
+not-found/error response cannot abort later healthy jobs in the same polling batch. Its current
+configuration produces a `StatusBatchSafety` counterexample, while the fixed configuration
+passes; the runtime probe is `tests/test_googlecloud_status_remote_failure_runtime.py`.
