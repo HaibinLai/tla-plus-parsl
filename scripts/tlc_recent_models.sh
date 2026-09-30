@@ -958,6 +958,9 @@ run_case pipeline-current counterexample \
 run_case pipeline-fixed pass \
     models/core/ParslPipelineFixed.cfg \
     models/core/ParslPipeline.tla
+run_case pipeline-smoke pass \
+    models/core/ParslPipelineSmoke.cfg \
+    models/core/ParslPipeline.tla
 run_case htex-submit-success pass \
     models/executors/ParslHtexSubmitSuccess.cfg \
     models/executors/ParslHtexSubmitFailure.tla

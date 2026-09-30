@@ -1373,10 +1373,13 @@ DataFuture readiness, and monitoring persistence. The current configuration expo
 monitoring publication (435 generated / 221 distinct states); the fixed configuration gates both
 staging and monitoring and passes all seven invariants (228 generated / 85 distinct states,
 depth 22).
+`ParslPipelineSmoke.cfg` is the 32 generated / 16 distinct state, depth-13 one-chunk/no-retry
+fixed regression for the same complete ordering.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslPipelineCurrent.cfg models/core/ParslPipeline.tla
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslPipelineFixed.cfg models/core/ParslPipeline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslPipelineSmoke.cfg models/core/ParslPipeline.tla
 ```
 
 The provider-failure/retry boundary is also modeled:
