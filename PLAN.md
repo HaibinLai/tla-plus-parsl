@@ -1746,6 +1746,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - `ParslHtexHeartbeatVersion` now combines heartbeat expiry with version-mismatch admission and
   fatal-result ordering; fairness and larger manager populations remain future work;
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
+- `ParslMonitoringVersionedBatch` now combines transaction rollback with per-task high-water
+  protection; larger multi-task transaction batches remain future work;
 - multi-level dynamic creation is now represented by `ParslDynamicTaskChain`, with a child-created
   grandchild and explicit dependency/retry safety; broader unbounded fan-out remains future work;
 - additional executor/provider-specific models.

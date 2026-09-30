@@ -51,3 +51,8 @@ findings, not claims that the model alone proves a production defect in every da
 
 The repository sweep also runs current/fixed variants for reordering, deferred messages,
 batching, shutdown, insert/update bookkeeping, and persistent retry.
+
+`ParslMonitoringVersionedBatch.tla` combines transaction atomicity with versioned delivery. A
+two-event batch can fail after its first write, and a late version-1 event can arrive after
+version 2 is committed. The fixed branch restores the transaction snapshot on batch failure and
+keeps the database high-water mark at version 2; TLC checks 100,001 simulated states.

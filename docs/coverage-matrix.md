@@ -277,3 +277,6 @@ task submission cannot reach a terminated DEALER socket.
 HTEX admission coverage now combines registration version mismatch with heartbeat expiry in
 `ParslHtexHeartbeatVersion`; the fixed model checks fatal-result ordering and rejects submissions
 during the closing window.
+
+Monitoring coverage now combines batch rollback with per-task version high-water handling in
+`ParslMonitoringVersionedBatch`.
