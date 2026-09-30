@@ -209,6 +209,11 @@ states for the default one-retry configuration. `tests/test_task_transport_runti
 real `pack_apply_message` payload through an in-process ZMQ pair, decodes it with the real facade,
 and invokes the reconstructed closure.
 
+`ParslTaskTransportSmoke.cfg` keeps the full bounded callable/argument/closure graph but sets
+`MAX_RETRIES = 0`. It provides a fast terminal-path regression for the serialization gate,
+task/result wire ordering, and Future-resolution invariants; TLC checks 69 generated / 29 distinct
+states at depth 14.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_task_transport_runtime.py -v

@@ -3298,6 +3298,9 @@ run_case serialization-registry-normal pass \
 run_case serialization-task-transport pass \
     models/serialization/ParslTaskTransport.cfg \
     models/serialization/ParslTaskTransport.tla
+run_case serialization-task-transport-smoke pass \
+    models/serialization/ParslTaskTransportSmoke.cfg \
+    models/serialization/ParslTaskTransport.tla
 run_case serialization-task-transport-failure pass \
     models/serialization/ParslTaskTransportFailure.cfg \
     models/serialization/ParslTaskTransport.tla

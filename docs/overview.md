@@ -1643,6 +1643,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnShapeMixe
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinNoneResultSingle.cfg models/dataflow/ParslJoinNoneResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinNoneResultList.cfg models/dataflow/ParslJoinNoneResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportSmoke.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportFailure.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPolling.cfg models/providers/ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollingSmoke.cfg models/providers/ParslProviderPolling.tla
