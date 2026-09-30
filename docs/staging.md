@@ -330,3 +330,13 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInCurrent.cf
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInFixed.cfg models/staging/ParslZipStageIn.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
 ```
+
+`ParslMultiOutputVersionedStageOut.tla` combines the multi-output readiness boundary with source
+versioning. The current branch can release one output before its sibling or publish bytes from an
+obsolete source version; the fixed branch requires both transfers to be ready and version-matched
+before releasing either consumer. TLC checks 100,142 simulated fixed states.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputVersionedStageOutCurrent.cfg models/staging/ParslMultiOutputVersionedStageOut.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputVersionedStageOut.cfg models/staging/ParslMultiOutputVersionedStageOut.tla
+```
