@@ -2725,6 +2725,15 @@ run_case zip-path-current counterexample \
 run_case zip-path-fixed pass \
     models/staging/ParslZipPathValidationFixed.cfg \
     models/staging/ParslZipPathValidation.tla
+run_case zip-traversal-current counterexample \
+    models/staging/ParslZipTraversalCurrent.cfg \
+    models/staging/ParslZipTraversal.tla
+run_case zip-traversal-fixed pass \
+    models/staging/ParslZipTraversalFixed.cfg \
+    models/staging/ParslZipTraversal.tla
+run_case zip-traversal-normal pass \
+    models/staging/ParslZipTraversalNormal.cfg \
+    models/staging/ParslZipTraversal.tla
 run_case globus-endpoint-current counterexample \
     models/staging/ParslGlobusEndpointPathCurrent.cfg \
     models/staging/ParslGlobusEndpointPath.tla

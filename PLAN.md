@@ -1859,6 +1859,9 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - `ParslZipPathFirstMatch` now models the multi-suffix path boundary: current parsing stops at
   the first `.zip/`, while the fixed branch selects the final separator, with BUG-191 runtime
   evidence from a parent directory whose name ends in `.zip`.
+- `ParslZipTraversal` now models archive-member containment during stage-in. The current helper
+  writes a `../` member outside the executor working directory, while the fixed branch rejects
+  escaping destinations; the runtime probe records BUG-208 against a real ZIP archive.
 - `ParslHTTPSeparateTaskCleanup` now models the separate-task HTTP stage-in response lifecycle,
   with BUG-192 runtime evidence showing a failed stream leaves its response open.
 

@@ -391,6 +391,11 @@ in-task wrappers interpolate hostnames and paths directly into `os.system`, so a
 spaces is split into multiple shell words. `tests/test_rsync_quoting_runtime.py` captures that
 command; the fixed branch quotes each shell argument.
 
+`ParslZipTraversal.tla` models archive-member containment during `ZipFileStaging` stage-in.
+The current implementation joins a member such as `../escaped.txt` with the worker directory
+and writes outside that directory; `tests/test_zip_traversal_runtime.py` reproduces the write
+against a real ZIP archive. The fixed branch rejects escaping members before publication.
+
 `ParslCommandDeadline.tla` refines the HTEX `CommandClient.run` timeout boundary. When a deadline
 has already elapsed, the current path passes a negative timeout to ZMQ `poll`; the runtime probe
 records that value with a fake socket. The fixed branch clamps the poll timeout to zero.
@@ -1528,6 +1533,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoDictOrderingHom
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingCurrent.cfg models/staging/ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingFixed.cfg models/staging/ParslRsyncQuoting.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingNormal.cfg models/staging/ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipTraversalCurrent.cfg models/staging/ParslZipTraversal.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipTraversalFixed.cfg models/staging/ParslZipTraversal.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipTraversalNormal.cfg models/staging/ParslZipTraversal.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineCurrent.cfg models/executors/ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineFixed.cfg models/executors/ParslCommandDeadline.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslCommandDeadlineNormal.cfg models/executors/ParslCommandDeadline.tla
