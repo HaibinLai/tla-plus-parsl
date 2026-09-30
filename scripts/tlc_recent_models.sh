@@ -1545,6 +1545,27 @@ run_case bash-timeout-cleanup-fixed pass \
 run_case pool-executor-map pass \
     models/executors/ParslPoolExecutorMap.cfg \
     models/executors/ParslPoolExecutorMap.tla
+run_case htex-submit-counter-current counterexample \
+    models/executors/ParslHtexSubmitCounterRaceCurrent.cfg \
+    models/executors/ParslHtexSubmitCounterRace.tla
+run_case htex-submit-counter-fixed pass \
+    models/executors/ParslHtexSubmitCounterRaceFixed.cfg \
+    models/executors/ParslHtexSubmitCounterRace.tla
+run_case htex-submit-failure-current counterexample \
+    models/executors/ParslHtexSubmitFailure.cfg \
+    models/executors/ParslHtexSubmitFailure.tla
+run_case htex-submit-failure-fixed pass \
+    models/executors/ParslHtexSubmitFailureFixed.cfg \
+    models/executors/ParslHtexSubmitFailure.tla
+run_case htex-submit-lifecycle-current counterexample \
+    models/executors/ParslHtexSubmitLifecycleQueueFailure.cfg \
+    models/executors/ParslHtexSubmitLifecycle.tla
+run_case htex-submit-lifecycle-fixed pass \
+    models/executors/ParslHtexSubmitLifecycleQueueFailureFixed.cfg \
+    models/executors/ParslHtexSubmitLifecycle.tla
+run_case htex-submit-lifecycle-serialization-failure pass \
+    models/executors/ParslHtexSubmitLifecycleSerializationFailure.cfg \
+    models/executors/ParslHtexSubmitLifecycle.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

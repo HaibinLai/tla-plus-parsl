@@ -824,6 +824,9 @@ explicitly distinguish process cleanup from merely re-raising an exception. Runt
 `ParslPoolExecutorMap` is now in the sweep, checking eager submission, input-order result
 iteration, iterator timeout, and late completion without implicit Future cancellation; the runtime
 probe covers the same timeout/cancellation contract.
+HTEX submit-side coverage now includes concurrent task-counter allocation, queue failure rollback,
+and serialization-before-Future allocation ordering. Runtime probes reproduce the duplicate task ID
+and orphaned pending Future behaviors, while fixed configurations check the cleanup candidates.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
