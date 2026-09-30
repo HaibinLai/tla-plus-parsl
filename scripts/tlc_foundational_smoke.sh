@@ -992,6 +992,12 @@ run_case monitoring-foreign-key \
 run_case monitoring-update-persistent-retry \
     models/monitoring/ParslMonitoringUpdatePersistentRetryFixed.cfg \
     models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
+run_case monitoring-external-queue-empty \
+    models/monitoring/ParslMonitoringExternalQueueEmptyRaceFixed.cfg \
+    models/monitoring/ParslMonitoringExternalQueueEmptyRace.tla
+run_case monitoring-udp-drain-clock \
+    models/clock/ParslMonitoringUDPDrainClockFixed.cfg \
+    models/clock/ParslMonitoringUDPDrainClock.tla
 run_case ftp-stage \
     models/staging/ParslFTPStageFixed.cfg \
     models/staging/ParslFTPStage.tla

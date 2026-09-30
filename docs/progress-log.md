@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `2dced00` (`Add provider staging admission model`).
-- Foundational smoke inventory: 378 TLC cases and 335 Python runtime probes.
+- Latest pushed commit: pending (monitoring queue and drain-clock coverage).
+- Foundational smoke inventory: 380 TLC cases and 337 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted monitoring shutdown boundaries into the foundational gate. The
+  external-queue model checks that a stale `empty()` observation cannot strand a message, while
+  the UDP drain-clock model checks that wall-clock rollback cannot extend shutdown indefinitely.
+  Both fixed configurations passed TLC, both runtime probes passed, and the complete foundational
+  smoke suites passed 380/380 TLC cases and 337/337 runtime entries.
 
 - Current stage: added `ParslProviderStagingAdmission`, a compact cross-component model for
   provider provisioning, chunked file publication, DataFuture readiness, task admission, and
