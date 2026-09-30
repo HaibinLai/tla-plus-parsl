@@ -1626,6 +1626,11 @@ Previously the action contained a running-attempt branch that was unreachable be
 only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
 duplicate-input, retry, and cancellation variants after this coverage correction.
 
+The focused ParslJoinRunningCancellation model now drives that race from pending to running,
+cancellation, callback, and outer terminal state. Its current configuration reproduces the
+pending-outer-Future callback escape; the fixed configuration converts the running inner
+Cancellation into terminal outer failure.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime

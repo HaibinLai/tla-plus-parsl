@@ -2703,6 +2703,12 @@ run_case join-single-cancellation-current counterexample \
 run_case join-single-cancellation-fixed pass \
     models/dataflow/ParslJoinSingleCancellationFixed.cfg \
     models/dataflow/ParslJoinSingleCancellation.tla
+run_case join-running-cancellation-current counterexample \
+    models/dataflow/ParslJoinRunningCancellationCurrent.cfg \
+    models/dataflow/ParslJoinRunningCancellation.tla
+run_case join-running-cancellation-fixed pass \
+    models/dataflow/ParslJoinRunningCancellationFixed.cfg \
+    models/dataflow/ParslJoinRunningCancellation.tla
 run_case memo-dict-ordering-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
