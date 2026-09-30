@@ -186,6 +186,12 @@ run_case htex-result-queue-current counterexample \
 run_case htex-result-queue-fixed pass \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla
+run_case executor-selection-current counterexample \
+    models/executors/ParslExecutorSelectionCurrent.cfg \
+    models/executors/ParslExecutorSelection.tla
+run_case executor-selection-fixed pass \
+    models/executors/ParslExecutorSelectionFixed.cfg \
+    models/executors/ParslExecutorSelection.tla
 run_case htex-priority-current counterexample \
     models/executors/ParslHtexTaskPriorityTypeCurrent.cfg \
     models/executors/ParslHtexTaskPriorityType.tla
