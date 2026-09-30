@@ -547,3 +547,8 @@ Azure provider coverage also includes `ParslAzureStatusOrdering` (BUG-254), chec
 reordered status list cannot turn a running VM into a pending observation. The current model
 violates `RunningStatusSafety`, while the semantic-selection fixed model passes; its runtime
 probe is `tests/test_azure_status_ordering_runtime.py`.
+
+HTEX result handling also includes `ParslHtexUnknownResultType` (BUG-255), which models an
+unknown decoded result-frame type followed by a valid frame. The current configuration violates
+`UnknownTypeSafety`; the fixed model passes and the runtime probe is
+`tests/test_htex_unknown_result_type_runtime.py`.

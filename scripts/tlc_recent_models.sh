@@ -359,6 +359,13 @@ run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
 
+run_case htex-unknown-result-type-current counterexample \
+    models/executors/ParslHtexUnknownResultTypeCurrent.cfg \
+    models/executors/ParslHtexUnknownResultType.tla
+run_case htex-unknown-result-type-fixed pass \
+    models/executors/ParslHtexUnknownResultTypeFixed.cfg \
+    models/executors/ParslHtexUnknownResultType.tla
+
 run_case googlecloud-status-remote-failure-current counterexample \
     models/providers/ParslGoogleCloudStatusRemoteFailureCurrent.cfg \
     models/providers/ParslGoogleCloudStatusRemoteFailure.tla
