@@ -706,6 +706,8 @@ model with 4 generated/2 distinct states. The direct runtime probe is
 `ParslNestedJoin.tla` adds a nested join: the outer join observes a direct Future and a Future
 produced by another join. The nested handle remains live until both leaf Futures are observed;
 nested success/failure then becomes the only state visible to the outer join.
+`tests/test_nested_join_retry_runtime.py` additionally runs a real leaf retry inside the nested
+join chain and verifies that the outer result is published only after the retried leaf succeeds.
 
 `ParslTaskTransport.tla` connects object-graph serialization to the task/result wire protocol.
 It checks multipart encode order, envelope corruption, decode rejection, dispatch admission,

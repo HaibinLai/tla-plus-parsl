@@ -69,6 +69,8 @@ handling expected by the safety properties.
 Two leaf Futures feed an inner join, which feeds an outer join; an old leaf result arriving after
 a retry cannot resolve the leaf or allow either join to report success in the fixed branch. TLC
 checks 100,001 simulated states.
+`tests/test_nested_join_retry_runtime.py` provides the corresponding live bridge: a leaf fails
+once, retries, and the outer nested join waits for the inner join's final ordered result.
 
 `ParslTripleNestedJoin.tla` extends the dependency graph to three levels: leaves A/B feed J1,
 J1 plus leaf C feed J2, and J2 feeds the root. The current branch permits J2 to evaluate with
