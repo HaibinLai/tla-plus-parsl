@@ -47,6 +47,10 @@ tests=(
     tests/test_join_cleanup_lifecycle_runtime.py
     tests/test_join_return_shape_runtime.py
     tests/test_outer_join_cancellation_runtime.py
+    tests/test_join_body_retry_runtime.py
+    tests/test_join_callback_runtime.py
+    tests/test_join_none_result_runtime.py
+    tests/test_nested_join_runtime.py
     tests/test_provider_worker_scaling_runtime.py
     tests/test_executor_selection_runtime.py
     tests/test_thread_executor_future_lifecycle_runtime.py

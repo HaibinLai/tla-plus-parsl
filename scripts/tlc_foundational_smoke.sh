@@ -413,6 +413,24 @@ run_case join-callback-multiplicity \
 run_case join-return-shape \
     models/dataflow/ParslJoinReturnShapeFuture.cfg \
     models/dataflow/ParslJoinReturnShape.tla
+run_case join-body-retry \
+    models/dataflow/ParslJoinBodyRetry.cfg \
+    models/dataflow/ParslJoinBodyRetry.tla
+run_case join-callback-race \
+    models/dataflow/ParslJoinCallbackRace.cfg \
+    models/dataflow/ParslJoinCallbackRace.tla
+run_case join-mixed-list \
+    models/dataflow/ParslJoinMixedList.cfg \
+    models/dataflow/ParslJoinMixedList.tla
+run_case join-memo-data \
+    models/dataflow/ParslJoinMemoData.cfg \
+    models/dataflow/ParslJoinMemoData.tla
+run_case nested-join-failure \
+    models/dataflow/ParslNestedJoinFailure.cfg \
+    models/dataflow/ParslNestedJoinFailure.tla
+run_case nested-join-retry \
+    models/dataflow/ParslNestedJoinRetry.cfg \
+    models/dataflow/ParslNestedJoinRetry.tla
 run_case htex-cancelled-result \
     models/executors/ParslHtexCancelledResultFixed.cfg \
     models/executors/ParslHtexCancelledResult.tla

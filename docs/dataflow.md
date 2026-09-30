@@ -22,6 +22,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDependencyFailurePr
 /tmp/parsl-venv/bin/python -m unittest tests/test_dependency_runtime.py -v
 ```
 
+The unified smoke runner also exercises the broader `join_app` composition boundary: join-body
+retry, callback races, mixed/`None` return values, memoized data inputs, nested joins, and nested
+join retry. These cases keep inner logical Futures distinct from the outer join Future while
+checking failure aggregation and retry state propagation.
+
 `ParslJoinFull.tla` is the integrated bounded join model. It combines single-Future joins,
 ordered list joins with duplicate positions, empty-list joins, invalid return handling, logical
 inner Futures with physical retries, inner/outer cancellation, failure aggregation, terminal result ordering,
