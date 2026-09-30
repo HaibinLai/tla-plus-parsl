@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `3e45186` (`Promote concrete provider runtime coverage`).
-- Foundational smoke inventory: 369 TLC cases and 261 Python runtime probes.
+- Latest pushed commit: pending (join composition runtime coverage).
+- Foundational smoke inventory: 369 TLC cases and 265 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -117,6 +117,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted ten concrete provider runtime bridges into the foundational gate. The
   probes cover Local process and status lifecycle, AWS reservation/status shapes, Azure resource
   bookkeeping, and malformed/unknown job responses from Condor, Slurm, PBSPro, and Kubernetes.
+- Current stage: promoted four join-composition runtime bridges into the foundational gate. The
+  probes cover serialized callable values, nested error-root selection, callback-time list mutation,
+  and duplicate input positions across retry attempts.
 
 ### Verification convention
 

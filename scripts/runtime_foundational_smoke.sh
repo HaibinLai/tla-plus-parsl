@@ -107,6 +107,10 @@ tests=(
     tests/test_join_none_result_runtime.py
     tests/test_nested_join_runtime.py
     tests/test_join_three_list_runtime.py
+    tests/test_join_callable_transport_runtime.py
+    tests/test_join_error_root_cause_runtime.py
+    tests/test_join_list_mutation_runtime.py
+    tests/test_join_retry_duplicates_runtime.py
     tests/test_provider_worker_scaling_runtime.py
     tests/test_poller_executor_isolation_runtime.py
     tests/test_executor_selection_runtime.py
