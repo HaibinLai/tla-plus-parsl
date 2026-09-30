@@ -558,6 +558,11 @@ models a malformed collector report preceding a valid report. The current config
 violates `MalformedReportSafety`; the fixed model passes with
 `tests/test_workqueue_malformed_report_runtime.py` as the runtime probe.
 
+TaskVine result handling also includes `ParslTaskVineMalformedReport` (BUG-258), which models
+the same malformed-report boundary in the TaskVine collector independently. The current
+configuration violates `MalformedReportSafety`; the fixed model passes with
+`tests/test_taskvine_malformed_report_runtime.py` as the runtime probe.
+
 HTEX result handling also includes `ParslHtexUnknownResultType` (BUG-255), which models an
 unknown decoded result-frame type followed by a valid frame. The current configuration violates
 `UnknownTypeSafety`; the fixed model passes and the runtime probe is

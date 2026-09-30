@@ -373,6 +373,13 @@ run_case workqueue-malformed-report-fixed pass \
     models/executors/ParslWorkQueueMalformedReportFixed.cfg \
     models/executors/ParslWorkQueueMalformedReport.tla
 
+run_case taskvine-malformed-report-current counterexample \
+    models/executors/ParslTaskVineMalformedReportCurrent.cfg \
+    models/executors/ParslTaskVineMalformedReport.tla
+run_case taskvine-malformed-report-fixed pass \
+    models/executors/ParslTaskVineMalformedReportFixed.cfg \
+    models/executors/ParslTaskVineMalformedReport.tla
+
 run_case htex-unknown-result-type-current counterexample \
     models/executors/ParslHtexUnknownResultTypeCurrent.cfg \
     models/executors/ParslHtexUnknownResultType.tla
