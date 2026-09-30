@@ -38,6 +38,16 @@ def outer_join_failure():
     return inner_join_failure()
 
 
+@join_app
+def triple_level_join():
+    return [inner_join_success(), nested_leaf("tail")]
+
+
+@join_app
+def triple_level_root():
+    return triple_level_join()
+
+
 class NestedJoinRuntimeTest(unittest.TestCase):
     def test_nested_join_preserves_inner_order(self):
         config = Config(executors=[ThreadPoolExecutor(max_threads=3)])
@@ -54,6 +64,14 @@ class NestedJoinRuntimeTest(unittest.TestCase):
             nested_exception = exception.dependent_exceptions_tids[0][0]
             self.assertIsInstance(nested_exception, JoinError)
             self.assertIsInstance(nested_exception.dependent_exceptions_tids[0][0], ValueError)
+
+    def test_three_level_join_preserves_nested_result_shape(self):
+        config = Config(executors=[ThreadPoolExecutor(max_threads=3)])
+        with parsl.load(config):
+            self.assertEqual(
+                triple_level_root().result(),
+                [["left", "right"], "tail"],
+            )
 
 
 if __name__ == "__main__":

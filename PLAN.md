@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 487 probes and passes as a whole:
+The runtime suite currently contains 488 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1799,7 +1799,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 487 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 488 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1815,6 +1815,8 @@ alias, provider-lifecycle, and multi-output staging additions.
 The latest full audit completed the same 487 tests in 12.971 seconds with `OK`; the DataManager
 cache, manager-liveness, ZMQ ACK/retry, and three-event monitoring additions also preserve the
 runtime baseline.
+The nested-join runtime extension then completed 488 tests in 13.033 seconds with `OK`, including
+the three-level nested result-shape probe.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
