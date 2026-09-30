@@ -71,6 +71,9 @@ failure probe; response lifetime is modeled separately from partial destination 
 The executor/provider row also includes `ParslProviderStatusShape` and its short-status runtime
 probe; status-response cardinality is modeled separately from cancellation-response shape.
 
+The provider row also includes `ParslAzureStatusShape` (BUG-176), which checks that a missing Azure
+instance-view object cannot abort status polling.
+
 The same row now includes `ParslClusterStatusUnknown` (BUG-170), which covers the shared
 `ClusterProvider.status` projection when a requested local job ID has gone stale.
 

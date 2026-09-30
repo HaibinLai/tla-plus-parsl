@@ -55,6 +55,15 @@ class AzureStatusRuntimeTest(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             provider.status(["vm-1"])
 
+    def test_missing_instance_view_raises_attribute_error_currently(self):
+        provider = AzureProvider.__new__(AzureProvider)
+        provider.group_name = "parsl.group"
+        vm = type("Vm", (), {"instance_view": None})()
+        provider.compute_client = FakeComputeClient(vm)
+
+        with self.assertRaises(AttributeError):
+            provider.status(["vm-1"])
+
 
 if __name__ == "__main__":
     unittest.main()
