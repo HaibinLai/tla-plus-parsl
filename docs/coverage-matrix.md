@@ -10,6 +10,10 @@ The file-transfer coverage also includes `ParslDataManagerStageOutReturn`, which
 `None` stage-out return (the output follows the application Future) from an independent transfer
 Future and checks output publication ordering with a real `DataManager` probe.
 
+The heartbeat coverage also has a runtime bridge for `ParslHeartbeatLateAck`: a heartbeat-shaped
+message from an expired manager is ignored by the real interchange path rather than resurrecting
+the manager.
+
 This repository intentionally uses bounded abstractions. The table below records what is
 currently modeled, which runtime probes corroborate it, and where the abstraction is still
 coarse. A passing TLC run is evidence for the listed finite model, not a proof of all Parsl

@@ -830,6 +830,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatLateAck.c
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatLateAckFixed.cfg models/executors/ParslHeartbeatLateAck.tla
 ```
 
+`tests/test_htex_heartbeat_runtime.py` also sends a heartbeat-shaped message from an expired,
+already-removed manager through the real `Interchange.process_manager_socket_message` path. The
+manager remains absent and no acknowledgement is emitted, corroborating the fixed stale-ACK
+boundary.
+
 `ParslBlockProviderBadState.tla` captures the shared `BlockProviderExecutor` failure path:
 an unrecoverable provider error records the exception, fails every outstanding Future with a
 `BadStateException`, and rejects later submissions while preserving already terminal tasks.

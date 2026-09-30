@@ -2,7 +2,9 @@
 
 import pickle
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
+
+import zmq
 
 from parsl.executors.high_throughput.interchange import Interchange
 
@@ -13,6 +15,18 @@ class FakeOutgoing:
 
     def send(self, message):
         self.messages.append(message)
+
+
+class FakeManagerSocket:
+    def __init__(self, message):
+        self.message = message
+        self.sent = []
+
+    def recv_multipart(self):
+        return self.message
+
+    def send_multipart(self, message):
+        self.sent.append(message)
 
 
 class HtexHeartbeatRuntimeTest(unittest.TestCase):
@@ -58,6 +72,26 @@ class HtexHeartbeatRuntimeTest(unittest.TestCase):
         result = pickle.loads(interchange.results_outgoing.messages[0])
         self.assertEqual(result["type"], "result")
         self.assertEqual(result["task_id"], 17)
+
+    def test_late_heartbeat_from_expired_manager_is_ignored(self):
+        interchange = Interchange.__new__(Interchange)
+        manager_id = b"expired-manager"
+        interchange._ready_managers = {}
+        interchange.manager_sock = FakeManagerSocket(
+            [manager_id, pickle.dumps({"type": "heartbeat"})]
+        )
+        interchange.socks = {interchange.manager_sock: zmq.POLLIN}
+        interesting = set()
+
+        interchange.process_manager_socket_message(
+            interesting,
+            monitoring_radio=None,
+            kill_event=Mock(),
+        )
+
+        self.assertEqual(interchange._ready_managers, {})
+        self.assertEqual(interesting, set())
+        self.assertEqual(interchange.manager_sock.sent, [])
 
 
 if __name__ == "__main__":
