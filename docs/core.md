@@ -279,6 +279,9 @@ join-focused forms. Those two configurations connect logical tasks, physical att
 provider capacity, wire envelopes, serialization, data readiness, heartbeat/deadline state,
 monitoring records, and join result invariants in one bounded model.
 
+The pipeline smoke cases add a compact composition check for ordered pipeline dependencies,
+timed progression, content-file publication, and timeout/retry stale-result rejection.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and

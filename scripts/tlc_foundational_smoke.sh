@@ -53,6 +53,18 @@ run_case() {
 run_case dag-retry \
     models/core/ParslEndToEndSmoke.cfg \
     models/core/ParslEndToEnd.tla
+run_case pipeline-smoke \
+    models/core/ParslPipelineSmoke.cfg \
+    models/core/ParslPipeline.tla
+run_case pipeline-timed \
+    models/core/ParslPipelineTimedFixed.cfg \
+    models/core/ParslPipelineTimed.tla
+run_case content-file-pipeline \
+    models/core/ParslContentFilePipeline.cfg \
+    models/core/ParslContentFilePipeline.tla
+run_case timeout-retry-stale-result \
+    models/core/ParslTimeoutRetryStaleResult.cfg \
+    models/core/ParslTimeoutRetryStaleResult.tla
 run_case integrated-abstract \
     models/core/ParslAbstractSmoke.cfg \
     models/core/ParslAbstract.tla
