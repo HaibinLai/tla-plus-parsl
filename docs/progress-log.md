@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (duplicate-result collector coverage).
+- Latest pushed commit: `f1fc91e` (`Promote duplicate result collector coverage`).
 - Foundational smoke inventory: 382 TLC cases and 339 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
