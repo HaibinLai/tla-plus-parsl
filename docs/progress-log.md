@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `8207d28` (`Refine join return equality validation`).
+- Latest pushed commit: `d84d7d2` (`Model partial join cancellation ordering`).
 - Foundational smoke inventory: 362 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
