@@ -335,6 +335,19 @@ run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
 
+run_case appfuture-stream-none pass \
+    models/dataflow/ParslAppFutureOutputStreamsNone.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
+run_case appfuture-stream-string pass \
+    models/dataflow/ParslAppFutureOutputStreamsString.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
+run_case appfuture-stream-tuple pass \
+    models/dataflow/ParslAppFutureOutputStreamsTuple.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
+run_case appfuture-stream-staged pass \
+    models/dataflow/ParslAppFutureOutputStreamsStaged.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
+
 run_case stageout-return-none pass \
     models/staging/ParslDataManagerStageOutReturnNone.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla

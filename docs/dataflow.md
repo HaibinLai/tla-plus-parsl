@@ -351,6 +351,12 @@ callback path can leave the outer AppFuture pending, while the fixed path report
 handler failure. The runtime probe reproduces the pending Future with a one-second timeout. This
 is recorded as BUG-151.
 
+`ParslAppFutureOutputStreams.tla` records the current `AppFuture.stdout`/`stderr` property
+contract. A separate stage-out `DataFuture` overrides the original task-record value; otherwise
+`None`, strings, and tuples are exposed unchanged. The tuple case is deliberately modeled as an
+opaque value because the source currently documents tuple stage-out handling as future work.
+`tests/test_app_future_output_streams_runtime.py` checks these paths against the real `AppFuture`.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNonNumericCostCurrent.cfg models/dataflow/ParslRetryHandlerNonNumericCost.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNonNumericCostFixed.cfg models/dataflow/ParslRetryHandlerNonNumericCost.tla
