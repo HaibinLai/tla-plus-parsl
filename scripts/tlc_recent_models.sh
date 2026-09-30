@@ -960,6 +960,9 @@ run_case monitoring-dispatch-envelope-fixed pass \
 run_case monitoring-dispatch-envelope-valid pass \
     models/monitoring/ParslMonitoringDispatchEnvelopeValid.cfg \
     models/monitoring/ParslMonitoringDispatchEnvelope.tla
+run_case monitoring-hub-close pass \
+    models/monitoring/ParslMonitoringHubClose.cfg \
+    models/monitoring/ParslMonitoringHubClose.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

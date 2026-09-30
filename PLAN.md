@@ -1066,6 +1066,10 @@ runtime bridge is `tests/test_monitoring_deferred_runtime.py`.
 dispatch: malformed tuples must be rejected without terminating the migration thread, while valid
 two-element envelopes are admitted. `tests/test_monitoring_dispatch_envelope_runtime.py`
 reproduces the current assertion on a one-element tuple.
+`ParslMonitoringHubClose.tla` covers the public MonitoringHub cleanup lifecycle and idempotence:
+the DB stop signal, process join, queue close, and queue join each occur once, even if `close()`
+is called repeatedly. `tests/test_monitoring_hub_close_runtime.py` checks the real cleanup ordering
+with deterministic doubles.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
