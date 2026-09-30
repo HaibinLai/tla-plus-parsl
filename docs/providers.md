@@ -214,6 +214,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerDuplicateExe
 This registration-idempotence boundary is recorded as BUG-123: repeated registration appends the
 same executor and duplicates poller/strategy work.
 
+`ParslPollerExecutorIsolation.tla` models two independent executors in one
+`JobStatusPoller.poll` tick. The current implementation has no per-executor exception boundary,
+so a transient provider/status exception from the first executor terminates the polling callback
+before the second executor is sampled. The fixed branch isolates the first failure and continues.
+`tests/test_poller_executor_isolation_runtime.py` invokes the concrete poller with one failing
+and one healthy executor double. This source-aligned boundary is recorded as BUG-269.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorIsolationCurrent.cfg models/providers/ParslPollerExecutorIsolation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorIsolationFixed.cfg models/providers/ParslPollerExecutorIsolation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_poller_executor_isolation_runtime.py -v
+```
+
 `ParslKubernetesUnknownJob.tla` models a status request for an id absent from the provider's
 local resource map. The current `status()` path raises `KeyError`; the fixed branch returns an
 explicit UNKNOWN status. The runtime probe isolates the concrete lookup with an empty resource

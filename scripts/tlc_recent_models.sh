@@ -2928,6 +2928,12 @@ run_case poller-duplicate-executor-current counterexample \
 run_case poller-duplicate-executor-fixed pass \
     models/providers/ParslPollerDuplicateExecutorFixed.cfg \
     models/providers/ParslPollerDuplicateExecutor.tla
+run_case poller-executor-isolation-current counterexample \
+    models/providers/ParslPollerExecutorIsolationCurrent.cfg \
+    models/providers/ParslPollerExecutorIsolation.tla
+run_case poller-executor-isolation-fixed pass \
+    models/providers/ParslPollerExecutorIsolationFixed.cfg \
+    models/providers/ParslPollerExecutorIsolation.tla
 run_case provider-poll-clock-current counterexample \
     models/providers/ParslProviderPollClockRollbackCurrent.cfg \
     models/providers/ParslProviderPollClockRollback.tla

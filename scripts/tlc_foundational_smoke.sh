@@ -680,6 +680,9 @@ run_case poller-close-scale-in \
 run_case poller-duplicate-executor \
     models/providers/ParslPollerDuplicateExecutorFixed.cfg \
     models/providers/ParslPollerDuplicateExecutor.tla
+run_case poller-executor-isolation \
+    models/providers/ParslPollerExecutorIsolationFixed.cfg \
+    models/providers/ParslPollerExecutorIsolation.tla
 run_case executor-kinds \
     models/executors/ParslExecutorKindsSmoke.cfg \
     models/executors/ParslExecutorKinds.tla

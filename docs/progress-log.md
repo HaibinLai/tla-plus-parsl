@@ -8,8 +8,9 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `270d093` (`Refine HTEX result decode continuation`).
-- Foundational smoke inventory: 351 TLC cases and 222 Python runtime probes.
+- Latest pushed commit: `77c2c24` (`Record HTEX decode continuation stage`).
+- Foundational smoke inventory: 352 TLC cases and 223 Python runtime probes (including the
+  uncommitted JobStatusPoller executor-isolation stage documented in the current working tree).
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

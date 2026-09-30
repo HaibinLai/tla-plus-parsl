@@ -249,6 +249,8 @@ that the later valid task remains queueable.
 at the HTEX submit boundary instead of escaping as raw implementation exceptions (BUG-268).
 The temporal refinement `ParslHtexResultDecodeContinuation` places a corrupt result before a
 valid result in one batch and checks that decode failure cannot strand the later Future (BUG-020).
+Provider/executor coverage also includes `ParslPollerExecutorIsolation` (BUG-269), which keeps
+one executor's transient status failure from suppressing independent executors in the same poll.
 
 Staging coverage also includes `ParslGlobusTokenSchema` (BUG-266), which checks that an incomplete
 but syntactically valid token cache cannot reach service-record indexing as if it were usable.
