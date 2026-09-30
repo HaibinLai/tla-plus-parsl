@@ -669,6 +669,15 @@ run_case datafuture-transfer-fixed pass \
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla
+run_case monitoring-db-insert-current counterexample \
+    models/monitoring/ParslMonitoringDBInsert.cfg \
+    models/monitoring/ParslMonitoringDBInsert.tla
+run_case monitoring-db-insert-fixed pass \
+    models/monitoring/ParslMonitoringDBInsertFixed.cfg \
+    models/monitoring/ParslMonitoringDBInsert.tla
+run_case monitoring-db-insert-present pass \
+    models/monitoring/ParslMonitoringDBInsertPresent.cfg \
+    models/monitoring/ParslMonitoringDBInsert.tla
 run_case executor-provider-core pass \
     models/executors/ParslExecutorProvider.cfg \
     models/executors/ParslExecutorProvider.tla

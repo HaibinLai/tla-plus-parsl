@@ -607,6 +607,9 @@ non-idempotent duplicate-key path is exposed as a dropped monitoring event, whil
 configuration checks an idempotent duplicate handler. This is based on the current
 `DatabaseManager._insert` exception handling and the STATUS primary key in
 `parsl/monitoring/db_manager.py`.
+Its current, fixed, and non-duplicate configurations are now part of the recurring smoke sweep;
+the SQLite bridge in `tests/test_monitoring_db_runtime.py` and status-history probe remain the
+concrete runtime checks.
 `ParslExecutorProvider.tla` models the HTEX executor/provider boundary: block request outcomes,
 manager registration, worker readiness, submit admission, draining/recovery, provider failure,
 and scale-in cleanup of queued/running tasks.
