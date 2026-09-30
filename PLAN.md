@@ -2148,3 +2148,7 @@ The next staging refinement is `ParslGlobusFailureEvent`. It models a terminal G
 task with an empty event list and records BUG-201: the current implementation indexes the first
 event unconditionally. The fixed branch preserves a normal transfer-failure outcome, and the
 runtime probe drives `Globus.transfer_file` with a fake SDK response.
+
+The provider audit then added `ParslLsfSubmitJobId`, recording BUG-202. It models LSF submission
+response validation and reproduces the current acceptance of `Job is submitted to queue` as job ID
+`is`; the fixed branch rejects the malformed response before resource publication.

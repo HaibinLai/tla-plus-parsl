@@ -2119,6 +2119,12 @@ run_case lsf-submit-failure pass \
 run_case lsf-submit-malformed pass \
     models/providers/ParslLSFSubmitMalformed.cfg \
     models/providers/ParslLSFSubmit.tla
+run_case lsf-submit-job-id-current counterexample \
+    models/providers/ParslLsfSubmitJobIdCurrent.cfg \
+    models/providers/ParslLsfSubmitJobId.tla
+run_case lsf-submit-job-id-fixed pass \
+    models/providers/ParslLsfSubmitJobIdFixed.cfg \
+    models/providers/ParslLsfSubmitJobId.tla
 run_case slurm-batch-strict-current counterexample \
     models/providers/ParslSlurmBatchStrictCurrent.cfg \
     models/providers/ParslSlurmBatchStrict.tla

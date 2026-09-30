@@ -128,6 +128,9 @@ Globus staging coverage also includes `ParslGlobusFailureEvent` (BUG-201), which
 failed transfer with no diagnostic events still produces a terminal transfer failure rather than
 an indexing exception.
 
+LSF provider coverage also includes `ParslLsfSubmitJobId` (BUG-202), which checks that malformed
+successful-looking scheduler output cannot publish an arbitrary token as a resource identifier.
+
 It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
 HTEX connection probe cannot fall through to a blocking receive.
 
