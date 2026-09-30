@@ -1784,6 +1784,8 @@ close behavior, and address probing.
 Cases 161--180 matched as well: address-probe empty/success paths, provisioning admission,
 scale-in/out cancellation and retry monitoring, integrated end-to-end execution, Work Queue
 serialization failure, monitoring DB reorder, DataFuture cancellation, and deep dependency lists.
+Cases 181--200 matched as well: dependency traversal variants, join internal-executor routing,
+value-list joins, retry-handler validation and cost boundaries, and single/list cancellation.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
