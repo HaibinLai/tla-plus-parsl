@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (AWS instance-state response-shape refinement).
+- Latest pushed commit: `ee21c20` (`Model AWS instance state shape`).
 - Foundational smoke inventory: 367 TLC cases and 235 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
