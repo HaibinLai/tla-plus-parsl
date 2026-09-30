@@ -69,3 +69,13 @@ handling expected by the safety properties.
 Two leaf Futures feed an inner join, which feeds an outer join; an old leaf result arriving after
 a retry cannot resolve the leaf or allow either join to report success in the fixed branch. TLC
 checks 100,001 simulated states.
+
+`ParslTripleNestedJoin.tla` extends the dependency graph to three levels: leaves A/B feed J1,
+J1 plus leaf C feed J2, and J2 feeds the root. The current branch permits J2 to evaluate with
+only one input terminal; the fixed branch enforces both-input gating before propagating success or
+failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTripleNestedJoinCurrent.cfg models/dataflow/ParslTripleNestedJoin.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTripleNestedJoinFixed.cfg models/dataflow/ParslTripleNestedJoin.tla
+```

@@ -370,6 +370,12 @@ run_case nested-join-retry-current counterexample \
 run_case nested-join-retry-fixed pass \
     models/dataflow/ParslNestedJoinRetry.cfg \
     models/dataflow/ParslNestedJoinRetry.tla
+run_case triple-nested-join-current counterexample \
+    models/dataflow/ParslTripleNestedJoinCurrent.cfg \
+    models/dataflow/ParslTripleNestedJoin.tla
+run_case triple-nested-join-fixed pass \
+    models/dataflow/ParslTripleNestedJoinFixed.cfg \
+    models/dataflow/ParslTripleNestedJoin.tla
 run_case provider-multiblock-current counterexample \
     models/executors/ParslProviderMultiBlockOwnershipCurrent.cfg \
     models/executors/ParslProviderMultiBlockOwnership.tla

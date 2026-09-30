@@ -1778,6 +1778,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   retry snapshots; arbitrary Python heap identity remains abstract;
 - `ParslNestedJoinRetry` now combines nested join propagation with leaf retries and stale-result
   rejection; larger nested graphs remain future work;
+- `ParslTripleNestedJoin` extends dependency gating to three nested join levels and explicitly
+  rejects an outer join that evaluates before all of its leaf/join inputs are terminal.
 - `ParslTimeoutRetryStaleResult` now combines timeout-driven retry with late-result correlation;
   multiple concurrent timers remain future work;
 - `ParslConcurrentTimeouts` now covers independent timeout clocks and cross-task result
