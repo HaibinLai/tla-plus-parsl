@@ -61,6 +61,13 @@ class GoogleCloudStatusRuntimeTest(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             provider.status(["vm-1"])
 
+    def test_cloud_status_for_stale_local_id_raises_key_error_currently(self):
+        provider = self.provider_with({"status": "RUNNING"})
+        provider.resources = {}
+
+        with self.assertRaises(KeyError):
+            provider.status(["stale-vm"])
+
 
 if __name__ == "__main__":
     unittest.main()

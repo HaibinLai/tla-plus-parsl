@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 514 probes and passes as a whole:
+The runtime suite currently contains 515 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1833,6 +1833,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   creation, with BUG-179 runtime evidence.
 - `ParslHtexRegistrationTypes` now models type validation for decoded manager-registration version
   fields before string operations, with BUG-180 runtime evidence.
+- `ParslGoogleCloudUnknownLocalStatus` now models stale local IDs after a valid GCE status response,
+  with BUG-181 runtime evidence.
 
 ## Validation workflow
 
@@ -1841,7 +1843,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 514 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 515 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1905,6 +1907,8 @@ The Google Cloud submit-state probe then completed 513 tests in 13.0 seconds wit
 including unknown instance-state handling during resource publication.
 The HTEX registration-type probe then completed 514 tests in 13.0 seconds with `OK`,
 including non-string version-field rejection before manager state mutation.
+The Google Cloud stale-status probe then completed 515 tests in 13.0 seconds with `OK`,
+including valid cloud responses whose local IDs were already removed.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

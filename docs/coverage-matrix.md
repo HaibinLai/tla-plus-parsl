@@ -98,6 +98,9 @@ required HTEX manager-registration fields before manager state is published.
 It also includes `ParslHtexRegistrationTypes` (BUG-180), which checks registration version-field
 types before string operations and version comparison.
 
+The provider row also includes `ParslGoogleCloudUnknownLocalStatus` (BUG-181), which checks stale
+local resource IDs after a valid GCE status response.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2

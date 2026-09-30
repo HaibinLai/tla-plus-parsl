@@ -1429,6 +1429,12 @@ run_case htex-registration-types-current counterexample \
 run_case htex-registration-types-fixed pass \
     models/serialization/ParslHtexRegistrationTypesFixed.cfg \
     models/serialization/ParslHtexRegistrationTypes.tla
+run_case googlecloud-unknown-local-current counterexample \
+    models/providers/ParslGoogleCloudUnknownLocalStatusCurrent.cfg \
+    models/providers/ParslGoogleCloudUnknownLocalStatus.tla
+run_case googlecloud-unknown-local-fixed pass \
+    models/providers/ParslGoogleCloudUnknownLocalStatusFixed.cfg \
+    models/providers/ParslGoogleCloudUnknownLocalStatus.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
