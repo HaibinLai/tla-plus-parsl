@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 505 probes and passes as a whole:
+The runtime suite currently contains 507 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -534,6 +534,9 @@ uses a fake socket to exercise the real polling and error classes without a netw
 or pickle input is ignored without changing manager heartbeat state, while a valid heartbeat
 updates the timestamp and emits the heartbeat reply. `tests/test_htex_manager_message_runtime.py`
 drives the real `Interchange.process_manager_socket_message` method.
+`ParslHtexRegistrationShape.tla` refines the registration branch: a pickleable message missing
+`python_v` or another required field currently escapes the outer decode guard and raises while
+constructing `ManagerRecord`; the fixed branch rejects it before manager-state mutation.
 `ParslGridEngineSubmit.tla` adds the missing Grid Engine provider submission model: submit-script
 creation, qsub failure, empty successful output, and first-job-id registration. It corresponds to
 the existing `tests/test_grid_engine_submit_runtime.py` probe.
@@ -1814,6 +1817,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   with BUG-171 runtime evidence.
 - `ParslHTTPContentLength` now models declared HTTP content-length validation before in-task
   execution, with BUG-172 runtime evidence.
+- `ParslHtexRegistrationShape` now models required manager-registration fields before HTEX
+  manager state mutation, with BUG-173 runtime evidence.
 
 ## Validation workflow
 
@@ -1822,7 +1827,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 505 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 507 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1870,6 +1875,8 @@ The Condor multi-digit submit probe then completed 505 tests in 12.897 seconds w
 including the ten-process count boundary.
 The HTTP content-length probe then completed 506 tests in 12.697 seconds with `OK`,
 including the truncated-response rejection boundary.
+The HTEX registration-envelope probe then completed 507 tests in 12.954 seconds with `OK`,
+including malformed-field isolation and valid manager-message paths.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

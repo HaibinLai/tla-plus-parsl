@@ -14,6 +14,7 @@ worker decode/dispatch, and result correlation.
 | parsl/executors/high_throughput/executor.py::submit_payload | ParslTaskTransport and ParslZMQSerializationEndToEnd task path |
 | parsl/executors/high_throughput/executor.py result worker | result decode/retry, duplicate/unknown result, and stale-correlation models |
 | parsl/executors/high_throughput/process_worker_pool.py | callable/object snapshot, worker result serialization, and failure payload models |
+| parsl/executors/high_throughput/interchange.py::process_manager_socket_message | manager-message, registration-envelope, heartbeat, and result-frame models |
 
 In ParslZMQSerializationEndToEnd, a task or result message has a serializer identifier,
 sender/receiver route, multipart frame state, and attempt number. The abstract transitions are:
@@ -65,6 +66,12 @@ is inconsistent, while the fixed branch rejects the mismatched envelope. TLC fin
 The focused apply-message models keep the concrete three-buffer callable/args/kwargs contract
 separate from the end-to-end route model. This avoids hiding a malformed frame-count or payload
 length behind a generic "message delivered" state.
+
+`ParslHtexRegistrationShape.tla` covers the registration-specific schema boundary. The outer
+pickle/type guard can succeed while required fields such as `python_v` are absent; the current
+branch then crashes while constructing the manager record. The fixed branch rejects the malformed
+registration before it mutates `_ready_managers`. The runtime probe uses the real interchange
+handler with a pickleable registration missing `python_v`.
 
 ## Safety properties
 

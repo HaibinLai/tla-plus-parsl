@@ -942,6 +942,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownManager
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexUnknownManagerResult.cfg models/executors/ParslHtexUnknownManagerMessage.tla
 ```
 
+`ParslHtexRegistrationShape.tla` refines registration-envelope validation. A pickleable
+registration missing `python_v` or another required field currently raises while constructing the
+manager record; the fixed branch rejects it before mutating ready-manager state. The runtime
+probe is included in `tests/test_htex_manager_message_runtime.py`.
+
 `ParslHtexManagerTaskAdmission.tla` connects manager registration to task queue admission. A
 queued task may exist before a manager registers, but dispatch must wait for a ready manager;
 heartbeat expiry then loses a running attempt and enables retry. During source review, the first

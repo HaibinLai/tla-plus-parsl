@@ -346,6 +346,15 @@ run_case http-content-length-fixed pass \
 run_case http-content-length-normal pass \
     models/staging/ParslHTTPContentLengthNormal.cfg \
     models/staging/ParslHTTPContentLength.tla
+run_case htex-registration-shape-current counterexample \
+    models/serialization/ParslHtexRegistrationShapeCurrent.cfg \
+    models/serialization/ParslHtexRegistrationShape.tla
+run_case htex-registration-shape-fixed pass \
+    models/serialization/ParslHtexRegistrationShapeFixed.cfg \
+    models/serialization/ParslHtexRegistrationShape.tla
+run_case htex-registration-shape-valid pass \
+    models/serialization/ParslHtexRegistrationShapeValid.cfg \
+    models/serialization/ParslHtexRegistrationShape.tla
 run_case dynamic-task-chain pass \
     models/dataflow/ParslDynamicTaskChain.cfg \
     models/dataflow/ParslDynamicTaskChain.tla

@@ -53,6 +53,23 @@ class HtexManagerMessageRuntimeTest(unittest.TestCase):
         self.assertEqual(interchange._ready_managers[b"manager-1"]["last_heartbeat"], 100)
         self.assertEqual(interchange.manager_sock.replies, [[b"manager-1", PKL_HEARTBEAT_CODE]])
 
+    def test_registration_missing_python_version_escapes_currently(self):
+        message = pickle.dumps({
+            "type": "registration",
+            "parsl_v": "current",
+            "start_time": 0,
+            "block_id": "block-1",
+            "max_capacity": 1,
+            "active": True,
+            "draining": False,
+        })
+        interchange = self.interchange_with([b"manager-2", message])
+        interchange.current_platform = {"python_v": "3.11.0", "parsl_v": "current"}
+        interchange._check_python_mismatch = True
+
+        with self.assertRaises(KeyError):
+            interchange.process_manager_socket_message(set(), None, object())
+
 
 if __name__ == "__main__":
     unittest.main()
