@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `2f1ce32` (`Add cross layer join retry model`).
-- Foundational smoke inventory: 370 TLC cases and 270 Python runtime probes.
+- Latest pushed commit: pending (join provider/monitoring model).
+- Foundational smoke inventory: 371 TLC cases and 270 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -127,6 +127,9 @@ are recorded here in English and committed with the model changes.
   dependencies and bounded physical attempts. The Current branch accepts a late timed-out result
   and violates result consistency; the Fixed branch classifies it as stale. Fixed TLC passed in the
   370-case smoke, while the Current configuration produced the intended counterexample.
+- Current stage: added `ParslJoinProviderMonitoring`, extending the cross-layer join model with
+  data staging readiness, provider loss/reprovisioning, and monitoring queue persistence. Its
+  Current branch again exposes stale-result acceptance; the Fixed branch passed standalone TLC.
 
 ### Verification convention
 

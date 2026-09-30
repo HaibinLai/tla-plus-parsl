@@ -68,6 +68,9 @@ run_case timeout-retry-stale-result \
 run_case join-retry-stale-result \
     models/core/ParslJoinRetryStaleResultFixed.cfg \
     models/core/ParslJoinRetryStaleResult.tla
+run_case join-provider-monitoring \
+    models/core/ParslJoinProviderMonitoringFixed.cfg \
+    models/core/ParslJoinProviderMonitoring.tla
 run_case integrated-abstract \
     models/core/ParslAbstractSmoke.cfg \
     models/core/ParslAbstract.tla
