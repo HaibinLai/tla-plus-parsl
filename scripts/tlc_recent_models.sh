@@ -1326,6 +1326,57 @@ run_case pbspro-submit-fixed pass \
 run_case pbspro-submit-present pass \
     models/providers/ParslPBSProSubmitPresent.cfg \
     models/providers/ParslPBSProSubmit.tla
+run_case torque-cancel-current counterexample \
+    models/providers/ParslTorqueCancel.cfg \
+    models/providers/ParslTorqueCancel.tla
+run_case torque-cancel-failure pass \
+    models/providers/ParslTorqueCancelFailure.cfg \
+    models/providers/ParslTorqueCancel.tla
+run_case torque-cancel-fixed pass \
+    models/providers/ParslTorqueCancelFixed.cfg \
+    models/providers/ParslTorqueCancel.tla
+run_case torque-duplicate-status-current counterexample \
+    models/providers/ParslTorqueDuplicateStatusCurrent.cfg \
+    models/providers/ParslTorqueDuplicateStatus.tla
+run_case torque-duplicate-status-fixed pass \
+    models/providers/ParslTorqueDuplicateStatusFixed.cfg \
+    models/providers/ParslTorqueDuplicateStatus.tla
+run_case torque-duplicate-status-unique pass \
+    models/providers/ParslTorqueDuplicateStatusUnique.cfg \
+    models/providers/ParslTorqueDuplicateStatus.tla
+run_case torque-status-current counterexample \
+    models/providers/ParslTorqueStatus.cfg \
+    models/providers/ParslTorqueStatus.tla
+run_case torque-status-fixed pass \
+    models/providers/ParslTorqueStatusFixed.cfg \
+    models/providers/ParslTorqueStatus.tla
+run_case torque-status-present pass \
+    models/providers/ParslTorqueStatusPresent.cfg \
+    models/providers/ParslTorqueStatus.tla
+run_case torque-status-failure-current counterexample \
+    models/providers/ParslTorqueStatusFailureCurrent.cfg \
+    models/providers/ParslTorqueStatusFailure.tla
+run_case torque-status-failure-fixed pass \
+    models/providers/ParslTorqueStatusFailureFixed.cfg \
+    models/providers/ParslTorqueStatusFailure.tla
+run_case torque-submit pass \
+    models/providers/ParslTorqueSubmit.cfg \
+    models/providers/ParslTorqueSubmit.tla
+run_case torque-submit-empty pass \
+    models/providers/ParslTorqueSubmitEmpty.cfg \
+    models/providers/ParslTorqueSubmit.tla
+run_case torque-submit-failure pass \
+    models/providers/ParslTorqueSubmitFailure.cfg \
+    models/providers/ParslTorqueSubmit.tla
+run_case torque-tasks-current counterexample \
+    models/providers/ParslTorqueTasksPerNodeCurrent.cfg \
+    models/providers/ParslTorqueTasksPerNode.tla
+run_case torque-tasks-fixed pass \
+    models/providers/ParslTorqueTasksPerNodeFixed.cfg \
+    models/providers/ParslTorqueTasksPerNode.tla
+run_case torque-tasks-valid pass \
+    models/providers/ParslTorqueTasksPerNodeValid.cfg \
+    models/providers/ParslTorqueTasksPerNode.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

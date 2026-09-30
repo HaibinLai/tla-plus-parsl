@@ -799,6 +799,9 @@ probes exercise `sbatch`, `sacct`, and `scancel` boundaries without a live sched
 PBS Pro coverage now includes malformed qstat JSON, foreign jobs, short/qualified job-ID alias
 collisions, and empty versus valid qsub output. The current and candidate-fixed status/submit
 contracts are in the TLC sweep, with runtime probes for the concrete JSON and scheduler paths.
+Torque coverage now includes foreign and duplicate qstat records, stale output after command
+failure, qdel terminal-state conventions, empty/valid qsub output, and non-positive
+`tasks_per_node` admission. Current and fixed branches are included in the recurring sweep.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
