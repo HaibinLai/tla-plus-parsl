@@ -1731,6 +1731,36 @@ run_case ftp-stage-fixed pass \
 run_case ftp-stage-success pass \
     models/staging/ParslFTPStageSuccess.cfg \
     models/staging/ParslFTPStage.tla
+run_case http-connection-current counterexample \
+    models/staging/ParslHTTPConnectionCleanupCurrent.cfg \
+    models/staging/ParslHTTPConnectionCleanup.tla
+run_case http-connection-fixed pass \
+    models/staging/ParslHTTPConnectionCleanupFixed.cfg \
+    models/staging/ParslHTTPConnectionCleanup.tla
+run_case http-existing-current counterexample \
+    models/staging/ParslHTTPExistingDestinationCurrent.cfg \
+    models/staging/ParslHTTPExistingDestination.tla
+run_case http-existing-fixed pass \
+    models/staging/ParslHTTPExistingDestinationFixed.cfg \
+    models/staging/ParslHTTPExistingDestination.tla
+run_case http-partial-current counterexample \
+    models/staging/ParslHTTPPartialCleanupCurrent.cfg \
+    models/staging/ParslHTTPPartialCleanup.tla
+run_case http-partial-fixed pass \
+    models/staging/ParslHTTPPartialCleanupFixed.cfg \
+    models/staging/ParslHTTPPartialCleanup.tla
+run_case http-partial-success pass \
+    models/staging/ParslHTTPPartialCleanupSuccess.cfg \
+    models/staging/ParslHTTPPartialCleanup.tla
+run_case http-stage-current counterexample \
+    models/staging/ParslHTTPStageCurrent.cfg \
+    models/staging/ParslHTTPStage.tla
+run_case http-stage-fixed pass \
+    models/staging/ParslHTTPStageFixed.cfg \
+    models/staging/ParslHTTPStage.tla
+run_case http-stage-success pass \
+    models/staging/ParslHTTPStageSuccess.cfg \
+    models/staging/ParslHTTPStage.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

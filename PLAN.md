@@ -844,6 +844,9 @@ the corresponding DatabaseManager and radio paths.
 FTP staging coverage now includes connection cleanup, partial destination cleanup, and in-task
 stage-in artifact publication. Failed transfers remain counterexample branches, while fixed paths
 remove partial bytes/close connections before exposing success or failure.
+HTTP staging coverage now includes response cleanup, atomic replacement of existing destinations,
+partial-stream cleanup, and non-2xx status validation before user-task execution. Runtime probes
+cover streaming failures and separate/in-task stage-in paths.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
