@@ -290,6 +290,8 @@ Recent focused models now connect the previously separate boundaries:
   not discard valid sibling events; the SQLite batch probe records the current rollback behavior.
 - `ParslMonitoringWorkflowInsertBookkeeping` now joins the sweep, requiring workflow bookkeeping
   to be recorded only after a successful WORKFLOW row insert.
+- `ParslMonitoringWorkflowEndBookkeeping` now covers the matching failed end-update path, requiring
+  a retryable failed update rather than permanently marking workflow completion.
 - `ParslSlurmStatus` is now in the smoke sweep, checking that foreign scheduler job rows do not
   crash the status poll and that known resource state remains available.
 - `ParslMonitoringZMQRouterFailure` is now in the smoke sweep, connecting the monitoring receive

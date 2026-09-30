@@ -609,6 +609,12 @@ run_case monitoring-workflow-insert-current counterexample \
 run_case monitoring-workflow-insert-fixed pass \
     models/monitoring/ParslMonitoringWorkflowInsertBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringWorkflowInsertBookkeeping.tla
+run_case monitoring-workflow-end-current counterexample \
+    models/monitoring/ParslMonitoringWorkflowEndBookkeepingCurrent.cfg \
+    models/monitoring/ParslMonitoringWorkflowEndBookkeeping.tla
+run_case monitoring-workflow-end-fixed pass \
+    models/monitoring/ParslMonitoringWorkflowEndBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringWorkflowEndBookkeeping.tla
 run_case monitoring-zmq-router-current counterexample \
     models/monitoring/ParslMonitoringZMQRouterFailureCurrent.cfg \
     models/monitoring/ParslMonitoringZMQRouterFailure.tla
