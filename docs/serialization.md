@@ -200,6 +200,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.
 /tmp/parsl-venv/bin/python -m unittest tests/test_task_transport_runtime.py -v
 ```
 
+`ParslTaskTransportCloseRace.tla` adds the sender lifecycle to that boundary. The current branch
+allows a ready serialized task to reach `TasksOutgoing.put()` after close, while the fixed branch
+rejects it before touching the terminated socket. The runtime bridge uses a real
+`pack_apply_message` payload and a closed-socket double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportCloseRaceCurrent.cfg models/serialization/ParslTaskTransportCloseRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportCloseRaceFixed.cfg models/serialization/ParslTaskTransportCloseRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_task_transport_close_runtime.py -v
+```
+
 `ParslFunctionObjectContents.tla` is the smallest callable-content model. It snapshots a
 closure's captured value and the argument value at their two serialization boundaries, permits
 the submitter to mutate its source object afterward, then decodes and runs the captured content.

@@ -390,3 +390,9 @@ run_case tasks-outgoing-close-current counterexample \
 run_case tasks-outgoing-close-fixed pass \
     models/executors/ParslTasksOutgoingCloseRaceFixed.cfg \
     models/executors/ParslTasksOutgoingCloseRace.tla
+run_case task-transport-close-current counterexample \
+    models/serialization/ParslTaskTransportCloseRaceCurrent.cfg \
+    models/serialization/ParslTaskTransportCloseRace.tla
+run_case task-transport-close-fixed pass \
+    models/serialization/ParslTaskTransportCloseRaceFixed.cfg \
+    models/serialization/ParslTaskTransportCloseRace.tla

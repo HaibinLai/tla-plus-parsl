@@ -918,6 +918,11 @@ The `TasksOutgoing` close/put lifecycle is also in the smoke sweep. Its current 
 the terminated DEALER socket after close, while the fixed branch rejects post-close submission
 before touching the transport.
 
+`ParslTaskTransportCloseRace.tla` now connects that sender lifecycle to the serialized task
+boundary: incomplete or corrupt payloads cannot enter transport, and a closed sender cannot
+publish a ready task. The runtime bridge packs a real callable with `pack_apply_message`, sends
+one task, then reproduces the current post-close send failure.
+
 ### 3. Checked properties
 
 The safety configurations check:
