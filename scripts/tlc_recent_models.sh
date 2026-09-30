@@ -45,6 +45,9 @@ run_case callable-retry-current counterexample \
 run_case callable-retry-fixed pass \
     models/serialization/ParslCallableRetryTransportFixed.cfg \
     models/serialization/ParslCallableRetryTransport.tla
+run_case function-object-contents pass \
+    models/serialization/ParslFunctionObjectContents.cfg \
+    models/serialization/ParslFunctionObjectContents.tla
 run_case heartbeat-timeout-current counterexample \
     models/clock/ParslHeartbeatTimeoutPersistenceCurrent.cfg \
     models/clock/ParslHeartbeatTimeoutPersistence.tla

@@ -227,6 +227,8 @@ Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
   snapshots across serialized ZMQ task frames, physical retries, and stale result correlation.
+- `ParslFunctionObjectContents` is included in the smoke sweep as the smallest executable
+  callable/argument object snapshot: post-pack mutation cannot change the worker result.
 - `ParslFileBytes` is corroborated by a real binary Zip stage-out/stage-in probe with per-chunk
   SHA-256 checksums.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
