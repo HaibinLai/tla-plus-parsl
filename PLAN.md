@@ -1767,6 +1767,9 @@ completed with their expected Current counterexamples and Fixed passes. Cases 41
 completed: heartbeat rollback, timeout/open, monitoring history, provider-worker scaling,
 join-callable transport, Bash/local-provider outcomes, thread lifecycle, TaskVine factory,
 timer/timeout, apply dispatch, and HTEX shutdown timeout all matched their configured outcomes.
+Cases 61--80 also matched their configured outcomes: join cancellation (single and list), data
+readiness, dependency traversal for shallow/deep containers, memo function identity and exception
+checkpoints, and input/output list mutation boundaries.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
