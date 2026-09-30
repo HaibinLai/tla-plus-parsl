@@ -1751,10 +1751,10 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 486 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 487 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
-The September 2026 full-suite audit ran all 486 runtime probes in 13.297 seconds with an `OK`
+The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
 result. The remaining unswept core configuration is `ParslNoFailures.cfg`; it deliberately
 contains the temporal `EventuallySettled`/fairness specification. TLC 2.19's simulator currently
 fails internally on that temporal setup, so it remains documented as a liveness follow-up rather

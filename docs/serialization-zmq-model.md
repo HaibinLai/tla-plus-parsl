@@ -57,3 +57,8 @@ length behind a generic "message delivered" state.
 The current/fixed configurations in the TLC sweep intentionally retain counterexamples for
 stale-result acceptance, close/send races, malformed frames, and cache aliasing. Fixed variants
 preserve the later valid message or classify the old frame without changing the logical Future.
+
+The concrete header behavior is probed by
+`tests/test_serializer_header_consistency_runtime.py`: the current built-in dill serializers
+accept a data body after its header is changed from `02` to `C2`, which is why the model treats
+the envelope identity as inconsistent even though the decoded Python value is unchanged.
