@@ -180,6 +180,15 @@ tests=(
     tests/test_poller_close_scale_in_runtime.py
     tests/test_poller_duplicate_executor_runtime.py
     tests/test_scale_in_cancel_shape_runtime.py
+    tests/test_aws_cancel_runtime.py
+    tests/test_azure_status_runtime.py
+    tests/test_condor_submit_runtime.py
+    tests/test_flux_inflight_submission_failure_runtime.py
+    tests/test_googlecloud_status_runtime.py
+    tests/test_grid_engine_status_batch_runtime.py
+    tests/test_lsf_status_runtime.py
+    tests/test_pbspro_status_runtime.py
+    tests/test_slurm_status_batch_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py

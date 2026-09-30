@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `12564d6` (`Promote timeout heartbeat runtime coverage`).
-- Foundational smoke inventory: 377 TLC cases and 287 Python runtime probes.
+- Latest pushed commit: pending (scheduler provider runtime coverage).
+- Foundational smoke inventory: 377 TLC cases and 296 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -159,6 +159,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted five timeout/heartbeat runtime bridges into the foundational gate:
   HTEX initial probe timeout, time-limited file open, bash cleanup, Python timeout parameters,
   and timer close behavior.
+- Current stage: promoted nine scheduler/provider runtime bridges into the foundational gate:
+  AWS cancel, Azure status, Condor submit, Flux submission failure, Google Cloud status, Grid
+  Engine batch status, LSF status, PBSPro status, and Slurm status batch.
 
 ### Verification convention
 
