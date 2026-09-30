@@ -160,6 +160,17 @@ tests=(
     tests/test_slurm_batch_strict_runtime.py
     tests/test_slurm_duplicate_status_runtime.py
     tests/test_slurm_empty_job_id_runtime.py
+    tests/test_slurm_cancel_runtime.py
+    tests/test_slurm_tasks_per_node_runtime.py
+    tests/test_condor_status_unknown_runtime.py
+    tests/test_grid_engine_empty_submit_runtime.py
+    tests/test_grid_engine_missing_status_runtime.py
+    tests/test_grid_engine_submit_shape_runtime.py
+    tests/test_pbspro_submit_shape_runtime.py
+    tests/test_torque_duplicate_status_runtime.py
+    tests/test_torque_malformed_status_runtime.py
+    tests/test_torque_missing_status_runtime.py
+    tests/test_torque_status_failure_runtime.py
     tests/test_lsf_duplicate_status_runtime.py
     tests/test_aws_unknown_instance_runtime.py
     tests/test_aws_status_missing_result_runtime.py

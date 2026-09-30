@@ -260,6 +260,15 @@ run_case slurm-malformed-line \
 run_case slurm-tasks-per-node \
     models/providers/ParslSlurmTasksPerNodeFixed.cfg \
     models/providers/ParslSlurmTasksPerNode.tla
+run_case slurm-cancel \
+    models/providers/ParslSlurmCancelFixed.cfg \
+    models/providers/ParslSlurmCancel.tla
+run_case condor-submit-count \
+    models/providers/ParslCondorSubmitCountFixed.cfg \
+    models/providers/ParslCondorSubmitCount.tla
+run_case condor-submit-whitespace \
+    models/providers/ParslCondorSubmitWhitespaceFixed.cfg \
+    models/providers/ParslCondorSubmitWhitespace.tla
 run_case condor-empty-submit \
     models/providers/ParslCondorEmptySubmitFixed.cfg \
     models/providers/ParslCondorEmptySubmit.tla
@@ -293,12 +302,33 @@ run_case local-unknown-job-status \
 run_case grid-engine-missing-status \
     models/providers/ParslGridEngineMissingStatusFixed.cfg \
     models/providers/ParslGridEngineMissingStatus.tla
+run_case grid-engine-empty-submit \
+    models/providers/ParslGridEngineEmptySubmitFixed.cfg \
+    models/providers/ParslGridEngineEmptySubmit.tla
+run_case grid-engine-submit-shape \
+    models/providers/ParslGridEngineSubmitShapeFixed.cfg \
+    models/providers/ParslGridEngineSubmitShape.tla
 run_case lsf-missing-job \
     models/providers/ParslLSFMissingJobFixed.cfg \
     models/providers/ParslLSFMissingJob.tla
 run_case lsf-resource-validation \
     models/providers/ParslLSFResourceValidationFixed.cfg \
     models/providers/ParslLSFResourceValidation.tla
+run_case pbspro-submit-shape \
+    models/providers/ParslPbsproSubmitShapeFixed.cfg \
+    models/providers/ParslPbsproSubmitShape.tla
+run_case torque-malformed-status \
+    models/providers/ParslTorqueMalformedStatusLineFixed.cfg \
+    models/providers/ParslTorqueMalformedStatusLine.tla
+run_case torque-missing-status \
+    models/providers/ParslTorqueMissingStatusFixed.cfg \
+    models/providers/ParslTorqueMissingStatus.tla
+run_case torque-status-failure \
+    models/providers/ParslTorqueStatusFailureFixed.cfg \
+    models/providers/ParslTorqueStatusFailure.tla
+run_case torque-duplicate-status \
+    models/providers/ParslTorqueDuplicateStatusFixed.cfg \
+    models/providers/ParslTorqueDuplicateStatus.tla
 run_case thread-executor-resource-spec \
     models/executors/ParslThreadExecutorResourceSpecFixed.cfg \
     models/executors/ParslThreadExecutorResourceSpec.tla
