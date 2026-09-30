@@ -1798,6 +1798,12 @@ The next interval covered memo/monitoring/serialization aliases, min-blocks and 
 aliases, memo dictionary ordering, monitoring retry, HTEX malformed task/result messages and
 batches, and result-frame/queue handling. The longer result-frame/queue tail was rerun at 100
 simulation steps and its Current/Fixed expectations passed; manager selection also passed.
+The following HTEX/provider interval (cases 261--280) also matched its expected outcomes at a
+100-step simulator bound: manager selection/blocking/eligibility, executor selection,
+resource admission and scaling, HTEX priority/resource-specification checks, Slurm status,
+AWS status cardinality, and Kubernetes polling. Current configurations produced the intended
+counterexamples while Fixed configurations returned success; the manager and admission models
+returned success directly.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
