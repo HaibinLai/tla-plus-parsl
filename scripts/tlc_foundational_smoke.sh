@@ -923,6 +923,9 @@ run_case globus-failure-event \
 run_case globus-token-file-atomicity \
     models/staging/ParslGlobusTokenFileAtomicityFixed.cfg \
     models/staging/ParslGlobusTokenFileAtomicity.tla
+run_case globus-token-schema \
+    models/staging/ParslGlobusTokenSchemaFixed.cfg \
+    models/staging/ParslGlobusTokenSchema.tla
 run_case globus-transfer-timeout \
     models/staging/ParslGlobusTransferTimeoutFixed.cfg \
     models/staging/ParslGlobusTransferTimeout.tla

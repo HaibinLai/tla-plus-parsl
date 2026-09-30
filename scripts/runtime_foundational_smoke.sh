@@ -158,6 +158,7 @@ tests=(
     tests/test_ftp_staging_runtime.py
     tests/test_globus_endpoint_path_runtime.py
     tests/test_globus_failure_event_runtime.py
+    tests/test_globus_token_schema_runtime.py
     tests/test_globus_token_file_atomicity_runtime.py
     tests/test_globus_transfer_timeout_runtime.py
     tests/test_http_connection_cleanup_runtime.py

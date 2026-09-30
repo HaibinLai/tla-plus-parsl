@@ -60,6 +60,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenFileAtomi
 /tmp/parsl-venv/bin/python -m unittest tests/test_globus_token_file_atomicity_runtime.py -v
 ```
 
+`ParslGlobusTokenSchema.tla` covers the next credential boundary: a JSON token file may parse
+successfully while missing the `transfer.api.globus.org` service record. The current
+`_get_native_app_authorizer` path treats that truthy mapping as usable and exposes a raw
+`KeyError`; the fixed branch rejects the schema and re-enters authentication. The runtime probe
+uses the real classmethod with a deliberately incomplete token mapping.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenSchemaCurrent.cfg models/staging/ParslGlobusTokenSchema.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenSchemaFixed.cfg models/staging/ParslGlobusTokenSchema.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_token_schema_runtime.py -v
+```
+
+This credential-schema boundary is recorded as BUG-266.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferTimeoutCurrent.cfg models/staging/ParslGlobusTransferTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferTimeoutFixed.cfg models/staging/ParslGlobusTransferTimeout.tla

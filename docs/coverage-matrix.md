@@ -246,6 +246,9 @@ Serialization/HTEX coverage also includes `ParslHtexTaskIngressContinuation`, wh
 BUG-098 from a single malformed envelope to a malformed-then-valid message sequence and checks
 that the later valid task remains queueable.
 
+Staging coverage also includes `ParslGlobusTokenSchema` (BUG-266), which checks that an incomplete
+but syntactically valid token cache cannot reach service-record indexing as if it were usable.
+
 AWS provider coverage also includes `ParslAwsStatusResponseShape` (BUG-205), which checks that a
 missing top-level `Reservations` field cannot abort status polling.
 

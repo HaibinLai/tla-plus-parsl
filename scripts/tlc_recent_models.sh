@@ -3288,6 +3288,12 @@ run_case globus-token-fixed pass \
 run_case globus-token-valid pass \
     models/staging/ParslGlobusTokenFileAtomicityValid.cfg \
     models/staging/ParslGlobusTokenFileAtomicity.tla
+run_case globus-token-schema-current counterexample \
+    models/staging/ParslGlobusTokenSchemaCurrent.cfg \
+    models/staging/ParslGlobusTokenSchema.tla
+run_case globus-token-schema-fixed pass \
+    models/staging/ParslGlobusTokenSchemaFixed.cfg \
+    models/staging/ParslGlobusTokenSchema.tla
 run_case globus-compute-config-current counterexample \
     models/staging/ParslGlobusComputeConfig.cfg \
     models/staging/ParslGlobusComputeConfig.tla
