@@ -963,6 +963,9 @@ run_case monitoring-dispatch-envelope-valid pass \
 run_case monitoring-hub-close pass \
     models/monitoring/ParslMonitoringHubClose.cfg \
     models/monitoring/ParslMonitoringHubClose.tla
+run_case worker-contact-timeout pass \
+    models/clock/ParslWorkerContactTimeout.cfg \
+    models/clock/ParslWorkerContactTimeout.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

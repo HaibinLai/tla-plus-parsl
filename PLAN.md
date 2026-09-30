@@ -1070,6 +1070,11 @@ reproduces the current assertion on a one-element tuple.
 the DB stop signal, process join, queue close, and queue join each occur once, even if `close()`
 is called repeatedly. `tests/test_monitoring_hub_close_runtime.py` checks the real cleanup ordering
 with deterministic doubles.
+`ParslWorkerContactTimeout.tla` is now in the clock sweep, modeling the concrete HTEX worker
+contact loop: heartbeats follow their period, contact refreshes the deadline, and the worker stops
+at the threshold only after a no-message poll. The related real worker clock probes remain in
+`tests/test_worker_contact_clock_rollback_runtime.py` and
+`tests/test_worker_pool_heartbeat_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
