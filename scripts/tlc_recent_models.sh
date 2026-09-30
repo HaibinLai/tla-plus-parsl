@@ -892,6 +892,12 @@ run_case zip-stage-in-current counterexample \
 run_case zip-stage-in-fixed pass \
     models/staging/ParslZipStageInFixed.cfg \
     models/staging/ParslZipStageIn.tla
+run_case zip-member-selection-current counterexample \
+    models/staging/ParslZipMemberSelectionCurrent.cfg \
+    models/staging/ParslZipMemberSelection.tla
+run_case zip-member-selection-fixed pass \
+    models/staging/ParslZipMemberSelectionFixed.cfg \
+    models/staging/ParslZipMemberSelection.tla
 run_case core-executor-drain pass \
     models/core/ParslExecutorDrain.cfg \
     models/core/ParslAbstract.tla

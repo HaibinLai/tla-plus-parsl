@@ -155,6 +155,27 @@ class ZipFileTransferRuntimeTest(unittest.TestCase):
                 # the archive still contains two entries and emits a warning.
                 self.assertEqual(z.read("nested/result.bin"), b"version-two")
 
+    def test_stage_in_duplicate_member_silently_selects_last_entry_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / "duplicate.zip"
+            restored = root / "restored.bin"
+            with zipfile.ZipFile(archive, "w") as z:
+                z.writestr("nested/result.bin", b"version-one")
+                z.writestr("nested/result.bin", b"version-two")
+
+            _zip_stage_in(
+                str(archive),
+                "nested/result.bin",
+                str(root),
+                parent_fut=None,
+                outputs=[File(str(restored))],
+            )
+
+            self.assertEqual(restored.read_bytes(), b"version-two")
+            with zipfile.ZipFile(archive, "r") as z:
+                self.assertEqual(z.namelist().count("nested/result.bin"), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

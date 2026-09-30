@@ -1853,6 +1853,9 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   BUG-188 runtime evidence.
 - `ParslKubernetesCancelResponse` now models Kubernetes delete-response confirmation, with BUG-189
   runtime evidence from a returned failure object.
+- `ParslZipMemberSelection` now models the read-side consequence of duplicate archive members:
+  current stage-in silently selects the last member, while the fixed branch rejects ambiguity,
+  with BUG-190 runtime evidence from a real duplicate-member ZIP.
 
 ## Validation workflow
 
@@ -1861,7 +1864,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 523 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 524 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1943,6 +1946,8 @@ The monitoring external-queue probe then completed 522 tests in 13.0 seconds wit
 including deterministic reproduction of a stale-empty shutdown message loss.
 The Torque malformed-status probe then completed 523 tests in 13.0 seconds with `OK`,
 including isolation of a truncated qstat record before state parsing.
+The Zip duplicate-member probe then completed 524 tests with `OK`, including the read-side
+selection of the last duplicate archive member.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
