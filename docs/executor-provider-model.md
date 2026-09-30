@@ -58,11 +58,13 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTi
 
 `ParslProviderExecutorTimedMonitoring.tla` composes that lifecycle with the asynchronous monitoring
 boundary. It keeps provider provisioning, manager heartbeat expiry, task timeout/retry, old-attempt
-late results, terminal status emission, and bounded database-write failures in one state machine.
+late results, terminal status emission, bounded database-write failures, and worker scale-in/scale-out
+in one state machine.
 The current branch accepts the old physical result and TLC finds the expected
-`StalePollSafety` violation after 1,737 generated / 943 distinct states. The fixed branch
-classifies old results and provider polls as stale, passing all thirteen invariants with 161,260
-generated / 37,527 distinct states at depth 25.
+`StalePollSafety` violation after 1,847 generated / 1,001 distinct states. The fixed branch
+classifies old results and provider polls as stale, prevents capacity changes while a task is
+running, and passes all fourteen invariants with 234,666 generated / 47,821 distinct states at
+depth 26.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedMonitoringCurrent.cfg models/executors/ParslProviderExecutorTimedMonitoring.tla

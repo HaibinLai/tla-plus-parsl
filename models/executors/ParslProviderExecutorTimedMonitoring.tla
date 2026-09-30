@@ -24,12 +24,12 @@ Statuses == {"none", "succeeded", "failed"}
 VARIABLES now, provider, manager, lastHeartbeat, slots, task, attempts,
           providerRetries, deadline, inFlight, oldInFlight, cause, lateResult,
           monitorState, monitorStatus, dbStatus, dbFailures,
-          generation, polledGeneration, stalePoll
+          generation, polledGeneration, stalePoll, scaleInWhileRunning
 
 vars == <<now, provider, manager, lastHeartbeat, slots, task, attempts,
            providerRetries, deadline, inFlight, oldInFlight, cause, lateResult,
            monitorState, monitorStatus, dbStatus, dbFailures,
-           generation, polledGeneration, stalePoll>>
+           generation, polledGeneration, stalePoll, scaleInWhileRunning>>
 
 Init ==
     /\ MAX_TIME >= 3
@@ -59,6 +59,7 @@ Init ==
     /\ generation = 0
     /\ polledGeneration = 0
     /\ stalePoll = FALSE
+    /\ scaleInWhileRunning = FALSE
 
 Tick ==
     /\ now < MAX_TIME
@@ -246,7 +247,7 @@ ProvisionGeneration ==
     /\ UNCHANGED <<now, provider, manager, lastHeartbeat, slots, task,
                     attempts, providerRetries, deadline, inFlight, oldInFlight,
                     cause, lateResult, monitorState, monitorStatus, dbStatus,
-                    dbFailures, polledGeneration>>
+                    dbFailures, polledGeneration, scaleInWhileRunning>>
 
 LatePoll ==
     /\ provider = "failed"
@@ -256,7 +257,30 @@ LatePoll ==
     /\ UNCHANGED <<now, manager, lastHeartbeat, slots, task, attempts,
                     providerRetries, deadline, inFlight, oldInFlight, cause,
                     lateResult, monitorState, monitorStatus, dbStatus,
-                    dbFailures, generation, polledGeneration>>
+                    dbFailures, generation, polledGeneration, scaleInWhileRunning>>
+
+ScaleIn ==
+    /\ provider = "active"
+    /\ manager = "up"
+    /\ IF USE_FIXED THEN (task # "running") ELSE TRUE
+    /\ slots' = 0
+    /\ scaleInWhileRunning' = (task = "running")
+    /\ UNCHANGED <<now, provider, manager, lastHeartbeat, task, attempts,
+                    providerRetries, deadline, inFlight, oldInFlight, cause,
+                    lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures, generation, polledGeneration, stalePoll>>
+
+ScaleOut ==
+    /\ provider = "active"
+    /\ manager = "up"
+    /\ slots = 0
+    /\ IF USE_FIXED THEN (task # "running") ELSE TRUE
+    /\ slots' = 1
+    /\ UNCHANGED <<now, provider, manager, lastHeartbeat, task, attempts,
+                    providerRetries, deadline, inFlight, oldInFlight, cause,
+                    lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures, generation, polledGeneration, stalePoll,
+                    scaleInWhileRunning>>
 
 CoreNext ==
     \/ Tick \/ Heartbeat \/ RequestBlock \/ ProvisionBlock \/ RegisterManager
@@ -266,9 +290,12 @@ CoreNext ==
     \/ UNCHANGED vars
 
 Next ==
-    \/ (CoreNext /\ UNCHANGED <<generation, polledGeneration, stalePoll>>)
+    \/ (CoreNext /\ UNCHANGED <<generation, polledGeneration, stalePoll,
+                                  scaleInWhileRunning>>)
     \/ ProvisionGeneration
     \/ LatePoll
+    \/ ScaleIn
+    \/ ScaleOut
 
 Spec == Init /\ [][Next]_vars
 
@@ -293,6 +320,7 @@ TypeOK ==
     /\ generation \in 0..2
     /\ polledGeneration \in 0..2
     /\ stalePoll \in BOOLEAN
+    /\ scaleInWhileRunning \in BOOLEAN
 
 AdmissionSafety ==
     task = "running" => provider = "active" /\ manager = "up" /\ slots = 0
@@ -310,6 +338,9 @@ MonitoringSafety ==
 
 DatabaseRetryBound == dbFailures <= MAX_DB_FAILURES
 ProviderGenerationBound == generation <= 2
-StalePollSafety == stalePoll => ~(provider = "active" /\ manager = "expired" /\ slots = 0)
+StalePollSafety ==
+    stalePoll => ~(provider = "active" /\ manager = "expired" /\ slots = 0
+                   /\ providerRetries = 0)
+ScaleInSafety == scaleInWhileRunning => ~USE_FIXED
 
 =============================================================================

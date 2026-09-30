@@ -52,7 +52,8 @@ implementations or every detail in the paper.
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes
-that lifecycle with terminal monitoring persistence and provisioning-generation stale-poll checks.
+that lifecycle with terminal monitoring persistence, provisioning-generation stale-poll checks, and
+worker scale-in/scale-out admission.
 `ParslZMQCallableRetry` now combines callable/object snapshots with task/result wire retries.
 `ParslJoinFull` now includes the explicit serialized
 attempt phase and current/fixed stale-result correlation after a physical retry. The three join
