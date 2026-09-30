@@ -206,6 +206,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchCl
 This batching-clock boundary is recorded as BUG-090: the current implementation is sensitive to
 wall-clock rollback, while the candidate fixed model uses a monotonic deadline.
 
+`ParslMonitoringZMQBatchClock.tla` applies the same deadline abstraction to the ZMQ monitoring
+router. `MonitoringRouter.start` measures each one-second receive batch with `time.time()`;
+rollback can therefore keep the inner receive loop active after its intended deadline. The
+current model reproduces the overrun, while the fixed branch advances a monotonic deadline.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringZMQBatchClockCurrent.cfg models/monitoring/ParslMonitoringZMQBatchClock.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringZMQBatchClockFixed.cfg models/monitoring/ParslMonitoringZMQBatchClock.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_zmq_batch_clock_runtime.py -v
+```
+
+This ZMQ batch-deadline boundary is recorded as BUG-247.
+
 `ParslMonitoringDispatchEnvelope.tla` models the outer queue tuple consumed by
 `DatabaseManager._dispatch_to_internal`. The current assertion lets a tuple with the wrong
 length escape and terminate the migration thread; the fixed branch rejects it while preserving

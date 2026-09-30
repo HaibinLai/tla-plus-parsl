@@ -703,6 +703,18 @@ previous cancellation request and violates `StrictCancellation`; the fixed confi
 cancellation precedence. `tests/test_local_provider_runtime.py` reproduces the same behavior with
 a fake `.ec` file and a dead process.
 
+`ParslCondorEmptySubmit.tla` models the successful-but-empty `condor_submit` response boundary in
+`CondorProvider.submit`. The current parser builds an empty job-ID list and then indexes its first
+element, leaking `IndexError` instead of reporting a failed provisioning request. The fixed branch
+rejects the empty response before indexing it. The runtime probe uses a fake successful command
+with empty stdout and checks that no resource is published.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitCurrent.cfg models/providers/ParslCondorEmptySubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFixed.cfg models/providers/ParslCondorEmptySubmit.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_empty_submit_runtime.py -v
+```
+
 `ParslClusterSubmitScript.tla` covers the common `ClusterProvider._write_submit_script` boundary.
 Valid template substitution publishes the script; missing template keys map to
 `SchedulerMissingArgs`, while target I/O failures map to `ScriptPathError`. The runtime probe

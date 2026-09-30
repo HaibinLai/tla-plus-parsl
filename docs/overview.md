@@ -565,6 +565,12 @@ The current `DatabaseManager._get_messages_in_batch` uses `time.time()`, so a ba
 jump can admit another message after the configured interval; the fixed branch uses monotonic
 elapsed time. The runtime probe drives the real helper with a deterministic rollback sequence.
 
+`ParslMonitoringZMQBatchClock.tla` applies the same check to `MonitoringRouter.start`. The current
+one-second ZMQ receive batch can overrun after a wall-clock rollback; the fixed branch uses a
+monotonic deadline. TLC reports 4 generated/3 distinct states for the current counterexample and
+6 generated/3 distinct states for the fixed branch, and
+`tests/test_monitoring_zmq_batch_clock_runtime.py` reproduces the extra receive cycle.
+
 `ParslJoinReturnShape.tla` isolates the `join_app` return contract: only one Future, a
 Future-only list, or an empty list may enter the joining state. Tuple, scalar, and mixed-list
 returns fail before callbacks are registered, matching the validation in `DataFlowKernel`.
@@ -2119,6 +2125,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   empty successful submit output reaches an uncaught job-id indexing error.
 - `ParslCondorSubmitFixed.cfg`: 18 states generated, 9 distinct states, depth 3; malformed
   successful output is rejected without registering a resource.
+- `ParslCondorEmptySubmitCurrent.cfg`: expected counterexample at depth 2; empty successful
+  output reaches the unchecked `job_id[0]` access.
+- `ParslCondorEmptySubmitFixed.cfg`: 4 states generated, 2 distinct states, depth 2; an empty
+  successful response is rejected before resource publication.
 
 The Condor status counterexample is also checked against the current Python source with a
 deterministic scheduler stub (no Condor installation is required):

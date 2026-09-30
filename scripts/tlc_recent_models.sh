@@ -2416,6 +2416,12 @@ run_case condor-submit-current counterexample \
 run_case condor-submit-fixed pass \
     models/providers/ParslCondorSubmitFixed.cfg \
     models/providers/ParslCondorSubmit.tla
+run_case condor-empty-submit-current counterexample \
+    models/providers/ParslCondorEmptySubmitCurrent.cfg \
+    models/providers/ParslCondorEmptySubmit.tla
+run_case condor-empty-submit-fixed pass \
+    models/providers/ParslCondorEmptySubmitFixed.cfg \
+    models/providers/ParslCondorEmptySubmit.tla
 run_case condor-unknown-job-current counterexample \
     models/providers/ParslCondorUnknownJobCurrent.cfg \
     models/providers/ParslCondorUnknownJob.tla
@@ -2995,6 +3001,12 @@ run_case monitoring-batch-clock-current counterexample \
 run_case monitoring-batch-clock-fixed pass \
     models/monitoring/ParslMonitoringBatchClockFixed.cfg \
     models/monitoring/ParslMonitoringBatchClock.tla
+run_case monitoring-zmq-batch-clock-current counterexample \
+    models/monitoring/ParslMonitoringZMQBatchClockCurrent.cfg \
+    models/monitoring/ParslMonitoringZMQBatchClock.tla
+run_case monitoring-zmq-batch-clock-fixed pass \
+    models/monitoring/ParslMonitoringZMQBatchClockFixed.cfg \
+    models/monitoring/ParslMonitoringZMQBatchClock.tla
 run_case monitoring-close-abnormal pass \
     models/monitoring/ParslMonitoringCloseAbnormal.cfg \
     models/monitoring/ParslMonitoringClose.tla
