@@ -151,12 +151,20 @@ tests=(
     tests/test_condor_chunk_size_runtime.py
     tests/test_condor_status_failure_runtime.py
     tests/test_condor_unknown_job_runtime.py
+    tests/test_cluster_status_request_runtime.py
+    tests/test_cluster_status_unknown_runtime.py
     tests/test_slurm_batch_strict_runtime.py
     tests/test_slurm_duplicate_status_runtime.py
     tests/test_slurm_empty_job_id_runtime.py
     tests/test_lsf_duplicate_status_runtime.py
     tests/test_aws_unknown_instance_runtime.py
     tests/test_local_unknown_job_status_runtime.py
+    tests/test_local_cancel_failure_runtime.py
+    tests/test_local_exit_file_missing_runtime.py
+    tests/test_provider_status_shape_runtime.py
+    tests/test_torque_cancel_unknown_runtime.py
+    tests/test_azure_cancel_bookkeeping_runtime.py
+    tests/test_pbspro_status_shape_runtime.py
     tests/test_htex_worker_restart_failure_runtime.py
     tests/test_pbspro_missing_status_runtime.py
     tests/test_mpi_nondivisible_runtime.py

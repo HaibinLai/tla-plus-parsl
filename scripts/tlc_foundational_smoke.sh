@@ -446,12 +446,36 @@ run_case block-provider-bad-state-mutation \
 run_case cluster-provider-unknown-job \
     models/providers/ParslClusterProviderUnknownJobFixed.cfg \
     models/providers/ParslClusterProviderUnknownJob.tla
+run_case cluster-status-request \
+    models/providers/ParslClusterStatusRequest.cfg \
+    models/providers/ParslClusterStatusRequest.tla
+run_case cluster-status-unknown \
+    models/providers/ParslClusterStatusUnknownFixed.cfg \
+    models/providers/ParslClusterStatusUnknown.tla
 run_case local-provider-submit-cleanup \
     models/providers/ParslLocalProviderSubmitCleanupFixed.cfg \
     models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-cancel-failure \
+    models/providers/ParslLocalCancelFailureFixed.cfg \
+    models/providers/ParslLocalCancelFailure.tla
+run_case local-exit-file-missing \
+    models/providers/ParslLocalExitFileMissingFixed.cfg \
+    models/providers/ParslLocalExitFileMissing.tla
 run_case local-provider-cancel-unknown \
     models/providers/ParslLocalProviderCancelUnknownFixed.cfg \
     models/providers/ParslLocalProviderCancelUnknown.tla
+run_case provider-status-shape \
+    models/executors/ParslProviderStatusShapeFixed.cfg \
+    models/executors/ParslProviderStatusShape.tla
+run_case torque-cancel-unknown \
+    models/providers/ParslTorqueCancelUnknownFixed.cfg \
+    models/providers/ParslTorqueCancelUnknown.tla
+run_case azure-cancel-bookkeeping \
+    models/providers/ParslAzureCancelBookkeepingFixed.cfg \
+    models/providers/ParslAzureCancelBookkeeping.tla
+run_case pbspro-status-shape \
+    models/providers/ParslPbsproStatusShapeFixed.cfg \
+    models/providers/ParslPbsproStatusShape.tla
 run_case local-submit-pid-shape \
     models/providers/ParslLocalSubmitPidShapeFixed.cfg \
     models/providers/ParslLocalSubmitPidShape.tla
