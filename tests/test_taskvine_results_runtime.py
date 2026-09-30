@@ -28,6 +28,20 @@ class OneReportQueue:
         raise queue.Empty
 
 
+class SequenceReportQueue:
+    def __init__(self, reports, stop):
+        self.reports = list(reports)
+        self.stop = stop
+
+    def get(self, timeout=None):
+        if self.reports:
+            report = self.reports.pop(0)
+            if not self.reports:
+                self.stop.set()
+            return report
+        raise queue.Empty
+
+
 class EmptyQueue:
     def get(self, timeout=None):
         raise queue.Empty
@@ -119,6 +133,28 @@ class TaskVineResultsRuntimeTest(unittest.TestCase):
             executor._collect_taskvine_results()
         with self.assertRaises(TaskVineManagerFailure):
             future.result()
+
+    def test_cancelled_failure_report_aborts_collector_before_next_report_currently(self):
+        stop = threading.Event()
+        first = VineTaskToParsl(1, False, None, "first failure", 1)
+        second = VineTaskToParsl(2, True, "/tmp/unused-result", None, 0)
+        executor = TaskVineExecutor.__new__(TaskVineExecutor)
+        executor._should_stop = stop
+        executor._submit_process = FakeSubmitProcess(True)
+        executor._finished_task_queue = SequenceReportQueue([first, second], stop)
+        executor._tasks_lock = threading.Lock()
+        first_future = Future()
+        self.assertTrue(first_future.cancel())
+        second_future = Future()
+        executor._tasks = {1: first_future, 2: second_future}
+        executor._outstanding_tasks_lock = threading.Lock()
+        executor._outstanding_tasks = 2
+
+        with self.assertRaises(Exception):
+            executor._collect_taskvine_results()
+
+        self.assertNotIn(1, executor.tasks)
+        self.assertTrue(second_future.done())
 
 
 if __name__ == "__main__":

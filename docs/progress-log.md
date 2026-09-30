@@ -79,6 +79,10 @@ are recorded here in English and committed with the model changes.
   cancelled wrapper after an underlying Flux job fails; the Current model produces a two-state
   counterexample, the Fixed model passes in four generated/two distinct states, and the concrete
   callback probe reproduces the `InvalidStateError`.
+- Current stage: bridged the existing BUG-018 failure-path models to concrete collector probes.
+  Work Queue and TaskVine each now exercise a cancelled first failure report followed by a live
+  report; the current collector aborts and its finalizer fails the unrelated Future, matching the
+  Current TLA+ semantics. The targeted result suites pass 11/11 tests.
 
 ### Verification convention
 

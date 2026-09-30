@@ -28,6 +28,20 @@ class OneReportQueue:
         raise queue.Empty
 
 
+class SequenceReportQueue:
+    def __init__(self, reports, stop):
+        self.reports = list(reports)
+        self.stop = stop
+
+    def get(self, timeout=None):
+        if self.reports:
+            report = self.reports.pop(0)
+            if not self.reports:
+                self.stop.value = True
+            return report
+        raise queue.Empty
+
+
 class AlwaysEmptyQueue:
     def get(self, timeout=None):
         raise queue.Empty
@@ -94,6 +108,26 @@ class WorkQueueResultsRuntimeTest(unittest.TestCase):
 
         with self.assertRaises(WorkQueueFailure):
             future.result()
+
+    def test_cancelled_failure_report_aborts_collector_before_next_report_currently(self):
+        stop = multiprocessing.Value("b", False)
+        executor = WorkQueueExecutor.__new__(WorkQueueExecutor)
+        executor.should_stop = stop
+        executor.submit_process = AliveProcess(True)
+        executor.tasks_lock = threading.Lock()
+        first = WqTaskToParsl("task-1", False, None, "first failure", None)
+        second = WqTaskToParsl("task-2", True, "/tmp/unused-result", None, None)
+        first_future = Future()
+        self.assertTrue(first_future.cancel())
+        second_future = Future()
+        executor._tasks = {"task-1": first_future, "task-2": second_future}
+        executor.collector_queue = SequenceReportQueue([first, second], stop)
+
+        with self.assertRaises(Exception):
+            executor._collect_work_queue_results()
+
+        self.assertNotIn("task-1", executor.tasks)
+        self.assertTrue(second_future.done())
 
 
 if __name__ == "__main__":
