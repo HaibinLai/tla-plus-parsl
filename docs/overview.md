@@ -383,6 +383,12 @@ the old result wins. The chronological fixed configuration passes with 3 distinc
 [`tests/test_memo_checkpoint_order_runtime.py`](../tests/test_memo_checkpoint_order_runtime.py)
 reproduces the stale restoration using two UUID-like run directory names.
 
+`ParslMemoCheckpointResultFailure.tla` models the complementary result-completion boundary. With
+`task_exit` checkpointing, `_complete_task_result` writes the checkpoint before updating the task
+record and resolving the AppFuture. An unpickleable successful result therefore leaves the task
+and Future pending in the current path; the fixed branch makes checkpoint failure terminal. The
+runtime probe uses a real `BasicMemoizer` and an unpickleable result. This is recorded as BUG-245.
+
 `ParslLastCheckpointUUID.tla` models `get_last_checkpoint` in `parsl/utils.py`. Current DFK run
 directories are UUIDs, but the helper filters candidates with `str.isdigit()`, so a valid UUID
 checkpoint is not selected. TLC finds the two-state current counterexample and the fixed branch
@@ -1993,6 +1999,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   loads `new` before `old`, then restores the old duplicate value.
 - `ParslMemoCheckpointOrderFixed.cfg`: 4 states generated, 3 distinct states, depth 3;
   chronological loading satisfies `LatestCheckpointWins`.
+- `ParslMemoCheckpointResultFailureCurrent.cfg`: expected counterexample at depth 2; checkpoint
+  serialization failure leaves the task running and its Future unresolved.
+- `ParslMemoCheckpointResultFailureFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
+  checkpoint failure is converted into an explicit terminal rejection.
 - `ParslLastCheckpointUUIDCurrent.cfg`: expected counterexample at depth 2; `isdigit()` filtering
   leaves a UUID checkpoint unselected.
 - `ParslLastCheckpointUUIDFixed.cfg`: 3 states generated, 2 distinct states, depth 2; UUID
