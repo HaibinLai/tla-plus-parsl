@@ -230,6 +230,10 @@ tests=(
     tests/test_block_provider_bad_state_order_runtime.py
     tests/test_block_provider_bad_state_mutation_runtime.py
     tests/test_strategy_runtime.py
+    tests/test_memoization_runtime.py
+    tests/test_memo_closure_runtime.py
+    tests/test_memo_dict_ordering_runtime.py
+    tests/test_memo_ignore_key_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py

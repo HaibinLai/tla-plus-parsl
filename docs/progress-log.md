@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `cbe937d` (`Promote strategy runtime coverage`).
-- Foundational smoke inventory: 382 TLC cases and 352 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, scaling, and memoization coverage).
+- Foundational smoke inventory: 382 TLC cases and 356 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted memoization runtime probes for duplicate-call reuse, closure-content
+  identity, heterogeneous dictionary-key hashing, and unknown `ignore_for_cache` names. Four
+  targeted tests passed, and the affected runtime suffix (213–356) passed after insertion; the
+  prior prefix (1–212) was already green.
 
 - Current stage: promoted the `Strategy` runtime bridge for initial capacity, overload scale-out,
   idle scale-in with a minimum block floor, and invalid zero-nodes-per-block input. The targeted

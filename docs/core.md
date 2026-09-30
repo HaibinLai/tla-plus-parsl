@@ -141,9 +141,9 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 382 TLC cases and 352 Python runtime test files.
+The current repository smoke runner enumerates 382 TLC cases and 356 Python runtime test files.
 On 2026-09-30, all 382 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
-suite passed with 352 entries. The subsequently added cases were also run individually as they
+suite passed with 356 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
 isolation, monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus
@@ -191,6 +191,11 @@ the intended all-pending-Future failure semantics.
 The `Strategy` runtime bridge exercises initial capacity requests, overload scale-out, idle
 scale-in while respecting `min_blocks`, and the zero-nodes-per-block failure path. Its bounded
 capacity Fixed model is already part of the TLC gate.
+
+The memoization probes cover duplicate-call reuse with a dependent Future, closure contents that
+serialize differently but currently collide in the cache key, heterogeneous dictionary-key
+hashing, and unknown `ignore_for_cache` names. The corresponding Current/Fixed memo models remain
+in the TLC gate.
 
 The Work Queue and TaskVine duplicate-report models add the stale-result collector boundary.
 The fixed branches ignore a report whose task identifier has already been removed, preserving
