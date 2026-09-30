@@ -3073,6 +3073,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   distinct); interleaved submits can observe another task's temporary resource specification.
 - `ParslGlobusComputeConfigFixed.cfg`: 37 states generated, 16 distinct states, depth 8;
   serialized submit sections preserve per-task resource specifications and default restoration.
+- `ParslGlobusComputeShutdownCleanupCurrent.cfg`: expected counterexample at depth 2; an SDK
+  shutdown exception leaves the result watcher running.
+- `ParslGlobusComputeShutdownCleanupFixed.cfg`: 6 states generated, 3 distinct states, depth 2;
+  watcher cleanup remains terminal on SDK shutdown failure.
 - `ParslGlobusComputeResult.cfg`: 8 states generated, 5 distinct states, depth 3; direct SDK
   Future identity and success/exception/cancellation propagation satisfy the result invariants.
 - `ParslBlockProviderBadStateOrderingCurrent.cfg`: expected counterexample at depth 2; a

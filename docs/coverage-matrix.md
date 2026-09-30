@@ -70,6 +70,10 @@ checks; the scaling model above is an additional symbolic admission layer rather
 for backend-specific probes. The provider-worker scaling bridge is corroborated by
 `tests/test_provider_worker_scaling_runtime.py`.
 
+Globus Compute shutdown coverage now includes `ParslGlobusComputeShutdownCleanup`: SDK shutdown
+failure must not skip result-watcher cleanup. The runtime bridge uses a failing SDK double, and the
+executor/provider probe inventory is now 438 tests.
+
 Google Cloud provider admission also includes `ParslGoogleCloudZoneResponseShape`, which
 isolates the missing-`items` response boundary in `get_zone` and is backed by the zone-selection
 runtime probe.

@@ -848,6 +848,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeSubmi
 /tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_submit_race_runtime.py -v
 ```
 
+`ParslGlobusComputeShutdownCleanup.tla` models the SDK shutdown/result-watcher boundary. The
+current `GlobusComputeExecutor.shutdown` reaches the watcher only after the SDK executor returns;
+an SDK shutdown exception therefore skips watcher cleanup. The fixed branch makes watcher cleanup
+terminal even on the SDK failure path. The runtime probe uses a failing fake SDK executor.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeShutdownCleanupCurrent.cfg models/executors/ParslGlobusComputeShutdownCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeShutdownCleanupFixed.cfg models/executors/ParslGlobusComputeShutdownCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_shutdown_cleanup_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider

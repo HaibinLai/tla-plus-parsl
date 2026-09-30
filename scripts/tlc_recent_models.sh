@@ -475,6 +475,12 @@ run_case globus-compute-resource-spec-type-fixed pass \
 run_case globus-compute-resource-spec-type-normal pass \
     models/executors/ParslGlobusComputeResourceSpecTypeNormal.cfg \
     models/executors/ParslGlobusComputeResourceSpecType.tla
+run_case globus-compute-shutdown-cleanup-current counterexample \
+    models/executors/ParslGlobusComputeShutdownCleanupCurrent.cfg \
+    models/executors/ParslGlobusComputeShutdownCleanup.tla
+run_case globus-compute-shutdown-cleanup-fixed pass \
+    models/executors/ParslGlobusComputeShutdownCleanupFixed.cfg \
+    models/executors/ParslGlobusComputeShutdownCleanup.tla
 run_case http-separate-content-length-current counterexample \
     models/staging/ParslHTTPSeparateContentLengthCurrent.cfg \
     models/staging/ParslHTTPSeparateContentLength.tla
