@@ -273,3 +273,7 @@ Local provider coverage also records a missing live-job exit-code file during po
 
 ZMQ executor coverage also includes `ParslTasksOutgoingCloseRace` (BUG-165), which checks that
 task submission cannot reach a terminated DEALER socket.
+
+HTEX admission coverage now combines registration version mismatch with heartbeat expiry in
+`ParslHtexHeartbeatVersion`; the fixed model checks fatal-result ordering and rejects submissions
+during the closing window.

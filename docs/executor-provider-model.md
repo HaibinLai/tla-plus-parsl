@@ -46,3 +46,10 @@ calling submit, then restores defaults in a finally path. ParslGlobusComputeSubm
 the override/submit/restore critical section and shows that overlapping submissions can observe
 the other task's configuration. The fixed variant serializes the critical section; the runtime
 probe is tests/test_globus_compute_submit_race_runtime.py.
+
+`ParslHtexHeartbeatVersion.tla` combines two HTEX admission boundaries that are often analyzed
+separately. A version-mismatched registration and a manager whose heartbeat age reaches the
+expiry threshold both close the interchange and queue a fatal result. The fixed submit action
+blocks immediately on `failureSeen`, `fatalPending`, or a non-ready manager; the current action
+can accept a task in that window. TLC finds the current admission counterexample and checks
+100,001 fixed states.

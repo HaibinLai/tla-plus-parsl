@@ -1743,6 +1743,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - richer join_app behavior beyond the bounded inner-Future set, cancellation, duplicate positions,
   nested failure payload, failure aggregation, and invalid-return branches now modeled;
 - manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
+- `ParslHtexHeartbeatVersion` now combines heartbeat expiry with version-mismatch admission and
+  fatal-result ordering; fairness and larger manager populations remain future work;
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
 - multi-level dynamic creation is now represented by `ParslDynamicTaskChain`, with a child-created
   grandchild and explicit dependency/retry safety; broader unbounded fan-out remains future work;
