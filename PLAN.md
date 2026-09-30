@@ -1113,6 +1113,10 @@ truncated payload.
 `ParslSerializationBinaryPayload.tla` is now in the serialization sweep, checking length-prefixed
 framing for newline, NUL, and non-ASCII bytes. `tests/test_serialization_binary_payload_runtime.py`
 round-trips the same byte classes through the real `pack_buffers`/`unpack_buffers` implementation.
+`ParslSerializationFrameCount.tla` is also in the sweep: apply-message frame count is validated
+before deserialization in the fixed branch, preventing extra frames from being decoded before
+rejection. `tests/test_serialization_frame_count_runtime.py` reproduces the current four-frame
+decode-before-assertion path.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

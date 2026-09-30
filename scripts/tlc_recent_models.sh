@@ -1020,6 +1020,15 @@ run_case serialization-envelope-fixed pass \
 run_case serialization-binary-payload pass \
     models/serialization/ParslSerializationBinaryPayload.cfg \
     models/serialization/ParslSerializationBinaryPayload.tla
+run_case serialization-frame-count-current counterexample \
+    models/serialization/ParslSerializationFrameCountCurrent.cfg \
+    models/serialization/ParslSerializationFrameCount.tla
+run_case serialization-frame-count-fixed pass \
+    models/serialization/ParslSerializationFrameCountFixed.cfg \
+    models/serialization/ParslSerializationFrameCount.tla
+run_case serialization-frame-count-normal pass \
+    models/serialization/ParslSerializationFrameCountNormal.cfg \
+    models/serialization/ParslSerializationFrameCount.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
