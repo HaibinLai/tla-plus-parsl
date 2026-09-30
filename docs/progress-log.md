@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `0d908e2` (`Record Flux serialization refinement`).
-- Foundational smoke inventory: 356 TLC cases and 227 Python runtime probes.
+- Foundational smoke inventory: 358 TLC cases and 229 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -44,6 +44,10 @@ are recorded here in English and committed with the model changes.
   mask the original serialization TypeError with an `AttributeError`.
 - `7178406`: extended the callable-object serialization-error refinement to Flux, confirming the
   same safe error-reporting condition across two concrete executors.
+- Current stage: refined BUG-018 for TaskVine and Work Queue failure reports. A cancelled Future
+  can raise from `set_exception` just as it can from `set_result`; both current models produce a
+  two-state counterexample, while both fixed models complete in seven generated/four distinct
+  states. Runtime probes exercise both collector branches.
 
 ### Verification convention
 

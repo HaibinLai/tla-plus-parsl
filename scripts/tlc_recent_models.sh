@@ -996,6 +996,12 @@ run_case taskvine-cancelled-result-current counterexample \
 run_case taskvine-cancelled-result-fixed pass \
     models/executors/ParslTaskVineCancelledResultFixed.cfg \
     models/executors/ParslTaskVineCancelledResult.tla
+run_case taskvine-cancelled-failure-result-current counterexample \
+    models/executors/ParslTaskVineCancelledFailureResultCurrent.cfg \
+    models/executors/ParslTaskVineCancelledFailureResult.tla
+run_case taskvine-cancelled-failure-result-fixed pass \
+    models/executors/ParslTaskVineCancelledFailureResultFixed.cfg \
+    models/executors/ParslTaskVineCancelledFailureResult.tla
 run_case htex-force-scale-in-current counterexample \
     models/executors/ParslHtexForceScaleInCurrent.cfg \
     models/executors/ParslHtexForceScaleIn.tla
@@ -3513,6 +3519,12 @@ run_case workqueue-cancelled-result-current counterexample \
 run_case workqueue-cancelled-result-fixed pass \
     models/executors/ParslWorkQueueCancelledResultFixed.cfg \
     models/executors/ParslWorkQueueCancelledResult.tla
+run_case workqueue-cancelled-failure-result-current counterexample \
+    models/executors/ParslWorkQueueCancelledFailureResultCurrent.cfg \
+    models/executors/ParslWorkQueueCancelledFailureResult.tla
+run_case workqueue-cancelled-failure-result-fixed pass \
+    models/executors/ParslWorkQueueCancelledFailureResultFixed.cfg \
+    models/executors/ParslWorkQueueCancelledFailureResult.tla
 run_case workqueue-duplicate-report-current counterexample \
     models/executors/ParslWorkQueueDuplicateReport.cfg \
     models/executors/ParslWorkQueueDuplicateReport.tla

@@ -63,6 +63,30 @@ class TaskVineCancelledResultRuntimeTest(unittest.TestCase):
             self.assertTrue(second.done())
             self.assertIsInstance(second.exception(), TaskVineManagerFailure)
 
+    def test_cancelled_failure_report_also_terminates_current_collector(self):
+        executor = TaskVineExecutor.__new__(TaskVineExecutor)
+        stop = threading.Event()
+        executor._should_stop = stop
+        executor._submit_process = AliveProcess()
+        executor._finished_task_queue = TwoReportQueue(
+            [VineTaskToParsl(1, False, None, "worker-failure", 1),
+             VineTaskToParsl(2, True, "/unused", None, 0)], stop)
+        executor._tasks_lock = threading.Lock()
+        executor._outstanding_tasks_lock = threading.Lock()
+        executor._outstanding_tasks = 2
+        first = Future()
+        self.assertTrue(first.cancel())
+        second = Future()
+        executor._tasks = {1: first, 2: second}
+
+        with self.assertRaises(InvalidStateError):
+            executor._collect_taskvine_results()
+
+        self.assertNotIn(1, executor.tasks)
+        self.assertIn(2, executor.tasks)
+        self.assertTrue(second.done())
+        self.assertIsInstance(second.exception(), TaskVineManagerFailure)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -477,6 +477,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelled
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_cancelled_result_runtime.py -v
 ```
 
+`ParslWorkQueueCancelledFailureResult.tla` refines the same race for the no-result/failure report
+branch, where the collector calls `set_exception` rather than `set_result`. A cancelled Future
+raises on that path as well, so the current collector can still abort and fail an unrelated task.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledFailureResultCurrent.cfg models/executors/ParslWorkQueueCancelledFailureResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledFailureResultFixed.cfg models/executors/ParslWorkQueueCancelledFailureResult.tla
+```
+
 `ParslWorkQueueResourceCategory.tla` models the Work Queue resource specification schema. The
 current `submit` method has a `category` handling branch, but omits `category` from
 `acceptable_fields`, so a valid category is rejected before task mapping. The fixed branch accepts
@@ -511,6 +520,15 @@ drives two real result-file reports through the collector boundary.
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledResultCurrent.cfg models/executors/ParslTaskVineCancelledResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledResultFixed.cfg models/executors/ParslTaskVineCancelledResult.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_cancelled_result_runtime.py -v
+```
+
+`ParslTaskVineCancelledFailureResult.tla` covers the corresponding TaskVine no-result/failure
+report branch. It demonstrates that guarding only successful result delivery is insufficient:
+`set_exception` must also ignore a terminal Future and allow later reports to be collected.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledFailureResultCurrent.cfg models/executors/ParslTaskVineCancelledFailureResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledFailureResultFixed.cfg models/executors/ParslTaskVineCancelledFailureResult.tla
 ```
 
 `ParslTaskVineFactory.tla` models the optional TaskVine factory process. The factory is created,

@@ -401,6 +401,9 @@ run_case workqueue-submit-serialization \
 run_case workqueue-cancelled-result \
     models/executors/ParslWorkQueueCancelledResultFixed.cfg \
     models/executors/ParslWorkQueueCancelledResult.tla
+run_case workqueue-cancelled-failure-result \
+    models/executors/ParslWorkQueueCancelledFailureResultFixed.cfg \
+    models/executors/ParslWorkQueueCancelledFailureResult.tla
 run_case taskvine-submit \
     models/executors/ParslTaskVineSubmitFixed.cfg \
     models/executors/ParslTaskVineSubmit.tla
@@ -416,6 +419,9 @@ run_case taskvine-submit-serialization \
 run_case taskvine-cancelled-result \
     models/executors/ParslTaskVineCancelledResultFixed.cfg \
     models/executors/ParslTaskVineCancelledResult.tla
+run_case taskvine-cancelled-failure-result \
+    models/executors/ParslTaskVineCancelledFailureResultFixed.cfg \
+    models/executors/ParslTaskVineCancelledFailureResult.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
