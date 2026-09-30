@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (monitoring resource-history inventory completion).
+- Latest pushed commit: `f6d56a8` (`Include monitoring resource history in smoke`).
 - Foundational smoke inventory: 369 TLC cases and 236 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
