@@ -1875,6 +1875,9 @@ partial-stage behavior, and Rsync quoting plus stage-in/stage-out failure paths.
 Cases 761--780 matched at 100 steps: Rsync success, clean-copy/path resolution, Zip path validation,
 Globus endpoint/dependency/token/configuration, DataFuture cancellation, multi-output stage-out,
 and staging-provider dispatch.
+Cases 781--800 matched at 100 steps: Zip stage-out/retry, stage-in/out ordering, serialization
+envelopes and binary payloads, frame-count/short-frame checks, negative-length validation, and
+truncated-length handling.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
