@@ -1774,6 +1774,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   multiple concurrent timers remain future work;
 - `ParslConcurrentTimeouts` now covers independent timeout clocks and cross-task result
   isolation; larger timer populations remain future work;
+- `ParslThreeConcurrentTimeouts` extends that clock population to three tasks with distinct
+  deadlines, per-task retry generations, and stale-result classification.
 - multi-level dynamic creation is now represented by `ParslDynamicTaskChain`, with a child-created
   grandchild and explicit dependency/retry safety; broader unbounded fan-out remains future work;
 - additional executor/provider-specific models.

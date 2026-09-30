@@ -382,6 +382,12 @@ run_case concurrent-timeouts-current counterexample \
 run_case concurrent-timeouts-fixed pass \
     models/clock/ParslConcurrentTimeouts.cfg \
     models/clock/ParslConcurrentTimeouts.tla
+run_case three-concurrent-timeouts-current counterexample \
+    models/clock/ParslThreeConcurrentTimeoutsCurrent.cfg \
+    models/clock/ParslThreeConcurrentTimeouts.tla
+run_case three-concurrent-timeouts-fixed pass \
+    models/clock/ParslThreeConcurrentTimeoutsFixed.cfg \
+    models/clock/ParslThreeConcurrentTimeouts.tla
 run_case input-list-mutation-current counterexample \
     models/dataflow/ParslInputListMutationCurrent.cfg \
     models/dataflow/ParslInputListMutation.tla

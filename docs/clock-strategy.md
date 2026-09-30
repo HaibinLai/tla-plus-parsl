@@ -8,6 +8,15 @@ manager, while the monotonic fixed branch expires once elapsed time reaches the 
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
 
+`ParslThreeConcurrentTimeouts.tla` extends the independent timer model to three logical tasks
+with deadlines 1, 2, and 3. Each task has its own retry generation and late-result token; the
+fixed branch rejects an old generation without affecting the other timers.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslThreeConcurrentTimeoutsCurrent.cfg models/clock/ParslThreeConcurrentTimeouts.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslThreeConcurrentTimeoutsFixed.cfg models/clock/ParslThreeConcurrentTimeouts.tla
+```
+
 `ParslHtexShutdownTimeout.tla` models the HTEX shutdown deadline: terminate, wait, kill only
 after `TimeoutExpired`, then close communication pipes and allow the result thread to exit. The
 runtime bridge uses a fake interchange process and real `HighThroughputExecutor.shutdown()`.
