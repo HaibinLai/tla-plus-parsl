@@ -32,6 +32,12 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCallableTranspo
 terminal Future. This captures a small dynamic DAG without conflating child creation with child
 execution.
 
+`ParslDynamicTaskChain.tla` deepens that abstraction by allowing a created child to create a
+grandchild: the parent creates `C1`/`C2`, then successful `C1` creates `G`, whose dependencies are
+the parent and `C1`. Creation, dependency release, logical Future resolution, and per-node retry
+counters remain separate. TLC checks 100,001 simulated states with the same dependency, terminal,
+and retry invariants.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -simulate num=1000 \
   -config models/dataflow/ParslDynamicTaskFanout.cfg \

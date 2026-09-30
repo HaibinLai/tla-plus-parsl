@@ -1741,7 +1741,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   nested failure payload, failure aggregation, and invalid-return branches now modeled;
 - manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
-- richer dynamic task creation beyond the bounded parent-to-two-child fan-out model;
+- multi-level dynamic creation is now represented by `ParslDynamicTaskChain`, with a child-created
+  grandchild and explicit dependency/retry safety; broader unbounded fan-out remains future work;
 - additional executor/provider-specific models.
 
 ## Validation workflow
