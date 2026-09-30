@@ -242,6 +242,10 @@ The monitoring lifecycle cases cover hub close before start, startup failure cle
 start protection, idempotent close, shutdown draining, and close/worker races. They make resource
 ownership and queue/process cleanup explicit in addition to database write semantics.
 
+The monitoring stream cases cover event ordering/status history, malformed worker messages,
+dispatch-envelope validation, ZMQ tuple shape, worker-status atomicity, and lifecycle bookkeeping.
+These models separate transport admission from database transaction state.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and

@@ -76,6 +76,11 @@ tests=(
     tests/test_monitoring_close_idempotence_runtime.py
     tests/test_monitoring_shutdown_drain_runtime.py
     tests/test_monitoring_shutdown_race_runtime.py
+    tests/test_monitoring_dispatch_envelope_runtime.py
+    tests/test_monitoring_malformed_worker_message_runtime.py
+    tests/test_monitoring_status_history_runtime.py
+    tests/test_monitoring_zmq_tuple_shape_runtime.py
+    tests/test_monitoring_worker_status_atomicity_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

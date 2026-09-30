@@ -476,5 +476,26 @@ run_case monitoring-shutdown-drain \
 run_case monitoring-shutdown-race \
     models/monitoring/ParslMonitoringShutdownRaceFixed.cfg \
     models/monitoring/ParslMonitoringShutdownRace.tla
+run_case monitoring-event-stream \
+    models/monitoring/ParslMonitoringEventStreamFixed.cfg \
+    models/monitoring/ParslMonitoringEventStream.tla
+run_case monitoring-status-history \
+    models/monitoring/ParslMonitoringStatusHistory.cfg \
+    models/monitoring/ParslMonitoringStatusHistory.tla
+run_case monitoring-malformed-worker-message \
+    models/monitoring/ParslMonitoringMalformedWorkerMessageFixed.cfg \
+    models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
+run_case monitoring-dispatch-envelope \
+    models/monitoring/ParslMonitoringDispatchEnvelopeFixed.cfg \
+    models/monitoring/ParslMonitoringDispatchEnvelope.tla
+run_case monitoring-zmq-tuple-shape \
+    models/monitoring/ParslMonitoringZMQTupleShapeValid.cfg \
+    models/monitoring/ParslMonitoringZMQTupleShape.tla
+run_case monitoring-worker-status-atomicity \
+    models/monitoring/ParslMonitoringWorkerStatusAtomicityFixed.cfg \
+    models/monitoring/ParslMonitoringWorkerStatusAtomicity.tla
+run_case monitoring-lifecycle-bookkeeping \
+    models/monitoring/ParslMonitoringLifecycleBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
 
 echo "Foundational TLC smoke suite passed."
