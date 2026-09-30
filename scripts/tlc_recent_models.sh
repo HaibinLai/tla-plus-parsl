@@ -1587,6 +1587,42 @@ run_case block-provider-bad-state-order-current counterexample \
 run_case block-provider-bad-state-order-fixed pass \
     models/executors/ParslBlockProviderBadStateOrderingFixed.cfg \
     models/executors/ParslBlockProviderBadStateOrdering.tla
+run_case command-client-reply pass \
+    models/executors/ParslCommandClientReply.cfg \
+    models/executors/ParslCommandClient.tla
+run_case command-client-timeout pass \
+    models/executors/ParslCommandClientTimeout.cfg \
+    models/executors/ParslCommandClient.tla
+run_case command-client-close-current counterexample \
+    models/executors/ParslCommandClientCloseRaceCurrent.cfg \
+    models/executors/ParslCommandClientCloseRace.tla
+run_case command-client-close-fixed pass \
+    models/executors/ParslCommandClientCloseRaceFixed.cfg \
+    models/executors/ParslCommandClientCloseRace.tla
+run_case command-client-lock-current counterexample \
+    models/executors/ParslCommandClientLockTimeoutCurrent.cfg \
+    models/executors/ParslCommandClientLockTimeout.tla
+run_case command-client-lock-fixed pass \
+    models/executors/ParslCommandClientLockTimeoutFixed.cfg \
+    models/executors/ParslCommandClientLockTimeout.tla
+run_case command-client-retries-current counterexample \
+    models/executors/ParslCommandClientMaxRetriesCurrent.cfg \
+    models/executors/ParslCommandClientMaxRetries.tla
+run_case command-client-retries-fixed pass \
+    models/executors/ParslCommandClientMaxRetriesFixed.cfg \
+    models/executors/ParslCommandClientMaxRetries.tla
+run_case command-client-send-timeout pass \
+    models/executors/ParslCommandClientSendTimeout.cfg \
+    models/executors/ParslCommandClientSendTimeout.tla
+run_case command-deadline-current counterexample \
+    models/executors/ParslCommandDeadlineCurrent.cfg \
+    models/executors/ParslCommandDeadline.tla
+run_case command-deadline-fixed pass \
+    models/executors/ParslCommandDeadlineFixed.cfg \
+    models/executors/ParslCommandDeadline.tla
+run_case command-deadline-normal pass \
+    models/executors/ParslCommandDeadlineNormal.cfg \
+    models/executors/ParslCommandDeadline.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

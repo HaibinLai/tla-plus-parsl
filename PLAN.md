@@ -831,6 +831,9 @@ BlockProvider bad-state handling is now covered: marking an executor bad fails o
 records the cause, rejects later submissions, and must tolerate callbacks mutating or completing
 the task dictionary during the failure sweep. Current mutation/order failures and fixed snapshot
 paths are included in TLC, with runtime probes for each behavior.
+CommandClient coverage now includes REQ/REP timeout poisoning, close/send races, lock acquisition
+past a deadline, unused max-retry behavior, pre-send timeout reuse, and negative poll-timeout
+calculation. Runtime probes exercise the corresponding ZMQ command-client paths.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
