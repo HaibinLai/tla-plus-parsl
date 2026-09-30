@@ -242,6 +242,8 @@ Recent focused models now connect the previously separate boundaries:
   a missing-file timeout and preventing a raw `open()` after the timeout horizon.
 - `ParslClusterStatusRequest` is now in the smoke sweep, checking one backend poll, duplicate
   request-position preservation, and ordered public status projection.
+- `ParslMonitoringUpdatePersistentRetry` is now in the smoke sweep, exposing unbounded
+  `OperationalError` retries in `_update` and a bounded fixed branch with an explicit abort.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
   late completion, and monitoring persistence.
 - `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,

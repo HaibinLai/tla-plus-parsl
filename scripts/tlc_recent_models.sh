@@ -327,6 +327,12 @@ run_case monitoring-update-permanent-current counterexample \
 run_case monitoring-update-permanent-fixed pass \
     models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
+run_case monitoring-update-retry-current counterexample \
+    models/monitoring/ParslMonitoringUpdatePersistentRetryCurrent.cfg \
+    models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
+run_case monitoring-update-retry-fixed pass \
+    models/monitoring/ParslMonitoringUpdatePersistentRetryFixed.cfg \
+    models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
 run_case globus-transfer-timeout-current counterexample \
     models/staging/ParslGlobusTransferTimeoutCurrent.cfg \
     models/staging/ParslGlobusTransferTimeout.tla
