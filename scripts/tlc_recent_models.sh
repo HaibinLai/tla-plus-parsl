@@ -405,6 +405,12 @@ run_case kubernetes-admission-current counterexample \
 run_case kubernetes-admission-fixed pass \
     models/providers/ParslKubernetesAdmissionFixed.cfg \
     models/providers/ParslKubernetesAdmission.tla
+run_case kubernetes-unknown-job-current counterexample \
+    models/providers/ParslKubernetesUnknownJobCurrent.cfg \
+    models/providers/ParslKubernetesUnknownJob.tla
+run_case kubernetes-unknown-job-fixed pass \
+    models/providers/ParslKubernetesUnknownJobFixed.cfg \
+    models/providers/ParslKubernetesUnknownJob.tla
 run_case cluster-submit-script-valid pass \
     models/providers/ParslClusterSubmitScript.cfg \
     models/providers/ParslClusterSubmitScript.tla
