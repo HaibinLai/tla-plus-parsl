@@ -236,6 +236,8 @@ Recent focused models now connect the previously separate boundaries:
   transport loss/duplicate delivery to retry, correlation, cleanup, and terminal-result safety.
 - `ParslMisroute` and `ParslResultMisroute` are now in the smoke sweep, rejecting task/result
   envelopes delivered through the wrong executor-manager binding.
+- `ParslProviderFailureRetry` is now in the smoke sweep, separating logical task retry from lost
+  provider attempts and rejecting late results from stale physical attempts.
 - `ParslKubernetesUnknownJob` is now in the smoke sweep, requiring stale job IDs to return an
   explicit UNKNOWN status instead of raising from local resource bookkeeping.
 - `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,

@@ -66,6 +66,12 @@ run_case message-misroute pass \
 run_case result-misroute pass \
     models/core/ParslResultMisroute.cfg \
     models/core/ParslAbstract.tla
+run_case provider-failure-retry-current counterexample \
+    models/core/ParslProviderFailureRetryCurrent.cfg \
+    models/core/ParslProviderFailureRetry.tla
+run_case provider-failure-retry-fixed pass \
+    models/core/ParslProviderFailureRetryFixed.cfg \
+    models/core/ParslProviderFailureRetry.tla
 run_case python-object-graph pass \
     models/serialization/ParslPython.cfg \
     models/serialization/ParslPython.tla
