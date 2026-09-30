@@ -20,6 +20,15 @@ class RunningKubernetesClient:
         return self.Pod()
 
 
+class EmptyPhaseKubernetesClient:
+    class Pod:
+        def __init__(self):
+            self.status = type("PodStatus", (), {"phase": None})()
+
+    def read_namespaced_pod(self, **kwargs):
+        return self.Pod()
+
+
 class KubernetesPollingRuntimeTest(unittest.TestCase):
     def provider_with_client(self, client):
         provider = KubernetesProvider.__new__(KubernetesProvider)
@@ -46,6 +55,13 @@ class KubernetesPollingRuntimeTest(unittest.TestCase):
         provider._status()
 
         self.assertEqual(provider.resources["job-1"]["status"].state, JobState.COMPLETED)
+
+    def test_successful_read_with_missing_phase_leaves_running_currently(self):
+        provider = self.provider_with_client(EmptyPhaseKubernetesClient())
+
+        provider._status()
+
+        self.assertEqual(provider.resources["job-1"]["status"].state, JobState.RUNNING)
 
 
 if __name__ == "__main__":

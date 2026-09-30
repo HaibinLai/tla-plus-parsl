@@ -922,6 +922,12 @@ run_case google-zone-shape-current counterexample \
 run_case google-zone-shape-fixed pass \
     models/providers/ParslGoogleCloudZoneResponseShapeFixed.cfg \
     models/providers/ParslGoogleCloudZoneResponseShape.tla
+run_case kubernetes-empty-phase-current counterexample \
+    models/providers/ParslKubernetesEmptyPhaseCurrent.cfg \
+    models/providers/ParslKubernetesEmptyPhase.tla
+run_case kubernetes-empty-phase-fixed pass \
+    models/providers/ParslKubernetesEmptyPhaseFixed.cfg \
+    models/providers/ParslKubernetesEmptyPhase.tla
 run_case core-executor-drain pass \
     models/core/ParslExecutorDrain.cfg \
     models/core/ParslAbstract.tla
