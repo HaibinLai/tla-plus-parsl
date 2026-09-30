@@ -227,6 +227,30 @@ run_case zmq-callable-retry \
 run_case zmq-object-snapshot \
     models/serialization/ParslZMQObjectSnapshotFixed.cfg \
     models/serialization/ParslZMQObjectSnapshot.tla
+run_case command-receive-failure \
+    models/serialization/ParslCommandReceiveFailureFixed.cfg \
+    models/serialization/ParslCommandReceiveFailure.tla
+run_case command-send-failure \
+    models/serialization/ParslCommandSendFailureFixed.cfg \
+    models/serialization/ParslCommandSendFailure.tla
+run_case pool-executor-callable-cache \
+    models/serialization/ParslPoolExecutorCallableCacheFixed.cfg \
+    models/serialization/ParslPoolExecutorCallableCache.tla
+run_case results-incoming-close-race \
+    models/executors/ParslResultsIncomingCloseRaceFixed.cfg \
+    models/executors/ParslResultsIncomingCloseRace.tla
+run_case tasks-outgoing-close-race \
+    models/executors/ParslTasksOutgoingCloseRaceFixed.cfg \
+    models/executors/ParslTasksOutgoingCloseRace.tla
+run_case workqueue-malformed-report \
+    models/executors/ParslWorkQueueMalformedReportFixed.cfg \
+    models/executors/ParslWorkQueueMalformedReport.tla
+run_case taskvine-malformed-report \
+    models/executors/ParslTaskVineMalformedReportFixed.cfg \
+    models/executors/ParslTaskVineMalformedReport.tla
+run_case workqueue-start-timeout-cleanup \
+    models/executors/ParslWorkQueueStartTimeoutCleanupFixed.cfg \
+    models/executors/ParslWorkQueueStartTimeoutCleanup.tla
 run_case slurm-foreign-job \
     models/providers/ParslSlurmForeignJobFixed.cfg \
     models/providers/ParslSlurmForeignJob.tla

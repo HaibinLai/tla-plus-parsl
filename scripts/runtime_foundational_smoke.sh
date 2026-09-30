@@ -35,6 +35,13 @@ tests=(
     tests/test_serialization_plugin_error_runtime.py
     tests/test_task_transport_close_runtime.py
     tests/test_callable_retry_transport_runtime.py
+    tests/test_command_receive_failure_runtime.py
+    tests/test_command_send_failure_runtime.py
+    tests/test_pool_executor_callable_cache_runtime.py
+    tests/test_results_incoming_close_race_runtime.py
+    tests/test_workqueue_malformed_report_runtime.py
+    tests/test_taskvine_malformed_report_runtime.py
+    tests/test_workqueue_start_timeout_cleanup_runtime.py
     tests/test_file_bytes_transfer_runtime.py
     tests/test_data_manager_stage_in_ordering_runtime.py
     tests/test_data_manager_stage_out_ordering_runtime.py
