@@ -1738,7 +1738,7 @@ The runtime baseline is reproducible with `python -m unittest discover -s tests 
 'test_*runtime.py'`; the current suite has 486 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
-The September 2026 full-suite audit ran all 486 runtime probes in 13.044 seconds with an `OK`
+The September 2026 full-suite audit ran all 486 runtime probes in 13.297 seconds with an `OK`
 result. The remaining unswept core configuration is `ParslNoFailures.cfg`; it deliberately
 contains the temporal `EventuallySettled`/fairness specification. TLC 2.19's simulator currently
 fails internally on that temporal setup, so it remains documented as a liveness follow-up rather
