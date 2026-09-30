@@ -579,6 +579,27 @@ run_case join-internal-executor-fixed pass \
 run_case join-value-list pass \
     models/dataflow/ParslJoinValueList.cfg \
     models/dataflow/ParslJoinMixedList.tla
+run_case retry-handler-current counterexample \
+    models/dataflow/ParslRetryHandlerCurrent.cfg \
+    models/dataflow/ParslRetryHandler.tla
+run_case retry-handler-fixed pass \
+    models/dataflow/ParslRetryHandlerFixed.cfg \
+    models/dataflow/ParslRetryHandler.tla
+run_case retry-handler-positive pass \
+    models/dataflow/ParslRetryHandlerPositive.cfg \
+    models/dataflow/ParslRetryHandler.tla
+run_case retry-handler-negative-cost-current counterexample \
+    models/dataflow/ParslRetryHandlerNegativeCostCurrent.cfg \
+    models/dataflow/ParslRetryHandlerNegativeCost.tla
+run_case retry-handler-negative-cost-fixed pass \
+    models/dataflow/ParslRetryHandlerNegativeCostFixed.cfg \
+    models/dataflow/ParslRetryHandlerNegativeCost.tla
+run_case retry-handler-nonnumeric-current counterexample \
+    models/dataflow/ParslRetryHandlerNonNumericCostCurrent.cfg \
+    models/dataflow/ParslRetryHandlerNonNumericCost.tla
+run_case retry-handler-nonnumeric-fixed pass \
+    models/dataflow/ParslRetryHandlerNonNumericCostFixed.cfg \
+    models/dataflow/ParslRetryHandlerNonNumericCost.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

@@ -1502,6 +1502,12 @@ also includes `ParslJoinValueList` (rejecting non-Future values) and `ParslJoinI
 (ensuring the outer join task targets `_parsl_internal`). Runtime probes cover twelve dependency/join
 paths, including internal-executor selection and nested container unwrapping.
 
+Retry-handler validation is now in the sweep. `ParslRetryHandler` covers zero-cost handlers bypassing
+a zero retry budget; `ParslRetryHandlerNegativeCost` covers negative costs that make attempts
+unbounded; and `ParslRetryHandlerNonNumericCost` covers invalid handler return types leaving a Future
+pending. Runtime probes reproduce all three current behaviors. Current configurations produce TLC
+counterexamples, while fixed and positive-cost configurations pass simulation.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
