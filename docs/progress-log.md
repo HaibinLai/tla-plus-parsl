@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (Flux late failure cancellation refinement).
+- Latest pushed commit: `d40e7c4` (`Model Flux late failure cancellation`).
 - Foundational smoke inventory: 364 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
