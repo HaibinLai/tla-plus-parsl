@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `6ca8bcf` (`Promote monitoring lifecycle coverage`).
-- Foundational smoke inventory: 377 TLC cases and 323 Python runtime probes.
+- Latest pushed commit: pending (remaining concrete provider runtime coverage).
+- Foundational smoke inventory: 377 TLC cases and 334 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted eleven concrete provider runtime bridges into the foundational gate:
+  HTEX submit, Kubernetes cancel/submit, Azure and Google Cloud cancel, Condor cancel/empty
+  submit, Flux cleanup/status/working-directory, and LocalProvider submit cleanup. The targeted
+  provider batch ran 21 tests, and the complete foundational runtime suite passed 334/334.
 
 - `e9503ff`: PBS Pro status-batch isolation. A malformed scheduler record must not prevent an
   independent valid record in the same response from being processed.

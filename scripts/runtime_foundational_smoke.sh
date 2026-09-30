@@ -216,6 +216,17 @@ tests=(
     tests/test_pool_executor_map_runtime.py
     tests/test_task_transport_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
+    tests/test_htex_submit_runtime.py
+    tests/test_kubernetes_cancel_runtime.py
+    tests/test_kubernetes_submit_runtime.py
+    tests/test_azure_cancel_runtime.py
+    tests/test_googlecloud_cancel_runtime.py
+    tests/test_condor_cancel_runtime.py
+    tests/test_condor_empty_submit_runtime.py
+    tests/test_flux_error_cleanup_cancellation_runtime.py
+    tests/test_flux_provider_status_empty_runtime.py
+    tests/test_flux_working_directory_runtime.py
+    tests/test_local_provider_submit_cleanup_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py
