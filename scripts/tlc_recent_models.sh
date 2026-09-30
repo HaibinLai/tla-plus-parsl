@@ -345,6 +345,12 @@ run_case local-provider-current counterexample \
 run_case local-provider-fixed pass \
     models/providers/ParslLocalProviderFixed.cfg \
     models/providers/ParslLocalProvider.tla
+run_case local-provider-status-scope-current counterexample \
+    models/providers/ParslLocalProviderStatusScope.cfg \
+    models/providers/ParslLocalProviderStatusScope.tla
+run_case local-provider-status-scope-fixed pass \
+    models/providers/ParslLocalProviderStatusScopeFixed.cfg \
+    models/providers/ParslLocalProviderStatusScope.tla
 run_case slurm-malformed-line-current counterexample \
     models/providers/ParslSlurmMalformedLineCurrent.cfg \
     models/providers/ParslSlurmMalformedLine.tla

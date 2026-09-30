@@ -934,6 +934,8 @@ and exit-file checks in `tests/test_local_provider_runtime.py`.
 `ParslLocalProviderStatusScope.tla` models the current `status(job_ids)` implementation's loop
 over all resources. Its current configuration exposes an unrelated missing `.ec` file aborting a
 valid query, while the fixed configuration limits observation to requested IDs.
+Its current/fixed configurations are now included in the recurring smoke sweep, backed by
+`tests/test_local_provider_status_scope_runtime.py`.
 `ParslGridEngineStatus.tla` models the Grid Engine malformed-qstat boundary. Its current
 configuration reproduces the short-line crash; fixed and valid-output configurations pass.
 `ParslGoogleCloudStatus.tla` models direct GCE status-table lookup: the current unknown-status
