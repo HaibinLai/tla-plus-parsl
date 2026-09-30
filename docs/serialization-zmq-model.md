@@ -104,6 +104,13 @@ than Parsl's `SerializationError`. The fixed branch normalizes every serializati
 it leaves submit. `tests/test_htex_serialization_failure_runtime.py` invokes the real executor
 method with deterministic serializer failures. This finding is recorded as BUG-268.
 
+`ParslHtexResultDecodeContinuation.tla` is a temporal refinement of BUG-020. It puts a corrupt
+result frame before an independent valid frame in the same incoming batch. The current worker
+exits on the first decode exception, leaving both the first Future orphaned and the later Future
+pending; the fixed branch fails the first Future explicitly and continues to the valid frame.
+`tests/test_htex_result_decode_continuation_runtime.py` reproduces the current batch behavior with
+the real result-worker loop.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexSerializationFailureCurrent.cfg models/serialization/ParslHtexSerializationFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexSerializationFailureFixed.cfg models/serialization/ParslHtexSerializationFailure.tla

@@ -8,8 +8,9 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `00c18d9` (`Model HTEX serialization failure normalization`).
-- Foundational smoke inventory: 350 TLC cases and 221 Python runtime probes.
+- Latest pushed commit: `7692d96` (`Record HTEX serialization stage`).
+- Foundational smoke inventory: 351 TLC cases and 222 Python runtime probes (including the
+  uncommitted HTEX result-decode continuation stage documented in the current working tree).
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -31,6 +32,7 @@ are recorded here in English and committed with the model changes.
   directory state into `FileExistsError`.
 - `00c18d9`: HTEX serialization-failure normalization. Non-`TypeError` serializer failures must
   not escape the public submit boundary as raw implementation exceptions.
+- `7692d96`: recorded the HTEX serialization stage and its durable smoke inventory.
 
 ### Verification convention
 

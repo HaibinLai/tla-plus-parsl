@@ -912,6 +912,12 @@ run_case htex-serialization-failure-current counterexample \
 run_case htex-serialization-failure-fixed pass \
     models/serialization/ParslHtexSerializationFailureFixed.cfg \
     models/serialization/ParslHtexSerializationFailure.tla
+run_case htex-result-decode-continuation-current counterexample \
+    models/serialization/ParslHtexResultDecodeContinuationCurrent.cfg \
+    models/serialization/ParslHtexResultDecodeContinuation.tla
+run_case htex-result-decode-continuation-fixed pass \
+    models/serialization/ParslHtexResultDecodeContinuationFixed.cfg \
+    models/serialization/ParslHtexResultDecodeContinuation.tla
 run_case htex-manager-loss-current counterexample \
     models/executors/ParslHtexManagerLossCurrent.cfg \
     models/executors/ParslHtexManagerLoss.tla

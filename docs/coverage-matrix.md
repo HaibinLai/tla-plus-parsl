@@ -247,6 +247,8 @@ BUG-098 from a single malformed envelope to a malformed-then-valid message seque
 that the later valid task remains queueable.
 `ParslHtexSerializationFailure` checks that non-`TypeError` serializer failures are normalized
 at the HTEX submit boundary instead of escaping as raw implementation exceptions (BUG-268).
+The temporal refinement `ParslHtexResultDecodeContinuation` places a corrupt result before a
+valid result in one batch and checks that decode failure cannot strand the later Future (BUG-020).
 
 Staging coverage also includes `ParslGlobusTokenSchema` (BUG-266), which checks that an incomplete
 but syntactically valid token cache cannot reach service-record indexing as if it were usable.

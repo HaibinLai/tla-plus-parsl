@@ -830,6 +830,9 @@ run_case htex-task-ingress-continuation \
 run_case htex-serialization-failure \
     models/serialization/ParslHtexSerializationFailureFixed.cfg \
     models/serialization/ParslHtexSerializationFailure.tla
+run_case htex-result-decode-continuation \
+    models/serialization/ParslHtexResultDecodeContinuationFixed.cfg \
+    models/serialization/ParslHtexResultDecodeContinuation.tla
 run_case htex-task-priority-type \
     models/executors/ParslHtexTaskPriorityTypeFixed.cfg \
     models/executors/ParslHtexTaskPriorityType.tla
