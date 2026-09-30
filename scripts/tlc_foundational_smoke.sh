@@ -596,5 +596,20 @@ run_case data-manager-stage-out-return \
 run_case data-manager-stage-out-return-none \
     models/staging/ParslDataManagerStageOutReturnNone.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla
+run_case apply-message-arity \
+    models/serialization/ParslApplyMessageArityFixed.cfg \
+    models/serialization/ParslApplyMessageArity.tla
+run_case serialization-short-frame-count \
+    models/serialization/ParslSerializationShortFrameCountFixed.cfg \
+    models/serialization/ParslSerializationShortFrameCount.tla
+run_case serialization-truncated-length \
+    models/serialization/ParslSerializationTruncatedLengthFixed.cfg \
+    models/serialization/ParslSerializationTruncatedLength.tla
+run_case serialization-negative-length \
+    models/serialization/ParslSerializationNegativeLengthFixed.cfg \
+    models/serialization/ParslSerializationNegativeLength.tla
+run_case serialization-binary-payload \
+    models/serialization/ParslSerializationBinaryPayload.cfg \
+    models/serialization/ParslSerializationBinaryPayload.tla
 
 echo "Foundational TLC smoke suite passed."

@@ -106,6 +106,11 @@ tests=(
     tests/test_datafuture_cancellation_runtime.py
     tests/test_datafuture_falsey_exception_runtime.py
     tests/test_data_manager_stage_out_return_runtime.py
+    tests/test_apply_message_arity_runtime.py
+    tests/test_serialization_short_frame_count_runtime.py
+    tests/test_serialization_truncated_length_runtime.py
+    tests/test_serialization_negative_length_runtime.py
+    tests/test_serialization_binary_payload_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

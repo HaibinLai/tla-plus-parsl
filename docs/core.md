@@ -259,6 +259,11 @@ The data-readiness cases connect staging to the DFK: DataFuture transfer and can
 DataManager cache reuse, stage-out return ownership, stale captured data, and dependency failure
 propagation. They enforce that consumers execute only after a published, non-failed DataFuture.
 
+The serializer framing cases make the concrete `pack_buffers`/`unpack_buffers` contract explicit:
+exactly three apply buffers, declared lengths, short/truncated/negative frames, and binary-safe
+payloads. These checks sit below route/correlation and expose malformed framing before worker
+dispatch.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and
