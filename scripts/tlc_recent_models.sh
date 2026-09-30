@@ -1464,6 +1464,33 @@ run_case kubernetes-unknown-job-current counterexample \
 run_case kubernetes-unknown-job-fixed pass \
     models/providers/ParslKubernetesUnknownJobFixed.cfg \
     models/providers/ParslKubernetesUnknownJob.tla
+run_case duplicate-job-id-current counterexample \
+    models/providers/ParslDuplicateJobIdCurrent.cfg \
+    models/providers/ParslDuplicateJobId.tla
+run_case duplicate-job-id-fixed pass \
+    models/providers/ParslDuplicateJobIdFixed.cfg \
+    models/providers/ParslDuplicateJobId.tla
+run_case poller-duplicate-executor-current counterexample \
+    models/providers/ParslPollerDuplicateExecutorCurrent.cfg \
+    models/providers/ParslPollerDuplicateExecutor.tla
+run_case poller-duplicate-executor-fixed pass \
+    models/providers/ParslPollerDuplicateExecutorFixed.cfg \
+    models/providers/ParslPollerDuplicateExecutor.tla
+run_case provider-poll-clock-current counterexample \
+    models/providers/ParslProviderPollClockRollbackCurrent.cfg \
+    models/providers/ParslProviderPollClockRollback.tla
+run_case provider-poll-clock-fixed pass \
+    models/providers/ParslProviderPollClockRollbackFixed.cfg \
+    models/providers/ParslProviderPollClockRollback.tla
+run_case walltime-parsing-current counterexample \
+    models/providers/ParslWalltimeParsingCurrent.cfg \
+    models/providers/ParslWalltimeParsing.tla
+run_case walltime-parsing-fixed pass \
+    models/providers/ParslWalltimeParsingFixed.cfg \
+    models/providers/ParslWalltimeParsing.tla
+run_case walltime-parsing-valid pass \
+    models/providers/ParslWalltimeParsingValid.cfg \
+    models/providers/ParslWalltimeParsing.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

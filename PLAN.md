@@ -810,6 +810,10 @@ Kubernetes coverage now includes Pending-versus-Running admission, API cancellat
 stale cancellation/status IDs, read-error visibility, and submit-time resource state. The current
 and fixed branches are in the recurring TLC sweep, with runtime probes using fake Kubernetes API
 clients.
+The remaining provider utility contracts are now also covered: duplicate provider job IDs,
+duplicate poller registration, wall-clock rollback in provider polling, and sub-minute walltime
+conversion. Each has a current counterexample and a fixed/valid TLC configuration; runtime probes
+exercise the corresponding Python helpers.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
