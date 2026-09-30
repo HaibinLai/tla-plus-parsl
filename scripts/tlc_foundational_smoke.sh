@@ -389,6 +389,9 @@ run_case thread-executor-resource-spec \
 run_case thread-executor-empty-resource-spec \
     models/executors/ParslThreadExecutorEmptyResourceSpecFixed.cfg \
     models/executors/ParslThreadExecutorEmptyResourceSpec.tla
+run_case flux-serialization-error-name \
+    models/executors/ParslFluxSerializationErrorNameFixed.cfg \
+    models/executors/ParslFluxSerializationErrorName.tla
 run_case workqueue-submit \
     models/executors/ParslWorkQueueSubmitFixed.cfg \
     models/executors/ParslWorkQueueSubmit.tla

@@ -129,6 +129,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorEmpt
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_empty_resource_spec_runtime.py -v
 ```
 
+The callable-name refinement is also checked at the Flux executor boundary by
+`ParslFluxSerializationErrorName.tla` and `tests/test_flux_serialization_error_name_runtime.py`.
+Flux uses the same unsafe `func.__name__` error-reporting path as HTEX; the fixed condition from
+BUG-272 must hold for both concrete submit implementations.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecCurrent.cfg models/executors/ParslThreadExecutorResourceSpec.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecFixed.cfg models/executors/ParslThreadExecutorResourceSpec.tla

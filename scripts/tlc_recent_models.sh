@@ -2979,6 +2979,12 @@ run_case thread-executor-empty-resource-current counterexample \
 run_case thread-executor-empty-resource-fixed pass \
     models/executors/ParslThreadExecutorEmptyResourceSpecFixed.cfg \
     models/executors/ParslThreadExecutorEmptyResourceSpec.tla
+run_case flux-serialization-error-name-current counterexample \
+    models/executors/ParslFluxSerializationErrorNameCurrent.cfg \
+    models/executors/ParslFluxSerializationErrorName.tla
+run_case flux-serialization-error-name-fixed pass \
+    models/executors/ParslFluxSerializationErrorNameFixed.cfg \
+    models/executors/ParslFluxSerializationErrorName.tla
 run_case thread-executor-count-current counterexample \
     models/executors/ParslThreadExecutorThreadCountCurrent.cfg \
     models/executors/ParslThreadExecutorThreadCount.tla
