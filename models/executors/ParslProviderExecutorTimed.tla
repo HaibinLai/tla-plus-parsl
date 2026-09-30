@@ -10,7 +10,8 @@ EXTENDS Naturals
  * branch accepts that old report; the fixed branch records it as stale.
  *)
 
-CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MAX_RETRIES, USE_FIXED
+CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MAX_RETRIES,
+          MAX_PROVIDER_RETRIES, USE_FIXED
 ProviderStates == {"down", "pending", "active", "failed"}
 ManagerStates == {"absent", "up", "expired"}
 TaskStates == {"pending", "running", "lost", "done"}
@@ -18,15 +19,16 @@ Causes == {"none", "provider_lost", "manager_lost", "timeout"}
 LateStates == {"none", "accepted", "stale"}
 
 VARIABLES now, provider, manager, lastHeartbeat, slots, task, attempts,
-          deadline, inFlight, oldInFlight, cause, lateResult
+          providerRetries, deadline, inFlight, oldInFlight, cause, lateResult
 vars == <<now, provider, manager, lastHeartbeat, slots, task, attempts,
-           deadline, inFlight, oldInFlight, cause, lateResult>>
+           providerRetries, deadline, inFlight, oldInFlight, cause, lateResult>>
 
 Init ==
     /\ MAX_TIME >= 3
     /\ HEARTBEAT_TIMEOUT > 0
     /\ TASK_TIMEOUT > 0
     /\ MAX_RETRIES >= 0
+    /\ MAX_PROVIDER_RETRIES >= 0
     /\ USE_FIXED \in BOOLEAN
     /\ now = 0
     /\ provider = "down"
@@ -35,6 +37,7 @@ Init ==
     /\ slots = 0
     /\ task = "pending"
     /\ attempts = 0
+    /\ providerRetries = 0
     /\ deadline = 0
     /\ inFlight = FALSE
     /\ oldInFlight = FALSE
@@ -45,25 +48,29 @@ Tick ==
     /\ now < MAX_TIME
     /\ now' = now + 1
     /\ UNCHANGED <<provider, manager, lastHeartbeat, slots, task, attempts,
-                    deadline, inFlight, oldInFlight, cause, lateResult>>
+                    providerRetries, deadline, inFlight, oldInFlight, cause,
+                    lateResult>>
 
 Heartbeat ==
     /\ manager = "up"
     /\ lastHeartbeat' = now
-    /\ UNCHANGED <<now, provider, manager, slots, task, attempts, deadline,
-                    inFlight, oldInFlight, cause, lateResult>>
+    /\ UNCHANGED <<now, provider, manager, slots, task, attempts,
+                    providerRetries, deadline, inFlight, oldInFlight, cause,
+                    lateResult>>
 
 RequestBlock ==
     /\ provider = "down"
     /\ provider' = "pending"
     /\ UNCHANGED <<now, manager, lastHeartbeat, slots, task, attempts,
-                    deadline, inFlight, oldInFlight, cause, lateResult>>
+                    providerRetries, deadline, inFlight, oldInFlight, cause,
+                    lateResult>>
 
 ProvisionBlock ==
     /\ provider = "pending"
     /\ provider' = "active"
     /\ UNCHANGED <<now, manager, lastHeartbeat, slots, task, attempts,
-                    deadline, inFlight, oldInFlight, cause, lateResult>>
+                    providerRetries, deadline, inFlight, oldInFlight, cause,
+                    lateResult>>
 
 RegisterManager ==
     /\ provider = "active"
@@ -71,8 +78,8 @@ RegisterManager ==
     /\ manager' = "up"
     /\ slots' = 1
     /\ lastHeartbeat' = now
-    /\ UNCHANGED <<now, provider, task, attempts, deadline, inFlight,
-                    oldInFlight, cause, lateResult>>
+    /\ UNCHANGED <<now, provider, task, attempts, providerRetries, deadline,
+                    inFlight, oldInFlight, cause, lateResult>>
 
 Submit ==
     /\ provider = "active"
@@ -84,7 +91,7 @@ Submit ==
     /\ deadline' = now + TASK_TIMEOUT
     /\ inFlight' = TRUE
     /\ UNCHANGED <<now, provider, manager, lastHeartbeat, attempts,
-                    oldInFlight, cause, lateResult>>
+                    providerRetries, oldInFlight, cause, lateResult>>
 
 Complete ==
     /\ task = "running"
@@ -94,8 +101,8 @@ Complete ==
     /\ task' = "done"
     /\ slots' = slots + 1
     /\ inFlight' = FALSE
-    /\ UNCHANGED <<now, provider, manager, lastHeartbeat, attempts, deadline,
-                    oldInFlight, cause, lateResult>>
+    /\ UNCHANGED <<now, provider, manager, lastHeartbeat, attempts,
+                    providerRetries, deadline, oldInFlight, cause, lateResult>>
 
 Timeout ==
     /\ task = "running"
@@ -106,7 +113,7 @@ Timeout ==
     /\ oldInFlight' = TRUE
     /\ inFlight' = FALSE
     /\ UNCHANGED <<now, provider, manager, lastHeartbeat, slots, attempts,
-                    deadline, lateResult>>
+                    providerRetries, deadline, lateResult>>
 
 ExpireManager ==
     /\ manager = "up"
@@ -116,8 +123,8 @@ ExpireManager ==
     /\ cause' = IF task = "running" THEN "manager_lost" ELSE cause
     /\ oldInFlight' = IF task = "running" THEN TRUE ELSE oldInFlight
     /\ inFlight' = IF task = "running" THEN FALSE ELSE inFlight
-    /\ UNCHANGED <<now, provider, lastHeartbeat, slots, attempts, deadline,
-                    lateResult>>
+    /\ UNCHANGED <<now, provider, lastHeartbeat, slots, attempts,
+                    providerRetries, deadline, lateResult>>
 
 FailProvider ==
     /\ provider = "active"
@@ -128,7 +135,8 @@ FailProvider ==
     /\ oldInFlight' = IF task = "running" THEN TRUE ELSE oldInFlight
     /\ inFlight' = IF task = "running" THEN FALSE ELSE inFlight
     /\ slots' = 0
-    /\ UNCHANGED <<now, lastHeartbeat, attempts, deadline, lateResult>>
+    /\ UNCHANGED <<now, lastHeartbeat, attempts, providerRetries, deadline,
+                    lateResult>>
 
 RetryLost ==
     /\ task = "lost"
@@ -139,7 +147,7 @@ RetryLost ==
     /\ attempts' = attempts + 1
     /\ cause' = "none"
     /\ UNCHANGED <<now, provider, manager, lastHeartbeat, slots, deadline,
-                    inFlight, oldInFlight, lateResult>>
+                    inFlight, oldInFlight, lateResult, providerRetries>>
 
 LateComplete ==
     /\ oldInFlight
@@ -151,7 +159,17 @@ LateComplete ==
                /\ lateResult' = "accepted"
     /\ oldInFlight' = FALSE
     /\ UNCHANGED <<now, provider, manager, lastHeartbeat, slots, attempts,
-                    deadline, inFlight, cause>>
+                    providerRetries, deadline, inFlight, cause>>
+
+RetryProvision ==
+    /\ provider = "failed"
+    /\ providerRetries < MAX_PROVIDER_RETRIES
+    /\ provider' = "pending"
+    /\ manager' = "absent"
+    /\ slots' = 0
+    /\ providerRetries' = providerRetries + 1
+    /\ UNCHANGED <<now, lastHeartbeat, task, attempts, deadline, inFlight,
+                    oldInFlight, cause, lateResult>>
 
 Next ==
     \/ Tick
@@ -164,6 +182,7 @@ Next ==
     \/ Timeout
     \/ ExpireManager
     \/ FailProvider
+    \/ RetryProvision
     \/ RetryLost
     \/ LateComplete
     \/ UNCHANGED vars
@@ -178,6 +197,7 @@ TypeOK ==
     /\ slots \in 0..1
     /\ task \in TaskStates
     /\ attempts \in 0..MAX_RETRIES
+    /\ providerRetries \in 0..MAX_PROVIDER_RETRIES
     /\ deadline \in 0..(MAX_TIME + TASK_TIMEOUT)
     /\ inFlight \in BOOLEAN
     /\ oldInFlight \in BOOLEAN
@@ -192,6 +212,9 @@ CapacitySafety ==
 
 RetryBoundSafety ==
     attempts <= MAX_RETRIES
+
+ProviderRetryBoundSafety ==
+    providerRetries <= MAX_PROVIDER_RETRIES
 
 TerminalCauseSafety ==
     cause # "none" => task # "done"

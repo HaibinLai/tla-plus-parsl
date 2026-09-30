@@ -42,13 +42,14 @@ probes are listed in the bug ledger.
 
 `ParslProviderExecutorTimed.tla` is the smallest dynamic provider-backed composition. It models
 one provider block, one registered manager, one worker slot, heartbeat expiry, provider failure,
-logical retry, and a late report from the old physical attempt. The current branch accepts the
-late report after `provider_lost` and TLC finds `TerminalCauseSafety` after 1,222 generated / 626
-distinct states. The fixed branch records the report as stale and passes admission, capacity,
-retry-bound, terminal-cause, and stale-result invariants with 2,162 generated / 720 distinct
-states at depth 14. This complements `ParslExecutorKinds.tla`: the latter checks the static
-contract matrix across executor families, while this model checks the dynamic provider/manager
-loss boundary.
+bounded provider re-provisioning, logical task retry, and a late report from the old physical
+attempt. The current branch accepts the late report after `provider_lost` and TLC finds
+`TerminalCauseSafety` after 1,413 generated / 779 distinct states. The fixed branch records the
+report as stale and passes admission, capacity, task-retry, provider-retry-bound, terminal-cause,
+and stale-result invariants with 11,001 generated / 3,314 distinct states at depth 19. This
+complements `ParslExecutorKinds.tla`: the latter checks the static contract matrix across
+executor families, while this model checks the dynamic provider/manager loss and re-provisioning
+boundary.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedCurrent.cfg models/executors/ParslProviderExecutorTimed.tla
