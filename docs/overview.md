@@ -1660,6 +1660,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterProviderUnk
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterProviderUnknownJobFixed.cfg models/providers/ParslClusterProviderUnknownJob.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesPollingFixed.cfg models/providers/ParslKubernetesPolling.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorBridge.cfg models/executors/ParslProviderExecutorBridge.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorBridgeSmoke.cfg models/executors/ParslProviderExecutorBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatProvider.cfg models/executors/ParslHeartbeatProvider.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslResultRace.cfg models/dataflow/ParslResultRace.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCallbackRace.cfg models/dataflow/ParslJoinCallbackRace.tla
@@ -3064,6 +3065,9 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslProviderExecutorBridge.cfg`: 3,511 states generated, 432 distinct states, depth 15;
   provider-to-executor admission, pre-manager and post-manager terminal failure, unknown-status
   tolerance, and terminal provider cleanup of manager capacity and in-flight work all passed.
+- `ParslProviderExecutorBridgeSmoke.cfg`: 899 states generated, 124 distinct states, depth 11;
+  a bounded single-slot/single-task smoke configuration for the same provider/executor admission
+  and terminal-cleanup invariants.
 - `ParslJoinCallbackRace.cfg`: 4,778 states generated, 956 distinct states, depth 11;
   early callback return, all-inner-done gating, join-lock serialization, ordered aggregation,
   duplicate callback tolerance, and delayed JoinError propagation all passed.

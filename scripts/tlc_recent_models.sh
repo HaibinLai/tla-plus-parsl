@@ -1942,6 +1942,9 @@ run_case executor-provider-core pass \
 run_case provider-executor-bridge pass \
     models/executors/ParslProviderExecutorBridge.cfg \
     models/executors/ParslProviderExecutorBridge.tla
+run_case provider-executor-bridge-smoke pass \
+    models/executors/ParslProviderExecutorBridgeSmoke.cfg \
+    models/executors/ParslProviderExecutorBridge.tla
 run_case executor-provider-lifecycle-current counterexample \
     models/executors/ParslExecutorProviderLifecycle.cfg \
     models/executors/ParslExecutorProviderLifecycle.tla
