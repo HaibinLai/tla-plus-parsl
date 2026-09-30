@@ -700,6 +700,11 @@ rejection, admission, drain/recovery, and provider/executor failure cleanup.
 when a queued task still cannot fit, the current implementation requeues it and recursively calls
 itself until Python raises `RecursionError`; the fixed branch stops the pass and retries after a
 resource return. `tests/test_mpi_backlog_retry_runtime.py` reproduces the live recursion path.
+`ParslMPINoResourceResult.tla` models the adjacent MPI result-path defect documented in the
+source (`Issue #3427`): a successful task with no `num_nodes` allocation reaches an assertion
+instead of returning its result. `tests/test_mpi_no_resource_result_runtime.py` reproduces the
+current assertion using a task result with an empty node map; the fixed branch makes node release
+conditional and still delivers the result.
 `ParslExecutorShutdown.tla` refines concrete shutdown behavior: ThreadPool waits for accepted
 work, WorkQueue's collector fails tasks left behind during process shutdown, and HTEX closes its
 interchange before in-flight cleanup. It also checks that shutdown rejects new submissions.

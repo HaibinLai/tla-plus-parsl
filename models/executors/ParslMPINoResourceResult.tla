@@ -2,45 +2,43 @@
 EXTENDS Naturals
 
 (***************************************************************************
- * MPITaskScheduler.get_result currently assumes every result task owns an
- * entry in _map_tasks_to_nodes.  A task without ``num_nodes`` is valid and is
- * deliberately not inserted into that map, but its result still enters the
- * result queue.  The current assert then aborts the scheduler.  USE_FIXED
- * models treating an unmapped result as a normal result with no node return.
+ * MPITaskScheduler.get_result currently assumes every successful task has an
+ * entry in _map_tasks_to_nodes. Tasks without a num_nodes resource request
+ * have no such entry, so the assertion is reached before the result returns.
+ * USE_FIXED models conditional node release with normal result delivery.
  *************************************************************************** *)
 
 CONSTANT USE_FIXED
 
-VARIABLES resultKind, mapped, phase, schedulerAlive
-vars == <<resultKind, mapped, phase, schedulerAlive>>
+VARIABLES mapped, result, phase
+vars == <<mapped, result, phase>>
 
 Init ==
     /\ USE_FIXED \in BOOLEAN
-    /\ resultKind = "result"
     /\ mapped = FALSE
+    /\ result = "ready"
     /\ phase = "queued"
-    /\ schedulerAlive = TRUE
 
 ConsumeResult ==
-    /\ phase = "queued" /\ resultKind = "result"
-    /\ phase' = IF mapped \/ USE_FIXED THEN "returned" ELSE "asserted"
-    /\ schedulerAlive' = IF mapped \/ USE_FIXED THEN TRUE ELSE FALSE
-    /\ UNCHANGED <<resultKind, mapped>>
+    /\ phase = "queued"
+    /\ result = "ready"
+    /\ phase' = IF mapped \/ USE_FIXED THEN "returned" ELSE "assertion"
+    /\ UNCHANGED <<mapped, result>>
 
 Done ==
-    /\ phase \in {"returned", "asserted"}
+    /\ phase \in {"returned", "assertion"}
     /\ UNCHANGED vars
 
 Next == ConsumeResult \/ Done
 Spec == Init /\ [][Next]_vars
 
 TypeOK ==
-    /\ resultKind = "result"
+    /\ USE_FIXED \in BOOLEAN
     /\ mapped \in BOOLEAN
-    /\ phase \in {"queued", "returned", "asserted"}
-    /\ schedulerAlive \in BOOLEAN
+    /\ result = "ready"
+    /\ phase \in {"queued", "returned", "assertion"}
 
-UnmappedResultSafety ==
-    ~mapped /\ resultKind = "result" => phase # "asserted"
+NoRawAssertion == phase # "assertion"
+ResultDelivered == phase = "returned"
 
 =============================================================================

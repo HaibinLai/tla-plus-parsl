@@ -843,6 +843,12 @@ run_case mpi-backlog-retry-current counterexample \
 run_case mpi-backlog-retry-fixed pass \
     models/executors/ParslMPIBacklogRetryFixed.cfg \
     models/executors/ParslMPIBacklogRetry.tla
+run_case mpi-no-resource-result-current counterexample \
+    models/executors/ParslMPINoResourceResultCurrent.cfg \
+    models/executors/ParslMPINoResourceResult.tla
+run_case mpi-no-resource-result-fixed pass \
+    models/executors/ParslMPINoResourceResultFixed.cfg \
+    models/executors/ParslMPINoResourceResult.tla
 run_case flux-submission-failure pass \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla
