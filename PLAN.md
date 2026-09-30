@@ -270,6 +270,8 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslJoinMonitoring` is now in the smoke sweep, connecting memoized, staged, and ordinary
   inner Futures to versioned outer status events, reordered delivery, database-write retry, and
   terminal monitoring-record stability.
+- `ParslJoinApp` and `ParslNestedJoin` are now in the smoke sweep, covering the core outer-handle
+  protocol and delayed propagation from leaf Futures through an inner join into an outer join.
 - `ParslHtexResultBatchContinuation` is now in the smoke sweep, requiring a malformed result
   frame to be discarded without aborting later valid results in the same manager batch.
 - `ParslHtexExecutorResultFrameContinuation` extends that property to the executor result queue:

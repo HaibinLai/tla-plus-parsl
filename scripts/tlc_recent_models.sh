@@ -534,3 +534,9 @@ run_case join-end-to-end pass \
 run_case join-monitoring pass \
     models/dataflow/ParslJoinMonitoring.cfg \
     models/dataflow/ParslJoinMonitoring.tla
+run_case join-app-core pass \
+    models/dataflow/ParslJoinApp.cfg \
+    models/dataflow/ParslJoinApp.tla
+run_case nested-join pass \
+    models/dataflow/ParslNestedJoin.cfg \
+    models/dataflow/ParslNestedJoin.tla
