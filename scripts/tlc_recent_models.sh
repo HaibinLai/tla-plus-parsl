@@ -322,6 +322,15 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case azure-status-remote-failure-current counterexample \
+    models/providers/ParslAzureStatusRemoteFailureCurrent.cfg \
+    models/providers/ParslAzureStatusRemoteFailure.tla
+run_case azure-status-remote-failure-fixed pass \
+    models/providers/ParslAzureStatusRemoteFailureFixed.cfg \
+    models/providers/ParslAzureStatusRemoteFailure.tla
+run_case azure-status-remote-failure-normal pass \
+    models/providers/ParslAzureStatusRemoteFailureNormal.cfg \
+    models/providers/ParslAzureStatusRemoteFailure.tla
 run_case cluster-status-unknown-current counterexample \
     models/providers/ParslClusterStatusUnknownCurrent.cfg \
     models/providers/ParslClusterStatusUnknown.tla

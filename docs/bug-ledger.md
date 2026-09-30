@@ -10,6 +10,8 @@ reproduced. A `Current` finding describes the behavior observed in the inspected
 patched. Each new model stage should add an entry here with a source path, a TLC configuration,
 and a runtime probe when one is available.
 
+| BUG-211 | Azure remote-missing status aborts polling batch | `AzureProvider.status` lets a VM lookup exception escape, preventing later requested jobs from being observed. | `models/providers/ParslAzureStatusRemoteFailure*.cfg`; `tests/test_azure_status_remote_failure_runtime.py` | Isolate remote lookup failures as UNKNOWN/PENDING and continue the batch. | Reproduced; candidate fixed model passes |
+
 | ID | Component | Current behavior / risk | Evidence | Candidate safety condition | Status |
 | --- | --- | --- | --- | --- | --- |
 | BUG-001 | DFK retry/result delivery | A result arriving after a physical attempt timed out can resolve the logical Future while its retry number is still current. | `ParslEndToEnd.cfg` (`CurrentAttemptResultSafety`); `tests/test_end_to_end_runtime.py` | Only a result from an attempt in `succeeded` state may resolve the Future. | Reproduced; model fixed branch passes |

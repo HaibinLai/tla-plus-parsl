@@ -73,6 +73,9 @@ The provider uses `none/requested/active/failed/cancelled`; workers use
 `unregistered/idle/busy/failed`. Workers begin as `unregistered` and must pass through
 `RegisterWorker` before becoming idle, matching the HTEX interchange manager-registration
 boundary.
+
+Provider-focused models also isolate Azure remote-status lookup failures so one deleted or
+temporarily unavailable VM cannot abort status projection for unrelated jobs.
 Executors additionally use `up/draining/down`; `ExecutorDrain` blocks new submissions while
 existing attempts may continue, and `ExecutorRecover` reopens submission.
 `RequestAllocation`, `AllocationSucceeds`, and `AllocationFails` abstract resource request,

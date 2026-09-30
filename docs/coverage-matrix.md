@@ -81,6 +81,9 @@ probe; status-response cardinality is modeled separately from cancellation-respo
 The provider row also includes `ParslAzureStatusShape` (BUG-176), which checks that a missing Azure
 instance-view object cannot abort status polling.
 
+It now also includes `ParslAzureStatusRemoteFailure` (BUG-211), which checks that a remote VM
+lookup failure is isolated instead of aborting status results for unrelated requested jobs.
+
 It also includes `ParslCondorSubmitWhitespace` (BUG-177), which checks scheduler whitespace
 normalization before cluster/process ID expansion.
 
