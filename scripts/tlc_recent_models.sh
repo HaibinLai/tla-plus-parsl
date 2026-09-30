@@ -1471,6 +1471,12 @@ run_case worker-initial-probe-current counterexample \
 run_case worker-initial-probe-fixed pass \
     models/clock/ParslWorkerInitialProbeTimeoutFixed.cfg \
     models/clock/ParslWorkerInitialProbeTimeout.tla
+run_case monitoring-external-empty-current counterexample \
+    models/monitoring/ParslMonitoringExternalQueueEmptyRaceCurrent.cfg \
+    models/monitoring/ParslMonitoringExternalQueueEmptyRace.tla
+run_case monitoring-external-empty-fixed pass \
+    models/monitoring/ParslMonitoringExternalQueueEmptyRaceFixed.cfg \
+    models/monitoring/ParslMonitoringExternalQueueEmptyRace.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
