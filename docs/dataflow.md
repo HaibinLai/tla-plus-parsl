@@ -46,16 +46,18 @@ generated / 3,559 distinct states at depth 20.
 
 `ParslJoinTimedMonitoring.tla` is the small clock-focused companion. It combines one inner
 Future, an outer join, two-chunk data staging, DataFuture readiness, per-chunk checksum validation,
-source-version capture during stage-in, manager heartbeat expiry, task timeout, late completion,
-and terminal monitoring persistence. The current configuration permits publication of a corrupt
-chunk; TLC finds the expected `ContentSafety` violation after 4,500 generated / 1,452 distinct
-states (the stale-source branch is also modeled). The fixed configuration requires valid checksums,
-requires the captured source version to match the current source before publication, bounds each
-chunk repair to `MAX_CHUNK_REPAIRS = 1`, and classifies late completion as stale, passing all nine
-invariants with 51,123 generated / 11,708 distinct states at depth 22. The smoke
-current/fixed configurations use a three-tick horizon; current reaches a safety violation in 4,296
-generated / 1,335 distinct states, while fixed passes with 26,563 generated / 6,036 distinct
-states at depth 21.
+source-version capture during stage-in, manager heartbeat expiry, task timeout, outer cancellation,
+late completion, and terminal monitoring persistence. The current configuration permits publication
+of a corrupt chunk; TLC finds the expected `ContentSafety` violation after 5,577 generated / 1,820
+distinct states (the cancellation and stale-source branches are also modeled). The fixed
+configuration requires valid checksums, requires the captured source version to match the current
+source before publication, bounds each chunk repair to `MAX_CHUNK_REPAIRS = 1`, keeps cancellation
+terminal, and classifies late completion as stale, passing all ten invariants with 130,223 generated
+/ 27,386 distinct states at depth 22. The smoke current/fixed configurations use a three-tick
+horizon; current reaches a safety violation in 5,854 generated / 1,817 distinct states, while fixed
+passes with 69,411 generated / 14,418 distinct states at depth 21. The focused cancellation
+configuration finds `CancellationSafety` in 33,266 generated / 7,898 distinct current states and
+passes with 130,223 generated / 27,386 distinct fixed states.
 The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
 inner Python apps and verifies the duplicate Future position in the outer result.
 

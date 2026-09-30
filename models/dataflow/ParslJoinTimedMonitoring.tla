@@ -10,13 +10,13 @@ EXTENDS Naturals
  *************************************************************************** *)
 
 CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MAX_CHUNK_REPAIRS, USE_FIXED
-OuterStates == {"executing", "joining", "succeeded", "failed"}
+OuterStates == {"executing", "joining", "succeeded", "failed", "cancelled"}
 InnerStates == {"pending", "running", "succeeded", "lost"}
 ManagerStates == {"up", "expired"}
 Causes == {"none", "timeout", "manager_lost"}
 LateStates == {"none", "accepted", "stale"}
 MonitorStates == {"none", "queued", "persisted"}
-MonitorStatuses == {"none", "succeeded", "failed"}
+MonitorStatuses == {"none", "succeeded", "failed", "cancelled"}
 Chunks == 1..2
 ChunkStates == {"missing", "received"}
 ChecksumStates == {"missing", "valid", "corrupt"}
@@ -25,11 +25,13 @@ Versions == 0..1
 VARIABLES now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
           cause, lateResult, chunkState, chunkChecksum, chunkRepairs, dataReady,
           sourceVersion, capturedVersion,
+          cancelled,
           monitorState,
           monitorStatus, dbStatus
 vars == <<now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
            cause, lateResult, chunkState, chunkChecksum, chunkRepairs, dataReady,
            sourceVersion, capturedVersion,
+           cancelled,
            monitorState,
            monitorStatus, dbStatus>>
 
@@ -54,6 +56,7 @@ Init ==
     /\ dataReady = FALSE
     /\ sourceVersion = 0
     /\ capturedVersion = 0
+    /\ cancelled = FALSE
     /\ monitorState = "none"
     /\ monitorStatus = "none"
     /\ dbStatus = "none"
@@ -88,6 +91,7 @@ StageChunk(c) ==
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
                     inFlight, cause, lateResult, chunkRepairs, dataReady,
                     sourceVersion,
+                    cancelled,
                     monitorState,
                     monitorStatus, dbStatus>>
 
@@ -101,6 +105,7 @@ CorruptChunk(c) ==
                     inFlight, cause, lateResult, chunkState, chunkRepairs,
                     dataReady,
                     sourceVersion, capturedVersion,
+                    cancelled,
                     monitorState, monitorStatus, dbStatus>>
 
 RepairChunk(c) ==
@@ -113,6 +118,7 @@ RepairChunk(c) ==
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
                     inFlight, cause, lateResult, chunkState, dataReady,
                     sourceVersion, capturedVersion,
+                    cancelled,
                     monitorState, monitorStatus, dbStatus>>
 
 ChangeSource ==
@@ -121,6 +127,7 @@ ChangeSource ==
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
                     inFlight, cause, lateResult, chunkState, chunkChecksum,
                     chunkRepairs, dataReady, capturedVersion,
+                    cancelled,
                     monitorState, monitorStatus, dbStatus>>
 
 PublishData ==
@@ -135,6 +142,7 @@ PublishData ==
                     inFlight, cause, lateResult, chunkState, chunkChecksum,
                     chunkRepairs,
                     sourceVersion, capturedVersion,
+                    cancelled,
                     monitorState,
                     monitorStatus, dbStatus>>
 
@@ -148,6 +156,17 @@ StartInner ==
     /\ inFlight' = TRUE
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, cause, lateResult,
                     monitorState, monitorStatus, dbStatus>>
+
+CancelOuter ==
+    /\ outer \in {"executing", "joining"}
+    /\ outer' = "cancelled"
+    /\ cancelled' = TRUE
+    /\ inner' = IF inner = "running" THEN "lost" ELSE inner
+    /\ inFlight' = FALSE
+    /\ UNCHANGED <<now, manager, lastHeartbeat, deadline, cause, lateResult,
+                    chunkState, chunkChecksum, chunkRepairs, dataReady,
+                    sourceVersion, capturedVersion, monitorState,
+                    monitorStatus, dbStatus>>
 
 CompleteInner ==
     /\ inner = "running"
@@ -183,11 +202,14 @@ LateComplete ==
     /\ inner = "lost"
     /\ IF USE_FIXED
           THEN /\ lateResult' = "stale"
-               /\ UNCHANGED inner
+               /\ UNCHANGED <<inner, outer>>
           ELSE /\ inner' = "succeeded"
+               /\ outer' = IF cancelled THEN "succeeded" ELSE outer
                /\ lateResult' = "accepted"
-    /\ UNCHANGED <<now, manager, lastHeartbeat, outer, deadline, inFlight,
-                    cause, monitorState, monitorStatus, dbStatus>>
+    /\ UNCHANGED <<now, manager, lastHeartbeat, deadline, inFlight,
+                    cause, monitorState, monitorStatus, dbStatus,
+                    cancelled, chunkState, chunkChecksum, chunkRepairs,
+                    dataReady, sourceVersion, capturedVersion>>
 
 FinalizeJoin ==
     /\ outer = "joining"
@@ -197,7 +219,7 @@ FinalizeJoin ==
                     cause, lateResult, monitorState, monitorStatus, dbStatus>>
 
 EmitStatus ==
-    /\ outer \in {"succeeded", "failed"}
+    /\ outer \in {"succeeded", "failed", "cancelled"}
     /\ monitorState = "none"
     /\ monitorState' = "queued"
     /\ monitorStatus' = outer
@@ -219,7 +241,9 @@ CoreNext ==
 
 Next ==
     \/ (CoreNext /\ UNCHANGED <<chunkState, chunkChecksum, chunkRepairs,
-                                  dataReady, sourceVersion, capturedVersion>>)
+                                  dataReady, sourceVersion, capturedVersion,
+                                  cancelled>>)
+    \/ CancelOuter
     \/ \E c \in Chunks: StageChunk(c)
     \/ \E c \in Chunks: CorruptChunk(c) \/ RepairChunk(c)
     \/ ChangeSource
@@ -243,6 +267,7 @@ TypeOK ==
     /\ dataReady \in BOOLEAN
     /\ sourceVersion \in Versions
     /\ capturedVersion \in Versions
+    /\ cancelled \in BOOLEAN
     /\ monitorState \in MonitorStates
     /\ monitorStatus \in MonitorStatuses
     /\ dbStatus \in MonitorStatuses
@@ -257,5 +282,8 @@ StaleResultSafety == lateResult = "accepted" => ~USE_FIXED
 DatabaseSafety ==
     /\ dbStatus = "succeeded" => outer = "succeeded"
     /\ dbStatus = "failed" => outer = "failed"
+    /\ dbStatus = "cancelled" => outer = "cancelled"
+
+CancellationSafety == cancelled => outer = "cancelled"
 
 =============================================================================

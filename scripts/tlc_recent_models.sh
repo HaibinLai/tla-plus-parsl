@@ -2083,6 +2083,12 @@ run_case join-timed-monitoring-smoke-current counterexample \
 run_case join-timed-monitoring-smoke-fixed pass \
     models/dataflow/ParslJoinTimedMonitoringSmokeFixed.cfg \
     models/dataflow/ParslJoinTimedMonitoring.tla
+run_case join-timed-monitoring-cancel-current counterexample \
+    models/dataflow/ParslJoinTimedMonitoringCancelCurrent.cfg \
+    models/dataflow/ParslJoinTimedMonitoring.tla
+run_case join-timed-monitoring-cancel-fixed pass \
+    models/dataflow/ParslJoinTimedMonitoringCancelFixed.cfg \
+    models/dataflow/ParslJoinTimedMonitoring.tla
 run_case join-app-core pass \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
