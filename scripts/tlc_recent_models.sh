@@ -340,6 +340,15 @@ run_case globus-compute-resource-spec-type-fixed pass \
 run_case globus-compute-resource-spec-type-normal pass \
     models/executors/ParslGlobusComputeResourceSpecTypeNormal.cfg \
     models/executors/ParslGlobusComputeResourceSpecType.tla
+run_case http-separate-content-length-current counterexample \
+    models/staging/ParslHTTPSeparateContentLengthCurrent.cfg \
+    models/staging/ParslHTTPSeparateContentLength.tla
+run_case http-separate-content-length-fixed pass \
+    models/staging/ParslHTTPSeparateContentLengthFixed.cfg \
+    models/staging/ParslHTTPSeparateContentLength.tla
+run_case http-separate-content-length-normal pass \
+    models/staging/ParslHTTPSeparateContentLengthNormal.cfg \
+    models/staging/ParslHTTPSeparateContentLength.tla
 run_case http-separate-status-current counterexample \
     models/staging/ParslHTTPSeparateStatusCurrent.cfg \
     models/staging/ParslHTTPSeparateStatus.tla

@@ -323,6 +323,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPContentLengthNor
 
 This content-length boundary is recorded as BUG-172.
 
+`ParslHTTPSeparateContentLength.tla` applies the same declared-length invariant to the separate
+task helper (`_http_stage_in`). The current path accepts a response advertising five bytes while
+yielding three; the fixed path rejects the short transfer before completing stage-in.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateContentLengthCurrent.cfg models/staging/ParslHTTPSeparateContentLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateContentLengthFixed.cfg models/staging/ParslHTTPSeparateContentLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateContentLengthNormal.cfg models/staging/ParslHTTPSeparateContentLength.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_separate_content_length_runtime.py -v
+```
+
 `ParslHTTPSeparateStatus.tla` covers the separate-task HTTP helper (`_http_stage_in`). The
 current helper writes any response body and completes successfully even for a non-2xx response;
 the fixed branch validates the status before publishing the staged input.

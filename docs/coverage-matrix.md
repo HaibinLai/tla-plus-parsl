@@ -124,6 +124,9 @@ Executor coverage also includes `ParslGlobusComputeResourceSpecType` (BUG-219), 
 typed admission of per-submit Globus Compute resource specifications before shared SDK state is
 mutated.
 
+File-transfer coverage also includes `ParslHTTPSeparateContentLength` (BUG-220), applying the
+declared-length safety check to the separate-task HTTP helper as well as the in-task wrapper.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
