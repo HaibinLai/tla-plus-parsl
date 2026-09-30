@@ -1489,6 +1489,14 @@ exact-threshold output, and head/tail truncation above the threshold. Runtime pr
 filesystem/status paths. The current summary-read error branch produces a TLC counterexample; fixed
 and all summary-shape configurations pass simulation.
 
+Callback-based executors are now covered by `ParslRadicalPilotFailurePayload`, which wraps a missing
+exception payload before resolving a failed Future; `ParslRadicalPilotLateCallback`, which suppresses
+DONE after cancellation; and `ParslRadicalPilotUnknownCallback`, which ignores callbacks for removed
+tasks. `ParslGlobusComputeResult` models direct propagation of SDK success, failure, and cancellation
+without an extra wrapper state. Runtime probes cover ten Radical Pilot/Globus Compute paths. Current
+Radical Pilot configurations produce the expected callback/failure counterexamples; fixed and direct
+SDK propagation configurations pass TLC simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

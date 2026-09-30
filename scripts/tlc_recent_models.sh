@@ -450,6 +450,27 @@ run_case job-status-summary-large pass \
 run_case job-status-summary-missing pass \
     models/executors/ParslJobStatusOutputSummaryMissing.cfg \
     models/executors/ParslJobStatusOutputSummary.tla
+run_case radical-pilot-failure-payload-current counterexample \
+    models/executors/ParslRadicalPilotFailurePayloadCurrent.cfg \
+    models/executors/ParslRadicalPilotFailurePayload.tla
+run_case radical-pilot-failure-payload-fixed pass \
+    models/executors/ParslRadicalPilotFailurePayloadFixed.cfg \
+    models/executors/ParslRadicalPilotFailurePayload.tla
+run_case radical-pilot-late-callback-current counterexample \
+    models/executors/ParslRadicalPilotLateCallbackCurrent.cfg \
+    models/executors/ParslRadicalPilotLateCallback.tla
+run_case radical-pilot-late-callback-fixed pass \
+    models/executors/ParslRadicalPilotLateCallbackFixed.cfg \
+    models/executors/ParslRadicalPilotLateCallback.tla
+run_case radical-pilot-unknown-callback-current counterexample \
+    models/executors/ParslRadicalPilotUnknownCallbackCurrent.cfg \
+    models/executors/ParslRadicalPilotUnknownCallback.tla
+run_case radical-pilot-unknown-callback-fixed pass \
+    models/executors/ParslRadicalPilotUnknownCallbackFixed.cfg \
+    models/executors/ParslRadicalPilotUnknownCallback.tla
+run_case globus-compute-result pass \
+    models/executors/ParslGlobusComputeResult.cfg \
+    models/executors/ParslGlobusComputeResult.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
