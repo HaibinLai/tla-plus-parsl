@@ -12,7 +12,7 @@ EXTENDS Naturals, Sequences, FiniteSets
  * results preserve the original input positions.
  ***************************************************************************)
 
-CONSTANT MAX_RETRIES
+CONSTANT MAX_RETRIES, USE_FIXED
 
 INNER == {"I1", "I2"}
 POSITIONS == 1..3
@@ -20,7 +20,7 @@ Inputs == <<"I1", "I2", "I1">>
 Modes == {"none", "single", "list", "empty", "invalid"}
 OuterStates == {"executing", "joining", "succeeded", "failed"}
 LogicalStates == {"pending", "retry_wait", "succeeded", "failed", "cancelled"}
-AttemptStates == {"absent", "serialized", "running", "succeeded", "failed", "cancelled"}
+AttemptStates == {"absent", "serialized", "running", "succeeded", "failed", "cancelled", "stale"}
 Values == {"I1:value", "I2:value", "unset"}
 ResultValue == Values \cup {"invalid-return", "join-error"} \cup Seq(Values)
 
@@ -37,6 +37,7 @@ AllJoinedTerminal ==
 
 Init ==
     /\ MAX_RETRIES >= 1
+    /\ USE_FIXED \in BOOLEAN
     /\ outerState = "executing"
     /\ mode = "none"
     /\ joinSet = {}
@@ -142,6 +143,22 @@ RetryAttempt(i) ==
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     attemptState, innerValue, outerResult, failureCount>>
 
+LateAttempt(i, a) ==
+    /\ i \in INNER
+    /\ a \in 0..MAX_RETRIES
+    /\ a < currentAttempt[i]
+    /\ attemptState[i][a] = "failed"
+    /\ IF USE_FIXED
+          THEN /\ attemptState' = [attemptState EXCEPT ![i][a] = "stale"]
+               /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                               logicalState, currentAttempt, innerValue,
+                               outerResult, failureCount>>
+          ELSE /\ logicalState' = [logicalState EXCEPT ![i] = "succeeded"]
+               /\ innerValue' = [innerValue EXCEPT ![i] = i \o ":value"]
+               /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                               currentAttempt, attemptState, outerResult,
+                               failureCount>>
+
 CancelInner(i) ==
     /\ i \in INNER
     /\ logicalState[i] \in {"pending", "retry_wait", "running"}
@@ -188,6 +205,7 @@ Next ==
                              \/ FailAttempt(i) \/ RetryAttempt(i)
                              \/ CancelInner(i)
     \/ \E i \in INNER : Observe(i)
+    \/ \E i \in INNER, a \in 0..MAX_RETRIES : LateAttempt(i, a)
     \/ Finalize
     \/ UNCHANGED vars
 
@@ -230,5 +248,10 @@ CancellationSafety ==
       logicalState[i] = "cancelled"
         => attemptState[i][currentAttempt[i]] \in
              {"absent", "failed", "cancelled"}
+
+LateResultSafety ==
+    \A i \in INNER :
+      logicalState[i] = "succeeded" =>
+        attemptState[i][currentAttempt[i]] = "succeeded"
 
 =============================================================================

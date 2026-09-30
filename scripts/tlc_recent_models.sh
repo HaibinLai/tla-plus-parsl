@@ -2056,6 +2056,9 @@ run_case taskvine-shutdown pass \
 run_case join-full pass \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla
+run_case join-full-current counterexample \
+    models/dataflow/ParslJoinFullCurrent.cfg \
+    models/dataflow/ParslJoinFull.tla
 run_case join-end-to-end pass \
     models/dataflow/ParslJoinEndToEnd.cfg \
     models/dataflow/ParslJoinEndToEnd.tla

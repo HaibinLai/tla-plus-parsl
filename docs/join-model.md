@@ -25,6 +25,7 @@ The integrated ParslJoinFull model covers:
 - duplicate list references;
 - explicit callable serialization before each physical attempt starts;
 - per-inner physical retries;
+- late completion from an older failed attempt, classified as stale in the fixed branch;
 - inner failure/cancellation and outer terminal failure;
 - ordered successful list results.
 

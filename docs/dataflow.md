@@ -29,7 +29,10 @@ and an explicit per-attempt `absent -> serialized -> running` transport stage. `
 keeps the state space small while preserving the important attempt correlation and join-handle
 invariants. The full configuration checks 7,148 generated / 1,958 distinct states at depth 19
 with no invariant violation. The six-case runtime bridge in
-`tests/test_join_runtime.py` exercises real decorated `join_app` behavior for single, list,
+`ParslJoinFullCurrent.cfg` intentionally accepts a result from a failed attempt after a retry has
+started; TLC finds `AttemptLogicalSafety` after 2,417 generated / 982 distinct states. The fixed
+configuration rejects that old result as stale and checks 18,061 generated / 4,248 distinct
+states at depth 21. `tests/test_join_runtime.py` exercises real decorated `join_app` behavior for single, list,
 duplicate, empty, failure, and nested joins.
 
 `ParslJoinCallableTransport.tla` adds the serialized callable boundary to that join semantics.
