@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `e9d56ef` (`Promote provider executor lifecycle coverage`).
-- Foundational smoke inventory: 374 TLC cases and 278 Python runtime probes.
+- Latest pushed commit: pending (monitoring database runtime coverage).
+- Foundational smoke inventory: 374 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -144,6 +144,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted eight concrete provider/executor runtime bridges into the foundational
   gate: Flux cancellation races, Globus Compute submit overlap, HTEX cancellation admission,
   Local PID admission, poller close/duplicate registration, and scale-in result shape.
+- Current stage: promoted four monitoring DB runtime bridges into the foundational gate. The probes
+  cover batch boundaries, permanent insert/update errors, deferred worker messages, and duplicate
+  observations against the installed SQLite-backed DatabaseManager.
 
 ### Verification convention
 
