@@ -159,6 +159,11 @@ outer cancellation, stale-result rejection, failure aggregation, and terminal mo
 small `ParslJoinApp` protocol. Focused models remain the place for individual callback races and
 backend-specific details.
 
+The monitoring cases cover the next database refinement: all-or-nothing batch publication,
+persistent retry of transient writes, and explicit terminal handling for permanent insert/update
+errors. They complement the smaller `ParslMonitoringDBSmoke` path without making the smoke suite
+depend on an unbounded database or queue.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The

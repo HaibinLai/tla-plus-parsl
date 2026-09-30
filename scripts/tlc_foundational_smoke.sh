@@ -90,5 +90,17 @@ run_case provider-executor-monitoring \
 run_case join-full \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla
+run_case monitoring-batch-atomicity \
+    models/monitoring/ParslMonitoringBatchAtomicityFixed.cfg \
+    models/monitoring/ParslMonitoringBatchAtomicity.tla
+run_case monitoring-persistent-retry \
+    models/monitoring/ParslMonitoringPersistentRetryFixed.cfg \
+    models/monitoring/ParslMonitoringPersistentRetry.tla
+run_case monitoring-db-permanent-insert \
+    models/monitoring/ParslMonitoringDBPermanentErrorFixed.cfg \
+    models/monitoring/ParslMonitoringDBPermanentError.tla
+run_case monitoring-db-permanent-update \
+    models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
+    models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
 
 echo "Foundational TLC smoke suite passed."
