@@ -1831,6 +1831,10 @@ monitoring task/try insertion bookkeeping, and TasksOutgoing transport closure.
 Cases 421--440 matched at 100 steps: transport close, file bytes/corruption, transfer retry,
 DataFuture transfer, HTTP status, Rsync partial cleanup, stage-out Future placement, and
 monitoring database core/insert behavior.
+Cases 441--460 matched at 100 steps: monitoring insert presence, executor/provider bridge and
+lifecycle, MPI backlog retry and no-resource results, cluster unknown jobs, LSF resource
+validation, Flux submission failure, TaskVine/Work Queue shutdown/results, and full join success
+including end-to-end execution.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
