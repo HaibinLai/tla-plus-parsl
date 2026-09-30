@@ -817,6 +817,10 @@ exercise the corresponding Python helpers.
 The provider-free ThreadPoolExecutor abstraction is now covered: blocking and non-blocking
 shutdown, pending versus running Future cancellation, resource-spec validation, and max-thread
 count validation. Runtime probes exercise the real executor and Future behavior.
+The command-execution boundary is now covered as well: malformed packed task messages are rejected
+before invocation, callable values and exceptions cross the execution boundary, and timeout paths
+explicitly distinguish process cleanup from merely re-raising an exception. Runtime probes cover
+`execute_task`, `execute_wait`, and the Bash timeout helper.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

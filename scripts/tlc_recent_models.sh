@@ -1518,6 +1518,30 @@ run_case thread-executor-count-fixed pass \
 run_case thread-executor-count-valid pass \
     models/executors/ParslThreadExecutorThreadCountValid.cfg \
     models/executors/ParslThreadExecutorThreadCount.tla
+run_case execute-task-malformed pass \
+    models/executors/ParslExecuteTaskMalformed.cfg \
+    models/executors/ParslExecuteTask.tla
+run_case execute-task-value pass \
+    models/executors/ParslExecuteTaskValue.cfg \
+    models/executors/ParslExecuteTask.tla
+run_case execute-task-exception pass \
+    models/executors/ParslExecuteTaskException.cfg \
+    models/executors/ParslExecuteTask.tla
+run_case execute-wait-timeout-current counterexample \
+    models/executors/ParslExecuteWaitTimeoutCurrent.cfg \
+    models/executors/ParslExecuteWaitTimeout.tla
+run_case execute-wait-timeout-fixed pass \
+    models/executors/ParslExecuteWaitTimeoutFixed.cfg \
+    models/executors/ParslExecuteWaitTimeout.tla
+run_case execute-wait-timeout-success pass \
+    models/executors/ParslExecuteWaitTimeoutSuccess.cfg \
+    models/executors/ParslExecuteWaitTimeout.tla
+run_case bash-timeout-cleanup-current counterexample \
+    models/executors/ParslBashTimeoutCleanupCurrent.cfg \
+    models/executors/ParslBashTimeoutCleanup.tla
+run_case bash-timeout-cleanup-fixed pass \
+    models/executors/ParslBashTimeoutCleanupFixed.cfg \
+    models/executors/ParslBashTimeoutCleanup.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
