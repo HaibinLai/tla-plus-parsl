@@ -228,6 +228,16 @@ tests=(
     tests/test_lsf_duplicate_status_runtime.py
     tests/test_aws_unknown_instance_runtime.py
     tests/test_aws_status_missing_result_runtime.py
+    tests/test_local_provider_runtime.py
+    tests/test_local_provider_status_scope_runtime.py
+    tests/test_local_provider_exit_status_runtime.py
+    tests/test_aws_status_runtime.py
+    tests/test_aws_status_reservation_shape_runtime.py
+    tests/test_azure_status_bookkeeping_runtime.py
+    tests/test_condor_malformed_status_line_runtime.py
+    tests/test_slurm_malformed_line_runtime.py
+    tests/test_pbspro_malformed_json_runtime.py
+    tests/test_kubernetes_unknown_job_runtime.py
     tests/test_aws_status_response_shape_runtime.py
     tests/test_aws_instance_state_runtime.py
     tests/test_local_unknown_job_status_runtime.py

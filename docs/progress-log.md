@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `d297dc8` (`Promote clock and heartbeat runtime coverage`).
-- Foundational smoke inventory: 369 TLC cases and 251 Python runtime probes.
+- Latest pushed commit: pending (concrete provider runtime coverage).
+- Foundational smoke inventory: 369 TLC cases and 261 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -114,6 +114,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted eight clock/heartbeat runtime bridges into the foundational gate. The
   probes cover HTEX drain and heartbeat message timing, address-probe timeout propagation,
   provider polling after clock rollback, resource-monitor sampling, and monitoring batch deadlines.
+- Current stage: promoted ten concrete provider runtime bridges into the foundational gate. The
+  probes cover Local process and status lifecycle, AWS reservation/status shapes, Azure resource
+  bookkeeping, and malformed/unknown job responses from Condor, Slurm, PBSPro, and Kubernetes.
 
 ### Verification convention
 
