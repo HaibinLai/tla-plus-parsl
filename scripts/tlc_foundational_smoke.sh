@@ -263,6 +263,9 @@ run_case slurm-tasks-per-node \
 run_case condor-empty-submit \
     models/providers/ParslCondorEmptySubmitFixed.cfg \
     models/providers/ParslCondorEmptySubmit.tla
+run_case condor-unknown-job \
+    models/providers/ParslCondorUnknownJobFixed.cfg \
+    models/providers/ParslCondorUnknownJob.tla
 run_case condor-malformed-status \
     models/providers/ParslCondorMalformedStatusLineFixed.cfg \
     models/providers/ParslCondorMalformedStatusLine.tla
@@ -278,6 +281,15 @@ run_case pbspro-malformed-json \
 run_case grid-engine-duplicate-status \
     models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
     models/providers/ParslGridEngineDuplicateStatus.tla
+run_case lsf-duplicate-status \
+    models/providers/ParslLSFDuplicateStatusFixed.cfg \
+    models/providers/ParslLSFDuplicateStatus.tla
+run_case aws-unknown-instance \
+    models/providers/ParslAwsUnknownInstanceFixed.cfg \
+    models/providers/ParslAwsUnknownInstance.tla
+run_case local-unknown-job-status \
+    models/providers/ParslLocalUnknownJobStatusFixed.cfg \
+    models/providers/ParslLocalUnknownJobStatus.tla
 run_case grid-engine-missing-status \
     models/providers/ParslGridEngineMissingStatusFixed.cfg \
     models/providers/ParslGridEngineMissingStatus.tla

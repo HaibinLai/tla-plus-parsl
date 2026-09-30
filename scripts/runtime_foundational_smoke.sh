@@ -134,9 +134,13 @@ tests=(
     tests/test_kubernetes_cancel_unknown_runtime.py
     tests/test_condor_chunk_size_runtime.py
     tests/test_condor_status_failure_runtime.py
+    tests/test_condor_unknown_job_runtime.py
     tests/test_slurm_batch_strict_runtime.py
     tests/test_slurm_duplicate_status_runtime.py
     tests/test_slurm_empty_job_id_runtime.py
+    tests/test_lsf_duplicate_status_runtime.py
+    tests/test_aws_unknown_instance_runtime.py
+    tests/test_local_unknown_job_status_runtime.py
     tests/test_htex_worker_restart_failure_runtime.py
     tests/test_pbspro_missing_status_runtime.py
     tests/test_mpi_nondivisible_runtime.py
