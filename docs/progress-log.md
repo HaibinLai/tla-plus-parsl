@@ -65,6 +65,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslJoinPartialCancellation`, which forces one list member to be
   observed successfully before a second member is cancelled. The Current model produces an
   eight-state/5-distinct callback-escape counterexample; the Fixed model passes in 10/5 states.
+- Verification stage: the complete foundational regression passed after the join refinement:
+  all 362 TLC smoke cases passed with `TLC_SIMULATE=10`, and all 233 Python runtime probes
+  passed against the installed Parsl source. The runtime run emitted only existing resource
+  warnings from temporary Parsl log handles; no test failed.
 
 ### Verification convention
 
