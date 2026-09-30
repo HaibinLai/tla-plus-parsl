@@ -1862,6 +1862,9 @@ poll-clock behavior.
 Cases 661--680 matched at 100 steps: walltime parsing, ThreadPool executor lifecycle/resource
 validation/thread counts, task execution values/exceptions, execute-wait timeout cleanup, and
 Bash timeout cleanup.
+Cases 681--700 matched at 100 steps: pool executor mapping, HTEX submit counter/failure/lifecycle
+and serialization failure, bad-state task mutation, BlockProvider bad-state/order handling, and
+command-client reply/timeout/close behavior.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
