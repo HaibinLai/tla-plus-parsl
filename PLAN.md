@@ -1083,6 +1083,10 @@ encoding probes remain in `tests/test_worker_pool_heartbeat_runtime.py`.
 the current wall-clock comparison can suppress expiry after a backward step, while the fixed
 branch uses monotonic elapsed age. `tests/test_worker_contact_clock_rollback_runtime.py`
 reproduces the wall-clock behavior with a deterministic time sequence.
+`ParslHtexUnknownManagerMessage.tla` is now in the executor sweep for both unknown heartbeat and
+unknown result messages. The model requires non-registration traffic from an unknown manager to
+be ignored without creating a ready-manager record, replying, or forwarding a result;
+`tests/test_htex_unknown_manager_runtime.py` drives the real interchange handler.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

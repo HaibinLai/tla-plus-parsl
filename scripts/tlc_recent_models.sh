@@ -978,6 +978,12 @@ run_case worker-contact-rollback-current counterexample \
 run_case worker-contact-rollback-fixed pass \
     models/clock/ParslWorkerContactClockRollbackFixed.cfg \
     models/clock/ParslWorkerContactClockRollback.tla
+run_case htex-unknown-manager-heartbeat pass \
+    models/executors/ParslHtexUnknownManagerHeartbeat.cfg \
+    models/executors/ParslHtexUnknownManagerMessage.tla
+run_case htex-unknown-manager-result pass \
+    models/executors/ParslHtexUnknownManagerResult.cfg \
+    models/executors/ParslHtexUnknownManagerMessage.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
