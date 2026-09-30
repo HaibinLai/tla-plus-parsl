@@ -65,6 +65,23 @@ generated / 41,246 distinct fixed states.
 The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
 inner Python apps and verifies the duplicate Future position in the outer result.
 
+`ParslJoinCleanupLifecycle.tla` models workflow shutdown while an outer `join_app` is still
+waiting on an inner Future. The current branch permits cleanup and workflow-end publication while
+the outer task remains `joining`; a late callback can then complete it after cleanup returned.
+The fixed branch delays cleanup admission until the outer join is terminal. TLC finds the current
+`TerminalCountSafety` counterexample in 9 generated / 6 distinct states and checks 12 generated /
+6 distinct fixed states. The runtime bridge is
+`tests/test_join_cleanup_lifecycle_runtime.py`, which calls the real `DataFlowKernel.cleanup()`
+before completing the inner Future.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCleanupLifecycleCurrent.cfg models/dataflow/ParslJoinCleanupLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCleanupLifecycleFixed.cfg models/dataflow/ParslJoinCleanupLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_cleanup_lifecycle_runtime.py -v
+```
+
+This cleanup/join quiescence boundary is recorded as BUG-237.
+
 `ParslJoinCallableTransportSmoke.cfg` uses one inner Future, two duplicate input positions, and no
 retry for a fast regression of serialized join result ordering and stale-result safety. TLC checks
 26 generated / 13 distinct states at depth 6.

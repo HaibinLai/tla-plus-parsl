@@ -2107,6 +2107,12 @@ run_case join-timed-monitoring-cancel-current counterexample \
 run_case join-timed-monitoring-cancel-fixed pass \
     models/dataflow/ParslJoinTimedMonitoringCancelFixed.cfg \
     models/dataflow/ParslJoinTimedMonitoring.tla
+run_case join-cleanup-lifecycle-current counterexample \
+    models/dataflow/ParslJoinCleanupLifecycleCurrent.cfg \
+    models/dataflow/ParslJoinCleanupLifecycle.tla
+run_case join-cleanup-lifecycle-fixed pass \
+    models/dataflow/ParslJoinCleanupLifecycleFixed.cfg \
+    models/dataflow/ParslJoinCleanupLifecycle.tla
 run_case join-app-core pass \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
