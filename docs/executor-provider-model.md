@@ -40,6 +40,21 @@ callback-based Globus/Radical Pilot results, and provider status/cancel shape va
 Their current/fixed configurations are included in the TLC sweep and corresponding runtime
 probes are listed in the bug ledger.
 
+`ParslProviderExecutorTimed.tla` is the smallest dynamic provider-backed composition. It models
+one provider block, one registered manager, one worker slot, heartbeat expiry, provider failure,
+logical retry, and a late report from the old physical attempt. The current branch accepts the
+late report after `provider_lost` and TLC finds `TerminalCauseSafety` after 1,222 generated / 626
+distinct states. The fixed branch records the report as stale and passes admission, capacity,
+retry-bound, terminal-cause, and stale-result invariants with 2,162 generated / 720 distinct
+states at depth 14. This complements `ParslExecutorKinds.tla`: the latter checks the static
+contract matrix across executor families, while this model checks the dynamic provider/manager
+loss boundary.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedCurrent.cfg models/executors/ParslProviderExecutorTimed.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedFixed.cfg models/executors/ParslProviderExecutorTimed.tla
+```
+
 Globus Compute has a distinct concurrency boundary: GlobusComputeExecutor.submit temporarily
 mutates one shared SDK Executor's resource specification and endpoint configuration before
 calling submit, then restores defaults in a finally path. ParslGlobusComputeSubmitRace models
