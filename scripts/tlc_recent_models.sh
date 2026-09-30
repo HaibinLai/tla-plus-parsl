@@ -648,6 +648,12 @@ run_case task-transport-close-fixed pass \
 run_case file-bytes-transfer pass \
     models/staging/ParslFileBytes.cfg \
     models/staging/ParslFileBytes.tla
+run_case file-corruption-small pass \
+    models/core/ParslFileCorruptionSmall.cfg \
+    models/core/ParslAbstract.tla
+run_case input-corruption pass \
+    models/staging/ParslInputCorruption.cfg \
+    models/core/ParslAbstract.tla
 run_case file-transfer-retry-current counterexample \
     models/staging/ParslFileTransferRetryCurrent.cfg \
     models/staging/ParslFileTransferRetry.tla

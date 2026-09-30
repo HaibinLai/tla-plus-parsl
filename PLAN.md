@@ -578,6 +578,8 @@ The current truthiness check treats a custom falsey exception as success; the ru
 real `Future` and `DataFuture`, while the fixed branch tests exception presence explicitly.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
+The minimal corrupted-output and input-stage-in configurations are now included in the recent
+smoke sweep, so corruption repair and dependent-task blocking remain continuously checked.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
 paths, including stage-out failure/retry and dependent-task gating on the output `DataFuture`.
 `ParslMultiOutputStageOut.tla` extends the output protocol to two independently completing files
