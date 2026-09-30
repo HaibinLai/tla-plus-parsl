@@ -288,6 +288,8 @@ Recent focused models now connect the previously separate boundaries:
   cores/memory/disk/GPU validation, queueing, capacity admission, and resource release.
 - `ParslResourceScaling` is now in the smoke sweep, connecting task core demand to scale-out,
   pending allocation failures, dispatch capacity, and safe scale-in.
+- `ParslDependencyTraversal` is now in the smoke sweep for shallow-vs-deep Future discovery,
+  including list, dictionary value/key, tuple, and set containers.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 

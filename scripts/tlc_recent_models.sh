@@ -156,6 +156,24 @@ run_case data-ready-current counterexample \
 run_case data-ready-fixed pass \
     models/core/ParslDataReadyExecutionFixed.cfg \
     models/core/ParslDataReadyExecution.tla
+run_case dependency-traversal-shallow counterexample \
+    models/dataflow/ParslDependencyTraversalShallow.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-list pass \
+    models/dataflow/ParslDependencyTraversal.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-dict pass \
+    models/dataflow/ParslDependencyTraversalDeepDict.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-key pass \
+    models/dataflow/ParslDependencyTraversalDeepDictKey.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-tuple pass \
+    models/dataflow/ParslDependencyTraversalDeepTuple.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-set pass \
+    models/dataflow/ParslDependencyTraversalDeepSet.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
 run_case monitoring-retry-current counterexample \
     models/monitoring/ParslMonitoringTaskRetry.cfg \
     models/monitoring/ParslMonitoringTaskRetry.tla
