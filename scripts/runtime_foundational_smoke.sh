@@ -243,6 +243,10 @@ tests=(
     tests/test_command_deadline_runtime.py
     tests/test_timer_interval_validation_runtime.py
     tests/test_walltime_parsing_runtime.py
+    tests/test_tasks_outgoing_runtime.py
+    tests/test_tasks_outgoing_close_runtime.py
+    tests/test_results_incoming_runtime.py
+    tests/test_execute_task_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py
