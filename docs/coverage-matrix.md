@@ -104,6 +104,9 @@ local resource IDs after a valid GCE status response.
 The executor row also includes `ParslHtexNegativeScaleInIdle` (BUG-182), which checks negative
 idle-only scale-in requests before HTEX block selection.
 
+It also includes `ParslHtexZeroScaleInIdle` (BUG-183), which checks zero-count idle-only requests
+as no-ops.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2

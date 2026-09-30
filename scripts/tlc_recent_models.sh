@@ -1441,6 +1441,12 @@ run_case htex-negative-idle-current counterexample \
 run_case htex-negative-idle-fixed pass \
     models/executors/ParslHtexNegativeScaleInIdleFixed.cfg \
     models/executors/ParslHtexNegativeScaleInIdle.tla
+run_case htex-zero-idle-current counterexample \
+    models/executors/ParslHtexZeroScaleInIdleCurrent.cfg \
+    models/executors/ParslHtexZeroScaleInIdle.tla
+run_case htex-zero-idle-fixed pass \
+    models/executors/ParslHtexZeroScaleInIdleFixed.cfg \
+    models/executors/ParslHtexZeroScaleInIdle.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
