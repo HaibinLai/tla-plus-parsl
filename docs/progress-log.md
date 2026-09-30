@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `0c93ca7` (`Model MPI corrupt result cleanup`).
+- Latest pushed commit: `7bdc236` (`Record Slurm cancellation ledger finding`).
 - Foundational smoke inventory: 360 TLC cases and 231 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
