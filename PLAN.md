@@ -1039,6 +1039,10 @@ runtime bridges are `tests/test_join_failure_aggregation_runtime.py` and
 `_complete_task_result`, where the logical task reaches `exec_done` before the public AppFuture is
 resolved. `tests/test_task_status_future_ordering_runtime.py` records the status observed by the
 Future completion callback.
+The monitoring sweep also includes `ParslMonitoringMalformedWorkerMessage.tla`: malformed worker
+task envelopes with neither `first_msg` nor `last_msg` must be discarded without killing the
+database worker. `tests/test_monitoring_malformed_worker_message_runtime.py` reproduces the
+current thread failure against the real `DatabaseManager`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

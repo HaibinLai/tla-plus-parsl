@@ -921,6 +921,12 @@ run_case task-status-future-ordering-fixed pass \
 run_case task-status-future-ordering-valid pass \
     models/dataflow/ParslTaskStatusFutureOrderingValid.cfg \
     models/dataflow/ParslTaskStatusFutureOrdering.tla
+run_case monitoring-malformed-worker-current counterexample \
+    models/monitoring/ParslMonitoringMalformedWorkerMessageCurrent.cfg \
+    models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
+run_case monitoring-malformed-worker-fixed pass \
+    models/monitoring/ParslMonitoringMalformedWorkerMessageFixed.cfg \
+    models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
