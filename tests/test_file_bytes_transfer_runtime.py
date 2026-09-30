@@ -3,6 +3,7 @@
 import hashlib
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 from parsl.data_provider.files import File
@@ -38,6 +39,29 @@ class FileBytesTransferRuntimeTest(unittest.TestCase):
             ]
             self.assertEqual(restored_bytes, payload)
             self.assertEqual(actual, expected)
+
+    def test_corrupt_archive_payload_is_rejected_before_publication(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            archive = root / "corrupt.zip"
+            restored = root / "restored.bin"
+
+            with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_STORED) as zf:
+                zf.writestr("data.bin", b"known-good-payload")
+
+            archive_bytes = bytearray(archive.read_bytes())
+            payload_offset = archive_bytes.find(b"known-good-payload")
+            self.assertGreaterEqual(payload_offset, 0)
+            archive_bytes[payload_offset] ^= 0x01
+            archive.write_bytes(archive_bytes)
+
+            with self.assertRaises(zipfile.BadZipFile):
+                _zip_stage_in(
+                    str(archive), "data.bin", str(root),
+                    parent_fut=None, outputs=[File(str(restored))],
+                )
+
+            self.assertFalse(restored.exists())
 
 
 if __name__ == "__main__":
