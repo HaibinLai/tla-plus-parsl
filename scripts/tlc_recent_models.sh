@@ -1435,6 +1435,12 @@ run_case googlecloud-unknown-local-current counterexample \
 run_case googlecloud-unknown-local-fixed pass \
     models/providers/ParslGoogleCloudUnknownLocalStatusFixed.cfg \
     models/providers/ParslGoogleCloudUnknownLocalStatus.tla
+run_case htex-negative-idle-current counterexample \
+    models/executors/ParslHtexNegativeScaleInIdleCurrent.cfg \
+    models/executors/ParslHtexNegativeScaleInIdle.tla
+run_case htex-negative-idle-fixed pass \
+    models/executors/ParslHtexNegativeScaleInIdleFixed.cfg \
+    models/executors/ParslHtexNegativeScaleInIdle.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla

@@ -101,6 +101,9 @@ types before string operations and version comparison.
 The provider row also includes `ParslGoogleCloudUnknownLocalStatus` (BUG-181), which checks stale
 local resource IDs after a valid GCE status response.
 
+The executor row also includes `ParslHtexNegativeScaleInIdle` (BUG-182), which checks negative
+idle-only scale-in requests before HTEX block selection.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2
