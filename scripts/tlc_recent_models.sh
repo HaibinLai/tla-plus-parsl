@@ -906,6 +906,12 @@ run_case join-return-equality-current counterexample \
 run_case join-return-equality-fixed pass \
     models/dataflow/ParslJoinReturnEqualityFixed.cfg \
     models/dataflow/ParslJoinReturnEquality.tla
+run_case join-failure-aggregation pass \
+    models/dataflow/ParslJoinFailureAggregation.cfg \
+    models/dataflow/ParslJoinFailureAggregation.tla
+run_case join-error-root-cause pass \
+    models/dataflow/ParslJoinErrorRootCause.cfg \
+    models/dataflow/ParslJoinErrorRootCause.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

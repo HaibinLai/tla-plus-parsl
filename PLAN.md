@@ -1030,6 +1030,11 @@ duplicate, failure, cancellation, and already-completed Future paths against the
 does not invoke user-defined equality before determining whether a join result is a Future or a
 list. `tests/test_join_return_equality_runtime.py` reproduces the current callback escape and
 pending outer Future.
+The sweep also includes `ParslJoinFailureAggregation.tla` and `ParslJoinErrorRootCause.tla`.
+Together they check that all failed inner Futures are collected in join-list order and that a
+nested `JoinError` preserves the first leaf exception and representative path annotation. The
+runtime bridges are `tests/test_join_failure_aggregation_runtime.py` and
+`tests/test_join_error_root_cause_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
