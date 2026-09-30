@@ -399,6 +399,18 @@ run_case globus-transfer-timeout-current counterexample \
 run_case globus-transfer-timeout-fixed pass \
     models/staging/ParslGlobusTransferTimeoutFixed.cfg \
     models/staging/ParslGlobusTransferTimeout.tla
+run_case globus-transfer-failure-current-empty counterexample \
+    models/staging/ParslGlobusTransferFailureCurrentEmpty.cfg \
+    models/staging/ParslGlobusTransferFailure.tla
+run_case globus-transfer-failure-current-event pass \
+    models/staging/ParslGlobusTransferFailureCurrentEvent.cfg \
+    models/staging/ParslGlobusTransferFailure.tla
+run_case globus-transfer-failure-fixed-empty pass \
+    models/staging/ParslGlobusTransferFailureFixedEmpty.cfg \
+    models/staging/ParslGlobusTransferFailure.tla
+run_case globus-transfer-failure-success pass \
+    models/staging/ParslGlobusTransferFailureSuccess.cfg \
+    models/staging/ParslGlobusTransferFailure.tla
 run_case join-duplicate-failure-current counterexample \
     models/dataflow/ParslJoinDuplicateFailureAggregationCurrent.cfg \
     models/dataflow/ParslJoinDuplicateFailureAggregation.tla

@@ -246,6 +246,8 @@ Recent focused models now connect the previously separate boundaries:
   stage-out makes the first publication stale and forces a version-matching retry.
 - `ParslDataFutureTransfer` is now in the smoke sweep, connecting producer completion, chunk
   checksums, atomic stage-out publication, DataFuture readiness, and consumer admission.
+- `ParslGlobusTransferFailure` is now in the smoke sweep, distinguishing terminal transfer
+  failure reporting from missing diagnostic events and successful event-bearing completion.
 - `ParslClusterSubmitScript` is now in the smoke sweep for a concrete provider boundary: valid
   template publication, missing scheduler arguments, and script-path I/O failure remain distinct.
 - `ParslTimeLimitedOpenTimeout` is now in the smoke sweep, separating a genuine file open from
