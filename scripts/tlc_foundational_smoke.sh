@@ -575,5 +575,26 @@ run_case slurm-duplicate-status \
 run_case slurm-empty-job-id \
     models/providers/ParslSlurmEmptyJobIdFixed.cfg \
     models/providers/ParslSlurmEmptyJobId.tla
+run_case data-ready-execution \
+    models/core/ParslDataReadyExecutionFixed.cfg \
+    models/core/ParslDataReadyExecution.tla
+run_case data-transfer-dependency-failure \
+    models/core/ParslDataTransferDependencyFailureFixed.cfg \
+    models/core/ParslDataTransferDependencyFailure.tla
+run_case datafuture-transfer \
+    models/staging/ParslDataFutureTransferFixed.cfg \
+    models/staging/ParslDataFutureTransfer.tla
+run_case datafuture-cancellation-propagation \
+    models/staging/ParslDataFutureCancellationPropagationFixed.cfg \
+    models/staging/ParslDataFutureCancellationPropagation.tla
+run_case data-manager-cache \
+    models/staging/ParslDataManagerCacheFixed.cfg \
+    models/staging/ParslDataManagerCache.tla
+run_case data-manager-stage-out-return \
+    models/staging/ParslDataManagerStageOutReturnFuture.cfg \
+    models/staging/ParslDataManagerStageOutReturn.tla
+run_case data-manager-stage-out-return-none \
+    models/staging/ParslDataManagerStageOutReturnNone.cfg \
+    models/staging/ParslDataManagerStageOutReturn.tla
 
 echo "Foundational TLC smoke suite passed."

@@ -102,6 +102,10 @@ tests=(
     tests/test_slurm_batch_strict_runtime.py
     tests/test_slurm_duplicate_status_runtime.py
     tests/test_slurm_empty_job_id_runtime.py
+    tests/test_datafuture_runtime.py
+    tests/test_datafuture_cancellation_runtime.py
+    tests/test_datafuture_falsey_exception_runtime.py
+    tests/test_data_manager_stage_out_return_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

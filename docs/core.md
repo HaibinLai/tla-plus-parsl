@@ -255,6 +255,10 @@ The additional scheduler cases cover Kubernetes polling/cancel response shapes, 
 Condor chunk-size and command-failure handling, and Slurm strict batch/cancel/duplicate-status/
 empty-ID behavior. These fixed models isolate scheduler response parsing from provider ownership.
 
+The data-readiness cases connect staging to the DFK: DataFuture transfer and cancellation,
+DataManager cache reuse, stage-out return ownership, stale captured data, and dependency failure
+propagation. They enforce that consumers execute only after a published, non-failed DataFuture.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and
