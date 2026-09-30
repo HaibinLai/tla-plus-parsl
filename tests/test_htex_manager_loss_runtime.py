@@ -69,6 +69,31 @@ class HtexManagerLossRuntimeTest(unittest.TestCase):
         self.assertNotIn(17, executor._tasks)
         self.assertIsInstance(loss_future.exception(), ManagerLost)
 
+    def test_expiring_one_manager_preserves_two_active_managers(self):
+        interchange = Interchange.__new__(Interchange)
+        interchange.heartbeat_threshold = 10
+        interchange._ready_managers = {
+            b"manager-1": {"last_heartbeat": 89, "active": True,
+                           "tasks": [17], "hostname": "worker-1"},
+            b"manager-2": {"last_heartbeat": 95, "active": True,
+                           "tasks": [], "hostname": "worker-2"},
+            b"manager-3": {"last_heartbeat": 96, "active": True,
+                           "tasks": [], "hostname": "worker-3"},
+        }
+        interchange.results_outgoing = OutgoingMessages()
+        interchange._send_monitoring_info = lambda radio, manager: None
+
+        with patch(
+            "parsl.executors.high_throughput.interchange.time.time", return_value=100
+        ):
+            interesting = set(interchange._ready_managers)
+            interchange.expire_bad_managers(interesting, monitoring_radio=None)
+
+        self.assertEqual(set(interchange._ready_managers),
+                         {b"manager-2", b"manager-3"})
+        self.assertEqual(interesting, {b"manager-2", b"manager-3"})
+        self.assertEqual(len(interchange.results_outgoing.messages), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

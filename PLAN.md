@@ -311,7 +311,7 @@ Recent focused models now connect the previously separate boundaries:
   with a real SQLite insertion/query bridge.
 - `ParslProviderWorkerScaling` separates provider blocks from registered executor worker slots and
   is bridged to the real `BlockProviderExecutor` block/job mapping.
-- `ParslManagerLivenessPool` now models two-manager heartbeat expiry, retry after manager loss,
+- `ParslManagerLivenessPool` now models three-manager heartbeat expiry, retry after manager loss,
   live-manager admission, and stale results from an expired manager; its current branch exposes
   the admission/late-result counterexample and the fixed branch passes TLC.
 - `ParslJoinCallableTransport` combines serialized inner callable snapshots, retry attempts,
@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 496 probes and passes as a whole:
+The runtime suite currently contains 497 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1806,7 +1806,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 496 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 497 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1836,6 +1836,8 @@ The three-inner-Future join probe then completed 495 tests in 12.545 seconds wit
 ordered four-position aggregation with a duplicate inner Future.
 The four-task multipart ZMQ probe then completed 496 tests in 12.183 seconds with `OK`, including
 identity-preserving delivery and real serializer round trips for reversed task order.
+The three-manager liveness probe then completed 497 tests in 12.862 seconds with `OK`, including
+independent preservation of two active managers after one heartbeat expiry.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

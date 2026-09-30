@@ -72,8 +72,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderThreeBlock
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderThreeBlockOwnershipFixed.cfg models/executors/ParslProviderThreeBlockOwnership.tla
 ```
 
-`ParslManagerLivenessPool.tla` provides the small manager-pool refinement. Heartbeat expiry marks
-M1 unavailable; a lost task can retry on M2, while admission must not select the expired manager.
+`ParslManagerLivenessPool.tla` provides the small three-manager pool refinement. Heartbeat expiry
+marks M1 unavailable; a lost task can retry on M2 or M3, while admission must not select the
+expired manager.
 The current branch also accepts a late result from the expired manager, whereas the fixed branch
 classifies it as stale. `LiveManagerAdmission` and `NoLateResultAcceptance` are checked in both
 configurations.

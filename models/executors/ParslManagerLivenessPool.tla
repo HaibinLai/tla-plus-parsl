@@ -2,7 +2,7 @@
 EXTENDS Naturals, Integers
 
 (***************************************************************************
- * A bounded two-manager liveness/admission model.
+ * A bounded three-manager liveness/admission model.
  *
  * Heartbeats make manager M1 expire.  A logical task may be retried after an
  * attempt on that manager is lost.  The current branch admits a new attempt
@@ -12,7 +12,7 @@ EXTENDS Naturals, Integers
 
 CONSTANTS MAX_TIME, MAX_RETRIES, USE_FIXED
 
-Managers == {"M1", "M2"}
+Managers == {"M1", "M2", "M3"}
 ManagerStates == {"up", "expired"}
 TaskStates == {"pending", "running", "lost", "succeeded"}
 
@@ -47,6 +47,12 @@ HeartbeatM2 ==
     /\ UNCHANGED <<now, managerState, task, assigned, attempt,
                     lateResult, lateAccepted>>
 
+HeartbeatM3 ==
+    /\ managerState["M3"] = "up"
+    /\ lastHeartbeat' = [lastHeartbeat EXCEPT !["M3"] = now]
+    /\ UNCHANGED <<now, managerState, task, assigned, attempt,
+                    lateResult, lateAccepted>>
+
 ExpireM1 ==
     /\ managerState["M1"] = "up"
     /\ now - lastHeartbeat["M1"] >= 2
@@ -68,6 +74,14 @@ StartOnM2 ==
     /\ managerState["M2"] = "up"
     /\ task' = "running"
     /\ assigned' = "M2"
+    /\ UNCHANGED <<now, managerState, lastHeartbeat, attempt, lateResult,
+                    lateAccepted>>
+
+StartOnM3 ==
+    /\ task = "pending"
+    /\ managerState["M3"] = "up"
+    /\ task' = "running"
+    /\ assigned' = "M3"
     /\ UNCHANGED <<now, managerState, lastHeartbeat, attempt, lateResult,
                     lateAccepted>>
 
@@ -106,9 +120,11 @@ DeliverLateResult ==
 Next ==
     \/ Tick
     \/ HeartbeatM2
+    \/ HeartbeatM3
     \/ ExpireM1
     \/ StartOnM1
     \/ StartOnM2
+    \/ StartOnM3
     \/ RetryLost
     \/ CompleteCurrentAttempt
     \/ SendLateResult
