@@ -423,6 +423,12 @@ run_case task-transport-close-fixed pass \
 run_case file-bytes-transfer pass \
     models/staging/ParslFileBytes.cfg \
     models/staging/ParslFileBytes.tla
+run_case file-transfer-retry-current counterexample \
+    models/staging/ParslFileTransferRetryCurrent.cfg \
+    models/staging/ParslFileTransferRetry.tla
+run_case file-transfer-retry-fixed pass \
+    models/staging/ParslFileTransferRetryFixed.cfg \
+    models/staging/ParslFileTransferRetry.tla
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla

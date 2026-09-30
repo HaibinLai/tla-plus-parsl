@@ -234,6 +234,8 @@ Recent focused models now connect the previously separate boundaries:
   stale-payload counterexamples.
 - `ParslFileBytes` is corroborated by a real binary Zip stage-out/stage-in probe with per-chunk
   SHA-256 checksums.
+- `ParslFileTransferRetry` is now in the smoke sweep, checking that source mutation during
+  stage-out makes the first publication stale and forces a version-matching retry.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
   late completion, and monitoring persistence.
 - `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,
