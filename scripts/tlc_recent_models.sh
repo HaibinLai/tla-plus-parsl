@@ -1495,6 +1495,12 @@ run_case flux-late-cancelled-current counterexample \
 run_case flux-late-cancelled-fixed pass \
     models/executors/ParslFluxLateResultCancelledFutureFixed.cfg \
     models/executors/ParslFluxLateResultCancelledFuture.tla
+run_case flux-working-directory-current counterexample \
+    models/executors/ParslFluxWorkingDirectoryCurrent.cfg \
+    models/executors/ParslFluxWorkingDirectory.tla
+run_case flux-working-directory-fixed pass \
+    models/executors/ParslFluxWorkingDirectoryFixed.cfg \
+    models/executors/ParslFluxWorkingDirectory.tla
 run_case serialized-result-file-current counterexample \
     models/core/ParslSerializedResultFileCurrent.cfg \
     models/core/ParslSerializedResultFile.tla

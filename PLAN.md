@@ -2137,3 +2137,9 @@ adjacent input-mutation regression case.
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
 implementation detail of Parsl is correct.
+
+The latest Flux refinement is `ParslFluxWorkingDirectory`. It separates the configured executor
+workspace from the submitting process directory and models relative-path resolution in the Flux
+Jobspec. The current branch reproduces BUG-200 (`JobspecV1.cwd = os.getcwd()`), while the fixed
+branch propagates `working_dir`; the accompanying runtime probe uses a fake Jobspec to exercise the
+installed `_submit_single_job` path.

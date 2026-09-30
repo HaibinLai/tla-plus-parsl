@@ -120,6 +120,10 @@ caused by concurrent block selection.
 It also includes `ParslFluxLateResultCancelledFuture` (BUG-185), which checks that a late successful
 Flux callback cannot write into an already-cancelled user-facing Future.
 
+Flux executor coverage also includes `ParslFluxWorkingDirectory` (BUG-200), which checks that a
+relative task path resolves under the configured executor workspace rather than the submitting
+process's current directory.
+
 It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
 HTEX connection probe cannot fall through to a blocking receive.
 
