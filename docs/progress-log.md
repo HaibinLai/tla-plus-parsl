@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `8207d28` (`Refine join return equality validation`).
-- Foundational smoke inventory: 361 TLC cases and 232 Python runtime probes.
+- Foundational smoke inventory: 362 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -62,6 +62,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: refined BUG-084 for truthy user equality. An invalid join return whose
   `__eq__([])` returns `True` enters the empty-list branch and leaves the outer Future pending;
   the new Current model has a three-state counterexample and the Fixed model passes.
+- Current stage: added `ParslJoinPartialCancellation`, which forces one list member to be
+  observed successfully before a second member is cancelled. The Current model produces an
+  eight-state/5-distinct callback-escape counterexample; the Fixed model passes in 10/5 states.
 
 ### Verification convention
 

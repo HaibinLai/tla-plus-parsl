@@ -2322,6 +2322,12 @@ run_case join-return-equality-truthy-current counterexample \
 run_case join-return-equality-truthy-fixed pass \
     models/dataflow/ParslJoinReturnEqualityTruthyFixed.cfg \
     models/dataflow/ParslJoinReturnEqualityTruthy.tla
+run_case join-partial-cancellation-current counterexample \
+    models/dataflow/ParslJoinPartialCancellationCurrent.cfg \
+    models/dataflow/ParslJoinPartialCancellation.tla
+run_case join-partial-cancellation-fixed pass \
+    models/dataflow/ParslJoinPartialCancellationFixed.cfg \
+    models/dataflow/ParslJoinPartialCancellation.tla
 run_case join-failure-aggregation pass \
     models/dataflow/ParslJoinFailureAggregation.cfg \
     models/dataflow/ParslJoinFailureAggregation.tla

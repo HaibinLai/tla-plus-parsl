@@ -412,6 +412,11 @@ exception `__cause__` and string representation.
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinErrorRootCause.cfg models/dataflow/ParslJoinErrorRootCause.tla
 ```
 
+`ParslJoinPartialCancellation.tla` refines list cancellation with callback ordering: one inner
+Future is observed successfully before a later inner Future is cancelled. The Current branch
+still leaves the outer task in `joining` after the cancellation callback escapes; the Fixed branch
+converts it to a terminal join failure.
+
 `ParslRetryHandlerNegativeCost.tla` audits the retry-budget boundary in
 `DataFlowKernel.handle_exec_update`. The current implementation adds the value returned by a
 user `retry_handler` directly to `fail_cost`; a negative value makes every failure remain within

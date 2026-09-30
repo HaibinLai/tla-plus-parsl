@@ -554,6 +554,9 @@ run_case mpi-malformed-result-cleanup \
 run_case join-return-equality-truthy \
     models/dataflow/ParslJoinReturnEqualityTruthyFixed.cfg \
     models/dataflow/ParslJoinReturnEqualityTruthy.tla
+run_case join-partial-cancellation \
+    models/dataflow/ParslJoinPartialCancellationFixed.cfg \
+    models/dataflow/ParslJoinPartialCancellation.tla
 run_case radical-failure-payload \
     models/executors/ParslRadicalPilotFailurePayloadFixed.cfg \
     models/executors/ParslRadicalPilotFailurePayload.tla
