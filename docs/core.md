@@ -141,9 +141,9 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 382 TLC cases and 348 Python runtime test files.
+The current repository smoke runner enumerates 382 TLC cases and 351 Python runtime test files.
 On 2026-09-30, all 382 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
-suite passed with 348 entries. The subsequently added cases were also run individually as they
+suite passed with 351 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
 isolation, monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus
@@ -182,6 +182,11 @@ preserve the current `ValueError`/`KeyError` behavior as source-level evidence.
 The cancellation/missing-job probes extend that family to Grid Engine and Torque cancellation,
 LSF missing status, and Radical Pilot callbacks for removed tasks. They record the current
 resource-state and callback failures while the existing Fixed models define non-crashing handling.
+
+The BlockProvider bad-state probes cover failure fan-out to outstanding Futures, a completed
+Future encountered during the sweep, and mutation of the task dictionary from a done callback.
+These preserve the current failure-sweep edge cases while the corresponding Fixed models express
+the intended all-pending-Future failure semantics.
 
 The Work Queue and TaskVine duplicate-report models add the stale-result collector boundary.
 The fixed branches ignore a report whose task identifier has already been removed, preserving

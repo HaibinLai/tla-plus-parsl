@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `b9b1523` (`Promote provider cancellation probes`).
-- Foundational smoke inventory: 382 TLC cases and 348 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation and BlockProvider bad-state coverage).
+- Foundational smoke inventory: 382 TLC cases and 351 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted BlockProvider bad-state propagation probes for outstanding Future
+  fan-out, completed-Future ordering, and callback-driven task-map mutation. Four targeted tests
+  passed, and the affected runtime suffix (209–351) passed after the new entries were inserted;
+  the prior prefix (1–208) was already green.
 
 - Current stage: promoted Grid Engine and Torque cancellation, LSF missing-job status, and
   Radical Pilot removed-task callback probes. The targeted seven tests passed; the full runtime
