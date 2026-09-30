@@ -26,6 +26,10 @@ checks; the scaling model above is an additional symbolic admission layer rather
 for backend-specific probes. The provider-worker scaling bridge is corroborated by
 `tests/test_provider_worker_scaling_runtime.py`.
 
+Google Cloud provider admission also includes `ParslGoogleCloudZoneResponseShape`, which
+isolates the missing-`items` response boundary in `get_zone` and is backed by the zone-selection
+runtime probe.
+
 Slurm provider coverage also includes `ParslSlurmTasksPerNode`, which checks zero
 `tasks_per_node` admission before the `cores_per_node` division and is backed by
 `tests/test_slurm_tasks_per_node_runtime.py`.

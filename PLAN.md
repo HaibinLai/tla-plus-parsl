@@ -1869,7 +1869,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 527 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 528 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1959,6 +1959,9 @@ The HTTP separate-task cleanup probe then completed 526 tests with `OK`, includi
 leakage after a later stream chunk fails.
 The HTEX registration-state probe then completed 527 tests with `OK`, including reserved-field
 state poisoning through a valid pickleable registration envelope.
+`ParslGoogleCloudZoneResponseShape` now models malformed zone-list responses during provider
+construction, with BUG-194 runtime evidence for the missing-`items` `KeyError` path.
+The Google Cloud zone-shape probe then completed 528 tests with `OK`.
 `ParslHtexRegistrationStatePoisoning` now models reserved-field overwrites in the manager
 registration envelope, with BUG-193 runtime evidence showing that a pickleable `tasks` field
 can replace the internal task list before manager admission.

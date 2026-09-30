@@ -916,6 +916,12 @@ run_case htex-registration-state-current counterexample \
 run_case htex-registration-state-fixed pass \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla
+run_case google-zone-shape-current counterexample \
+    models/providers/ParslGoogleCloudZoneResponseShapeCurrent.cfg \
+    models/providers/ParslGoogleCloudZoneResponseShape.tla
+run_case google-zone-shape-fixed pass \
+    models/providers/ParslGoogleCloudZoneResponseShapeFixed.cfg \
+    models/providers/ParslGoogleCloudZoneResponseShape.tla
 run_case core-executor-drain pass \
     models/core/ParslExecutorDrain.cfg \
     models/core/ParslAbstract.tla

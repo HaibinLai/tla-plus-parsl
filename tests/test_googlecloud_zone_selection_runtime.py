@@ -41,6 +41,14 @@ class GoogleCloudZoneSelectionRuntimeTest(unittest.TestCase):
         # request is made with an invalid zone.
         self.assertIsNone(provider.get_zone("europe"))
 
+    def test_zone_response_without_items_raises_key_error_currently(self):
+        provider = GoogleCloudProvider.__new__(GoogleCloudProvider)
+        provider.client = FakeClient({})
+        provider.project_id = "project"
+
+        with self.assertRaises(KeyError):
+            provider.get_zone("europe")
+
 
 if __name__ == "__main__":
     unittest.main()
