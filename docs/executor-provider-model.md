@@ -56,6 +56,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTi
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedFixed.cfg models/executors/ParslProviderExecutorTimed.tla
 ```
 
+`ParslProviderExecutorTimedMonitoring.tla` composes that lifecycle with the asynchronous monitoring
+boundary. It keeps provider provisioning, manager heartbeat expiry, task timeout/retry, old-attempt
+late results, terminal status emission, and bounded database-write failures in one state machine.
+The current branch accepts the old physical result and TLC finds the expected
+`TerminalCauseSafety` violation after 1,645 generated / 924 distinct states. The fixed branch
+classifies the result as stale and passes all nine invariants with 50,611 generated / 13,031
+distinct states at depth 24.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedMonitoringCurrent.cfg models/executors/ParslProviderExecutorTimedMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedMonitoringFixed.cfg models/executors/ParslProviderExecutorTimedMonitoring.tla
+```
+
 Globus Compute has a distinct concurrency boundary: GlobusComputeExecutor.submit temporarily
 mutates one shared SDK Executor's resource specification and endpoint configuration before
 calling submit, then restores defaults in a finally path. ParslGlobusComputeSubmitRace models

@@ -694,6 +694,12 @@ run_case provider-executor-timed-current counterexample \
 run_case provider-executor-timed-fixed pass \
     models/executors/ParslProviderExecutorTimedFixed.cfg \
     models/executors/ParslProviderExecutorTimed.tla
+run_case provider-executor-timed-monitoring-current counterexample \
+    models/executors/ParslProviderExecutorTimedMonitoringCurrent.cfg \
+    models/executors/ParslProviderExecutorTimedMonitoring.tla
+run_case provider-executor-timed-monitoring-fixed pass \
+    models/executors/ParslProviderExecutorTimedMonitoringFixed.cfg \
+    models/executors/ParslProviderExecutorTimedMonitoring.tla
 run_case negative-scale-in-current counterexample \
     models/executors/ParslNegativeScaleInCurrent.cfg \
     models/executors/ParslNegativeScaleIn.tla

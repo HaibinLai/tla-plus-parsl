@@ -50,8 +50,9 @@ implementations or every detail in the paper.
 | join_app | ParslJoinFull, ParslJoinCallableTransport, ParslJoinComplete, ParslJoinInternalExecutor, ParslJoinRetry, ParslJoinRetryDuplicates, ParslJoinRetryCancellation, ParslJoinDuplicateFailureAggregation, ParslJoinReturnShape, ParslNestedJoin, ParslNestedJoinFailure, ParslTripleNestedJoin, ParslJoinCallbackMultiplicity, failure aggregation, root-cause metadata, callback/cancellation/mutation/nested/memo-data models, and single-Future cancellation | 25 join runtime tests covering internal-executor routing, serialized callable transport, memoization, single/list/empty/None results, duplicate positions, retry, nested retry, cancellation, return validation, callback races, mutation, two-/three-level nested joins, failure aggregation, and root-cause metadata | Python exception identity and arbitrary user object graphs remain abstract |
 
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
-composition, and `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
-worker capacity, and bounded provider retry. `ParslJoinFull` now includes the explicit serialized
+composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
+worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes
+that lifecycle with terminal monitoring persistence. `ParslJoinFull` now includes the explicit serialized
 attempt phase and current/fixed stale-result correlation after a physical retry. The three join
 retry runtime probes (`test_join_retry_runtime.py`, `test_join_retry_duplicates_runtime.py`, and
 `test_nested_join_retry_runtime.py`) all pass against the current Parsl source.
