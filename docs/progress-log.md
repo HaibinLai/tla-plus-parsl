@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (provider task scale/retry model).
+- Latest pushed commit: `7c0a418` (`Add provider task scale retry model`).
 - Foundational smoke inventory: 377 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
