@@ -1828,6 +1828,9 @@ Globus Compute submit races, LSF duplicate IDs, and timer-close timeout handling
 Cases 401--420 matched at 100 steps: join-list snapshot mutation, command-client retry and close,
 TaskVine/Work Queue duplicate reports, ResultsIncoming close, Google Cloud cancellation,
 monitoring task/try insertion bookkeeping, and TasksOutgoing transport closure.
+Cases 421--440 matched at 100 steps: transport close, file bytes/corruption, transfer retry,
+DataFuture transfer, HTTP status, Rsync partial cleanup, stage-out Future placement, and
+monitoring database core/insert behavior.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
