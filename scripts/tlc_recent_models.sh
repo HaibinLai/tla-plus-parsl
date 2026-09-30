@@ -1056,6 +1056,9 @@ run_case serialization-length-current counterexample \
 run_case serialization-length-fixed pass \
     models/serialization/ParslSerializationLengthFixed.cfg \
     models/serialization/ParslSerializationLength.tla
+run_case serialization-snapshot pass \
+    models/serialization/ParslSerializationSnapshot.cfg \
+    models/serialization/ParslSerializationSnapshot.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla

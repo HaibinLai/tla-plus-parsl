@@ -1130,6 +1130,10 @@ reproduces the current short-payload handoff.
 `ParslSerializationLength.tla` is also in the sweep as the compact declared-vs-actual frame
 length abstraction; the strict configuration rejects mismatches before exposing payload bytes.
 `tests/test_serialization_runtime.py` exercises the concrete short-frame behavior.
+`ParslSerializationSnapshot.tla` is also in the sweep, checking that callable/object content is
+captured at `pack_apply_message` time and remains isolated from later source mutation. The real
+snapshot bridges are `tests/test_function_object_contents_runtime.py`,
+`tests/test_callable_argument_alias_runtime.py`, and `tests/test_callable_retry_transport_runtime.py`.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.
