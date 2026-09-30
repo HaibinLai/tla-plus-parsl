@@ -655,6 +655,9 @@ match the resolver's registered container handlers and the runtime probes.
 `ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
 exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
 when the current pop-before-validation path exits the worker.
+The companion `ParslHtexWorkerWatchdog` busy and idle configurations are now in the smoke sweep;
+the busy path is exercised by `tests/test_htex_worker_watchdog_runtime.py` and emits a logical
+WorkerLost result before replacement.
 `ParslHtexResultDecodeFailure.tla` separates corrupt result-payload decoding from malformed fields:
 the current `tasks.pop` before `deserialize(result)` can orphan a pending Future, while the fixed
 branch reports a terminal deserialization failure; `tests/test_htex_result_decode_failure_runtime.py`
