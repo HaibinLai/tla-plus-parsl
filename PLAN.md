@@ -1523,6 +1523,12 @@ The core lifecycle layer is now extended with `ParslDataFlowCleanup` (ordered, i
 monitoring persistence). Runtime probes cover cleanup and wait-snapshot behavior. Current wait,
 decode, and staging/monitoring branches produce TLC counterexamples; fixed configurations pass.
 
+The abstract wire/file configurations are now explicitly tracked as well. `ParslFileContent` checks
+content tokens, chunk completion, and file publication; `ParslNestedSerialization` checks bounded
+object-graph closure; `ParslResultSerializationFailure` checks an unencodable worker result; and
+`ParslMessaging` checks bounded task/result queues, correlation, and serialization gates. These four
+configurations pass TLC simulation under the shared `ParslAbstract` state machine.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime

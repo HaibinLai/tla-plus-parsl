@@ -657,6 +657,18 @@ run_case task-staging-monitoring-current counterexample \
 run_case task-staging-monitoring-fixed pass \
     models/core/ParslTaskStagingMonitoringFixed.cfg \
     models/core/ParslTaskStagingMonitoring.tla
+run_case file-content pass \
+    models/core/ParslFileContent.cfg \
+    models/core/ParslAbstract.tla
+run_case nested-serialization pass \
+    models/core/ParslNestedSerialization.cfg \
+    models/core/ParslAbstract.tla
+run_case result-serialization-failure pass \
+    models/serialization/ParslResultSerializationFailure.cfg \
+    models/core/ParslAbstract.tla
+run_case messaging pass \
+    models/core/ParslMessaging.cfg \
+    models/core/ParslAbstract.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
