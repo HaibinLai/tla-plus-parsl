@@ -60,9 +60,10 @@ the all-done check and either constructs the ordered result or aggregates all fa
 `ParslJoinTimedMonitoring.tla` provides the compact clock boundary for this family: heartbeat
 expiry and task timeout can lose the inner Future while its physical attempt remains capable of a
 late completion. Two staged chunks must be received and published before the inner Future can
-start, and a corrupt received chunk must be repaired before fixed-branch publication. The current
-branch can publish corrupt content and accepts the late completion; the fixed branch rejects the
-corrupt publication and records late completion as stale before the outer join status is persisted.
+start, and a corrupt received chunk must be repaired before fixed-branch publication. Repairs are
+bounded per chunk. The current branch can publish corrupt content and accepts the late completion;
+the fixed branch rejects the corrupt publication and records late completion as stale before the
+outer join status is persisted.
 
 ## Safety properties
 

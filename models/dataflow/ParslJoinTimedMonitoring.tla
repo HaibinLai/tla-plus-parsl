@@ -9,7 +9,7 @@ EXTENDS Naturals
  * late result to race with join finalization and monitoring persistence.
  *************************************************************************** *)
 
-CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, USE_FIXED
+CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MAX_CHUNK_REPAIRS, USE_FIXED
 OuterStates == {"executing", "joining", "succeeded", "failed"}
 InnerStates == {"pending", "running", "succeeded", "lost"}
 ManagerStates == {"up", "expired"}
@@ -22,16 +22,19 @@ ChunkStates == {"missing", "received"}
 ChecksumStates == {"missing", "valid", "corrupt"}
 
 VARIABLES now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
-          cause, lateResult, chunkState, chunkChecksum, dataReady, monitorState,
+          cause, lateResult, chunkState, chunkChecksum, chunkRepairs, dataReady,
+          monitorState,
           monitorStatus, dbStatus
 vars == <<now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
-           cause, lateResult, chunkState, chunkChecksum, dataReady, monitorState,
+           cause, lateResult, chunkState, chunkChecksum, chunkRepairs, dataReady,
+           monitorState,
            monitorStatus, dbStatus>>
 
 Init ==
     /\ MAX_TIME >= 3
     /\ HEARTBEAT_TIMEOUT > 0
     /\ TASK_TIMEOUT > 0
+    /\ MAX_CHUNK_REPAIRS >= 0
     /\ USE_FIXED \in BOOLEAN
     /\ now = 0
     /\ manager = "up"
@@ -44,6 +47,7 @@ Init ==
     /\ lateResult = "none"
     /\ chunkState = [c \in Chunks |-> "missing"]
     /\ chunkChecksum = [c \in Chunks |-> "missing"]
+    /\ chunkRepairs = [c \in Chunks |-> 0]
     /\ dataReady = FALSE
     /\ monitorState = "none"
     /\ monitorStatus = "none"
@@ -73,7 +77,8 @@ StageChunk(c) ==
     /\ chunkState' = [chunkState EXCEPT ![c] = "received"]
     /\ chunkChecksum' = [chunkChecksum EXCEPT ![c] = "valid"]
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
-                    inFlight, cause, lateResult, dataReady, monitorState,
+                    inFlight, cause, lateResult, chunkRepairs, dataReady,
+                    monitorState,
                     monitorStatus, dbStatus>>
 
 CorruptChunk(c) ==
@@ -83,14 +88,17 @@ CorruptChunk(c) ==
     /\ chunkChecksum[c] = "valid"
     /\ chunkChecksum' = [chunkChecksum EXCEPT ![c] = "corrupt"]
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
-                    inFlight, cause, lateResult, chunkState, dataReady,
+                    inFlight, cause, lateResult, chunkState, chunkRepairs,
+                    dataReady,
                     monitorState, monitorStatus, dbStatus>>
 
 RepairChunk(c) ==
     /\ c \in Chunks
     /\ chunkState[c] = "received"
     /\ chunkChecksum[c] = "corrupt"
+    /\ chunkRepairs[c] < MAX_CHUNK_REPAIRS
     /\ chunkChecksum' = [chunkChecksum EXCEPT ![c] = "valid"]
+    /\ chunkRepairs' = [chunkRepairs EXCEPT ![c] = @ + 1]
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
                     inFlight, cause, lateResult, chunkState, dataReady,
                     monitorState, monitorStatus, dbStatus>>
@@ -104,6 +112,7 @@ PublishData ==
     /\ dataReady' = TRUE
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
                     inFlight, cause, lateResult, chunkState, chunkChecksum,
+                    chunkRepairs,
                     monitorState,
                     monitorStatus, dbStatus>>
 
@@ -187,7 +196,8 @@ CoreNext ==
     \/ UNCHANGED vars
 
 Next ==
-    \/ (CoreNext /\ UNCHANGED <<chunkState, chunkChecksum, dataReady>>)
+    \/ (CoreNext /\ UNCHANGED <<chunkState, chunkChecksum, chunkRepairs,
+                                  dataReady>>)
     \/ \E c \in Chunks: StageChunk(c)
     \/ \E c \in Chunks: CorruptChunk(c) \/ RepairChunk(c)
     \/ PublishData
@@ -206,6 +216,7 @@ TypeOK ==
     /\ lateResult \in LateStates
     /\ chunkState \in [Chunks -> ChunkStates]
     /\ chunkChecksum \in [Chunks -> ChecksumStates]
+    /\ chunkRepairs \in [Chunks -> 0..MAX_CHUNK_REPAIRS]
     /\ dataReady \in BOOLEAN
     /\ monitorState \in MonitorStates
     /\ monitorStatus \in MonitorStatuses
@@ -214,6 +225,7 @@ TypeOK ==
 JoinSafety == outer = "succeeded" => inner = "succeeded"
 DataReadinessSafety == inner \in {"running", "succeeded"} => dataReady
 ContentSafety == dataReady => \A c \in Chunks: chunkChecksum[c] = "valid"
+ChunkRepairBound == \A c \in Chunks: chunkRepairs[c] <= MAX_CHUNK_REPAIRS
 TerminalCauseSafety == cause # "none" => inner # "succeeded"
 StaleResultSafety == lateResult = "accepted" => ~USE_FIXED
 DatabaseSafety ==

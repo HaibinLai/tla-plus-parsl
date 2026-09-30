@@ -48,12 +48,12 @@ generated / 3,559 distinct states at depth 20.
 Future, an outer join, two-chunk data staging, DataFuture readiness, per-chunk checksum validation,
 manager heartbeat expiry, task timeout, late completion, and terminal monitoring persistence. The
 current configuration permits publication of a corrupt chunk; TLC finds the expected
-`ContentSafety` violation after 2,712 generated / 795 distinct states (the late-result branch is
-also reachable).
-The fixed configuration requires valid checksums and classifies late completion as stale, passing
-all seven invariants with 5,388 generated / 1,327 distinct states at depth 17. The smoke
-current/fixed configurations use a three-tick horizon; current reaches a safety violation in 2,057
-generated / 586 distinct states, while fixed passes with 2,707 generated / 670 distinct states.
+`ContentSafety` violation after 3,032 generated / 960 distinct states (the late-result branch is
+also reachable). The fixed configuration requires valid checksums, bounds each chunk repair to
+`MAX_CHUNK_REPAIRS = 1`, and classifies late completion as stale, passing all eight invariants
+with 18,764 generated / 4,846 distinct states at depth 21. The smoke current/fixed configurations
+use a three-tick horizon; current reaches a safety violation in 2,721 generated / 873 distinct
+states, while fixed passes with 9,124 generated / 2,394 distinct states at depth 20.
 The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
 inner Python apps and verifies the duplicate Future position in the outer result.
 
