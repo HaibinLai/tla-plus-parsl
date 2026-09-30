@@ -127,9 +127,14 @@ tests=(
     tests/test_http_partial_cleanup_runtime.py
     tests/test_http_status_validation_runtime.py
     tests/test_rsync_partial_cleanup_runtime.py
+    tests/test_rsync_stageout_version_runtime.py
+    tests/test_http_existing_destination_runtime.py
+    tests/test_http_separate_content_length_runtime.py
+    tests/test_http_separate_status_runtime.py
     tests/test_zip_file_transfer_runtime.py
     tests/test_zip_path_validation_runtime.py
     tests/test_zip_traversal_runtime.py
+    tests/test_multi_output_stageout_runtime.py
     tests/test_kubernetes_polling_runtime.py
     tests/test_kubernetes_cancel_unknown_runtime.py
     tests/test_condor_chunk_size_runtime.py

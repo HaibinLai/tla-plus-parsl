@@ -665,6 +665,24 @@ run_case http-status-validation \
 run_case rsync-partial-cleanup \
     models/staging/ParslRsyncPartialCleanupFixed.cfg \
     models/staging/ParslRsyncPartialCleanup.tla
+run_case file-transfer-retry \
+    models/staging/ParslFileTransferRetryFixed.cfg \
+    models/staging/ParslFileTransferRetry.tla
+run_case http-existing-destination \
+    models/staging/ParslHTTPExistingDestinationFixed.cfg \
+    models/staging/ParslHTTPExistingDestination.tla
+run_case http-separate-content-length \
+    models/staging/ParslHTTPSeparateContentLengthFixed.cfg \
+    models/staging/ParslHTTPSeparateContentLength.tla
+run_case http-separate-status \
+    models/staging/ParslHTTPSeparateStatusFixed.cfg \
+    models/staging/ParslHTTPSeparateStatus.tla
+run_case multi-output-versioned-stageout \
+    models/staging/ParslMultiOutputVersionedStageOut.cfg \
+    models/staging/ParslMultiOutputVersionedStageOut.tla
+run_case three-output-versioned-stageout \
+    models/staging/ParslThreeOutputVersionedStageOutFixed.cfg \
+    models/staging/ParslThreeOutputVersionedStageOut.tla
 run_case zip-member-selection \
     models/staging/ParslZipMemberSelectionFixed.cfg \
     models/staging/ParslZipMemberSelection.tla
