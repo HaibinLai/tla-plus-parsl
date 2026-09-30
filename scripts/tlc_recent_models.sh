@@ -1011,6 +1011,12 @@ run_case stage-out-ordering-current counterexample \
 run_case stage-out-ordering-fixed pass \
     models/staging/ParslDataManagerStageOutOrderingFixed.cfg \
     models/staging/ParslDataManagerStageOutOrdering.tla
+run_case serialization-envelope-current counterexample \
+    models/serialization/ParslSerializationEnvelopeMalformedCurrent.cfg \
+    models/serialization/ParslSerializationEnvelopeMalformed.tla
+run_case serialization-envelope-fixed pass \
+    models/serialization/ParslSerializationEnvelopeMalformedFixed.cfg \
+    models/serialization/ParslSerializationEnvelopeMalformed.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

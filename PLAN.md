@@ -1106,6 +1106,10 @@ runtime staging-provider dispatch probes.
 `ParslDataManagerStageOutOrdering.tla` mirrors the output side: wrapper construction must precede
 starting a provider stage-out Future, otherwise wrapper failure leaves a live orphan transfer.
 `tests/test_data_manager_stage_out_ordering_runtime.py` reproduces that current behavior.
+`ParslSerializationEnvelopeMalformed.tla` is now in the serialization sweep: truncated or
+headerless envelopes must become a controlled decode rejection rather than a raw framing error.
+`tests/test_serialization_envelope_malformed_runtime.py` reproduces the current failure on a
+truncated payload.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
