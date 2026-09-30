@@ -956,6 +956,33 @@ run_case datafuture-transfer \
 run_case datafuture-cancellation-propagation \
     models/staging/ParslDataFutureCancellationPropagationFixed.cfg \
     models/staging/ParslDataFutureCancellationPropagation.tla
+run_case datafuture-copy \
+    models/dataflow/ParslDataFutureCopy.cfg \
+    models/dataflow/ParslDataFutureCopy.tla
+run_case input-list-mutation \
+    models/dataflow/ParslInputListMutationFixed.cfg \
+    models/dataflow/ParslInputListMutation.tla
+run_case output-list-mutation \
+    models/dataflow/ParslOutputListMutationFixed.cfg \
+    models/dataflow/ParslOutputListMutation.tla
+run_case dependency-identity-dedup \
+    models/dataflow/ParslDependencyIdentityDedupFixed.cfg \
+    models/dataflow/ParslDependencyIdentityDedup.tla
+run_case task-staging-monitoring \
+    models/core/ParslTaskStagingMonitoringFixed.cfg \
+    models/core/ParslTaskStagingMonitoring.tla
+run_case app-future-output-streams-none \
+    models/dataflow/ParslAppFutureOutputStreamsNone.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
+run_case app-future-output-streams-staged \
+    models/dataflow/ParslAppFutureOutputStreamsStaged.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
+run_case app-future-output-streams-string \
+    models/dataflow/ParslAppFutureOutputStreamsString.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
+run_case app-future-output-streams-tuple \
+    models/dataflow/ParslAppFutureOutputStreamsTuple.cfg \
+    models/dataflow/ParslAppFutureOutputStreams.tla
 run_case data-manager-cache \
     models/staging/ParslDataManagerCacheFixed.cfg \
     models/staging/ParslDataManagerCache.tla

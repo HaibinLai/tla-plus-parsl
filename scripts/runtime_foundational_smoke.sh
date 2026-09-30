@@ -201,6 +201,9 @@ tests=(
     tests/test_datafuture_runtime.py
     tests/test_datafuture_cancellation_runtime.py
     tests/test_datafuture_falsey_exception_runtime.py
+    tests/test_input_list_mutation_runtime.py
+    tests/test_output_list_mutation_runtime.py
+    tests/test_app_future_output_streams_runtime.py
     tests/test_data_manager_stage_out_return_runtime.py
     tests/test_apply_message_arity_runtime.py
     tests/test_serialization_short_frame_count_runtime.py
