@@ -47,6 +47,17 @@ the override/submit/restore critical section and shows that overlapping submissi
 the other task's configuration. The fixed variant serializes the critical section; the runtime
 probe is tests/test_globus_compute_submit_race_runtime.py.
 
+`ParslGlobusComputeResourceSpecType.tla` covers the preceding admission boundary: the current
+wrapper calls `.pop()` on a truthy per-submit specification before checking that it is a mapping,
+so a scalar leaks `AttributeError`. The fixed branch rejects malformed input before SDK state is
+changed, with a direct runtime probe against the wrapper.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResourceSpecTypeCurrent.cfg models/executors/ParslGlobusComputeResourceSpecType.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResourceSpecTypeFixed.cfg models/executors/ParslGlobusComputeResourceSpecType.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_resource_spec_type_runtime.py -v
+```
+
 `ParslHtexHeartbeatVersion.tla` combines two HTEX admission boundaries that are often analyzed
 separately. A version-mismatched registration and a manager whose heartbeat age reaches the
 expiry threshold both close the interchange and queue a fatal result. The fixed submit action

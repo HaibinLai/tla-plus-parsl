@@ -120,6 +120,10 @@ boundary to the separate-task `_http_stage_in` path rather than only the in-task
 The clock/executor coverage also includes `ParslHtexContactTimeoutStarvation` (BUG-218), which
 checks that continuous result forwarding cannot suppress the HTEX interchange-contact deadline.
 
+Executor coverage also includes `ParslGlobusComputeResourceSpecType` (BUG-219), which checks
+typed admission of per-submit Globus Compute resource specifications before shared SDK state is
+mutated.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

@@ -331,6 +331,15 @@ run_case htex-contact-timeout-starvation-fixed pass \
 run_case htex-contact-timeout-starvation-normal pass \
     models/clock/ParslHtexContactTimeoutStarvationNormal.cfg \
     models/clock/ParslHtexContactTimeoutStarvation.tla
+run_case globus-compute-resource-spec-type-current counterexample \
+    models/executors/ParslGlobusComputeResourceSpecTypeCurrent.cfg \
+    models/executors/ParslGlobusComputeResourceSpecType.tla
+run_case globus-compute-resource-spec-type-fixed pass \
+    models/executors/ParslGlobusComputeResourceSpecTypeFixed.cfg \
+    models/executors/ParslGlobusComputeResourceSpecType.tla
+run_case globus-compute-resource-spec-type-normal pass \
+    models/executors/ParslGlobusComputeResourceSpecTypeNormal.cfg \
+    models/executors/ParslGlobusComputeResourceSpecType.tla
 run_case http-separate-status-current counterexample \
     models/staging/ParslHTTPSeparateStatusCurrent.cfg \
     models/staging/ParslHTTPSeparateStatus.tla
