@@ -111,6 +111,11 @@ tests=(
     tests/test_serialization_truncated_length_runtime.py
     tests/test_serialization_negative_length_runtime.py
     tests/test_serialization_binary_payload_runtime.py
+    tests/test_serialized_result_file_runtime.py
+    tests/test_dataflow_cleanup_runtime.py
+    tests/test_dataflow_wait_snapshot_runtime.py
+    tests/test_retry_handler_negative_cost_runtime.py
+    tests/test_retry_handler_non_numeric_cost_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

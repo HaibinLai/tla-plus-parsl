@@ -264,6 +264,11 @@ exactly three apply buffers, declared lengths, short/truncated/negative frames, 
 payloads. These checks sit below route/correlation and expose malformed framing before worker
 dispatch.
 
+The core failure-path cases cover serialized result-file publication, result decode retry,
+provider failure retry, invalid retry-handler costs, DFK cleanup, wait-snapshot shutdown, and
+dependency-failure propagation. They preserve the distinction between logical Future terminality
+and physical retry/result-file state.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and

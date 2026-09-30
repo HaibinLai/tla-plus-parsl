@@ -611,5 +611,29 @@ run_case serialization-negative-length \
 run_case serialization-binary-payload \
     models/serialization/ParslSerializationBinaryPayload.cfg \
     models/serialization/ParslSerializationBinaryPayload.tla
+run_case serialized-result-file \
+    models/core/ParslSerializedResultFileFixed.cfg \
+    models/core/ParslSerializedResultFile.tla
+run_case result-decode-retry \
+    models/core/ParslResultDecodeRetryFixed.cfg \
+    models/core/ParslResultDecodeRetry.tla
+run_case provider-failure-retry \
+    models/core/ParslProviderFailureRetryFixed.cfg \
+    models/core/ParslProviderFailureRetry.tla
+run_case retry-handler-negative-cost \
+    models/dataflow/ParslRetryHandlerNegativeCostFixed.cfg \
+    models/dataflow/ParslRetryHandlerNegativeCost.tla
+run_case retry-handler-nonnumeric-cost \
+    models/dataflow/ParslRetryHandlerNonNumericCostFixed.cfg \
+    models/dataflow/ParslRetryHandlerNonNumericCost.tla
+run_case dataflow-cleanup \
+    models/core/ParslDataFlowCleanup.cfg \
+    models/core/ParslDataFlowCleanup.tla
+run_case dataflow-wait-snapshot \
+    models/core/ParslDataFlowWaitSnapshotFixed.cfg \
+    models/core/ParslDataFlowWaitSnapshot.tla
+run_case dependency-failure-propagation \
+    models/dataflow/ParslDependencyFailurePropagationFixed.cfg \
+    models/dataflow/ParslDependencyFailurePropagation.tla
 
 echo "Foundational TLC smoke suite passed."
