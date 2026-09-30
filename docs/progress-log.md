@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (scale-in response-shape refinement).
+- Latest pushed commit: `0ebe67c` (`Model scale-in response shape`).
 - Foundational smoke inventory: 366 TLC cases and 234 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
