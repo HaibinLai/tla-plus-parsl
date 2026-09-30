@@ -717,6 +717,9 @@ source (`Issue #3427`): a successful task with no `num_nodes` allocation reaches
 instead of returning its result. `tests/test_mpi_no_resource_result_runtime.py` reproduces the
 current assertion using a task result with an empty node map; the fixed branch makes node release
 conditional and still delivers the result.
+`ParslMPITaskContextShape` now adds the MPI task-package admission boundary: a non-mapping
+`context` currently reaches `.get` and raises `AttributeError`, while the fixed branch rejects it
+before queue admission. This is recorded as BUG-209 and covered by a live scheduler probe.
 The recurring sweep also executes `ParslClusterProviderUnknownJob.tla` and
 `ParslLSFResourceValidation.tla`: the former checks that a stale scheduler ID is handled as an
 explicit missing observation, while the latter rejects non-positive `cores_per_node` values before

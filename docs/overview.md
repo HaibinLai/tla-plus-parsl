@@ -223,6 +223,11 @@ comment). The fixed model returns such a result without a node-reclamation step.
 change, eventually overflowing the Python call stack. The fixed branch stops the pass and leaves
 the task queued until resources are returned.
 
+`ParslMPITaskContextShape.tla` models the MPI scheduler's task-package boundary. The current
+`MPITaskScheduler.put_task` calls `.get` on `context` before checking its shape, so a malformed
+pickleable context raises `AttributeError` and can escape the manager path. The runtime probe
+uses the installed scheduler method; the fixed branch rejects the package before admission.
+
 `ParslBashTimeoutCleanup.tla` models Bash app timeout cleanup. The current
 `remote_side_bash_executor` reports `AppTimeout` after `Popen.wait` expires but leaves the shell
 or process group alive; the fixed branch kills it before reporting the timeout.
@@ -1671,6 +1676,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexSubmitSuccess.
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexVersionMismatchFixed.cfg models/executors/ParslHtexVersionMismatch.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDispatchPriority.cfg models/executors/ParslHtexDispatchPriority.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPISpecFixed.cfg models/executors/ParslMPISpec.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPITaskContextShapeCurrent.cfg models/executors/ParslMPITaskContextShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPITaskContextShapeFixed.cfg models/executors/ParslMPITaskContextShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPITaskContextShapeNormal.cfg models/executors/ParslMPITaskContextShape.tla
 ```
 
 The first configuration checks `TypeOK`, dependency safety, terminal-state stability,

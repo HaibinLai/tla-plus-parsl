@@ -1738,6 +1738,15 @@ run_case mpi-no-resource-result-current counterexample \
 run_case mpi-no-resource-result-fixed pass \
     models/executors/ParslMPINoResourceResultFixed.cfg \
     models/executors/ParslMPINoResourceResult.tla
+run_case mpi-task-context-current counterexample \
+    models/executors/ParslMPITaskContextShapeCurrent.cfg \
+    models/executors/ParslMPITaskContextShape.tla
+run_case mpi-task-context-fixed pass \
+    models/executors/ParslMPITaskContextShapeFixed.cfg \
+    models/executors/ParslMPITaskContextShape.tla
+run_case mpi-task-context-normal pass \
+    models/executors/ParslMPITaskContextShapeNormal.cfg \
+    models/executors/ParslMPITaskContextShape.tla
 run_case cluster-provider-unknown-job-current counterexample \
     models/providers/ParslClusterProviderUnknownJob.cfg \
     models/providers/ParslClusterProviderUnknownJob.tla
