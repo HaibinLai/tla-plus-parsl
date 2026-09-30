@@ -1157,6 +1157,9 @@ real result handler.
 current branch lets `set_result` raise and kills the result worker, while the fixed branch
 discards the cancelled task's result and continues to later messages. The concrete bridge is
 `tests/test_htex_cancelled_result_runtime.py`.
+`ParslHtexDuplicateResult.tla` is now in the executor sweep: after the first result removes the
+task map entry, a duplicate frame must be classified as stale and leave the result worker alive.
+The related concrete result-queue probes cover duplicate/late frame handling.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.
