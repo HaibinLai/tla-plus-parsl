@@ -231,5 +231,44 @@ run_case globus-resource-spec \
 run_case globus-shutdown-cleanup \
     models/executors/ParslGlobusComputeShutdownCleanupFixed.cfg \
     models/executors/ParslGlobusComputeShutdownCleanup.tla
+run_case aws-submit \
+    models/providers/ParslAWSProviderSubmitFixed.cfg \
+    models/providers/ParslAWSProviderSubmit.tla
+run_case aws-cancel \
+    models/providers/ParslAWSProviderCancelMissingFixed.cfg \
+    models/providers/ParslAWSProviderCancel.tla
+run_case aws-cancel-duplicates \
+    models/providers/ParslAwsCancelDuplicatesFixed.cfg \
+    models/providers/ParslAwsCancelDuplicates.tla
+run_case aws-empty-submit \
+    models/providers/ParslAwsSubmitEmptyResponseFixed.cfg \
+    models/providers/ParslAwsSubmitEmptyResponse.tla
+run_case aws-reservation-shape \
+    models/providers/ParslAwsStatusReservationShapeFixed.cfg \
+    models/providers/ParslAwsStatusReservationShape.tla
+run_case azure-submit \
+    models/providers/ParslAzureProviderSubmitFixed.cfg \
+    models/providers/ParslAzureProviderSubmit.tla
+run_case azure-cancel \
+    models/providers/ParslAzureCancelBookkeepingFixed.cfg \
+    models/providers/ParslAzureCancelBookkeeping.tla
+run_case azure-status-bookkeeping \
+    models/providers/ParslAzureStatusBookkeepingFixed.cfg \
+    models/providers/ParslAzureStatusBookkeeping.tla
+run_case google-submit \
+    models/providers/ParslGoogleCloudSubmitFixed.cfg \
+    models/providers/ParslGoogleCloudSubmit.tla
+run_case google-submit-state \
+    models/providers/ParslGoogleCloudSubmitStateFixed.cfg \
+    models/providers/ParslGoogleCloudSubmitState.tla
+run_case google-cancel \
+    models/providers/ParslGoogleCloudCancelFixed.cfg \
+    models/providers/ParslGoogleCloudCancel.tla
+run_case google-status \
+    models/providers/ParslGoogleCloudStatusFixed.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
+run_case google-status-remote-failure \
+    models/providers/ParslGoogleCloudStatusRemoteFailureFixed.cfg \
+    models/providers/ParslGoogleCloudStatusRemoteFailure.tla
 
 echo "Foundational TLC smoke suite passed."

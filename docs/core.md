@@ -194,6 +194,11 @@ Globus Compute resource-spec validation, concurrent-submit isolation, and shutdo
 models preserve the shared Future terminality contract while keeping backend-specific state
 bounded.
 
+The cloud-provider cases cover AWS, Azure, and Google Cloud submit, cancel, status-bookkeeping,
+empty-response, duplicate-ID, reservation-shape, and remote-failure paths. They model remote API
+responses separately from local resource maps so a partial or stale cloud response cannot silently
+publish inconsistent capacity.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
