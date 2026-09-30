@@ -6,6 +6,22 @@ resource admission, and result races.
 
 Files live in [`models/dataflow/`](../models/dataflow/).
 
+`ParslDependencyFailurePropagation.tla` models the ordinary DAG failure boundary.  The dependent
+logical task remains blocked until its upstream Future is terminal.  A failed upstream is unwrapped
+as `DependencyError`, so the current Parsl `launch_if_ready`/`handle_exec_update` path completes
+the dependent task as `dep_fail` without submitting a physical attempt or consuming retry budget.
+The Current configuration intentionally omits that special case and TLC finds the retry/launch
+counterexample; the Fixed configuration checks dependency safety, no launch after dependency
+failure, retry bounds, and terminal Future consistency.  The runtime bridge is
+`tests/test_dependency_runtime.py`, which verifies both successful result propagation and that a
+failed producer prevents the consumer function from executing.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDependencyFailurePropagationCurrent.cfg models/dataflow/ParslDependencyFailurePropagation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDependencyFailurePropagationFixed.cfg models/dataflow/ParslDependencyFailurePropagation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_dependency_runtime.py -v
+```
+
 `ParslJoinFull.tla` is the integrated bounded join model. It combines single-Future joins,
 ordered list joins with duplicate positions, empty-list joins, invalid return handling, logical
 inner Futures with physical retries, cancellation, failure aggregation, and terminal result

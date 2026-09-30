@@ -307,6 +307,12 @@ run_case dependency-traversal-deep-tuple pass \
 run_case dependency-traversal-deep-set pass \
     models/dataflow/ParslDependencyTraversalDeepSet.cfg \
     models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-failure-propagation-current counterexample \
+    models/dataflow/ParslDependencyFailurePropagationCurrent.cfg \
+    models/dataflow/ParslDependencyFailurePropagation.tla
+run_case dependency-failure-propagation-fixed pass \
+    models/dataflow/ParslDependencyFailurePropagationFixed.cfg \
+    models/dataflow/ParslDependencyFailurePropagation.tla
 run_case memo-function-identity-current counterexample \
     models/dataflow/ParslMemoFunctionIdentityCurrent.cfg \
     models/dataflow/ParslMemoFunctionIdentity.tla
