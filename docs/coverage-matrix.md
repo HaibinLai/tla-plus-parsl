@@ -119,6 +119,9 @@ HTEX connection probe cannot fall through to a blocking receive.
 Monitoring coverage also includes `ParslMonitoringExternalQueueEmptyRace` (BUG-187), which checks
 that shutdown does not trust a stale `Queue.empty()` observation and strand an external message.
 
+The provider row also includes `ParslTorqueMalformedStatusLine` (BUG-188), which checks malformed
+Torque scheduler records before state-column indexing.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2

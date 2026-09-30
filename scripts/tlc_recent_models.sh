@@ -1477,6 +1477,12 @@ run_case monitoring-external-empty-current counterexample \
 run_case monitoring-external-empty-fixed pass \
     models/monitoring/ParslMonitoringExternalQueueEmptyRaceFixed.cfg \
     models/monitoring/ParslMonitoringExternalQueueEmptyRace.tla
+run_case torque-malformed-status-current counterexample \
+    models/providers/ParslTorqueMalformedStatusLineCurrent.cfg \
+    models/providers/ParslTorqueMalformedStatusLine.tla
+run_case torque-malformed-status-fixed pass \
+    models/providers/ParslTorqueMalformedStatusLineFixed.cfg \
+    models/providers/ParslTorqueMalformedStatusLine.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
