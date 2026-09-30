@@ -1586,6 +1586,11 @@ DataFlowKernel._send_task_info, DatabaseManager.start, _insert, _update, batchin
 to the logical-task/physical-try/event-queue abstraction, and explicitly records where the
 current source uses unbounded database retry or deferred worker-message bookkeeping.
 
+The executor/provider boundary is now documented in docs/executor-provider-model.md. It maps
+ThreadPoolExecutor, HTEX, MPI, Work Queue, TaskVine, Flux, Globus Compute, and
+BlockProviderExecutor to the unified executor-kind model and its admission, capacity, drain,
+and failure-cleanup properties.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
