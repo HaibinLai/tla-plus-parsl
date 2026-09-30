@@ -38,6 +38,16 @@ bounded four-frame queues. It combines out-of-order delivery, late retry generat
 frames, and cross-task retargeting; the fixed configuration checks 106,145 simulated states while
 the Current configuration reproduces the correlation counterexample.
 
+`ParslZMQAckRetry.tla` isolates the sender acknowledgement boundary. A missing ACK permits a
+second transmission of the same logical envelope; the current branch dispatches both deliveries,
+while the fixed branch treats the second delivery as a duplicate before worker invocation. The
+model checks single-dispatch, ACK-after-completion, and Future consistency.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryCurrent.cfg models/serialization/ParslZMQAckRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryFixed.cfg models/serialization/ParslZMQAckRetry.tla
+```
+
 `ParslCallableAliasRetry.tla` combines Python object aliasing with retry snapshots. A mutable
 object is both captured by a callable and passed as an argument; if it mutates while an encoded
 attempt is pending, the fixed path invalidates that snapshot and re-encodes before retry. The

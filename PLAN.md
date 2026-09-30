@@ -233,6 +233,8 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslSerializationWire` and its failure configuration are now in the smoke sweep, checking
   the concrete `C2`/`02` headers, length framing, ordered unpack/decode, and rejection before
   dispatch when one buffer is not serializable.
+- `ParslZMQAckRetry` is now in the smoke sweep, checking multipart task retransmission when an ACK
+  is delayed; the fixed branch deduplicates the envelope before dispatch and Future resolution.
 - `ParslMessageLoss` and `ParslMessageDuplicate` are now in the smoke sweep, connecting bounded
   transport loss/duplicate delivery to retry, correlation, cleanup, and terminal-result safety.
 - `ParslMisroute` and `ParslResultMisroute` are now in the smoke sweep, rejecting task/result
