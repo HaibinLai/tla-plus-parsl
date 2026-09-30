@@ -316,10 +316,10 @@ run_case memo-exception-checkpoint-fixed pass \
 run_case dynamic-task-chain pass \
     models/dataflow/ParslDynamicTaskChain.cfg \
     models/dataflow/ParslDynamicTaskChain.tla
-run_case message-correlation-three-current counterexample \
+run_case message-correlation-four-current counterexample \
     models/serialization/ParslMessageCorrelationThreeCurrent.cfg \
     models/serialization/ParslMessageCorrelationThree.tla
-run_case message-correlation-three-fixed pass \
+run_case message-correlation-four-fixed pass \
     models/serialization/ParslMessageCorrelationThree.cfg \
     models/serialization/ParslMessageCorrelationThree.tla
 run_case callable-alias-retry-current counterexample \

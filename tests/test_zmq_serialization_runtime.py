@@ -73,6 +73,35 @@ class ZmqSerializationRuntimeTest(unittest.TestCase):
             receiver.close(0)
             context.term()
 
+    def test_four_task_multipart_delivery_preserves_task_identity(self):
+        context = zmq.Context()
+        sender = context.socket(zmq.PAIR)
+        receiver = context.socket(zmq.PAIR)
+        try:
+            endpoint = "inproc://parsl-tla-four-task-correlation"
+            sender.bind(endpoint)
+            receiver.connect(endpoint)
+            for task_id, value in reversed([(b"A", 1), (b"B", 2),
+                                            (b"C", 3), (b"D", 4)]):
+                sender.send_multipart([
+                    task_id,
+                    pack_apply_message(increment, (value,), {}),
+                ])
+
+            received = []
+            for _ in range(4):
+                self.assertTrue(receiver.poll(1000, zmq.POLLIN))
+                task_id, payload = receiver.recv_multipart()
+                func, args, kwargs = unpack_apply_message(payload)
+                received.append((task_id, func(*args, **kwargs)))
+
+            self.assertEqual(received, [(b"D", 5), (b"C", 4),
+                                        (b"B", 3), (b"A", 2)])
+        finally:
+            sender.close(0)
+            receiver.close(0)
+            context.term()
+
 
 if __name__ == "__main__":
     unittest.main()

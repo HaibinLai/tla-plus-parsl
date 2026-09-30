@@ -33,7 +33,7 @@ configuration demonstrates that checking only the attempt number can resolve a r
 wrong task Future; the fixed configuration requires both `origin = target` and the current
 attempt before resolution.
 
-`ParslMessageCorrelationThree` extends this protocol to three concurrent logical tasks and
+`ParslMessageCorrelationThree` extends this protocol to four concurrent logical tasks and
 bounded four-frame queues. It combines out-of-order delivery, late retry generations, duplicate
 frames, and cross-task retargeting; the fixed configuration checks 106,145 simulated states while
 the Current configuration reproduces the correlation counterexample.

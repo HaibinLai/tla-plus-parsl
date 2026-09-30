@@ -2,7 +2,7 @@
 EXTENDS Naturals, Sequences, FiniteSets
 
 (***************************************************************************
- * Three-task result transport refinement.
+ * Four-task result transport refinement.
  *
  * Each logical task has two physical attempts.  Result envelopes may be
  * emitted late, delivered out of order, duplicated in the queue, or retargeted
@@ -11,7 +11,7 @@ EXTENDS Naturals, Sequences, FiniteSets
 
 CONSTANT USE_FIXED
 
-Tasks == {"A", "B", "C"}
+Tasks == {"A", "B", "C", "D"}
 Attempts == 0..1
 Messages == { [origin |-> t, attempt |-> a] : t \in Tasks, a \in Attempts }
 WireStates == {"none", "queued", "inbox", "decoded", "resolved", "stale", "rejected"}
@@ -59,7 +59,7 @@ Emit(m) ==
     /\ m \in Messages
     /\ m \in done
     /\ wire[m] = "none"
-    /\ Len(tx) < 4
+    /\ Len(tx) < 5
     /\ tx' = Append(tx, m)
     /\ wire' = [wire EXCEPT ![m] = "queued"]
     /\ UNCHANGED <<currentAttempt, done, target, rx, future>>
@@ -74,7 +74,7 @@ Retarget(m, t) ==
 
 Deliver(i) ==
     /\ i \in 1..Len(tx)
-    /\ Len(rx) < 4
+    /\ Len(rx) < 5
     /\ LET m == tx[i] IN
         /\ rx' = Append(rx, m)
         /\ wire' = [wire EXCEPT ![m] = "inbox"]
@@ -123,8 +123,8 @@ TypeOK ==
     /\ done \subseteq Messages
     /\ target \in [Messages -> Tasks]
     /\ wire \in [Messages -> WireStates]
-    /\ tx \in Seq(Messages) /\ Len(tx) <= 4
-    /\ rx \in Seq(Messages) /\ Len(rx) <= 4
+    /\ tx \in Seq(Messages) /\ Len(tx) <= 5
+    /\ rx \in Seq(Messages) /\ Len(rx) <= 5
     /\ future \in [Tasks -> {"unresolved", "resolved", "rejected"}]
 
 CorrelationSafety ==
