@@ -148,6 +148,21 @@ fixed configuration reads old then new and passes.
 [`tests/test_memo_checkpoint_order_runtime.py`](../tests/test_memo_checkpoint_order_runtime.py)
 creates two UUID-like directories and demonstrates the actual stale restoration.
 
+`ParslMemoCheckpointResultFailure.tla` models the result-completion ordering when `task_exit`
+checkpointing is enabled. The current `_complete_task_result` writes the checkpoint before
+updating task state and resolving the AppFuture, so a result that cannot be pickled leaves the
+logical task running and the Future pending. The fixed branch makes checkpoint failure terminal
+or otherwise decouples optional persistence from Future completion. The runtime probe uses a real
+`BasicMemoizer` and an unpickleable result.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoCheckpointResultFailureCurrent.cfg models/dataflow/ParslMemoCheckpointResultFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslMemoCheckpointResultFailureFixed.cfg models/dataflow/ParslMemoCheckpointResultFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_memo_checkpoint_result_failure_runtime.py -v
+```
+
+This checkpoint-completion boundary is recorded as BUG-245.
+
 `ParslLastCheckpointUUID.tla` models the run-directory filter in `get_last_checkpoint`. Current
 DFK instances use UUID run IDs, but the helper keeps only `isdigit()` directory names, so a valid
 UUID checkpoint is invisible. TLC finds the two-state current counterexample; the fixed branch

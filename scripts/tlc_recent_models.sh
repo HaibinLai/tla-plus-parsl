@@ -937,6 +937,12 @@ run_case radical-failure-fanout-current counterexample \
 run_case radical-failure-fanout-fixed pass \
     models/executors/ParslRadicalFailureFanoutFixed.cfg \
     models/executors/ParslRadicalFailureFanout.tla
+run_case memo-checkpoint-result-failure-current counterexample \
+    models/dataflow/ParslMemoCheckpointResultFailureCurrent.cfg \
+    models/dataflow/ParslMemoCheckpointResultFailure.tla
+run_case memo-checkpoint-result-failure-fixed pass \
+    models/dataflow/ParslMemoCheckpointResultFailureFixed.cfg \
+    models/dataflow/ParslMemoCheckpointResultFailure.tla
 run_case globus-compute-result pass \
     models/executors/ParslGlobusComputeResult.cfg \
     models/executors/ParslGlobusComputeResult.tla
