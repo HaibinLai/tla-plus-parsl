@@ -288,5 +288,29 @@ run_case scale-in-retry-monitoring \
 run_case negative-scale-in \
     models/executors/ParslNegativeScaleInFixed.cfg \
     models/executors/ParslNegativeScaleIn.tla
+run_case mpi-nonpositive-resources \
+    models/executors/ParslMPINonPositiveResourcesFixed.cfg \
+    models/executors/ParslMPINonPositiveResources.tla
+run_case mpi-nondivisible-ranks \
+    models/executors/ParslMPINonDivisibleRanksFixed.cfg \
+    models/executors/ParslMPINonDivisibleRanks.tla
+run_case mpi-no-resource-result \
+    models/executors/ParslMPINoResourceResultFixed.cfg \
+    models/executors/ParslMPINoResourceResult.tla
+run_case radical-failure-payload \
+    models/executors/ParslRadicalPilotFailurePayloadFixed.cfg \
+    models/executors/ParslRadicalPilotFailurePayload.tla
+run_case radical-failure-fanout \
+    models/executors/ParslRadicalFailureFanoutFixed.cfg \
+    models/executors/ParslRadicalFailureFanout.tla
+run_case radical-late-callback \
+    models/executors/ParslRadicalPilotLateCallbackFixed.cfg \
+    models/executors/ParslRadicalPilotLateCallback.tla
+run_case radical-unknown-callback \
+    models/executors/ParslRadicalPilotUnknownCallbackFixed.cfg \
+    models/executors/ParslRadicalPilotUnknownCallback.tla
+run_case radical-bulk-shutdown \
+    models/executors/ParslRadicalPilotBulkShutdownFixed.cfg \
+    models/executors/ParslRadicalPilotBulkShutdown.tla
 
 echo "Foundational TLC smoke suite passed."

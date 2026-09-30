@@ -204,6 +204,10 @@ worker-per-block capacity, three-block ownership, retry-aware scale-in monitorin
 of negative scale-in requests. Together they make the resource-scaling contract explicit before
 backend-specific scheduler details are layered on top.
 
+The MPI and Radical Pilot cases complete another executor-family slice: MPI resource derivation,
+non-divisible rank handling, no-resource result delivery, and Radical Pilot failure payloads,
+failure fanout, late/unknown callbacks, and bulk shutdown cleanup.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
