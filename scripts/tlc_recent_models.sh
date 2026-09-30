@@ -183,6 +183,12 @@ run_case memo-function-identity-fixed pass \
 run_case memo-function-identity-stable pass \
     models/dataflow/ParslMemoFunctionIdentityStable.cfg \
     models/dataflow/ParslMemoFunctionIdentity.tla
+run_case memo-exception-checkpoint-current counterexample \
+    models/dataflow/ParslMemoExceptionCheckpointCurrent.cfg \
+    models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case memo-exception-checkpoint-fixed pass \
+    models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
+    models/dataflow/ParslMemoExceptionCheckpoint.tla
 run_case monitoring-retry-current counterexample \
     models/monitoring/ParslMonitoringTaskRetry.cfg \
     models/monitoring/ParslMonitoringTaskRetry.tla
