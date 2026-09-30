@@ -316,5 +316,6 @@ ordered model for real SQLite `RESOURCE` samples and duplicate primary-key handl
 `tests/test_monitoring_resource_history_runtime.py`.
 
 Join coverage also includes `ParslJoinThreeList`, which keeps three distinct inner Futures and
-four ordered list positions (including a duplicate) separate in the outer result, backed by
-`tests/test_join_three_list_runtime.py`.
+four ordered list positions (including a duplicate) separate in the outer result, and
+`ParslJoinThreeCancellation`, which exercises a three-element cancelled-inner list, backed by
+`tests/test_join_three_list_runtime.py` and `tests/test_join_list_cancellation_runtime.py`.
