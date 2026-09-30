@@ -1685,6 +1685,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationF
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyMessageArity.cfg models/serialization/ParslApplyMessageArity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyMessageArityFixed.cfg models/serialization/ParslApplyMessageArity.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationZMQBridge.cfg models/serialization/ParslSerializationZMQBridge.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationZMQBridgeSmoke.cfg models/serialization/ParslSerializationZMQBridge.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultQueueFixed.cfg models/executors/ParslHtexResultQueue.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultDecodeFailureCurrent.cfg models/executors/ParslHtexResultDecodeFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexResultDecodeFailureFixed.cfg models/executors/ParslHtexResultDecodeFailure.tla
@@ -3099,6 +3100,9 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslSerializationZMQBridge.cfg`: 104,657 states generated, 20,320 distinct states, depth 39;
   serializer-token correlation, route validation, drop/duplicate handling, decode-before-dispatch,
   worker-loss retry, and stale result suppression all passed.
+- `ParslSerializationZMQBridgeSmoke.cfg`: 1,173 states generated, 328 distinct states, depth 21;
+  the bounded no-retry smoke configuration retains serializer-token, route, duplicate, corruption,
+  and stale-result paths.
 - `ParslHtexResultQueue.cfg`: expected counterexample at depth 1 (10 states generated, 6 distinct);
   a malformed result causes the actual pop-before-validation path to leave a pending Future after
   the result thread exits.

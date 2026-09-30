@@ -3079,6 +3079,9 @@ run_case serialization-snapshot pass \
 run_case serialization-zmq-bridge pass \
     models/serialization/ParslSerializationZMQBridge.cfg \
     models/serialization/ParslSerializationZMQBridge.tla
+run_case serialization-zmq-bridge-smoke pass \
+    models/serialization/ParslSerializationZMQBridgeSmoke.cfg \
+    models/serialization/ParslSerializationZMQBridge.tla
 run_case curvezmq-certificate-invalid pass \
     models/serialization/ParslCurveZMQCertificateModeInvalid.cfg \
     models/serialization/ParslCurveZMQCertificateMode.tla
