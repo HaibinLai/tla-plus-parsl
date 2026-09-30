@@ -1377,6 +1377,57 @@ run_case torque-tasks-fixed pass \
 run_case torque-tasks-valid pass \
     models/providers/ParslTorqueTasksPerNodeValid.cfg \
     models/providers/ParslTorqueTasksPerNode.tla
+run_case local-exit-file-current counterexample \
+    models/providers/ParslLocalExitFileMissingCurrent.cfg \
+    models/providers/ParslLocalExitFileMissing.tla
+run_case local-exit-file-fixed pass \
+    models/providers/ParslLocalExitFileMissingFixed.cfg \
+    models/providers/ParslLocalExitFileMissing.tla
+run_case local-provider-current counterexample \
+    models/providers/ParslLocalProviderCurrent.cfg \
+    models/providers/ParslLocalProvider.tla
+run_case local-provider-fixed pass \
+    models/providers/ParslLocalProviderFixed.cfg \
+    models/providers/ParslLocalProvider.tla
+run_case local-exit-status pass \
+    models/providers/ParslLocalProviderExitStatus.cfg \
+    models/providers/ParslLocalProviderExitStatus.tla
+run_case local-cancel-unknown-current counterexample \
+    models/providers/ParslLocalProviderCancelUnknownCurrent.cfg \
+    models/providers/ParslLocalProviderCancelUnknown.tla
+run_case local-cancel-unknown-fixed pass \
+    models/providers/ParslLocalProviderCancelUnknownFixed.cfg \
+    models/providers/ParslLocalProviderCancelUnknown.tla
+run_case local-status-scope-current counterexample \
+    models/providers/ParslLocalProviderStatusScope.cfg \
+    models/providers/ParslLocalProviderStatusScope.tla
+run_case local-status-scope-fixed pass \
+    models/providers/ParslLocalProviderStatusScopeFixed.cfg \
+    models/providers/ParslLocalProviderStatusScope.tla
+run_case local-submit-cleanup-current counterexample \
+    models/providers/ParslLocalProviderSubmitCleanupCurrent.cfg \
+    models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-submit-cleanup-fixed pass \
+    models/providers/ParslLocalProviderSubmitCleanupFixed.cfg \
+    models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-submit-cleanup-success pass \
+    models/providers/ParslLocalProviderSubmitCleanupSuccess.cfg \
+    models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-tasks-current counterexample \
+    models/providers/ParslLocalTasksPerNodeCurrent.cfg \
+    models/providers/ParslLocalTasksPerNode.tla
+run_case local-tasks-fixed pass \
+    models/providers/ParslLocalTasksPerNodeFixed.cfg \
+    models/providers/ParslLocalTasksPerNode.tla
+run_case local-tasks-valid pass \
+    models/providers/ParslLocalTasksPerNodeValid.cfg \
+    models/providers/ParslLocalTasksPerNode.tla
+run_case local-unknown-job-current counterexample \
+    models/providers/ParslLocalUnknownJobStatusCurrent.cfg \
+    models/providers/ParslLocalUnknownJobStatus.tla
+run_case local-unknown-job-fixed pass \
+    models/providers/ParslLocalUnknownJobStatusFixed.cfg \
+    models/providers/ParslLocalUnknownJobStatus.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

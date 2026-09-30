@@ -802,6 +802,10 @@ contracts are in the TLC sweep, with runtime probes for the concrete JSON and sc
 Torque coverage now includes foreign and duplicate qstat records, stale output after command
 failure, qdel terminal-state conventions, empty/valid qsub output, and non-positive
 `tasks_per_node` admission. Current and fixed branches are included in the recurring sweep.
+LocalProvider coverage now includes live-process exit-file races, marker precedence after cancel,
+stale cancellation/status IDs, requested-status scoping, failed-launch script cleanup, and zero
+`tasks_per_node` admission. These models connect local process/file semantics to provider status
+and resource bookkeeping.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
