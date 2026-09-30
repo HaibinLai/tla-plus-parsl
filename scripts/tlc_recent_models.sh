@@ -2245,6 +2245,12 @@ run_case bad-state-task-mutation-current counterexample \
 run_case bad-state-task-mutation-fixed pass \
     models/executors/ParslBadStateTaskMutationFixed.cfg \
     models/executors/ParslBadStateTaskMutation.tla
+run_case bad-state-terminal-future-current counterexample \
+    models/executors/ParslBadStateTerminalFutureCurrent.cfg \
+    models/executors/ParslBadStateTerminalFuture.tla
+run_case bad-state-terminal-future-fixed pass \
+    models/executors/ParslBadStateTerminalFutureFixed.cfg \
+    models/executors/ParslBadStateTerminalFuture.tla
 run_case block-provider-bad-state pass \
     models/executors/ParslBlockProviderBadState.cfg \
     models/executors/ParslBlockProviderBadState.tla
