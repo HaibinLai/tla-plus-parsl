@@ -258,6 +258,9 @@ run_case htex-manager-selection pass \
 run_case htex-manager-selection-block pass \
     models/executors/ParslHtexManagerSelectionBlock.cfg \
     models/executors/ParslHtexManagerSelection.tla
+run_case htex-manager-eligibility pass \
+    models/executors/ParslHtexManagerEligibility.cfg \
+    models/executors/ParslHtexManagerEligibility.tla
 run_case executor-selection-current counterexample \
     models/executors/ParslExecutorSelectionCurrent.cfg \
     models/executors/ParslExecutorSelection.tla

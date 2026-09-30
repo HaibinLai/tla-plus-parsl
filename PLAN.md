@@ -296,6 +296,8 @@ Recent focused models now connect the previously separate boundaries:
   result handling, duplicate task IDs, and interchange failure without orphaning pending work.
 - `ParslHtexManagerSelection` is now in the smoke sweep, checking random and block-ID manager
   selection orders without inventing or duplicating manager identities.
+- `ParslHtexManagerEligibility` is now in the smoke sweep, separating selector order from
+  dispatch admission and skipping inactive, draining, or zero-capacity managers.
 - `ParslExecutorSelection` is now in the smoke sweep, requiring an empty executor selection to
   be rejected before `random.choice` can expose a raw `IndexError`.
 - `ParslResourceAdmission` and its autolabel configuration are now in the smoke sweep, checking
