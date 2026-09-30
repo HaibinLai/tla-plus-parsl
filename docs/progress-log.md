@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `0f6ccec` (`Model callable object serialization error`).
-- Foundational smoke inventory: 355 TLC cases and 226 Python runtime probes.
+- Latest pushed commit: `7178406` (`Refine Flux callable serialization errors`).
+- Foundational smoke inventory: 356 TLC cases and 227 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -42,6 +42,8 @@ are recorded here in English and committed with the model changes.
   specification must not bypass executor input validation.
 - `0f6ccec`: HTEX callable-object serialization errors. A callable without `__name__` must not
   mask the original serialization TypeError with an `AttributeError`.
+- `7178406`: extended the callable-object serialization-error refinement to Flux, confirming the
+  same safe error-reporting condition across two concrete executors.
 
 ### Verification convention
 
