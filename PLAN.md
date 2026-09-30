@@ -1124,6 +1124,9 @@ reproduces that current path.
 `ParslSerializationNegativeLength.tla` is now in the sweep, requiring a receiver to reject
 negative length declarations before Python slicing. `tests/test_serialization_negative_length_runtime.py`
 reproduces the current partial-slice then parse failure.
+`ParslSerializationTruncatedLength.tla` adds declared-length validation: a frame claiming more
+bytes than remain must be rejected before deserialization. `tests/test_serialization_truncated_length_runtime.py`
+reproduces the current short-payload handoff.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

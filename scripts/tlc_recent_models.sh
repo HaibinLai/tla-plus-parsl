@@ -1044,6 +1044,12 @@ run_case serialization-negative-length-fixed pass \
 run_case serialization-negative-length-valid pass \
     models/serialization/ParslSerializationNegativeLengthValid.cfg \
     models/serialization/ParslSerializationNegativeLength.tla
+run_case serialization-truncated-length-current counterexample \
+    models/serialization/ParslSerializationTruncatedLengthCurrent.cfg \
+    models/serialization/ParslSerializationTruncatedLength.tla
+run_case serialization-truncated-length-fixed pass \
+    models/serialization/ParslSerializationTruncatedLengthFixed.cfg \
+    models/serialization/ParslSerializationTruncatedLength.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
