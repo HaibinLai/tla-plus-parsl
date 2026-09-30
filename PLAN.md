@@ -1804,6 +1804,9 @@ resource admission and scaling, HTEX priority/resource-specification checks, Slu
 AWS status cardinality, and Kubernetes polling. Current configurations produced the intended
 counterexamples while Fixed configurations returned success; the manager and admission models
 returned success directly.
+The subsequent provider-parser interval (cases 281--300) matched as well at 100 steps, covering
+LocalProvider status scoping, Slurm malformed status lines, PBSPro malformed JSON and job-alias
+uniqueness, Condor malformed/unknown jobs, and GridEngine duplicate/status-batch handling.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
