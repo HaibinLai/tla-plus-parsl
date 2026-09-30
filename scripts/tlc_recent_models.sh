@@ -1056,6 +1056,39 @@ run_case azure-cancel-normal pass \
 run_case azure-cancel-linger pass \
     models/providers/ParslAzureCancelLinger.cfg \
     models/providers/ParslAzureCancel.tla
+run_case google-zone-selection-current counterexample \
+    models/providers/ParslGoogleCloudZoneSelectionCurrent.cfg \
+    models/providers/ParslGoogleCloudZoneSelection.tla
+run_case google-zone-selection-fixed pass \
+    models/providers/ParslGoogleCloudZoneSelectionFixed.cfg \
+    models/providers/ParslGoogleCloudZoneSelection.tla
+run_case google-zone-selection-valid pass \
+    models/providers/ParslGoogleCloudZoneSelectionValid.cfg \
+    models/providers/ParslGoogleCloudZoneSelection.tla
+run_case google-status-current counterexample \
+    models/providers/ParslGoogleCloudStatus.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
+run_case google-status-fixed pass \
+    models/providers/ParslGoogleCloudStatusFixed.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
+run_case google-status-present pass \
+    models/providers/ParslGoogleCloudStatusPresent.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
+run_case google-submit-current counterexample \
+    models/providers/ParslGoogleCloudSubmit.cfg \
+    models/providers/ParslGoogleCloudSubmit.tla
+run_case google-submit-fixed pass \
+    models/providers/ParslGoogleCloudSubmitFixed.cfg \
+    models/providers/ParslGoogleCloudSubmit.tla
+run_case google-cancel-current counterexample \
+    models/providers/ParslGoogleCloudCancel.cfg \
+    models/providers/ParslGoogleCloudCancel.tla
+run_case google-cancel-failure pass \
+    models/providers/ParslGoogleCloudCancelFailure.cfg \
+    models/providers/ParslGoogleCloudCancel.tla
+run_case google-cancel-fixed pass \
+    models/providers/ParslGoogleCloudCancelFixed.cfg \
+    models/providers/ParslGoogleCloudCancel.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

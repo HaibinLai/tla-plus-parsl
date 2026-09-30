@@ -776,6 +776,10 @@ Azure provider coverage now includes short/unknown VM status views, local-resour
 partial VM provisioning rollback, linger-mode cancellation, and idempotent cleanup after a
 successful delete whose local instance ID is already absent. The corresponding current/fixed
 branches are in the TLC sweep and the runtime probes cover the concrete Azure methods.
+Google Cloud provider coverage now includes region-to-zone selection, unknown GCE status
+translation, failed-create instance numbering, and cancellation status synchronization. Current
+and candidate-fixed branches are in the sweep, with runtime probes covering the concrete GCE
+provider methods.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
