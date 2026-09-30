@@ -107,6 +107,9 @@ idle-only scale-in requests before HTEX block selection.
 It also includes `ParslHtexZeroScaleInIdle` (BUG-183), which checks zero-count idle-only requests
 as no-ops.
 
+It also includes `ParslHtexScaleInRace` (BUG-184), which checks duplicate provider cancellation
+caused by concurrent block selection.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2

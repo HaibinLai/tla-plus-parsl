@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 517 probes and passes as a whole:
+The runtime suite currently contains 518 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1839,6 +1839,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   selection, with BUG-182 runtime evidence.
 - `ParslHtexZeroScaleInIdle` now models zero-count idle-only scale-in as an immediate no-op, with
   BUG-183 runtime evidence.
+- `ParslHtexScaleInRace` now models concurrent HTEX block selection and duplicate provider
+  cancellation, with BUG-184 runtime evidence.
 
 ## Validation workflow
 
@@ -1847,7 +1849,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 517 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 518 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1917,6 +1919,8 @@ The HTEX negative-idle-scale-in probe then completed 516 tests in 13.0 seconds w
 including rejection of negative requests before selecting idle blocks.
 The HTEX zero-idle-scale-in probe then completed 517 tests in 13.0 seconds with `OK`,
 including no-op handling for zero-count requests before selecting idle blocks.
+The HTEX scale-in-race probe then completed 518 tests in 13.0 seconds with `OK`,
+including deterministic duplicate cancellation from concurrent callers.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

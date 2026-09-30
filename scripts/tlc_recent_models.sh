@@ -1447,6 +1447,12 @@ run_case htex-zero-idle-current counterexample \
 run_case htex-zero-idle-fixed pass \
     models/executors/ParslHtexZeroScaleInIdleFixed.cfg \
     models/executors/ParslHtexZeroScaleInIdle.tla
+run_case htex-scale-in-race-current counterexample \
+    models/executors/ParslHtexScaleInRaceCurrent.cfg \
+    models/executors/ParslHtexScaleInRace.tla
+run_case htex-scale-in-race-fixed pass \
+    models/executors/ParslHtexScaleInRaceFixed.cfg \
+    models/executors/ParslHtexScaleInRace.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
