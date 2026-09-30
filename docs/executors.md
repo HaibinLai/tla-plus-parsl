@@ -788,6 +788,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineShutdown.c
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_shutdown_runtime.py -v
 ```
 
+`ParslTaskVineStartFailureCleanup.tla` models provider-scaling failure during startup. The current
+`TaskVineExecutor.start` launches the manager before calling `initialize_scaling`; a provider
+exception escapes before the collector starts and leaves the manager process running. The fixed
+branch stops already-launched components before returning startup failure. The runtime probe uses
+fake process/thread objects and a failing scaling hook.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineStartFailureCleanupCurrent.cfg models/executors/ParslTaskVineStartFailureCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineStartFailureCleanupFixed.cfg models/executors/ParslTaskVineStartFailureCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_start_failure_cleanup_runtime.py -v
+```
+
 `ParslFluxSubmissionFailure.tla` covers the Flux submission-thread exception path. `_error_out_jobs`
 continues draining queued jobs after the stop event is set and fails each queued Future. The
 runtime probe calls that real helper with a one-job queue.

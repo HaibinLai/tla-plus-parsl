@@ -1924,6 +1924,12 @@ run_case workqueue-start-timeout-cleanup-current counterexample \
 run_case workqueue-start-timeout-cleanup-fixed pass \
     models/executors/ParslWorkQueueStartTimeoutCleanupFixed.cfg \
     models/executors/ParslWorkQueueStartTimeoutCleanup.tla
+run_case taskvine-start-failure-cleanup-current counterexample \
+    models/executors/ParslTaskVineStartFailureCleanupCurrent.cfg \
+    models/executors/ParslTaskVineStartFailureCleanup.tla
+run_case taskvine-start-failure-cleanup-fixed pass \
+    models/executors/ParslTaskVineStartFailureCleanupFixed.cfg \
+    models/executors/ParslTaskVineStartFailureCleanup.tla
 run_case workqueue-duplicate-report-current counterexample \
     models/executors/ParslWorkQueueDuplicateReport.cfg \
     models/executors/ParslWorkQueueDuplicateReport.tla

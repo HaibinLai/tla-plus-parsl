@@ -3042,6 +3042,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   missing port announcement leaves the submit process and collector running.
 - `ParslWorkQueueStartTimeoutCleanupFixed.cfg`: 8 states generated, 4 distinct states, depth 4;
   startup failure stops both components before the exception is returned.
+- `ParslTaskVineStartFailureCleanupCurrent.cfg`: expected startup-failure counterexample; provider
+  scaling failure leaves the already-started manager process running.
+- `ParslTaskVineStartFailureCleanupFixed.cfg`: 8 states generated, 4 distinct states, depth 4;
+  startup failure stops the manager before returning the provider exception.
 - `ParslWorkQueueDuplicateReport.cfg`: expected counterexample at depth 3 (5 states
   generated, 4 distinct); a duplicate report kills the collector and exposes unrelated task
   failure. `ParslWorkQueueDuplicateReportFixed.cfg`: 22 states generated, 7 distinct states,
