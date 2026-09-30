@@ -43,6 +43,26 @@ class MultiOutputStageOutRuntimeTest(unittest.TestCase):
         self.assertTrue(first.done())
         self.assertTrue(second.done())
 
+    def test_three_outputs_share_atomic_application_gate(self):
+        provider = FakeStaging()
+        dfk = SimpleNamespace(executors={
+            "exec": SimpleNamespace(storage_access=[provider]),
+        })
+        manager = DataManager(dfk)
+        application = Future()
+        outputs = [
+            manager.stage_out(File(f"file:///tmp/output-{index}"), "exec", application)
+            for index in range(3)
+        ]
+
+        self.assertEqual(len(outputs), 3)
+        self.assertTrue(all(not output.done() for output in outputs))
+        self.assertEqual([parent for _, parent in provider.parents],
+                         [application, application, application])
+
+        application.set_result("application complete")
+        self.assertTrue(all(output.done() for output in outputs))
+
 
 if __name__ == "__main__":
     unittest.main()
