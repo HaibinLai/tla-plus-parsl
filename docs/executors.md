@@ -4,6 +4,20 @@ These models cover executor lifecycle, task execution, HTEX submission and resul
 registration, heartbeats, command deadlines, ThreadExecutor, WorkQueue, TaskVine, Flux, and
 RadicalPilot result handling.
 
+`ParslHtexShutdownReap.tla` refines the HTEX shutdown timeout boundary. The current path sends
+`kill()` after a timed wait but does not perform a second `wait()` before closing ZMQ pipes; the
+fixed branch requires a reap step before shutdown completion. The runtime probe uses the concrete
+`HighThroughputExecutor.shutdown()` method with a process double whose kill is asynchronous.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexShutdownReapCurrent.cfg models/executors/ParslHtexShutdownReap.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexShutdownReapFixed.cfg models/executors/ParslHtexShutdownReap.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexShutdownReapNormal.cfg models/executors/ParslHtexShutdownReap.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_shutdown_reap_runtime.py -v
+```
+
+This shutdown quiescence boundary is recorded as BUG-213.
+
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 

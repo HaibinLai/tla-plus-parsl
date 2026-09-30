@@ -87,6 +87,9 @@ lookup failure is isolated instead of aborting status results for unrelated requ
 The provider row also includes `ParslLocalPidAdmission` (BUG-212), which checks that launcher
 output cannot publish a zero/negative process ID as a live managed resource.
 
+The executor row also includes `ParslHtexShutdownReap` (BUG-213), which checks that a forced
+interchange kill is reaped before shutdown closes its dependent channels.
+
 It also includes `ParslCondorSubmitWhitespace` (BUG-177), which checks scheduler whitespace
 normalization before cluster/process ID expansion.
 

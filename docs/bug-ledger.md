@@ -12,6 +12,7 @@ and a runtime probe when one is available.
 
 | BUG-211 | Azure remote-missing status aborts polling batch | `AzureProvider.status` lets a VM lookup exception escape, preventing later requested jobs from being observed. | `models/providers/ParslAzureStatusRemoteFailure*.cfg`; `tests/test_azure_status_remote_failure_runtime.py` | Isolate remote lookup failures as UNKNOWN/PENDING and continue the batch. | Reproduced; candidate fixed model passes |
 | BUG-212 | LocalProvider accepts non-positive launcher PID | `LocalProvider.submit` publishes zero or negative launcher PIDs as managed RUNNING resources. | `models/providers/ParslLocalPidAdmission*.cfg`; `tests/test_local_pid_admission_runtime.py` | Require a strictly positive PID before recording a resource. | Reproduced; candidate fixed model passes |
+| BUG-213 | HTEX shutdown kill is not reaped | HTEX closes its channels immediately after a timed-out `kill()` without a second `wait()`, so shutdown can return before the interchange is quiescent. | `models/executors/ParslHtexShutdownReap*.cfg`; `tests/test_htex_shutdown_reap_runtime.py` | Reap the forcefully terminated process before reporting shutdown complete. | Reproduced; candidate fixed model passes |
 
 | ID | Component | Current behavior / risk | Evidence | Candidate safety condition | Status |
 | --- | --- | --- | --- | --- | --- |

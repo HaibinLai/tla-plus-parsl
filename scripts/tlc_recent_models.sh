@@ -340,6 +340,15 @@ run_case local-pid-admission-fixed pass \
 run_case local-pid-admission-normal pass \
     models/providers/ParslLocalPidAdmissionNormal.cfg \
     models/providers/ParslLocalPidAdmission.tla
+run_case htex-shutdown-reap-current counterexample \
+    models/executors/ParslHtexShutdownReapCurrent.cfg \
+    models/executors/ParslHtexShutdownReap.tla
+run_case htex-shutdown-reap-fixed pass \
+    models/executors/ParslHtexShutdownReapFixed.cfg \
+    models/executors/ParslHtexShutdownReap.tla
+run_case htex-shutdown-reap-normal pass \
+    models/executors/ParslHtexShutdownReapNormal.cfg \
+    models/executors/ParslHtexShutdownReap.tla
 run_case cluster-status-unknown-current counterexample \
     models/providers/ParslClusterStatusUnknownCurrent.cfg \
     models/providers/ParslClusterStatusUnknown.tla
