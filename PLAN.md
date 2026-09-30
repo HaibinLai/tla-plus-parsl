@@ -772,6 +772,10 @@ serialization/process failures with orphaned-Future rollback candidates. Runtime
 translation, omitted instance responses, and the candidate completion mapping for a missing
 requested instance; the AWS runtime probes cover status, submit, unknown-instance, and cancel
 bookkeeping boundaries.
+Azure provider coverage now includes short/unknown VM status views, local-resource bookkeeping,
+partial VM provisioning rollback, linger-mode cancellation, and idempotent cleanup after a
+successful delete whose local instance ID is already absent. The corresponding current/fixed
+branches are in the TLC sweep and the runtime probes cover the concrete Azure methods.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

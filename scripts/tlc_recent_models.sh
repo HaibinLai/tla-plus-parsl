@@ -1023,6 +1023,39 @@ run_case aws-provider-status-fixed pass \
 run_case aws-provider-status-present pass \
     models/providers/ParslAWSProviderStatusPresent.cfg \
     models/providers/ParslAWSProviderStatus.tla
+run_case azure-status-running pass \
+    models/providers/ParslAzureStatus.cfg \
+    models/providers/ParslAzureStatus.tla
+run_case azure-status-short-view pass \
+    models/providers/ParslAzureStatusShortView.cfg \
+    models/providers/ParslAzureStatus.tla
+run_case azure-status-unknown pass \
+    models/providers/ParslAzureStatusUnknown.cfg \
+    models/providers/ParslAzureStatus.tla
+run_case azure-status-bookkeeping-current counterexample \
+    models/providers/ParslAzureStatusBookkeepingCurrent.cfg \
+    models/providers/ParslAzureStatusBookkeeping.tla
+run_case azure-status-bookkeeping-fixed pass \
+    models/providers/ParslAzureStatusBookkeepingFixed.cfg \
+    models/providers/ParslAzureStatusBookkeeping.tla
+run_case azure-submit-current counterexample \
+    models/providers/ParslAzureProviderSubmit.cfg \
+    models/providers/ParslAzureProviderSubmit.tla
+run_case azure-submit-fixed pass \
+    models/providers/ParslAzureProviderSubmitFixed.cfg \
+    models/providers/ParslAzureProviderSubmit.tla
+run_case azure-cancel-missing-current counterexample \
+    models/providers/ParslAzureCancelMissingCurrent.cfg \
+    models/providers/ParslAzureCancel.tla
+run_case azure-cancel-missing-fixed pass \
+    models/providers/ParslAzureCancelMissingFixed.cfg \
+    models/providers/ParslAzureCancel.tla
+run_case azure-cancel-normal pass \
+    models/providers/ParslAzureCancel.cfg \
+    models/providers/ParslAzureCancel.tla
+run_case azure-cancel-linger pass \
+    models/providers/ParslAzureCancelLinger.cfg \
+    models/providers/ParslAzureCancel.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
