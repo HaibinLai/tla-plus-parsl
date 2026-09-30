@@ -528,6 +528,12 @@ run_case monitoring-update-retry-current counterexample \
 run_case monitoring-update-retry-fixed pass \
     models/monitoring/ParslMonitoringUpdatePersistentRetryFixed.cfg \
     models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
+run_case monitoring-insert-retry-current counterexample \
+    models/monitoring/ParslMonitoringPersistentRetryCurrent.cfg \
+    models/monitoring/ParslMonitoringPersistentRetry.tla
+run_case monitoring-insert-retry-fixed pass \
+    models/monitoring/ParslMonitoringPersistentRetryFixed.cfg \
+    models/monitoring/ParslMonitoringPersistentRetry.tla
 run_case monitoring-zmq-router-current counterexample \
     models/monitoring/ParslMonitoringZMQRouterFailureCurrent.cfg \
     models/monitoring/ParslMonitoringZMQRouterFailure.tla
