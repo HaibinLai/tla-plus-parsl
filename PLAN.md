@@ -1529,6 +1529,12 @@ object-graph closure; `ParslResultSerializationFailure` checks an unencodable wo
 `ParslMessaging` checks bounded task/result queues, correlation, and serialization gates. These four
 configurations pass TLC simulation under the shared `ParslAbstract` state machine.
 
+The staging sweep now explicitly includes `ParslFileCorruption`, `ParslGlobusStageOutDependency`,
+and `ParslZipStageIn`. These cover corrupted output chunks, stage-out dependency gating, corrupt
+archives, and atomic versus partial output publication on write failure. Runtime probes cover eight
+file/archive/Globus paths. The current Zip write-failure configuration produces the expected partial-
+file counterexample; fixed, corrupt-archive, dependency, and content configurations pass simulation.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime

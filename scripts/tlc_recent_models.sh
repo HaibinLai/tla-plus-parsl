@@ -669,6 +669,24 @@ run_case result-serialization-failure pass \
 run_case messaging pass \
     models/core/ParslMessaging.cfg \
     models/core/ParslAbstract.tla
+run_case file-corruption pass \
+    models/staging/ParslFileCorruption.cfg \
+    models/core/ParslAbstract.tla
+run_case globus-stage-out-dependency pass \
+    models/staging/ParslGlobusStageOutDependency.cfg \
+    models/staging/ParslGlobusStageDependency.tla
+run_case zip-stage-in pass \
+    models/staging/ParslZipStageIn.cfg \
+    models/staging/ParslZipStageIn.tla
+run_case zip-stage-in-corrupt pass \
+    models/staging/ParslZipStageInCorrupt.cfg \
+    models/staging/ParslZipStageIn.tla
+run_case zip-stage-in-current counterexample \
+    models/staging/ParslZipStageInCurrent.cfg \
+    models/staging/ParslZipStageIn.tla
+run_case zip-stage-in-fixed pass \
+    models/staging/ParslZipStageInFixed.cfg \
+    models/staging/ParslZipStageIn.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
