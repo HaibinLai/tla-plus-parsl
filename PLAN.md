@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 511 probes and passes as a whole:
+The runtime suite currently contains 512 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1827,6 +1827,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   status instead of a raw shape exception, with BUG-176 runtime evidence.
 - `ParslCondorSubmitWhitespace` now models whitespace-normalized cluster parsing before Condor
   process-ID expansion, with BUG-177 runtime evidence.
+- `ParslJoinImmediateCancellation` now models synchronous callback registration for an already
+  cancelled inner Future, with BUG-178 runtime evidence.
 
 ## Validation workflow
 
@@ -1835,7 +1837,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 511 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 512 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1893,6 +1895,8 @@ The Azure status-shape probe then completed 510 tests in 13.3 seconds with `OK`,
 including a missing instance-view response without a polling-thread escape.
 The Condor whitespace probe then completed 511 tests in 13.1 seconds with `OK`,
 including repeated-space scheduler output and cluster-ID integrity.
+The immediate-join-cancellation probe then completed 512 tests in 13.2 seconds with `OK`,
+including synchronous callback registration for an already-cancelled inner Future.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

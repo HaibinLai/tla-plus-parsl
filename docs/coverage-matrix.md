@@ -77,6 +77,9 @@ instance-view object cannot abort status polling.
 It also includes `ParslCondorSubmitWhitespace` (BUG-177), which checks scheduler whitespace
 normalization before cluster/process ID expansion.
 
+The join row also includes `ParslJoinImmediateCancellation` (BUG-178), which checks terminal
+failure propagation when cancellation callbacks run synchronously during registration.
+
 The same row now includes `ParslClusterStatusUnknown` (BUG-170), which covers the shared
 `ClusterProvider.status` projection when a requested local job ID has gone stale.
 

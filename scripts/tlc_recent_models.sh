@@ -1411,6 +1411,12 @@ run_case condor-submit-whitespace-current counterexample \
 run_case condor-submit-whitespace-fixed pass \
     models/providers/ParslCondorSubmitWhitespaceFixed.cfg \
     models/providers/ParslCondorSubmitWhitespace.tla
+run_case join-immediate-cancellation-current counterexample \
+    models/dataflow/ParslJoinImmediateCancellationCurrent.cfg \
+    models/dataflow/ParslJoinImmediateCancellation.tla
+run_case join-immediate-cancellation-fixed pass \
+    models/dataflow/ParslJoinImmediateCancellationFixed.cfg \
+    models/dataflow/ParslJoinImmediateCancellation.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
