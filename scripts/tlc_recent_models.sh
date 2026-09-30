@@ -48,6 +48,21 @@ run_case callable-retry-fixed pass \
 run_case function-object-contents pass \
     models/serialization/ParslFunctionObjectContents.cfg \
     models/serialization/ParslFunctionObjectContents.tla
+run_case function-object-transport pass \
+    models/serialization/ParslFunctionObjectTransport.cfg \
+    models/serialization/ParslFunctionObjectTransport.tla
+run_case object-snapshot-retry-current counterexample \
+    models/serialization/ParslObjectSnapshotRetryCurrent.cfg \
+    models/serialization/ParslObjectSnapshotRetry.tla
+run_case object-snapshot-retry-fixed pass \
+    models/serialization/ParslObjectSnapshotRetryFixed.cfg \
+    models/serialization/ParslObjectSnapshotRetry.tla
+run_case zmq-object-snapshot-current counterexample \
+    models/serialization/ParslZMQObjectSnapshotCurrent.cfg \
+    models/serialization/ParslZMQObjectSnapshot.tla
+run_case zmq-object-snapshot-fixed pass \
+    models/serialization/ParslZMQObjectSnapshotFixed.cfg \
+    models/serialization/ParslZMQObjectSnapshot.tla
 run_case heartbeat-timeout-current counterexample \
     models/clock/ParslHeartbeatTimeoutPersistenceCurrent.cfg \
     models/clock/ParslHeartbeatTimeoutPersistence.tla
