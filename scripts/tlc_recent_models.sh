@@ -359,6 +359,13 @@ run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
 
+run_case input-dependency-duplicate-current counterexample \
+    models/dataflow/ParslInputDependencyDuplicateCurrent.cfg \
+    models/dataflow/ParslInputDependencyDuplicate.tla
+run_case input-dependency-duplicate-fixed pass \
+    models/dataflow/ParslInputDependencyDuplicateFixed.cfg \
+    models/dataflow/ParslInputDependencyDuplicate.tla
+
 run_case htex-worker-drain-clock-current counterexample \
     models/clock/ParslHtexWorkerDrainClockCurrent.cfg \
     models/clock/ParslHtexWorkerDrainClock.tla

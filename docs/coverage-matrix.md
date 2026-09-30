@@ -567,3 +567,8 @@ HTEX result handling also includes `ParslHtexUnknownResultType` (BUG-255), which
 unknown decoded result-frame type followed by a valid frame. The current configuration violates
 `UnknownTypeSafety`; the fixed model passes and the runtime probe is
 `tests/test_htex_unknown_result_type_runtime.py`.
+
+Core dataflow coverage also includes `ParslInputDependencyDuplicate` (BUG-259), which models
+the reserved `inputs` kwarg being traversed twice by `_gather_all_deps`. The current
+configuration violates `NoDuplicateDependency`; the fixed model passes with
+`tests/test_input_dependency_duplicate_runtime.py` as the runtime probe.
