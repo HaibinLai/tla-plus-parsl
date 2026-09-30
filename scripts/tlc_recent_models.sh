@@ -1089,6 +1089,63 @@ run_case google-cancel-failure pass \
 run_case google-cancel-fixed pass \
     models/providers/ParslGoogleCloudCancelFixed.cfg \
     models/providers/ParslGoogleCloudCancel.tla
+run_case condor-cancel pass \
+    models/providers/ParslCondorCancel.cfg \
+    models/providers/ParslCondorCancel.tla
+run_case condor-cancel-failure pass \
+    models/providers/ParslCondorCancelFailure.cfg \
+    models/providers/ParslCondorCancel.tla
+run_case condor-chunk-size-current counterexample \
+    models/providers/ParslCondorChunkSizeCurrent.cfg \
+    models/providers/ParslCondorChunkSize.tla
+run_case condor-chunk-size-fixed pass \
+    models/providers/ParslCondorChunkSizeFixed.cfg \
+    models/providers/ParslCondorChunkSize.tla
+run_case condor-chunk-size-valid pass \
+    models/providers/ParslCondorChunkSizeValid.cfg \
+    models/providers/ParslCondorChunkSize.tla
+run_case condor-malformed-line-current counterexample \
+    models/providers/ParslCondorMalformedStatusLineCurrent.cfg \
+    models/providers/ParslCondorMalformedStatusLine.tla
+run_case condor-malformed-line-fixed pass \
+    models/providers/ParslCondorMalformedStatusLineFixed.cfg \
+    models/providers/ParslCondorMalformedStatusLine.tla
+run_case condor-status-current counterexample \
+    models/providers/ParslCondorStatus.cfg \
+    models/providers/ParslCondorStatus.tla
+run_case condor-status-fixed pass \
+    models/providers/ParslCondorStatusFixed.cfg \
+    models/providers/ParslCondorStatus.tla
+run_case condor-status-present pass \
+    models/providers/ParslCondorStatusPresent.cfg \
+    models/providers/ParslCondorStatus.tla
+run_case condor-status-failure-current-malformed counterexample \
+    models/providers/ParslCondorStatusFailureCurrentMalformed.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-current-valid counterexample \
+    models/providers/ParslCondorStatusFailureCurrentValid.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-fixed-malformed pass \
+    models/providers/ParslCondorStatusFailureFixedMalformed.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-fixed-valid pass \
+    models/providers/ParslCondorStatusFailureFixedValid.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-success pass \
+    models/providers/ParslCondorStatusFailureSuccess.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-submit-current counterexample \
+    models/providers/ParslCondorSubmit.cfg \
+    models/providers/ParslCondorSubmit.tla
+run_case condor-submit-fixed pass \
+    models/providers/ParslCondorSubmitFixed.cfg \
+    models/providers/ParslCondorSubmit.tla
+run_case condor-unknown-job-current counterexample \
+    models/providers/ParslCondorUnknownJobCurrent.cfg \
+    models/providers/ParslCondorUnknownJob.tla
+run_case condor-unknown-job-fixed pass \
+    models/providers/ParslCondorUnknownJobFixed.cfg \
+    models/providers/ParslCondorUnknownJob.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

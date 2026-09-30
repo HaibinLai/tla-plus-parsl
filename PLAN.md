@@ -780,6 +780,11 @@ Google Cloud provider coverage now includes region-to-zone selection, unknown GC
 translation, failed-create instance numbering, and cancellation status synchronization. Current
 and candidate-fixed branches are in the sweep, with runtime probes covering the concrete GCE
 provider methods.
+HTCondor coverage now includes chunk-size validation, malformed and failed `condor_q` output,
+stale local job IDs, submit output parsing, and chunked cancellation. The current parser and
+bookkeeping failures are retained as counterexample configurations beside the fixed candidates;
+the Condor runtime probes exercise these concrete scheduler boundaries without requiring a live
+HTCondor installation.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
