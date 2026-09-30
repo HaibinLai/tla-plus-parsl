@@ -636,6 +636,27 @@ run_case last-checkpoint-uuid-fixed pass \
 run_case result-race pass \
     models/dataflow/ParslResultRace.cfg \
     models/dataflow/ParslResultRace.tla
+run_case dataflow-cleanup pass \
+    models/core/ParslDataFlowCleanup.cfg \
+    models/core/ParslDataFlowCleanup.tla
+run_case dataflow-wait-snapshot-current counterexample \
+    models/core/ParslDataFlowWaitSnapshotCurrent.cfg \
+    models/core/ParslDataFlowWaitSnapshot.tla
+run_case dataflow-wait-snapshot-fixed pass \
+    models/core/ParslDataFlowWaitSnapshotFixed.cfg \
+    models/core/ParslDataFlowWaitSnapshot.tla
+run_case result-decode-retry-current counterexample \
+    models/core/ParslResultDecodeRetryCurrent.cfg \
+    models/core/ParslResultDecodeRetry.tla
+run_case result-decode-retry-fixed pass \
+    models/core/ParslResultDecodeRetryFixed.cfg \
+    models/core/ParslResultDecodeRetry.tla
+run_case task-staging-monitoring-current counterexample \
+    models/core/ParslTaskStagingMonitoringCurrent.cfg \
+    models/core/ParslTaskStagingMonitoring.tla
+run_case task-staging-monitoring-fixed pass \
+    models/core/ParslTaskStagingMonitoringFixed.cfg \
+    models/core/ParslTaskStagingMonitoring.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

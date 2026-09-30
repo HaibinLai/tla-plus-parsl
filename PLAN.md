@@ -1516,6 +1516,13 @@ positions across physical retries; `ParslLastCheckpointUUID` covers UUID-named r
 checkpoint, and memoization paths. Current cancellation/order/checkpoint configurations produce TLC
 counterexamples; fixed, success, memo, and result-race configurations pass simulation.
 
+The core lifecycle layer is now extended with `ParslDataFlowCleanup` (ordered, idempotent shutdown),
+`ParslDataFlowWaitSnapshot` (late task insertion during `wait_for_current_tasks`),
+`ParslResultDecodeRetry` (decode failure, retry, and stale result correlation), and
+`ParslTaskStagingMonitoring` (complete stage-out before DataFuture readiness, consumer admission, and
+monitoring persistence). Runtime probes cover cleanup and wait-snapshot behavior. Current wait,
+decode, and staging/monitoring branches produce TLC counterexamples; fixed configurations pass.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
