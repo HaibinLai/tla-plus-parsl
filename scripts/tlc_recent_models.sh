@@ -1827,6 +1827,24 @@ run_case datafuture-cancel-current counterexample \
 run_case datafuture-cancel-fixed pass \
     models/staging/ParslDataFutureCancellationPropagationFixed.cfg \
     models/staging/ParslDataFutureCancellationPropagation.tla
+run_case multi-output-stageout pass \
+    models/staging/ParslMultiOutputStageOutCurrent.cfg \
+    models/staging/ParslMultiOutputStageOut.tla
+run_case multi-output-stageout-early counterexample \
+    models/staging/ParslMultiOutputStageOutEarly.cfg \
+    models/staging/ParslMultiOutputStageOut.tla
+run_case staging-provider-dispatch pass \
+    models/staging/ParslStagingProviderDispatchCurrent.cfg \
+    models/staging/ParslStagingProviderDispatch.tla
+run_case zip-stageout pass \
+    models/staging/ParslZipStageOut.cfg \
+    models/staging/ParslZipStageOut.tla
+run_case zip-stageout-retry-current counterexample \
+    models/staging/ParslZipStageOutRetry.cfg \
+    models/staging/ParslZipStageOut.tla
+run_case zip-stageout-retry-fixed pass \
+    models/staging/ParslZipStageOutRetryFixed.cfg \
+    models/staging/ParslZipStageOut.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
