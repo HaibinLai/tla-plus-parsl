@@ -5,7 +5,7 @@ This directory is the split, component-oriented view of the complete [Parsl bug 
 | Category | Entries | Full records |
 | --- | ---: | --- |
 | Executors and worker lifecycle | 28 | [executors/README.md](executors/README.md) |
-| Serialization and ZMQ transport | 36 | [serialization/README.md](serialization/README.md) |
+| Serialization and ZMQ transport | 37 | [serialization/README.md](serialization/README.md) |
 | Providers and scheduler adapters | 46 | [providers/README.md](providers/README.md) |
 | Monitoring and database | 18 | [monitoring/README.md](monitoring/README.md) |
 | File staging and transfer | 15 | [staging/README.md](staging/README.md) |
@@ -14,4 +14,3 @@ This directory is the split, component-oriented view of the complete [Parsl bug 
 | Core dataflow and Future lifecycle | 1 | [dataflow/README.md](dataflow/README.md) |
 
 Every BUG ID in the flat ledger appears exactly once in these category files. Cross-component findings are assigned to the primary implementation or safety property; the original component text is preserved in each row.
-

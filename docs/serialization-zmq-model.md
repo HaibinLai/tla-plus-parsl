@@ -91,6 +91,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandSendFai
 
 This transport-health boundary is recorded as BUG-214.
 
+`ParslHtexResultForwarding.tla` models manager-side task ownership while a serialized result is
+forwarded over the outgoing ZMQ channel. The current implementation removes the task ID from
+the manager record before `send_multipart`; a send exception therefore loses the manager's only
+ownership record. The Fixed branch retains ownership until forwarding succeeds and allows a
+bounded retry. The runtime probe uses a real `Interchange` method with a deterministic failing
+outgoing socket and observes the current task-list loss. This boundary is recorded as BUG-225.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexResultForwardingCurrent.cfg models/serialization/ParslHtexResultForwarding.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexResultForwardingFixed.cfg models/serialization/ParslHtexResultForwarding.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_forwarding_runtime.py -v
+```
+
 ## Safety properties
 
 - no dispatch occurs before receive and decode;

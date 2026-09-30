@@ -3148,6 +3148,12 @@ run_case serialization-apply-message-arity-current counterexample \
 run_case serialization-apply-message-arity-fixed pass \
     models/serialization/ParslApplyMessageArityFixed.cfg \
     models/serialization/ParslApplyMessageArity.tla
+run_case htex-result-forwarding-current counterexample \
+    models/serialization/ParslHtexResultForwardingCurrent.cfg \
+    models/serialization/ParslHtexResultForwarding.tla
+run_case htex-result-forwarding-fixed pass \
+    models/serialization/ParslHtexResultForwardingFixed.cfg \
+    models/serialization/ParslHtexResultForwarding.tla
 run_case serialization-callable-argument-alias-current counterexample \
     models/serialization/ParslCallableArgumentAliasCurrent.cfg \
     models/serialization/ParslCallableArgumentAlias.tla
