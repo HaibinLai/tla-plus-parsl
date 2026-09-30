@@ -91,6 +91,14 @@ tests=(
     tests/test_monitoring_status_history_runtime.py
     tests/test_monitoring_zmq_tuple_shape_runtime.py
     tests/test_monitoring_worker_status_atomicity_runtime.py
+    tests/test_monitoring_deferred_multiplicity_runtime.py
+    tests/test_monitoring_last_message_runtime.py
+    tests/test_monitoring_task_insert_bookkeeping_runtime.py
+    tests/test_monitoring_try_insert_bookkeeping_runtime.py
+    tests/test_monitoring_workflow_insert_bookkeeping_runtime.py
+    tests/test_monitoring_workflow_end_bookkeeping_runtime.py
+    tests/test_monitoring_foreign_key_runtime.py
+    tests/test_monitoring_update_persistent_retry_runtime.py
     tests/test_ftp_connection_cleanup_runtime.py
     tests/test_ftp_partial_cleanup_runtime.py
     tests/test_ftp_staging_runtime.py

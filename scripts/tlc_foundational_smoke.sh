@@ -539,6 +539,30 @@ run_case monitoring-worker-status-atomicity \
 run_case monitoring-lifecycle-bookkeeping \
     models/monitoring/ParslMonitoringLifecycleBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
+run_case monitoring-deferred-multiplicity \
+    models/monitoring/ParslMonitoringDeferredMultiplicityFixed.cfg \
+    models/monitoring/ParslMonitoringDeferredMultiplicity.tla
+run_case monitoring-last-message-race \
+    models/monitoring/ParslMonitoringLastMessageRaceFixed.cfg \
+    models/monitoring/ParslMonitoringLastMessageRace.tla
+run_case monitoring-task-insert-bookkeeping \
+    models/monitoring/ParslMonitoringTaskInsertBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringTaskInsertBookkeeping.tla
+run_case monitoring-try-insert-bookkeeping \
+    models/monitoring/ParslMonitoringTryInsertBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringTryInsertBookkeeping.tla
+run_case monitoring-workflow-insert-bookkeeping \
+    models/monitoring/ParslMonitoringWorkflowInsertBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringWorkflowInsertBookkeeping.tla
+run_case monitoring-workflow-end-bookkeeping \
+    models/monitoring/ParslMonitoringWorkflowEndBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringWorkflowEndBookkeeping.tla
+run_case monitoring-foreign-key \
+    models/monitoring/ParslMonitoringForeignKeyFixed.cfg \
+    models/monitoring/ParslMonitoringForeignKey.tla
+run_case monitoring-update-persistent-retry \
+    models/monitoring/ParslMonitoringUpdatePersistentRetryFixed.cfg \
+    models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
 run_case ftp-stage \
     models/staging/ParslFTPStageFixed.cfg \
     models/staging/ParslFTPStage.tla
