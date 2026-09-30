@@ -242,12 +242,12 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLastMes
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_last_message_runtime.py -v
 ```
 
-`ParslMonitoringDeferredMultiplicity.tla` refines the first-message deferral boundary to two
+`ParslMonitoringDeferredMultiplicity.tla` refines the first-message deferral boundary to three
 observations for the same task/try before the `TRY` row exists. The current one-entry dictionary
-overwrites the earlier observation; the candidate fixed path retains both until replay. TLC finds
-the current `NoDeferredLoss` counterexample (5 generated/4 distinct states) and checks 18
-generated/9 distinct fixed states. The runtime probe uses the real SQLite-backed manager and
-checks that only the later hostname survives today.
+overwrites earlier observations; the candidate fixed path retains the bounded sequence until
+replay. TLC finds the current `NoDeferredLoss` counterexample (5 generated/4 distinct states)
+and checks 28 generated/14 distinct fixed states. The runtime probe uses the real SQLite-backed
+manager and checks that only the later hostname survives today.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeferredMultiplicityCurrent.cfg models/monitoring/ParslMonitoringDeferredMultiplicity.tla

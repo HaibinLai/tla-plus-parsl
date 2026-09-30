@@ -4,7 +4,8 @@ EXTENDS Naturals
 (***************************************************************************
  * Multiple first worker messages can arrive before the corresponding TRY
  * row.  DatabaseManager currently stores one deferred message per task/try,
- * so a later observation replaces an earlier one.
+ * so later observations replace earlier ones.  The fixed branch keeps a
+ * bounded sequence of three observations for this model.
  ***************************************************************************)
 
 CONSTANT USE_FIXED
@@ -21,7 +22,7 @@ Init ==
 
 ReceiveFirst ==
     /\ ~tryInserted
-    /\ IF USE_FIXED THEN pending < 2 ELSE lost < 2
+    /\ IF USE_FIXED THEN pending < 3 ELSE lost < 3
     /\ IF USE_FIXED
           THEN /\ pending' = pending + 1
                /\ UNCHANGED lost
@@ -52,11 +53,11 @@ Spec == Init /\ [][Next]_vars
 TypeOK ==
     /\ USE_FIXED \in BOOLEAN
     /\ tryInserted \in BOOLEAN
-    /\ pending \in 0..2
-    /\ replayed \in 0..2
-    /\ lost \in 0..2
+    /\ pending \in 0..3
+    /\ replayed \in 0..3
+    /\ lost \in 0..3
 
 NoDeferredLoss == USE_FIXED \/ lost = 0
-ReplayCountSafety == replayed + pending <= 2
+ReplayCountSafety == replayed + pending <= 3
 
 =============================================================================

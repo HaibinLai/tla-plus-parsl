@@ -1170,9 +1170,9 @@ reproduces the current empty-queue race.
 messages accepted before the kill signal are conserved across external-queue migration and
 internal processing. `tests/test_monitoring_shutdown_drain_runtime.py` exercises the real queue
 drain after the kill event.
-`ParslMonitoringDeferredMultiplicity.tla` now covers multiple worker `first_msg` observations
-arriving before the TRY row: the fixed branch preserves both deferred observations for replay,
-while the current single-slot map overwrites the earlier one. The concrete bridge is
+`ParslMonitoringDeferredMultiplicity.tla` now covers three worker `first_msg` observations
+arriving before the TRY row: the fixed branch preserves the bounded sequence for replay,
+while the current single-slot map overwrites earlier observations. The concrete bridge is
 `tests/test_monitoring_deferred_multiplicity_runtime.py`.
 The baseline `ParslMonitoringDeferred.tla` is also in the recurring sweep, checking the normal
 first-message deferral/replay path, foreign-key gating, and latest-observation replacement. The

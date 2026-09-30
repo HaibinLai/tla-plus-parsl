@@ -45,6 +45,9 @@ class MonitoringDeferredMultiplicityRuntimeTest(unittest.TestCase):
         second = dict(first)
         second["timestamp"] = first["timestamp"] + datetime.timedelta(seconds=1)
         second["hostname"] = "worker-b"
+        third = dict(second)
+        third["timestamp"] = second["timestamp"] + datetime.timedelta(seconds=1)
+        third["hostname"] = "worker-c"
 
         manager = DatabaseManager(
             db_url="sqlite:///" + tempfile.mktemp(suffix=".db"),
@@ -61,7 +64,7 @@ class MonitoringDeferredMultiplicityRuntimeTest(unittest.TestCase):
             if msg_queue is manager.pending_worker_task_queue:
                 calls["worker"] += 1
                 if calls["worker"] == 1:
-                    return [first, second]
+                    return [first, second, third]
                 if calls["worker"] == 2:
                     threading.Timer(0.02, manager._kill_event.set).start()
                 return []
@@ -76,7 +79,7 @@ class MonitoringDeferredMultiplicityRuntimeTest(unittest.TestCase):
         rows = manager.db.session.execute(manager.db.meta.tables[STATUS].select()).fetchall()
         try_rows = manager.db.session.execute(manager.db.meta.tables[TRY].select()).fetchall()
         self.assertEqual(len(rows), 1)
-        self.assertEqual(try_rows[0].hostname, "worker-b")
+        self.assertEqual(try_rows[0].hostname, "worker-c")
 
 
 if __name__ == "__main__":
