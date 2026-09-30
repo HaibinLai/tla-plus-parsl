@@ -141,5 +141,26 @@ run_case closure-memo-snapshot \
 run_case object-snapshot-retry \
     models/serialization/ParslObjectSnapshotRetryFixed.cfg \
     models/serialization/ParslObjectSnapshotRetry.tla
+run_case message-correlation \
+    models/serialization/ParslMessageCorrelationFixed.cfg \
+    models/serialization/ParslMessageCorrelation.tla
+run_case zmq-ack-retry \
+    models/serialization/ParslZMQAckRetryFixed.cfg \
+    models/serialization/ParslZMQAckRetry.tla
+run_case serializer-header-consistency \
+    models/serialization/ParslSerializerHeaderConsistencyFixed.cfg \
+    models/serialization/ParslSerializerHeaderConsistency.tla
+run_case serializer-fallback-primary \
+    models/serialization/ParslSerializationFallbackPrimary.cfg \
+    models/serialization/ParslSerializationFallback.tla
+run_case serializer-fallback-failure \
+    models/serialization/ParslSerializationFallbackFailure.cfg \
+    models/serialization/ParslSerializationFallback.tla
+run_case serializer-plugin-failure-cache \
+    models/serialization/ParslSerializationPluginFailureCacheFixed.cfg \
+    models/serialization/ParslSerializationPluginFailureCache.tla
+run_case serializer-registry \
+    models/serialization/ParslSerializerRegistryFixed.cfg \
+    models/serialization/ParslSerializerRegistry.tla
 
 echo "Foundational TLC smoke suite passed."

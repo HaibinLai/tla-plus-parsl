@@ -178,6 +178,11 @@ its argument, nested mutable aliases, closure values used in memoization keys, a
 object snapshots. The fixed paths preserve submission-time identity/content rather than allowing
 post-submit mutation to alter execution or cache behavior.
 
+The serialization cases refine the wire protocol itself: logical-task/attempt correlation,
+duplicate ACK retransmission, serializer-header identity, primary/secondary serializer fallback,
+failed dynamic-plugin cache eviction, and registry collision handling. They sit below the larger
+ZMQ end-to-end model and keep serializer-specific invariants directly executable.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
