@@ -1838,6 +1838,9 @@ including end-to-end execution.
 Cases 461--480 matched at 100 steps: join monitoring/core/completion, callback races, return
 equality and failure aggregation, task-status/Future ordering, malformed monitoring worker
 messages, close idempotence, shutdown race, and shutdown drain.
+Cases 481--500 matched at 100 steps: deferred monitoring multiplicity and dispatch envelopes,
+monitoring hub close, worker contact timeout, timed heartbeat and wall-clock rollback, unknown
+HTEX manager/task results, malformed manager messages, and provider polling/status batches.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
