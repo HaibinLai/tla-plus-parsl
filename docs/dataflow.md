@@ -24,10 +24,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDependencyFailurePr
 
 `ParslJoinFull.tla` is the integrated bounded join model. It combines single-Future joins,
 ordered list joins with duplicate positions, empty-list joins, invalid return handling, logical
-inner Futures with physical retries, cancellation, failure aggregation, and terminal result
-ordering. `MAX_RETRIES = 1` keeps the state space small while preserving the important attempt
-correlation and join-handle invariants. The full configuration checks 5,268 generated / 1,558
-distinct states at depth 15 with no invariant violation. The six-case runtime bridge in
+inner Futures with physical retries, cancellation, failure aggregation, terminal result ordering,
+and an explicit per-attempt `absent -> serialized -> running` transport stage. `MAX_RETRIES = 1`
+keeps the state space small while preserving the important attempt correlation and join-handle
+invariants. The full configuration checks 7,148 generated / 1,958 distinct states at depth 19
+with no invariant violation. The six-case runtime bridge in
 `tests/test_join_runtime.py` exercises real decorated `join_app` behavior for single, list,
 duplicate, empty, failure, and nested joins.
 

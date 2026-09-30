@@ -20,7 +20,7 @@ Inputs == <<"I1", "I2", "I1">>
 Modes == {"none", "single", "list", "empty", "invalid"}
 OuterStates == {"executing", "joining", "succeeded", "failed"}
 LogicalStates == {"pending", "retry_wait", "succeeded", "failed", "cancelled"}
-AttemptStates == {"absent", "running", "succeeded", "failed", "cancelled"}
+AttemptStates == {"absent", "serialized", "running", "succeeded", "failed", "cancelled"}
 Values == {"I1:value", "I2:value", "unset"}
 ResultValue == Values \cup {"invalid-return", "join-error"} \cup Seq(Values)
 
@@ -91,10 +91,20 @@ ReturnInvalid ==
     /\ UNCHANGED <<logicalState, currentAttempt, attemptState, innerValue,
                     failureCount>>
 
-StartAttempt(i) ==
+SerializeAttempt(i) ==
     /\ i \in INNER
     /\ logicalState[i] \in {"pending", "retry_wait"}
     /\ attemptState[i][currentAttempt[i]] = "absent"
+    /\ attemptState' = [attemptState EXCEPT
+          ![i][currentAttempt[i]] = "serialized"]
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, innerValue,
+                    outerResult, failureCount>>
+
+StartAttempt(i) ==
+    /\ i \in INNER
+    /\ logicalState[i] \in {"pending", "retry_wait"}
+    /\ attemptState[i][currentAttempt[i]] = "serialized"
     /\ attemptState' = [attemptState EXCEPT
           ![i][currentAttempt[i]] = "running"]
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
@@ -137,7 +147,7 @@ CancelInner(i) ==
     /\ logicalState[i] \in {"pending", "retry_wait", "running"}
     /\ attemptState' = [attemptState EXCEPT
           ![i][currentAttempt[i]] =
-              IF @ = "running" THEN "cancelled" ELSE @]
+              IF @ \in {"running", "serialized"} THEN "cancelled" ELSE @]
     /\ logicalState' = [logicalState EXCEPT ![i] = "cancelled"]
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     currentAttempt, innerValue, outerResult, failureCount>>
@@ -173,7 +183,8 @@ Finalize ==
 
 Next ==
     \/ ReturnSingle \/ ReturnList \/ ReturnEmpty \/ ReturnInvalid
-    \/ \E i \in INNER : StartAttempt(i) \/ CompleteAttempt(i)
+    \/ \E i \in INNER : SerializeAttempt(i) \/ StartAttempt(i)
+                             \/ CompleteAttempt(i)
                              \/ FailAttempt(i) \/ RetryAttempt(i)
                              \/ CancelInner(i)
     \/ \E i \in INNER : Observe(i)
@@ -217,6 +228,7 @@ AttemptLogicalSafety ==
 CancellationSafety ==
     \A i \in INNER :
       logicalState[i] = "cancelled"
-        => attemptState[i][currentAttempt[i]] \in {"absent", "failed", "cancelled"}
+        => attemptState[i][currentAttempt[i]] \in
+             {"absent", "failed", "cancelled"}
 
 =============================================================================
