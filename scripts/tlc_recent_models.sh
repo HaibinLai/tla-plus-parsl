@@ -359,6 +359,13 @@ run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
 
+run_case htex-worker-drain-clock-current counterexample \
+    models/clock/ParslHtexWorkerDrainClockCurrent.cfg \
+    models/clock/ParslHtexWorkerDrainClock.tla
+run_case htex-worker-drain-clock-fixed pass \
+    models/clock/ParslHtexWorkerDrainClockFixed.cfg \
+    models/clock/ParslHtexWorkerDrainClock.tla
+
 run_case htex-unknown-result-type-current counterexample \
     models/executors/ParslHtexUnknownResultTypeCurrent.cfg \
     models/executors/ParslHtexUnknownResultType.tla

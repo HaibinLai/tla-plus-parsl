@@ -548,6 +548,11 @@ reordered status list cannot turn a running VM into a pending observation. The c
 violates `RunningStatusSafety`, while the semantic-selection fixed model passes; its runtime
 probe is `tests/test_azure_status_ordering_runtime.py`.
 
+Worker lifecycle timing also includes `ParslHtexWorkerDrainClock` (BUG-256), which checks that
+an elapsed worker drain deadline remains effective after a wall-clock rollback. The current
+configuration violates `DrainDeadlineSafety`; the fixed model passes with
+`tests/test_htex_worker_drain_clock_runtime.py` as the runtime probe.
+
 HTEX result handling also includes `ParslHtexUnknownResultType` (BUG-255), which models an
 unknown decoded result-frame type followed by a valid frame. The current configuration violates
 `UnknownTypeSafety`; the fixed model passes and the runtime probe is
