@@ -1026,6 +1026,10 @@ without finalizing, the final callback checks all inner Futures under a lock, fa
 The callback-race and immediate-callback configurations are now part of the recurring TLC sweep;
 `tests/test_join_callback_runtime.py` and `tests/test_join_runtime.py` exercise the same early,
 duplicate, failure, cancellation, and already-completed Future paths against the real kernel.
+`ParslJoinReturnEquality.tla` is now in the sweep as well: it checks that return-shape validation
+does not invoke user-defined equality before determining whether a join result is a Future or a
+list. `tests/test_join_return_equality_runtime.py` reproduces the current callback escape and
+pending outer Future.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

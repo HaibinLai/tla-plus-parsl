@@ -900,6 +900,12 @@ run_case join-callback-race pass \
 run_case join-immediate-callback pass \
     models/dataflow/ParslJoinImmediateCallback.cfg \
     models/dataflow/ParslJoinImmediateCallback.tla
+run_case join-return-equality-current counterexample \
+    models/dataflow/ParslJoinReturnEqualityCurrent.cfg \
+    models/dataflow/ParslJoinReturnEquality.tla
+run_case join-return-equality-fixed pass \
+    models/dataflow/ParslJoinReturnEqualityFixed.cfg \
+    models/dataflow/ParslJoinReturnEquality.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
