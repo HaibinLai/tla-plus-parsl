@@ -34,6 +34,13 @@ generated / 2,213 distinct states. The fixed full configuration passes all eight
 1,397,137 generated / 302,560 distinct states at depth 59. The smoke fixed configuration passes
 with 3,981 generated / 1,192 distinct states at depth 31.
 
+`ParslZMQCallableRetry.tla` combines the callable/object snapshot with the physical task/result
+wire and retry generation. A failed attempt can deliver a complete, valid payload after a retry
+has captured a newer object version. The current branch resolves that old payload into the logical
+Future, violating `CurrentResultSafety` after 139 generated / 84 distinct states; the fixed branch
+classifies it as stale and passes all seven invariants with 222 generated / 84 distinct states at
+depth 13.
+
 `ParslMessageCorrelation` makes the correlation key explicit. Each result carries an
 `origin` logical-task ID and a physical `attempt` number, while the abstract transport also
 tracks the Future selected by its route. The model permits bounded queue reordering, a late

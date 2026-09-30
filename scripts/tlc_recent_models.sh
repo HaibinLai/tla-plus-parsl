@@ -76,6 +76,12 @@ run_case callable-retry-current counterexample \
 run_case callable-retry-fixed pass \
     models/serialization/ParslCallableRetryTransportFixed.cfg \
     models/serialization/ParslCallableRetryTransport.tla
+run_case zmq-callable-retry-current counterexample \
+    models/serialization/ParslZMQCallableRetryCurrent.cfg \
+    models/serialization/ParslZMQCallableRetry.tla
+run_case zmq-callable-retry-fixed pass \
+    models/serialization/ParslZMQCallableRetryFixed.cfg \
+    models/serialization/ParslZMQCallableRetry.tla
 run_case function-object-contents pass \
     models/serialization/ParslFunctionObjectContents.cfg \
     models/serialization/ParslFunctionObjectContents.tla
