@@ -189,6 +189,15 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case memo-dict-order-current counterexample \
+    models/dataflow/ParslMemoDictOrderingCurrent.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-dict-order-fixed pass \
+    models/dataflow/ParslMemoDictOrderingFixed.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-dict-order-homogeneous pass \
+    models/dataflow/ParslMemoDictOrderingHomogeneous.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
 run_case monitoring-retry-current counterexample \
     models/monitoring/ParslMonitoringTaskRetry.cfg \
     models/monitoring/ParslMonitoringTaskRetry.tla

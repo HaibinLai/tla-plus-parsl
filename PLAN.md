@@ -294,6 +294,8 @@ Recent focused models now connect the previously separate boundaries:
   source cannot reuse a stale memo key while unchanged source remains stable.
 - `ParslMemoExceptionCheckpoint` is now in the smoke sweep, distinguishing in-memory failed-call
   reuse from checkpoint restart behavior and explicit failure persistence.
+- `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
+  keys, canonical fixed ordering, and the homogeneous-key success path.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 
