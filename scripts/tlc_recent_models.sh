@@ -1002,6 +1002,12 @@ run_case provider-status-batch pass \
 run_case provider-polling pass \
     models/providers/ParslProviderPolling.cfg \
     models/providers/ParslProviderPolling.tla
+run_case provider-status-shape-current counterexample \
+    models/executors/ParslProviderStatusShapeCurrent.cfg \
+    models/executors/ParslProviderStatusShape.tla
+run_case provider-status-shape-fixed pass \
+    models/executors/ParslProviderStatusShapeFixed.cfg \
+    models/executors/ParslProviderStatusShape.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
