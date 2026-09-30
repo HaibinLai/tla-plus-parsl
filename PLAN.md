@@ -1778,6 +1778,9 @@ task ID/context validation, manager loss/admission, and worker task batch/frame 
 Cases 121--140 matched as well: HTEX monitoring-message enablement, MPI rank/prefix/specification
 boundaries, Work Queue submit and serialization rollback, TaskVine cancelled results, forced HTEX
 scale-in, and HTEX monitoring-batch continuation.
+Cases 141--160 matched as well: JobStatus output errors/summaries, Radical Pilot failure and late
+callbacks, Globus Compute result propagation, ResultsIncoming timeout/close behavior, TasksOutgoing
+close behavior, and address probing.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
