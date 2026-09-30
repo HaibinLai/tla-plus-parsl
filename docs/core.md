@@ -225,6 +225,11 @@ The shared executor-contract cases add executor-kind admission, provider/executo
 provider lifecycle, empty-selection rejection, shutdown ordering, and timed provider-backed
 execution. These are the common contracts that concrete backend models refine.
 
+`scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
+Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
+inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and
+`PARSL_SOURCE` when the development environment uses different paths.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
