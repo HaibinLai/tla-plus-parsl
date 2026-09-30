@@ -198,5 +198,38 @@ run_case lsf-missing-job \
 run_case lsf-resource-validation \
     models/providers/ParslLSFResourceValidationFixed.cfg \
     models/providers/ParslLSFResourceValidation.tla
+run_case thread-executor-resource-spec \
+    models/executors/ParslThreadExecutorResourceSpecFixed.cfg \
+    models/executors/ParslThreadExecutorResourceSpec.tla
+run_case workqueue-submit \
+    models/executors/ParslWorkQueueSubmitFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-serialization \
+    models/executors/ParslWorkQueueSubmitSerializationFailureFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-cancelled-result \
+    models/executors/ParslWorkQueueCancelledResultFixed.cfg \
+    models/executors/ParslWorkQueueCancelledResult.tla
+run_case taskvine-submit \
+    models/executors/ParslTaskVineSubmitFixed.cfg \
+    models/executors/ParslTaskVineSubmit.tla
+run_case taskvine-submit-serialization \
+    models/executors/ParslTaskVineSubmitSerializationFailureFixed.cfg \
+    models/executors/ParslTaskVineSubmit.tla
+run_case taskvine-cancelled-result \
+    models/executors/ParslTaskVineCancelledResultFixed.cfg \
+    models/executors/ParslTaskVineCancelledResult.tla
+run_case flux-error-cleanup \
+    models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
+    models/executors/ParslFluxErrorCleanupCancellation.tla
+run_case globus-submit-race \
+    models/executors/ParslGlobusComputeSubmitRaceFixed.cfg \
+    models/executors/ParslGlobusComputeSubmitRace.tla
+run_case globus-resource-spec \
+    models/executors/ParslGlobusComputeResourceSpecTypeFixed.cfg \
+    models/executors/ParslGlobusComputeResourceSpecType.tla
+run_case globus-shutdown-cleanup \
+    models/executors/ParslGlobusComputeShutdownCleanupFixed.cfg \
+    models/executors/ParslGlobusComputeShutdownCleanup.tla
 
 echo "Foundational TLC smoke suite passed."

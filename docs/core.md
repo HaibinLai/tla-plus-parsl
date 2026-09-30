@@ -188,6 +188,12 @@ Engine, and LSF: foreign or malformed status lines, empty submissions, job-ID al
 JSON, missing jobs, and invalid resource derivation. Each fixed model rejects malformed scheduler
 output without corrupting local resource bookkeeping.
 
+The executor-family cases cover ThreadPool resource validation, Work Queue and TaskVine submit
+rollback/serialization/cancelled-result handling, Flux cleanup after submission failure, and
+Globus Compute resource-spec validation, concurrent-submit isolation, and shutdown cleanup. These
+models preserve the shared Future terminality contract while keeping backend-specific state
+bounded.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
