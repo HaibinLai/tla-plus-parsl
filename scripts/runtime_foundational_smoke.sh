@@ -213,6 +213,11 @@ tests=(
     tests/test_retry_handler_negative_cost_runtime.py
     tests/test_retry_handler_non_numeric_cost_runtime.py
     tests/test_memo_function_identity_runtime.py
+    tests/test_memo_ignore_outputs_runtime.py
+    tests/test_memo_checkpoint_order_runtime.py
+    tests/test_memo_checkpoint_result_failure_runtime.py
+    tests/test_memo_exception_checkpoint_runtime.py
+    tests/test_last_checkpoint_uuid_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )
 

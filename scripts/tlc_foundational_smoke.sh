@@ -560,6 +560,21 @@ run_case memo-function-identity-stable \
 run_case memo-ignore-key \
     models/dataflow/ParslMemoIgnoreKeyFixed.cfg \
     models/dataflow/ParslMemoIgnoreKey.tla
+run_case memo-ignore-outputs \
+    models/dataflow/ParslMemoIgnoreOutputsFixed.cfg \
+    models/dataflow/ParslMemoIgnoreOutputs.tla
+run_case memo-checkpoint-order \
+    models/dataflow/ParslMemoCheckpointOrderFixed.cfg \
+    models/dataflow/ParslMemoCheckpointOrder.tla
+run_case memo-checkpoint-result-failure \
+    models/dataflow/ParslMemoCheckpointResultFailureFixed.cfg \
+    models/dataflow/ParslMemoCheckpointResultFailure.tla
+run_case memo-exception-checkpoint \
+    models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
+    models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case last-checkpoint-uuid \
+    models/dataflow/ParslLastCheckpointUUIDFixed.cfg \
+    models/dataflow/ParslLastCheckpointUUID.tla
 run_case task-status-future-ordering \
     models/dataflow/ParslTaskStatusFutureOrderingFixed.cfg \
     models/dataflow/ParslTaskStatusFutureOrdering.tla
