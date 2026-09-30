@@ -270,5 +270,23 @@ run_case google-status \
 run_case google-status-remote-failure \
     models/providers/ParslGoogleCloudStatusRemoteFailureFixed.cfg \
     models/providers/ParslGoogleCloudStatusRemoteFailure.tla
+run_case provider-provisioning-lifecycle \
+    models/executors/ParslProviderProvisioningLifecycle.cfg \
+    models/executors/ParslProviderProvisioningLifecycle.tla
+run_case provider-multi-block-ownership \
+    models/executors/ParslProviderMultiBlockOwnership.cfg \
+    models/executors/ParslProviderMultiBlockOwnership.tla
+run_case provider-worker-scaling \
+    models/executors/ParslProviderWorkerScaling.cfg \
+    models/executors/ParslProviderWorkerScaling.tla
+run_case provider-three-block-ownership \
+    models/executors/ParslProviderThreeBlockOwnershipFixed.cfg \
+    models/executors/ParslProviderThreeBlockOwnership.tla
+run_case scale-in-retry-monitoring \
+    models/executors/ParslScaleInRetryMonitoringFixed.cfg \
+    models/executors/ParslScaleInRetryMonitoring.tla
+run_case negative-scale-in \
+    models/executors/ParslNegativeScaleInFixed.cfg \
+    models/executors/ParslNegativeScaleIn.tla
 
 echo "Foundational TLC smoke suite passed."

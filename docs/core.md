@@ -199,6 +199,11 @@ empty-response, duplicate-ID, reservation-shape, and remote-failure paths. They 
 responses separately from local resource maps so a partial or stale cloud response cannot silently
 publish inconsistent capacity.
 
+The provider-lifecycle cases add generic provisioning generations, multi-block ownership,
+worker-per-block capacity, three-block ownership, retry-aware scale-in monitoring, and rejection
+of negative scale-in requests. Together they make the resource-scaling contract explicit before
+backend-specific scheduler details are layered on top.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
