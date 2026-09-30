@@ -23,7 +23,8 @@ The integrated ParslJoinFull model covers:
 - an empty list;
 - invalid join-body returns;
 - duplicate list references;
-- explicit callable serialization before each physical attempt starts;
+- explicit callable serialization and `queued -> received -> decoded` transport stages before each
+  physical attempt starts;
 - per-inner physical retries;
 - late completion from an older failed attempt, classified as stale in the fixed branch;
 - terminal outer status emission and persistence into the monitoring database;

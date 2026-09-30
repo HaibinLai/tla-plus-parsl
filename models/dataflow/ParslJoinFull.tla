@@ -20,7 +20,8 @@ Inputs == <<"I1", "I2", "I1">>
 Modes == {"none", "single", "list", "empty", "invalid"}
 OuterStates == {"executing", "joining", "succeeded", "failed"}
 LogicalStates == {"pending", "retry_wait", "succeeded", "failed", "cancelled"}
-AttemptStates == {"absent", "serialized", "running", "succeeded", "failed", "cancelled", "stale"}
+AttemptStates == {"absent", "serialized", "queued", "received", "decoded",
+                  "running", "succeeded", "failed", "cancelled", "stale"}
 Values == {"I1:value", "I2:value", "unset"}
 ResultValue == Values \cup {"invalid-return", "join-error"} \cup Seq(Values)
 MonitorStates == {"none", "queued", "persisted"}
@@ -107,10 +108,40 @@ SerializeAttempt(i) ==
                     logicalState, currentAttempt, innerValue,
                     outerResult, failureCount>>
 
-StartAttempt(i) ==
+QueueAttempt(i) ==
     /\ i \in INNER
     /\ logicalState[i] \in {"pending", "retry_wait"}
     /\ attemptState[i][currentAttempt[i]] = "serialized"
+    /\ attemptState' = [attemptState EXCEPT
+          ![i][currentAttempt[i]] = "queued"]
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, innerValue,
+                    outerResult, failureCount>>
+
+ReceiveAttempt(i) ==
+    /\ i \in INNER
+    /\ logicalState[i] \in {"pending", "retry_wait"}
+    /\ attemptState[i][currentAttempt[i]] = "queued"
+    /\ attemptState' = [attemptState EXCEPT
+          ![i][currentAttempt[i]] = "received"]
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, innerValue,
+                    outerResult, failureCount>>
+
+DecodeAttempt(i) ==
+    /\ i \in INNER
+    /\ logicalState[i] \in {"pending", "retry_wait"}
+    /\ attemptState[i][currentAttempt[i]] = "received"
+    /\ attemptState' = [attemptState EXCEPT
+          ![i][currentAttempt[i]] = "decoded"]
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, innerValue,
+                    outerResult, failureCount>>
+
+StartAttempt(i) ==
+    /\ i \in INNER
+    /\ logicalState[i] \in {"pending", "retry_wait"}
+    /\ attemptState[i][currentAttempt[i]] = "decoded"
     /\ attemptState' = [attemptState EXCEPT
           ![i][currentAttempt[i]] = "running"]
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
@@ -169,7 +200,8 @@ CancelInner(i) ==
     /\ logicalState[i] \in {"pending", "retry_wait", "running"}
     /\ attemptState' = [attemptState EXCEPT
           ![i][currentAttempt[i]] =
-              IF @ \in {"running", "serialized"} THEN "cancelled" ELSE @]
+              IF @ \in {"running", "serialized", "queued", "received", "decoded"}
+              THEN "cancelled" ELSE @]
     /\ logicalState' = [logicalState EXCEPT ![i] = "cancelled"]
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     currentAttempt, innerValue, outerResult, failureCount>>
@@ -205,8 +237,9 @@ Finalize ==
 
 JoinNext ==
     \/ ReturnSingle \/ ReturnList \/ ReturnEmpty \/ ReturnInvalid
-    \/ \E i \in INNER : SerializeAttempt(i) \/ StartAttempt(i)
-                             \/ CompleteAttempt(i)
+    \/ \E i \in INNER : SerializeAttempt(i) \/ QueueAttempt(i)
+                             \/ ReceiveAttempt(i) \/ DecodeAttempt(i)
+                             \/ StartAttempt(i) \/ CompleteAttempt(i)
                              \/ FailAttempt(i) \/ RetryAttempt(i)
                              \/ CancelInner(i)
     \/ \E i \in INNER : Observe(i)
