@@ -931,6 +931,12 @@ run_case radical-pilot-unknown-callback-current counterexample \
 run_case radical-pilot-unknown-callback-fixed pass \
     models/executors/ParslRadicalPilotUnknownCallbackFixed.cfg \
     models/executors/ParslRadicalPilotUnknownCallback.tla
+run_case radical-failure-fanout-current counterexample \
+    models/executors/ParslRadicalFailureFanoutCurrent.cfg \
+    models/executors/ParslRadicalFailureFanout.tla
+run_case radical-failure-fanout-fixed pass \
+    models/executors/ParslRadicalFailureFanoutFixed.cfg \
+    models/executors/ParslRadicalFailureFanout.tla
 run_case globus-compute-result pass \
     models/executors/ParslGlobusComputeResult.cfg \
     models/executors/ParslGlobusComputeResult.tla

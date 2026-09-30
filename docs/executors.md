@@ -703,6 +703,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotUnknow
 
 This unknown-callback isolation boundary is recorded as BUG-144.
 
+`ParslRadicalFailureFanout.tla` models the executor-wide failure path. The current
+`RadicalPilotExecutor._fail_all_tasks` iterates the live `future_tasks` dictionary while
+`Future.set_exception` runs callbacks synchronously; a callback that removes its own task can
+abort the iteration before later Futures are failed. The fixed branch iterates a snapshot so
+failure fan-out remains complete. The runtime probe installs this callback mutation on the real
+executor method.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalFailureFanoutCurrent.cfg models/executors/ParslRadicalFailureFanout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalFailureFanoutFixed.cfg models/executors/ParslRadicalFailureFanout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_failure_fanout_runtime.py -v
+```
+
+This failure-fan-out mutation boundary is recorded as BUG-244.
+
 `ParslHtexWorkerWatchdog.tla` separates a physical HTEX worker from the logical task attempt it
 was executing. When a busy worker dies, the watchdog emits a serialized `WorkerLost` result and
 replaces the worker; an idle worker is simply restarted. The runtime probe invokes the real

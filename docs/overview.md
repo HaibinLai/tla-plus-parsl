@@ -861,6 +861,12 @@ submitting queued tasks; their Futures remain pending. The fixed branch flushes 
 before collector exit. The runtime probe calls the real `_bulk_collector` with an already-set stop
 event and verifies that its queued item is left behind.
 
+`ParslRadicalFailureFanout.tla` refines the executor-wide failure path. The current
+`_fail_all_tasks` iterates the live `future_tasks` dictionary while `Future.set_exception` can run
+a callback that removes the current entry, aborting the sweep with a dictionary-mutation error.
+The fixed branch snapshots the entries first, so every independent Future reaches a terminal
+failure state. The runtime probe installs exactly this callback mutation on the real method.
+
 `ParslGlobusComputeConfig.tla` models the thin Globus Compute wrapper's temporary resource and
 endpoint configuration. Each submit copies task-specific values into the shared SDK executor,
 calls the underlying submit, and restores both defaults in `finally`. The unsynchronized
@@ -3039,6 +3045,10 @@ This probe patches the real interchange clock forward and confirms that the curr
   the bulk collector with one queued task and a pending Future.
 - `ParslRadicalPilotBulkShutdownFixed.cfg`: 5 states generated, 4 distinct states, depth 4;
   queued work is flushed before shutdown completes.
+- `ParslRadicalFailureFanoutCurrent.cfg`: expected counterexample at depth 2; a callback removes
+  an entry during failure fan-out and the second Future remains pending.
+- `ParslRadicalFailureFanoutFixed.cfg`: 6 states generated, 3 distinct states, depth 3; snapshot
+  iteration fails both outstanding Futures without mutation aborting the sweep.
 - `ParslGlobusComputeConfig.cfg`: expected counterexample at depth 3 (38 states generated, 25
   distinct); interleaved submits can observe another task's temporary resource specification.
 - `ParslGlobusComputeConfigFixed.cfg`: 37 states generated, 16 distinct states, depth 8;
@@ -3407,6 +3417,7 @@ This probe patches the real interchange clock forward and confirms that the curr
 | `TaskDone` / `TaskCanceled` / `TaskFailed` / `MasterFailed` / `Shutdown` | Radical Pilot callback mapping and pending-Future cleanup | `RadicalPilotExecutor.task_state_cb`, `_fail_all_tasks`, and `shutdown` |
 | `Cancel` / `LateDone` | Radical Pilot cancellation versus late result callback | `RadicalPilotExecutor.task_state_cb` terminal Future updates |
 | `RequestShutdown` / `FlushBulk` / `DropBulk` / `FinishShutdown` | Radical Pilot bulk-queue flush before shutdown | `RadicalPilotExecutor._bulk_collector` and `shutdown` |
+| `FailNext` / `MutationSafety` / `FailureProgress` | Radical Pilot failure fan-out and callback-driven task-map mutation | `RadicalPilotExecutor._fail_all_tasks` |
 | `BeginSubmit` / `UnderlyingSubmit` / `FinishSubmit` | Globus Compute temporary resource-specification override and restoration | `GlobusComputeExecutor.submit` |
 | `BeginA` / `BeginB` / `SubmitA` / `SubmitB` | concurrent Globus Compute configuration isolation and serialized fixed path | `GlobusComputeExecutor.submit` shared SDK executor mutation |
 | `DeliverMalformed` / `DeliverDuplicate` / `InterchangeFailure` | HTEX result-thread message validation, duplicate handling, and fatal interchange cleanup | `HighThroughputExecutor._result_queue_worker` |
