@@ -358,6 +358,12 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case dependency-identity-dedup-current counterexample \
+    models/dataflow/ParslDependencyIdentityDedupCurrent.cfg \
+    models/dataflow/ParslDependencyIdentityDedup.tla
+run_case dependency-identity-dedup-fixed pass \
+    models/dataflow/ParslDependencyIdentityDedupFixed.cfg \
+    models/dataflow/ParslDependencyIdentityDedup.tla
 
 run_case input-dependency-duplicate-current counterexample \
     models/dataflow/ParslInputDependencyDuplicateCurrent.cfg \

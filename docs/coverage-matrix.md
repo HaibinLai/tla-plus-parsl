@@ -572,3 +572,7 @@ Core dataflow coverage also includes `ParslInputDependencyDuplicate` (BUG-259), 
 the reserved `inputs` kwarg being traversed twice by `_gather_all_deps`. The current
 configuration violates `NoDuplicateDependency`; the fixed model passes with
 `tests/test_input_dependency_duplicate_runtime.py` as the runtime probe.
+
+`ParslDependencyIdentityDedup` refines BUG-259 to the cross-position case: one Future appears in
+both a normal kwarg and `inputs`. The current model registers it three times, while the fixed
+model records the Future identity once before callback registration.

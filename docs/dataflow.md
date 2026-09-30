@@ -436,3 +436,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNonNume
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslRetryHandlerNonNumericCostFixed.cfg models/dataflow/ParslRetryHandlerNonNumericCost.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_retry_handler_non_numeric_cost_runtime.py -v
 ```
+
+`ParslDependencyIdentityDedup.tla` refines dependency collection at the DFK boundary. The
+current `_gather_all_deps` path can append the same Future three times when it appears in a
+normal kwarg and in `inputs`; the fixed branch records the Future identity once before callback
+registration. The runtime probe in `tests/test_input_dependency_duplicate_runtime.py` observes
+both the inputs-only duplicate and the cross-position triplication.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDependencyIdentityDedupCurrent.cfg models/dataflow/ParslDependencyIdentityDedup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDependencyIdentityDedupFixed.cfg models/dataflow/ParslDependencyIdentityDedup.tla
+PYTHONPATH=/tmp/parsl-source /tmp/parsl-venv/bin/python -m unittest tests/test_input_dependency_duplicate_runtime.py -v
+```
