@@ -54,6 +54,12 @@ run_case serialization-wire pass \
 run_case serialization-wire-failure pass \
     models/serialization/ParslSerializationWireFailure.cfg \
     models/serialization/ParslSerializationWire.tla
+run_case message-loss pass \
+    models/core/ParslMessageLoss.cfg \
+    models/core/ParslAbstract.tla
+run_case message-duplicate pass \
+    models/core/ParslMessageDuplicate.cfg \
+    models/core/ParslAbstract.tla
 run_case python-object-graph pass \
     models/serialization/ParslPython.cfg \
     models/serialization/ParslPython.tla
