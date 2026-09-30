@@ -16,9 +16,9 @@ E(task, version, status) == [task |-> task, version |-> version, status |-> stat
 NormalBatch == <<E("A", 1, "running"), E("A", 2, "done")>>
 DuplicateBatch == <<E("A", 1, "running"), E("A", 1, "running")>>
 
-VARIABLES dbVersion, dbStatus, batch, snapshot, txState, firstWritten,
+VARIABLES dbVersion, dbStatus, batch, snapshot, snapshotStatus, txState, firstWritten,
           staleApplied
-vars == <<dbVersion, dbStatus, batch, snapshot, txState, firstWritten,
+vars == <<dbVersion, dbStatus, batch, snapshot, snapshotStatus, txState, firstWritten,
           staleApplied>>
 
 Init ==
@@ -26,6 +26,7 @@ Init ==
     /\ dbStatus = [A |-> "none"]
     /\ batch = <<>>
     /\ snapshot = [A |-> 0]
+    /\ snapshotStatus = [A |-> "none"]
     /\ txState = "idle"
     /\ firstWritten = FALSE
     /\ staleApplied = FALSE
@@ -34,6 +35,7 @@ PrepareNormal ==
     /\ txState = "idle"
     /\ batch' = NormalBatch
     /\ snapshot' = dbVersion
+    /\ snapshotStatus' = dbStatus
     /\ txState' = "prepared"
     /\ UNCHANGED <<dbVersion, dbStatus, firstWritten, staleApplied>>
 
@@ -41,6 +43,7 @@ PrepareDuplicate ==
     /\ txState = "idle"
     /\ batch' = DuplicateBatch
     /\ snapshot' = dbVersion
+    /\ snapshotStatus' = dbStatus
     /\ txState' = "prepared"
     /\ UNCHANGED <<dbVersion, dbStatus, firstWritten, staleApplied>>
 
@@ -51,18 +54,18 @@ WriteFirst ==
     /\ dbStatus' = [dbStatus EXCEPT ![batch[1].task] = batch[1].status]
     /\ txState' = "writing"
     /\ firstWritten' = TRUE
-    /\ UNCHANGED <<batch, snapshot, staleApplied>>
+    /\ UNCHANGED <<batch, snapshot, snapshotStatus, staleApplied>>
 
 WriteSecond ==
     /\ txState = "writing"
     /\ batch[2].version <= dbVersion[batch[2].task]
     /\ IF USE_FIXED
           THEN /\ dbVersion' = snapshot
-               /\ dbStatus' = [A |-> "none"]
+               /\ dbStatus' = snapshotStatus
           ELSE /\ dbVersion' = dbVersion
                /\ dbStatus' = dbStatus
     /\ txState' = "rolled-back"
-    /\ UNCHANGED <<batch, snapshot, firstWritten, staleApplied>>
+    /\ UNCHANGED <<batch, snapshot, snapshotStatus, firstWritten, staleApplied>>
 
 CommitSecond ==
     /\ txState = "writing"
@@ -70,7 +73,7 @@ CommitSecond ==
     /\ dbVersion' = [dbVersion EXCEPT ![batch[2].task] = batch[2].version]
     /\ dbStatus' = [dbStatus EXCEPT ![batch[2].task] = batch[2].status]
     /\ txState' = "committed"
-    /\ UNCHANGED <<batch, snapshot, firstWritten, staleApplied>>
+    /\ UNCHANGED <<batch, snapshot, snapshotStatus, firstWritten, staleApplied>>
 
 DeliverStale ==
     /\ txState = "committed"
@@ -81,7 +84,7 @@ DeliverStale ==
           ELSE /\ dbVersion' = [dbVersion EXCEPT !["A"] = 1]
                /\ dbStatus' = [dbStatus EXCEPT !["A"] = "running"]
     /\ staleApplied' = TRUE
-    /\ UNCHANGED <<batch, snapshot, txState, firstWritten>>
+    /\ UNCHANGED <<batch, snapshot, snapshotStatus, txState, firstWritten>>
 
 Next ==
     \/ PrepareNormal
@@ -100,12 +103,14 @@ TypeOK ==
     /\ batch \in Seq([task : {"A"}, version : 1..2, status : {"running", "done"}])
     /\ Len(batch) \in 0..2
     /\ snapshot \in [{"A"} -> 0..2]
+    /\ snapshotStatus \in [{"A"} -> {"none", "running", "done"}]
     /\ txState \in {"idle", "prepared", "writing", "committed", "rolled-back"}
     /\ firstWritten \in BOOLEAN
     /\ staleApplied \in BOOLEAN
 
 AtomicBatchSafety ==
-    txState = "rolled-back" => dbVersion = snapshot
+    txState = "rolled-back" => /\ dbVersion = snapshot
+                              /\ dbStatus = snapshotStatus
 
 HighWaterSafety ==
     staleApplied => dbVersion["A"] = 2
