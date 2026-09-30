@@ -165,6 +165,12 @@ run_case htex-priority-current counterexample \
 run_case htex-priority-fixed pass \
     models/executors/ParslHtexTaskPriorityTypeFixed.cfg \
     models/executors/ParslHtexTaskPriorityType.tla
+run_case slurm-status-current counterexample \
+    models/providers/ParslSlurmStatusCurrent.cfg \
+    models/providers/ParslSlurmStatus.tla
+run_case slurm-status-fixed pass \
+    models/providers/ParslSlurmStatusFixed.cfg \
+    models/providers/ParslSlurmStatus.tla
 run_case htex-resource-spec-current counterexample \
     models/executors/ParslHtexTaskResourceSpecTypeCurrent.cfg \
     models/executors/ParslHtexTaskResourceSpecType.tla
