@@ -942,6 +942,12 @@ run_case monitoring-shutdown-race-fixed pass \
 run_case monitoring-shutdown-drain pass \
     models/monitoring/ParslMonitoringShutdownDrain.cfg \
     models/monitoring/ParslMonitoringShutdownDrain.tla
+run_case monitoring-deferred-multiplicity-current counterexample \
+    models/monitoring/ParslMonitoringDeferredMultiplicityCurrent.cfg \
+    models/monitoring/ParslMonitoringDeferredMultiplicity.tla
+run_case monitoring-deferred-multiplicity-fixed pass \
+    models/monitoring/ParslMonitoringDeferredMultiplicityFixed.cfg \
+    models/monitoring/ParslMonitoringDeferredMultiplicity.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

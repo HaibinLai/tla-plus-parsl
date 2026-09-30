@@ -1055,6 +1055,10 @@ reproduces the current empty-queue race.
 messages accepted before the kill signal are conserved across external-queue migration and
 internal processing. `tests/test_monitoring_shutdown_drain_runtime.py` exercises the real queue
 drain after the kill event.
+`ParslMonitoringDeferredMultiplicity.tla` now covers multiple worker `first_msg` observations
+arriving before the TRY row: the fixed branch preserves both deferred observations for replay,
+while the current single-slot map overwrites the earlier one. The concrete bridge is
+`tests/test_monitoring_deferred_multiplicity_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
