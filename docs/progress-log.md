@@ -133,6 +133,8 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslJoinZMQRetry`, which models task/result envelopes through framing,
   send/receive, decode, corruption rejection, and `(task, attempt)` resolution. The Fixed branch
   passed standalone TLC and the Current branch produced the intended stale-result violation.
+  The model now also tracks mutable Python-object versions and serialization snapshots, with a
+  dispatch invariant that catches live-object substitution after serialization.
 
 ### Verification convention
 

@@ -188,6 +188,8 @@ terminal join. The fixed configuration is part of the foundational TLC smoke.
 framing, send, receive, decode, and resolve states, with a validity bit for malformed frames.
 The `(task, attempt)` correlation is retained across timeout and late-result delivery, so the
 fixed branch can reject stale or corrupt frames without changing the logical Future.
+It also tracks a mutable Python-object version, the serialized capture version, and the worker
+dispatch version; `DispatchSnapshotSafety` requires the latter two to agree.
 
 The monitoring cases cover the next database refinement: all-or-nothing batch publication,
 persistent retry of transient writes, and explicit terminal handling for permanent insert/update
