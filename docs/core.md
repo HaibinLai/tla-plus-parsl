@@ -75,16 +75,18 @@ states at depth 22. `ParslPipelineSmoke.cfg` is the one-chunk/no-retry fixed che
 `parsl/data_provider/data_manager.py`, `parsl/serialize/facade.py`, and the monitoring database
 writer.
 
-`ParslPipelineTimed.tla` is a deliberately smaller cross-layer composition for the timing
-boundary. It keeps a two-node logical DAG (`A -> B`), gives each physical attempt its own
-deadline, and models manager heartbeat expiry, retry admission, and late completion separately
-from the logical task state. `ParslPipelineTimedCurrent.cfg` accepts a completion from an attempt
-whose task was already marked `manager_lost`; TLC finds the `TerminalCauseSafety` violation after
-1,581 generated / 728 distinct states. `ParslPipelineTimedFixed.cfg` records that completion as
-stale and passes dependency, retry, result, terminal-cause, and stale-result invariants with
-20,430 generated / 5,987 distinct states at depth 19. This model is intentionally complementary
-to the larger `ParslPipeline.tla`: it makes the logical-task versus physical-attempt and clock
-boundary easy to inspect before adding more executor/provider detail.
+`ParslPipelineTimed.tla` is a deliberately smaller cross-layer composition for the timing and
+monitoring boundary. It keeps a two-node logical DAG (`A -> B`), gives each physical attempt its
+own deadline, models manager heartbeat expiry, retry admission, and late completion separately
+from the logical task state, and sends terminal events through an explicit
+`EmitStatus -> PersistStatus` queue. `ParslPipelineTimedCurrent.cfg` accepts a completion from an
+attempt whose task was already marked `manager_lost`; TLC finds the `TerminalCauseSafety`
+violation after 1,698 generated / 827 distinct states. `ParslPipelineTimedFixed.cfg` records that
+completion as stale and passes dependency, retry, result, terminal-cause, stale-result, and
+database-cause invariants with 225,836 generated / 51,703 distinct states at depth 24. This model
+is intentionally complementary to the larger `ParslPipeline.tla`: it makes the logical-task
+versus physical-attempt, clock, and monitoring boundaries easy to inspect before adding more
+executor/provider detail.
 
 The combined join configuration `models/core/ParslJoinSafety.cfg` has also been checked against
 the shared `ParslAbstract` module. It explores 427,320 generated states (66,459 distinct states,
