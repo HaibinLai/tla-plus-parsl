@@ -1868,6 +1868,8 @@ command-client reply/timeout/close behavior.
 Cases 701--720 matched at 100 steps: command-client lock/retry/deadline/send timeout, heartbeat
 clock boundaries and late acknowledgements, heartbeat provider behavior, file-transfer monitoring,
 filesystem radio, and monitoring batch handling.
+Cases 721--740 matched at 100 steps: monitoring batch clock/close/idempotence, permanent DB errors,
+retry integrity, delivery/event-stream ordering, thresholds, and FTP connection cleanup.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
