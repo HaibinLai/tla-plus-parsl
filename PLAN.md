@@ -799,6 +799,8 @@ missing-instance behavior and normal instance-state translation.
 `tests/test_aws_submit_runtime.py` drives `AWSProvider.submit` with a fake instance launcher,
 checking successful registration, failed launch handling, unknown-state fallback, and the empty
 launch-response unpacking path modeled by `ParslAWSProviderSubmit.tla`.
+The narrower empty-response current/fixed model is also in the recurring smoke sweep, making the
+response-validation boundary explicit.
 `tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
 `tests/test_pbspro_status_runtime.py` drives PBS Pro's JSON status parser, checking known-job

@@ -459,6 +459,12 @@ run_case aws-submit-current counterexample \
 run_case aws-submit-fixed pass \
     models/providers/ParslAWSProviderSubmitFixed.cfg \
     models/providers/ParslAWSProviderSubmit.tla
+run_case aws-submit-empty-current counterexample \
+    models/providers/ParslAwsSubmitEmptyResponseCurrent.cfg \
+    models/providers/ParslAwsSubmitEmptyResponse.tla
+run_case aws-submit-empty-fixed pass \
+    models/providers/ParslAwsSubmitEmptyResponseFixed.cfg \
+    models/providers/ParslAwsSubmitEmptyResponse.tla
 run_case condor-status-failure-current-valid counterexample \
     models/providers/ParslCondorStatusFailureCurrentValid.cfg \
     models/providers/ParslCondorStatusFailure.tla
