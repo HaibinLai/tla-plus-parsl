@@ -1591,6 +1591,10 @@ ThreadPoolExecutor, HTEX, MPI, Work Queue, TaskVine, Flux, Globus Compute, and
 BlockProviderExecutor to the unified executor-kind model and its admission, capacity, drain,
 and failure-cleanup properties.
 
+The serialization/ZMQ source-model map is now documented in docs/serialization-zmq-model.md.
+It ties facade serialization, the three-buffer apply-message contract, HTEX task/result transport,
+worker result decoding, and attempt correlation to the layered wire-state models.
+
 The integrated join model now admits cancellation while an inner physical attempt is running.
 Previously the action contained a running-attempt branch that was unreachable because its guard
 only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
