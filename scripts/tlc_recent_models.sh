@@ -1035,6 +1035,15 @@ run_case serialization-short-frame-current counterexample \
 run_case serialization-short-frame-fixed pass \
     models/serialization/ParslSerializationShortFrameCountFixed.cfg \
     models/serialization/ParslSerializationShortFrameCount.tla
+run_case serialization-negative-length-current counterexample \
+    models/serialization/ParslSerializationNegativeLengthCurrent.cfg \
+    models/serialization/ParslSerializationNegativeLength.tla
+run_case serialization-negative-length-fixed pass \
+    models/serialization/ParslSerializationNegativeLengthFixed.cfg \
+    models/serialization/ParslSerializationNegativeLength.tla
+run_case serialization-negative-length-valid pass \
+    models/serialization/ParslSerializationNegativeLengthValid.cfg \
+    models/serialization/ParslSerializationNegativeLength.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

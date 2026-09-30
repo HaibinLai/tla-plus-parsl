@@ -1121,6 +1121,9 @@ decode-before-assertion path.
 two-frame messages: the fixed branch validates the count before decoding, while the current
 branch deserializes available frames first. `tests/test_serialization_short_frame_count_runtime.py`
 reproduces that current path.
+`ParslSerializationNegativeLength.tla` is now in the sweep, requiring a receiver to reject
+negative length declarations before Python slicing. `tests/test_serialization_negative_length_runtime.py`
+reproduces the current partial-slice then parse failure.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
