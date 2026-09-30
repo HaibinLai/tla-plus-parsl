@@ -849,6 +849,21 @@ run_case mpi-no-resource-result-current counterexample \
 run_case mpi-no-resource-result-fixed pass \
     models/executors/ParslMPINoResourceResultFixed.cfg \
     models/executors/ParslMPINoResourceResult.tla
+run_case cluster-provider-unknown-job-current counterexample \
+    models/providers/ParslClusterProviderUnknownJob.cfg \
+    models/providers/ParslClusterProviderUnknownJob.tla
+run_case cluster-provider-unknown-job-fixed pass \
+    models/providers/ParslClusterProviderUnknownJobFixed.cfg \
+    models/providers/ParslClusterProviderUnknownJob.tla
+run_case lsf-resource-validation-current counterexample \
+    models/providers/ParslLSFResourceValidationCurrent.cfg \
+    models/providers/ParslLSFResourceValidation.tla
+run_case lsf-resource-validation-fixed pass \
+    models/providers/ParslLSFResourceValidationFixed.cfg \
+    models/providers/ParslLSFResourceValidation.tla
+run_case lsf-resource-validation-valid pass \
+    models/providers/ParslLSFResourceValidationValid.cfg \
+    models/providers/ParslLSFResourceValidation.tla
 run_case flux-submission-failure pass \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla
