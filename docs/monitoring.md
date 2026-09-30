@@ -67,6 +67,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInser
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_db_runtime.py -v
 ```
 
+`ParslMonitoringDBSmoke.cfg` is the fast complete check for the compact asynchronous database
+model: two logical versions, a one-message radio queue, and one bounded write failure. It checks
+757 generated and 291 distinct states and is equivalent to the default small configuration.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBSmoke.cfg models/monitoring/ParslMonitoringDB.tla
+```
+
 `ParslMonitoringResourceHistory.tla` covers the append-only `RESOURCE` table path. Resource
 samples may arrive out of timestamp order through the external queue, but each timestamp remains
 a distinct database row and a duplicate sample cannot create a second row. The latest observation

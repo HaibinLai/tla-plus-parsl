@@ -1912,6 +1912,9 @@ run_case stageout-future-none pass \
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla
+run_case monitoring-db-smoke pass \
+    models/monitoring/ParslMonitoringDBSmoke.cfg \
+    models/monitoring/ParslMonitoringDB.tla
 run_case monitoring-db-insert-current counterexample \
     models/monitoring/ParslMonitoringDBInsert.cfg \
     models/monitoring/ParslMonitoringDBInsert.tla
