@@ -2156,3 +2156,7 @@ response validation and reproduces the current acceptance of `Job is submitted t
 The next provider refinement is `ParslTorqueCancelUnknown` (BUG-203). It separates successful
 remote `qdel` from local bookkeeping and models stale cancellation as an idempotent operation;
 the current branch reproduces the post-success `KeyError`.
+
+The following PBS Pro refinement is `ParslPbsproStatusShape` (BUG-204). It models malformed JSON
+job-record shapes and verifies that the fixed path preserves the polling loop with an explicit
+UNKNOWN observation instead of exposing `AttributeError`.

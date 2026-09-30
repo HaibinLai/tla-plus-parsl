@@ -2212,6 +2212,12 @@ run_case pbspro-status-fixed pass \
 run_case pbspro-status-known pass \
     models/providers/ParslPBSProStatusKnown.cfg \
     models/providers/ParslPBSProStatus.tla
+run_case pbspro-status-shape-current counterexample \
+    models/providers/ParslPbsproStatusShapeCurrent.cfg \
+    models/providers/ParslPbsproStatusShape.tla
+run_case pbspro-status-shape-fixed pass \
+    models/providers/ParslPbsproStatusShapeFixed.cfg \
+    models/providers/ParslPbsproStatusShape.tla
 run_case pbspro-submit-current counterexample \
     models/providers/ParslPBSProSubmit.cfg \
     models/providers/ParslPBSProSubmit.tla

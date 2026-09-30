@@ -134,6 +134,9 @@ successful-looking scheduler output cannot publish an arbitrary token as a resou
 Torque provider coverage also includes `ParslTorqueCancelUnknown` (BUG-203), which checks that a
 successful remote cancellation remains successful when local polling has already removed the job.
 
+PBS Pro provider coverage also includes `ParslPbsproStatusShape` (BUG-204), which checks that a
+non-mapping JSON job record cannot abort the status poll.
+
 It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
 HTEX connection probe cannot fall through to a blocking receive.
 
