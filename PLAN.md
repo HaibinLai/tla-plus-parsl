@@ -280,6 +280,8 @@ Recent focused models now connect the previously separate boundaries:
   result handling, duplicate task IDs, and interchange failure without orphaning pending work.
 - `ParslExecutorSelection` is now in the smoke sweep, requiring an empty executor selection to
   be rejected before `random.choice` can expose a raw `IndexError`.
+- `ParslResourceAdmission` and its autolabel configuration are now in the smoke sweep, checking
+  cores/memory/disk/GPU validation, queueing, capacity admission, and resource release.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 

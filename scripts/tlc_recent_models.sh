@@ -192,6 +192,12 @@ run_case executor-selection-current counterexample \
 run_case executor-selection-fixed pass \
     models/executors/ParslExecutorSelectionFixed.cfg \
     models/executors/ParslExecutorSelection.tla
+run_case resource-admission pass \
+    models/dataflow/ParslResourceAdmission.cfg \
+    models/dataflow/ParslResourceAdmission.tla
+run_case resource-admission-autolabel pass \
+    models/dataflow/ParslResourceAdmissionAutolabel.cfg \
+    models/dataflow/ParslResourceAdmission.tla
 run_case htex-priority-current counterexample \
     models/executors/ParslHtexTaskPriorityTypeCurrent.cfg \
     models/executors/ParslHtexTaskPriorityType.tla
