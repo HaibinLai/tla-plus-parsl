@@ -357,6 +357,10 @@ contract. A separate stage-out `DataFuture` overrides the original task-record v
 opaque value because the source currently documents tuple stage-out handling as future work.
 `tests/test_app_future_output_streams_runtime.py` checks these paths against the real `AppFuture`.
 
+`ParslJoinBodyRetry.tla` separates retries of the join body's own physical execution from the
+later inner-Future join. The outer task installs a join handle only after a body attempt succeeds;
+`tests/test_join_body_retry_runtime.py` verifies this ordering with a real decorated `join_app`.
+
 `ParslFutureWaitTimeout.tla` separates a caller-side `Future.result(timeout=...)` expiry from a
 Parsl task timeout. The caller may stop waiting while the Future remains pending and can later
 complete normally. `tests/test_future_wait_timeout_runtime.py` verifies this behavior with a real

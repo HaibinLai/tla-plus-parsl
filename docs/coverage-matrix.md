@@ -18,6 +18,9 @@ The dataflow coverage also includes `ParslAppFutureOutputStreams`, which models 
 `AppFuture.stdout`/`stderr` distinction between raw task-record values and installed stage-out
 `DataFuture` overrides; tuple values remain an explicitly coarse boundary.
 
+The `join_app` coverage also includes `ParslJoinBodyRetry`, which separates outer join-body retry
+attempts from installation and completion of the inner Future join.
+
 Monitoring coverage also includes `ParslMonitoringZMQTupleShape`, which checks malformed-versus-
 valid tuple admission in the real ZMQ monitoring router before queue/database delivery.
 

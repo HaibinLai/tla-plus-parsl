@@ -359,6 +359,10 @@ run_case monitoring-zmq-tuple-invalid pass \
     models/monitoring/ParslMonitoringZMQTupleShapeInvalid.cfg \
     models/monitoring/ParslMonitoringZMQTupleShape.tla
 
+run_case join-body-retry pass \
+    models/dataflow/ParslJoinBodyRetry.cfg \
+    models/dataflow/ParslJoinBodyRetry.tla
+
 run_case stageout-return-none pass \
     models/staging/ParslDataManagerStageOutReturnNone.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla
