@@ -423,6 +423,21 @@ run_case aws-submit-current counterexample \
 run_case aws-submit-fixed pass \
     models/providers/ParslAWSProviderSubmitFixed.cfg \
     models/providers/ParslAWSProviderSubmit.tla
+run_case condor-status-failure-current-valid counterexample \
+    models/providers/ParslCondorStatusFailureCurrentValid.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-current-malformed counterexample \
+    models/providers/ParslCondorStatusFailureCurrentMalformed.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-fixed-valid pass \
+    models/providers/ParslCondorStatusFailureFixedValid.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-fixed-malformed pass \
+    models/providers/ParslCondorStatusFailureFixedMalformed.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-failure-success pass \
+    models/providers/ParslCondorStatusFailureSuccess.cfg \
+    models/providers/ParslCondorStatusFailure.tla
 run_case cluster-submit-script-valid pass \
     models/providers/ParslClusterSubmitScript.cfg \
     models/providers/ParslClusterSubmitScript.tla

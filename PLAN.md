@@ -242,6 +242,8 @@ Recent focused models now connect the previously separate boundaries:
   explicit UNKNOWN status instead of raising from local resource bookkeeping.
 - `ParslAWSProviderSubmit` is now in the smoke sweep, checking EC2 launch success/failure,
   empty launch responses, and resource registration consistency.
+- `ParslCondorStatusFailure` is now in the smoke sweep, requiring failed `condor_q` commands to
+  preserve the last resource state instead of parsing stale or malformed stdout.
 - `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,
   traversing callable roots, globals/defaults/closures, nested arguments, failed object graphs,
   and self-referential cycles with visited-set protection.
