@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (provider/staging admission abstraction).
+- Latest pushed commit: `2dced00` (`Add provider staging admission model`).
 - Foundational smoke inventory: 378 TLC cases and 335 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
