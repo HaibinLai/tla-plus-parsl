@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (HTEX null registration block ID refinement).
+- Latest pushed commit: `cfe3b6c` (`Model HTEX null registration block ID`).
 - Foundational smoke inventory: 368 TLC cases and 235 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
