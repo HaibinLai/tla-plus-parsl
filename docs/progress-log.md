@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `8a8d7e0` (`Model Flux running cancellation race`).
-- Foundational smoke inventory: 365 TLC cases and 233 Python runtime probes.
+- Latest pushed commit: pending (scale-in response-shape refinement).
+- Foundational smoke inventory: 366 TLC cases and 234 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -88,6 +88,10 @@ are recorded here in English and committed with the model changes.
   Current model produces a two-state `NoRawCancelError` counterexample, the Fixed model passes in
   four generated/two distinct states, and the runtime probe reproduces the raw `RuntimeError` plus
   the inconsistent unfinished-wrapper state.
+- Current stage: added `ParslScaleInResultShape` for malformed provider cancellation responses.
+  A short boolean result list currently reaches a raw `_filter_scale_in_ids` assertion; the
+  Current model produces a two-state counterexample, the Fixed model passes in four generated/two
+  distinct states, and the runtime probe reproduces the assertion directly.
 
 ### Verification convention
 

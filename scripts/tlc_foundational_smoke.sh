@@ -434,6 +434,9 @@ run_case flux-late-failure-cancelled-future \
 run_case flux-cancel-running-race \
     models/executors/ParslFluxCancelRunningRaceFixed.cfg \
     models/executors/ParslFluxCancelRunningRace.tla
+run_case scale-in-result-shape \
+    models/executors/ParslScaleInResultShapeFixed.cfg \
+    models/executors/ParslScaleInResultShape.tla
 run_case flux-submission-failure \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla

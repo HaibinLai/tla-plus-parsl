@@ -1947,6 +1947,12 @@ run_case flux-cancel-running-race-current counterexample \
 run_case flux-cancel-running-race-fixed pass \
     models/executors/ParslFluxCancelRunningRaceFixed.cfg \
     models/executors/ParslFluxCancelRunningRace.tla
+run_case scale-in-result-shape-current counterexample \
+    models/executors/ParslScaleInResultShapeCurrent.cfg \
+    models/executors/ParslScaleInResultShape.tla
+run_case scale-in-result-shape-fixed pass \
+    models/executors/ParslScaleInResultShapeFixed.cfg \
+    models/executors/ParslScaleInResultShape.tla
 run_case flux-working-directory-current counterexample \
     models/executors/ParslFluxWorkingDirectoryCurrent.cfg \
     models/executors/ParslFluxWorkingDirectory.tla
