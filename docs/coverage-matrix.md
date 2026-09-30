@@ -80,6 +80,9 @@ Google Cloud provider admission also includes `ParslGoogleCloudZoneResponseShape
 isolates the missing-`items` response boundary in `get_zone` and is backed by the zone-selection
 runtime probe.
 
+Monitoring startup coverage also includes `ParslMonitoringStarterConstructionFailure`, which
+ensures a `DatabaseManager` constructor exception is not masked by cleanup of an unbound manager.
+
 Kubernetes polling also includes `ParslKubernetesEmptyPhase`, which isolates a successful pod
 response with a missing phase field and is backed by the Kubernetes polling runtime probe.
 

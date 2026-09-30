@@ -392,6 +392,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslMonitoringUDPDrainCloc
 
 This UDP drain-deadline boundary is recorded as BUG-240.
 
+`ParslMonitoringStarterConstructionFailure.tla` models failure before the monitoring database
+manager is constructed. The current `dbm_starter` exception handler unconditionally calls
+`dbm.close()`, so a constructor exception is replaced by `UnboundLocalError`; the fixed branch
+preserves the original construction failure. The runtime probe patches the real starter's
+`DatabaseManager` constructor.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringStarterConstructionFailureCurrent.cfg models/monitoring/ParslMonitoringStarterConstructionFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringStarterConstructionFailureFixed.cfg models/monitoring/ParslMonitoringStarterConstructionFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_starter_construction_failure_runtime.py -v
+```
+
 `ParslResourceMonitorClock.tla` covers the worker-side resource monitor in
 `parsl.monitoring.remote`. The current loop uses `time.time()` for periodic sampling; a backward
 wall-clock step can suppress an already-due intermediate resource message. The fixed branch uses

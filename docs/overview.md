@@ -1946,6 +1946,10 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
   record safety passed.
 - `ParslMonitoringDBReorder.cfg`: 527 states generated, 206 distinct states, depth 9;
   radio queue reordering and stale-event suppression passed with the same invariants.
+- `ParslMonitoringStarterConstructionFailureCurrent.cfg`: expected counterexample at depth 2;
+  constructor failure is masked by an unbound `dbm` cleanup reference.
+- `ParslMonitoringStarterConstructionFailureFixed.cfg`: 5 states generated, 2 distinct states,
+  depth 2; the original database-construction failure is preserved.
 - `ParslMonitoringDeferred.cfg`: 36 states generated, 16 distinct states, depth 6;
   deferred first-message replay, duplicate-first replacement/discard, try-before-status foreign
   key ordering, and bounded monitoring cleanup all passed.

@@ -3043,6 +3043,12 @@ run_case monitoring-db-permanent-current counterexample \
 run_case monitoring-db-permanent-fixed pass \
     models/monitoring/ParslMonitoringDBPermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBPermanentError.tla
+run_case monitoring-starter-construction-current counterexample \
+    models/monitoring/ParslMonitoringStarterConstructionFailureCurrent.cfg \
+    models/monitoring/ParslMonitoringStarterConstructionFailure.tla
+run_case monitoring-starter-construction-fixed pass \
+    models/monitoring/ParslMonitoringStarterConstructionFailureFixed.cfg \
+    models/monitoring/ParslMonitoringStarterConstructionFailure.tla
 run_case monitoring-db-retry pass \
     models/monitoring/ParslMonitoringDBRetry.cfg \
     models/monitoring/ParslMonitoringDBRetry.tla
