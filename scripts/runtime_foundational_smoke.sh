@@ -213,6 +213,7 @@ tests=(
     tests/test_aws_unknown_instance_runtime.py
     tests/test_aws_status_missing_result_runtime.py
     tests/test_aws_status_response_shape_runtime.py
+    tests/test_aws_instance_state_runtime.py
     tests/test_local_unknown_job_status_runtime.py
     tests/test_local_cancel_failure_runtime.py
     tests/test_local_exit_file_missing_runtime.py

@@ -573,7 +573,8 @@ not-found/error response cannot abort later healthy jobs in the same polling bat
 configuration produces a `StatusBatchSafety` counterexample, while the fixed configuration
 passes; the runtime probe is `tests/test_googlecloud_status_remote_failure_runtime.py`.
 
-AWS provider coverage also includes `ParslAwsStatusReservationShape` (BUG-253), which checks
+AWS provider coverage also includes `ParslAwsStatusReservationShape` (BUG-253) and
+`ParslAwsInstanceStateShape` (BUG-280), which check
 that a malformed nested `Reservations` entry cannot abort processing of later healthy entries.
 The current configuration violates `NestedShapeSafety`; the fixed configuration passes, with
 the runtime probe in `tests/test_aws_status_reservation_shape_runtime.py`.

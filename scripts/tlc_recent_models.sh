@@ -1875,6 +1875,12 @@ run_case aws-status-response-shape-current counterexample \
 run_case aws-status-response-shape-fixed pass \
     models/providers/ParslAwsStatusResponseShapeFixed.cfg \
     models/providers/ParslAwsStatusResponseShape.tla
+run_case aws-instance-state-shape-current counterexample \
+    models/providers/ParslAwsInstanceStateShapeCurrent.cfg \
+    models/providers/ParslAwsInstanceStateShape.tla
+run_case aws-instance-state-shape-fixed pass \
+    models/providers/ParslAwsInstanceStateShapeFixed.cfg \
+    models/providers/ParslAwsInstanceStateShape.tla
 run_case azure-status-shape-current counterexample \
     models/providers/ParslAzureStatusShapeCurrent.cfg \
     models/providers/ParslAzureStatusShape.tla

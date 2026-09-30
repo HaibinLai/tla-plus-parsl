@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `0ebe67c` (`Model scale-in response shape`).
-- Foundational smoke inventory: 366 TLC cases and 234 Python runtime probes.
+- Latest pushed commit: pending (AWS instance-state response-shape refinement).
+- Foundational smoke inventory: 367 TLC cases and 235 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -92,6 +92,10 @@ are recorded here in English and committed with the model changes.
   A short boolean result list currently reaches a raw `_filter_scale_in_ids` assertion; the
   Current model produces a two-state counterexample, the Fixed model passes in four generated/two
   distinct states, and the runtime probe reproduces the assertion directly.
+- Current stage: added `ParslAwsInstanceStateShape` for an empty EC2 reservation in
+  `AWSProvider.get_instance_state`. The Current model produces a two-state `NoRawIndexError`
+  counterexample, the Fixed model passes in four generated/two distinct states, and the provider
+  probe reproduces the concrete `IndexError`.
 
 ### Verification convention
 

@@ -134,6 +134,9 @@ run_case local-pid-admission \
 run_case aws-status-shape \
     models/providers/ParslAwsStatusResponseShapeFixed.cfg \
     models/providers/ParslAwsStatusResponseShape.tla
+run_case aws-instance-state-shape \
+    models/providers/ParslAwsInstanceStateShapeFixed.cfg \
+    models/providers/ParslAwsInstanceStateShape.tla
 run_case google-zone-response-shape \
     models/providers/ParslGoogleCloudZoneResponseShapeFixed.cfg \
     models/providers/ParslGoogleCloudZoneResponseShape.tla
