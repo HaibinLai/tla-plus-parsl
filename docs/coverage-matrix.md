@@ -310,3 +310,7 @@ concurrent logical tasks.
 Executor capacity coverage also includes `ParslHtexWorkerCapacity`, which mirrors the HTEX
 constructor's CPU-, memory-, maximum-worker-, and accelerator-limited worker calculation and is
 backed by `tests/test_htex_worker_capacity_runtime.py`.
+
+Monitoring coverage also includes `ParslMonitoringResourceHistory`, an append-only, timestamp-
+ordered model for real SQLite `RESOURCE` samples and duplicate primary-key handling, backed by
+`tests/test_monitoring_resource_history_runtime.py`.

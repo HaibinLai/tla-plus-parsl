@@ -62,6 +62,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInser
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_db_runtime.py -v
 ```
 
+`ParslMonitoringResourceHistory.tla` covers the append-only `RESOURCE` table path. Resource
+samples may arrive out of timestamp order through the external queue, but each timestamp remains
+a distinct database row and a duplicate sample cannot create a second row. The latest observation
+is selected by timestamp rather than insertion order. The runtime bridge inserts three samples
+into the real SQLite-backed `Database`, attempts a duplicate primary key, and checks the retained
+latest value.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringResourceHistory.cfg models/monitoring/ParslMonitoringResourceHistory.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_resource_history_runtime.py -v
+```
+
 `ParslMonitoringTaskInsertBookkeeping.tla` models a separate TASK-table failure boundary. The
 current `DatabaseManager.start` loop records a task ID in `inserted_tasks` before the SQL insert
 has succeeded. If the insert fails, the next message is routed to UPDATE even though the row is
