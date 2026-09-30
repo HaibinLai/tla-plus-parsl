@@ -639,6 +639,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedJSO
 /tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_malformed_json_runtime.py -v
 ```
 
+`ParslPbsproMissingStatus.tla` models the successful-but-incomplete `qstat` boundary. The
+current provider marks every locally known job absent from the response as `COMPLETED`, even
+when the scheduler returned an empty `Jobs` object. The fixed branch preserves a non-terminal
+`UNKNOWN` observation until an explicit record is received. The runtime probe calls the real
+PBS Pro `_status` method with an empty successful response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproMissingStatusCurrent.cfg models/providers/ParslPbsproMissingStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproMissingStatusFixed.cfg models/providers/ParslPbsproMissingStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_missing_status_runtime.py -v
+```
+
+This successful-empty status boundary is recorded as BUG-236.
+
 `ParslProviderPollClockRollback.tla` models `BlockProviderExecutor.poll_facade` from
 [`executors/status_handling.py`](https://github.com/Parsl/Parsl/blob/master/parsl/executors/status_handling.py).
 The current wall-clock guard can suppress provider status polling after `time.time()` moves

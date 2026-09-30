@@ -2575,6 +2575,12 @@ run_case pbspro-status-shape-current counterexample \
 run_case pbspro-status-shape-fixed pass \
     models/providers/ParslPbsproStatusShapeFixed.cfg \
     models/providers/ParslPbsproStatusShape.tla
+run_case pbspro-missing-status-current counterexample \
+    models/providers/ParslPbsproMissingStatusCurrent.cfg \
+    models/providers/ParslPbsproMissingStatus.tla
+run_case pbspro-missing-status-fixed pass \
+    models/providers/ParslPbsproMissingStatusFixed.cfg \
+    models/providers/ParslPbsproMissingStatus.tla
 run_case pbspro-submit-current counterexample \
     models/providers/ParslPBSProSubmit.cfg \
     models/providers/ParslPBSProSubmit.tla
