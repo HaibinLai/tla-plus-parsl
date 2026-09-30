@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (timeout and heartbeat runtime coverage).
+- Latest pushed commit: `12564d6` (`Promote timeout heartbeat runtime coverage`).
 - Foundational smoke inventory: 377 TLC cases and 287 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
