@@ -189,6 +189,12 @@ tests=(
     tests/test_lsf_status_runtime.py
     tests/test_pbspro_status_runtime.py
     tests/test_slurm_status_batch_runtime.py
+    tests/test_globus_compute_resource_spec_type_runtime.py
+    tests/test_globus_compute_runtime.py
+    tests/test_globus_compute_shutdown_cleanup_runtime.py
+    tests/test_globus_staging_runtime.py
+    tests/test_globus_transfer_failure_runtime.py
+    tests/test_rsync_staging_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py

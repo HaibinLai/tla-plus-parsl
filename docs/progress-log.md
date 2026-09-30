@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `0c4b658` (`Promote scheduler provider runtime coverage`).
-- Foundational smoke inventory: 377 TLC cases and 296 Python runtime probes.
+- Latest pushed commit: pending (file-transfer provider runtime coverage).
+- Foundational smoke inventory: 377 TLC cases and 302 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -162,6 +162,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted nine scheduler/provider runtime bridges into the foundational gate:
   AWS cancel, Azure status, Condor submit, Flux submission failure, Google Cloud status, Grid
   Engine batch status, LSF status, PBSPro status, and Slurm status batch.
+- Current stage: promoted six file-transfer provider runtime bridges into the foundational gate:
+  Globus Compute resource/submit/shutdown behavior, Globus stage-in/out dependency wiring,
+  Globus terminal transfer failure, and rsync stage-in/out ordering.
 
 ### Verification convention
 
