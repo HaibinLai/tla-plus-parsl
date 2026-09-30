@@ -789,6 +789,10 @@ Grid Engine coverage now includes qstat malformed-record handling, malformed-rec
 within a batch, duplicate status lines, qsub empty/failure/success output, and qdel handling for
 known and unknown jobs. These models preserve the scheduler-specific terminal-state conventions
 while making the parser and local-resource failure paths explicit.
+LSF coverage now includes duplicate `bjobs` lines, missing-job completion semantics, unknown-job
+cancel handling, non-positive `cores_per_node`, and bsub success/failure/malformed output. The
+runtime probes cover the concrete LSF methods, while TLC keeps current behavior and candidate
+fixed behavior side by side.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

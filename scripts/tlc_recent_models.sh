@@ -1194,6 +1194,54 @@ run_case grid-submit-failure pass \
 run_case grid-submit-job pass \
     models/providers/ParslGridEngineSubmitJob.cfg \
     models/providers/ParslGridEngineSubmit.tla
+run_case lsf-cancel pass \
+    models/providers/ParslLSFCancel.cfg \
+    models/providers/ParslLSFCancel.tla
+run_case lsf-cancel-failure pass \
+    models/providers/ParslLSFCancelFailure.cfg \
+    models/providers/ParslLSFCancel.tla
+run_case lsf-cancel-fixed pass \
+    models/providers/ParslLSFCancelFixed.cfg \
+    models/providers/ParslLSFCancel.tla
+run_case lsf-cancel-unknown-current counterexample \
+    models/providers/ParslLSFCancelUnknown.cfg \
+    models/providers/ParslLSFCancel.tla
+run_case lsf-cancel-valid pass \
+    models/providers/ParslLSFCancelValid.cfg \
+    models/providers/ParslLSFCancel.tla
+run_case lsf-duplicate-status-current counterexample \
+    models/providers/ParslLSFDuplicateStatusCurrent.cfg \
+    models/providers/ParslLSFDuplicateStatus.tla
+run_case lsf-duplicate-status-fixed pass \
+    models/providers/ParslLSFDuplicateStatusFixed.cfg \
+    models/providers/ParslLSFDuplicateStatus.tla
+run_case lsf-duplicate-status-unique pass \
+    models/providers/ParslLSFDuplicateStatusUnique.cfg \
+    models/providers/ParslLSFDuplicateStatus.tla
+run_case lsf-missing-job-current counterexample \
+    models/providers/ParslLSFMissingJobCurrent.cfg \
+    models/providers/ParslLSFMissingJob.tla
+run_case lsf-missing-job-fixed pass \
+    models/providers/ParslLSFMissingJobFixed.cfg \
+    models/providers/ParslLSFMissingJob.tla
+run_case lsf-resource-current counterexample \
+    models/providers/ParslLSFResourceValidationCurrent.cfg \
+    models/providers/ParslLSFResourceValidation.tla
+run_case lsf-resource-fixed pass \
+    models/providers/ParslLSFResourceValidationFixed.cfg \
+    models/providers/ParslLSFResourceValidation.tla
+run_case lsf-resource-valid pass \
+    models/providers/ParslLSFResourceValidationValid.cfg \
+    models/providers/ParslLSFResourceValidation.tla
+run_case lsf-submit pass \
+    models/providers/ParslLSFSubmit.cfg \
+    models/providers/ParslLSFSubmit.tla
+run_case lsf-submit-failure pass \
+    models/providers/ParslLSFSubmitFailure.cfg \
+    models/providers/ParslLSFSubmit.tla
+run_case lsf-submit-malformed pass \
+    models/providers/ParslLSFSubmitMalformed.cfg \
+    models/providers/ParslLSFSubmit.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
