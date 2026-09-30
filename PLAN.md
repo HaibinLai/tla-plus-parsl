@@ -762,6 +762,8 @@ interference for either field.
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
+It is now included in the recurring TLC smoke sweep so the provider-kind contract is checked
+alongside the provider poller and status-shape models.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
