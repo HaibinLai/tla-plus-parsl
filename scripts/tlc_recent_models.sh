@@ -2230,6 +2230,12 @@ run_case torque-cancel-failure pass \
 run_case torque-cancel-fixed pass \
     models/providers/ParslTorqueCancelFixed.cfg \
     models/providers/ParslTorqueCancel.tla
+run_case torque-cancel-unknown-current counterexample \
+    models/providers/ParslTorqueCancelUnknownCurrent.cfg \
+    models/providers/ParslTorqueCancelUnknown.tla
+run_case torque-cancel-unknown-fixed pass \
+    models/providers/ParslTorqueCancelUnknownFixed.cfg \
+    models/providers/ParslTorqueCancelUnknown.tla
 run_case torque-duplicate-status-current counterexample \
     models/providers/ParslTorqueDuplicateStatusCurrent.cfg \
     models/providers/ParslTorqueDuplicateStatus.tla

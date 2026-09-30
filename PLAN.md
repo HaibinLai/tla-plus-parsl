@@ -2152,3 +2152,7 @@ runtime probe drives `Globus.transfer_file` with a fake SDK response.
 The provider audit then added `ParslLsfSubmitJobId`, recording BUG-202. It models LSF submission
 response validation and reproduces the current acceptance of `Job is submitted to queue` as job ID
 `is`; the fixed branch rejects the malformed response before resource publication.
+
+The next provider refinement is `ParslTorqueCancelUnknown` (BUG-203). It separates successful
+remote `qdel` from local bookkeeping and models stale cancellation as an idempotent operation;
+the current branch reproduces the post-success `KeyError`.

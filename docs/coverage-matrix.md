@@ -131,6 +131,9 @@ an indexing exception.
 LSF provider coverage also includes `ParslLsfSubmitJobId` (BUG-202), which checks that malformed
 successful-looking scheduler output cannot publish an arbitrary token as a resource identifier.
 
+Torque provider coverage also includes `ParslTorqueCancelUnknown` (BUG-203), which checks that a
+successful remote cancellation remains successful when local polling has already removed the job.
+
 It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
 HTEX connection probe cannot fall through to a blocking receive.
 
