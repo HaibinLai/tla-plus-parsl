@@ -297,6 +297,12 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxCancelUnderlyi
 /tmp/parsl-venv/bin/python -m unittest tests/test_flux_cancel_underlying_state_runtime.py -v
 ```
 
+`ParslFluxCancelRunningRace.tla` covers the complementary running-wrapper race. The current
+implementation can cancel the underlying future successfully, then raise `RuntimeError` because
+the already-running wrapper rejects `Future.cancel()`. The Fixed branch rejects the request before
+changing the underlying state; `tests/test_flux_cancel_submit_race_runtime.py` reproduces the
+current two-layer inconsistency.
+
 `ParslCommandClientSendTimeout.tla` adds the pre-send timeout branch of the HTEX REQ/REP command
 client. A `POLLOUT` timeout occurs before any request is put on the socket, so it leaves
 `client.ok` true and a later command can safely retry; this contrasts with a post-send reply

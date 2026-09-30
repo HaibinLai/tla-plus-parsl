@@ -1941,6 +1941,12 @@ run_case flux-late-failure-cancelled-future-current counterexample \
 run_case flux-late-failure-cancelled-future-fixed pass \
     models/executors/ParslFluxLateFailureCancelledFutureFixed.cfg \
     models/executors/ParslFluxLateFailureCancelledFuture.tla
+run_case flux-cancel-running-race-current counterexample \
+    models/executors/ParslFluxCancelRunningRaceCurrent.cfg \
+    models/executors/ParslFluxCancelRunningRace.tla
+run_case flux-cancel-running-race-fixed pass \
+    models/executors/ParslFluxCancelRunningRaceFixed.cfg \
+    models/executors/ParslFluxCancelRunningRace.tla
 run_case flux-working-directory-current counterexample \
     models/executors/ParslFluxWorkingDirectoryCurrent.cfg \
     models/executors/ParslFluxWorkingDirectory.tla

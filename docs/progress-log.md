@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `718a67b` (`Bridge collector cancellation failure probes`).
-- Foundational smoke inventory: 364 TLC cases and 233 Python runtime probes.
+- Latest pushed commit: pending (Flux running-wrapper cancellation race).
+- Foundational smoke inventory: 365 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -83,6 +83,11 @@ are recorded here in English and committed with the model changes.
   Work Queue and TaskVine each now exercise a cancelled first failure report followed by a live
   report; the current collector aborts and its finalizer fails the unrelated Future, matching the
   Current TLA+ semantics. The targeted result suites pass 11/11 tests.
+- Current stage: added `ParslFluxCancelRunningRace`, which models `FluxFutureWrapper.cancel()`
+  while the wrapper is RUNNING but the underlying Flux future still accepts cancellation. The
+  Current model produces a two-state `NoRawCancelError` counterexample, the Fixed model passes in
+  four generated/two distinct states, and the runtime probe reproduces the raw `RuntimeError` plus
+  the inconsistent unfinished-wrapper state.
 
 ### Verification convention
 

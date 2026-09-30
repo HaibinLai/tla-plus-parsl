@@ -18,6 +18,21 @@ class SuccessfulFluxFuture:
         return 0
 
 
+class CancellableFluxFuture:
+    def __init__(self):
+        self.was_cancelled = False
+
+    def cancelled(self):
+        return self.was_cancelled
+
+    def cancel(self):
+        self.was_cancelled = True
+        return True
+
+    def running(self):
+        return not self.was_cancelled
+
+
 class FluxCancelSubmitRaceRuntimeTest(unittest.TestCase):
     def test_late_binding_after_cancel_causes_callback_state_error_currently(self):
         wrapper = FluxFutureWrapper()
@@ -33,6 +48,18 @@ class FluxCancelSubmitRaceRuntimeTest(unittest.TestCase):
                 _complete_future(str(result_path), wrapper, wrapper._flux_future)
 
         self.assertTrue(wrapper.cancelled())
+
+    def test_cancel_while_wrapper_running_raises_after_cancelling_underlying_currently(self):
+        wrapper = FluxFutureWrapper()
+        underlying = CancellableFluxFuture()
+        wrapper._flux_future = underlying
+        self.assertTrue(wrapper.set_running_or_notify_cancel())
+
+        with self.assertRaises(RuntimeError):
+            wrapper.cancel()
+
+        self.assertTrue(underlying.cancelled())
+        self.assertFalse(wrapper.done())
 
 
 if __name__ == "__main__":
