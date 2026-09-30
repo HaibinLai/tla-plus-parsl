@@ -1702,7 +1702,7 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 
 - richer DataManager/staging behavior beyond the current atomic chunks, checksums, and failure
   paths;
-- bounded message reordering and message correlation IDs;
+- richer message reordering/correlation beyond the two-task bounded result-envelope model;
 - richer join_app behavior beyond the bounded inner-Future set, cancellation, duplicate positions,
   failure aggregation, and invalid-return branches now modeled;
 - manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;

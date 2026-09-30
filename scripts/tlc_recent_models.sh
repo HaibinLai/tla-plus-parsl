@@ -72,6 +72,12 @@ run_case zmq-serialization-current counterexample \
 run_case zmq-serialization-fixed pass \
     models/serialization/ParslZMQSerializationEndToEndFixed.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla
+run_case message-correlation-current counterexample \
+    models/serialization/ParslMessageCorrelationCurrent.cfg \
+    models/serialization/ParslMessageCorrelation.tla
+run_case message-correlation-fixed pass \
+    models/serialization/ParslMessageCorrelationFixed.cfg \
+    models/serialization/ParslMessageCorrelation.tla
 run_case message-loss pass \
     models/core/ParslMessageLoss.cfg \
     models/core/ParslAbstract.tla

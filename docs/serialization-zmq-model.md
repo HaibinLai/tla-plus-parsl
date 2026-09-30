@@ -25,6 +25,14 @@ sender/receiver route, multipart frame state, and attempt number. The abstract t
 5. decode and dispatch;
 6. resolve only the current physical attempt, or classify the frame as stale.
 
+`ParslMessageCorrelation` makes the correlation key explicit. Each result carries an
+`origin` logical-task ID and a physical `attempt` number, while the abstract transport also
+tracks the Future selected by its route. The model permits bounded queue reordering, a late
+result from an earlier attempt, duplicate delivery, and a misrouted frame. The current
+configuration demonstrates that checking only the attempt number can resolve a result into the
+wrong task Future; the fixed configuration requires both `origin = target` and the current
+attempt before resolution.
+
 The focused apply-message models keep the concrete three-buffer callable/args/kwargs contract
 separate from the end-to-end route model. This avoids hiding a malformed frame-count or payload
 length behind a generic "message delivered" state.
