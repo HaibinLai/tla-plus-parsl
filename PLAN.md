@@ -276,6 +276,8 @@ Recent focused models now connect the previously separate boundaries:
   frame to be discarded without aborting later valid results in the same manager batch.
 - `ParslHtexExecutorResultFrameContinuation` extends that property to the executor result queue:
   a corrupt outer pickle cannot strand unrelated later Futures.
+- `ParslHtexResultQueue` is now in the smoke sweep, checking Future/task mapping, malformed
+  result handling, duplicate task IDs, and interchange failure without orphaning pending work.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 

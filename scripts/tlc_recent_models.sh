@@ -180,6 +180,12 @@ run_case htex-executor-result-frame-current counterexample \
 run_case htex-executor-result-frame-fixed pass \
     models/executors/ParslHtexExecutorResultFrameContinuationFixed.cfg \
     models/executors/ParslHtexExecutorResultFrameContinuation.tla
+run_case htex-result-queue-current counterexample \
+    models/executors/ParslHtexResultQueue.cfg \
+    models/executors/ParslHtexResultQueue.tla
+run_case htex-result-queue-fixed pass \
+    models/executors/ParslHtexResultQueueFixed.cfg \
+    models/executors/ParslHtexResultQueue.tla
 run_case htex-priority-current counterexample \
     models/executors/ParslHtexTaskPriorityTypeCurrent.cfg \
     models/executors/ParslHtexTaskPriorityType.tla
