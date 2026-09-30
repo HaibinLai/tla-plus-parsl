@@ -49,7 +49,9 @@ Future, an outer join, manager heartbeat expiry, task timeout, late completion, 
 monitoring persistence. The current configuration reaches the expected `TerminalCauseSafety`
 violation in 1,556 generated / 553 distinct states; the fixed configuration classifies the late
 completion as stale and passes all five invariants with 3,411 generated / 949 distinct states at
-depth 14.
+depth 14. The smoke current/fixed configurations use a three-tick horizon for fast regression;
+the current reaches its expected violation in 774 generated / 274 distinct states, while fixed
+passes with 1,502 generated / 436 distinct states at depth 13.
 The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
 inner Python apps and verifies the duplicate Future position in the outer result.
 
