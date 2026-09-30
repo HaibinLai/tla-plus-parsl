@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `90907a6` (`Promote memoization runtime coverage`).
-- Foundational smoke inventory: 382 TLC cases and 356 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, scaling, memoization, and cyclic serialization coverage).
+- Foundational smoke inventory: 383 TLC cases and 358 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted serializer-registry precedence and cyclic Python-object round-trip
+  coverage. The two targeted runtime probes passed, the new cyclic-object TLC case passed, and
+  the affected runtime suffix (217–358) passed after insertion; the prior prefix (1–216) was
+  already green.
 
 - Current stage: promoted memoization runtime probes for duplicate-call reuse, closure-content
   identity, heterogeneous dictionary-key hashing, and unknown `ignore_for_cache` names. Four

@@ -221,6 +221,9 @@ run_case callable-argument-alias \
 run_case python-nested-alias \
     models/serialization/ParslPythonNestedAliasFixed.cfg \
     models/serialization/ParslPythonNestedAlias.tla
+run_case python-cyclic-object \
+    models/serialization/ParslPythonCyclic.cfg \
+    models/serialization/ParslPython.tla
 run_case closure-memo-snapshot \
     models/serialization/ParslCallableClosureMemoFixed.cfg \
     models/serialization/ParslCallableClosureMemo.tla
