@@ -346,6 +346,12 @@ run_case nested-join-retry-current counterexample \
 run_case nested-join-retry-fixed pass \
     models/dataflow/ParslNestedJoinRetry.cfg \
     models/dataflow/ParslNestedJoinRetry.tla
+run_case provider-multiblock-current counterexample \
+    models/executors/ParslProviderMultiBlockOwnershipCurrent.cfg \
+    models/executors/ParslProviderMultiBlockOwnership.tla
+run_case provider-multiblock-fixed pass \
+    models/executors/ParslProviderMultiBlockOwnership.cfg \
+    models/executors/ParslProviderMultiBlockOwnership.tla
 run_case input-list-mutation-current counterexample \
     models/dataflow/ParslInputListMutationCurrent.cfg \
     models/dataflow/ParslInputListMutation.tla

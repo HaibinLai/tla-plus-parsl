@@ -281,6 +281,9 @@ during the closing window.
 Provider coverage also includes `ParslProviderProvisioningLifecycle`, combining provisioning
 retry, stale generation polling, dispatch admission, and scale-in safety.
 
+Provider coverage also includes `ParslProviderMultiBlockOwnership`, adding two-block ownership
+and task-to-block scale-in safety.
+
 Monitoring coverage now combines batch rollback with per-task version high-water handling in
 `ParslMonitoringVersionedBatch`.
 

@@ -1750,6 +1750,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   fatal-result ordering; fairness and larger manager populations remain future work;
 - `ParslProviderProvisioningLifecycle` now combines block provisioning/retry, stale polling,
   dispatch admission, and scale-in; multi-block provider generations remain future work;
+- `ParslProviderMultiBlockOwnership` now covers two-block task ownership and idle-only scale-in;
+  larger provider fleets remain future work;
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
 - `ParslMonitoringVersionedBatch` now combines transaction rollback with per-task high-water
   protection; larger multi-task transaction batches remain future work;

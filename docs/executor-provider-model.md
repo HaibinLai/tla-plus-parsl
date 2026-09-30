@@ -58,3 +58,7 @@ can accept a task in that window. TLC finds the current admission counterexample
 failure, retry, stale status polling, dispatch, completion, and scale-in. A poll from an older
 generation can arrive after provider failure; the fixed branch ignores it and checks 100,001
 states while preserving retry, admission, and scale-in safety.
+
+`ParslProviderMultiBlockOwnership.tla` extends this to two independently owned blocks and two
+tasks. It checks that scale-in removes only idle blocks, running tasks retain active ownership,
+and stale polls cannot revive a failed generation; the fixed configuration checks 100,001 states.
