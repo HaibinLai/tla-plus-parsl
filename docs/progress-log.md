@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `8d76308` (`Promote scheduler duplicate status probes`).
-- Foundational smoke inventory: 382 TLC cases and 344 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation and missing-job runtime coverage).
+- Foundational smoke inventory: 382 TLC cases and 348 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted Grid Engine and Torque cancellation, LSF missing-job status, and
+  Radical Pilot removed-task callback probes. The targeted seven tests passed; the full runtime
+  inventory passed in two contiguous segments through 348/348, while the existing Fixed TLC
+  models remain covered by the 382-case gate.
 
 - Current stage: promoted duplicate-status runtime probes for Grid Engine, LSF, Slurm, and
   Torque. All four current implementations reproduce the expected `ValueError`/`KeyError`

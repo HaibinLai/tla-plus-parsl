@@ -222,6 +222,10 @@ tests=(
     tests/test_lsf_duplicate_status_runtime.py
     tests/test_slurm_duplicate_status_runtime.py
     tests/test_torque_duplicate_status_runtime.py
+    tests/test_grid_engine_cancel_runtime.py
+    tests/test_lsf_missing_job_runtime.py
+    tests/test_torque_cancel_runtime.py
+    tests/test_radical_unknown_callback_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py
