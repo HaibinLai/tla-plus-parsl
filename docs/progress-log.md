@@ -8,9 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `9f9b4c1` (`Model poller executor failure isolation`).
-- Foundational smoke inventory: 353 TLC cases and 224 Python runtime probes (including the
-  uncommitted monitoring internal-queue drain stage documented in the current working tree).
+- Latest pushed commit: `1cc300f` (`Model monitoring internal queue drain`).
+- Foundational smoke inventory: 353 TLC cases and 224 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -37,6 +36,8 @@ are recorded here in English and committed with the model changes.
   must not strand the later Future.
 - `9f9b4c1`: JobStatusPoller executor isolation. A provider/status failure in one executor must
   not suppress independent executors in the same polling tick.
+- `1cc300f`: monitoring internal-queue drain. Shutdown must not exit the database loop while a
+  pending internal message remains after a stale `empty()` observation.
 
 ### Verification convention
 
