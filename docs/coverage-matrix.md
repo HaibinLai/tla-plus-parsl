@@ -580,3 +580,7 @@ model records the Future identity once before callback registration.
 Monitoring lifecycle coverage also includes `ParslMonitoringHubCloseBeforeStart` (BUG-260), which
 models cleanup before `MonitoringHub.start()` initializes its active flag. The current branch
 violates `NoCloseCrash`; the fixed branch makes an unstarted close a no-op.
+
+`ParslMonitoringHubStartFailureCleanup` (BUG-261) covers the complementary partial-start path:
+the current branch leaves the hub active after child-process startup fails, while the fixed branch
+rolls back the allocated lifecycle state.

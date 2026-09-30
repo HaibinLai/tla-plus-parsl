@@ -370,6 +370,12 @@ run_case monitoring-hub-close-before-start-current counterexample \
 run_case monitoring-hub-close-before-start-fixed pass \
     models/monitoring/ParslMonitoringHubCloseBeforeStartFixed.cfg \
     models/monitoring/ParslMonitoringHubCloseBeforeStart.tla
+run_case monitoring-hub-start-failure-current counterexample \
+    models/monitoring/ParslMonitoringHubStartFailureCleanupCurrent.cfg \
+    models/monitoring/ParslMonitoringHubStartFailureCleanup.tla
+run_case monitoring-hub-start-failure-fixed pass \
+    models/monitoring/ParslMonitoringHubStartFailureCleanupFixed.cfg \
+    models/monitoring/ParslMonitoringHubStartFailureCleanup.tla
 
 run_case input-dependency-duplicate-current counterexample \
     models/dataflow/ParslInputDependencyDuplicateCurrent.cfg \

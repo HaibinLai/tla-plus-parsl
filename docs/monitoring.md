@@ -173,6 +173,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubClos
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_before_start_runtime.py -v
 ```
 
+`ParslMonitoringHubStartFailureCleanup.tla` covers failure after `MonitoringHub.start()` has
+allocated its queue and process wrapper but before the child process starts. The current path
+propagates the startup exception while leaving the hub active; the fixed path rolls back the
+active/resource state before propagation. The runtime probe uses deterministic queue, event, and
+process doubles.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubStartFailureCleanupCurrent.cfg models/monitoring/ParslMonitoringHubStartFailureCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubStartFailureCleanupFixed.cfg models/monitoring/ParslMonitoringHubStartFailureCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_start_failure_cleanup_runtime.py -v
+```
+
 `ParslMonitoringCloseIdempotence.tla` models repeated abnormal
 `DatabaseManager.close()` calls. The current implementation leaves
 `workflow_end` false after finalization, so each close emits another workflow
