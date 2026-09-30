@@ -1091,6 +1091,10 @@ be ignored without creating a ready-manager record, replying, or forwarding a re
 retry, cancellation, or teardown: the current result worker dies on an unconditional lookup,
 while the fixed branch discards the stale frame and continues to a live task. The runtime bridge
 is `tests/test_htex_unknown_task_result_runtime.py`.
+The recurring sweep also includes `ParslHtexManagerMessage.tla` for malformed multipart/pickle
+messages and valid heartbeat messages: malformed input is ignored without state changes, while a
+heartbeat updates contact time and emits the expected reply. The runtime bridge is
+`tests/test_htex_manager_message_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
