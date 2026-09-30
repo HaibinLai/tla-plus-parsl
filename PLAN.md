@@ -1798,6 +1798,9 @@ An additional rerun of the same suite completed 487 tests in 12.240 seconds with
 The post-refinement rerun completed 487 tests in 12.887 seconds with `OK`; no runtime probe
 regressed after the dynamic-DAG, correlation, heartbeat/version, monitoring-batch, callable
 alias, provider-lifecycle, and multi-output staging additions.
+The latest full audit completed the same 487 tests in 12.971 seconds with `OK`; the DataManager
+cache, manager-liveness, ZMQ ACK/retry, and three-event monitoring additions also preserve the
+runtime baseline.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
