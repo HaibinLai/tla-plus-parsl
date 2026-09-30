@@ -2080,6 +2080,12 @@ run_case lsf-resource-validation-valid pass \
 run_case flux-submission-failure pass \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla
+run_case flux-inflight-submission-current counterexample \
+    models/executors/ParslFluxInflightSubmissionFailureCurrent.cfg \
+    models/executors/ParslFluxInflightSubmissionFailure.tla
+run_case flux-inflight-submission-fixed pass \
+    models/executors/ParslFluxInflightSubmissionFailureFixed.cfg \
+    models/executors/ParslFluxInflightSubmissionFailure.tla
 run_case taskvine-results pass \
     models/executors/ParslTaskVineResults.cfg \
     models/executors/ParslTaskVineResults.tla

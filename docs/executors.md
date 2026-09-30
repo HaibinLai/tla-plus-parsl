@@ -770,6 +770,22 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxSubmissionFail
 /tmp/parsl-venv/bin/python -m unittest tests/test_flux_submission_failure_runtime.py -v
 ```
 
+`ParslFluxInflightSubmissionFailure.tla` refines that path to include the job
+already dequeued by `_submit_flux_jobs`. A jobspec-construction exception occurs
+before `_submit_single_job` enters its protected Flux-future section, so the
+current `_error_out_jobs` call cannot see the inflight job and its Future stays
+pending. The fixed branch makes every dequeued preparation failure terminal.
+The runtime probe injects a failing `JobspecV1.from_command` into the real
+`_submit_single_job` function.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxInflightSubmissionFailureCurrent.cfg models/executors/ParslFluxInflightSubmissionFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxInflightSubmissionFailureFixed.cfg models/executors/ParslFluxInflightSubmissionFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_inflight_submission_failure_runtime.py -v
+```
+
+This inflight submission-failure boundary is recorded as BUG-242.
+
 `ParslFluxCancelSubmitRace.tla` models a Flux-specific cancellation race. If the wrapper is
 cancelled while `_flux_future` is still unbound, a later successful underlying callback can call
 `set_result` on the already-cancelled wrapper. The current configuration reaches the callback
