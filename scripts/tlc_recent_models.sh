@@ -279,6 +279,15 @@ run_case strategy-block-capacity-fixed pass \
 run_case strategy-block-capacity-success pass \
     models/strategy/ParslStrategyBlockCapacitySuccess.cfg \
     models/strategy/ParslStrategyBlockCapacity.tla
+run_case aws-provider-cancel pass \
+    models/providers/ParslAWSProviderCancel.cfg \
+    models/providers/ParslAWSProviderCancel.tla
+run_case aws-provider-cancel-linger pass \
+    models/providers/ParslAWSProviderCancelLinger.cfg \
+    models/providers/ParslAWSProviderCancel.tla
+run_case local-provider-current counterexample \
+    models/providers/ParslLocalProvider.cfg \
+    models/providers/ParslLocalProvider.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

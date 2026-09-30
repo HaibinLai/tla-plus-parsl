@@ -1430,6 +1430,14 @@ overload scale-out, minimum-block bounds, and zero-capacity validation. Runtime 
 polling and negative scale-in. The current negative-input and zero-capacity branches produce TLC
 counterexamples; fixed and normal configurations pass simulation.
 
+The provider baseline now includes the remaining un-swept AWS cancel paths and the full local
+provider state machine. `ParslAWSProviderCancel` covers successful remote termination, stale local
+instance cleanup, and the linger path. `ParslLocalProvider` models process liveness, `.ec` exit
+markers, malformed output, cancellation, and the late-success race; its current configuration
+produces the expected strict-cancellation counterexample. Runtime probes cover real local process
+launch/status/cancel behavior and failed-launch cleanup, while the AWS configurations pass TLC
+simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
