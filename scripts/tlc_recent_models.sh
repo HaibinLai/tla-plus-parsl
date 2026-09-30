@@ -2158,6 +2158,9 @@ run_case htex-manager-message-malformed pass \
 run_case provider-status-batch pass \
     models/providers/ParslProviderStatusBatch.cfg \
     models/providers/ParslProviderStatusBatch.tla
+run_case provider-status-batch-smoke pass \
+    models/providers/ParslProviderStatusBatchSmoke.cfg \
+    models/providers/ParslProviderStatusBatch.tla
 run_case provider-polling pass \
     models/providers/ParslProviderPolling.cfg \
     models/providers/ParslProviderPolling.tla

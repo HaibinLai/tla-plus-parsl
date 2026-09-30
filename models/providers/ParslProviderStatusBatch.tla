@@ -11,9 +11,7 @@ EXTENDS Naturals, FiniteSets
  * COMPLETED, matching the current Slurm implementation.
  ***************************************************************************)
 
-JOBS == {"J1", "J2", "J3"}
-MAX_BATCH == 2
-MAX_POLLS == 3
+CONSTANTS JOBS, MAX_BATCH, MAX_POLLS
 RawStates == {"PD", "R", "CD", "F", "TO", "UNKNOWN"}
 JobStates == {"PENDING", "RUNNING", "COMPLETED", "FAILED", "TIMEOUT", "UNKNOWN"}
 TerminalStates == {"COMPLETED", "FAILED", "TIMEOUT"}
@@ -32,6 +30,9 @@ vars == <<jobState, rawState, observed, pollVersion, lastPollFailed,
            beforeFailure, lastBatchSize, lastMissing>>
 
 Init ==
+    /\ JOBS # {}
+    /\ MAX_BATCH > 0
+    /\ MAX_POLLS > 0
     /\ jobState = [j \in JOBS |-> "PENDING"]
     /\ rawState = [j \in JOBS |-> "PD"]
     /\ observed = [j \in JOBS |-> TRUE]

@@ -958,6 +958,8 @@ The finite configuration bounds the number of successful polls while retaining a
 translation branches. This follows the batching and `execute_wait` behavior in
 [`cluster_provider.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/cluster_provider.py)
 and [`slurm.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/providers/slurm/slurm.py).
+The jobs, batch size, and poll budget are parameterized; `ParslProviderStatusBatchSmoke.cfg`
+reduces them to one job, one batch slot, and one successful poll for fast regression.
 
 `ParslClusterProviderUnknownJob.tla` checks the common `ClusterProvider.status` lookup contract.
 The current method raises `KeyError` when a requested scheduler job is absent from local
@@ -3085,6 +3087,8 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslProviderStatusBatch.cfg`: 140,628 states generated, 17,672 distinct states, depth 6;
   bounded batch size, atomic status updates, scheduler-command failure preservation, missing-job
   completion mapping, and terminal-state stability all passed.
+- `ParslProviderStatusBatchSmoke.cfg`: 45 states generated, 12 distinct states, depth 3; a
+  bounded one-job/one-batch/one-poll regression for the same provider status invariants.
 - `ParslClusterProviderUnknownJob.cfg`: expected counterexample at depth 2 (2 states
   generated, 2 distinct); an unknown requested job raises instead of returning a status.
   `ParslClusterProviderUnknownJobFixed.cfg`: 4 states generated, 2 distinct states, depth 2;
