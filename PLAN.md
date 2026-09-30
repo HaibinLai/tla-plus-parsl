@@ -1775,6 +1775,9 @@ strategy capacity, AWS cancellation, LocalProvider, Flux cancellation/status/res
 HTEX address-probe timeout behavior.
 Cases 101--120 matched as well: HTEX cores-per-worker and priority admission, version mismatch,
 task ID/context validation, manager loss/admission, and worker task batch/frame shape handling.
+Cases 121--140 matched as well: HTEX monitoring-message enablement, MPI rank/prefix/specification
+boundaries, Work Queue submit and serialization rollback, TaskVine cancelled results, forced HTEX
+scale-in, and HTEX monitoring-batch continuation.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
