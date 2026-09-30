@@ -1781,6 +1781,9 @@ scale-in, and HTEX monitoring-batch continuation.
 Cases 141--160 matched as well: JobStatus output errors/summaries, Radical Pilot failure and late
 callbacks, Globus Compute result propagation, ResultsIncoming timeout/close behavior, TasksOutgoing
 close behavior, and address probing.
+Cases 161--180 matched as well: address-probe empty/success paths, provisioning admission,
+scale-in/out cancellation and retry monitoring, integrated end-to-end execution, Work Queue
+serialization failure, monitoring DB reorder, DataFuture cancellation, and deep dependency lists.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
