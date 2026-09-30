@@ -416,6 +416,8 @@ provider `MIN_BLOCKS` floor.
 `ParslZMQSerializationEndToEnd.tla` combines concrete serializer headers and multipart ZMQ
 progress with worker-attempt correlation. Its current branch exposes wrong-attempt result
 resolution; the fixed branch classifies those messages as stale.
+It is now part of the recent smoke sweep, alongside the real in-process ROUTER/DEALER and
+`pack_apply_message` bridge in `tests/test_zmq_serialization_runtime.py`.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery

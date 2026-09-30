@@ -54,6 +54,12 @@ run_case serialization-wire pass \
 run_case serialization-wire-failure pass \
     models/serialization/ParslSerializationWireFailure.cfg \
     models/serialization/ParslSerializationWire.tla
+run_case zmq-serialization-current counterexample \
+    models/serialization/ParslZMQSerializationEndToEnd.cfg \
+    models/serialization/ParslZMQSerializationEndToEnd.tla
+run_case zmq-serialization-fixed pass \
+    models/serialization/ParslZMQSerializationEndToEndFixed.cfg \
+    models/serialization/ParslZMQSerializationEndToEnd.tla
 run_case message-loss pass \
     models/core/ParslMessageLoss.cfg \
     models/core/ParslAbstract.tla
