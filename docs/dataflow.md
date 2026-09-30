@@ -52,12 +52,14 @@ of a corrupt chunk; TLC finds the expected `ContentSafety` violation after 5,577
 distinct states (the cancellation and stale-source branches are also modeled). The fixed
 configuration requires valid checksums, requires the captured source version to match the current
 source before publication, bounds each chunk repair to `MAX_CHUNK_REPAIRS = 1`, keeps cancellation
-terminal, and classifies late completion as stale, passing all ten invariants with 130,223 generated
-/ 27,386 distinct states at depth 22. The smoke current/fixed configurations use a three-tick
-horizon; current reaches a safety violation in 5,854 generated / 1,817 distinct states, while fixed
-passes with 69,411 generated / 14,418 distinct states at depth 21. The focused cancellation
-configuration finds `CancellationSafety` in 33,266 generated / 7,898 distinct current states and
-passes with 130,223 generated / 27,386 distinct fixed states.
+terminal, and bounds database write failures with `MAX_DB_FAILURES = 1`. It passes all eleven
+invariants in the fixed branch with 195,067 generated / 41,246 distinct states at depth 23. The
+current branch reaches the expected `ContentSafety` violation in 6,177 generated / 2,045 distinct
+states. The smoke current/fixed configurations use a three-tick horizon; current reaches a safety
+violation in 5,417 generated / 1,737 distinct states, while fixed passes with 102,903 generated /
+21,526 distinct states at depth 22. The focused cancellation configuration finds
+`CancellationSafety` in 26,403 generated / 6,609 distinct current states and passes with 195,067
+generated / 41,246 distinct fixed states.
 The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
 inner Python apps and verifies the duplicate Future position in the outer result.
 

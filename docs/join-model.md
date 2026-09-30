@@ -65,8 +65,10 @@ also lets the source version change while stage-in is incomplete: the fixed bran
 captured version that is no longer current. Repairs are bounded per chunk. The current branch can
 publish corrupt or stale-source content and accepts the late completion; the fixed branch rejects
 those publication paths, keeps a cancelled outer join terminal, and records late completion as
-stale before the outer join status is persisted. The focused cancellation configurations expose
-the current resurrection counterexample independently of the content-integrity counterexample.
+stale before the outer join status is persisted. Monitoring writes can fail a bounded number of
+times while the status remains queued; `DatabaseRetryBound` proves the retry counter is bounded.
+The focused cancellation configurations expose the current resurrection counterexample
+independently of the content-integrity counterexample.
 
 ## Safety properties
 

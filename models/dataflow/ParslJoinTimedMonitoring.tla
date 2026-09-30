@@ -9,7 +9,8 @@ EXTENDS Naturals
  * late result to race with join finalization and monitoring persistence.
  *************************************************************************** *)
 
-CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MAX_CHUNK_REPAIRS, USE_FIXED
+CONSTANTS MAX_TIME, HEARTBEAT_TIMEOUT, TASK_TIMEOUT, MAX_CHUNK_REPAIRS,
+          MAX_DB_FAILURES, USE_FIXED
 OuterStates == {"executing", "joining", "succeeded", "failed", "cancelled"}
 InnerStates == {"pending", "running", "succeeded", "lost"}
 ManagerStates == {"up", "expired"}
@@ -27,19 +28,20 @@ VARIABLES now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
           sourceVersion, capturedVersion,
           cancelled,
           monitorState,
-          monitorStatus, dbStatus
+          monitorStatus, dbStatus, dbFailures
 vars == <<now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
            cause, lateResult, chunkState, chunkChecksum, chunkRepairs, dataReady,
            sourceVersion, capturedVersion,
            cancelled,
            monitorState,
-           monitorStatus, dbStatus>>
+           monitorStatus, dbStatus, dbFailures>>
 
 Init ==
     /\ MAX_TIME >= 3
     /\ HEARTBEAT_TIMEOUT > 0
     /\ TASK_TIMEOUT > 0
     /\ MAX_CHUNK_REPAIRS >= 0
+    /\ MAX_DB_FAILURES >= 0
     /\ USE_FIXED \in BOOLEAN
     /\ now = 0
     /\ manager = "up"
@@ -60,24 +62,28 @@ Init ==
     /\ monitorState = "none"
     /\ monitorStatus = "none"
     /\ dbStatus = "none"
+    /\ dbFailures = 0
 
 Tick ==
     /\ now < MAX_TIME
     /\ now' = now + 1
     /\ UNCHANGED <<manager, lastHeartbeat, outer, inner, deadline, inFlight,
-                    cause, lateResult, monitorState, monitorStatus, dbStatus>>
+                    cause, lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures>>
 
 Heartbeat ==
     /\ manager = "up"
     /\ lastHeartbeat' = now
     /\ UNCHANGED <<now, manager, outer, inner, deadline, inFlight, cause,
-                    lateResult, monitorState, monitorStatus, dbStatus>>
+                    lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures>>
 
 ReturnJoin ==
     /\ outer = "executing"
     /\ outer' = "joining"
     /\ UNCHANGED <<now, manager, lastHeartbeat, inner, deadline, inFlight,
-                    cause, lateResult, monitorState, monitorStatus, dbStatus>>
+                    cause, lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures>>
 
 StageChunk(c) ==
     /\ c \in Chunks
@@ -93,7 +99,7 @@ StageChunk(c) ==
                     sourceVersion,
                     cancelled,
                     monitorState,
-                    monitorStatus, dbStatus>>
+                    monitorStatus, dbStatus, dbFailures>>
 
 CorruptChunk(c) ==
     /\ ~dataReady
@@ -106,7 +112,7 @@ CorruptChunk(c) ==
                     dataReady,
                     sourceVersion, capturedVersion,
                     cancelled,
-                    monitorState, monitorStatus, dbStatus>>
+                    monitorState, monitorStatus, dbStatus, dbFailures>>
 
 RepairChunk(c) ==
     /\ c \in Chunks
@@ -119,7 +125,7 @@ RepairChunk(c) ==
                     inFlight, cause, lateResult, chunkState, dataReady,
                     sourceVersion, capturedVersion,
                     cancelled,
-                    monitorState, monitorStatus, dbStatus>>
+                    monitorState, monitorStatus, dbStatus, dbFailures>>
 
 ChangeSource ==
     /\ ~dataReady
@@ -128,7 +134,7 @@ ChangeSource ==
                     inFlight, cause, lateResult, chunkState, chunkChecksum,
                     chunkRepairs, dataReady, capturedVersion,
                     cancelled,
-                    monitorState, monitorStatus, dbStatus>>
+                    monitorState, monitorStatus, dbStatus, dbFailures>>
 
 PublishData ==
     /\ ~dataReady
@@ -144,7 +150,7 @@ PublishData ==
                     sourceVersion, capturedVersion,
                     cancelled,
                     monitorState,
-                    monitorStatus, dbStatus>>
+                    monitorStatus, dbStatus, dbFailures>>
 
 StartInner ==
     /\ outer = "joining"
@@ -155,7 +161,7 @@ StartInner ==
     /\ deadline' = now + TASK_TIMEOUT
     /\ inFlight' = TRUE
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, cause, lateResult,
-                    monitorState, monitorStatus, dbStatus>>
+                    monitorState, monitorStatus, dbStatus, dbFailures>>
 
 CancelOuter ==
     /\ outer \in {"executing", "joining"}
@@ -166,7 +172,7 @@ CancelOuter ==
     /\ UNCHANGED <<now, manager, lastHeartbeat, deadline, cause, lateResult,
                     chunkState, chunkChecksum, chunkRepairs, dataReady,
                     sourceVersion, capturedVersion, monitorState,
-                    monitorStatus, dbStatus>>
+                    monitorStatus, dbStatus, dbFailures>>
 
 CompleteInner ==
     /\ inner = "running"
@@ -176,7 +182,8 @@ CompleteInner ==
     /\ inner' = "succeeded"
     /\ inFlight' = FALSE
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, deadline, cause,
-                    lateResult, monitorState, monitorStatus, dbStatus>>
+                    lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures>>
 
 TimeoutInner ==
     /\ inner = "running"
@@ -186,7 +193,7 @@ TimeoutInner ==
     /\ cause' = "timeout"
     /\ inFlight' = FALSE
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, deadline, lateResult,
-                    monitorState, monitorStatus, dbStatus>>
+                    monitorState, monitorStatus, dbStatus, dbFailures>>
 
 ExpireManager ==
     /\ manager = "up"
@@ -196,7 +203,7 @@ ExpireManager ==
     /\ cause' = IF inner = "running" THEN "manager_lost" ELSE cause
     /\ inFlight' = IF inner = "running" THEN FALSE ELSE inFlight
     /\ UNCHANGED <<now, lastHeartbeat, outer, deadline, lateResult,
-                    monitorState, monitorStatus, dbStatus>>
+                    monitorState, monitorStatus, dbStatus, dbFailures>>
 
 LateComplete ==
     /\ inner = "lost"
@@ -216,7 +223,8 @@ FinalizeJoin ==
     /\ inner \in {"succeeded", "lost"}
     /\ outer' = IF inner = "succeeded" THEN "succeeded" ELSE "failed"
     /\ UNCHANGED <<now, manager, lastHeartbeat, inner, deadline, inFlight,
-                    cause, lateResult, monitorState, monitorStatus, dbStatus>>
+                    cause, lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures>>
 
 EmitStatus ==
     /\ outer \in {"succeeded", "failed", "cancelled"}
@@ -224,14 +232,24 @@ EmitStatus ==
     /\ monitorState' = "queued"
     /\ monitorStatus' = outer
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
-                    inFlight, cause, lateResult, dbStatus>>
+                    inFlight, cause, lateResult, dbStatus, dbFailures>>
 
 PersistStatus ==
     /\ monitorState = "queued"
     /\ monitorState' = "persisted"
     /\ dbStatus' = monitorStatus
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
-                    inFlight, cause, lateResult, monitorStatus>>
+                    inFlight, cause, lateResult, monitorStatus, dbFailures>>
+
+FailStatusWrite ==
+    /\ monitorState = "queued"
+    /\ dbFailures < MAX_DB_FAILURES
+    /\ dbFailures' = dbFailures + 1
+    /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
+                    inFlight, cause, lateResult, monitorState,
+                    monitorStatus, dbStatus, chunkState, chunkChecksum,
+                    chunkRepairs, dataReady, sourceVersion, capturedVersion,
+                    cancelled>>
 
 CoreNext ==
     \/ Tick \/ Heartbeat \/ ReturnJoin \/ StartInner \/ CompleteInner
@@ -242,8 +260,9 @@ CoreNext ==
 Next ==
     \/ (CoreNext /\ UNCHANGED <<chunkState, chunkChecksum, chunkRepairs,
                                   dataReady, sourceVersion, capturedVersion,
-                                  cancelled>>)
+                                  cancelled, dbFailures>>)
     \/ CancelOuter
+    \/ FailStatusWrite
     \/ \E c \in Chunks: StageChunk(c)
     \/ \E c \in Chunks: CorruptChunk(c) \/ RepairChunk(c)
     \/ ChangeSource
@@ -271,6 +290,7 @@ TypeOK ==
     /\ monitorState \in MonitorStates
     /\ monitorStatus \in MonitorStatuses
     /\ dbStatus \in MonitorStatuses
+    /\ dbFailures \in 0..MAX_DB_FAILURES
 
 JoinSafety == outer = "succeeded" => inner = "succeeded"
 DataReadinessSafety == inner \in {"running", "succeeded"} => dataReady
@@ -285,5 +305,6 @@ DatabaseSafety ==
     /\ dbStatus = "cancelled" => outer = "cancelled"
 
 CancellationSafety == cancelled => outer = "cancelled"
+DatabaseRetryBound == dbFailures <= MAX_DB_FAILURES
 
 =============================================================================
