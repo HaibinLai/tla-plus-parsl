@@ -344,6 +344,12 @@ run_case workqueue-cancelled-result \
 run_case taskvine-submit \
     models/executors/ParslTaskVineSubmitFixed.cfg \
     models/executors/ParslTaskVineSubmit.tla
+run_case taskvine-factory \
+    models/executors/ParslTaskVineFactory.cfg \
+    models/executors/ParslTaskVineFactory.tla
+run_case taskvine-start-failure-cleanup \
+    models/executors/ParslTaskVineStartFailureCleanupFixed.cfg \
+    models/executors/ParslTaskVineStartFailureCleanup.tla
 run_case taskvine-submit-serialization \
     models/executors/ParslTaskVineSubmitSerializationFailureFixed.cfg \
     models/executors/ParslTaskVineSubmit.tla
@@ -353,6 +359,30 @@ run_case taskvine-cancelled-result \
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
+run_case flux-result \
+    models/executors/ParslFluxResultFixed.cfg \
+    models/executors/ParslFluxResult.tla
+run_case flux-submission-failure \
+    models/executors/ParslFluxSubmissionFailure.cfg \
+    models/executors/ParslFluxSubmissionFailure.tla
+run_case globus-compute-result \
+    models/executors/ParslGlobusComputeResult.cfg \
+    models/executors/ParslGlobusComputeResult.tla
+run_case radical-pilot-results \
+    models/executors/ParslRadicalPilotResultsFixed.cfg \
+    models/executors/ParslRadicalPilotResults.tla
+run_case mpi-backlog-retry \
+    models/executors/ParslMPIBacklogRetryFixed.cfg \
+    models/executors/ParslMPIBacklogRetry.tla
+run_case workqueue-shutdown \
+    models/executors/ParslWorkQueueShutdown.cfg \
+    models/executors/ParslWorkQueueShutdown.tla
+run_case thread-executor-nonblocking \
+    models/executors/ParslThreadExecutorNonBlocking.cfg \
+    models/executors/ParslThreadExecutor.tla
+run_case thread-executor-future-lifecycle \
+    models/executors/ParslThreadExecutorFutureLifecycle.cfg \
+    models/executors/ParslThreadExecutorFutureLifecycle.tla
 run_case globus-submit-race \
     models/executors/ParslGlobusComputeSubmitRaceFixed.cfg \
     models/executors/ParslGlobusComputeSubmitRace.tla
