@@ -1141,6 +1141,10 @@ classification. Concrete bridges include `tests/test_zmq_serialization_runtime.p
 `ParslCurveZMQCertificateMode.tla` is now in the ZMQ sweep, checking that secret keys load only
 from private certificate directories and that missing keys or unsafe modes are rejected.
 `tests/test_curvezmq_certificate_runtime.py` drives the real certificate loader.
+`ParslWorkerPoolControlFrame.tla` is now in the serialization/HTEX sweep: valid heartbeat and
+drain frames decode as distinct control records, while malformed pickle frames are discarded in
+the fixed branch instead of crashing the receive loop. The runtime bridge is
+`tests/test_worker_pool_control_frame_runtime.py`.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.

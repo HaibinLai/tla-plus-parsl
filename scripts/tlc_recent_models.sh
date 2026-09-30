@@ -1068,6 +1068,12 @@ run_case curvezmq-certificate-invalid pass \
 run_case curvezmq-certificate-valid pass \
     models/serialization/ParslCurveZMQCertificateModeValid.cfg \
     models/serialization/ParslCurveZMQCertificateMode.tla
+run_case worker-pool-control-frame-current counterexample \
+    models/serialization/ParslWorkerPoolControlFrameCurrent.cfg \
+    models/serialization/ParslWorkerPoolControlFrame.tla
+run_case worker-pool-control-frame-fixed pass \
+    models/serialization/ParslWorkerPoolControlFrameFixed.cfg \
+    models/serialization/ParslWorkerPoolControlFrame.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla
