@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `d96f9a2` (`Add join file staging model`).
-- Foundational smoke inventory: 373 TLC cases and 270 Python runtime probes.
+- Latest pushed commit: pending (join monitoring database model).
+- Foundational smoke inventory: 374 TLC cases and 270 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -138,6 +138,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslJoinFileStaging`, a two-chunk content/checksum/source-version model
   that gates join execution on safe publication. The Current branch publishes corrupt bytes and
   violates readiness/content safety; the Fixed branch passed standalone TLC.
+- Current stage: added `ParslJoinMonitoringDB`, connecting terminal join status to queued and
+  persisted monitoring rows. The Current branch loses terminal status on a duplicate write; the
+  Fixed branch treats duplicates idempotently and passed standalone TLC.
 
 ### Verification convention
 
