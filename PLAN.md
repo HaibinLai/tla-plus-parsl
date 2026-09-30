@@ -1616,6 +1616,11 @@ collapsing transport failure into a local chunk state.
 Its current/fixed configurations now also check CorruptionRejectionSafety: every corrupt chunk
 must retain a checksum mismatch until repair clears the transfer state.
 
+After the callable dispatch and file-corruption refinements, the complete runtime bridge was
+rerun: all 486 runtime tests passed in 13.254 seconds. The suite intentionally logs malformed,
+cancelled, and provider-failure paths; those diagnostics are expected and the final result was
+OK.
+
 The integrated join model now admits cancellation while an inner physical attempt is running.
 Previously the action contained a running-attempt branch that was unreachable because its guard
 only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
