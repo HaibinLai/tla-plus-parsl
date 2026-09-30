@@ -1707,6 +1707,30 @@ run_case monitoring-threshold-current counterexample \
 run_case monitoring-threshold-fixed pass \
     models/monitoring/ParslMonitoringThresholdFixed.cfg \
     models/monitoring/ParslMonitoringThreshold.tla
+run_case ftp-connection-current counterexample \
+    models/staging/ParslFTPConnectionCleanupCurrent.cfg \
+    models/staging/ParslFTPConnectionCleanup.tla
+run_case ftp-connection-fixed pass \
+    models/staging/ParslFTPConnectionCleanupFixed.cfg \
+    models/staging/ParslFTPConnectionCleanup.tla
+run_case ftp-connection-success pass \
+    models/staging/ParslFTPConnectionCleanupSuccess.cfg \
+    models/staging/ParslFTPConnectionCleanup.tla
+run_case ftp-partial-current counterexample \
+    models/staging/ParslFTPPartialCleanupCurrent.cfg \
+    models/staging/ParslFTPPartialCleanup.tla
+run_case ftp-partial-fixed pass \
+    models/staging/ParslFTPPartialCleanupFixed.cfg \
+    models/staging/ParslFTPPartialCleanup.tla
+run_case ftp-stage-current counterexample \
+    models/staging/ParslFTPStageCurrent.cfg \
+    models/staging/ParslFTPStage.tla
+run_case ftp-stage-fixed pass \
+    models/staging/ParslFTPStageFixed.cfg \
+    models/staging/ParslFTPStage.tla
+run_case ftp-stage-success pass \
+    models/staging/ParslFTPStageSuccess.cfg \
+    models/staging/ParslFTPStage.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

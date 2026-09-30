@@ -841,6 +841,9 @@ Monitoring coverage now includes atomic filesystem-radio publication, file-trans
 zero-interval batching, monotonic batch clocks, close idempotence, permanent and transient DB
 errors, ordered event delivery, and zero-threshold queue handling. SQLite/runtime probes exercise
 the corresponding DatabaseManager and radio paths.
+FTP staging coverage now includes connection cleanup, partial destination cleanup, and in-task
+stage-in artifact publication. Failed transfers remain counterexample branches, while fixed paths
+remove partial bytes/close connections before exposing success or failure.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
