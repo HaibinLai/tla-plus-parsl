@@ -1017,6 +1017,9 @@ run_case serialization-envelope-current counterexample \
 run_case serialization-envelope-fixed pass \
     models/serialization/ParslSerializationEnvelopeMalformedFixed.cfg \
     models/serialization/ParslSerializationEnvelopeMalformed.tla
+run_case serialization-binary-payload pass \
+    models/serialization/ParslSerializationBinaryPayload.cfg \
+    models/serialization/ParslSerializationBinaryPayload.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

@@ -1110,6 +1110,9 @@ starting a provider stage-out Future, otherwise wrapper failure leaves a live or
 headerless envelopes must become a controlled decode rejection rather than a raw framing error.
 `tests/test_serialization_envelope_malformed_runtime.py` reproduces the current failure on a
 truncated payload.
+`ParslSerializationBinaryPayload.tla` is now in the serialization sweep, checking length-prefixed
+framing for newline, NUL, and non-ASCII bytes. `tests/test_serialization_binary_payload_runtime.py`
+round-trips the same byte classes through the real `pack_buffers`/`unpack_buffers` implementation.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
