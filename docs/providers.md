@@ -6,6 +6,18 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslAzureCancelBookkeeping.tla` models the post-delete local bookkeeping boundary. The current
+Azure provider removes a VM from `instances` but leaves its `resources` entry present; the fixed
+branch clears both records after remote deletion.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureCancelBookkeepingCurrent.cfg models/providers/ParslAzureCancelBookkeeping.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureCancelBookkeepingFixed.cfg models/providers/ParslAzureCancelBookkeeping.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_azure_cancel_bookkeeping_runtime.py -v
+```
+
+This stale resource-map boundary is recorded as BUG-227.
+
 `ParslCondorSubmitCount.tla` refines the Condor submission parser for multi-digit job counts.
 For output such as `10 job(s) submitted to cluster ...`, the current implementation indexes
 `line[0]` and registers only one process; the fixed branch parses the complete count token.

@@ -22,7 +22,8 @@ The `join_app` coverage also includes `ParslJoinBodyRetry`, which separates oute
 attempts from installation and completion of the inner Future join.
 
 Provider coverage also includes `ParslLocalCancelFailure` (BUG-226), which checks that a failed
-local kill command cannot be reported as successful cancellation.
+local kill command cannot be reported as successful cancellation. `ParslAzureCancelBookkeeping`
+(BUG-227) checks that confirmed Azure deletion clears both the instance list and the resource map.
 
 Monitoring coverage also includes `ParslMonitoringZMQTupleShape`, which checks malformed-versus-
 valid tuple admission in the real ZMQ monitoring router before queue/database delivery.

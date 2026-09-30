@@ -369,6 +369,12 @@ run_case local-cancel-failure-current counterexample \
 run_case local-cancel-failure-fixed pass \
     models/providers/ParslLocalCancelFailureFixed.cfg \
     models/providers/ParslLocalCancelFailure.tla
+run_case azure-cancel-bookkeeping-current counterexample \
+    models/providers/ParslAzureCancelBookkeepingCurrent.cfg \
+    models/providers/ParslAzureCancelBookkeeping.tla
+run_case azure-cancel-bookkeeping-fixed pass \
+    models/providers/ParslAzureCancelBookkeepingFixed.cfg \
+    models/providers/ParslAzureCancelBookkeeping.tla
 
 run_case stageout-return-none pass \
     models/staging/ParslDataManagerStageOutReturnNone.cfg \
