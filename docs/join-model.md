@@ -64,3 +64,8 @@ the all-done check and either constructs the ordered result or aggregates all fa
 The current/fixed configurations intentionally preserve source/runtime counterexamples for
 callback cancellation and return equality. The fixed variants provide the candidate terminal
 handling expected by the safety properties.
+
+`ParslNestedJoinRetry.tla` combines nested join propagation with leaf retries and late results.
+Two leaf Futures feed an inner join, which feeds an outer join; an old leaf result arriving after
+a retry cannot resolve the leaf or allow either join to report success in the fixed branch. TLC
+checks 100,001 simulated states.

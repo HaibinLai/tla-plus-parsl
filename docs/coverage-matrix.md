@@ -289,3 +289,6 @@ in `ParslCallableAliasRetry`.
 
 Staging coverage also combines multi-output publication, source-version changes, per-output
 retry, and atomic consumer release in `ParslMultiOutputVersionedStageOut`.
+
+Join coverage also combines nested joins, leaf retry, and stale leaf-result rejection in
+`ParslNestedJoinRetry`.
