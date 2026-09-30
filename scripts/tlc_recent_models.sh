@@ -1428,6 +1428,42 @@ run_case local-unknown-job-current counterexample \
 run_case local-unknown-job-fixed pass \
     models/providers/ParslLocalUnknownJobStatusFixed.cfg \
     models/providers/ParslLocalUnknownJobStatus.tla
+run_case kubernetes-admission-current counterexample \
+    models/providers/ParslKubernetesAdmissionCurrent.cfg \
+    models/providers/ParslKubernetesAdmission.tla
+run_case kubernetes-admission-fixed pass \
+    models/providers/ParslKubernetesAdmissionFixed.cfg \
+    models/providers/ParslKubernetesAdmission.tla
+run_case kubernetes-cancel-current counterexample \
+    models/providers/ParslKubernetesCancel.cfg \
+    models/providers/ParslKubernetesCancel.tla
+run_case kubernetes-cancel-fixed pass \
+    models/providers/ParslKubernetesCancelFixed.cfg \
+    models/providers/ParslKubernetesCancel.tla
+run_case kubernetes-cancel-unknown-current counterexample \
+    models/providers/ParslKubernetesCancelUnknownJobCurrent.cfg \
+    models/providers/ParslKubernetesCancelUnknownJob.tla
+run_case kubernetes-cancel-unknown-fixed pass \
+    models/providers/ParslKubernetesCancelUnknownJobFixed.cfg \
+    models/providers/ParslKubernetesCancelUnknownJob.tla
+run_case kubernetes-polling-current counterexample \
+    models/providers/ParslKubernetesPolling.cfg \
+    models/providers/ParslKubernetesPolling.tla
+run_case kubernetes-polling-fixed pass \
+    models/providers/ParslKubernetesPollingFixed.cfg \
+    models/providers/ParslKubernetesPolling.tla
+run_case kubernetes-submit-current counterexample \
+    models/providers/ParslKubernetesSubmit.cfg \
+    models/providers/ParslKubernetesSubmit.tla
+run_case kubernetes-submit-fixed pass \
+    models/providers/ParslKubernetesSubmitFixed.cfg \
+    models/providers/ParslKubernetesSubmit.tla
+run_case kubernetes-unknown-job-current counterexample \
+    models/providers/ParslKubernetesUnknownJobCurrent.cfg \
+    models/providers/ParslKubernetesUnknownJob.tla
+run_case kubernetes-unknown-job-fixed pass \
+    models/providers/ParslKubernetesUnknownJobFixed.cfg \
+    models/providers/ParslKubernetesUnknownJob.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

@@ -806,6 +806,10 @@ LocalProvider coverage now includes live-process exit-file races, marker precede
 stale cancellation/status IDs, requested-status scoping, failed-launch script cleanup, and zero
 `tasks_per_node` admission. These models connect local process/file semantics to provider status
 and resource bookkeeping.
+Kubernetes coverage now includes Pending-versus-Running admission, API cancellation responses,
+stale cancellation/status IDs, read-error visibility, and submit-time resource state. The current
+and fixed branches are in the recurring TLC sweep, with runtime probes using fake Kubernetes API
+clients.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
