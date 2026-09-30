@@ -9,6 +9,9 @@ set -euo pipefail
 JAVA_BIN=${JAVA_BIN:-java}
 TLA_JAR=${TLA_JAR:-tla2tools.jar}
 TLC_SIMULATE=${TLC_SIMULATE:-1000}
+TLC_CASE_START=${TLC_CASE_START:-1}
+TLC_CASE_LIMIT=${TLC_CASE_LIMIT:-0}
+CASE_COUNT=0
 
 if [[ "$JAVA_BIN" == "java" ]] && ! command -v java >/dev/null 2>&1; then
     JAVA_BIN=$(find /tmp -path '*/jdk-*/bin/java' -type f -perm -u+x -print -quit 2>/dev/null)
@@ -29,6 +32,14 @@ run_case() {
     local config=$2
     local spec=$3
     local log="$WORK_DIR/${label}.log"
+
+    CASE_COUNT=$((CASE_COUNT + 1))
+    if [[ "$CASE_COUNT" -lt "$TLC_CASE_START" ]]; then
+        return 0
+    fi
+    if [[ "$TLC_CASE_LIMIT" -gt 0 && "$CASE_COUNT" -gt "$TLC_CASE_LIMIT" ]]; then
+        exit 0
+    fi
 
     "$JAVA_BIN" -cp "$TLA_JAR" tlc2.TLC -simulate num="$TLC_SIMULATE" \
         -metadir "$WORK_DIR/meta-$label" \

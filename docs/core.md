@@ -134,6 +134,10 @@ JAVA_BIN=/path/to/java TLA_JAR=/path/to/tla2tools.jar \
   TLC_SIMULATE=1000 scripts/tlc_foundational_smoke.sh
 ```
 
+The suite can be split into reproducible case intervals when the full inventory is too large for
+one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclusive; for example,
+`TLC_CASE_START=31 TLC_CASE_LIMIT=60` runs only cases 31 through 60.
+
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
