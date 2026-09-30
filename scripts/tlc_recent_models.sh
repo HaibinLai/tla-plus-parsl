@@ -687,6 +687,36 @@ run_case zip-stage-in-current counterexample \
 run_case zip-stage-in-fixed pass \
     models/staging/ParslZipStageInFixed.cfg \
     models/staging/ParslZipStageIn.tla
+run_case core-executor-drain pass \
+    models/core/ParslExecutorDrain.cfg \
+    models/core/ParslAbstract.tla
+run_case core-idle-manager-timeout pass \
+    models/core/ParslIdleManagerTimeout.cfg \
+    models/core/ParslAbstract.tla
+run_case core-provider-failure pass \
+    models/core/ParslProviderFailure.cfg \
+    models/core/ParslAbstract.tla
+run_case core-registration pass \
+    models/core/ParslRegistration.cfg \
+    models/core/ParslAbstract.tla
+run_case core-registration-failure pass \
+    models/core/ParslRegistrationFailure.cfg \
+    models/core/ParslAbstract.tla
+run_case core-registration-recovery pass \
+    models/core/ParslRegistrationRecovery.cfg \
+    models/core/ParslAbstract.tla
+run_case core-scale-in pass \
+    models/core/ParslScaleIn.cfg \
+    models/core/ParslAbstract.tla
+run_case core-serialization-failure pass \
+    models/core/ParslSerializationFailure.cfg \
+    models/core/ParslAbstract.tla
+run_case core-submit-failure pass \
+    models/core/ParslSubmitFailure.cfg \
+    models/core/ParslAbstract.tla
+run_case core-timeout-terminal pass \
+    models/core/ParslTimeoutTerminal.cfg \
+    models/core/ParslAbstract.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

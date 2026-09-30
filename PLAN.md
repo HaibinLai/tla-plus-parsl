@@ -1535,6 +1535,12 @@ archives, and atomic versus partial output publication on write failure. Runtime
 file/archive/Globus paths. The current Zip write-failure configuration produces the expected partial-
 file counterexample; fixed, corrupt-archive, dependency, and content configurations pass simulation.
 
+The core `ParslAbstract` smoke sweep now also includes executor drain, idle-manager timeout, provider
+failure, registration success/failure/recovery, scale-in, serialization failure, submit failure, and
+terminal timeout configurations. These bounded scenarios completed TLC simulation without invariant
+violations in the exercised runs, extending startup, capacity, failure, and shutdown coverage beyond
+the focused models.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
