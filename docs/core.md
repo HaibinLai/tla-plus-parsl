@@ -212,6 +212,11 @@ The MPI and Radical Pilot cases complete another executor-family slice: MPI reso
 non-divisible rank handling, no-resource result delivery, and Radical Pilot failure payloads,
 failure fanout, late/unknown callbacks, and bulk shutdown cleanup.
 
+The DFK cases now include bounded dynamic task creation, chain and fanout dependency release,
+memoization function identity/dict ordering/ignore-key handling, and task-status versus Future
+publication ordering. These preserve logical dependency safety as the graph grows after runtime
+submission.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The

@@ -323,5 +323,26 @@ run_case radical-unknown-callback \
 run_case radical-bulk-shutdown \
     models/executors/ParslRadicalPilotBulkShutdownFixed.cfg \
     models/executors/ParslRadicalPilotBulkShutdown.tla
+run_case dynamic-task-chain \
+    models/dataflow/ParslDynamicTaskChain.cfg \
+    models/dataflow/ParslDynamicTaskChain.tla
+run_case dynamic-task-creation \
+    models/dataflow/ParslDynamicTaskCreation.cfg \
+    models/dataflow/ParslDynamicTaskCreation.tla
+run_case dynamic-task-fanout \
+    models/dataflow/ParslDynamicTaskFanout.cfg \
+    models/dataflow/ParslDynamicTaskFanout.tla
+run_case memo-function-identity \
+    models/dataflow/ParslMemoFunctionIdentityFixed.cfg \
+    models/dataflow/ParslMemoFunctionIdentity.tla
+run_case memo-dict-ordering \
+    models/dataflow/ParslMemoDictOrderingFixed.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-ignore-key \
+    models/dataflow/ParslMemoIgnoreKeyFixed.cfg \
+    models/dataflow/ParslMemoIgnoreKey.tla
+run_case task-status-future-ordering \
+    models/dataflow/ParslTaskStatusFutureOrderingFixed.cfg \
+    models/dataflow/ParslTaskStatusFutureOrdering.tla
 
 echo "Foundational TLC smoke suite passed."
