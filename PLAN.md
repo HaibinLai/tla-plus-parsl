@@ -1137,6 +1137,9 @@ reproduces the current poisoned-cache behavior.
 the serializer `deserialize` interface. `tests/test_serialization_plugin_error_runtime.py`
 reproduces the current raw `AttributeError` and contrasts it with the already-wrapped import
 failure path.
+`ParslSerializationFallback.tla` is now in the sweep for primary success, primary failure with
+secondary success, and all-serializer failure. `tests/test_serialization_fallback_runtime.py`
+checks fallback ordering and re-raising of the final serializer exception.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

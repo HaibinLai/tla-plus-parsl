@@ -1065,6 +1065,15 @@ run_case serialization-plugin-error-current counterexample \
 run_case serialization-plugin-error-fixed pass \
     models/serialization/ParslSerializationPluginErrorFixed.cfg \
     models/serialization/ParslSerializationPluginError.tla
+run_case serialization-fallback-primary pass \
+    models/serialization/ParslSerializationFallbackPrimary.cfg \
+    models/serialization/ParslSerializationFallback.tla
+run_case serialization-fallback-secondary pass \
+    models/serialization/ParslSerializationFallbackSecondary.cfg \
+    models/serialization/ParslSerializationFallback.tla
+run_case serialization-fallback-failure pass \
+    models/serialization/ParslSerializationFallbackFailure.cfg \
+    models/serialization/ParslSerializationFallback.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
