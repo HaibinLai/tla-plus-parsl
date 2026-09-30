@@ -60,11 +60,13 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCallableArgume
 `ParslPythonNestedAlias.tla` extends the same identity boundary to a nested field: the callable,
 direct argument, and nested reference all point to one source object. The current branch
 reconstructs independent object IDs for the argument and nested field; the fixed branch preserves
-one decoded graph identity.
+one decoded graph identity. The runtime bridge in `tests/test_python_nested_alias_runtime.py`
+confirms the current `pack_apply_message` behavior with a real closure and nested mutable dict.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonNestedAliasCurrent.cfg models/serialization/ParslPythonNestedAlias.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonNestedAliasFixed.cfg models/serialization/ParslPythonNestedAlias.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_python_nested_alias_runtime.py -v
 ```
 
 `ParslCallableEqualCache.tla` models a related object-content boundary in

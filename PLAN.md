@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 499 probes and passes as a whole:
+The runtime suite currently contains 500 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1785,6 +1785,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   snapshot before reporting an aborted batch;
 - `ParslCallableAliasRetry` now combines shared callable/argument aliasing with mutation-aware
   retry snapshots; arbitrary Python heap identity remains abstract;
+- `ParslPythonNestedAlias` now has a real `pack_apply_message` bridge covering a closure root and
+  nested mutable argument field, in addition to its current/fixed TLC configurations.
 - `ParslNestedJoinRetry` now combines nested join propagation with leaf retries and stale-result
   rejection; larger nested graphs remain future work;
 - `ParslTripleNestedJoin` extends dependency gating to three nested join levels and explicitly
@@ -1810,7 +1812,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 499 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 500 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1846,6 +1848,8 @@ The three-element join-cancellation probe then completed 498 tests in 12.464 sec
 including the current `CancelledError` escape with two successful siblings.
 The HTEX no-hints capacity probe then completed 499 tests in 12.471 seconds with `OK`, including
 the constructor's conservative one-worker fallback.
+The nested Python alias probe then completed 500 tests in 12.863 seconds with `OK`, confirming the
+current independent reconstruction of a closure root and nested mutable argument.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

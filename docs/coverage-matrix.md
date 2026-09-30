@@ -294,6 +294,9 @@ Monitoring coverage now combines batch rollback with per-task version high-water
 Python object coverage also combines callable/argument aliasing with mutation-aware retry epochs
 in `ParslCallableAliasRetry`.
 
+The nested object identity boundary is also backed by `tests/test_python_nested_alias_runtime.py`,
+which observes the current independent reconstruction of a closure root and nested argument field.
+
 Staging coverage also combines multi-output publication, source-version changes, per-output
 retry, and atomic consumer release in `ParslMultiOutputVersionedStageOut`.
 
