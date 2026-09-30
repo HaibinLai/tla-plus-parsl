@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `f1fc91e` (`Promote duplicate result collector coverage`).
-- Foundational smoke inventory: 382 TLC cases and 339 Python runtime probes.
+- Latest pushed commit: pending (ClusterProvider mixed known/unknown status coverage).
+- Foundational smoke inventory: 382 TLC cases and 340 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: deepened `ParslClusterProviderUnknownJob` to a mixed status poll containing a
+  valid known job and a stale unknown ID. The Fixed branch preserves the valid RUNNING update
+  while returning MISSING for the stale ID; the Current branch still produces the raw CRASH/
+  `KeyError` behavior. The runtime probe and complete foundational smoke suites passed 340/340
+  runtime entries and 382/382 TLC cases.
 
 - Current stage: promoted Work Queue and TaskVine duplicate/late-result collector boundaries.
   The fixed models ignore an already-consumed task identifier and preserve unrelated Futures;

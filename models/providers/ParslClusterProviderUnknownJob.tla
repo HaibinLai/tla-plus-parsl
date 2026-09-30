@@ -20,14 +20,18 @@ vars == <<resources, requested, result>>
 Init ==
     /\ USE_FIXED \in BOOLEAN
     /\ resources = {"known"}
-    /\ requested = {"unknown"}
-    /\ result = "none"
+    /\ requested = {"known", "unknown"}
+    /\ result = [j \in requested |-> "none"]
 
 Poll ==
-    /\ result = "none"
-    /\ IF "unknown" \in resources
-          THEN result' = "RUNNING"
-          ELSE IF USE_FIXED THEN result' = "MISSING" ELSE result' = "CRASH"
+    /\ result["known"] = "none"
+    /\ result["unknown"] = "none"
+    /\ result' = [result EXCEPT
+                    !["known"] = IF "known" \in resources
+                                   THEN "RUNNING" ELSE "MISSING",
+                    !["unknown"] = IF "unknown" \in resources
+                                      THEN "RUNNING"
+                                      ELSE IF USE_FIXED THEN "MISSING" ELSE "CRASH"]
     /\ UNCHANGED <<resources, requested>>
 
 Next ==
@@ -39,9 +43,12 @@ Spec == Init /\ [][Next]_vars
 TypeOK ==
     /\ resources \subseteq {"known", "unknown"}
     /\ requested \subseteq {"known", "unknown"}
-    /\ result \in (JobStates \cup {"none"})
+    /\ result \in [requested -> (JobStates \cup {"none"})]
 
 UnknownJobSafety ==
-    result = "MISSING" \/ result = "none"
+    result["unknown"] = "MISSING" \/ result["unknown"] = "none"
+
+KnownJobSafety ==
+    result["known"] = "RUNNING" => "known" \in resources
 
 =============================================================================
