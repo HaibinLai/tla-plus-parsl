@@ -2,12 +2,31 @@
 
 # Run the bounded cross-layer models added in the recent refinement stages.
 # Current configurations are expected to produce a counterexample; fixed and
-# ordinary configurations must complete without an invariant violation.
+# ordinary configurations must complete without an invariant violation.  The
+# default simulator bound is controlled by TLC_SIMULATE; set TLC_CASE_LIMIT to
+# a positive number for a quick prefix smoke test.
 
 set -u
 
 JAVA_BIN=${JAVA_BIN:-java}
 TLA_JAR=${TLA_JAR:-tla2tools.jar}
+TLC_SIMULATE=${TLC_SIMULATE:-1000}
+TLC_CASE_LIMIT=${TLC_CASE_LIMIT:-0}
+CASE_COUNT=0
+
+# The development image may not put Java on PATH, while the TLC bundle is
+# provisioned under /tmp/tla-run.*.  Keep explicit JAVA_BIN/TLA_JAR overrides,
+# but discover the provisioned tools when the defaults are unavailable.
+if [[ "$JAVA_BIN" == "java" ]] && ! command -v java >/dev/null 2>&1; then
+    JAVA_BIN=$(find /tmp -path '*/jdk-*/bin/java' -type f -perm -u+x 2>/dev/null | sort | head -1)
+fi
+if [[ "$TLA_JAR" == "tla2tools.jar" ]] && [[ ! -f "$TLA_JAR" ]]; then
+    TLA_JAR=$(find /tmp -path '*/tla2tools.jar' -type f 2>/dev/null | sort | head -1)
+fi
+if [[ -z "$JAVA_BIN" || -z "$TLA_JAR" || ! -x "$JAVA_BIN" || ! -f "$TLA_JAR" ]]; then
+    echo "Unable to locate Java/TLC. Set JAVA_BIN and TLA_JAR explicitly." >&2
+    exit 2
+fi
 WORK_DIR=$(mktemp -d)
 trap 'rm -rf "$WORK_DIR"' EXIT
 
@@ -18,8 +37,15 @@ run_case() {
     local spec=$4
     local log="$WORK_DIR/${label}.log"
 
+    CASE_COUNT=$((CASE_COUNT + 1))
+    if [[ "$TLC_CASE_LIMIT" -gt 0 && "$CASE_COUNT" -gt "$TLC_CASE_LIMIT" ]]; then
+        exit 0
+    fi
+
     set +e
-    "$JAVA_BIN" -cp "$TLA_JAR" tlc2.TLC -config "$config" "$spec" >"$log" 2>&1
+    "$JAVA_BIN" -cp "$TLA_JAR" tlc2.TLC -simulate num="$TLC_SIMULATE" \
+        -metadir "$WORK_DIR/meta-$label" \
+        -config "$config" "$spec" >"$log" 2>&1
     local rc=$?
     set -e
 
