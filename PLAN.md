@@ -1776,6 +1776,9 @@ fails internally on that temporal setup, so it remains documented as a liveness 
 than being reported as a passing safety run. `ParslTimeSafety.cfg` provides the executable
 safety-only counterpart for the time model.
 An additional rerun of the same suite completed 487 tests in 12.240 seconds with `OK`.
+The post-refinement rerun completed 487 tests in 12.887 seconds with `OK`; no runtime probe
+regressed after the dynamic-DAG, correlation, heartbeat/version, monitoring-batch, callable
+alias, provider-lifecycle, and multi-output staging additions.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
