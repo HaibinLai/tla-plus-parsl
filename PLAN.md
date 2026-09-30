@@ -698,6 +698,8 @@ exception drains every queued Future before Flux shutdown completes; the real br
 `tests/test_flux_submission_failure_runtime.py`.
 `ParslTaskVineResults.tla` refines TaskVine's manager report and collector protocol, including
 result-file failure mapping and cleanup of all outstanding Futures after manager failure.
+It is now included in the recurring smoke sweep, with valid, missing, corrupt, exception, and
+manager-exit cases exercised by `tests/test_taskvine_results_runtime.py`.
 `ParslTaskVineDuplicateReport.tla` adds the stale-report interleaving to that collector. It
 captures the current duplicate-ID `KeyError`, the resulting collector exit and unrelated-future
 cleanup, and the candidate idempotent guard.

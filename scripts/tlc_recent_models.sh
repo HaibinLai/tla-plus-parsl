@@ -717,6 +717,9 @@ run_case executor-provider-lifecycle-fixed pass \
 run_case flux-submission-failure pass \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla
+run_case taskvine-results pass \
+    models/executors/ParslTaskVineResults.cfg \
+    models/executors/ParslTaskVineResults.tla
 run_case join-full pass \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla
