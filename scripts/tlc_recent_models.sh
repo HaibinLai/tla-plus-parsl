@@ -2128,6 +2128,9 @@ run_case provider-status-batch pass \
 run_case provider-polling pass \
     models/providers/ParslProviderPolling.cfg \
     models/providers/ParslProviderPolling.tla
+run_case provider-polling-smoke pass \
+    models/providers/ParslProviderPollingSmoke.cfg \
+    models/providers/ParslProviderPolling.tla
 run_case provider-status-shape-current counterexample \
     models/executors/ParslProviderStatusShapeCurrent.cfg \
     models/executors/ParslProviderStatusShape.tla

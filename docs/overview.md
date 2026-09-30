@@ -1629,6 +1629,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinNoneResultList.
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportFailure.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPolling.cfg models/providers/ParslProviderPolling.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPollingSmoke.cfg models/providers/ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config models/executors/ParslExecutorKinds.cfg models/executors/ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorKindsSmoke.cfg models/executors/ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorShutdown.cfg models/executors/ParslExecutorShutdown.tla
@@ -2953,6 +2954,9 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslProviderPolling.cfg`: 2,861 states generated, 854 distinct states, depth 19;
   provider submit/status/cancel outcomes, unknown-status failure, transient API errors, cancel
   rollback, and block-target consistency all passed.
+- `ParslProviderPollingSmoke.cfg`: 69 states generated, 28 distinct states, depth 9; a bounded
+  single-block/single-poll regression configuration for the same provider API lifecycle and safety
+  invariants.
 - `ParslExecutorKinds.cfg`: 50,149,761 states generated, 3,533,824 distinct states, depth 52;
   the bounded depth-10 executor contract run passed provider-free/provider-backed admission,
   manager registration, resource-specification rejection, drain/recovery, and failure cleanup.
