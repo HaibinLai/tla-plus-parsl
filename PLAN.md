@@ -2138,6 +2138,10 @@ The model is intentionally a bounded protocol abstraction. A passing TLC run mea
 specified finite abstraction satisfies the listed properties; it does not prove that every
 implementation detail of Parsl is correct.
 
+The Work Queue refinement `ParslWorkQueueResourceSpecShape` records BUG-206. It models admission
+validation ordering and reproduces the current late assertion plus orphaned task-directory side
+effect for a non-mapping resource specification.
+
 The latest Flux refinement is `ParslFluxWorkingDirectory`. It separates the configured executor
 workspace from the submitting process directory and models relative-path resolution in the Flux
 Jobspec. The current branch reproduces BUG-200 (`JobspecV1.cwd = os.getcwd()`), while the fixed

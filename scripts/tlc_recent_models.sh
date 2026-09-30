@@ -2914,6 +2914,12 @@ run_case workqueue-resource-category-current counterexample \
 run_case workqueue-resource-category-fixed pass \
     models/executors/ParslWorkQueueResourceCategoryFixed.cfg \
     models/executors/ParslWorkQueueResourceCategory.tla
+run_case workqueue-resource-spec-shape-current counterexample \
+    models/executors/ParslWorkQueueResourceSpecShapeCurrent.cfg \
+    models/executors/ParslWorkQueueResourceSpecShape.tla
+run_case workqueue-resource-spec-shape-fixed pass \
+    models/executors/ParslWorkQueueResourceSpecShapeFixed.cfg \
+    models/executors/ParslWorkQueueResourceSpecShape.tla
 run_case workqueue-results pass \
     models/executors/ParslWorkQueueResults.cfg \
     models/executors/ParslWorkQueueResults.tla
