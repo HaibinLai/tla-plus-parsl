@@ -18,6 +18,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureCancelBookkee
 
 This stale resource-map boundary is recorded as BUG-227.
 
+`ParslCondorStatusUnknown.tla` models the Condor status projection boundary. The current
+provider indexes every requested ID after polling, while the fixed branch returns an explicit
+UNKNOWN result for IDs no longer present in local bookkeeping.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusUnknownCurrent.cfg models/providers/ParslCondorStatusUnknown.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorStatusUnknownFixed.cfg models/providers/ParslCondorStatusUnknown.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_status_unknown_runtime.py -v
+```
+
+This stale Condor projection boundary is recorded as BUG-228.
+
 `ParslCondorSubmitCount.tla` refines the Condor submission parser for multi-digit job counts.
 For output such as `10 job(s) submitted to cluster ...`, the current implementation indexes
 `line[0]` and registers only one process; the fixed branch parses the complete count token.

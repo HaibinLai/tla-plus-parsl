@@ -375,6 +375,12 @@ run_case azure-cancel-bookkeeping-current counterexample \
 run_case azure-cancel-bookkeeping-fixed pass \
     models/providers/ParslAzureCancelBookkeepingFixed.cfg \
     models/providers/ParslAzureCancelBookkeeping.tla
+run_case condor-status-unknown-current counterexample \
+    models/providers/ParslCondorStatusUnknownCurrent.cfg \
+    models/providers/ParslCondorStatusUnknown.tla
+run_case condor-status-unknown-fixed pass \
+    models/providers/ParslCondorStatusUnknownFixed.cfg \
+    models/providers/ParslCondorStatusUnknown.tla
 
 run_case stageout-return-none pass \
     models/staging/ParslDataManagerStageOutReturnNone.cfg \
