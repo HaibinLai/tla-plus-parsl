@@ -1845,6 +1845,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   cancelled user-facing Future, with BUG-185 runtime evidence.
 - `ParslSerializedResultFile` now models the executor result-file boundary: serialized bytes are
   written privately and become consumable only after complete atomic publication.
+- `ParslWorkerInitialProbeTimeout` now models HTEX startup probe timeout handling, with BUG-186
+  runtime evidence for the current fall-through into blocking `recv()`.
 
 ## Validation workflow
 
@@ -1853,7 +1855,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 520 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 521 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1929,6 +1931,8 @@ The Flux late-cancelled-result probe then completed 519 tests in 13.0 seconds wi
 including the `InvalidStateError` raised when a late success callback writes a cancelled wrapper.
 The serialized-result-file probe then completed 520 tests in 13.0 seconds with `OK`,
 including real serializer bytes, partial-read rejection, and atomic replacement before decode.
+The HTEX initial-probe timeout probe then completed 521 tests in 13.0 seconds with `OK`,
+including deterministic reproduction of the blocking receive after a failed connection probe.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

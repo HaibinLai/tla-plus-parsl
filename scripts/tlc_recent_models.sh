@@ -1465,6 +1465,12 @@ run_case serialized-result-file-current counterexample \
 run_case serialized-result-file-fixed pass \
     models/core/ParslSerializedResultFileFixed.cfg \
     models/core/ParslSerializedResultFile.tla
+run_case worker-initial-probe-current counterexample \
+    models/clock/ParslWorkerInitialProbeTimeoutCurrent.cfg \
+    models/clock/ParslWorkerInitialProbeTimeout.tla
+run_case worker-initial-probe-fixed pass \
+    models/clock/ParslWorkerInitialProbeTimeoutFixed.cfg \
+    models/clock/ParslWorkerInitialProbeTimeout.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla

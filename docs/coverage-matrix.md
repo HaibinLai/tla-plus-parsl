@@ -113,6 +113,9 @@ caused by concurrent block selection.
 It also includes `ParslFluxLateResultCancelledFuture` (BUG-185), which checks that a late successful
 Flux callback cannot write into an already-cancelled user-facing Future.
 
+It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
+HTEX connection probe cannot fall through to a blocking receive.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2
