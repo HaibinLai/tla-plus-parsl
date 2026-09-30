@@ -31,9 +31,10 @@ keeps the state space small while preserving the important attempt correlation a
 invariants. The full configuration checks 7,148 generated / 1,958 distinct states at depth 19
 with no invariant violation. The six-case runtime bridge in
 `ParslJoinFullCurrent.cfg` intentionally accepts a result from a failed attempt after a retry has
-started; TLC finds `AttemptLogicalSafety` after 5,321 generated / 1,684 distinct states. The fixed
+started; TLC finds `AttemptLogicalSafety` after 6,365 generated / 2,007 distinct states. The fixed
 configuration rejects that old result as stale, persists the terminal outer status through the
-monitoring event boundary, and checks 60,440 generated / 12,418 distinct states at depth 35.
+monitoring event boundary, exercises bounded database-write failure and retry, and checks 96,536
+generated / 19,732 distinct states at depth 37.
 `tests/test_join_runtime.py` exercises real decorated `join_app` behavior for single, list,
 duplicate, empty, failure, and nested joins.
 

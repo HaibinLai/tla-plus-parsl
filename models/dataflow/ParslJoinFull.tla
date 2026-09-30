@@ -12,7 +12,7 @@ EXTENDS Naturals, Sequences, FiniteSets
  * results preserve the original input positions.
  ***************************************************************************)
 
-CONSTANT MAX_RETRIES, USE_FIXED
+CONSTANT MAX_RETRIES, MAX_DB_FAILURES, USE_FIXED
 
 INNER == {"I1", "I2"}
 POSITIONS == 1..3
@@ -24,15 +24,17 @@ AttemptStates == {"absent", "serialized", "queued", "received", "decoded",
                   "running", "succeeded", "failed", "cancelled", "stale"}
 Values == {"I1:value", "I2:value", "unset"}
 ResultValue == Values \cup {"invalid-return", "join-error"} \cup Seq(Values)
-MonitorStates == {"none", "queued", "persisted"}
+MonitorStates == {"none", "queued", "failed", "persisted"}
 MonitorStatuses == {"none", "succeeded", "failed"}
 
 VARIABLES outerState, mode, joinSet, observed, joinHandle,
           logicalState, currentAttempt, attemptState, innerValue,
-          outerResult, failureCount, monitorState, monitorStatus, dbStatus
+          outerResult, failureCount, monitorState, monitorStatus, dbStatus,
+          dbFailures
 vars == <<outerState, mode, joinSet, observed, joinHandle,
            logicalState, currentAttempt, attemptState, innerValue,
-           outerResult, failureCount, monitorState, monitorStatus, dbStatus>>
+           outerResult, failureCount, monitorState, monitorStatus, dbStatus,
+           dbFailures>>
 
 ExpectedList == [p \in POSITIONS |-> innerValue[Inputs[p]]]
 AllJoinedTerminal ==
@@ -40,6 +42,7 @@ AllJoinedTerminal ==
 
 Init ==
     /\ MAX_RETRIES >= 1
+    /\ MAX_DB_FAILURES >= 0
     /\ USE_FIXED \in BOOLEAN
     /\ outerState = "executing"
     /\ mode = "none"
@@ -56,6 +59,7 @@ Init ==
     /\ monitorState = "none"
     /\ monitorStatus = "none"
     /\ dbStatus = "none"
+    /\ dbFailures = 0
 
 ReturnSingle ==
     /\ outerState = "executing"
@@ -254,7 +258,7 @@ EmitOuterStatus ==
     /\ monitorStatus' = outerState
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     logicalState, currentAttempt, attemptState, innerValue,
-                    outerResult, failureCount, dbStatus>>
+                    outerResult, failureCount, dbStatus, dbFailures>>
 
 PersistOuterStatus ==
     /\ monitorState = "queued"
@@ -262,12 +266,32 @@ PersistOuterStatus ==
     /\ dbStatus' = monitorStatus
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     logicalState, currentAttempt, attemptState, innerValue,
-                    outerResult, failureCount, monitorStatus>>
+                    outerResult, failureCount, monitorStatus, dbFailures>>
+
+FailDatabaseWrite ==
+    /\ monitorState = "queued"
+    /\ dbFailures < MAX_DB_FAILURES
+    /\ monitorState' = "failed"
+    /\ dbFailures' = dbFailures + 1
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, attemptState, innerValue,
+                    outerResult, failureCount, monitorStatus, dbStatus>>
+
+RetryDatabaseWrite ==
+    /\ monitorState = "failed"
+    /\ monitorState' = "queued"
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, attemptState, innerValue,
+                    outerResult, failureCount, monitorStatus, dbStatus,
+                    dbFailures>>
 
 Next ==
-    \/ (JoinNext /\ UNCHANGED <<monitorState, monitorStatus, dbStatus>>)
+    \/ (JoinNext /\ UNCHANGED <<monitorState, monitorStatus, dbStatus,
+                                  dbFailures>>)
     \/ EmitOuterStatus
     \/ PersistOuterStatus
+    \/ FailDatabaseWrite
+    \/ RetryDatabaseWrite
 
 Spec == Init /\ [][Next]_vars
 
@@ -289,6 +313,7 @@ TypeOK ==
     /\ monitorState \in MonitorStates
     /\ monitorStatus \in MonitorStatuses
     /\ dbStatus \in MonitorStatuses
+    /\ dbFailures \in 0..MAX_DB_FAILURES
 
 JoinWaitSafety == outerState = "joining" => joinHandle
 TerminalHandleSafety == outerState \in {"succeeded", "failed"} => ~joinHandle
@@ -320,5 +345,8 @@ LateResultSafety ==
 DatabaseTerminalSafety ==
     /\ dbStatus = "succeeded" => outerState = "succeeded"
     /\ dbStatus = "failed" => outerState = "failed"
+
+DatabaseRetryBound ==
+    dbFailures <= MAX_DB_FAILURES
 
 =============================================================================
