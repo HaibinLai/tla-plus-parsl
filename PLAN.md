@@ -1770,6 +1770,9 @@ timer/timeout, apply dispatch, and HTEX shutdown timeout all matched their confi
 Cases 61--80 also matched their configured outcomes: join cancellation (single and list), data
 readiness, dependency traversal for shallow/deep containers, memo function identity and exception
 checkpoints, and input/output list mutation boundaries.
+Cases 81--100 matched as well: output-list mutation, executor-kind admission, negative scale-in,
+strategy capacity, AWS cancellation, LocalProvider, Flux cancellation/status/result paths, and
+HTEX address-probe timeout behavior.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
