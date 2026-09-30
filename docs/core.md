@@ -120,6 +120,23 @@ the old frame and checks 18 distinct states. The concrete corrupt-result behavio
 
 The detailed action-to-Parsl mapping and TLC results are in [the overview](overview.md).
 
+## Foundational smoke suite
+
+Before running the larger model inventory, `scripts/tlc_foundational_smoke.sh` checks the
+small first-stage abstractions that establish the repository's main boundaries: a dependency
+and retry path, callable/object snapshotting, chunked file bytes, heartbeat time, monitoring
+database persistence, `join_app`, and an end-to-end ZMQ/serialization route. The suite uses
+TLC simulation with bounded state and exits on the first failing model. Java and TLC can be
+provided explicitly when they are not on `PATH`:
+
+```bash
+JAVA_BIN=/path/to/java TLA_JAR=/path/to/tla2tools.jar \
+  TLC_SIMULATE=1000 scripts/tlc_foundational_smoke.sh
+```
+
+This is a regression entry point, not a replacement for the exhaustive TLC configurations or
+the concrete Python runtime probes documented by each module.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
