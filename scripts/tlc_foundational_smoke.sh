@@ -167,6 +167,9 @@ run_case google-zone-response-shape \
 run_case provider-executor-monitoring \
     models/executors/ParslProviderExecutorTimedMonitoringFixed.cfg \
     models/executors/ParslProviderExecutorTimedMonitoring.tla
+run_case provider-task-scale-retry \
+    models/executors/ParslProviderTaskScaleRetryFixed.cfg \
+    models/executors/ParslProviderTaskScaleRetry.tla
 run_case join-full \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla

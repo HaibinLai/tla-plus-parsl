@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `8945d87` (`Add integrated full abstract smoke`).
-- Foundational smoke inventory: 376 TLC cases and 282 Python runtime probes.
+- Latest pushed commit: pending (provider task scale/retry model).
+- Foundational smoke inventory: 377 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -153,6 +153,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslAbstractFullSmoke.cfg`, a positive integrated run with four tasks,
   dependency/join edges, memoization, object graphs, file outputs, two executors, three workers,
   provider capacity, heartbeat/task deadlines, and monitoring enabled. It passed standalone TLC.
+- Current stage: added `ParslProviderTaskScaleRetry`, a provider-capacity model for admission,
+  scale-in cancellation, retry, result completion, and monitoring. The Current branch leaves a
+  running task without capacity; the Fixed branch moves it to `retry_wait` and passed standalone TLC.
 
 ### Verification convention
 
