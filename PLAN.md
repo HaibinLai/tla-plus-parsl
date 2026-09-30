@@ -1051,6 +1051,10 @@ current implementation.
 worker must not stop on an empty queue until its producer is closed, otherwise a message enqueued
 immediately after the observation is stranded. `tests/test_monitoring_shutdown_race_runtime.py`
 reproduces the current empty-queue race.
+`ParslMonitoringShutdownDrain.tla` complements that race model with the normal shutdown path:
+messages accepted before the kill signal are conserved across external-queue migration and
+internal processing. `tests/test_monitoring_shutdown_drain_runtime.py` exercises the real queue
+drain after the kill event.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

@@ -939,6 +939,9 @@ run_case monitoring-shutdown-race-current counterexample \
 run_case monitoring-shutdown-race-fixed pass \
     models/monitoring/ParslMonitoringShutdownRaceFixed.cfg \
     models/monitoring/ParslMonitoringShutdownRace.tla
+run_case monitoring-shutdown-drain pass \
+    models/monitoring/ParslMonitoringShutdownDrain.cfg \
+    models/monitoring/ParslMonitoringShutdownDrain.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
