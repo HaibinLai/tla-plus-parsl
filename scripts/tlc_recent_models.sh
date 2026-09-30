@@ -1050,6 +1050,12 @@ run_case serialization-truncated-length-current counterexample \
 run_case serialization-truncated-length-fixed pass \
     models/serialization/ParslSerializationTruncatedLengthFixed.cfg \
     models/serialization/ParslSerializationTruncatedLength.tla
+run_case serialization-length-current counterexample \
+    models/serialization/ParslSerializationLength.cfg \
+    models/serialization/ParslSerializationLength.tla
+run_case serialization-length-fixed pass \
+    models/serialization/ParslSerializationLengthFixed.cfg \
+    models/serialization/ParslSerializationLength.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla
