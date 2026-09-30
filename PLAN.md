@@ -936,6 +936,12 @@ radio events, bounded queueing and reordering, database write failure/retry, sta
 suppression, and terminal-record stability; the SQLite runtime probe covers duplicate STATUS keys
 and transient operational-error retry.
 
+The provider/executor baseline is now in the smoke sweep too. `ParslExecutorProvider` covers
+block allocation, manager registration, worker readiness, submission admission, provider failure,
+drain/recovery, and scale-in; `ParslProviderExecutorBridge` checks provider terminal observations
+revoke executor capacity and account for queued/running work. The lifecycle model retains a
+deliberately broken scale-in-floor configuration alongside its fixed configuration.
+
 ### 3. Checked properties
 
 The safety configurations check:

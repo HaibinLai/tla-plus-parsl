@@ -408,3 +408,15 @@ run_case file-bytes-transfer pass \
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla
+run_case executor-provider-core pass \
+    models/executors/ParslExecutorProvider.cfg \
+    models/executors/ParslExecutorProvider.tla
+run_case provider-executor-bridge pass \
+    models/executors/ParslProviderExecutorBridge.cfg \
+    models/executors/ParslProviderExecutorBridge.tla
+run_case executor-provider-lifecycle-current counterexample \
+    models/executors/ParslExecutorProviderLifecycle.cfg \
+    models/executors/ParslExecutorProviderLifecycle.tla
+run_case executor-provider-lifecycle-fixed pass \
+    models/executors/ParslExecutorProviderLifecycleFixed.cfg \
+    models/executors/ParslExecutorProviderLifecycle.tla
