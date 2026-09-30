@@ -972,6 +972,12 @@ run_case timed-heartbeat-current counterexample \
 run_case timed-heartbeat-fixed pass \
     models/clock/ParslTimedHeartbeatFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla
+run_case worker-contact-rollback-current counterexample \
+    models/clock/ParslWorkerContactClockRollbackCurrent.cfg \
+    models/clock/ParslWorkerContactClockRollback.tla
+run_case worker-contact-rollback-fixed pass \
+    models/clock/ParslWorkerContactClockRollbackFixed.cfg \
+    models/clock/ParslWorkerContactClockRollback.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

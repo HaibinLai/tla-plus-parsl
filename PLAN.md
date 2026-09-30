@@ -1079,6 +1079,10 @@ at the threshold only after a no-message poll. The related real worker clock pro
 per-attempt deadlines, and late-result handling; the current branch accepts a stale result while
 the fixed branch classifies it without resolving the rejected Future. The concrete heartbeat
 encoding probes remain in `tests/test_worker_pool_heartbeat_runtime.py`.
+`ParslWorkerContactClockRollback.tla` is also in the sweep as a concrete clock-failure model:
+the current wall-clock comparison can suppress expiry after a backward step, while the fixed
+branch uses monotonic elapsed age. `tests/test_worker_contact_clock_rollback_runtime.py`
+reproduces the wall-clock behavior with a deterministic time sequence.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
