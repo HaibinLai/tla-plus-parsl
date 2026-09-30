@@ -1884,6 +1884,9 @@ Work Queue cancelled/duplicate result handling.
 Cases 821--840 matched at 100 steps: Work Queue duplicate/resource-category/results/shutdown and
 submit failures, serialization plugin cache/error/fallback behavior, nested join success/failure,
 and callback multiplicity.
+Cases 841--860 matched at 100 steps: apply-message arity, callable/argument aliasing and serializer
+cache freshness, pool-executor callable cache, serializer registry empty/collision behavior, task
+transport/ZMQ paths, and heartbeat parameter validation.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
