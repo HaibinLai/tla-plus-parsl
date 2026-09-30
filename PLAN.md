@@ -1023,6 +1023,9 @@ Future resolution.
 `ParslJoinCallbackRace.tla` models the actual `join_app` callback gate: early callbacks return
 without finalizing, the final callback checks all inner Futures under a lock, failures become
 `JoinError` only after all selected Futures are done, and duplicate callbacks are harmless.
+The callback-race and immediate-callback configurations are now part of the recurring TLC sweep;
+`tests/test_join_callback_runtime.py` and `tests/test_join_runtime.py` exercise the same early,
+duplicate, failure, cancellation, and already-completed Future paths against the real kernel.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

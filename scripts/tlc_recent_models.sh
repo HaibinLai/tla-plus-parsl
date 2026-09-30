@@ -894,6 +894,12 @@ run_case join-complete-current counterexample \
 run_case join-complete-fixed pass \
     models/dataflow/ParslJoinCompleteFixed.cfg \
     models/dataflow/ParslJoinComplete.tla
+run_case join-callback-race pass \
+    models/dataflow/ParslJoinCallbackRace.cfg \
+    models/dataflow/ParslJoinCallbackRace.tla
+run_case join-immediate-callback pass \
+    models/dataflow/ParslJoinImmediateCallback.cfg \
+    models/dataflow/ParslJoinImmediateCallback.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
