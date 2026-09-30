@@ -1686,6 +1686,12 @@ requires both the origin task and current attempt before a Future is resolved. T
 configuration produces the expected correlation counterexample; the fixed configuration checks
 100,907 simulated states.
 
+The serializer facade now has an explicit `ParslSerializerHeaderConsistency.tla` model. It keeps
+the body-producing serializer separate from the newline-delimited header and rejects a swapped
+callable/data header instead of treating the mismatched payload as a valid decode. The current
+configuration produces the expected wrong-content counterexample; the fixed configuration checks
+100,001 simulated states.
+
 Dynamic dataflow now includes `ParslDynamicTaskFanout.tla`: a completed parent creates two logical
 children, the second child depends on the first child as well as the parent, and each child has a
 bounded physical retry counter. The model checks creation, dependency, Future consistency, retry

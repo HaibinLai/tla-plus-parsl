@@ -33,6 +33,14 @@ configuration demonstrates that checking only the attempt number can resolve a r
 wrong task Future; the fixed configuration requires both `origin = target` and the current
 attempt before resolution.
 
+`ParslSerializerHeaderConsistency` models the lower-level facade contract. `serialize()` emits
+the serializer identifier, a newline delimiter, and the serializer body; the model keeps the
+body's producing serializer separate from the header seen by `deserialize()`. The current branch
+accepts a swapped callable/data header as a decoded object with the wrong content kind, while the
+fixed branch rejects the mismatched envelope. TLC finds the current counterexample and checks
+100,001 fixed states. The configuration uses a callable payload; replacing `OBJECT_KIND` with
+`"data"` exercises the symmetric data serializer path.
+
 The focused apply-message models keep the concrete three-buffer callable/args/kwargs contract
 separate from the end-to-end route model. This avoids hiding a malformed frame-count or payload
 length behind a generic "message delivered" state.

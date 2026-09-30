@@ -72,6 +72,12 @@ run_case zmq-serialization-current counterexample \
 run_case zmq-serialization-fixed pass \
     models/serialization/ParslZMQSerializationEndToEndFixed.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla
+run_case serializer-header-current counterexample \
+    models/serialization/ParslSerializerHeaderConsistencyCurrent.cfg \
+    models/serialization/ParslSerializerHeaderConsistency.tla
+run_case serializer-header-fixed pass \
+    models/serialization/ParslSerializerHeaderConsistencyFixed.cfg \
+    models/serialization/ParslSerializerHeaderConsistency.tla
 run_case message-correlation-current counterexample \
     models/serialization/ParslMessageCorrelationCurrent.cfg \
     models/serialization/ParslMessageCorrelation.tla
