@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (join heartbeat retry model).
+- Latest pushed commit: `b6d2aca` (`Add join heartbeat retry model`).
 - Foundational smoke inventory: 375 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
