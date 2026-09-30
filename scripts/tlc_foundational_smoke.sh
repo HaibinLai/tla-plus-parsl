@@ -386,5 +386,29 @@ run_case executor-shutdown \
 run_case provider-executor-timed \
     models/executors/ParslProviderExecutorTimedFixed.cfg \
     models/executors/ParslProviderExecutorTimed.tla
+run_case join-cancellation \
+    models/dataflow/ParslJoinCancellationFixed.cfg \
+    models/dataflow/ParslJoinCancellation.tla
+run_case join-cleanup-lifecycle \
+    models/dataflow/ParslJoinCleanupLifecycleFixed.cfg \
+    models/dataflow/ParslJoinCleanupLifecycle.tla
+run_case join-duplicate-failure-aggregation \
+    models/dataflow/ParslJoinDuplicateFailureAggregationFixed.cfg \
+    models/dataflow/ParslJoinDuplicateFailureAggregation.tla
+run_case join-failure-aggregation \
+    models/dataflow/ParslJoinFailureAggregation.cfg \
+    models/dataflow/ParslJoinFailureAggregation.tla
+run_case join-immediate-cancellation \
+    models/dataflow/ParslJoinImmediateCancellationFixed.cfg \
+    models/dataflow/ParslJoinImmediateCancellation.tla
+run_case join-list-cancellation \
+    models/dataflow/ParslJoinListCancellationFixed.cfg \
+    models/dataflow/ParslJoinListCancellation.tla
+run_case join-callback-multiplicity \
+    models/dataflow/ParslJoinCallbackMultiplicity.cfg \
+    models/dataflow/ParslJoinCallbackMultiplicity.tla
+run_case join-return-shape \
+    models/dataflow/ParslJoinReturnShapeFuture.cfg \
+    models/dataflow/ParslJoinReturnShape.tla
 
 echo "Foundational TLC smoke suite passed."

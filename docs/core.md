@@ -225,6 +225,11 @@ The shared executor-contract cases add executor-kind admission, provider/executo
 provider lifecycle, empty-selection rejection, shutdown ordering, and timed provider-backed
 execution. These are the common contracts that concrete backend models refine.
 
+The join-specific cases now exercise cancellation of single and list joins, immediate callback
+cancellation, cleanup quiescence, duplicate failure aggregation, callback multiplicity, return
+shape validation, and outer cancellation. The runtime runner includes the corresponding decorated
+`join_app` probes, so the fixed TLA+ terminal-state properties are checked against real Futures.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and
