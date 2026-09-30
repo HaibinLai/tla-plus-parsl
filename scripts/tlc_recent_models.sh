@@ -2848,6 +2848,12 @@ run_case local-submit-pid-shape-current counterexample \
 run_case local-submit-pid-shape-fixed pass \
     models/providers/ParslLocalSubmitPidShapeFixed.cfg \
     models/providers/ParslLocalSubmitPidShape.tla
+run_case monitoring-udp-pickle-current counterexample \
+    models/monitoring/ParslMonitoringUDPPickleIsolationCurrent.cfg \
+    models/monitoring/ParslMonitoringUDPPickleIsolation.tla
+run_case monitoring-udp-pickle-fixed pass \
+    models/monitoring/ParslMonitoringUDPPickleIsolationFixed.cfg \
+    models/monitoring/ParslMonitoringUDPPickleIsolation.tla
 run_case htex-duplicate-result-current counterexample \
     models/executors/ParslHtexDuplicateResultCurrent.cfg \
     models/executors/ParslHtexDuplicateResult.tla

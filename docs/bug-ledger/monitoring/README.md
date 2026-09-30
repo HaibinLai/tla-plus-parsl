@@ -1,5 +1,7 @@
 # Monitoring and database
 
+| BUG-199 | Monitoring UDP malformed pickle kills router | `MonitoringRouter.process_message` verifies the HMAC and then calls `pickle.loads` without a decode-error boundary. An authenticated but malformed UDP payload therefore escapes the listener, preventing later valid monitoring datagrams from reaching the database queue. | `ParslMonitoringUDPPickleIsolationCurrent.cfg` (counterexample to `RouterSurvivalSafety`); fixed configuration passes; `tests/test_monitoring_udp_pickle_runtime.py` | Catch malformed pickle payloads, log/discard them, and keep the UDP router alive for subsequent valid messages. | Reproduced against the installed UDP monitoring router; candidate fixed model passes |
+
 This file contains the complete ledger entries assigned to this component. See the [split index](../index.md) or the [flat compatibility ledger](../../bug-ledger.md).
 
 | ID | Component | Current behavior / risk | Evidence | Candidate safety condition | Status |

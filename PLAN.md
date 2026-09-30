@@ -1985,6 +1985,11 @@ BUG-198: a zero-return launcher with a non-numeric `PID:` line reaches raw `Valu
 submission instead of a controlled failed resource admission. The Current/Fixed TLC pair and
 the real malformed-stdout probe produced the expected outcomes.
 The LocalProvider PID-shape probe then completed 532 tests with `OK`.
+`ParslMonitoringUDPPickleIsolation` now covers the authenticated UDP monitoring payload
+boundary. It records BUG-199: a valid HMAC does not make the pickle body safe, and the current
+router lets `pickle.loads` terminate processing before later datagrams are forwarded. The
+Current/Fixed TLC pair and malformed-payload runtime probe produced the expected outcomes.
+The monitoring UDP-pickle probe then completed 533 tests with `OK`.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
