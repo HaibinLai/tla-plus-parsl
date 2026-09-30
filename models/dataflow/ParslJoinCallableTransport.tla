@@ -11,19 +11,19 @@ EXTENDS Naturals, Integers, Sequences, FiniteSets
  * including duplicate references.
  ***************************************************************************)
 
-INNER == {"I1", "I2"}
-POSITIONS == 1..3
-Inputs == <<"I1", "I2", "I1">>
-MAX_RETRIES == 1
+CONSTANTS INNER, INPUT_MODE, MAX_RETRIES
+Inputs ==
+    IF INPUT_MODE = "full"
+    THEN <<"I1", "I2", "I1">>
+    ELSE LET i == CHOOSE x \in INNER : TRUE IN <<i, i>>
+POSITIONS == 1..Len(Inputs)
 
 LogicalStates == {"pending", "retry_wait", "succeeded", "failed"}
 AttemptStates == {"absent", "running", "failed", "succeeded", "stale"}
 OuterStates == {"joining", "succeeded", "failed"}
 
 Value(i, v) ==
-    IF i = "I1"
-    THEN IF v = 0 THEN "I1v0" ELSE "I1v1"
-    ELSE IF v = 0 THEN "I2v0" ELSE "I2v1"
+    i \o (IF v = 0 THEN ":v0" ELSE ":v1")
 
 VARIABLES sourceVersion, currentAttempt, logicalState, attemptState,
           capturedVersion, resultWire, resultVersion,
@@ -33,6 +33,10 @@ vars == <<sourceVersion, currentAttempt, logicalState, attemptState,
            outerState, outerResult>>
 
 Init ==
+    /\ INNER # {}
+    /\ INPUT_MODE \in {"full", "duplicate-single"}
+    /\ Inputs \in Seq(INNER)
+    /\ Len(Inputs) > 0
     /\ sourceVersion = [i \in INNER |-> 0]
     /\ currentAttempt = [i \in INNER |-> 0]
     /\ logicalState = [i \in INNER |-> "pending"]

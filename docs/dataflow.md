@@ -33,11 +33,15 @@ duplicate, empty, failure, and nested joins.
 
 `ParslJoinCallableTransport.tla` adds the serialized callable boundary to that join semantics.
 Each inner logical Future has per-attempt captured content, task/result wire state, and stale
-late-result handling. The outer join only finalizes after both logical Futures succeed, then
-constructs the ordered `<<I1, I2, I1>>` result, preserving the duplicate position. TLC checks
-16,113 generated/3,559 distinct states.
+late-result handling. The inner-Future set, input positions, and retry budget are parameterized;
+the full configuration constructs the ordered `<<I1, I2, I1>>` result and TLC checks 16,113
+generated / 3,559 distinct states at depth 20.
 The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
 inner Python apps and verifies the duplicate Future position in the outer result.
+
+`ParslJoinCallableTransportSmoke.cfg` uses one inner Future, two duplicate input positions, and no
+retry for a fast regression of serialized join result ordering and stale-result safety. TLC checks
+26 generated / 13 distinct states at depth 6.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCallableTransport.cfg models/dataflow/ParslJoinCallableTransport.tla

@@ -235,6 +235,9 @@ run_case htex-capacity-fallback pass \
 run_case join-callable-transport pass \
     models/dataflow/ParslJoinCallableTransport.cfg \
     models/dataflow/ParslJoinCallableTransport.tla
+run_case join-callable-transport-smoke pass \
+    models/dataflow/ParslJoinCallableTransportSmoke.cfg \
+    models/dataflow/ParslJoinCallableTransport.tla
 run_case bash-app-outcome pass \
     models/executors/ParslBashAppOutcome.cfg \
     models/executors/ParslBashAppOutcome.tla
