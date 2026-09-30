@@ -1822,6 +1822,9 @@ Zip stage-in write failure, and monitoring update permanent-error handling.
 Cases 361--380 matched at 100 steps: monitoring update/insert retry, batch atomicity, workflow
 insert/end bookkeeping, last-message and ZMQ-router shutdown paths, plus Globus transfer timeout
 and failure outcomes.
+Cases 381--400 matched at 100 steps: Globus transfer failure/success, duplicate join failure
+positions, Azure status/submit bookkeeping, AWS cancellation, LocalProvider cleanup,
+Globus Compute submit races, LSF duplicate IDs, and timer-close timeout handling.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
