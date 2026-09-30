@@ -384,6 +384,24 @@ run_case htex-monitoring-message-enabled pass \
 run_case htex-monitoring-message-fixed pass \
     models/executors/ParslHtexMonitoringMessageFixed.cfg \
     models/executors/ParslHtexMonitoringMessage.tla
+run_case mpi-nondivisible-ranks-current counterexample \
+    models/executors/ParslMPINonDivisibleRanksCurrent.cfg \
+    models/executors/ParslMPINonDivisibleRanks.tla
+run_case mpi-nondivisible-ranks-fixed pass \
+    models/executors/ParslMPINonDivisibleRanksFixed.cfg \
+    models/executors/ParslMPINonDivisibleRanks.tla
+run_case mpi-prefix pass \
+    models/executors/ParslMPIPrefix.cfg \
+    models/executors/ParslMPIPrefix.tla
+run_case mpi-prefix-invalid pass \
+    models/executors/ParslMPIPrefixInvalid.cfg \
+    models/executors/ParslMPIPrefix.tla
+run_case mpi-spec-current counterexample \
+    models/executors/ParslMPISpec.cfg \
+    models/executors/ParslMPISpec.tla
+run_case mpi-spec-fixed pass \
+    models/executors/ParslMPISpecFixed.cfg \
+    models/executors/ParslMPISpec.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

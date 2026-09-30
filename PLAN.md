@@ -1462,6 +1462,13 @@ monitoring-disabled messages, malformed batches, and frame continuation. The cur
 worker receiver, and monitoring-disabled branches produce TLC counterexamples; fixed and enabled
 configurations pass simulation.
 
+The MPI executor baseline is now in the sweep. `ParslMPINonDivisibleRanks` models rank-per-node
+derivation and rejects fractional allocations in the fixed branch; `ParslMPIPrefix` validates
+launcher prefix selection; and `ParslMPISpec` checks legal resource keys, missing-rank derivation,
+and zero-node validation. Runtime probes cover seven MPI construction/command paths. The current
+non-divisible and zero-node configurations produce counterexamples, while fixed, valid, and prefix
+configurations pass TLC simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
