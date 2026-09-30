@@ -446,6 +446,36 @@ run_case dynamic-task-creation \
 run_case dynamic-task-fanout \
     models/dataflow/ParslDynamicTaskFanout.cfg \
     models/dataflow/ParslDynamicTaskFanout.tla
+run_case dependency-traversal-deep-dict \
+    models/dataflow/ParslDependencyTraversalDeepDict.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-dict-key \
+    models/dataflow/ParslDependencyTraversalDeepDictKey.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-set \
+    models/dataflow/ParslDependencyTraversalDeepSet.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-tuple \
+    models/dataflow/ParslDependencyTraversalDeepTuple.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case future-cancellation-app \
+    models/dataflow/ParslFutureCancellationApp.cfg \
+    models/dataflow/ParslFutureCancellation.tla
+run_case future-cancellation-data \
+    models/dataflow/ParslFutureCancellationData.cfg \
+    models/dataflow/ParslFutureCancellation.tla
+run_case future-cancellation-underlying \
+    models/dataflow/ParslFutureCancellationUnderlying.cfg \
+    models/dataflow/ParslFutureCancellation.tla
+run_case future-projection-invalid \
+    models/dataflow/ParslFutureProjectionInvalid.cfg \
+    models/dataflow/ParslFutureProjection.tla
+run_case future-projection-valid \
+    models/dataflow/ParslFutureProjectionValid.cfg \
+    models/dataflow/ParslFutureProjection.tla
+run_case future-wait-timeout \
+    models/dataflow/ParslFutureWaitTimeout.cfg \
+    models/dataflow/ParslFutureWaitTimeout.tla
 run_case memo-function-identity \
     models/dataflow/ParslMemoFunctionIdentityFixed.cfg \
     models/dataflow/ParslMemoFunctionIdentity.tla

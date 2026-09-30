@@ -62,6 +62,10 @@ tests=(
     tests/test_join_runtime.py
     tests/test_join_retry_runtime.py
     tests/test_nested_join_retry_runtime.py
+    tests/test_dependency_traversal_runtime.py
+    tests/test_future_cancellation_runtime.py
+    tests/test_future_projection_runtime.py
+    tests/test_future_wait_timeout_runtime.py
     tests/test_join_cancellation_end_to_end_runtime.py
     tests/test_join_list_cancellation_end_to_end_runtime.py
     tests/test_join_single_cancellation_runtime.py
