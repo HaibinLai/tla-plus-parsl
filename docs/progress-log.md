@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `d84d7d2` (`Model partial join cancellation ordering`).
-- Foundational smoke inventory: 362 TLC cases and 233 Python runtime probes.
+- Latest pushed commit: pending (HTEX cancelled-failure result refinement).
+- Foundational smoke inventory: 363 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -69,6 +69,11 @@ are recorded here in English and committed with the model changes.
   all 362 TLC smoke cases passed with `TLC_SIMULATE=10`, and all 233 Python runtime probes
   passed against the installed Parsl source. The runtime run emitted only existing resource
   warnings from temporary Parsl log handles; no test failed.
+- Current stage: added `ParslHtexCancelledFailureResult`, the failure-payload counterpart to
+  `ParslHtexCancelledResult`. The current HTEX result worker can escape after `set_exception`
+  rejects a cancelled Future and its recovery call rejects again; the Current model produces a
+  two-state counterexample, the Fixed model passes in seven generated/four distinct states, and
+  the runtime probe reproduces the stranded later failure Future.
 
 ### Verification convention
 

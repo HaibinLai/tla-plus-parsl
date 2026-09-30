@@ -357,6 +357,11 @@ thread after removing the cancelled task, so later results in the same batch rem
 fixed branch discards the cancelled result and continues. `tests/test_htex_cancelled_result_runtime.py`
 reproduces the current failure with two messages in one batch.
 
+`ParslHtexCancelledFailureResult.tla` applies the same check to an exception result frame. In the
+current implementation, `set_exception` on the cancelled Future raises and the recovery path can
+raise again, so a later failure frame is stranded. The fixed branch ignores the terminal Future and
+continues consuming the batch; the runtime probe covers both result and exception payloads.
+
 `ParslHtexDuplicateResult.tla` is the focused duplicate-delivery abstraction for an
 already-completed task result. `ParslHtexResultQueue.tla` also covers this path alongside
 malformed and terminal results.
@@ -368,6 +373,8 @@ worker alive for unrelated tasks. The duplicate-result case is exercised by
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResultCurrent.cfg models/executors/ParslHtexCancelledResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledResultFixed.cfg models/executors/ParslHtexCancelledResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledFailureResultCurrent.cfg models/executors/ParslHtexCancelledFailureResult.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledFailureResultFixed.cfg models/executors/ParslHtexCancelledFailureResult.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_cancelled_result_runtime.py -v
 ```
 

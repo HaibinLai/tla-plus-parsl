@@ -46,6 +46,36 @@ class HtexCancelledResultRuntimeTest(unittest.TestCase):
         self.assertIn(2, executor.tasks)
         self.assertFalse(pending.done())
 
+    def test_cancelled_future_failure_stops_current_worker_and_orphans_next(self):
+        executor = HighThroughputExecutor.__new__(HighThroughputExecutor)
+        cancelled = Future()
+        self.assertTrue(cancelled.cancel())
+        pending = Future()
+        executor._tasks = {1: cancelled, 2: pending}
+        executor._executor_bad_state = threading.Event()
+        executor._result_queue_thread_exit = threading.Event()
+        executor.poll_period = 1
+        messages = [
+            pickle.dumps({
+                "type": "result",
+                "task_id": 1,
+                "exception": serialize(ValueError("cancelled-failure")),
+            }),
+            pickle.dumps({
+                "type": "result",
+                "task_id": 2,
+                "exception": serialize(ValueError("live-failure")),
+            }),
+        ]
+        executor.incoming_q = OneBatchQueue(executor, messages)
+
+        with self.assertRaises(InvalidStateError):
+            executor._result_queue_worker()
+
+        self.assertNotIn(1, executor.tasks)
+        self.assertIn(2, executor.tasks)
+        self.assertFalse(pending.done())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -202,6 +202,10 @@ terminate the thread before later results in the same batch are handled. The fix
 the cancelled result as stale and continues processing the batch; the runtime probe reproduces
 the current orphaned-pending-task behavior.
 
+`ParslHtexCancelledFailureResult.tla` covers the corresponding exception frame. The current
+`set_exception` path can raise on the cancelled Future and then raise again while handling that
+failure, stranding later failure frames; the fixed branch consumes the stale frame and continues.
+
 `ParslHtexUnknownTaskResult.tla` models a result whose task id has already been removed from the
 executor task map. The current `tasks.pop(task_id)` raises `KeyError` and terminates the result
 worker, leaving later valid results unprocessed. The fixed branch discards the stale result and

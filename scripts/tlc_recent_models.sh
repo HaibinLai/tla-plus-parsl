@@ -3501,6 +3501,12 @@ run_case htex-cancelled-result-current counterexample \
 run_case htex-cancelled-result-fixed pass \
     models/executors/ParslHtexCancelledResultFixed.cfg \
     models/executors/ParslHtexCancelledResult.tla
+run_case htex-cancelled-failure-result-current counterexample \
+    models/executors/ParslHtexCancelledFailureResultCurrent.cfg \
+    models/executors/ParslHtexCancelledFailureResult.tla
+run_case htex-cancelled-failure-result-fixed pass \
+    models/executors/ParslHtexCancelledFailureResultFixed.cfg \
+    models/executors/ParslHtexCancelledFailureResult.tla
 run_case htex-cancellation-admission-current counterexample \
     models/executors/ParslHtexCancellationAdmissionCurrent.cfg \
     models/executors/ParslHtexCancellationAdmission.tla

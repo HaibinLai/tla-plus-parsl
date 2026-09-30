@@ -773,6 +773,9 @@ run_case nested-join-retry \
 run_case htex-cancelled-result \
     models/executors/ParslHtexCancelledResultFixed.cfg \
     models/executors/ParslHtexCancelledResult.tla
+run_case htex-cancelled-failure-result \
+    models/executors/ParslHtexCancelledFailureResultFixed.cfg \
+    models/executors/ParslHtexCancelledFailureResult.tla
 run_case htex-duplicate-result \
     models/executors/ParslHtexDuplicateResultFixed.cfg \
     models/executors/ParslHtexDuplicateResult.tla
