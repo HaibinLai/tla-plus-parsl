@@ -87,8 +87,14 @@ consumer can run.
 changes while an asynchronous stage-out is transferring, the current branch publishes the old
 captured version and marks the DataFuture ready. TLC finds a `PublicationSafety` counterexample
 at depth 8 (133 states generated). The fixed branch marks the transfer stale, retries from the
-new source version, and checks 54 distinct states. `ParslFileBytes.tla` contains the more detailed
+new source version, and checks 76 distinct states (261 generated). `CorruptChunk` is bounded to
+one mutation per clean in-flight chunk so repair/retransmission remains finite. `ParslFileBytes.tla` contains the more detailed
 multi-file byte/checksum abstraction; this model focuses on the version/publication boundary.
+
+The smoke configurations reduce the transfer to one chunk while retaining source-version change,
+checksum corruption, stale retry, atomic publication, and consumer-readiness invariants.
+The smoke current configuration reaches its expected counterexample in 39 generated / 17 distinct
+states; the fixed configuration passes in 39 generated / 16 distinct states at depth 7.
 
 The symbolic byte/checksum path is also exercised against a real local archive transfer by
 `tests/test_file_bytes_transfer_runtime.py`.  The probe splits binary content into bounded chunks,

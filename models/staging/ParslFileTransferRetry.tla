@@ -92,6 +92,7 @@ CorruptChunk(c) ==
     /\ transfer = "sending"
     /\ c \in CHUNKS
     /\ chunkState[c] = "sent"
+    /\ wireChecksum[c] = Checksum(wireToken[c])
     /\ wireChecksum' = [wireChecksum EXCEPT ![c] = @ \o ":bad"]
     /\ chunkState' = [chunkState EXCEPT ![c] = "sent"]
     /\ UNCHANGED <<sourceVersion, capturedVersion, sourceToken, transfer,

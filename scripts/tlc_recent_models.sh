@@ -1888,6 +1888,12 @@ run_case file-transfer-retry-current counterexample \
 run_case file-transfer-retry-fixed pass \
     models/staging/ParslFileTransferRetryFixed.cfg \
     models/staging/ParslFileTransferRetry.tla
+run_case file-transfer-retry-smoke-current counterexample \
+    models/staging/ParslFileTransferRetrySmokeCurrent.cfg \
+    models/staging/ParslFileTransferRetry.tla
+run_case file-transfer-retry-smoke-fixed pass \
+    models/staging/ParslFileTransferRetrySmokeFixed.cfg \
+    models/staging/ParslFileTransferRetry.tla
 run_case data-manager-cache-current counterexample \
     models/staging/ParslDataManagerCacheCurrent.cfg \
     models/staging/ParslDataManagerCache.tla
