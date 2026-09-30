@@ -8,9 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `77c2c24` (`Record HTEX decode continuation stage`).
-- Foundational smoke inventory: 352 TLC cases and 223 Python runtime probes (including the
-  uncommitted JobStatusPoller executor-isolation stage documented in the current working tree).
+- Latest pushed commit: `9f9b4c1` (`Model poller executor failure isolation`).
+- Foundational smoke inventory: 352 TLC cases and 223 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -35,6 +34,8 @@ are recorded here in English and committed with the model changes.
 - `7692d96`: recorded the HTEX serialization stage and its durable smoke inventory.
 - `270d093`: refined HTEX result decoding with a corrupt-then-valid batch sequence; a bad frame
   must not strand the later Future.
+- `9f9b4c1`: JobStatusPoller executor isolation. A provider/status failure in one executor must
+  not suppress independent executors in the same polling tick.
 
 ### Verification convention
 
