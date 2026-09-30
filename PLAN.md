@@ -1133,6 +1133,10 @@ loading exactly once and stable reuse for a second payload. The concrete bridge 
 `ParslSerializationPluginFailureCache.tla` is now in the sweep: a plugin that raises during
 decode must not remain cached as if it were healthy. `tests/test_serialization_plugin_failure_cache_runtime.py`
 reproduces the current poisoned-cache behavior.
+`ParslSerializationPluginError.tla` is now in the sweep, covering an importable class that lacks
+the serializer `deserialize` interface. `tests/test_serialization_plugin_error_runtime.py`
+reproduces the current raw `AttributeError` and contrasts it with the already-wrapped import
+failure path.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
