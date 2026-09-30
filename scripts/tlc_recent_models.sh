@@ -87,6 +87,9 @@ run_case result-misroute pass \
 run_case no-failures-safety pass \
     models/core/ParslNoFailuresSafety.cfg \
     models/core/ParslAbstract.tla
+run_case content-file-pipeline pass \
+    models/core/ParslContentFilePipeline.cfg \
+    models/core/ParslContentFilePipeline.tla
 run_case provider-failure-retry-current counterexample \
     models/core/ParslProviderFailureRetryCurrent.cfg \
     models/core/ParslProviderFailureRetry.tla

@@ -1569,6 +1569,13 @@ with `Spec` and the core safety invariants. The safety companion completed a TLC
 155,120 states checked; this separates a simulator limitation in the temporal run from ordinary
 no-failure protocol safety.
 
+`ParslContentFilePipeline` is the first deliberately cross-layer content model: it connects a
+callable/object version snapshot, encoded/sent/decoded task payload, two-chunk file stage-in,
+atomic file publication, worker admission, and result/Future delivery. Source mutation can be
+interleaved at any point, but execution requires a decoded payload and an available file, and the
+published result records the captured versions. TLC simulation checked 100,001 states with all
+pipeline safety invariants enabled.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
