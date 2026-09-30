@@ -53,6 +53,12 @@ run_case() {
 run_case dag-retry \
     models/core/ParslEndToEndSmoke.cfg \
     models/core/ParslEndToEnd.tla
+run_case integrated-abstract \
+    models/core/ParslAbstractSmoke.cfg \
+    models/core/ParslAbstract.tla
+run_case integrated-abstract-join \
+    models/core/ParslAbstractJoinSmoke.cfg \
+    models/core/ParslAbstract.tla
 run_case callable-object-snapshot \
     models/serialization/ParslFunctionObjectContents.cfg \
     models/serialization/ParslFunctionObjectContents.tla
