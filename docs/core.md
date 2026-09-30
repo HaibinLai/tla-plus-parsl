@@ -141,7 +141,7 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 371 TLC cases and 270 Python runtime test files.
+The current repository smoke runner enumerates 372 TLC cases and 270 Python runtime test files.
 On 2026-09-30, all 313 TLC cases passed in segmented runs with `TLC_SIMULATE=10`, and the
 complete runtime suite passed with 196 files; the subsequently added cases were also run
 individually as they were introduced, including the PBS Pro status-batch isolation and
@@ -183,6 +183,11 @@ counterexample for stale-result acceptance.
 loss and reprovisioning, and monitoring queue/persistence. Its invariants require running work to
 have staged data and an active manager, while persisted monitoring state can only describe a
 terminal join. The fixed configuration is part of the foundational TLC smoke.
+
+`ParslJoinZMQRetry.tla` adds the concrete wire path: task and result envelopes move through
+framing, send, receive, decode, and resolve states, with a validity bit for malformed frames.
+The `(task, attempt)` correlation is retained across timeout and late-result delivery, so the
+fixed branch can reject stale or corrupt frames without changing the logical Future.
 
 The monitoring cases cover the next database refinement: all-or-nothing batch publication,
 persistent retry of transient writes, and explicit terminal handling for permanent insert/update

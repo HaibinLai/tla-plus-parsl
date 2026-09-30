@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7da3825` (`Add join provider monitoring model`).
-- Foundational smoke inventory: 371 TLC cases and 270 Python runtime probes.
+- Latest pushed commit: pending (join ZMQ retry model).
+- Foundational smoke inventory: 372 TLC cases and 270 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -130,6 +130,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslJoinProviderMonitoring`, extending the cross-layer join model with
   data staging readiness, provider loss/reprovisioning, and monitoring queue persistence. Its
   Current branch again exposes stale-result acceptance; the Fixed branch passed standalone TLC.
+- Current stage: added `ParslJoinZMQRetry`, which models task/result envelopes through framing,
+  send/receive, decode, corruption rejection, and `(task, attempt)` resolution. The Fixed branch
+  passed standalone TLC and the Current branch produced the intended stale-result violation.
 
 ### Verification convention
 
