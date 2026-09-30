@@ -496,6 +496,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueDuplicateSta
 /tmp/parsl-venv/bin/python -m unittest tests/test_torque_duplicate_status_runtime.py -v
 ```
 
+`ParslTorqueMissingStatus.tla` models a successful but empty `qstat` response. The current
+Torque provider marks every locally known job absent from the response as `COMPLETED`, even when
+the scheduler has not supplied an explicit terminal record. The fixed branch preserves an
+`UNKNOWN` observation until a job record is present. The runtime probe calls the real `_status`
+method with an empty successful response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueMissingStatusCurrent.cfg models/providers/ParslTorqueMissingStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueMissingStatusFixed.cfg models/providers/ParslTorqueMissingStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_missing_status_runtime.py -v
+```
+
+This successful-empty status boundary is recorded as BUG-241.
+
 `ParslLSFDuplicateStatus.tla` covers the analogous LSF `bjobs` response. The current set-based
 bookkeeping raises `KeyError` on a duplicate job line; the fixed branch ignores the second line.
 TLC checks six generated/three distinct states in the fixed and unique-row configurations.

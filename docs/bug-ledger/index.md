@@ -6,7 +6,7 @@ This directory is the split, component-oriented view of the complete [Parsl bug 
 | --- | ---: | --- |
 | Executors and worker lifecycle | 30 | [executors/README.md](executors/README.md) |
 | Serialization and ZMQ transport | 40 | [serialization/README.md](serialization/README.md) |
-| Providers and scheduler adapters | 52 | [providers/README.md](providers/README.md) |
+| Providers and scheduler adapters | 53 | [providers/README.md](providers/README.md) |
 | Monitoring and database | 19 | [monitoring/README.md](monitoring/README.md) |
 | File staging and transfer | 15 | [staging/README.md](staging/README.md) |
 | join_app and memoization | 7 | [join/README.md](join/README.md) |

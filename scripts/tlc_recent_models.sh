@@ -2632,6 +2632,12 @@ run_case torque-duplicate-status-fixed pass \
 run_case torque-duplicate-status-unique pass \
     models/providers/ParslTorqueDuplicateStatusUnique.cfg \
     models/providers/ParslTorqueDuplicateStatus.tla
+run_case torque-missing-status-current counterexample \
+    models/providers/ParslTorqueMissingStatusCurrent.cfg \
+    models/providers/ParslTorqueMissingStatus.tla
+run_case torque-missing-status-fixed pass \
+    models/providers/ParslTorqueMissingStatusFixed.cfg \
+    models/providers/ParslTorqueMissingStatus.tla
 run_case torque-status-current counterexample \
     models/providers/ParslTorqueStatus.cfg \
     models/providers/ParslTorqueStatus.tla
