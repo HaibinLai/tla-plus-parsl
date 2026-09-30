@@ -711,6 +711,8 @@ captures the current duplicate-ID `KeyError`, the resulting collector exit and u
 cleanup, and the candidate idempotent guard.
 `ParslRadicalPilotResults.tla` refines RadicalPilot callback mapping for Bash/Python/MPI tasks,
 master failure propagation, cancellation, and the shutdown pending-Future probe.
+Its current/fixed configurations are now in the recurring smoke sweep, with callback coverage
+provided by `tests/test_radical_results_runtime.py`.
 `ParslGlobusComputeConfig.tla` refines Globus Compute's temporary per-submit resource and endpoint
 configuration and records the caller-side serialization assumption needed to avoid cross-submit
 interference for either field.
