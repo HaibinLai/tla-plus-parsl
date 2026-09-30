@@ -62,6 +62,27 @@ run_case file-bytes-transfer \
 run_case heartbeat \
     models/clock/ParslTimedHeartbeatSmokeFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla
+run_case concurrent-timeouts \
+    models/clock/ParslConcurrentTimeouts.cfg \
+    models/clock/ParslConcurrentTimeouts.tla
+run_case periodic-timer \
+    models/clock/ParslPeriodicTimer.cfg \
+    models/clock/ParslPeriodicTimer.tla
+run_case htex-shutdown-timeout \
+    models/clock/ParslHtexShutdownTimeout.cfg \
+    models/clock/ParslHtexShutdownTimeout.tla
+run_case heartbeat-parameter-validation \
+    models/clock/ParslHeartbeatParameterValidationFixed.cfg \
+    models/clock/ParslHeartbeatParameterValidation.tla
+run_case worker-contact-timeout \
+    models/clock/ParslWorkerContactTimeout.cfg \
+    models/clock/ParslWorkerContactTimeout.tla
+run_case timeout-monitoring \
+    models/clock/ParslTimeoutMonitoringFixed.cfg \
+    models/clock/ParslTimeoutMonitoring.tla
+run_case timeout-timer-error \
+    models/clock/ParslTimeoutTimerError.cfg \
+    models/clock/ParslTimeoutTimer.tla
 run_case monitoring-db \
     models/monitoring/ParslMonitoringDBSmoke.cfg \
     models/monitoring/ParslMonitoringDB.tla

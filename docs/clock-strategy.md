@@ -227,3 +227,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStar
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationFixed.cfg models/clock/ParslHtexContactTimeoutStarvation.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_contact_timeout_starvation_runtime.py -v
 ```
+
+The clock smoke set also covers independent per-task timeout clocks, periodic timer callback
+failure and quiescent close, HTEX shutdown kill ordering, heartbeat parameter admission, worker
+contact expiry, timeout-to-monitoring cause persistence, and timeout-timer cleanup. These models
+keep wall-clock progression separate from heartbeat contact and physical task attempt state.

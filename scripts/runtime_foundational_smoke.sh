@@ -33,6 +33,12 @@ tests=(
     tests/test_htex_heartbeat_runtime.py
     tests/test_heartbeat_clock_jump_runtime.py
     tests/test_htex_contact_timeout_starvation_runtime.py
+    tests/test_periodic_timer_runtime.py
+    tests/test_htex_shutdown_timeout_runtime.py
+    tests/test_heartbeat_parameter_validation_runtime.py
+    tests/test_worker_contact_clock_rollback_runtime.py
+    tests/test_retry_timeout_runtime.py
+    tests/test_timeout_timer_runtime.py
     tests/test_monitoring_db_runtime.py
     tests/test_monitoring_batch_atomicity_runtime.py
     tests/test_monitoring_persistent_retry_runtime.py
