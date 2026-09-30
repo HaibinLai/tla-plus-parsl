@@ -584,3 +584,7 @@ violates `NoCloseCrash`; the fixed branch makes an unstarted close a no-op.
 `ParslMonitoringHubStartFailureCleanup` (BUG-261) covers the complementary partial-start path:
 the current branch leaves the hub active after child-process startup fails, while the fixed branch
 rolls back the allocated lifecycle state.
+
+`ParslMonitoringHubRepeatedStart` (BUG-262) checks single ownership across repeated monitoring
+hub starts. The current branch creates a second process/queue and loses the first handles; the
+fixed branch rejects the duplicate start without allocating resources.

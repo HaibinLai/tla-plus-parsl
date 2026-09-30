@@ -185,6 +185,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubStar
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_start_failure_cleanup_runtime.py -v
 ```
 
+`ParslMonitoringHubRepeatedStart.tla` covers the active-state guard around a second
+`MonitoringHub.start()` call. The current implementation allocates a second DB process and queue
+and overwrites the first handles; the fixed branch leaves the original owner intact. The runtime
+probe starts the real method twice with deterministic process/queue doubles.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubRepeatedStartCurrent.cfg models/monitoring/ParslMonitoringHubRepeatedStart.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubRepeatedStartFixed.cfg models/monitoring/ParslMonitoringHubRepeatedStart.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_repeated_start_runtime.py -v
+```
+
 `ParslMonitoringCloseIdempotence.tla` models repeated abnormal
 `DatabaseManager.close()` calls. The current implementation leaves
 `workflow_end` false after finalization, so each close emits another workflow
