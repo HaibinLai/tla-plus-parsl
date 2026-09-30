@@ -2842,6 +2842,12 @@ run_case mpi-nonpositive-resources-current counterexample \
 run_case mpi-nonpositive-resources-fixed pass \
     models/executors/ParslMPINonPositiveResourcesFixed.cfg \
     models/executors/ParslMPINonPositiveResources.tla
+run_case local-submit-pid-shape-current counterexample \
+    models/providers/ParslLocalSubmitPidShapeCurrent.cfg \
+    models/providers/ParslLocalSubmitPidShape.tla
+run_case local-submit-pid-shape-fixed pass \
+    models/providers/ParslLocalSubmitPidShapeFixed.cfg \
+    models/providers/ParslLocalSubmitPidShape.tla
 run_case htex-duplicate-result-current counterexample \
     models/executors/ParslHtexDuplicateResultCurrent.cfg \
     models/executors/ParslHtexDuplicateResult.tla

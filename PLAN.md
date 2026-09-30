@@ -1980,6 +1980,11 @@ and can either emit invalid launcher values or raise raw division errors. The Cu
 pair produced the expected counterexample/pass outcomes, and the runtime probe covered zero and
 negative values across all three resource fields.
 The MPI non-positive-resource probe then completed 531 tests with `OK`.
+`ParslLocalSubmitPidShape` now models the LocalProvider launcher response boundary. It records
+BUG-198: a zero-return launcher with a non-numeric `PID:` line reaches raw `ValueError` during
+submission instead of a controlled failed resource admission. The Current/Fixed TLC pair and
+the real malformed-stdout probe produced the expected outcomes.
+The LocalProvider PID-shape probe then completed 532 tests with `OK`.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

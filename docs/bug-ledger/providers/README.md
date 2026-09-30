@@ -2,6 +2,8 @@
 
 This file contains the complete ledger entries assigned to this component. See the [split index](../index.md) or the [flat compatibility ledger](../../bug-ledger.md).
 
+| BUG-198 | LocalProvider malformed launcher PID leaks raw parse error | `LocalProvider.submit` accepts a zero exit code from the launch command and then converts the `PID:` suffix with `int()` without validating its shape. A successful launcher response such as `PID:not-a-number` raises raw `ValueError` and leaves no explicit provider failure result. | `ParslLocalSubmitPidShapeCurrent.cfg` (counterexample to `NoRawParseCrash`); fixed configuration passes; `tests/test_local_submit_pid_shape_runtime.py` | Validate the PID response before conversion and raise a controlled `SubmitException` (or equivalent failed submission) without publishing partial state. | Reproduced against the installed LocalProvider; candidate fixed model passes |
+
 | ID | Component | Current behavior / risk | Evidence | Candidate safety condition | Status |
 | --- | --- | --- | --- | --- | --- |
 | BUG-003 | Google Cloud provider | `GoogleCloudProvider.get_zone` returns `None` when no matching UP zone exists; construction can continue until a later API request uses an invalid zone. | `ParslGoogleCloudZoneSelectionCurrent.cfg`; `tests/test_googlecloud_zone_selection_runtime.py` | Zone selection must reject a missing match before submission. | Reproduced; candidate fixed model passes |
