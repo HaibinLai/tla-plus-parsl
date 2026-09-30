@@ -23,13 +23,15 @@ LogicalStates == {"pending", "retry_wait", "succeeded", "failed", "cancelled"}
 AttemptStates == {"absent", "serialized", "running", "succeeded", "failed", "cancelled", "stale"}
 Values == {"I1:value", "I2:value", "unset"}
 ResultValue == Values \cup {"invalid-return", "join-error"} \cup Seq(Values)
+MonitorStates == {"none", "queued", "persisted"}
+MonitorStatuses == {"none", "succeeded", "failed"}
 
 VARIABLES outerState, mode, joinSet, observed, joinHandle,
           logicalState, currentAttempt, attemptState, innerValue,
-          outerResult, failureCount
+          outerResult, failureCount, monitorState, monitorStatus, dbStatus
 vars == <<outerState, mode, joinSet, observed, joinHandle,
            logicalState, currentAttempt, attemptState, innerValue,
-           outerResult, failureCount>>
+           outerResult, failureCount, monitorState, monitorStatus, dbStatus>>
 
 ExpectedList == [p \in POSITIONS |-> innerValue[Inputs[p]]]
 AllJoinedTerminal ==
@@ -50,6 +52,9 @@ Init ==
     /\ innerValue = [i \in INNER |-> "unset"]
     /\ outerResult = [kind |-> "none", value |-> "unset"]
     /\ failureCount = 0
+    /\ monitorState = "none"
+    /\ monitorStatus = "none"
+    /\ dbStatus = "none"
 
 ReturnSingle ==
     /\ outerState = "executing"
@@ -198,7 +203,7 @@ Finalize ==
     /\ UNCHANGED <<mode, joinSet, observed, logicalState, currentAttempt,
                     attemptState, innerValue>>
 
-Next ==
+JoinNext ==
     \/ ReturnSingle \/ ReturnList \/ ReturnEmpty \/ ReturnInvalid
     \/ \E i \in INNER : SerializeAttempt(i) \/ StartAttempt(i)
                              \/ CompleteAttempt(i)
@@ -208,6 +213,28 @@ Next ==
     \/ \E i \in INNER, a \in 0..MAX_RETRIES : LateAttempt(i, a)
     \/ Finalize
     \/ UNCHANGED vars
+
+EmitOuterStatus ==
+    /\ outerState \in {"succeeded", "failed"}
+    /\ monitorState = "none"
+    /\ monitorState' = "queued"
+    /\ monitorStatus' = outerState
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, attemptState, innerValue,
+                    outerResult, failureCount, dbStatus>>
+
+PersistOuterStatus ==
+    /\ monitorState = "queued"
+    /\ monitorState' = "persisted"
+    /\ dbStatus' = monitorStatus
+    /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
+                    logicalState, currentAttempt, attemptState, innerValue,
+                    outerResult, failureCount, monitorStatus>>
+
+Next ==
+    \/ (JoinNext /\ UNCHANGED <<monitorState, monitorStatus, dbStatus>>)
+    \/ EmitOuterStatus
+    \/ PersistOuterStatus
 
 Spec == Init /\ [][Next]_vars
 
@@ -226,6 +253,9 @@ TypeOK ==
        THEN outerResult["value"] \in [POSITIONS -> Values]
        ELSE outerResult["value"] \in ResultValue
     /\ failureCount \in 0..Cardinality(INNER)
+    /\ monitorState \in MonitorStates
+    /\ monitorStatus \in MonitorStatuses
+    /\ dbStatus \in MonitorStatuses
 
 JoinWaitSafety == outerState = "joining" => joinHandle
 TerminalHandleSafety == outerState \in {"succeeded", "failed"} => ~joinHandle
@@ -253,5 +283,9 @@ LateResultSafety ==
     \A i \in INNER :
       logicalState[i] = "succeeded" =>
         attemptState[i][currentAttempt[i]] = "succeeded"
+
+DatabaseTerminalSafety ==
+    /\ dbStatus = "succeeded" => outerState = "succeeded"
+    /\ dbStatus = "failed" => outerState = "failed"
 
 =============================================================================
