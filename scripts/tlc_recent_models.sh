@@ -381,6 +381,12 @@ run_case gridengine-duplicate-current counterexample \
 run_case gridengine-duplicate-fixed pass \
     models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
     models/providers/ParslGridEngineDuplicateStatus.tla
+run_case gridengine-status-batch-current counterexample \
+    models/providers/ParslGridEngineStatusBatchCurrent.cfg \
+    models/providers/ParslGridEngineStatusBatch.tla
+run_case gridengine-status-batch-fixed pass \
+    models/providers/ParslGridEngineStatusBatchFixed.cfg \
+    models/providers/ParslGridEngineStatusBatch.tla
 run_case torque-submit-success pass \
     models/providers/ParslTorqueSubmit.cfg \
     models/providers/ParslTorqueSubmit.tla
