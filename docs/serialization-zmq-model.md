@@ -92,6 +92,11 @@ branch then crashes while constructing the manager record. The fixed branch reje
 registration before it mutates `_ready_managers`. The runtime probe uses the real interchange
 handler with a pickleable registration missing `python_v`.
 
+`ParslHtexTaskIngressContinuation.tla` refines the malformed task-envelope boundary to a message
+sequence. A malformed decoded task followed by a valid task leaves the current interchange loop
+dead before the valid task can be queued; the fixed branch discards the first envelope and keeps
+processing the channel. This is a temporal refinement of BUG-098 rather than a separate defect.
+
 `ParslCommandSendFailure.tla` models a transport exception during `CommandClient.run`'s
 `send_pyobj` call. The current branch leaves the REQ client marked healthy, while the fixed branch
 poisons it before the next command can reuse the failed socket. The runtime probe uses the real

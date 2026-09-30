@@ -824,6 +824,9 @@ run_case htex-task-id-type \
 run_case htex-task-message-shape \
     models/executors/ParslHtexTaskMessageMalformedFixed.cfg \
     models/executors/ParslHtexTaskMessageMalformed.tla
+run_case htex-task-ingress-continuation \
+    models/serialization/ParslHtexTaskIngressContinuationFixed.cfg \
+    models/serialization/ParslHtexTaskIngressContinuation.tla
 run_case htex-task-priority-type \
     models/executors/ParslHtexTaskPriorityTypeFixed.cfg \
     models/executors/ParslHtexTaskPriorityType.tla

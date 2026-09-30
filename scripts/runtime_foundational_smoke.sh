@@ -128,6 +128,7 @@ tests=(
     tests/test_htex_task_context_type_runtime.py
     tests/test_htex_task_id_type_runtime.py
     tests/test_htex_task_message_malformed_runtime.py
+    tests/test_htex_task_ingress_continuation_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py

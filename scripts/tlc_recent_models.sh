@@ -900,6 +900,12 @@ run_case htex-task-context-type-current counterexample \
 run_case htex-task-context-type-fixed pass \
     models/executors/ParslHtexTaskContextTypeFixed.cfg \
     models/executors/ParslHtexTaskContextType.tla
+run_case htex-task-ingress-continuation-current counterexample \
+    models/serialization/ParslHtexTaskIngressContinuationCurrent.cfg \
+    models/serialization/ParslHtexTaskIngressContinuation.tla
+run_case htex-task-ingress-continuation-fixed pass \
+    models/serialization/ParslHtexTaskIngressContinuationFixed.cfg \
+    models/serialization/ParslHtexTaskIngressContinuation.tla
 run_case htex-manager-loss-current counterexample \
     models/executors/ParslHtexManagerLossCurrent.cfg \
     models/executors/ParslHtexManagerLoss.tla

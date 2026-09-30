@@ -242,6 +242,10 @@ processed.
 Monitoring coverage also includes `ParslMonitoringWorkerTryAtomicity` (BUG-265), which checks
 that a worker STATUS write cannot remain committed after the corresponding TRY update fails.
 
+Serialization/HTEX coverage also includes `ParslHtexTaskIngressContinuation`, which refines
+BUG-098 from a single malformed envelope to a malformed-then-valid message sequence and checks
+that the later valid task remains queueable.
+
 AWS provider coverage also includes `ParslAwsStatusResponseShape` (BUG-205), which checks that a
 missing top-level `Reservations` field cannot abort status polling.
 
