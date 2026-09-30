@@ -244,6 +244,8 @@ Recent focused models now connect the previously separate boundaries:
   empty launch responses, and resource registration consistency.
 - `ParslCondorStatusFailure` is now in the smoke sweep, requiring failed `condor_q` commands to
   preserve the last resource state instead of parsing stale or malformed stdout.
+- `ParslCondorUnknownJob` now adds the stale local-ID boundary to the smoke sweep, contrasting
+  the current `KeyError` with an explicit UNKNOWN status path.
 - `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,
   traversing callable roots, globals/defaults/closures, nested arguments, failed object graphs,
   and self-referential cycles with visited-set protection.

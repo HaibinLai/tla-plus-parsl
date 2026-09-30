@@ -369,6 +369,12 @@ run_case condor-malformed-line-current counterexample \
 run_case condor-malformed-line-fixed pass \
     models/providers/ParslCondorMalformedStatusLineFixed.cfg \
     models/providers/ParslCondorMalformedStatusLine.tla
+run_case condor-unknown-job-current counterexample \
+    models/providers/ParslCondorUnknownJobCurrent.cfg \
+    models/providers/ParslCondorUnknownJob.tla
+run_case condor-unknown-job-fixed pass \
+    models/providers/ParslCondorUnknownJobFixed.cfg \
+    models/providers/ParslCondorUnknownJob.tla
 run_case gridengine-duplicate-current counterexample \
     models/providers/ParslGridEngineDuplicateStatusCurrent.cfg \
     models/providers/ParslGridEngineDuplicateStatus.tla
