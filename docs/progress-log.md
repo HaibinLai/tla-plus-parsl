@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `0d908e2` (`Record Flux serialization refinement`).
+- Latest pushed commit: `f2e0630` (`Refine cancelled executor failure results`).
 - Foundational smoke inventory: 358 TLC cases and 229 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
