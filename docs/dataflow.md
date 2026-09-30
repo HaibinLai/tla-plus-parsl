@@ -26,7 +26,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslDependencyFailurePr
 ordered list joins with duplicate positions, empty-list joins, invalid return handling, logical
 inner Futures with physical retries, cancellation, failure aggregation, and terminal result
 ordering. `MAX_RETRIES = 1` keeps the state space small while preserving the important attempt
-correlation and join-handle invariants.
+correlation and join-handle invariants. The full configuration checks 5,268 generated / 1,558
+distinct states at depth 15 with no invariant violation. The six-case runtime bridge in
+`tests/test_join_runtime.py` exercises real decorated `join_app` behavior for single, list,
+duplicate, empty, failure, and nested joins.
 
 `ParslJoinCallableTransport.tla` adds the serialized callable boundary to that join semantics.
 Each inner logical Future has per-attempt captured content, task/result wire state, and stale
@@ -77,7 +80,7 @@ member leave the decorated outer join unresolved in the current path.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinFull.cfg models/dataflow/ParslJoinFull.tla
-PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl /tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_join*_runtime.py' -v
+PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl /tmp/parsl-venv/bin/python -m unittest tests/test_join_runtime.py -v
 ```
 
 `ParslMemoExceptionCheckpoint.tla` models failure persistence across a memoizer restart. The
