@@ -105,6 +105,7 @@ tests=(
     tests/test_radical_results_runtime.py
     tests/test_radical_late_callback_runtime.py
     tests/test_mpi_backlog_retry_runtime.py
+    tests/test_mpi_malformed_result_runtime.py
     tests/test_taskvine_factory_runtime.py
     tests/test_taskvine_start_failure_cleanup_runtime.py
     tests/test_workqueue_shutdown_runtime.py

@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `05431ed` (`Refine Radical Pilot late failure callbacks`).
-- Foundational smoke inventory: 359 TLC cases and 230 Python runtime probes.
+- Foundational smoke inventory: 360 TLC cases and 231 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -51,6 +51,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: refined BUG-135 for Radical-Pilot late `FAILED` callbacks. A callback arriving
   after cancellation can raise through `set_exception` just like the existing `DONE` path; the
   failure Current model produces a four-state counterexample and the Fixed model passes.
+- Current stage: added MPI malformed-result cleanup. A corrupt pickle currently escapes
+  `MPITaskScheduler.get_result`, leaving allocated nodes held while the ferry loop continues;
+  the Current model produces a two-state leak counterexample and the Fixed model releases the
+  allocation while publishing a terminal decode failure.
 
 ### Verification convention
 

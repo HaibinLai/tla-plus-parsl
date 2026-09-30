@@ -425,6 +425,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINoResourceResul
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_no_resource_result_runtime.py -v
 ```
 
+`ParslMPIMalformedResultCleanup.tla` models a corrupt worker result payload. The current
+`MPITaskScheduler.get_result` performs `pickle.loads` before releasing nodes; the surrounding
+ferry loop catches the decode exception and continues, but the allocation remains held and no
+terminal result is returned. The fixed branch releases the nodes and records a decode failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResultCleanupCurrent.cfg models/executors/ParslMPIMalformedResultCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResultCleanupFixed.cfg models/executors/ParslMPIMalformedResultCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_mpi_malformed_result_runtime.py -v
+```
+
 `ParslMPIBacklogRetry.tla` models the MPI backlog scheduler when its head task needs more nodes
 than are currently free. The current `_schedule_backlog_tasks` requeues that task and immediately
 recurses, so an unchanged resource count eventually raises `RecursionError`. The fixed branch

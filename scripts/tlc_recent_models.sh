@@ -2211,6 +2211,12 @@ run_case mpi-no-resource-result-current counterexample \
 run_case mpi-no-resource-result-fixed pass \
     models/executors/ParslMPINoResourceResultFixed.cfg \
     models/executors/ParslMPINoResourceResult.tla
+run_case mpi-malformed-result-cleanup-current counterexample \
+    models/executors/ParslMPIMalformedResultCleanupCurrent.cfg \
+    models/executors/ParslMPIMalformedResultCleanup.tla
+run_case mpi-malformed-result-cleanup-fixed pass \
+    models/executors/ParslMPIMalformedResultCleanupFixed.cfg \
+    models/executors/ParslMPIMalformedResultCleanup.tla
 run_case mpi-task-context-current counterexample \
     models/executors/ParslMPITaskContextShapeCurrent.cfg \
     models/executors/ParslMPITaskContextShape.tla

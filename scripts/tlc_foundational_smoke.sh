@@ -548,6 +548,9 @@ run_case htex-worker-restart-failure \
 run_case mpi-no-resource-result \
     models/executors/ParslMPINoResourceResultFixed.cfg \
     models/executors/ParslMPINoResourceResult.tla
+run_case mpi-malformed-result-cleanup \
+    models/executors/ParslMPIMalformedResultCleanupFixed.cfg \
+    models/executors/ParslMPIMalformedResultCleanup.tla
 run_case radical-failure-payload \
     models/executors/ParslRadicalPilotFailurePayloadFixed.cfg \
     models/executors/ParslRadicalPilotFailurePayload.tla
