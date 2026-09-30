@@ -6,6 +6,19 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslCondorSubmitCount.tla` refines the Condor submission parser for multi-digit job counts.
+For output such as `10 job(s) submitted to cluster ...`, the current implementation indexes
+`line[0]` and registers only one process; the fixed branch parses the complete count token.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorSubmitCountCurrent.cfg models/providers/ParslCondorSubmitCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorSubmitCountFixed.cfg models/providers/ParslCondorSubmitCount.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorSubmitCountNormal.cfg models/providers/ParslCondorSubmitCount.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_submit_runtime.py -v
+```
+
+This multi-digit Condor count boundary is recorded as BUG-171.
+
 `ParslLocalProviderExitStatus.tla` models the local provider's `.ec` exit-marker protocol. It
 separates an in-flight `-` marker from numeric and malformed markers, process liveness, and a
 prior cancellation request. Numeric exit codes take precedence over liveness/cancellation, and

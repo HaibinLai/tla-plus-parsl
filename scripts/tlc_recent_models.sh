@@ -328,6 +328,15 @@ run_case cluster-status-unknown-current counterexample \
 run_case cluster-status-unknown-fixed pass \
     models/providers/ParslClusterStatusUnknownFixed.cfg \
     models/providers/ParslClusterStatusUnknown.tla
+run_case condor-submit-count-current counterexample \
+    models/providers/ParslCondorSubmitCountCurrent.cfg \
+    models/providers/ParslCondorSubmitCount.tla
+run_case condor-submit-count-fixed pass \
+    models/providers/ParslCondorSubmitCountFixed.cfg \
+    models/providers/ParslCondorSubmitCount.tla
+run_case condor-submit-count-normal pass \
+    models/providers/ParslCondorSubmitCountNormal.cfg \
+    models/providers/ParslCondorSubmitCount.tla
 run_case dynamic-task-chain pass \
     models/dataflow/ParslDynamicTaskChain.cfg \
     models/dataflow/ParslDynamicTaskChain.tla

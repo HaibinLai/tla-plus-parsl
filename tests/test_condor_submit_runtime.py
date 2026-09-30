@@ -47,6 +47,15 @@ class CondorSubmitRuntimeTest(unittest.TestCase):
             with self.assertRaises(ScaleOutFailed):
                 provider.submit("echo worker", tasks_per_node=1)
 
+    def test_multi_digit_job_count_only_registers_first_digit_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            provider = self.provider_with_output("10 job(s) submitted to cluster 118907.\n")
+            provider.script_dir = directory
+            first_job_id = provider.submit("echo worker", tasks_per_node=1)
+
+        self.assertEqual(first_job_id, "118907.0")
+        self.assertEqual(len(provider.resources), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
