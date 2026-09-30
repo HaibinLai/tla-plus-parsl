@@ -54,9 +54,16 @@ MutateSource ==
     /\ UNCHANGED <<currentAttempt, task, attemptState, capturedVersion,
                     resultWire, resultVersion, futureVersion>>
 
-FailAttempt ==
+DispatchAttempt ==
     /\ task = "running"
     /\ attemptState[currentAttempt] = "serialized"
+    /\ attemptState' = [attemptState EXCEPT ![currentAttempt] = "running"]
+    /\ UNCHANGED <<sourceVersion, currentAttempt, task, capturedVersion,
+                    resultWire, resultVersion, futureVersion>>
+
+FailAttempt ==
+    /\ task = "running"
+    /\ attemptState[currentAttempt] = "running"
     /\ attemptState' = [attemptState EXCEPT ![currentAttempt] = "failed"]
     /\ task' = IF currentAttempt < MAX_RETRIES THEN "retry_wait" ELSE "failed"
     /\ UNCHANGED <<sourceVersion, currentAttempt, capturedVersion,
@@ -72,7 +79,7 @@ Retry ==
 
 CompleteAttempt(k) ==
     /\ k \in AttemptIds
-    /\ attemptState[k] = "serialized"
+    /\ attemptState[k] = "running"
     /\ resultWire' = [resultWire EXCEPT ![k] = "queued"]
     /\ resultVersion' = [resultVersion EXCEPT ![k] = capturedVersion[k]]
     /\ attemptState' = [attemptState EXCEPT ![k] = "succeeded"]
@@ -108,6 +115,7 @@ DeliverResult(k) ==
 Next ==
     \/ SerializeAttempt
     \/ MutateSource
+    \/ DispatchAttempt
     \/ FailAttempt
     \/ Retry
     \/ \E k \in AttemptIds : CompleteAttempt(k) \/ LateComplete(k) \/ DeliverResult(k)

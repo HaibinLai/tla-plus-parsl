@@ -14,8 +14,9 @@ DataFlowKernel -> HighThroughputExecutor -> Interchange -> Manager/worker pool
                -> ExecutionProvider
 ```
 
-Other executors can reuse the same abstract submission boundary, but are not modeled in full
-in the first version.
+Other executors and providers reuse the abstract submission boundary and now have focused
+refinements for concrete admission, callback/result, scaling, cancellation, status, and cleanup.
+These refinements are intentionally bounded and do not claim to represent every backend detail.
 
 ## Completed phases
 
@@ -227,8 +228,78 @@ Recent focused models now connect the previously separate boundaries:
 
 - `ParslFunctionObjectTransport` and `ParslCallableRetryTransport` model Python callable/closure
   snapshots across serialized ZMQ task frames, physical retries, and stale result correlation.
+- `ParslFunctionObjectContents` is included in the smoke sweep as the smallest executable
+  callable/argument object snapshot: post-pack mutation cannot change the worker result.
+- `ParslSerializationWire` and its failure configuration are now in the smoke sweep, checking
+  the concrete `C2`/`02` headers, length framing, ordered unpack/decode, and rejection before
+  dispatch when one buffer is not serializable.
+- `ParslMessageLoss` and `ParslMessageDuplicate` are now in the smoke sweep, connecting bounded
+  transport loss/duplicate delivery to retry, correlation, cleanup, and terminal-result safety.
+- `ParslMisroute` and `ParslResultMisroute` are now in the smoke sweep, rejecting task/result
+  envelopes delivered through the wrong executor-manager binding.
+- `ParslProviderFailureRetry` is now in the smoke sweep, separating logical task retry from lost
+  provider attempts and rejecting late results from stale physical attempts.
+- `ParslKubernetesUnknownJob` is now in the smoke sweep, requiring stale job IDs to return an
+  explicit UNKNOWN status instead of raising from local resource bookkeeping.
+- `ParslAWSProviderSubmit` is now in the smoke sweep, checking EC2 launch success/failure,
+  empty launch responses, and resource registration consistency.
+- `ParslCondorStatusFailure` is now in the smoke sweep, requiring failed `condor_q` commands to
+  preserve the last resource state instead of parsing stale or malformed stdout.
+- `ParslCondorUnknownJob` now adds the stale local-ID boundary to the smoke sweep, contrasting
+  the current `KeyError` with an explicit UNKNOWN status path.
+- `ParslGridEngineStatusBatch` now adds malformed-record continuation to the smoke sweep, keeping
+  a later valid qstat record observable in the fixed parser.
+- `ParslPBSProJobIdAlias` now adds short/qualified job-id normalization to the smoke sweep,
+  including duplicate alias handling and the unique-id control path.
+- `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,
+  traversing callable roots, globals/defaults/closures, nested arguments, failed object graphs,
+  and self-referential cycles with visited-set protection.
+- `ParslPythonTimeoutCatch` is now in the smoke sweep, checking that a Python app cannot turn an
+  injected walltime timeout into a successful Future by catching the timeout exception.
+- `ParslFunctionObjectTransport`, `ParslObjectSnapshotRetry`, and `ParslZMQObjectSnapshot` now
+  extend that boundary through queued frames and physical retries, including current/fixed
+  stale-payload counterexamples.
 - `ParslFileBytes` is corroborated by a real binary Zip stage-out/stage-in probe with per-chunk
   SHA-256 checksums.
+- `ParslFileTransferRetry` is now in the smoke sweep, checking that source mutation during
+  stage-out makes the first publication stale and forces a version-matching retry.
+- `ParslDataFutureTransfer` is now in the smoke sweep, connecting producer completion, chunk
+  checksums, atomic stage-out publication, DataFuture readiness, and consumer admission.
+- `ParslHTTPStatusValidation` now joins the staging sweep, checking that non-2xx response bodies
+  cannot be published or passed to a task, while preserving the successful 2xx path.
+- `ParslRsyncPartialCleanup` now joins the staging sweep, checking that a failed transfer removes
+  partial destination bytes before reporting failure; `tests/test_rsync_partial_cleanup_runtime.py`
+  exercises the current leftover-file behavior.
+- `ParslStageOutFuture` now joins the sweep for separate-task, in-task, and no-staging modes,
+  checking output publication and dependent-task gating against the real DataFuture tests.
+- `ParslGlobusTransferFailure` is now in the smoke sweep, distinguishing terminal transfer
+  failure reporting from missing diagnostic events and successful event-bearing completion.
+- `ParslClusterSubmitScript` is now in the smoke sweep for a concrete provider boundary: valid
+  template publication, missing scheduler arguments, and script-path I/O failure remain distinct.
+- `ParslTimeLimitedOpenTimeout` is now in the smoke sweep, separating a genuine file open from
+  a missing-file timeout and preventing a raw `open()` after the timeout horizon.
+- `ParslHeartbeatClockRollback` is now in the smoke sweep, distinguishing wall-clock rollback
+  from monotonic heartbeat age so manager expiry is not delayed indefinitely.
+- `ParslClusterStatusRequest` is now in the smoke sweep, checking one backend poll, duplicate
+  request-position preservation, and ordered public status projection.
+- `ParslMonitoringUpdatePersistentRetry` is now in the smoke sweep, exposing unbounded
+  `OperationalError` retries in `_update` and a bounded fixed branch with an explicit abort.
+- `ParslMonitoringPersistentRetry` now covers the matching `_insert` loop, with a bounded fixed
+  retry budget and explicit aborted-write state; the runtime bridge uses an always-locked SQLite
+  double to verify the current non-terminating behavior.
+- `ParslMonitoringBatchAtomicity` now joins the sweep, checking that a duplicate STATUS row does
+  not discard valid sibling events; the SQLite batch probe records the current rollback behavior.
+- `ParslMonitoringWorkflowInsertBookkeeping` now joins the sweep, requiring workflow bookkeeping
+  to be recorded only after a successful WORKFLOW row insert.
+- `ParslMonitoringWorkflowEndBookkeeping` now covers the matching failed end-update path, requiring
+  a retryable failed update rather than permanently marking workflow completion.
+- `ParslMonitoringLastMessageRace` now joins the sweep, checking that a last worker message is
+  deferred until its TRY row exists; `tests/test_monitoring_last_message_runtime.py` records the
+  current ordering weakness.
+- `ParslSlurmStatus` is now in the smoke sweep, checking that foreign scheduler job rows do not
+  crash the status poll and that known resource state remains available.
+- `ParslMonitoringZMQRouterFailure` is now in the smoke sweep, connecting the monitoring receive
+  channel to a bounded failure-stop policy instead of retrying a permanently broken socket.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
   late completion, and monitoring persistence.
 - `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,
@@ -238,8 +309,37 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslJoinCallableTransport` combines serialized inner callable snapshots, retry attempts,
   stale results, and ordered duplicate positions in an outer `join_app`; a real Parsl runtime
   bridge exercises the same result shape.
+- `ParslJoinMonitoring` is now in the smoke sweep, connecting memoized, staged, and ordinary
+  inner Futures to versioned outer status events, reordered delivery, database-write retry, and
+  terminal monitoring-record stability.
+- `ParslJoinApp` and `ParslNestedJoin` are now in the smoke sweep, covering the core outer-handle
+  protocol and delayed propagation from leaf Futures through an inner join into an outer join.
+- `ParslHtexResultBatchContinuation` is now in the smoke sweep, requiring a malformed result
+  frame to be discarded without aborting later valid results in the same manager batch.
+- `ParslHtexExecutorResultFrameContinuation` extends that property to the executor result queue:
+  a corrupt outer pickle cannot strand unrelated later Futures.
+- `ParslHtexResultQueue` is now in the smoke sweep, checking Future/task mapping, malformed
+  result handling, duplicate task IDs, and interchange failure without orphaning pending work.
+- `ParslHtexManagerSelection` is now in the smoke sweep, checking random and block-ID manager
+  selection orders without inventing or duplicating manager identities.
+- `ParslHtexManagerEligibility` is now in the smoke sweep, separating selector order from
+  dispatch admission and skipping inactive, draining, or zero-capacity managers.
+- `ParslExecutorSelection` is now in the smoke sweep, requiring an empty executor selection to
+  be rejected before `random.choice` can expose a raw `IndexError`.
+- `ParslResourceAdmission` and its autolabel configuration are now in the smoke sweep, checking
+  cores/memory/disk/GPU validation, queueing, capacity admission, and resource release.
+- `ParslResourceScaling` is now in the smoke sweep, connecting task core demand to scale-out,
+  pending allocation failures, dispatch capacity, and safe scale-in.
+- `ParslDependencyTraversal` is now in the smoke sweep for shallow-vs-deep Future discovery,
+  including list, dictionary value/key, tuple, and set containers.
+- `ParslMemoFunctionIdentity` is now in the smoke sweep, checking that changed Python function
+  source cannot reuse a stale memo key while unchanged source remains stable.
+- `ParslMemoExceptionCheckpoint` is now in the smoke sweep, distinguishing in-memory failed-call
+  reuse from checkpoint restart behavior and explicit failure persistence.
+- `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
+  keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 485 probes and passes as a whole:
+The runtime suite currently contains 487 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -333,6 +433,8 @@ database record. Queue reordering exposes the stale-event overwrite in the curre
 returns, duplicate references, empty and invalid returns, `None` results, and inner cancellation.
 The current branch's set-like duplicate handling violates `JoinResultSafety`; the fixed branch
 preserves the returned sequence.
+Both current and fixed configurations are now in the recurring smoke sweep, alongside the real
+join callback, return-shape, cancellation, and aggregation probes.
 `ParslSerializerRegistry.tla` models the concrete code/data serializer registries and their
 code-first dispatch order. An identifier collision is a current-path counterexample and a fixed
 path rejection; the runtime probe confirms the current facade behavior.
@@ -342,6 +444,8 @@ provider `MIN_BLOCKS` floor.
 `ParslZMQSerializationEndToEnd.tla` combines concrete serializer headers and multipart ZMQ
 progress with worker-attempt correlation. Its current branch exposes wrong-attempt result
 resolution; the fixed branch classifies those messages as stale.
+It is now part of the recent smoke sweep, alongside the real in-process ROUTER/DEALER and
+`pack_apply_message` bridge in `tests/test_zmq_serialization_runtime.py`.
 `ParslMessaging.cfg` adds explicit bounded task/result wire queues and serialized-envelope
 states, with `MessageSafety` checking that transport progress cannot bypass encoding or decode.
 The result path now separates receive, acknowledgement, and consume/decode so duplicate delivery
@@ -502,6 +606,8 @@ The current truthiness check treats a custom falsey exception as success; the ru
 real `Future` and `DataFuture`, while the fixed branch tests exception presence explicitly.
 `ParslFileBytes.tla` adds bounded symbolic byte chunks, checksums, temporary buffers, corruption
 repair, source-version changes during stage-in, and atomic stage-in/stage-out publication.
+The minimal corrupted-output and input-stage-in configurations are now included in the recent
+smoke sweep, so corruption repair and dependent-task blocking remain continuously checked.
 `ParslStageOutFuture.tla` refines output stage-out into separate-task, in-task, and no-staging
 paths, including stage-out failure/retry and dependent-task gating on the output `DataFuture`.
 `ParslMultiOutputStageOut.tla` extends the output protocol to two independently completing files
@@ -529,6 +635,9 @@ non-idempotent duplicate-key path is exposed as a dropped monitoring event, whil
 configuration checks an idempotent duplicate handler. This is based on the current
 `DatabaseManager._insert` exception handling and the STATUS primary key in
 `parsl/monitoring/db_manager.py`.
+Its current, fixed, and non-duplicate configurations are now part of the recurring smoke sweep;
+the SQLite bridge in `tests/test_monitoring_db_runtime.py` and status-history probe remain the
+concrete runtime checks.
 `ParslExecutorProvider.tla` models the HTEX executor/provider boundary: block request outcomes,
 manager registration, worker readiness, submit admission, draining/recovery, provider failure,
 and scale-in cleanup of queued/running tasks.
@@ -569,6 +678,9 @@ match the resolver's registered container handlers and the runtime probes.
 `ParslHtexResultQueue.tla` probes the concrete HTEX result queue worker, including valid and
 exception result decoding, malformed/duplicate messages, interchange failure, and Future orphaning
 when the current pop-before-validation path exits the worker.
+The companion `ParslHtexWorkerWatchdog` busy and idle configurations are now in the smoke sweep;
+the busy path is exercised by `tests/test_htex_worker_watchdog_runtime.py` and emits a logical
+WorkerLost result before replacement.
 `ParslHtexResultDecodeFailure.tla` separates corrupt result-payload decoding from malformed fields:
 the current `tasks.pop` before `deserialize(result)` can orphan a pending Future, while the fixed
 branch reports a terminal deserialization failure; `tests/test_htex_result_decode_failure_runtime.py`
@@ -585,12 +697,42 @@ provider-backed HTEX/MPI/workqueue paths, including manager registration, resour
 rejection, admission, drain/recovery, and provider/executor failure cleanup.
 `ParslMPISpec.tla` refines the MPI path with resource-specification key validation, derived
 `num_ranks`/`ranks_per_node`, zero-node admission probing, and the positive-node candidate fix.
+`ParslMPIBacklogRetry.tla` models the concrete `MPITaskScheduler._schedule_backlog_tasks` loop:
+when a queued task still cannot fit, the current implementation requeues it and recursively calls
+itself until Python raises `RecursionError`; the fixed branch stops the pass and retries after a
+resource return. `tests/test_mpi_backlog_retry_runtime.py` reproduces the live recursion path.
+`ParslMPINoResourceResult.tla` models the adjacent MPI result-path defect documented in the
+source (`Issue #3427`): a successful task with no `num_nodes` allocation reaches an assertion
+instead of returning its result. `tests/test_mpi_no_resource_result_runtime.py` reproduces the
+current assertion using a task result with an empty node map; the fixed branch makes node release
+conditional and still delivers the result.
+The recurring sweep also executes `ParslClusterProviderUnknownJob.tla` and
+`ParslLSFResourceValidation.tla`: the former checks that a stale scheduler ID is handled as an
+explicit missing observation, while the latter rejects non-positive `cores_per_node` values before
+deriving block capacity. Their concrete bridges are
+`tests/test_cluster_provider_unknown_job_runtime.py` and
+`tests/test_lsf_resource_validation_runtime.py`.
 `ParslExecutorShutdown.tla` refines concrete shutdown behavior: ThreadPool waits for accepted
 work, WorkQueue's collector fails tasks left behind during process shutdown, and HTEX closes its
 interchange before in-flight cleanup. It also checks that shutdown rejects new submissions.
+The model is now part of `scripts/tlc_recent_models.sh`; the real ThreadPool bridge
+(`tests/test_thread_executor_runtime.py`) passes all three shutdown/resource-admission probes,
+and bounded TLC simulation reaches 100,001 checked states for the invariant set.
+The same sweep now includes `ParslTaskVineFactory.tla` (factory creation, configuration,
+context exit, and construction failure) and `ParslPeriodicTimer.tla` (immediate callback,
+callback-failure isolation, bounded periodic callbacks, and quiescent close).
+It also includes the current/fixed `ParslTimeoutMonitoring` configurations, which connect
+heartbeat expiry and task deadlines to late-result rejection and monitoring-status stability;
+`tests/test_retry_timeout_runtime.py` provides the concrete timeout/retry bridge.
+`ParslTimerReentrantClose` is now included as well, checking callback self-close behavior and
+the fixed no-self-join path with `tests/test_timer_reentrant_close_runtime.py`.
 `ParslWorkQueueResults.tla` refines WorkQueue's collector result protocol: valid result files,
 deserialization failures, app exceptions, no-result reports, and final cleanup of outstanding
 tasks when the collector exits.
+`ParslWorkQueueShutdown.tla` is now in the recurring smoke sweep, with the real collector-finally
+cleanup exercised by `tests/test_workqueue_shutdown_runtime.py`.
+`ParslTaskVineShutdown.tla` now has the same recurring check for TaskVine manager-failure cleanup,
+backed by `tests/test_taskvine_shutdown_runtime.py`.
 `ParslWorkQueueDuplicateReport.tla` refines the same collector with a stale/duplicate report
 interleaving. It captures the current `tasks.pop(task_report.id)` `KeyError` path, the resulting
 collector exit and unrelated-future cleanup, and a candidate guard that ignores reports whose
@@ -601,19 +743,127 @@ candidate uncached path that still reaches `dill.dumps`.
 `ParslFluxResult.tla` refines FluxExecutor's wrapped Future, result-file decoding, abnormal exit,
 and cancellation propagation; its actual configuration preserves a cancellation-orphan probe and
 the fixed configuration checks the candidate propagation fix.
+`ParslFluxSubmissionFailure.tla` is now in the smoke sweep and checks that a submit-thread
+exception drains every queued Future before Flux shutdown completes; the real bridge is
+`tests/test_flux_submission_failure_runtime.py`.
 `ParslTaskVineResults.tla` refines TaskVine's manager report and collector protocol, including
 result-file failure mapping and cleanup of all outstanding Futures after manager failure.
+It is now included in the recurring smoke sweep, with valid, missing, corrupt, exception, and
+manager-exit cases exercised by `tests/test_taskvine_results_runtime.py`.
 `ParslTaskVineDuplicateReport.tla` adds the stale-report interleaving to that collector. It
 captures the current duplicate-ID `KeyError`, the resulting collector exit and unrelated-future
 cleanup, and the candidate idempotent guard.
 `ParslRadicalPilotResults.tla` refines RadicalPilot callback mapping for Bash/Python/MPI tasks,
 master failure propagation, cancellation, and the shutdown pending-Future probe.
+Its current/fixed configurations are now in the recurring smoke sweep, with callback coverage
+provided by `tests/test_radical_results_runtime.py`.
 `ParslGlobusComputeConfig.tla` refines Globus Compute's temporary per-submit resource and endpoint
 configuration and records the caller-side serialization assumption needed to avoid cross-submit
 interference for either field.
 `ParslProviderKinds.tla` refines concrete provider behavior for Slurm-like and Kubernetes-like
 backends: submit/status/cancel outcomes, backend-to-Parsl state translation, missing jobs,
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
+It is now included in the recurring TLC smoke sweep so the provider-kind contract is checked
+alongside the provider poller and status-shape models.
+The Work Queue executor models are now covered as well: result-file decode outcomes, collector
+shutdown cleanup, cancelled or duplicate result races, resource-category admission, and submit
+serialization/process failures with orphaned-Future rollback candidates. Runtime probes in
+`tests/test_workqueue_*_runtime.py` exercise the corresponding current behavior.
+`ParslAWSProviderStatus.tla` is also in the sweep, covering EC2 pending/running/terminated
+translation, omitted instance responses, and the candidate completion mapping for a missing
+requested instance; the AWS runtime probes cover status, submit, unknown-instance, and cancel
+bookkeeping boundaries.
+Azure provider coverage now includes short/unknown VM status views, local-resource bookkeeping,
+partial VM provisioning rollback, linger-mode cancellation, and idempotent cleanup after a
+successful delete whose local instance ID is already absent. The corresponding current/fixed
+branches are in the TLC sweep and the runtime probes cover the concrete Azure methods.
+Google Cloud provider coverage now includes region-to-zone selection, unknown GCE status
+translation, failed-create instance numbering, and cancellation status synchronization. Current
+and candidate-fixed branches are in the sweep, with runtime probes covering the concrete GCE
+provider methods.
+HTCondor coverage now includes chunk-size validation, malformed and failed `condor_q` output,
+stale local job IDs, submit output parsing, and chunked cancellation. The current parser and
+bookkeeping failures are retained as counterexample configurations beside the fixed candidates;
+the Condor runtime probes exercise these concrete scheduler boundaries without requiring a live
+HTCondor installation.
+Grid Engine coverage now includes qstat malformed-record handling, malformed-record continuation
+within a batch, duplicate status lines, qsub empty/failure/success output, and qdel handling for
+known and unknown jobs. These models preserve the scheduler-specific terminal-state conventions
+while making the parser and local-resource failure paths explicit.
+LSF coverage now includes duplicate `bjobs` lines, missing-job completion semantics, unknown-job
+cancel handling, non-positive `cores_per_node`, and bsub success/failure/malformed output. The
+runtime probes cover the concrete LSF methods, while TLC keeps current behavior and candidate
+fixed behavior side by side.
+Slurm coverage now includes strict batching compatibility, duplicate and malformed status records,
+foreign scheduler jobs, cancellation bookkeeping, and custom submit-regex output. The runtime
+probes exercise `sbatch`, `sacct`, and `scancel` boundaries without a live scheduler.
+PBS Pro coverage now includes malformed qstat JSON, foreign jobs, short/qualified job-ID alias
+collisions, and empty versus valid qsub output. The current and candidate-fixed status/submit
+contracts are in the TLC sweep, with runtime probes for the concrete JSON and scheduler paths.
+Torque coverage now includes foreign and duplicate qstat records, stale output after command
+failure, qdel terminal-state conventions, empty/valid qsub output, and non-positive
+`tasks_per_node` admission. Current and fixed branches are included in the recurring sweep.
+LocalProvider coverage now includes live-process exit-file races, marker precedence after cancel,
+stale cancellation/status IDs, requested-status scoping, failed-launch script cleanup, and zero
+`tasks_per_node` admission. These models connect local process/file semantics to provider status
+and resource bookkeeping.
+Kubernetes coverage now includes Pending-versus-Running admission, API cancellation responses,
+stale cancellation/status IDs, read-error visibility, and submit-time resource state. The current
+and fixed branches are in the recurring TLC sweep, with runtime probes using fake Kubernetes API
+clients.
+The remaining provider utility contracts are now also covered: duplicate provider job IDs,
+duplicate poller registration, wall-clock rollback in provider polling, and sub-minute walltime
+conversion. Each has a current counterexample and a fixed/valid TLC configuration; runtime probes
+exercise the corresponding Python helpers.
+The provider-free ThreadPoolExecutor abstraction is now covered: blocking and non-blocking
+shutdown, pending versus running Future cancellation, resource-spec validation, and max-thread
+count validation. Runtime probes exercise the real executor and Future behavior.
+The command-execution boundary is now covered as well: malformed packed task messages are rejected
+before invocation, callable values and exceptions cross the execution boundary, and timeout paths
+explicitly distinguish process cleanup from merely re-raising an exception. Runtime probes cover
+`execute_task`, `execute_wait`, and the Bash timeout helper.
+`ParslPoolExecutorMap` is now in the sweep, checking eager submission, input-order result
+iteration, iterator timeout, and late completion without implicit Future cancellation; the runtime
+probe covers the same timeout/cancellation contract.
+HTEX submit-side coverage now includes concurrent task-counter allocation, queue failure rollback,
+and serialization-before-Future allocation ordering. Runtime probes reproduce the duplicate task ID
+and orphaned pending Future behaviors, while fixed configurations check the cleanup candidates.
+BlockProvider bad-state handling is now covered: marking an executor bad fails outstanding tasks,
+records the cause, rejects later submissions, and must tolerate callbacks mutating or completing
+the task dictionary during the failure sweep. Current mutation/order failures and fixed snapshot
+paths are included in TLC, with runtime probes for each behavior.
+CommandClient coverage now includes REQ/REP timeout poisoning, close/send races, lock acquisition
+past a deadline, unused max-retry behavior, pre-send timeout reuse, and negative poll-timeout
+calculation. Runtime probes exercise the corresponding ZMQ command-client paths.
+Heartbeat coverage now includes strict expiry thresholds, in-flight task loss accounting, wall-clock
+jumps versus monotonic age, stale late acknowledgements, and provider UNKNOWN versus terminal
+states. Runtime probes cover manager expiry, heartbeat messages, and clock-jump behavior.
+Monitoring coverage now includes atomic filesystem-radio publication, file-transfer version checks,
+zero-interval batching, monotonic batch clocks, close idempotence, permanent and transient DB
+errors, ordered event delivery, and zero-threshold queue handling. SQLite/runtime probes exercise
+the corresponding DatabaseManager and radio paths.
+FTP staging coverage now includes connection cleanup, partial destination cleanup, and in-task
+stage-in artifact publication. Failed transfers remain counterexample branches, while fixed paths
+remove partial bytes/close connections before exposing success or failure.
+HTTP staging coverage now includes response cleanup, atomic replacement of existing destinations,
+partial-stream cleanup, and non-2xx status validation before user-task execution. Runtime probes
+cover streaming failures and separate/in-task stage-in paths.
+Rsync staging coverage now includes shell-safe path quoting, stage-in gating before app execution,
+stage-out failure after app completion, and successful transfer publication. Runtime probes cover
+the command builder and both in-task/separate staging paths.
+File-object coverage now includes clean-copy semantics (preserving URL metadata while clearing
+site-local paths), local versus staged path resolution, and malformed zip URL rejection. Runtime
+probes exercise the corresponding `File` and zip staging helpers.
+Globus staging coverage now includes endpoint child-path validation, stage-in/stage-out Future
+dependencies, atomic token-file publication, and serialized per-submit resource configuration.
+Runtime probes cover endpoint/path and token-cache behavior, including the current race and
+truncation counterexamples.
+DataFuture coverage now includes cancellation propagation: a cancelled parent must not be treated
+as successful file readiness. Runtime probes cover cancelled/failed parents, falsey exceptions,
+clean file copies, and dependent-app gating.
+The remaining staging contracts are now covered: multi-output stage-out gating, first-capable
+provider dispatch, and zip archive stage-out retry/idempotence. Runtime probes cover output-wise
+dependency gating, provider selection, archive bytes, and duplicate-entry behavior.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
@@ -699,6 +949,7 @@ pod translation.
 `tests/test_kubernetes_submit_runtime.py` drives Kubernetes pod creation with a fake CoreV1 API,
 checking successful resource registration and API error propagation. The current source's initial
 `RUNNING` status is captured by `ParslKubernetesSubmit.tla`; the fixed model waits in `PENDING`.
+The current/fixed submit configurations are now part of the recurring smoke sweep.
 `tests/test_kubernetes_cancel_runtime.py` drives pod deletion with a fake API, distinguishing
 exception propagation from a returned error object that the current wrapper ignores. The
 `ParslKubernetesCancel.tla` fixed model preserves `RUNNING` for that returned-error case.
@@ -707,6 +958,8 @@ missing-instance behavior and normal instance-state translation.
 `tests/test_aws_submit_runtime.py` drives `AWSProvider.submit` with a fake instance launcher,
 checking successful registration, failed launch handling, unknown-state fallback, and the empty
 launch-response unpacking path modeled by `ParslAWSProviderSubmit.tla`.
+The narrower empty-response current/fixed model is also in the recurring smoke sweep, making the
+response-validation boundary explicit.
 `tests/test_pbspro_submit_runtime.py` executes the PBS Pro submit parser with temporary scripts
 and deterministic `qsub` output, checking the empty-output and registered-job paths.
 `tests/test_pbspro_status_runtime.py` drives PBS Pro's JSON status parser, checking known-job
@@ -821,14 +1074,20 @@ a cancellation request, yielding `COMPLETED`.
 `ParslLocalProvider.tla` models this provider-specific `.ec`/PID boundary; its current
 configuration finds the late-marker cancellation counterexample and its fixed configuration
 prioritizes cancellation during polling.
+Both configurations are now part of the recurring smoke sweep, backed by the real local-process
+and exit-file checks in `tests/test_local_provider_runtime.py`.
 `ParslLocalProviderStatusScope.tla` models the current `status(job_ids)` implementation's loop
 over all resources. Its current configuration exposes an unrelated missing `.ec` file aborting a
 valid query, while the fixed configuration limits observation to requested IDs.
+Its current/fixed configurations are now included in the recurring smoke sweep, backed by
+`tests/test_local_provider_status_scope_runtime.py`.
 `ParslGridEngineStatus.tla` models the Grid Engine malformed-qstat boundary. Its current
 configuration reproduces the short-line crash; fixed and valid-output configurations pass.
 `ParslGoogleCloudStatus.tla` models direct GCE status-table lookup: the current unknown-status
 configuration produces a depth-2 `KeyError`-style crash, while tolerant and known-status paths
 pass.
+The three GCE status configurations are now part of the recurring smoke sweep, backed by
+`tests/test_googlecloud_status_runtime.py`.
 `ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,
@@ -866,6 +1125,166 @@ Future resolution.
 `ParslJoinCallbackRace.tla` models the actual `join_app` callback gate: early callbacks return
 without finalizing, the final callback checks all inner Futures under a lock, failures become
 `JoinError` only after all selected Futures are done, and duplicate callbacks are harmless.
+The callback-race and immediate-callback configurations are now part of the recurring TLC sweep;
+`tests/test_join_callback_runtime.py` and `tests/test_join_runtime.py` exercise the same early,
+duplicate, failure, cancellation, and already-completed Future paths against the real kernel.
+`ParslJoinReturnEquality.tla` is now in the sweep as well: it checks that return-shape validation
+does not invoke user-defined equality before determining whether a join result is a Future or a
+list. `tests/test_join_return_equality_runtime.py` reproduces the current callback escape and
+pending outer Future.
+The sweep also includes `ParslJoinFailureAggregation.tla` and `ParslJoinErrorRootCause.tla`.
+Together they check that all failed inner Futures are collected in join-list order and that a
+nested `JoinError` preserves the first leaf exception and representative path annotation. The
+runtime bridges are `tests/test_join_failure_aggregation_runtime.py` and
+`tests/test_join_error_root_cause_runtime.py`.
+`ParslTaskStatusFutureOrdering.tla` is also in the sweep: it checks the concrete ordering in
+`_complete_task_result`, where the logical task reaches `exec_done` before the public AppFuture is
+resolved. `tests/test_task_status_future_ordering_runtime.py` records the status observed by the
+Future completion callback.
+The monitoring sweep also includes `ParslMonitoringMalformedWorkerMessage.tla`: malformed worker
+task envelopes with neither `first_msg` nor `last_msg` must be discarded without killing the
+database worker. `tests/test_monitoring_malformed_worker_message_runtime.py` reproduces the
+current thread failure against the real `DatabaseManager`.
+`ParslMonitoringCloseIdempotence.tla` now covers repeated abnormal shutdown: the first close
+publishes the workflow finalization, while later closes must be no-ops. The runtime bridge
+`tests/test_monitoring_close_idempotence_runtime.py` reproduces the duplicate update in the
+current implementation.
+`ParslMonitoringShutdownRace.tla` now covers the late-producer shutdown boundary: a migration
+worker must not stop on an empty queue until its producer is closed, otherwise a message enqueued
+immediately after the observation is stranded. `tests/test_monitoring_shutdown_race_runtime.py`
+reproduces the current empty-queue race.
+`ParslMonitoringShutdownDrain.tla` complements that race model with the normal shutdown path:
+messages accepted before the kill signal are conserved across external-queue migration and
+internal processing. `tests/test_monitoring_shutdown_drain_runtime.py` exercises the real queue
+drain after the kill event.
+`ParslMonitoringDeferredMultiplicity.tla` now covers multiple worker `first_msg` observations
+arriving before the TRY row: the fixed branch preserves both deferred observations for replay,
+while the current single-slot map overwrites the earlier one. The concrete bridge is
+`tests/test_monitoring_deferred_multiplicity_runtime.py`.
+The baseline `ParslMonitoringDeferred.tla` is also in the recurring sweep, checking the normal
+first-message deferral/replay path, foreign-key gating, and latest-observation replacement. The
+runtime bridge is `tests/test_monitoring_deferred_runtime.py`.
+`ParslMonitoringDispatchEnvelope.tla` now covers the queue-envelope boundary before internal
+dispatch: malformed tuples must be rejected without terminating the migration thread, while valid
+two-element envelopes are admitted. `tests/test_monitoring_dispatch_envelope_runtime.py`
+reproduces the current assertion on a one-element tuple.
+`ParslMonitoringHubClose.tla` covers the public MonitoringHub cleanup lifecycle and idempotence:
+the DB stop signal, process join, queue close, and queue join each occur once, even if `close()`
+is called repeatedly. `tests/test_monitoring_hub_close_runtime.py` checks the real cleanup ordering
+with deterministic doubles.
+`ParslWorkerContactTimeout.tla` is now in the clock sweep, modeling the concrete HTEX worker
+contact loop: heartbeats follow their period, contact refreshes the deadline, and the worker stops
+at the threshold only after a no-message poll. The related real worker clock probes remain in
+`tests/test_worker_contact_clock_rollback_runtime.py` and
+`tests/test_worker_pool_heartbeat_runtime.py`.
+`ParslTimedHeartbeat.tla` is now in the recurring sweep, combining manager heartbeat expiry,
+per-attempt deadlines, and late-result handling; the current branch accepts a stale result while
+the fixed branch classifies it without resolving the rejected Future. The concrete heartbeat
+encoding probes remain in `tests/test_worker_pool_heartbeat_runtime.py`.
+`ParslWorkerContactClockRollback.tla` is also in the sweep as a concrete clock-failure model:
+the current wall-clock comparison can suppress expiry after a backward step, while the fixed
+branch uses monotonic elapsed age. `tests/test_worker_contact_clock_rollback_runtime.py`
+reproduces the wall-clock behavior with a deterministic time sequence.
+`ParslHtexUnknownManagerMessage.tla` is now in the executor sweep for both unknown heartbeat and
+unknown result messages. The model requires non-registration traffic from an unknown manager to
+be ignored without creating a ready-manager record, replying, or forwarding a result;
+`tests/test_htex_unknown_manager_runtime.py` drives the real interchange handler.
+`ParslHtexUnknownTaskResult.tla` now covers stale result frames whose task IDs were removed by
+retry, cancellation, or teardown: the current result worker dies on an unconditional lookup,
+while the fixed branch discards the stale frame and continues to a live task. The runtime bridge
+is `tests/test_htex_unknown_task_result_runtime.py`.
+The recurring sweep also includes `ParslHtexManagerMessage.tla` for malformed multipart/pickle
+messages and valid heartbeat messages: malformed input is ignored without state changes, while a
+heartbeat updates contact time and emits the expected reply. The runtime bridge is
+`tests/test_htex_manager_message_runtime.py`.
+`ParslProviderStatusBatch.tla` is now in the provider sweep, checking bounded batch size,
+failure atomicity, missing-job completion mapping, and terminal-state stability for scheduler
+polls. `tests/test_provider_status_shape_runtime.py` provides the concrete provider status-shape
+bridge.
+`ParslProviderPolling.tla` is now in the provider sweep, covering submit admission, pending/running
+status transitions, unknown-status failure, transient API errors, cancellation rollback, and
+bounded polling. The clock/runtime probes in `tests/test_provider_poll_clock_runtime.py` and
+`tests/test_provider_poll_clock_rollback_runtime.py` exercise the concrete polling boundary.
+`ParslProviderStatusShape.tla` is now in the provider/executor sweep: a short `status()` response
+must not abort the whole poll; the fixed branch preserves the known result and marks the missing
+observation explicitly. `tests/test_provider_status_shape_runtime.py` reproduces the current
+`IndexError` path.
+`ParslPollerBadState.tla` is now in the provider sweep, checking failure-threshold handling,
+outstanding-task failure, bad-state admission blocking, and the no-scale-after-bad-state rule.
+`ParslDataManagerStageInOrdering.tla` is now in the staging sweep: the current ordering starts a
+stage-in transfer before wrapper preparation, so wrapper failure can leave an orphaned transfer;
+the fixed branch prepares the wrapper first and only then starts stage-in. This complements the
+runtime staging-provider dispatch probes.
+`ParslDataManagerStageOutOrdering.tla` mirrors the output side: wrapper construction must precede
+starting a provider stage-out Future, otherwise wrapper failure leaves a live orphan transfer.
+`tests/test_data_manager_stage_out_ordering_runtime.py` reproduces that current behavior.
+`ParslSerializationEnvelopeMalformed.tla` is now in the serialization sweep: truncated or
+headerless envelopes must become a controlled decode rejection rather than a raw framing error.
+`tests/test_serialization_envelope_malformed_runtime.py` reproduces the current failure on a
+truncated payload.
+`ParslSerializationBinaryPayload.tla` is now in the serialization sweep, checking length-prefixed
+framing for newline, NUL, and non-ASCII bytes. `tests/test_serialization_binary_payload_runtime.py`
+round-trips the same byte classes through the real `pack_buffers`/`unpack_buffers` implementation.
+`ParslSerializationFrameCount.tla` is also in the sweep: apply-message frame count is validated
+before deserialization in the fixed branch, preventing extra frames from being decoded before
+rejection. `tests/test_serialization_frame_count_runtime.py` reproduces the current four-frame
+decode-before-assertion path.
+`ParslSerializationShortFrameCount.tla` complements the extra-frame model for truncated
+two-frame messages: the fixed branch validates the count before decoding, while the current
+branch deserializes available frames first. `tests/test_serialization_short_frame_count_runtime.py`
+reproduces that current path.
+`ParslSerializationNegativeLength.tla` is now in the sweep, requiring a receiver to reject
+negative length declarations before Python slicing. `tests/test_serialization_negative_length_runtime.py`
+reproduces the current partial-slice then parse failure.
+`ParslSerializationTruncatedLength.tla` adds declared-length validation: a frame claiming more
+bytes than remain must be rejected before deserialization. `tests/test_serialization_truncated_length_runtime.py`
+reproduces the current short-payload handoff.
+`ParslSerializationLength.tla` is also in the sweep as the compact declared-vs-actual frame
+length abstraction; the strict configuration rejects mismatches before exposing payload bytes.
+`tests/test_serialization_runtime.py` exercises the concrete short-frame behavior.
+`ParslSerializationSnapshot.tla` is also in the sweep, checking that callable/object content is
+captured at `pack_apply_message` time and remains isolated from later source mutation. The real
+snapshot bridges are `tests/test_function_object_contents_runtime.py`,
+`tests/test_callable_argument_alias_runtime.py`, and `tests/test_callable_retry_transport_runtime.py`.
+`ParslSerializationZMQBridge.tla` is now in the sweep, connecting serializer framing to ZMQ
+transport, route validation, duplicate suppression, retry-attempt correlation, and stale-result
+classification. Concrete bridges include `tests/test_zmq_serialization_runtime.py`,
+`tests/test_callable_retry_transport_runtime.py`, and `tests/test_task_transport_runtime.py`.
+`ParslCurveZMQCertificateMode.tla` is now in the ZMQ sweep, checking that secret keys load only
+from private certificate directories and that missing keys or unsafe modes are rejected.
+`tests/test_curvezmq_certificate_runtime.py` drives the real certificate loader.
+`ParslWorkerPoolControlFrame.tla` is now in the serialization/HTEX sweep: valid heartbeat and
+drain frames decode as distinct control records, while malformed pickle frames are discarded in
+the fixed branch instead of crashing the receive loop. The runtime bridge is
+`tests/test_worker_pool_control_frame_runtime.py`.
+`ParslHtexResultDecodeFailure.tla` is now in the executor sweep: corrupt result payloads must not
+orphan a pending Future after task-map removal. The fixed branch delivers a terminal decode error
+and keeps the result worker alive; `tests/test_htex_result_decode_failure_runtime.py` reproduces
+the current orphaning path.
+`ParslHtexAmbiguousResult.tla` is now in the executor sweep: result frames carrying conflicting
+success and exception fields are rejected as malformed in the fixed branch instead of silently
+resolving the Future as success. `tests/test_htex_ambiguous_result_runtime.py` exercises the
+real result handler.
+`ParslHtexCancelledResult.tla` also covers a late result racing with user cancellation: the
+current branch lets `set_result` raise and kills the result worker, while the fixed branch
+discards the cancelled task's result and continues to later messages. The concrete bridge is
+`tests/test_htex_cancelled_result_runtime.py`.
+`ParslHtexDuplicateResult.tla` is now in the executor sweep: after the first result removes the
+task map entry, a duplicate frame must be classified as stale and leave the result worker alive.
+The related concrete result-queue probes cover duplicate/late frame handling.
+`ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
+loading exactly once and stable reuse for a second payload. The concrete bridge is
+`tests/test_serialization_plugin_cache_runtime.py`.
+`ParslSerializationPluginFailureCache.tla` is now in the sweep: a plugin that raises during
+decode must not remain cached as if it were healthy. `tests/test_serialization_plugin_failure_cache_runtime.py`
+reproduces the current poisoned-cache behavior.
+`ParslSerializationPluginError.tla` is now in the sweep, covering an importable class that lacks
+the serializer `deserialize` interface. `tests/test_serialization_plugin_error_runtime.py`
+reproduces the current raw `AttributeError` and contrasts it with the already-wrapped import
+failure path.
+`ParslSerializationFallback.tla` is now in the sweep for primary success, primary failure with
+secondary success, and all-serializer failure. `tests/test_serialization_fallback_runtime.py`
+checks fallback ordering and re-raising of the final serializer exception.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
@@ -909,6 +1328,9 @@ event, while the fixed branch preserves the database high-water mark and termina
 `ParslCallableClosureMemo.tla` connects closure contents to memoization: real serialized
 closures differ when their captured values differ, while the current name/module-only key
 collides and can return the first closure's result.
+`ParslCallableMutationCache.tla` now also runs in the smoke sweep, checking that mutable callable
+state cannot be hidden by a stale Dill serializer payload; `tests/test_callable_mutation_cache_runtime.py`
+demonstrates the current cached-payload behavior.
 
 The monitoring TRY-row bookkeeping model is now included in the recurring TLC smoke sweep:
 the current configuration produces the failed-insert counterexample, while the fixed
@@ -942,6 +1364,355 @@ drain/recovery, and scale-in; `ParslProviderExecutorBridge` checks provider term
 revoke executor capacity and account for queued/running work. The lifecycle model retains a
 deliberately broken scale-in-floor configuration alongside its fixed configuration.
 
+The integrated join models are now in the smoke sweep: `ParslJoinFull` covers single/list/empty/
+invalid returns, duplicate list positions, retry, cancellation, failure aggregation, and terminal
+join handles; `ParslJoinEndToEnd` adds the logical-Future/physical-attempt split and ordered result
+reconstruction for a retryable duplicate-preserving list.
+
+The callable and wire-serialization boundary models are now in the smoke sweep. `ParslApplyMessageArity`
+checks that the apply-message unpacker cannot expose an unexpected frame count; `ParslCallableArgumentAlias`
+checks alias preservation across callable/argument decoding; and `ParslCallableDeserializeCache` checks
+that a mutable callable is not returned from a stale deserialization cache. `ParslCallableSerializerCache`
+and `ParslPoolExecutorCallableCache` cover unhashable callable admission, while `ParslSerializationEmptyRegistry`
+and `ParslSerializerRegistry` cover explicit empty-registry failure and ambiguous plugin identifiers.
+`ParslTaskTransport` and `ParslZMQ` connect object-graph serializability, framed task/result transport,
+retry identity, duplicate delivery, route validation, and stale-result rejection. Runtime probes cover
+the corresponding Parsl serializer, pool-executor, ZMQ, and task-transport paths.
+
+The first explicit clock/timeout parameter models are now in the smoke sweep. `ParslHeartbeatParameterValidation`
+checks admission of positive HTEX heartbeat period and threshold values; `ParslPythonTimeoutParameter`
+checks that non-positive Python-app timeout delays are rejected instead of causing an immediate timer
+fire; `ParslResourceMonitorClock` contrasts wall-clock scheduling with elapsed monotonic time after a
+clock rollback; `ParslTimeoutTimer` checks cancellation on both normal return and ordinary exceptions;
+and `ParslTimerIntervalValidation` checks negative periodic intervals. Runtime probes cover all five
+boundaries, and the current configurations intentionally produce TLC counterexamples for the unsafe
+branches while fixed and valid configurations pass simulation.
+
+The Future/DataFuture foundation is also in the sweep. `ParslDataFutureCopy` models clean stage-in
+copy isolation and dependency gating; `ParslDataFutureFalseyException` captures failure propagation
+when a user exception has false boolean value; `ParslFutureCancellation` distinguishes public
+AppFuture/DataFuture cancellation from cancellation of an underlying concurrent-futures object;
+`ParslFutureProjection` models deferred `__getitem__`/`__getattr__` tasks and invalid-key/failure
+propagation; and `ParslFutureWaitTimeout` separates caller-side `Future.result(timeout=...)` from
+the app's own wall timeout. Runtime probes cover DataFuture staging, cancellation, falsey exceptions,
+and deferred projections. The falsey-exception current branch produces a TLC counterexample; fixed,
+normal, and other contract configurations pass simulation.
+
+The next `join_app` refinement is in the sweep. `ParslJoinDuplicates` preserves duplicate Future
+references as separate list positions and counts repeated failures; `ParslJoinMixedList` and
+`ParslJoinReturnShape` validate accepted Future/list/empty-list returns before registering callbacks;
+`ParslJoinNoneResult` treats `None` as a successful value; `ParslJoinRetry` separates logical inner
+Futures from physical retry attempts; and `ParslJoinRetryCancellation` plus
+`ParslJoinSingleCancellation` cover cancellation during retry and single-Future callbacks.
+Runtime probes cover duplicate-preserving retries, `None` results, return-shape validation, and
+cancellation. The current cancellation branches produce TLC counterexamples, while fixed branches
+and the other valid shapes pass simulation.
+
+Memoization now has a focused object-content sweep. `ParslMemoDictOrdering` models heterogeneous
+Python dictionary keys that cannot be sorted during hashing; `ParslMemoIgnoreKey` validates unknown
+`ignore_for_cache` names; `ParslMemoIgnoreOutputs` makes removal of the special `outputs` key
+idempotent; `ParslMemoCheckpointOrder` checks that duplicate hashes select the newest checkpoint
+rather than lexical directory order; and `ParslMemoExceptionCheckpoint` contrasts in-memory failed
+Future reuse with failure persistence across restart. Runtime probes reproduce all five current
+behaviors. Each current configuration produces its expected TLC counterexample, while fixed and
+homogeneous/valid configurations pass simulation.
+
+The callable/object-content layer now also covers caller-owned list mutation. `ParslInputListMutation`
+models staging rewrites of an `inputs` list, and `ParslOutputListMutation` models clean-copy rewrites
+of an `outputs` list. Both current branches mutate the caller-visible value, while snapshot/fixed
+branches preserve it. The two runtime probes reproduce the current behavior and both fixed models
+pass TLC simulation.
+
+The executor/strategy baseline is now extended with `ParslExecutorKinds`, which distinguishes
+provider-free local executors from manager/provider-backed HTEX, MPI, and Work Queue paths and checks
+admission, drain, failure cleanup, and resource-request restrictions. `ParslNegativeScaleIn` models
+negative `scale_in` slicing, while `ParslStrategy` and `ParslStrategyBlockCapacity` cover idle scale-in,
+overload scale-out, minimum-block bounds, and zero-capacity validation. Runtime probes cover strategy
+polling and negative scale-in. The current negative-input and zero-capacity branches produce TLC
+counterexamples; fixed and normal configurations pass simulation.
+
+The provider baseline now includes the remaining un-swept AWS cancel paths and the full local
+provider state machine. `ParslAWSProviderCancel` covers successful remote termination, stale local
+instance cleanup, and the linger path. `ParslLocalProvider` models process liveness, `.ec` exit
+markers, malformed output, cancellation, and the late-success race; its current configuration
+produces the expected strict-cancellation counterexample. Runtime probes cover real local process
+launch/status/cancel behavior and failed-launch cleanup, while the AWS configurations pass TLC
+simulation.
+
+The Flux executor boundary is now represented by four focused models. `ParslFluxCancelSubmitRace`
+covers cancellation before the underlying Flux future is bound; `ParslFluxCancelUnderlyingState`
+propagates an already-cancelled underlying future; `ParslFluxProviderStatusEmpty` handles an empty
+provider status response; and `ParslFluxResult` covers result-file validity, nonzero/task exceptions,
+shutdown, and cancellation propagation to the Parsl-facing wrapper. Runtime probes cover ten Flux
+paths. All four current configurations produce the expected cancellation/status counterexamples,
+while fixed configurations pass TLC simulation.
+
+The HTEX protocol layer now includes address-probe timeout propagation, `cores_per_worker` admission,
+priority/capacity dispatch, version-mismatch fatal handling, and ingress type validation for task IDs
+and task context. `ParslHtexDispatchPriority` passes the normal priority and drain invariants;
+the other current branches reproduce dropped zero timeouts, division by zero, post-mismatch admission,
+and malformed-envelope crashes. Runtime probes cover all five concrete HTEX boundaries, and fixed or
+valid configurations pass TLC simulation.
+
+The HTEX manager/worker lifecycle is now extended with `ParslHtexManagerLoss`, which checks that
+manager expiry emits a synthetic result that resolves the affected Future; `ParslHtexManagerTaskAdmission`,
+which models registration, heartbeat expiry, retry, and stale-result correlation; and two worker
+receiver models for malformed batch shapes and corrupt pickle frames. `ParslHtexMonitoringMessage`
+covers optional monitoring payloads when no radio is configured. Runtime probes cover manager loss,
+monitoring-disabled messages, malformed batches, and frame continuation. The current manager-loss,
+worker receiver, and monitoring-disabled branches produce TLC counterexamples; fixed and enabled
+configurations pass simulation.
+
+Provider/executor resource-provisioning boundaries are now in the sweep. `ParslProbeAddresses`
+covers empty candidate sets, successful probe replies, and timeout failure; `ParslProvisioningAdmissionMonitoring`
+connects block allocation to task admission and failure monitoring; `ParslScaleInCancelShape` handles
+short cancellation responses; `ParslScaleInRetryMonitoring` separates lost-task retry from late
+results; and `ParslScaleOutFailureMonitoring` requires failed blocks to remain visible in monitoring.
+Runtime probes cover five concrete paths. Current configurations reproduce missing monitoring,
+shape-assertion, and late-result counterexamples; fixed/normal configurations pass TLC simulation.
+
+The MPI executor baseline is now in the sweep. `ParslMPINonDivisibleRanks` models rank-per-node
+derivation and rejects fractional allocations in the fixed branch; `ParslMPIPrefix` validates
+launcher prefix selection; and `ParslMPISpec` checks legal resource keys, missing-rank derivation,
+and zero-node validation. Runtime probes cover seven MPI construction/command paths. The current
+non-divisible and zero-node configurations produce counterexamples, while fixed, valid, and prefix
+configurations pass TLC simulation.
+
+The compact end-to-end protocol `ParslEndToEnd` is now explicitly in the recurring sweep. It joins
+dependency release, physical attempts, wire progress, worker execution, retry, timeout, and late
+result correlation in one small state machine. The current configuration reproduces an old timed-out
+attempt resolving the Future; the fixed configuration rejects it as stale. The corresponding runtime
+probe passes, and the fixed TLC configuration passes simulation.
+
+The remaining submit configuration aliases are now covered explicitly: `ParslHtexSubmitSuccess`
+checks the successful task/Future mapping, while the Work Queue serialization-failure current and
+fixed configurations exercise the same rollback contract with their concrete repository paths.
+These cases pass or reproduce the expected counterexample under TLC; the existing submit runtime
+probes cover the corresponding Python paths.
+
+The monitoring database reorder configuration is now explicitly included in the sweep using the
+versioned `ParslMonitoringDB` abstraction. I also added the separate `ParslDataFutureCancellation`
+model: a cancelled parent currently publishes its DataFuture as available, while the fixed branch
+propagates terminal failure. The existing DataFuture cancellation runtime probe covers this path;
+current TLC produces the expected counterexample and the fixed configuration passes.
+
+The dependency and join input layer is now expanded. `ParslDependencyTraversal` covers direct,
+list, tuple, set, and dictionary Future locations under shallow versus deep traversal; shallow list
+and dict configurations reproduce nested-Future leakage, while all deep shapes pass. The join sweep
+also includes `ParslJoinValueList` (rejecting non-Future values) and `ParslJoinInternalExecutor`
+(ensuring the outer join task targets `_parsl_internal`). Runtime probes cover twelve dependency/join
+paths, including internal-executor selection and nested container unwrapping.
+
+Retry-handler validation is now in the sweep. `ParslRetryHandler` covers zero-cost handlers bypassing
+a zero retry budget; `ParslRetryHandlerNegativeCost` covers negative costs that make attempts
+unbounded; and `ParslRetryHandlerNonNumericCost` covers invalid handler return types leaving a Future
+pending. Runtime probes reproduce all three current behaviors. Current configurations produce TLC
+counterexamples, while fixed and positive-cost configurations pass simulation.
+
+The remaining join/dataflow edge cases are now in the sweep. `ParslJoinCancellation` and
+`ParslJoinListCancellation` cover cancelled inner Futures; `ParslJoinMemoData` combines memo hits,
+DataFuture readiness, and ordered callbacks; `ParslJoinRetryDuplicates` preserves duplicate list
+positions across physical retries; `ParslLastCheckpointUUID` covers UUID-named run directories; and
+`ParslResultRace` models failure/retry versus late success callbacks. Runtime probes cover nine join,
+checkpoint, and memoization paths. Current cancellation/order/checkpoint configurations produce TLC
+counterexamples; fixed, success, memo, and result-race configurations pass simulation.
+
+The core lifecycle layer is now extended with `ParslDataFlowCleanup` (ordered, idempotent shutdown),
+`ParslDataFlowWaitSnapshot` (late task insertion during `wait_for_current_tasks`),
+`ParslResultDecodeRetry` (decode failure, retry, and stale result correlation), and
+`ParslTaskStagingMonitoring` (complete stage-out before DataFuture readiness, consumer admission, and
+monitoring persistence). Runtime probes cover cleanup and wait-snapshot behavior. Current wait,
+decode, and staging/monitoring branches produce TLC counterexamples; fixed configurations pass.
+
+The abstract wire/file configurations are now explicitly tracked as well. `ParslFileContent` checks
+content tokens, chunk completion, and file publication; `ParslNestedSerialization` checks bounded
+object-graph closure; `ParslResultSerializationFailure` checks an unencodable worker result; and
+`ParslMessaging` checks bounded task/result queues, correlation, and serialization gates. These four
+configurations pass TLC simulation under the shared `ParslAbstract` state machine.
+
+The staging sweep now explicitly includes `ParslFileCorruption`, `ParslGlobusStageOutDependency`,
+and `ParslZipStageIn`. These cover corrupted output chunks, stage-out dependency gating, corrupt
+archives, and atomic versus partial output publication on write failure. Runtime probes cover eight
+file/archive/Globus paths. The current Zip write-failure configuration produces the expected partial-
+file counterexample; fixed, corrupt-archive, dependency, and content configurations pass simulation.
+
+The core `ParslAbstract` smoke sweep now also includes executor drain, idle-manager timeout, provider
+failure, registration success/failure/recovery, scale-in, serialization failure, submit failure, and
+terminal timeout configurations. These bounded scenarios completed TLC simulation without invariant
+violations in the exercised runs, extending startup, capacity, failure, and shutdown coverage beyond
+the focused models.
+
+The abstract smoke matrix now explicitly includes normal execution, join, invalid join, memoization,
+monitoring, and serialization-failure configurations using `ParslAbstract`. The no-failure variant
+contains a temporal `EventuallySettled` property and currently triggers a TLC 2.19 simulator
+NullPointerException in this environment, so it remains documented but is not marked as a passing
+sweep case; this is a verifier/runtime limitation rather than a claimed model result.
+
+The remaining simple aliases now include `ParslMinBlocks` and the original
+`ParslJoinCancellation.cfg` entry. `ParslMinBlocks` passes the shared abstract model; the original
+join-cancellation configuration reproduces the same callback-crash counterexample as its focused
+current variant. `ParslTime.cfg`, `ParslLocalExecutor.cfg`, and `ParslMultiManagerTimeout.cfg` still
+use older constant/spec layouts and are intentionally not classified as passing until they are
+migrated to the current abstract module.
+
+The LocalExecutor and MultiManagerTimeout configurations have now been checked against the current
+`ParslAbstract` module and both pass simulation. `ParslTime.cfg` remains separate because its
+fairness/property configuration triggers the known TLC simulator NullPointerException; it needs a
+dedicated temporal-model migration rather than being relabeled as a safety-only pass.
+
+That migration now exists as `ParslTimeSafety.cfg`: it preserves the original time constants but
+uses the safety-only `Spec` and explicit time/worker/message invariants. TLC simulation passes this
+configuration; the original `ParslTime.cfg` remains available for a future fairness/liveness run.
+
+The no-failure abstract scenario has the same split: `ParslNoFailures.cfg` remains the temporal
+fairness/liveness configuration, while `ParslNoFailuresSafety.cfg` runs the identical bounded DAG
+with `Spec` and the core safety invariants. The safety companion completed a TLC simulation with
+155,120 states checked; this separates a simulator limitation in the temporal run from ordinary
+no-failure protocol safety.
+
+`ParslContentFilePipeline` is the first deliberately cross-layer content model: it connects a
+callable/object version snapshot, encoded/sent/decoded task payload, two-chunk file stage-in,
+atomic file publication, worker admission, and result/Future delivery. Source mutation can be
+interleaved at any point, but execution requires a decoded payload and an available file, and the
+published result records the captured versions. TLC simulation checked 100,001 states with all
+pipeline safety invariants enabled.
+
+ParslHeartbeatRetry now connects logical time, a rollback-prone wall clock, manager heartbeat
+expiry, task timeout, physical retry, and a late completion. The current configuration produces a
+counterexample for accepting a late result after timeout; the fixed configuration uses monotonic
+heartbeat age and stale-result classification and checks 100,001 simulated states successfully.
+
+The monitoring source/model map is now documented in docs/monitoring-model.md. It ties
+DataFlowKernel._send_task_info, DatabaseManager.start, _insert, _update, batching, and cleanup
+to the logical-task/physical-try/event-queue abstraction, and explicitly records where the
+current source uses unbounded database retry or deferred worker-message bookkeeping.
+
+The executor/provider boundary is now documented in docs/executor-provider-model.md. It maps
+ThreadPoolExecutor, HTEX, MPI, Work Queue, TaskVine, Flux, Globus Compute, and
+BlockProviderExecutor to the unified executor-kind model and its admission, capacity, drain,
+and failure-cleanup properties.
+
+The serialization/ZMQ source-model map is now documented in docs/serialization-zmq-model.md.
+It ties facade serialization, the three-buffer apply-message contract, HTEX task/result transport,
+worker result decoding, and attempt correlation to the layered wire-state models.
+
+The callable retry transport model now includes an explicit serialized-to-running dispatch step.
+Its previous failure/complete actions could fire directly from serialized, leaving the declared
+running state unreachable and under-modeling worker execution. Current/fixed retry and stale-result
+checks now exercise the physical running attempt before failure or completion.
+
+The file-content model also had an unreachable corruption-rejection branch: corruption changed a
+chunk to corrupt before the receiver could inspect its checksum, while rejection required sent.
+ParslFileBytes now keeps corrupted bytes in sent state until RejectCorruptChunk observes the
+mismatch, after which repair and retransmission remain available.
+
+The same protocol correction is applied to ParslDataFutureTransfer: a corrupt stage-out chunk
+remains sent until RejectCorrupt checks its checksum, so DataFuture publication cannot bypass the
+receiver-side rejection path.
+
+ParslFileTransferRetry now uses the same explicit receiver rejection step before repair. This
+keeps stale-version detection and checksum corruption as separate protocol events instead of
+collapsing transport failure into a local chunk state.
+
+Its current/fixed configurations now also check CorruptionRejectionSafety: every corrupt chunk
+must retain a checksum mismatch until repair clears the transfer state.
+
+After the callable dispatch and file-corruption refinements, the complete runtime bridge was
+rerun: all 486 runtime tests passed in 13.254 seconds. The suite intentionally logs malformed,
+cancelled, and provider-failure paths; those diagnostics are expected and the final result was
+OK.
+
+The integrated join model now admits cancellation while an inner physical attempt is running.
+Previously the action contained a running-attempt branch that was unreachable because its guard
+only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
+duplicate-input, retry, and cancellation variants after this coverage correction.
+
+The focused ParslJoinRunningCancellation model now drives that race from pending to running,
+cancellation, callback, and outer terminal state. Its current configuration reproduces the
+pending-outer-Future callback escape; the fixed configuration converts the running inner
+Cancellation into terminal outer failure.
+
+The join source/model map is now documented in docs/join-model.md, including the distinction
+between logical inner Futures, physical attempts, callback locking, ordered list positions,
+duplicate references, and JoinError failure multiplicity.
+
+ParslPython now tracks a bounded source epoch separately from object serializability. Encoding
+captures the epoch, later source mutation is allowed without changing the wire snapshot, and
+SnapshotEpochSafety checks that decode remains tied to the captured submission epoch. The normal,
+failure, and cyclic object-graph configurations all include this invariant.
+
+The concrete executor mapping now records the Globus Compute shared-configuration race and its
+critical-section refinement, linking the focused model and runtime probe to the actual submit
+implementation.
+
+The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
+rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
+ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
+probes cover sixteen Work Queue/TaskVine submission and result paths, including valid, malformed,
+exception, and cancelled reports. Current failure branches produce TLC counterexamples; rollback and
+fixed collector configurations pass simulation.
+
+Two additional HTEX lifecycle models are now in the sweep. `ParslHtexForceScaleIn` makes the
+busy-block behavior explicit: the current forced scale-in cancels an active worker context, while
+the fixed branch protects it. `ParslHtexMonitoringBatchContinuation` checks that an optional
+monitoring frame cannot abort a following valid task result when monitoring is disabled. Runtime
+probes cover both paths; current configurations produce TLC counterexamples and fixed configurations
+pass simulation.
+
+Scheduler output parsing is now covered by `ParslJobStatusOutputReadError`, which aligns stdout and
+summary read-error handling, and `ParslJobStatusOutputSummary`, which distinguishes missing files,
+exact-threshold output, and head/tail truncation above the threshold. Runtime probes cover five
+filesystem/status paths. The current summary-read error branch produces a TLC counterexample; fixed
+and all summary-shape configurations pass simulation.
+
+Callback-based executors are now covered by `ParslRadicalPilotFailurePayload`, which wraps a missing
+exception payload before resolving a failed Future; `ParslRadicalPilotLateCallback`, which suppresses
+DONE after cancellation; and `ParslRadicalPilotUnknownCallback`, which ignores callbacks for removed
+tasks. `ParslGlobusComputeResult` models direct propagation of SDK success, failure, and cancellation
+without an extra wrapper state. Runtime probes cover ten Radical Pilot/Globus Compute paths. Current
+Radical Pilot configurations produce the expected callback/failure counterexamples; fixed and direct
+SDK propagation configurations pass TLC simulation.
+
+The executor transport lifecycle now includes `ParslResultsIncoming` for multipart receive, poll
+timeout, and close behavior, `ParslResultsIncomingCloseRace` for get-after-close, and
+`ParslTasksOutgoing`/`ParslTasksOutgoingCloseRace` for send and post-close put behavior. Runtime
+probes cover seven real ZMQ pipe paths. Current close-race configurations reproduce socket-use-after-
+close failures; normal, timeout, and fixed configurations pass TLC simulation.
+
+The serialization layer now has an explicit two-task correlation model in
+`ParslMessageCorrelation.tla`. It separates logical task identity from physical attempt identity,
+permits bounded queue reordering, duplicate delivery, late retry results, and misrouting, and
+requires both the origin task and current attempt before a Future is resolved. The current
+configuration produces the expected correlation counterexample; the fixed configuration checks
+100,907 simulated states.
+
+The serializer facade now has an explicit `ParslSerializerHeaderConsistency.tla` model. It keeps
+the body-producing serializer separate from the newline-delimited header and rejects a swapped
+callable/data header instead of treating the mismatched payload as a valid decode. The current
+configuration produces the expected mismatched-header counterexample; the fixed configuration checks
+100,001 simulated states.
+
+Dynamic dataflow now includes `ParslDynamicTaskFanout.tla`: a completed parent creates two logical
+children, the second child depends on the first child as well as the parent, and each child has a
+bounded physical retry counter. The model checks creation, dependency, Future consistency, retry
+bound, and terminal-state invariants over 100,001 simulated states.
+
+Nested join error propagation now has an explicit `ParslNestedJoinFailure.tla` model. Failed leaf
+Future IDs are retained in the nested error in input order, while the outer join exposes the
+nested Future as one dependency entry; the completion and failure-shape invariants pass over
+100,001 simulated states.
+
+Callback multiplicity is now explicit in `ParslJoinCallbackMultiplicity.tla`: duplicate list
+positions register duplicate callbacks, but only the first callback that observes all inner
+Futures terminal may finalize the outer Future. The model preserves the duplicated result shape
+and checks single-finalization safety over 100,001 simulated states.
+
+Monitoring now includes `ParslMonitoringEventStream.tla`, a multi-task producer/queue/database
+writer abstraction. It models duplicate and reordered events, bounded write retry, per-task
+database high-water marks, and shutdown drain conditions. The current branch reproduces stale
+event rollback; the fixed branch checks 100,001 simulated states while preserving the latest
+version for each task.
+
 ### 3. Checked properties
 
 The safety configurations check:
@@ -961,14 +1732,39 @@ The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` 
 
 ## Planned extensions
 
-After the MVP is stable, possible extensions are:
+The current MVP is stable for the bounded safety scenarios. Remaining extensions are:
 
-- richer DataManager/staging behavior, including stage-in/stage-out failure and checksums;
-- bounded message reordering and message correlation IDs;
-- richer `join_app` behavior beyond the bounded inner-Future set and invalid-return branch now modeled;
-- manager heartbeat timeout, version mismatch, drain, and richer executor bad-state transitions;
-- monitoring as an abstract eventual event stream;
-- dynamic task creation while a workflow is running;
+- richer DataManager/staging behavior beyond the current atomic chunks, checksums, and failure
+  paths;
+- `ParslMultiOutputVersionedStageOut` now combines multi-output atomic publication with source
+  versions and per-output retry; larger output sets and provider-specific transfer streams remain
+  future work;
+- richer message reordering/correlation beyond the two-task bounded result-envelope model;
+- three-task correlation is now represented by `ParslMessageCorrelationThree`, including bounded
+  queue reordering, cross-task retargeting, duplicate frames, and retry generations; larger
+  unbounded transports remain future work;
+- richer join_app behavior beyond the bounded inner-Future set, cancellation, duplicate positions,
+  nested failure payload, failure aggregation, and invalid-return branches now modeled;
+- manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
+- `ParslHtexHeartbeatVersion` now combines heartbeat expiry with version-mismatch admission and
+  fatal-result ordering; fairness and larger manager populations remain future work;
+- `ParslProviderProvisioningLifecycle` now combines block provisioning/retry, stale polling,
+  dispatch admission, and scale-in; multi-block provider generations remain future work;
+- `ParslProviderMultiBlockOwnership` now covers two-block task ownership and idle-only scale-in;
+  larger provider fleets remain future work;
+- richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
+- `ParslMonitoringVersionedBatch` now combines transaction rollback with per-task high-water
+  protection; larger multi-task transaction batches remain future work;
+- `ParslCallableAliasRetry` now combines shared callable/argument aliasing with mutation-aware
+  retry snapshots; arbitrary Python heap identity remains abstract;
+- `ParslNestedJoinRetry` now combines nested join propagation with leaf retries and stale-result
+  rejection; larger nested graphs remain future work;
+- `ParslTimeoutRetryStaleResult` now combines timeout-driven retry with late-result correlation;
+  multiple concurrent timers remain future work;
+- `ParslConcurrentTimeouts` now covers independent timeout clocks and cross-task result
+  isolation; larger timer populations remain future work;
+- multi-level dynamic creation is now represented by `ParslDynamicTaskChain`, with a child-created
+  grandchild and explicit dependency/retry safety; broader unbounded fan-out remains future work;
 - additional executor/provider-specific models.
 
 ## Validation workflow
@@ -978,8 +1774,162 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 485 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 487 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
+
+The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
+result. The remaining unswept core configuration is `ParslNoFailures.cfg`; it deliberately
+contains the temporal `EventuallySettled`/fairness specification. TLC 2.19's simulator currently
+fails internally on that temporal setup, so it remains documented as a liveness follow-up rather
+than being reported as a passing safety run. `ParslTimeSafety.cfg` provides the executable
+safety-only counterpart for the time model.
+An additional rerun of the same suite completed 487 tests in 12.240 seconds with `OK`.
+The post-refinement rerun completed 487 tests in 12.887 seconds with `OK`; no runtime probe
+regressed after the dynamic-DAG, correlation, heartbeat/version, monitoring-batch, callable
+alias, provider-lifecycle, and multi-output staging additions.
+
+The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
+all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
+completed with their expected Current counterexamples and Fixed passes. Cases 41--60 likewise
+completed: heartbeat rollback, timeout/open, monitoring history, provider-worker scaling,
+join-callable transport, Bash/local-provider outcomes, thread lifecycle, TaskVine factory,
+timer/timeout, apply dispatch, and HTEX shutdown timeout all matched their configured outcomes.
+Cases 61--80 also matched their configured outcomes: join cancellation (single and list), data
+readiness, dependency traversal for shallow/deep containers, memo function identity and exception
+checkpoints, and input/output list mutation boundaries.
+Cases 81--100 matched as well: output-list mutation, executor-kind admission, negative scale-in,
+strategy capacity, AWS cancellation, LocalProvider, Flux cancellation/status/result paths, and
+HTEX address-probe timeout behavior.
+Cases 101--120 matched as well: HTEX cores-per-worker and priority admission, version mismatch,
+task ID/context validation, manager loss/admission, and worker task batch/frame shape handling.
+Cases 121--140 matched as well: HTEX monitoring-message enablement, MPI rank/prefix/specification
+boundaries, Work Queue submit and serialization rollback, TaskVine cancelled results, forced HTEX
+scale-in, and HTEX monitoring-batch continuation.
+Cases 141--160 matched as well: JobStatus output errors/summaries, Radical Pilot failure and late
+callbacks, Globus Compute result propagation, ResultsIncoming timeout/close behavior, TasksOutgoing
+close behavior, and address probing.
+Cases 161--180 matched as well: address-probe empty/success paths, provisioning admission,
+scale-in/out cancellation and retry monitoring, integrated end-to-end execution, Work Queue
+serialization failure, monitoring DB reorder, DataFuture cancellation, and deep dependency lists.
+Cases 181--200 matched as well: dependency traversal variants, join internal-executor routing,
+value-list joins, retry-handler validation and cost boundaries, and single/list cancellation.
+Cases 201--220 matched as well: join retry/memo data, checkpoint UUIDs, result races, DFK cleanup
+and wait snapshots, result decode retry, task staging/monitoring, file content/corruption,
+nested serialization, messaging, and Globus stage-out dependency.
+Cases 221--238 matched as well: Zip stage-in success/corruption/current-fixed paths and the core
+executor drain, idle-manager timeout, provider failure, registration/recovery, scale-in,
+serialization/submit failure, terminal timeout, and abstract smoke configurations. The remaining
+join smoke cases 239--240 also passed with a reduced 100-step simulator bound after the default
+1,000-step run exceeded the sandbox observation window.
+The next interval covered memo/monitoring/serialization aliases, min-blocks and executor/time
+aliases, memo dictionary ordering, monitoring retry, HTEX malformed task/result messages and
+batches, and result-frame/queue handling. The longer result-frame/queue tail was rerun at 100
+simulation steps and its Current/Fixed expectations passed; manager selection also passed.
+The following HTEX/provider interval (cases 261--280) also matched its expected outcomes at a
+100-step simulator bound: manager selection/blocking/eligibility, executor selection,
+resource admission and scaling, HTEX priority/resource-specification checks, Slurm status,
+AWS status cardinality, and Kubernetes polling. Current configurations produced the intended
+counterexamples while Fixed configurations returned success; the manager and admission models
+returned success directly.
+The subsequent provider-parser interval (cases 281--300) matched as well at 100 steps, covering
+LocalProvider status scoping, Slurm malformed status lines, PBSPro malformed JSON and job-alias
+uniqueness, Condor malformed/unknown jobs, and GridEngine duplicate/status-batch handling.
+Cases 301--320 matched at a 100-step bound: Torque submit outcomes, Work Queue and TaskVine
+submit/serialization failures, Flux cleanup, poller scale-in, HTEX duplicate registration,
+and manager drain behavior. Expected Current branches produced counterexamples; Fixed branches
+and normal-success variants passed.
+Cases 321--340 also matched at 100 steps: HTEX watchdog/result races and busy/idle watchdog
+states, Radical-Pilot shutdown/results, AWS unknown-instance status, command-client close,
+Kubernetes admission/unknown-job/submit handling, and AWS submit validation. Current branches
+reproduced their configured counterexamples and Fixed branches passed.
+Cases 341--360 matched at 100 steps: AWS empty-submit, Google Cloud status, Condor malformed and
+failure status, cluster submit/status request validation, equal-callable serializer caching,
+Zip stage-in write failure, and monitoring update permanent-error handling.
+Cases 361--380 matched at 100 steps: monitoring update/insert retry, batch atomicity, workflow
+insert/end bookkeeping, last-message and ZMQ-router shutdown paths, plus Globus transfer timeout
+and failure outcomes.
+Cases 381--400 matched at 100 steps: Globus transfer failure/success, duplicate join failure
+positions, Azure status/submit bookkeeping, AWS cancellation, LocalProvider cleanup,
+Globus Compute submit races, LSF duplicate IDs, and timer-close timeout handling.
+Cases 401--420 matched at 100 steps: join-list snapshot mutation, command-client retry and close,
+TaskVine/Work Queue duplicate reports, ResultsIncoming close, Google Cloud cancellation,
+monitoring task/try insertion bookkeeping, and TasksOutgoing transport closure.
+Cases 421--440 matched at 100 steps: transport close, file bytes/corruption, transfer retry,
+DataFuture transfer, HTTP status, Rsync partial cleanup, stage-out Future placement, and
+monitoring database core/insert behavior.
+Cases 441--460 matched at 100 steps: monitoring insert presence, executor/provider bridge and
+lifecycle, MPI backlog retry and no-resource results, cluster unknown jobs, LSF resource
+validation, Flux submission failure, TaskVine/Work Queue shutdown/results, and full join success
+including end-to-end execution.
+Cases 461--480 matched at 100 steps: join monitoring/core/completion, callback races, return
+equality and failure aggregation, task-status/Future ordering, malformed monitoring worker
+messages, close idempotence, shutdown race, and shutdown drain.
+Cases 481--500 matched at 100 steps: deferred monitoring multiplicity and dispatch envelopes,
+monitoring hub close, worker contact timeout, timed heartbeat and wall-clock rollback, unknown
+HTEX manager/task results, malformed manager messages, and provider polling/status batches.
+Cases 501--520 matched at 100 steps: provider status shape and bad-state handling, provider-kind
+dispatch, AWS status, Azure status/submit/cancel lifecycle, and Google Cloud zone selection.
+Cases 521--540 matched at 100 steps: Google Cloud status/submit/cancel, Condor cancellation,
+chunk-size validation, malformed lines, and status/failure parsing.
+Cases 541--560 matched at 100 steps: Condor status-failure/submit/unknown-job handling, Grid
+Engine cancellation and unknown IDs, duplicate/status parsing, and batch-status boundaries.
+Cases 561--580 matched at 100 steps: GridEngine status-batch and submit outcomes, LSF cancel
+unknown IDs, duplicate/missing-job status, resource validation, submit success/failure, and
+malformed submit handling.
+Cases 581--600 matched at 100 steps: Slurm strict batch, cancel, duplicate/foreign/malformed
+status, submit behavior, and PBSPro job-alias uniqueness.
+Cases 601--620 matched at 100 steps: PBSPro malformed JSON/status/submit, Torque cancel and
+duplicate/status parsing, status-failure handling, and submit success.
+Cases 621--640 matched at 100 steps: Torque task-list parsing, LocalProvider exit-file/status
+handling, unknown cancellation IDs, status scoping, submit cleanup, and task-list outcomes.
+Cases 641--660 matched at 100 steps: Local unknown jobs, Kubernetes admission/cancel/poll/submit
+and unknown-job handling, duplicate provider job IDs, duplicate executor polling, and provider
+poll-clock behavior.
+Cases 661--680 matched at 100 steps: walltime parsing, ThreadPool executor lifecycle/resource
+validation/thread counts, task execution values/exceptions, execute-wait timeout cleanup, and
+Bash timeout cleanup.
+Cases 681--700 matched at 100 steps: pool executor mapping, HTEX submit counter/failure/lifecycle
+and serialization failure, bad-state task mutation, BlockProvider bad-state/order handling, and
+command-client reply/timeout/close behavior.
+Cases 701--720 matched at 100 steps: command-client lock/retry/deadline/send timeout, heartbeat
+clock boundaries and late acknowledgements, heartbeat provider behavior, file-transfer monitoring,
+filesystem radio, and monitoring batch handling.
+Cases 721--740 matched at 100 steps: monitoring batch clock/close/idempotence, permanent DB errors,
+retry integrity, delivery/event-stream ordering, thresholds, and FTP connection cleanup.
+Cases 741--760 matched at 100 steps: FTP partial/stage failures, HTTP connection/existing-destination/
+partial-stage behavior, and Rsync quoting plus stage-in/stage-out failure paths.
+Cases 761--780 matched at 100 steps: Rsync success, clean-copy/path resolution, Zip path validation,
+Globus endpoint/dependency/token/configuration, DataFuture cancellation, multi-output stage-out,
+and staging-provider dispatch.
+Cases 781--800 matched at 100 steps: Zip stage-out/retry, stage-in/out ordering, serialization
+envelopes and binary payloads, frame-count/short-frame checks, negative-length validation, and
+truncated-length handling.
+Cases 801--820 matched at 100 steps: serialization length/snapshot/ZMQ bridge, CurveZMQ certificate
+validation, worker-pool control frames, HTEX result decode/ambiguity/cancellation/duplicates, and
+Work Queue cancelled/duplicate result handling.
+Cases 821--840 matched at 100 steps: Work Queue duplicate/resource-category/results/shutdown and
+submit failures, serialization plugin cache/error/fallback behavior, nested join success/failure,
+and callback multiplicity.
+Cases 841--860 matched at 100 steps: apply-message arity, callable/argument aliasing and serializer
+cache freshness, pool-executor callable cache, serializer registry empty/collision behavior, task
+transport/ZMQ paths, and heartbeat parameter validation.
+Cases 861--880 matched at 100 steps: heartbeat/Python timeout parameter validation, resource-monitor
+clock and timer intervals, DataFuture copy/falsey exceptions, Future cancellation projections, and
+timeout timer outcomes.
+Cases 881--900 matched at 100 steps: Future wait/projection, duplicate/mixed/empty join shapes,
+join retry and cancellation (single/running), return-shape variants, and dynamic task creation/
+fan-out.
+Cases 901--912 completed the configured sweep at 100 steps: memo dictionary ordering, ignored
+memo keys/outputs, checkpoint ordering, and exception-checkpoint behavior. All 912 discovered
+cases now have recorded bounded-simulator evidence with their expected Current/Fixed outcomes.
+The new refinement models are now registered in `scripts/tlc_recent_models.sh` as cases 79--93
+and were rerun at 100 steps: dynamic task chain, three-task message correlation, callable-alias
+retry, HTEX heartbeat/version admission, provider provisioning lifecycle, versioned monitoring
+batch, versioned multi-output stage-out, and nested join retry. Every Current/Fixed pair matched
+its expected outcome; the chain and normal-success variants also passed.
+The subsequent cases 94--99 rerun also passed their expected outcomes, including multi-block
+provider ownership, timeout/retry stale-result handling, concurrent timeout isolation, and the
+adjacent input-mutation regression case.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every

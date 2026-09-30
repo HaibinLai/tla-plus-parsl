@@ -25,6 +25,25 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinCallableTranspo
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_callable_transport_runtime.py -v
 ```
 
+`ParslDynamicTaskCreation.tla` models the basic parent-to-child creation boundary. The newer
+`ParslDynamicTaskFanout.tla` keeps the logical children separate: completion of the parent creates
+`C1` and `C2`, `C1` depends on the parent, and `C2` depends on both the parent and the successful
+`C1` Future. Each child has an explicit bounded physical-attempt counter, retry transition, and
+terminal Future. This captures a small dynamic DAG without conflating child creation with child
+execution.
+
+`ParslDynamicTaskChain.tla` deepens that abstraction by allowing a created child to create a
+grandchild: the parent creates `C1`/`C2`, then successful `C1` creates `G`, whose dependencies are
+the parent and `C1`. Creation, dependency release, logical Future resolution, and per-node retry
+counters remain separate. TLC checks 100,001 simulated states with the same dependency, terminal,
+and retry invariants.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=1000 \
+  -config models/dataflow/ParslDynamicTaskFanout.cfg \
+  models/dataflow/ParslDynamicTaskFanout.tla
+```
+
 `ParslJoinCancellation.tla` isolates cancelled inner Futures. `Future.exception()` raises
 `CancelledError` in the current callback path, so a decorated outer `join_app` can remain in
 `joining`; the fixed branch converts cancellation into a terminal join failure. The direct and

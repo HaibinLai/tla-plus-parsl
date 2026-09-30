@@ -14,6 +14,24 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRetryFixed.cfg models/monitoring/ParslMonitoringTaskRetry.tla
 ```
 
+`ParslMonitoringEventStream.tla` is the compact producer-to-database stream model. It has
+per-task logical status versions, a bounded event queue, duplicate and reordered events, a
+single database writer with bounded write retry, and an explicit producer/database shutdown
+drain. The current configuration demonstrates that an older event can roll back a task's
+database view; the fixed configuration compares event versions against the per-task high-water
+mark and passes 100,001 simulated states. This corresponds to
+`DatabaseManager`'s external radio queues, internal pending queues, `_db_mgmt_loop`, and
+`_insert` path in `parsl/monitoring/db_manager.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=1000 \
+  -config models/monitoring/ParslMonitoringEventStreamCurrent.cfg \
+  models/monitoring/ParslMonitoringEventStream.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=1000 \
+  -config models/monitoring/ParslMonitoringEventStreamFixed.cfg \
+  models/monitoring/ParslMonitoringEventStream.tla
+```
+
 This retry/high-water model is included in `scripts/tlc_recent_models.sh`. Together with
 `test_monitoring_status_history_runtime.py`, it connects asynchronous retry events to the real
 SQLite status-history ordering: an older attempt must not replace a newer terminal record.

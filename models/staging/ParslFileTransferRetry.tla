@@ -93,10 +93,20 @@ CorruptChunk(c) ==
     /\ c \in CHUNKS
     /\ chunkState[c] = "sent"
     /\ wireChecksum' = [wireChecksum EXCEPT ![c] = @ \o ":bad"]
-    /\ chunkState' = [chunkState EXCEPT ![c] = "corrupt"]
+    /\ chunkState' = [chunkState EXCEPT ![c] = "sent"]
     /\ UNCHANGED <<sourceVersion, capturedVersion, sourceToken, transfer,
                     wireToken, bufferToken, publishedVersion, dataFuture,
                     consumer, observed>>
+
+RejectCorruptChunk(c) ==
+    /\ transfer = "sending"
+    /\ c \in CHUNKS
+    /\ chunkState[c] = "sent"
+    /\ wireChecksum[c] # Checksum(wireToken[c])
+    /\ chunkState' = [chunkState EXCEPT ![c] = "corrupt"]
+    /\ UNCHANGED <<sourceVersion, capturedVersion, sourceToken, transfer,
+                    wireToken, wireChecksum, bufferToken, publishedVersion,
+                    dataFuture, consumer, observed>>
 
 RepairChunk(c) ==
     /\ transfer = "sending"
@@ -152,7 +162,8 @@ FinishConsumer ==
 Next ==
     \/ BeginStageOut
     \/ ModifySource
-    \/ \E c \in CHUNKS : SendChunk(c) \/ ReceiveChunk(c) \/ CorruptChunk(c) \/ RepairChunk(c)
+    \/ \E c \in CHUNKS : SendChunk(c) \/ ReceiveChunk(c) \/ CorruptChunk(c)
+                               \/ RejectCorruptChunk(c) \/ RepairChunk(c)
     \/ Publish
     \/ RetryStale
     \/ StartConsumer
@@ -191,5 +202,10 @@ ContentSafety ==
 
 StaleSafety ==
     transfer = "stale" => capturedVersion # sourceVersion
+
+CorruptionRejectionSafety ==
+    \A c \in CHUNKS :
+        chunkState[c] = "corrupt"
+            => wireChecksum[c] # Checksum(wireToken[c])
 
 =============================================================================

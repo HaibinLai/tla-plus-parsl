@@ -1,5 +1,5 @@
 --------------------------- MODULE ParslPython ---------------------------
-EXTENDS Naturals, FiniteSets, Sequences
+EXTENDS Naturals, Integers, FiniteSets, Sequences
 
 (***************************************************************************
  * A small model of the Python object graph carried by a Parsl task.
@@ -24,10 +24,10 @@ Children(o) == {c \in OBJECTS : (o \o "->" \o c) \in OBJECT_EDGES}
 PickleToken(t) == t \o ":pickle-payload"
 
 VARIABLES phase, encPending, encVisited, decPending, decVisited,
-          payloadToken, wireValid, objectOK
+          payloadToken, wireValid, objectOK, sourceEpoch, capturedEpoch
 
 vars == <<phase, encPending, encVisited, decPending, decVisited,
-           payloadToken, wireValid, objectOK>>
+           payloadToken, wireValid, objectOK, sourceEpoch, capturedEpoch>>
 
 Init ==
     /\ TASKS # {}
@@ -51,13 +51,16 @@ Init ==
     /\ payloadToken = [t \in TASKS |-> "none"]
     /\ wireValid = [t \in TASKS |-> TRUE]
     /\ objectOK = [o \in OBJECTS |-> o \in SERIALIZABLE_OBJECTS]
+    /\ sourceEpoch = 0
+    /\ capturedEpoch = [t \in TASKS |-> -1]
 
 StartEncode(t) ==
     /\ phase[t] = "none"
     /\ phase' = [phase EXCEPT ![t] = "encoding"]
     /\ encPending' = [encPending EXCEPT ![t] = Roots(t)]
     /\ encVisited' = [encVisited EXCEPT ![t] = {}]
-    /\ UNCHANGED <<decPending, decVisited, payloadToken, wireValid, objectOK>>
+    /\ UNCHANGED <<decPending, decVisited, payloadToken, wireValid, objectOK,
+                    sourceEpoch, capturedEpoch>>
 
 EncodeObject(t, o) ==
     /\ phase[t] = "encoding"
@@ -72,29 +75,31 @@ EncodeObject(t, o) ==
            /\ encPending' = [encPending EXCEPT ![t] =
                                   IF objectOK[o] THEN newPending ELSE {}]
            /\ encVisited' = [encVisited EXCEPT ![t] = newVisited]
-    /\ UNCHANGED <<decPending, decVisited, payloadToken, wireValid, objectOK>>
+    /\ UNCHANGED <<decPending, decVisited, payloadToken, wireValid, objectOK,
+                    sourceEpoch, capturedEpoch>>
 
 FinishEncode(t) ==
     /\ phase[t] = "encoding"
     /\ encPending[t] = {}
     /\ phase' = [phase EXCEPT ![t] = "encoded"]
     /\ payloadToken' = [payloadToken EXCEPT ![t] = PickleToken(t)]
+    /\ capturedEpoch' = [capturedEpoch EXCEPT ![t] = sourceEpoch]
     /\ UNCHANGED <<encPending, encVisited, decPending, decVisited,
-                    wireValid, objectOK>>
+                    wireValid, objectOK, sourceEpoch>>
 
 CorruptPayload(t) ==
     /\ phase[t] = "encoded"
     /\ wireValid[t]
     /\ wireValid' = [wireValid EXCEPT ![t] = FALSE]
     /\ UNCHANGED <<phase, encPending, encVisited, decPending, decVisited,
-                    payloadToken, objectOK>>
+                    payloadToken, objectOK, sourceEpoch, capturedEpoch>>
 
 RepairPayload(t) ==
     /\ phase[t] = "encoded"
     /\ ~wireValid[t]
     /\ wireValid' = [wireValid EXCEPT ![t] = TRUE]
     /\ UNCHANGED <<phase, encPending, encVisited, decPending, decVisited,
-                    payloadToken, objectOK>>
+                    payloadToken, objectOK, sourceEpoch, capturedEpoch>>
 
 StartDecode(t) ==
     /\ phase[t] = "encoded"
@@ -102,7 +107,8 @@ StartDecode(t) ==
     /\ phase' = [phase EXCEPT ![t] = "decoding"]
     /\ decPending' = [decPending EXCEPT ![t] = Roots(t)]
     /\ decVisited' = [decVisited EXCEPT ![t] = {}]
-    /\ UNCHANGED <<encPending, encVisited, payloadToken, wireValid, objectOK>>
+    /\ UNCHANGED <<encPending, encVisited, payloadToken, wireValid, objectOK,
+                    sourceEpoch, capturedEpoch>>
 
 DecodeObject(t, o) ==
     /\ phase[t] = "decoding"
@@ -115,7 +121,7 @@ DecodeObject(t, o) ==
            /\ decPending' = [decPending EXCEPT ![t] = newPending]
            /\ decVisited' = [decVisited EXCEPT ![t] = newVisited]
     /\ UNCHANGED <<phase, encPending, encVisited, payloadToken, wireValid,
-                    objectOK>>
+                    objectOK, sourceEpoch, capturedEpoch>>
 
 DecodeFailure(t, o) ==
     /\ phase[t] = "decoding"
@@ -124,27 +130,28 @@ DecodeFailure(t, o) ==
     /\ phase' = [phase EXCEPT ![t] = "failed"]
     /\ decPending' = [decPending EXCEPT ![t] = {}]
     /\ UNCHANGED <<encPending, encVisited, decVisited, payloadToken,
-                    wireValid, objectOK>>
+                    wireValid, objectOK, sourceEpoch, capturedEpoch>>
 
 FinishDecode(t) ==
     /\ phase[t] = "decoding"
     /\ decPending[t] = {}
     /\ phase' = [phase EXCEPT ![t] = "decoded"]
     /\ UNCHANGED <<encPending, encVisited, decPending, decVisited,
-                    payloadToken, wireValid, objectOK>>
+                    payloadToken, wireValid, objectOK, sourceEpoch,
+                    capturedEpoch>>
 
 MutateObject(o) ==
     /\ objectOK[o]
-    /\ \A t \in TASKS : phase[t] = "none"
-    /\ objectOK' = [objectOK EXCEPT ![o] = FALSE]
+    /\ sourceEpoch < 1
+    /\ sourceEpoch' = sourceEpoch + 1
     /\ UNCHANGED <<phase, encPending, encVisited, decPending, decVisited,
-                    payloadToken, wireValid>>
+                    payloadToken, wireValid, objectOK, capturedEpoch>>
 
 RepairObject(o) ==
     /\ ~objectOK[o]
     /\ objectOK' = [objectOK EXCEPT ![o] = TRUE]
     /\ UNCHANGED <<phase, encPending, encVisited, decPending, decVisited,
-                    payloadToken, wireValid>>
+                    payloadToken, wireValid, sourceEpoch, capturedEpoch>>
 
 Next ==
     \/ \E t \in TASKS : StartEncode(t)
@@ -171,6 +178,8 @@ TypeOK ==
     /\ payloadToken \in [TASKS -> ( {"none"} \cup {PickleToken(t) : t \in TASKS} )]
     /\ wireValid \in [TASKS -> BOOLEAN]
     /\ objectOK \in [OBJECTS -> BOOLEAN]
+    /\ sourceEpoch \in 0..1
+    /\ capturedEpoch \in [TASKS -> -1..1]
 
 FunctionContentSafety ==
     \A t \in TASKS :
@@ -198,9 +207,14 @@ ObjectKindSafety ==
         /\ Roots(t) \cap FUNCTION_OBJECTS # {}
         /\ Roots(t) \cap ARGUMENT_OBJECTS # {}
         /\ (phase[t] = "decoded" =>
-              encVisited[t] \cap (GLOBAL_OBJECTS \cup DEFAULT_OBJECTS
+                                    encVisited[t] \cap (GLOBAL_OBJECTS \cup DEFAULT_OBJECTS
                                   \cup CLOSURE_OBJECTS)
               = decVisited[t] \cap (GLOBAL_OBJECTS \cup DEFAULT_OBJECTS
                                     \cup CLOSURE_OBJECTS))
+
+SnapshotEpochSafety ==
+    \A t \in TASKS :
+        phase[t] \in {"encoded", "decoding", "decoded"}
+            => capturedEpoch[t] \in 0..sourceEpoch
 
 =============================================================================

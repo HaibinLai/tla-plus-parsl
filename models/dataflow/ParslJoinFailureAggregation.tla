@@ -71,6 +71,8 @@ WaitForAllSafety ==
 FailureAggregationSafety ==
     outerState = "failed" =>
         /\ Len(failureIds) = Cardinality({i \in INNER : innerState[i] = "failed"})
-        /\ \A i \in failureIds : innerState[i] = "failed"
+        /\ \A i \in INNER :
+              (\E j \in 1..Len(failureIds) : failureIds[j] = i)
+                => innerState[i] = "failed"
 
 =============================================================================
