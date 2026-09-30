@@ -57,6 +57,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsStatusMissingRe
 
 This missing-result cardinality boundary is recorded as BUG-143.
 
+`ParslLocalPidAdmission.tla` models the LocalProvider launcher-PID admission boundary. The
+current implementation parses any integer suffix, so `PID:0` is recorded as a running resource;
+the fixed branch requires a strictly positive PID before publishing the resource. The runtime
+probe uses the real provider with a fake successful launcher response and observes that
+`os.kill(0, 0)` can make the resource look alive.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalPidAdmissionCurrent.cfg models/providers/ParslLocalPidAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalPidAdmissionFixed.cfg models/providers/ParslLocalPidAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalPidAdmissionNormal.cfg models/providers/ParslLocalPidAdmission.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_pid_admission_runtime.py -v
+```
+
+This non-positive launcher-PID boundary is recorded as BUG-212.
+
 `ParslClusterStatusRequest.tla` captures the common `ClusterProvider.status` projection. A single
 provider-specific `_status()` poll updates local resources, then the public method projects those
 records back in the caller's requested order, including duplicate job IDs. The runtime probe uses

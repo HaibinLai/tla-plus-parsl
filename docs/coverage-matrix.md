@@ -84,6 +84,9 @@ instance-view object cannot abort status polling.
 It now also includes `ParslAzureStatusRemoteFailure` (BUG-211), which checks that a remote VM
 lookup failure is isolated instead of aborting status results for unrelated requested jobs.
 
+The provider row also includes `ParslLocalPidAdmission` (BUG-212), which checks that launcher
+output cannot publish a zero/negative process ID as a live managed resource.
+
 It also includes `ParslCondorSubmitWhitespace` (BUG-177), which checks scheduler whitespace
 normalization before cluster/process ID expansion.
 

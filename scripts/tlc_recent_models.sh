@@ -331,6 +331,15 @@ run_case azure-status-remote-failure-fixed pass \
 run_case azure-status-remote-failure-normal pass \
     models/providers/ParslAzureStatusRemoteFailureNormal.cfg \
     models/providers/ParslAzureStatusRemoteFailure.tla
+run_case local-pid-admission-current counterexample \
+    models/providers/ParslLocalPidAdmissionCurrent.cfg \
+    models/providers/ParslLocalPidAdmission.tla
+run_case local-pid-admission-fixed pass \
+    models/providers/ParslLocalPidAdmissionFixed.cfg \
+    models/providers/ParslLocalPidAdmission.tla
+run_case local-pid-admission-normal pass \
+    models/providers/ParslLocalPidAdmissionNormal.cfg \
+    models/providers/ParslLocalPidAdmission.tla
 run_case cluster-status-unknown-current counterexample \
     models/providers/ParslClusterStatusUnknownCurrent.cfg \
     models/providers/ParslClusterStatusUnknown.tla
