@@ -254,6 +254,8 @@ Recent focused models now connect the previously separate boundaries:
   terminal monitoring-record stability.
 - `ParslHtexResultBatchContinuation` is now in the smoke sweep, requiring a malformed result
   frame to be discarded without aborting later valid results in the same manager batch.
+- `ParslHtexExecutorResultFrameContinuation` extends that property to the executor result queue:
+  a corrupt outer pickle cannot strand unrelated later Futures.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 
