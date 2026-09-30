@@ -59,6 +59,24 @@ class ProviderWorkerScalingRuntimeTest(unittest.TestCase):
         self.assertEqual(provider.cancelled, [["job-0"]])
         self.assertEqual(executor._status["0"].state, JobState.SCALED_IN)
 
+    def test_three_block_mapping_preserves_surviving_block(self):
+        provider = ScalingProvider()
+        executor = ProbeExecutor(provider=provider, block_error_handler=False)
+
+        block_ids = executor.scale_out_facade(3)
+        self.assertEqual(block_ids, ["0", "1", "2"])
+        self.assertEqual(executor.blocks_to_job_id,
+                         {"0": "job-0", "1": "job-1", "2": "job-2"})
+
+        for block_id in block_ids:
+            executor._status[block_id] = JobStatus(JobState.RUNNING)
+
+        removed = executor.scale_in_facade(2)
+        self.assertEqual(removed, ["0", "1"])
+        self.assertEqual(provider.cancelled, [["job-0", "job-1"]])
+        self.assertEqual(executor._status["2"].state, JobState.RUNNING)
+        self.assertEqual(executor.job_ids_to_block["job-2"], "2")
+
 
 if __name__ == "__main__":
     unittest.main()
