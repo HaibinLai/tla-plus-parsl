@@ -23,11 +23,13 @@ Statuses == {"none", "succeeded", "failed"}
 
 VARIABLES now, provider, manager, lastHeartbeat, slots, task, attempts,
           providerRetries, deadline, inFlight, oldInFlight, cause, lateResult,
-          monitorState, monitorStatus, dbStatus, dbFailures
+          monitorState, monitorStatus, dbStatus, dbFailures,
+          generation, polledGeneration, stalePoll
 
 vars == <<now, provider, manager, lastHeartbeat, slots, task, attempts,
            providerRetries, deadline, inFlight, oldInFlight, cause, lateResult,
-           monitorState, monitorStatus, dbStatus, dbFailures>>
+           monitorState, monitorStatus, dbStatus, dbFailures,
+           generation, polledGeneration, stalePoll>>
 
 Init ==
     /\ MAX_TIME >= 3
@@ -54,6 +56,9 @@ Init ==
     /\ monitorStatus = "none"
     /\ dbStatus = "none"
     /\ dbFailures = 0
+    /\ generation = 0
+    /\ polledGeneration = 0
+    /\ stalePoll = FALSE
 
 Tick ==
     /\ now < MAX_TIME
@@ -232,12 +237,38 @@ PersistStatus ==
                     attempts, providerRetries, deadline, inFlight, oldInFlight,
                     cause, lateResult, monitorStatus, dbFailures>>
 
-Next ==
+ProvisionGeneration ==
+    /\ provider = "active"
+    /\ generation = polledGeneration
+    /\ generation < 2
+    /\ generation' = generation + 1
+    /\ stalePoll' = FALSE
+    /\ UNCHANGED <<now, provider, manager, lastHeartbeat, slots, task,
+                    attempts, providerRetries, deadline, inFlight, oldInFlight,
+                    cause, lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures, polledGeneration>>
+
+LatePoll ==
+    /\ provider = "failed"
+    /\ polledGeneration < generation
+    /\ stalePoll' = TRUE
+    /\ provider' = IF USE_FIXED THEN provider ELSE "active"
+    /\ UNCHANGED <<now, manager, lastHeartbeat, slots, task, attempts,
+                    providerRetries, deadline, inFlight, oldInFlight, cause,
+                    lateResult, monitorState, monitorStatus, dbStatus,
+                    dbFailures, generation, polledGeneration>>
+
+CoreNext ==
     \/ Tick \/ Heartbeat \/ RequestBlock \/ ProvisionBlock \/ RegisterManager
     \/ Submit \/ Complete \/ Timeout \/ ExpireManager \/ FailProvider
     \/ RetryProvision \/ RetryLost \/ RejectAfterRetry \/ LateComplete
     \/ EmitStatus \/ FailDatabaseWrite \/ PersistStatus
     \/ UNCHANGED vars
+
+Next ==
+    \/ (CoreNext /\ UNCHANGED <<generation, polledGeneration, stalePoll>>)
+    \/ ProvisionGeneration
+    \/ LatePoll
 
 Spec == Init /\ [][Next]_vars
 
@@ -259,6 +290,9 @@ TypeOK ==
     /\ monitorStatus \in Statuses
     /\ dbStatus \in Statuses
     /\ dbFailures \in 0..MAX_DB_FAILURES
+    /\ generation \in 0..2
+    /\ polledGeneration \in 0..2
+    /\ stalePoll \in BOOLEAN
 
 AdmissionSafety ==
     task = "running" => provider = "active" /\ manager = "up" /\ slots = 0
@@ -275,5 +309,7 @@ MonitoringSafety ==
     /\ dbStatus = "failed" => task = "failed"
 
 DatabaseRetryBound == dbFailures <= MAX_DB_FAILURES
+ProviderGenerationBound == generation <= 2
+StalePollSafety == stalePoll => ~(provider = "active" /\ manager = "expired" /\ slots = 0)
 
 =============================================================================

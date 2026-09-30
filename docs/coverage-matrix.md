@@ -52,7 +52,8 @@ implementations or every detail in the paper.
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes
-that lifecycle with terminal monitoring persistence. `ParslJoinFull` now includes the explicit serialized
+that lifecycle with terminal monitoring persistence and provisioning-generation stale-poll checks.
+`ParslJoinFull` now includes the explicit serialized
 attempt phase and current/fixed stale-result correlation after a physical retry. The three join
 retry runtime probes (`test_join_retry_runtime.py`, `test_join_retry_duplicates_runtime.py`, and
 `test_nested_join_retry_runtime.py`) all pass against the current Parsl source.

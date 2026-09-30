@@ -60,9 +60,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTi
 boundary. It keeps provider provisioning, manager heartbeat expiry, task timeout/retry, old-attempt
 late results, terminal status emission, and bounded database-write failures in one state machine.
 The current branch accepts the old physical result and TLC finds the expected
-`TerminalCauseSafety` violation after 1,645 generated / 924 distinct states. The fixed branch
-classifies the result as stale and passes all nine invariants with 50,611 generated / 13,031
-distinct states at depth 24.
+`StalePollSafety` violation after 1,737 generated / 943 distinct states. The fixed branch
+classifies old results and provider polls as stale, passing all thirteen invariants with 161,260
+generated / 37,527 distinct states at depth 25.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderExecutorTimedMonitoringCurrent.cfg models/executors/ParslProviderExecutorTimedMonitoring.tla
