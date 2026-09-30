@@ -114,5 +114,20 @@ run_case http-content-length \
 run_case rsync-path-quoting \
     models/staging/ParslRsyncQuotingFixed.cfg \
     models/staging/ParslRsyncQuoting.tla
+run_case heartbeat-clock-rollback \
+    models/clock/ParslHeartbeatClockRollbackFixed.cfg \
+    models/clock/ParslHeartbeatClockRollback.tla
+run_case htex-contact-timeout \
+    models/clock/ParslHtexContactTimeoutStarvationFixed.cfg \
+    models/clock/ParslHtexContactTimeoutStarvation.tla
+run_case worker-contact-rollback \
+    models/clock/ParslWorkerContactClockRollbackFixed.cfg \
+    models/clock/ParslWorkerContactClockRollback.tla
+run_case worker-initial-probe-timeout \
+    models/clock/ParslWorkerInitialProbeTimeoutFixed.cfg \
+    models/clock/ParslWorkerInitialProbeTimeout.tla
+run_case command-deadline \
+    models/executors/ParslCommandDeadlineFixed.cfg \
+    models/executors/ParslCommandDeadline.tla
 
 echo "Foundational TLC smoke suite passed."

@@ -168,6 +168,11 @@ The file-transfer cases extend the byte-level model with DataManager wrapper ord
 content-length validation, and safe rsync path construction. They keep publication atomic and
 make provider-transfer failures visible before dependent task admission.
 
+The time cases cover adjustable-clock rollback, result-traffic starvation of HTEX contact expiry,
+worker contact deadlines, initial probe timeout, and command deadline handling. These fixed
+models use logical time while the corresponding runtime probes exercise deterministic clock and
+socket doubles against the actual Parsl loops.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
