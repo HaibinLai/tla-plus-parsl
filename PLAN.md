@@ -290,6 +290,8 @@ Recent focused models now connect the previously separate boundaries:
   pending allocation failures, dispatch capacity, and safe scale-in.
 - `ParslDependencyTraversal` is now in the smoke sweep for shallow-vs-deep Future discovery,
   including list, dictionary value/key, tuple, and set containers.
+- `ParslMemoFunctionIdentity` is now in the smoke sweep, checking that changed Python function
+  source cannot reuse a stale memo key while unchanged source remains stable.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 

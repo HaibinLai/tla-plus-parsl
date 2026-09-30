@@ -174,6 +174,15 @@ run_case dependency-traversal-deep-tuple pass \
 run_case dependency-traversal-deep-set pass \
     models/dataflow/ParslDependencyTraversalDeepSet.cfg \
     models/dataflow/ParslDependencyTraversal.tla
+run_case memo-function-identity-current counterexample \
+    models/dataflow/ParslMemoFunctionIdentityCurrent.cfg \
+    models/dataflow/ParslMemoFunctionIdentity.tla
+run_case memo-function-identity-fixed pass \
+    models/dataflow/ParslMemoFunctionIdentityFixed.cfg \
+    models/dataflow/ParslMemoFunctionIdentity.tla
+run_case memo-function-identity-stable pass \
+    models/dataflow/ParslMemoFunctionIdentityStable.cfg \
+    models/dataflow/ParslMemoFunctionIdentity.tla
 run_case monitoring-retry-current counterexample \
     models/monitoring/ParslMonitoringTaskRetry.cfg \
     models/monitoring/ParslMonitoringTaskRetry.tla
