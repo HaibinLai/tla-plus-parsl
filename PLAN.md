@@ -1075,6 +1075,10 @@ contact loop: heartbeats follow their period, contact refreshes the deadline, an
 at the threshold only after a no-message poll. The related real worker clock probes remain in
 `tests/test_worker_contact_clock_rollback_runtime.py` and
 `tests/test_worker_pool_heartbeat_runtime.py`.
+`ParslTimedHeartbeat.tla` is now in the recurring sweep, combining manager heartbeat expiry,
+per-attempt deadlines, and late-result handling; the current branch accepts a stale result while
+the fixed branch classifies it without resolving the rejected Future. The concrete heartbeat
+encoding probes remain in `tests/test_worker_pool_heartbeat_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

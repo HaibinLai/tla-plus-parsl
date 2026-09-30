@@ -966,6 +966,12 @@ run_case monitoring-hub-close pass \
 run_case worker-contact-timeout pass \
     models/clock/ParslWorkerContactTimeout.cfg \
     models/clock/ParslWorkerContactTimeout.tla
+run_case timed-heartbeat-current counterexample \
+    models/clock/ParslTimedHeartbeat.cfg \
+    models/clock/ParslTimedHeartbeat.tla
+run_case timed-heartbeat-fixed pass \
+    models/clock/ParslTimedHeartbeatFixed.cfg \
+    models/clock/ParslTimedHeartbeat.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
