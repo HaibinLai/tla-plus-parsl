@@ -1483,6 +1483,12 @@ result correlation in one small state machine. The current configuration reprodu
 attempt resolving the Future; the fixed configuration rejects it as stale. The corresponding runtime
 probe passes, and the fixed TLC configuration passes simulation.
 
+The remaining submit configuration aliases are now covered explicitly: `ParslHtexSubmitSuccess`
+checks the successful task/Future mapping, while the Work Queue serialization-failure current and
+fixed configurations exercise the same rollback contract with their concrete repository paths.
+These cases pass or reproduce the expected counterexample under TLC; the existing submit runtime
+probes cover the corresponding Python paths.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime

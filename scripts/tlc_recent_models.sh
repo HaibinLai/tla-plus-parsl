@@ -531,6 +531,15 @@ run_case end-to-end-current counterexample \
 run_case end-to-end-fixed pass \
     models/core/ParslEndToEndFixed.cfg \
     models/core/ParslEndToEnd.tla
+run_case htex-submit-success pass \
+    models/executors/ParslHtexSubmitSuccess.cfg \
+    models/executors/ParslHtexSubmitFailure.tla
+run_case workqueue-serialization-failure-current counterexample \
+    models/executors/ParslWorkQueueSerializationFailure.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-serialization-failure-fixed pass \
+    models/executors/ParslWorkQueueSerializationFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
