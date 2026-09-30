@@ -1631,6 +1631,10 @@ cancellation, callback, and outer terminal state. Its current configuration repr
 pending-outer-Future callback escape; the fixed configuration converts the running inner
 Cancellation into terminal outer failure.
 
+The join source/model map is now documented in docs/join-model.md, including the distinction
+between logical inner Futures, physical attempts, callback locking, ordered list positions,
+duplicate references, and JoinError failure multiplicity.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
