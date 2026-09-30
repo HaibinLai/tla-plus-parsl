@@ -196,6 +196,9 @@ run_case heartbeat-retry-fixed pass \
 run_case clock-retry-heartbeat pass \
     models/clock/ParslClock.cfg \
     models/clock/ParslClock.tla
+run_case clock-smoke pass \
+    models/clock/ParslClockSmoke.cfg \
+    models/clock/ParslClock.tla
 run_case clock-terminal-timeout pass \
     models/clock/ParslClockTerminal.cfg \
     models/clock/ParslClock.tla

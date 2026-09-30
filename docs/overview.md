@@ -1510,6 +1510,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutNone.cfg mod
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputStageOutCurrent.cfg models/staging/ParslMultiOutputStageOut.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputStageOutEarly.cfg models/staging/ParslMultiOutputStageOut.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslClock.cfg models/clock/ParslClock.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslClockSmoke.cfg models/clock/ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslClockTerminal.cfg models/clock/ParslClock.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslFutureWaitTimeout.cfg models/dataflow/ParslFutureWaitTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHeartbeatBoundary.cfg models/executors/ParslHeartbeatBoundary.tla
@@ -1866,6 +1867,8 @@ Measured with TLC 2.19 and Java 17 on 2026-09-28:
 - `ParslClock.cfg`: 179,383 states generated, 37,788 distinct states, depth 21;
   wall-clock bounds, heartbeat delivery/drop/expiry, attempt deadlines, timeout-or-manager-loss
   retry selection, and stale late-result handling all passed.
+- `ParslClockSmoke.cfg`: 8,918 states generated, 2,078 distinct states, depth 17; the same six
+  invariants with one worker, one retry, and a three-tick horizon for fast regression checks.
 - `ParslClockTerminal.cfg`: 6,440 states generated, 1,574 distinct states, depth 13;
   terminal timeout rejection with no remaining retry passed the same time and result invariants.
 - `ParslHeartbeatBoundary.cfg`: 316 states generated, 93 distinct states, depth 10;

@@ -8,6 +8,14 @@ manager, while the monotonic fixed branch expires once elapsed time reaches the 
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
 
+`ParslClockSmoke.cfg` is a fast bounded regression configuration for `ParslClock.tla`. It keeps
+one worker, one retry, and a three-tick horizon while checking all six clock/result invariants.
+Use it for quick edits before running the larger `ParslClock.cfg` exploration.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslClockSmoke.cfg models/clock/ParslClock.tla
+```
+
 `ParslThreeConcurrentTimeouts.tla` extends the independent timer model to three logical tasks
 with deadlines 1, 2, and 3. Each task has its own retry generation and late-result token; the
 fixed branch rejects an old generation without affecting the other timers.
