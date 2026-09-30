@@ -2133,3 +2133,48 @@ run_case future-projection-valid pass \
 run_case future-wait-timeout pass \
     models/dataflow/ParslFutureWaitTimeout.cfg \
     models/dataflow/ParslFutureWaitTimeout.tla
+run_case join-duplicates pass \
+    models/dataflow/ParslJoinDuplicates.cfg \
+    models/dataflow/ParslJoinDuplicates.tla
+run_case join-mixed-list-current pass \
+    models/dataflow/ParslJoinMixedList.cfg \
+    models/dataflow/ParslJoinMixedList.tla
+run_case join-mixed-list-valid pass \
+    models/dataflow/ParslJoinMixedListValid.cfg \
+    models/dataflow/ParslJoinMixedList.tla
+run_case join-none-result-list pass \
+    models/dataflow/ParslJoinNoneResultList.cfg \
+    models/dataflow/ParslJoinNoneResult.tla
+run_case join-none-result-single pass \
+    models/dataflow/ParslJoinNoneResultSingle.cfg \
+    models/dataflow/ParslJoinNoneResult.tla
+run_case join-retry pass \
+    models/dataflow/ParslJoinRetry.cfg \
+    models/dataflow/ParslJoinRetry.tla
+run_case join-retry-cancellation-current counterexample \
+    models/dataflow/ParslJoinRetryCancellationCurrent.cfg \
+    models/dataflow/ParslJoinRetryCancellation.tla
+run_case join-retry-cancellation-fixed pass \
+    models/dataflow/ParslJoinRetryCancellationFixed.cfg \
+    models/dataflow/ParslJoinRetryCancellation.tla
+run_case join-return-shape-empty pass \
+    models/dataflow/ParslJoinReturnShapeEmpty.cfg \
+    models/dataflow/ParslJoinReturnShape.tla
+run_case join-return-shape-future pass \
+    models/dataflow/ParslJoinReturnShapeFuture.cfg \
+    models/dataflow/ParslJoinReturnShape.tla
+run_case join-return-shape-list pass \
+    models/dataflow/ParslJoinReturnShapeList.cfg \
+    models/dataflow/ParslJoinReturnShape.tla
+run_case join-return-shape-mixed pass \
+    models/dataflow/ParslJoinReturnShapeMixed.cfg \
+    models/dataflow/ParslJoinReturnShape.tla
+run_case join-return-shape-tuple pass \
+    models/dataflow/ParslJoinReturnShapeTuple.cfg \
+    models/dataflow/ParslJoinReturnShape.tla
+run_case join-single-cancellation-current counterexample \
+    models/dataflow/ParslJoinSingleCancellationCurrent.cfg \
+    models/dataflow/ParslJoinSingleCancellation.tla
+run_case join-single-cancellation-fixed pass \
+    models/dataflow/ParslJoinSingleCancellationFixed.cfg \
+    models/dataflow/ParslJoinSingleCancellation.tla

@@ -1397,6 +1397,16 @@ the app's own wall timeout. Runtime probes cover DataFuture staging, cancellatio
 and deferred projections. The falsey-exception current branch produces a TLC counterexample; fixed,
 normal, and other contract configurations pass simulation.
 
+The next `join_app` refinement is in the sweep. `ParslJoinDuplicates` preserves duplicate Future
+references as separate list positions and counts repeated failures; `ParslJoinMixedList` and
+`ParslJoinReturnShape` validate accepted Future/list/empty-list returns before registering callbacks;
+`ParslJoinNoneResult` treats `None` as a successful value; `ParslJoinRetry` separates logical inner
+Futures from physical retry attempts; and `ParslJoinRetryCancellation` plus
+`ParslJoinSingleCancellation` cover cancellation during retry and single-Future callbacks.
+Runtime probes cover duplicate-preserving retries, `None` results, return-shape validation, and
+cancellation. The current cancellation branches produce TLC counterexamples, while fixed branches
+and the other valid shapes pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
