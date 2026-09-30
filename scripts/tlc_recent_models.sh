@@ -103,6 +103,9 @@ run_case zmq-serialization-current counterexample \
 run_case zmq-serialization-fixed pass \
     models/serialization/ParslZMQSerializationEndToEndFixed.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla
+run_case zmq-serialization-smoke pass \
+    models/serialization/ParslZMQSerializationEndToEndSmoke.cfg \
+    models/serialization/ParslZMQSerializationEndToEnd.tla
 run_case zmq-ack-retry-current counterexample \
     models/serialization/ParslZMQAckRetryCurrent.cfg \
     models/serialization/ParslZMQAckRetry.tla

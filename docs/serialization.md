@@ -199,6 +199,8 @@ states). `TerminalResultSafety` makes the terminal-Future boundary explicit: a r
 not resolve a Future that is already rejected. The concrete HTEX result-worker probe in
 `tests/test_htex_result_queue_runtime.py` shows the current `Future.set_result` failure for a
 cancelled Future after the task bookkeeping entry has already been removed.
+`ParslZMQSerializationEndToEndSmoke.cfg` fixes `MAX_RETRIES = 0` and the corrected route/result
+invariants complete in 2,589 generated and 760 distinct states, providing a fast regression run.
 
 `ParslTaskTransport.tla` is the smaller cross-layer companion: a bounded callable/argument object
 graph must finish serialization before task transport, decoding must precede worker dispatch, and

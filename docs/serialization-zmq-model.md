@@ -49,6 +49,7 @@ ROUTER/DEALER pair: pyzmq delivers both retransmissions, while a receiver identi
 the serialized callable only once.
 
 ```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializationEndToEndSmoke.cfg models/serialization/ParslZMQSerializationEndToEnd.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryCurrent.cfg models/serialization/ParslZMQAckRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryFixed.cfg models/serialization/ParslZMQAckRetry.tla
 ```
