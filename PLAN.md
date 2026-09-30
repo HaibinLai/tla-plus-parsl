@@ -1563,6 +1563,12 @@ That migration now exists as `ParslTimeSafety.cfg`: it preserves the original ti
 uses the safety-only `Spec` and explicit time/worker/message invariants. TLC simulation passes this
 configuration; the original `ParslTime.cfg` remains available for a future fairness/liveness run.
 
+The no-failure abstract scenario has the same split: `ParslNoFailures.cfg` remains the temporal
+fairness/liveness configuration, while `ParslNoFailuresSafety.cfg` runs the identical bounded DAG
+with `Spec` and the core safety invariants. The safety companion completed a TLC simulation with
+155,120 states checked; this separates a simulator limitation in the temporal run from ordinary
+no-failure protocol safety.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
