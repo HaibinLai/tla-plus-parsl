@@ -1047,6 +1047,10 @@ current thread failure against the real `DatabaseManager`.
 publishes the workflow finalization, while later closes must be no-ops. The runtime bridge
 `tests/test_monitoring_close_idempotence_runtime.py` reproduces the duplicate update in the
 current implementation.
+`ParslMonitoringShutdownRace.tla` now covers the late-producer shutdown boundary: a migration
+worker must not stop on an empty queue until its producer is closed, otherwise a message enqueued
+immediately after the observation is stranded. `tests/test_monitoring_shutdown_race_runtime.py`
+reproduces the current empty-queue race.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

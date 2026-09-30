@@ -933,6 +933,12 @@ run_case monitoring-close-idempotence-current counterexample \
 run_case monitoring-close-idempotence-fixed pass \
     models/monitoring/ParslMonitoringCloseIdempotenceFixed.cfg \
     models/monitoring/ParslMonitoringCloseIdempotence.tla
+run_case monitoring-shutdown-race-current counterexample \
+    models/monitoring/ParslMonitoringShutdownRaceCurrent.cfg \
+    models/monitoring/ParslMonitoringShutdownRace.tla
+run_case monitoring-shutdown-race-fixed pass \
+    models/monitoring/ParslMonitoringShutdownRaceFixed.cfg \
+    models/monitoring/ParslMonitoringShutdownRace.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
