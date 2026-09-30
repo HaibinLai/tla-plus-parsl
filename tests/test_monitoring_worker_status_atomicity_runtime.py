@@ -20,6 +20,7 @@ class RecordingManager(DatabaseManager):
         self.pending_resource_queue = queue.Queue()
         self.pending_worker_task_queue = queue.Queue()
         self.external_exit_event = mp.Event()
+        self.db = FailingStatusDatabase()
         self.calls = []
         self._priority_done = False
         self._worker_done = False
@@ -42,34 +43,31 @@ class RecordingManager(DatabaseManager):
             }]
         return []
 
-    def _insert(self, table, messages):
-        self.calls.append(("insert", table, messages))
-        if table == "status":
-            # Current source swallows this failure inside _insert and continues.
-            return None
-
     def _update(self, table, columns, messages):
         self.calls.append(("update", table, messages))
+
+
+class FailingStatusDatabase:
+    def __init__(self):
+        self.inserted_tables = []
+        self.rollback_calls = 0
+
+    def insert(self, *, table, messages):
+        self.inserted_tables.append(table)
+        if table == "status":
+            raise ValueError("deterministic STATUS write failure")
+
+    def rollback(self):
+        self.rollback_calls += 1
 
 
 class MonitoringWorkerStatusAtomicityRuntimeTest(unittest.TestCase):
     def test_status_failure_still_updates_try_currently(self):
         manager = RecordingManager()
-        # Make STATUS look like a failed write while preserving the source's
-        # control flow: _insert returns, then _update(TRY) is executed.
-        original_insert = manager._insert
-
-        def failing_status_insert(table, messages):
-            manager.calls.append(("insert-failed", table, messages))
-            if table == "status":
-                return None
-            return original_insert(table, messages)
-
-        manager._insert = failing_status_insert
         manager.start(mp.Queue())
 
-        self.assertTrue(any(call[0] == "insert-failed" and call[1] == "status"
-                            for call in manager.calls))
+        self.assertIn("status", manager.db.inserted_tables)
+        self.assertGreaterEqual(manager.db.rollback_calls, 1)
         self.assertTrue(any(call[0] == "update" and call[1] == "try" for call in manager.calls))
 
 
