@@ -1446,6 +1446,13 @@ shutdown, and cancellation propagation to the Parsl-facing wrapper. Runtime prob
 paths. All four current configurations produce the expected cancellation/status counterexamples,
 while fixed configurations pass TLC simulation.
 
+The HTEX protocol layer now includes address-probe timeout propagation, `cores_per_worker` admission,
+priority/capacity dispatch, version-mismatch fatal handling, and ingress type validation for task IDs
+and task context. `ParslHtexDispatchPriority` passes the normal priority and drain invariants;
+the other current branches reproduce dropped zero timeouts, division by zero, post-mismatch admission,
+and malformed-envelope crashes. Runtime probes cover all five concrete HTEX boundaries, and fixed or
+valid configurations pass TLC simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

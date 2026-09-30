@@ -312,6 +312,45 @@ run_case flux-result-current counterexample \
 run_case flux-result-fixed pass \
     models/executors/ParslFluxResultFixed.cfg \
     models/executors/ParslFluxResult.tla
+run_case htex-address-probe-timeout-current counterexample \
+    models/executors/ParslHtexAddressProbeTimeoutCurrent.cfg \
+    models/executors/ParslHtexAddressProbeTimeout.tla
+run_case htex-address-probe-timeout-fixed pass \
+    models/executors/ParslHtexAddressProbeTimeoutFixed.cfg \
+    models/executors/ParslHtexAddressProbeTimeout.tla
+run_case htex-address-probe-timeout-valid pass \
+    models/executors/ParslHtexAddressProbeTimeoutValid.cfg \
+    models/executors/ParslHtexAddressProbeTimeout.tla
+run_case htex-cores-per-worker-current counterexample \
+    models/executors/ParslHtexCoresPerWorkerCurrent.cfg \
+    models/executors/ParslHtexCoresPerWorker.tla
+run_case htex-cores-per-worker-fixed pass \
+    models/executors/ParslHtexCoresPerWorkerFixed.cfg \
+    models/executors/ParslHtexCoresPerWorker.tla
+run_case htex-cores-per-worker-valid pass \
+    models/executors/ParslHtexCoresPerWorkerValid.cfg \
+    models/executors/ParslHtexCoresPerWorker.tla
+run_case htex-dispatch-priority pass \
+    models/executors/ParslHtexDispatchPriority.cfg \
+    models/executors/ParslHtexDispatchPriority.tla
+run_case htex-version-mismatch-current counterexample \
+    models/executors/ParslHtexVersionMismatch.cfg \
+    models/executors/ParslHtexVersionMismatch.tla
+run_case htex-version-mismatch-fixed pass \
+    models/executors/ParslHtexVersionMismatchFixed.cfg \
+    models/executors/ParslHtexVersionMismatch.tla
+run_case htex-task-id-type-current counterexample \
+    models/executors/ParslHtexTaskIdTypeCurrent.cfg \
+    models/executors/ParslHtexTaskIdType.tla
+run_case htex-task-id-type-fixed pass \
+    models/executors/ParslHtexTaskIdTypeFixed.cfg \
+    models/executors/ParslHtexTaskIdType.tla
+run_case htex-task-context-type-current counterexample \
+    models/executors/ParslHtexTaskContextTypeCurrent.cfg \
+    models/executors/ParslHtexTaskContextType.tla
+run_case htex-task-context-type-fixed pass \
+    models/executors/ParslHtexTaskContextTypeFixed.cfg \
+    models/executors/ParslHtexTaskContextType.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
