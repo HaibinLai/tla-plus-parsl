@@ -57,6 +57,11 @@ The outer callback lock is represented as an atomic callback section. A callback
 an incomplete list returns without finalizing; the callback for the last terminal Future performs
 the all-done check and either constructs the ordered result or aggregates all failures.
 
+`ParslJoinTimedMonitoring.tla` provides the compact clock boundary for this family: heartbeat
+expiry and task timeout can lose the inner Future while its physical attempt remains capable of a
+late completion. The current branch accepts that completion and violates terminal-cause safety;
+the fixed branch records it as stale before the outer join status is persisted.
+
 ## Safety properties
 
 - an outer join handle remains live while the outer task is joining;

@@ -2065,6 +2065,12 @@ run_case join-end-to-end pass \
 run_case join-monitoring pass \
     models/dataflow/ParslJoinMonitoring.cfg \
     models/dataflow/ParslJoinMonitoring.tla
+run_case join-timed-monitoring-current counterexample \
+    models/dataflow/ParslJoinTimedMonitoringCurrent.cfg \
+    models/dataflow/ParslJoinTimedMonitoring.tla
+run_case join-timed-monitoring-fixed pass \
+    models/dataflow/ParslJoinTimedMonitoringFixed.cfg \
+    models/dataflow/ParslJoinTimedMonitoring.tla
 run_case join-app-core pass \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
