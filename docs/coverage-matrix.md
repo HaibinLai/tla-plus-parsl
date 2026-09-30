@@ -451,6 +451,9 @@ HTEX executor coverage also includes `ParslHtexWorkerRestartFailure` (BUG-234), 
 that a failed worker respawn cannot silently terminate the watchdog while leaving the executor
 healthy and affected tasks without a terminal outcome.
 
+LSF provider coverage also includes `ParslLSFMissingJob` (BUG-235), which checks that an empty
+successful scheduler response does not falsely complete an active local job.
+
 AWS provider coverage also records status-list cardinality when EC2 omits a requested instance
 (`ParslAwsStatusMissingResult`, BUG-143).
 
