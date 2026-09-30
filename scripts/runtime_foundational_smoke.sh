@@ -33,6 +33,9 @@ tests=(
     tests/test_serialization_envelope_malformed_runtime.py
     tests/test_serialization_plugin_cache_runtime.py
     tests/test_serialization_plugin_error_runtime.py
+    tests/test_serialization_runtime.py
+    tests/test_serialization_frame_count_runtime.py
+    tests/test_serializer_header_consistency_runtime.py
     tests/test_task_transport_close_runtime.py
     tests/test_callable_retry_transport_runtime.py
     tests/test_command_receive_failure_runtime.py
@@ -58,6 +61,9 @@ tests=(
     tests/test_data_manager_stage_out_ordering_runtime.py
     tests/test_http_content_length_runtime.py
     tests/test_rsync_quoting_runtime.py
+    tests/test_file_clean_copy_runtime.py
+    tests/test_filesystem_radio_runtime.py
+    tests/test_http_staging_runtime.py
     tests/test_htex_heartbeat_runtime.py
     tests/test_heartbeat_clock_jump_runtime.py
     tests/test_htex_contact_timeout_starvation_runtime.py

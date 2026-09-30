@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `3790d01` (`Include three-level join runtime coverage`).
-- Foundational smoke inventory: 369 TLC cases and 237 Python runtime probes.
+- Latest pushed commit: pending (serialization and staging runtime coverage).
+- Foundational smoke inventory: 369 TLC cases and 243 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -107,6 +107,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `tests/test_join_three_list_runtime.py` into the foundational runtime
   gate. The probe confirms three distinct inner Futures preserve four ordered output positions,
   including a duplicate reference, matching the existing `ParslJoinThreeList` model.
+- Current stage: promoted six existing serialization and staging runtime bridges into the
+  foundational gate. The probes now exercise closure/object snapshotting, serializer frame and
+  header validation, clean-copy normalization, filesystem-radio atomic publication, and HTTP
+  staging failure behavior against the installed Parsl source.
 
 ### Verification convention
 
