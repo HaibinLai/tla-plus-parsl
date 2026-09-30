@@ -250,6 +250,8 @@ Recent focused models now connect the previously separate boundaries:
   template publication, missing scheduler arguments, and script-path I/O failure remain distinct.
 - `ParslTimeLimitedOpenTimeout` is now in the smoke sweep, separating a genuine file open from
   a missing-file timeout and preventing a raw `open()` after the timeout horizon.
+- `ParslHeartbeatClockRollback` is now in the smoke sweep, distinguishing wall-clock rollback
+  from monotonic heartbeat age so manager expiry is not delayed indefinitely.
 - `ParslClusterStatusRequest` is now in the smoke sweep, checking one backend poll, duplicate
   request-position preservation, and ordered public status projection.
 - `ParslMonitoringUpdatePersistentRetry` is now in the smoke sweep, exposing unbounded

@@ -96,6 +96,12 @@ run_case clock-retry-heartbeat pass \
 run_case clock-terminal-timeout pass \
     models/clock/ParslClockTerminal.cfg \
     models/clock/ParslClock.tla
+run_case heartbeat-clock-rollback-current counterexample \
+    models/clock/ParslHeartbeatClockRollbackCurrent.cfg \
+    models/clock/ParslHeartbeatClockRollback.tla
+run_case heartbeat-clock-rollback-fixed pass \
+    models/clock/ParslHeartbeatClockRollbackFixed.cfg \
+    models/clock/ParslHeartbeatClockRollback.tla
 run_case time-limited-open-current counterexample \
     models/clock/ParslTimeLimitedOpenTimeoutCurrent.cfg \
     models/clock/ParslTimeLimitedOpenTimeout.tla
