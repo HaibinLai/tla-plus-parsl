@@ -1779,6 +1779,21 @@ run_case rsync-stage-out-failure pass \
 run_case rsync-stage-success pass \
     models/staging/ParslRsyncStageSuccess.cfg \
     models/staging/ParslRsyncStage.tla
+run_case file-clean-copy-current counterexample \
+    models/staging/ParslFileCleanCopyCurrent.cfg \
+    models/staging/ParslFileCleanCopy.tla
+run_case file-clean-copy-fixed pass \
+    models/staging/ParslFileCleanCopyFixed.cfg \
+    models/staging/ParslFileCleanCopy.tla
+run_case file-path-resolution pass \
+    models/staging/ParslFilePathResolution.cfg \
+    models/staging/ParslFilePathResolution.tla
+run_case zip-path-current counterexample \
+    models/staging/ParslZipPathValidationCurrent.cfg \
+    models/staging/ParslZipPathValidation.tla
+run_case zip-path-fixed pass \
+    models/staging/ParslZipPathValidationFixed.cfg \
+    models/staging/ParslZipPathValidation.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

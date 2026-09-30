@@ -850,6 +850,9 @@ cover streaming failures and separate/in-task stage-in paths.
 Rsync staging coverage now includes shell-safe path quoting, stage-in gating before app execution,
 stage-out failure after app completion, and successful transfer publication. Runtime probes cover
 the command builder and both in-task/separate staging paths.
+File-object coverage now includes clean-copy semantics (preserving URL metadata while clearing
+site-local paths), local versus staged path resolution, and malformed zip URL rejection. Runtime
+probes exercise the corresponding `File` and zip staging helpers.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
