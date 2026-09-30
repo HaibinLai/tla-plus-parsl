@@ -346,6 +346,12 @@ run_case monitoring-versioned-batch-current counterexample \
 run_case monitoring-versioned-batch-fixed pass \
     models/monitoring/ParslMonitoringVersionedBatch.cfg \
     models/monitoring/ParslMonitoringVersionedBatch.tla
+run_case monitoring-batch-three-current counterexample \
+    models/monitoring/ParslMonitoringBatchThreeCurrent.cfg \
+    models/monitoring/ParslMonitoringBatchThree.tla
+run_case monitoring-batch-three-fixed pass \
+    models/monitoring/ParslMonitoringBatchThreeFixed.cfg \
+    models/monitoring/ParslMonitoringBatchThree.tla
 run_case multi-output-versioned-stageout-current counterexample \
     models/staging/ParslMultiOutputVersionedStageOutCurrent.cfg \
     models/staging/ParslMultiOutputVersionedStageOut.tla

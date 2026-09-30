@@ -1763,6 +1763,9 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
 - `ParslMonitoringVersionedBatch` now combines transaction rollback with per-task high-water
   protection; larger multi-task transaction batches remain future work;
+- `ParslMonitoringBatchThree` now exercises a three-event transaction with a mid-batch failure;
+  the current branch exposes partial-row visibility, while the fixed branch restores the database
+  snapshot before reporting an aborted batch;
 - `ParslCallableAliasRetry` now combines shared callable/argument aliasing with mutation-aware
   retry snapshots; arbitrary Python heap identity remains abstract;
 - `ParslNestedJoinRetry` now combines nested join propagation with leaf retries and stale-result

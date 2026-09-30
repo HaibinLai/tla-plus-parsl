@@ -56,3 +56,13 @@ batching, shutdown, insert/update bookkeeping, and persistent retry.
 two-event batch can fail after its first write, and a late version-1 event can arrive after
 version 2 is committed. The fixed branch restores the transaction snapshot on batch failure and
 keeps the database high-water mark at version 2; TLC checks 100,001 simulated states.
+
+`ParslMonitoringBatchThree.tla` extends the transaction boundary to three events. The writer
+fails after the second event; the current branch leaves those partial rows visible, while the
+fixed branch restores its pre-batch snapshot. `AbortAtomicity` and `CommitStability` capture the
+database safety contract.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchThreeCurrent.cfg models/monitoring/ParslMonitoringBatchThree.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchThreeFixed.cfg models/monitoring/ParslMonitoringBatchThree.tla
+```
