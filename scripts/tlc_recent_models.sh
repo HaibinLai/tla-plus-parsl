@@ -2178,3 +2178,36 @@ run_case join-single-cancellation-current counterexample \
 run_case join-single-cancellation-fixed pass \
     models/dataflow/ParslJoinSingleCancellationFixed.cfg \
     models/dataflow/ParslJoinSingleCancellation.tla
+run_case memo-dict-ordering-current counterexample \
+    models/dataflow/ParslMemoDictOrderingCurrent.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-dict-ordering-fixed pass \
+    models/dataflow/ParslMemoDictOrderingFixed.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-dict-ordering-homogeneous pass \
+    models/dataflow/ParslMemoDictOrderingHomogeneous.cfg \
+    models/dataflow/ParslMemoDictOrdering.tla
+run_case memo-ignore-key-current counterexample \
+    models/dataflow/ParslMemoIgnoreKeyCurrent.cfg \
+    models/dataflow/ParslMemoIgnoreKey.tla
+run_case memo-ignore-key-fixed pass \
+    models/dataflow/ParslMemoIgnoreKeyFixed.cfg \
+    models/dataflow/ParslMemoIgnoreKey.tla
+run_case memo-ignore-outputs-current counterexample \
+    models/dataflow/ParslMemoIgnoreOutputsCurrent.cfg \
+    models/dataflow/ParslMemoIgnoreOutputs.tla
+run_case memo-ignore-outputs-fixed pass \
+    models/dataflow/ParslMemoIgnoreOutputsFixed.cfg \
+    models/dataflow/ParslMemoIgnoreOutputs.tla
+run_case memo-checkpoint-order-current counterexample \
+    models/dataflow/ParslMemoCheckpointOrderCurrent.cfg \
+    models/dataflow/ParslMemoCheckpointOrder.tla
+run_case memo-checkpoint-order-fixed pass \
+    models/dataflow/ParslMemoCheckpointOrderFixed.cfg \
+    models/dataflow/ParslMemoCheckpointOrder.tla
+run_case memo-exception-checkpoint-current counterexample \
+    models/dataflow/ParslMemoExceptionCheckpointCurrent.cfg \
+    models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case memo-exception-checkpoint-fixed pass \
+    models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
+    models/dataflow/ParslMemoExceptionCheckpoint.tla

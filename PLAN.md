@@ -1407,6 +1407,15 @@ Runtime probes cover duplicate-preserving retries, `None` results, return-shape 
 cancellation. The current cancellation branches produce TLC counterexamples, while fixed branches
 and the other valid shapes pass simulation.
 
+Memoization now has a focused object-content sweep. `ParslMemoDictOrdering` models heterogeneous
+Python dictionary keys that cannot be sorted during hashing; `ParslMemoIgnoreKey` validates unknown
+`ignore_for_cache` names; `ParslMemoIgnoreOutputs` makes removal of the special `outputs` key
+idempotent; `ParslMemoCheckpointOrder` checks that duplicate hashes select the newest checkpoint
+rather than lexical directory order; and `ParslMemoExceptionCheckpoint` contrasts in-memory failed
+Future reuse with failure persistence across restart. Runtime probes reproduce all five current
+behaviors. Each current configuration produces its expected TLC counterexample, while fixed and
+homogeneous/valid configurations pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
