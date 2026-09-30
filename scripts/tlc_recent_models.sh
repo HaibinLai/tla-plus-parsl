@@ -2064,3 +2064,42 @@ run_case serialization-task-transport-failure pass \
 run_case serialization-zmq pass \
     models/serialization/ParslZMQ.cfg \
     models/serialization/ParslZMQ.tla
+run_case heartbeat-parameter-validation-current counterexample \
+    models/clock/ParslHeartbeatParameterValidationCurrent.cfg \
+    models/clock/ParslHeartbeatParameterValidation.tla
+run_case heartbeat-parameter-validation-fixed pass \
+    models/clock/ParslHeartbeatParameterValidationFixed.cfg \
+    models/clock/ParslHeartbeatParameterValidation.tla
+run_case heartbeat-parameter-validation-valid pass \
+    models/clock/ParslHeartbeatParameterValidationValid.cfg \
+    models/clock/ParslHeartbeatParameterValidation.tla
+run_case python-timeout-parameter-current counterexample \
+    models/clock/ParslPythonTimeoutParameterCurrent.cfg \
+    models/clock/ParslPythonTimeoutParameter.tla
+run_case python-timeout-parameter-fixed pass \
+    models/clock/ParslPythonTimeoutParameterFixed.cfg \
+    models/clock/ParslPythonTimeoutParameter.tla
+run_case python-timeout-parameter-valid pass \
+    models/clock/ParslPythonTimeoutParameterValid.cfg \
+    models/clock/ParslPythonTimeoutParameter.tla
+run_case resource-monitor-clock-current counterexample \
+    models/clock/ParslResourceMonitorClockCurrent.cfg \
+    models/clock/ParslResourceMonitorClock.tla
+run_case resource-monitor-clock-fixed pass \
+    models/clock/ParslResourceMonitorClockFixed.cfg \
+    models/clock/ParslResourceMonitorClock.tla
+run_case timeout-timer-error pass \
+    models/clock/ParslTimeoutTimerError.cfg \
+    models/clock/ParslTimeoutTimer.tla
+run_case timeout-timer-success pass \
+    models/clock/ParslTimeoutTimerSuccess.cfg \
+    models/clock/ParslTimeoutTimer.tla
+run_case timer-interval-validation-current counterexample \
+    models/clock/ParslTimerIntervalValidationCurrent.cfg \
+    models/clock/ParslTimerIntervalValidation.tla
+run_case timer-interval-validation-fixed pass \
+    models/clock/ParslTimerIntervalValidationFixed.cfg \
+    models/clock/ParslTimerIntervalValidation.tla
+run_case timer-interval-validation-valid pass \
+    models/clock/ParslTimerIntervalValidationValid.cfg \
+    models/clock/ParslTimerIntervalValidation.tla

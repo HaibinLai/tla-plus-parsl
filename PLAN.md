@@ -1378,6 +1378,15 @@ and `ParslSerializerRegistry` cover explicit empty-registry failure and ambiguou
 retry identity, duplicate delivery, route validation, and stale-result rejection. Runtime probes cover
 the corresponding Parsl serializer, pool-executor, ZMQ, and task-transport paths.
 
+The first explicit clock/timeout parameter models are now in the smoke sweep. `ParslHeartbeatParameterValidation`
+checks admission of positive HTEX heartbeat period and threshold values; `ParslPythonTimeoutParameter`
+checks that non-positive Python-app timeout delays are rejected instead of causing an immediate timer
+fire; `ParslResourceMonitorClock` contrasts wall-clock scheduling with elapsed monotonic time after a
+clock rollback; `ParslTimeoutTimer` checks cancellation on both normal return and ordinary exceptions;
+and `ParslTimerIntervalValidation` checks negative periodic intervals. Runtime probes cover all five
+boundaries, and the current configurations intentionally produce TLC counterexamples for the unsafe
+branches while fixed and valid configurations pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
