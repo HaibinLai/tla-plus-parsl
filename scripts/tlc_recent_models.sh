@@ -1089,6 +1089,12 @@ run_case htex-ambiguous-result-current counterexample \
 run_case htex-ambiguous-result-fixed pass \
     models/executors/ParslHtexAmbiguousResultFixed.cfg \
     models/executors/ParslHtexAmbiguousResult.tla
+run_case htex-cancelled-result-current counterexample \
+    models/executors/ParslHtexCancelledResultCurrent.cfg \
+    models/executors/ParslHtexCancelledResult.tla
+run_case htex-cancelled-result-fixed pass \
+    models/executors/ParslHtexCancelledResultFixed.cfg \
+    models/executors/ParslHtexCancelledResult.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla

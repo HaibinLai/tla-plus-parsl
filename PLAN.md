@@ -1153,6 +1153,10 @@ the current orphaning path.
 success and exception fields are rejected as malformed in the fixed branch instead of silently
 resolving the Future as success. `tests/test_htex_ambiguous_result_runtime.py` exercises the
 real result handler.
+`ParslHtexCancelledResult.tla` also covers a late result racing with user cancellation: the
+current branch lets `set_result` raise and kills the result worker, while the fixed branch
+discards the cancelled task's result and continues to later messages. The concrete bridge is
+`tests/test_htex_cancelled_result_runtime.py`.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.
