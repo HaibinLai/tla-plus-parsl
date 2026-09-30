@@ -717,6 +717,33 @@ run_case core-submit-failure pass \
 run_case core-timeout-terminal pass \
     models/core/ParslTimeoutTerminal.cfg \
     models/core/ParslAbstract.tla
+run_case abstract pass \
+    models/core/ParslAbstract.cfg \
+    models/core/ParslAbstract.tla
+run_case abstract-smoke pass \
+    models/core/ParslAbstractSmoke.cfg \
+    models/core/ParslAbstract.tla
+run_case abstract-join-smoke pass \
+    models/core/ParslAbstractJoinSmoke.cfg \
+    models/core/ParslAbstract.tla
+run_case join pass \
+    models/core/ParslJoin.cfg \
+    models/core/ParslAbstract.tla
+run_case join-invalid pass \
+    models/core/ParslJoinInvalid.cfg \
+    models/core/ParslAbstract.tla
+run_case join-safety pass \
+    models/core/ParslJoinSafety.cfg \
+    models/core/ParslAbstract.tla
+run_case memo pass \
+    models/core/ParslMemo.cfg \
+    models/core/ParslAbstract.tla
+run_case monitoring pass \
+    models/core/ParslMonitoring.cfg \
+    models/core/ParslAbstract.tla
+run_case serialization-failure pass \
+    models/core/ParslSerializationFailure.cfg \
+    models/core/ParslAbstract.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

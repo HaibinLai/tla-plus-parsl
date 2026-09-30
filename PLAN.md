@@ -1541,6 +1541,12 @@ terminal timeout configurations. These bounded scenarios completed TLC simulatio
 violations in the exercised runs, extending startup, capacity, failure, and shutdown coverage beyond
 the focused models.
 
+The abstract smoke matrix now explicitly includes normal execution, join, invalid join, memoization,
+monitoring, and serialization-failure configurations using `ParslAbstract`. The no-failure variant
+contains a temporal `EventuallySettled` property and currently triggers a TLC 2.19 simulator
+NullPointerException in this environment, so it remains documented but is not marked as a passing
+sweep case; this is a verifier/runtime limitation rather than a claimed model result.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
