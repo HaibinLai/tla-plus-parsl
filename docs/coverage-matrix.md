@@ -133,6 +133,9 @@ successful-submit response before admitting a Grid Engine resource.
 It also includes `ParslGridEngineEmptySubmit` (BUG-222), which requires an explicit failure when
 a successful scheduler command returns no usable job identifier.
 
+Provider coverage also includes `ParslSlurmEmptyJobId` (BUG-223), which rejects a successful
+Slurm response whose captured scheduler identifier is empty.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

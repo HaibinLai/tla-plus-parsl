@@ -328,6 +328,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySub
 /tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_empty_submit_runtime.py -v
 ```
 
+`ParslSlurmEmptyJobId.tla` models the default submit regex boundary. The current `\\S*` capture
+accepts an empty identifier from a truncated success line and publishes an empty resource key;
+the fixed branch requires a non-empty ID before registration.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmEmptyJobIdCurrent.cfg models/providers/ParslSlurmEmptyJobId.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmEmptyJobIdFixed.cfg models/providers/ParslSlurmEmptyJobId.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmEmptyJobIdNormal.cfg models/providers/ParslSlurmEmptyJobId.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_empty_job_id_runtime.py -v
+```
+
 `ParslLocalProviderCancelUnknown.tla` models cancellation after a local job has already been
 removed from `resources`. The current `LocalProvider.cancel()` indexes the missing id and raises
 `KeyError`; the fixed branch treats the stale cancellation as an unsuccessful, non-throwing
