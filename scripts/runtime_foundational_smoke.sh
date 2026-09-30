@@ -55,6 +55,12 @@ tests=(
     tests/test_aws_submit_runtime.py
     tests/test_azure_submit_runtime.py
     tests/test_googlecloud_submit_runtime.py
+    tests/test_htex_cancelled_result_runtime.py
+    tests/test_htex_result_queue_runtime.py
+    tests/test_htex_executor_result_frame_continuation_runtime.py
+    tests/test_htex_result_message_malformed_runtime.py
+    tests/test_htex_worker_task_batch_shape_runtime.py
+    tests/test_htex_worker_task_frame_continuation_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

@@ -230,6 +230,10 @@ cancellation, cleanup quiescence, duplicate failure aggregation, callback multip
 shape validation, and outer cancellation. The runtime runner includes the corresponding decorated
 `join_app` probes, so the fixed TLA+ terminal-state properties are checked against real Futures.
 
+The HTEX result cases cover cancelled and duplicate result delivery, corrupt outer result frames,
+malformed manager result payloads, and worker task batch/frame continuation. They assert that one
+bad or stale message cannot terminate processing for unrelated tasks.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and

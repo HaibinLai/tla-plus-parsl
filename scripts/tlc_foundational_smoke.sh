@@ -410,5 +410,23 @@ run_case join-callback-multiplicity \
 run_case join-return-shape \
     models/dataflow/ParslJoinReturnShapeFuture.cfg \
     models/dataflow/ParslJoinReturnShape.tla
+run_case htex-cancelled-result \
+    models/executors/ParslHtexCancelledResultFixed.cfg \
+    models/executors/ParslHtexCancelledResult.tla
+run_case htex-duplicate-result \
+    models/executors/ParslHtexDuplicateResultFixed.cfg \
+    models/executors/ParslHtexDuplicateResult.tla
+run_case htex-result-frame-continuation \
+    models/executors/ParslHtexExecutorResultFrameContinuationFixed.cfg \
+    models/executors/ParslHtexExecutorResultFrameContinuation.tla
+run_case htex-malformed-result-frame \
+    models/executors/ParslHtexResultMessageMalformedFixed.cfg \
+    models/executors/ParslHtexResultMessageMalformed.tla
+run_case htex-worker-batch-shape \
+    models/executors/ParslHtexWorkerTaskBatchShapeFixed.cfg \
+    models/executors/ParslHtexWorkerTaskBatchShape.tla
+run_case htex-worker-frame-continuation \
+    models/executors/ParslHtexWorkerTaskFrameContinuationFixed.cfg \
+    models/executors/ParslHtexWorkerTaskFrameContinuation.tla
 
 echo "Foundational TLC smoke suite passed."
