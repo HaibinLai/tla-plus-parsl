@@ -553,6 +553,11 @@ an elapsed worker drain deadline remains effective after a wall-clock rollback. 
 configuration violates `DrainDeadlineSafety`; the fixed model passes with
 `tests/test_htex_worker_drain_clock_runtime.py` as the runtime probe.
 
+Work Queue result handling also includes `ParslWorkQueueMalformedReport` (BUG-257), which
+models a malformed collector report preceding a valid report. The current configuration
+violates `MalformedReportSafety`; the fixed model passes with
+`tests/test_workqueue_malformed_report_runtime.py` as the runtime probe.
+
 HTEX result handling also includes `ParslHtexUnknownResultType` (BUG-255), which models an
 unknown decoded result-frame type followed by a valid frame. The current configuration violates
 `UnknownTypeSafety`; the fixed model passes and the runtime probe is

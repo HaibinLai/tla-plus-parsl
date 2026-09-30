@@ -366,6 +366,13 @@ run_case htex-worker-drain-clock-fixed pass \
     models/clock/ParslHtexWorkerDrainClockFixed.cfg \
     models/clock/ParslHtexWorkerDrainClock.tla
 
+run_case workqueue-malformed-report-current counterexample \
+    models/executors/ParslWorkQueueMalformedReportCurrent.cfg \
+    models/executors/ParslWorkQueueMalformedReport.tla
+run_case workqueue-malformed-report-fixed pass \
+    models/executors/ParslWorkQueueMalformedReportFixed.cfg \
+    models/executors/ParslWorkQueueMalformedReport.tla
+
 run_case htex-unknown-result-type-current counterexample \
     models/executors/ParslHtexUnknownResultTypeCurrent.cfg \
     models/executors/ParslHtexUnknownResultType.tla
