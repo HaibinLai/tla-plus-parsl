@@ -1819,6 +1819,9 @@ reproduced their configured counterexamples and Fixed branches passed.
 Cases 341--360 matched at 100 steps: AWS empty-submit, Google Cloud status, Condor malformed and
 failure status, cluster submit/status request validation, equal-callable serializer caching,
 Zip stage-in write failure, and monitoring update permanent-error handling.
+Cases 361--380 matched at 100 steps: monitoring update/insert retry, batch atomicity, workflow
+insert/end bookkeeping, last-message and ZMQ-router shutdown paths, plus Globus transfer timeout
+and failure outcomes.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
