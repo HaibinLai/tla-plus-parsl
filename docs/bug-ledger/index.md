@@ -10,7 +10,7 @@ This directory is the split, component-oriented view of the complete [Parsl bug 
 | Monitoring and database | 19 | [monitoring/README.md](monitoring/README.md) |
 | File staging and transfer | 15 | [staging/README.md](staging/README.md) |
 | join_app and memoization | 7 | [join/README.md](join/README.md) |
-| Clock, heartbeat, and timeout | 17 | [clock/README.md](clock/README.md) |
+| Clock, heartbeat, and timeout | 18 | [clock/README.md](clock/README.md) |
 | Core dataflow and Future lifecycle | 1 | [dataflow/README.md](dataflow/README.md) |
 
 Every BUG ID in the flat ledger appears exactly once in these category files. Cross-component findings are assigned to the primary implementation or safety property; the original component text is preserved in each row.

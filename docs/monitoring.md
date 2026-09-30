@@ -364,6 +364,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslFilesystemRadioAt
 /tmp/parsl-venv/bin/python -m unittest tests/test_filesystem_radio_runtime.py -v
 ```
 
+`ParslMonitoringUDPDrainClock.tla` models the UDP router's shutdown drain
+deadline. The current `MonitoringRouter.start` uses `time.time()` for the
+last-message baseline, so a wall-clock rollback can keep the drain loop alive
+after `atexit_timeout`; the fixed branch uses monotonic elapsed time. The
+runtime probe drives the real router loop with a timeout-only socket double and
+a decreasing wall-clock sequence.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslMonitoringUDPDrainClockCurrent.cfg models/clock/ParslMonitoringUDPDrainClock.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslMonitoringUDPDrainClockFixed.cfg models/clock/ParslMonitoringUDPDrainClock.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_udp_drain_clock_runtime.py -v
+```
+
+This UDP drain-deadline boundary is recorded as BUG-240.
+
 `ParslResourceMonitorClock.tla` covers the worker-side resource monitor in
 `parsl.monitoring.remote`. The current loop uses `time.time()` for periodic sampling; a backward
 wall-clock step can suppress an already-due intermediate resource message. The fixed branch uses

@@ -3277,6 +3277,12 @@ run_case monitoring-udp-pickle-current counterexample \
 run_case monitoring-udp-pickle-fixed pass \
     models/monitoring/ParslMonitoringUDPPickleIsolationFixed.cfg \
     models/monitoring/ParslMonitoringUDPPickleIsolation.tla
+run_case monitoring-udp-drain-clock-current counterexample \
+    models/clock/ParslMonitoringUDPDrainClockCurrent.cfg \
+    models/clock/ParslMonitoringUDPDrainClock.tla
+run_case monitoring-udp-drain-clock-fixed pass \
+    models/clock/ParslMonitoringUDPDrainClockFixed.cfg \
+    models/clock/ParslMonitoringUDPDrainClock.tla
 run_case htex-duplicate-result-current counterexample \
     models/executors/ParslHtexDuplicateResultCurrent.cfg \
     models/executors/ParslHtexDuplicateResult.tla
