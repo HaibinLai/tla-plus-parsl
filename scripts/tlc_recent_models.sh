@@ -349,6 +349,15 @@ run_case htex-shutdown-reap-fixed pass \
 run_case htex-shutdown-reap-normal pass \
     models/executors/ParslHtexShutdownReapNormal.cfg \
     models/executors/ParslHtexShutdownReap.tla
+run_case command-send-failure-current counterexample \
+    models/serialization/ParslCommandSendFailureCurrent.cfg \
+    models/serialization/ParslCommandSendFailure.tla
+run_case command-send-failure-fixed pass \
+    models/serialization/ParslCommandSendFailureFixed.cfg \
+    models/serialization/ParslCommandSendFailure.tla
+run_case command-send-failure-normal pass \
+    models/serialization/ParslCommandSendFailureNormal.cfg \
+    models/serialization/ParslCommandSendFailure.tla
 run_case cluster-status-unknown-current counterexample \
     models/providers/ParslClusterStatusUnknownCurrent.cfg \
     models/providers/ParslClusterStatusUnknown.tla

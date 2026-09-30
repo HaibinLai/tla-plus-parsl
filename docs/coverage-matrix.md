@@ -90,6 +90,9 @@ output cannot publish a zero/negative process ID as a live managed resource.
 The executor row also includes `ParslHtexShutdownReap` (BUG-213), which checks that a forced
 interchange kill is reaped before shutdown closes its dependent channels.
 
+The serialization/ZMQ row also includes `ParslCommandSendFailure` (BUG-214), which checks that
+failed command sends poison the REQ client instead of allowing unsafe reuse.
+
 It also includes `ParslCondorSubmitWhitespace` (BUG-177), which checks scheduler whitespace
 normalization before cluster/process ID expansion.
 

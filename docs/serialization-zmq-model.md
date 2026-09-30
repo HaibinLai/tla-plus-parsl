@@ -15,6 +15,7 @@ worker decode/dispatch, and result correlation.
 | parsl/executors/high_throughput/executor.py result worker | result decode/retry, duplicate/unknown result, and stale-correlation models |
 | parsl/executors/high_throughput/process_worker_pool.py | callable/object snapshot, worker result serialization, and failure payload models |
 | parsl/executors/high_throughput/interchange.py::process_manager_socket_message | manager-message, registration-envelope, heartbeat, and result-frame models |
+| parsl/executors/high_throughput/zmq_pipes.py::CommandClient.run | command deadline, retry, close, and `ParslCommandSendFailure` models |
 
 In ParslZMQSerializationEndToEnd, a task or result message has a serializer identifier,
 sender/receiver route, multipart frame state, and attempt number. The abstract transitions are:
@@ -75,6 +76,20 @@ pickle/type guard can succeed while required fields such as `python_v` are absen
 branch then crashes while constructing the manager record. The fixed branch rejects the malformed
 registration before it mutates `_ready_managers`. The runtime probe uses the real interchange
 handler with a pickleable registration missing `python_v`.
+
+`ParslCommandSendFailure.tla` models a transport exception during `CommandClient.run`'s
+`send_pyobj` call. The current branch leaves the REQ client marked healthy, while the fixed branch
+poisons it before the next command can reuse the failed socket. The runtime probe uses the real
+`CommandClient.run` implementation with a failing socket double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandSendFailureCurrent.cfg models/serialization/ParslCommandSendFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandSendFailureFixed.cfg models/serialization/ParslCommandSendFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandSendFailureNormal.cfg models/serialization/ParslCommandSendFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_send_failure_runtime.py -v
+```
+
+This transport-health boundary is recorded as BUG-214.
 
 ## Safety properties
 
