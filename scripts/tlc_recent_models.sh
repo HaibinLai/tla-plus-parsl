@@ -1492,6 +1492,12 @@ run_case htex-worker-watchdog-busy pass \
 run_case htex-worker-watchdog-idle pass \
     models/executors/ParslHtexWorkerWatchdogIdle.cfg \
     models/executors/ParslHtexWorkerWatchdog.tla
+run_case htex-worker-restart-failure-current counterexample \
+    models/executors/ParslHtexWorkerRestartFailureCurrent.cfg \
+    models/executors/ParslHtexWorkerRestartFailure.tla
+run_case htex-worker-restart-failure-fixed pass \
+    models/executors/ParslHtexWorkerRestartFailureFixed.cfg \
+    models/executors/ParslHtexWorkerRestartFailure.tla
 run_case radical-bulk-shutdown-current counterexample \
     models/executors/ParslRadicalPilotBulkShutdownCurrent.cfg \
     models/executors/ParslRadicalPilotBulkShutdown.tla

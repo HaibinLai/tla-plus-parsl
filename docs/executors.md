@@ -714,6 +714,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerWatchdog
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_watchdog_runtime.py -v
 ```
 
+`ParslHtexWorkerRestartFailure.tla` refines this boundary with a failed respawn. The current
+`Manager.worker_watchdog` lets an exception from `_start_worker` escape its loop, leaving the
+watchdog and executor without an explicit failure state. The fixed branch makes the restart
+failure visible as an executor-bad outcome; `tests/test_htex_worker_restart_failure_runtime.py`
+reproduces the escaping exception against the real manager.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerRestartFailureCurrent.cfg models/executors/ParslHtexWorkerRestartFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerRestartFailureFixed.cfg models/executors/ParslHtexWorkerRestartFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_restart_failure_runtime.py -v
+```
+
 `ParslHtexWatchdogResultRace.tla` models the ordering in the concrete worker loop where a result
 is placed on `pending_result_queue` before the worker removes its entry from `_tasks_in_progress`.
 If the process dies in that interval, the current watchdog emits an additional `WorkerLost`

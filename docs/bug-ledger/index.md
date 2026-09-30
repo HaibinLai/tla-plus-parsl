@@ -4,7 +4,7 @@ This directory is the split, component-oriented view of the complete [Parsl bug 
 
 | Category | Entries | Full records |
 | --- | ---: | --- |
-| Executors and worker lifecycle | 28 | [executors/README.md](executors/README.md) |
+| Executors and worker lifecycle | 30 | [executors/README.md](executors/README.md) |
 | Serialization and ZMQ transport | 38 | [serialization/README.md](serialization/README.md) |
 | Providers and scheduler adapters | 50 | [providers/README.md](providers/README.md) |
 | Monitoring and database | 19 | [monitoring/README.md](monitoring/README.md) |
