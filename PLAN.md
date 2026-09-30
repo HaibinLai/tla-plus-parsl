@@ -1850,6 +1850,8 @@ Engine cancellation and unknown IDs, duplicate/status parsing, and batch-status 
 Cases 561--580 matched at 100 steps: GridEngine status-batch and submit outcomes, LSF cancel
 unknown IDs, duplicate/missing-job status, resource validation, submit success/failure, and
 malformed submit handling.
+Cases 581--600 matched at 100 steps: Slurm strict batch, cancel, duplicate/foreign/malformed
+status, submit behavior, and PBSPro job-alias uniqueness.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
