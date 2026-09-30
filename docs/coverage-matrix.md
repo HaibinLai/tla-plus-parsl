@@ -247,6 +247,8 @@ BUG-098 from a single malformed envelope to a malformed-then-valid message seque
 that the later valid task remains queueable.
 `ParslHtexSerializationFailure` checks that non-`TypeError` serializer failures are normalized
 at the HTEX submit boundary instead of escaping as raw implementation exceptions (BUG-268).
+`ParslHtexSerializationErrorName` checks that callable instances without `__name__` still produce
+an explicit serialization error rather than masking it with `AttributeError` (BUG-272).
 The temporal refinement `ParslHtexResultDecodeContinuation` places a corrupt result before a
 valid result in one batch and checks that decode failure cannot strand the later Future (BUG-020).
 Provider/executor coverage also includes `ParslPollerExecutorIsolation` (BUG-269), which keeps

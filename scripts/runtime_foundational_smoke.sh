@@ -132,6 +132,7 @@ tests=(
     tests/test_htex_task_message_malformed_runtime.py
     tests/test_htex_task_ingress_continuation_runtime.py
     tests/test_htex_serialization_failure_runtime.py
+    tests/test_htex_serialization_error_name_runtime.py
     tests/test_htex_result_decode_continuation_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py

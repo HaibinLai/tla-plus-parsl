@@ -104,6 +104,13 @@ than Parsl's `SerializationError`. The fixed branch normalizes every serializati
 it leaves submit. `tests/test_htex_serialization_failure_runtime.py` invokes the real executor
 method with deterministic serializer failures. This finding is recorded as BUG-268.
 
+`ParslHtexSerializationErrorName.tla` refines the same submit-side error path for callable
+instances. When `pack_apply_message` raises `TypeError`, the current code uses `func.__name__`
+while constructing `SerializationError`; a callable object with only `__call__` has no such
+attribute, so an `AttributeError` masks the serialization failure. The fixed branch uses a safe
+callable description. `tests/test_htex_serialization_error_name_runtime.py` probes both a named
+function and a callable instance. This refinement is recorded as BUG-272.
+
 `ParslHtexResultDecodeContinuation.tla` is a temporal refinement of BUG-020. It puts a corrupt
 result frame before an independent valid frame in the same incoming batch. The current worker
 exits on the first decode exception, leaving both the first Future orphaned and the later Future
