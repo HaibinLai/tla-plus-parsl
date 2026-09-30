@@ -350,5 +350,15 @@ before releasing either consumer. TLC checks 100,142 simulated fixed states.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputVersionedStageOutCurrent.cfg models/staging/ParslMultiOutputVersionedStageOut.tla
-java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputVersionedStageOut.cfg models/staging/ParslMultiOutputVersionedStageOut.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputVersionedStageOutFixed.cfg models/staging/ParslMultiOutputVersionedStageOut.tla
+```
+
+`ParslThreeOutputVersionedStageOut.tla` extends that atomic publication boundary to three output
+files. A source-version change or failure of one transfer cannot make any output Future visible
+until all three outputs are ready at the same source version. The fixed branch also retries an
+individual failed output before publishing the set.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslThreeOutputVersionedStageOutCurrent.cfg models/staging/ParslThreeOutputVersionedStageOut.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslThreeOutputVersionedStageOutFixed.cfg models/staging/ParslThreeOutputVersionedStageOut.tla
 ```

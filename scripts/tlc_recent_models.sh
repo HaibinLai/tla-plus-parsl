@@ -358,6 +358,12 @@ run_case multi-output-versioned-stageout-current counterexample \
 run_case multi-output-versioned-stageout-fixed pass \
     models/staging/ParslMultiOutputVersionedStageOut.cfg \
     models/staging/ParslMultiOutputVersionedStageOut.tla
+run_case three-output-versioned-stageout-current counterexample \
+    models/staging/ParslThreeOutputVersionedStageOutCurrent.cfg \
+    models/staging/ParslThreeOutputVersionedStageOut.tla
+run_case three-output-versioned-stageout-fixed pass \
+    models/staging/ParslThreeOutputVersionedStageOutFixed.cfg \
+    models/staging/ParslThreeOutputVersionedStageOut.tla
 run_case nested-join-retry-current counterexample \
     models/dataflow/ParslNestedJoinRetryCurrent.cfg \
     models/dataflow/ParslNestedJoinRetry.tla

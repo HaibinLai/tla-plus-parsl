@@ -1748,6 +1748,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - `ParslMultiOutputVersionedStageOut` now combines multi-output atomic publication with source
   versions and per-output retry; larger output sets and provider-specific transfer streams remain
   future work;
+- `ParslThreeOutputVersionedStageOut` extends the same atomic publication and source-version
+  checks to three outputs, including independent output failure/retry and consumer gating.
 - richer message reordering/correlation beyond the two-task bounded result-envelope model;
 - three-task correlation is now represented by `ParslMessageCorrelationThree`, including bounded
   queue reordering, cross-task retargeting, duplicate frames, and retry generations; larger
