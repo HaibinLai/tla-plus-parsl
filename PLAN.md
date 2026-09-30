@@ -648,6 +648,9 @@ non-idempotent duplicate-key path is exposed as a dropped monitoring event, whil
 configuration checks an idempotent duplicate handler. This is based on the current
 `DatabaseManager._insert` exception handling and the STATUS primary key in
 `parsl/monitoring/db_manager.py`.
+`ParslMonitoringForeignKey` adds the SQLite schema boundary: the current default engine accepts
+an orphan STATUS row despite the declared WORKFLOW foreign key, while the fixed branch enforces
+the parent constraint. BUG-210 is backed by `tests/test_monitoring_foreign_key_runtime.py`.
 Its current, fixed, and non-duplicate configurations are now part of the recurring smoke sweep;
 the SQLite bridge in `tests/test_monitoring_db_runtime.py` and status-history probe remain the
 concrete runtime checks.

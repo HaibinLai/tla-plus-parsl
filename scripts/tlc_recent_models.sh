@@ -1714,6 +1714,15 @@ run_case monitoring-db-insert-fixed pass \
 run_case monitoring-db-insert-present pass \
     models/monitoring/ParslMonitoringDBInsertPresent.cfg \
     models/monitoring/ParslMonitoringDBInsert.tla
+run_case monitoring-db-foreign-key-current counterexample \
+    models/monitoring/ParslMonitoringForeignKeyCurrent.cfg \
+    models/monitoring/ParslMonitoringForeignKey.tla
+run_case monitoring-db-foreign-key-fixed pass \
+    models/monitoring/ParslMonitoringForeignKeyFixed.cfg \
+    models/monitoring/ParslMonitoringForeignKey.tla
+run_case monitoring-db-foreign-key-normal pass \
+    models/monitoring/ParslMonitoringForeignKeyNormal.cfg \
+    models/monitoring/ParslMonitoringForeignKey.tla
 run_case executor-provider-core pass \
     models/executors/ParslExecutorProvider.cfg \
     models/executors/ParslExecutorProvider.tla

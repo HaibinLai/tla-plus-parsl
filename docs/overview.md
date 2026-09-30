@@ -631,6 +631,12 @@ The queue can reorder events, writes can fail and be retried, stale versions are
 terminal database record is not overwritten by an older event. `MAX_FAILURES` and queue bounds
 keep the monitoring model finite for TLC.
 
+`ParslMonitoringForeignKey.tla` models the SQL schema boundary for STATUS rows. The current
+SQLite `Database` declares `Status.run_id` as a foreign key but does not enable SQLite foreign-key
+enforcement, so a missing WORKFLOW parent can still receive a committed STATUS row. The runtime
+probe confirms the orphan insert with the installed SQLAlchemy database; the fixed branch rejects
+it before publication.
+
 `ParslMonitoringDeferred.tla` adds the concrete database-manager race for worker task messages.
 When a worker's first status/resource message arrives before the DFK inserts the corresponding
 task/try rows, the message is deferred and replayed after the try row exists. A second first
@@ -1511,6 +1517,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDeferre
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsert.cfg models/monitoring/ParslMonitoringDBInsert.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsertFixed.cfg models/monitoring/ParslMonitoringDBInsert.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBInsertPresent.cfg models/monitoring/ParslMonitoringDBInsert.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringForeignKeyCurrent.cfg models/monitoring/ParslMonitoringForeignKey.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringForeignKeyFixed.cfg models/monitoring/ParslMonitoringForeignKey.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringForeignKeyNormal.cfg models/monitoring/ParslMonitoringForeignKey.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchCurrent.cfg models/monitoring/ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchFixed.cfg models/monitoring/ParslMonitoringBatch.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchPositive.cfg models/monitoring/ParslMonitoringBatch.tla
