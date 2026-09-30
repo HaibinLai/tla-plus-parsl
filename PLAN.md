@@ -1453,6 +1453,15 @@ the other current branches reproduce dropped zero timeouts, division by zero, po
 and malformed-envelope crashes. Runtime probes cover all five concrete HTEX boundaries, and fixed or
 valid configurations pass TLC simulation.
 
+The HTEX manager/worker lifecycle is now extended with `ParslHtexManagerLoss`, which checks that
+manager expiry emits a synthetic result that resolves the affected Future; `ParslHtexManagerTaskAdmission`,
+which models registration, heartbeat expiry, retry, and stale-result correlation; and two worker
+receiver models for malformed batch shapes and corrupt pickle frames. `ParslHtexMonitoringMessage`
+covers optional monitoring payloads when no radio is configured. Runtime probes cover manager loss,
+monitoring-disabled messages, malformed batches, and frame continuation. The current manager-loss,
+worker receiver, and monitoring-disabled branches produce TLC counterexamples; fixed and enabled
+configurations pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

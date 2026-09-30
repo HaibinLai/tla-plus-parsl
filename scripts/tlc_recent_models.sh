@@ -351,6 +351,39 @@ run_case htex-task-context-type-current counterexample \
 run_case htex-task-context-type-fixed pass \
     models/executors/ParslHtexTaskContextTypeFixed.cfg \
     models/executors/ParslHtexTaskContextType.tla
+run_case htex-manager-loss-current counterexample \
+    models/executors/ParslHtexManagerLossCurrent.cfg \
+    models/executors/ParslHtexManagerLoss.tla
+run_case htex-manager-loss-fixed pass \
+    models/executors/ParslHtexManagerLossFixed.cfg \
+    models/executors/ParslHtexManagerLoss.tla
+run_case htex-manager-task-admission-current pass \
+    models/executors/ParslHtexManagerTaskAdmissionCurrent.cfg \
+    models/executors/ParslHtexManagerTaskAdmission.tla
+run_case htex-manager-task-admission-fixed pass \
+    models/executors/ParslHtexManagerTaskAdmissionFixed.cfg \
+    models/executors/ParslHtexManagerTaskAdmission.tla
+run_case htex-worker-task-batch-shape-current counterexample \
+    models/executors/ParslHtexWorkerTaskBatchShapeCurrent.cfg \
+    models/executors/ParslHtexWorkerTaskBatchShape.tla
+run_case htex-worker-task-batch-shape-fixed pass \
+    models/executors/ParslHtexWorkerTaskBatchShapeFixed.cfg \
+    models/executors/ParslHtexWorkerTaskBatchShape.tla
+run_case htex-worker-task-frame-current counterexample \
+    models/executors/ParslHtexWorkerTaskFrameContinuationCurrent.cfg \
+    models/executors/ParslHtexWorkerTaskFrameContinuation.tla
+run_case htex-worker-task-frame-fixed pass \
+    models/executors/ParslHtexWorkerTaskFrameContinuationFixed.cfg \
+    models/executors/ParslHtexWorkerTaskFrameContinuation.tla
+run_case htex-monitoring-message-current counterexample \
+    models/executors/ParslHtexMonitoringMessageCurrent.cfg \
+    models/executors/ParslHtexMonitoringMessage.tla
+run_case htex-monitoring-message-enabled pass \
+    models/executors/ParslHtexMonitoringMessageEnabled.cfg \
+    models/executors/ParslHtexMonitoringMessage.tla
+run_case htex-monitoring-message-fixed pass \
+    models/executors/ParslHtexMonitoringMessageFixed.cfg \
+    models/executors/ParslHtexMonitoringMessage.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
