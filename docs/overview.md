@@ -1175,12 +1175,14 @@ The current model covers the major control-flow effects represented in the paper
 executor, interchange/manager, provider, and dataflow architecture. It does **not** simulate
 every implementation detail or every component in full fidelity.
 
-Deliberately abstracted away are ZMQ byte messages, serialized Python objects, callable
-contents, real filenames, wall-clock time, heartbeat timing, database schema, monitoring
-transport, and the exact behavior of every alternative executor/provider. Data staging is
-represented only by `unavailable/staging/available`. The model therefore checks protocol
-properties of a bounded abstraction; it is not a proof that the complete Parsl implementation
-is correct.
+The compact core still abstracts away arbitrary ZMQ byte streams, unrestricted Python heaps,
+real filenames, OS scheduling, the full database schema, and unbounded executor/provider fleets.
+Those boundaries are now refined by focused models and runtime bridges: concrete serializer
+headers and multipart framing, callable/object snapshots, symbolic file bytes and checksums,
+logical wall-clock/heartbeat timing, SQLite status ordering, and provider-specific response
+shapes are all represented in their respective module groups. The model therefore checks
+bounded protocol properties and source-backed scenarios; it is not a proof that the complete
+Parsl implementation is correct.
 
 The submission path now exposes an abstract message lifecycle: `SerializeAttempt` represents
 encoding the task payload, `SendAttempt` and `ReceiveAttempt` represent transport across the
@@ -1204,8 +1206,9 @@ current branch permits a partial file to become visible, while the fixed branch 
 bytes and a completed physical attempt before publication.
 `ProtocolProgress` gives ACK transitions their own strong-fairness obligation; duplicate/discard
 traffic alone is not treated as useful progress, preventing a livelock from starving decode.
-The next refinement can add bounded drops, duplicate deliveries, and symbolic object graphs
-without changing the logical-task/physical-attempt boundary.
+The focused `ParslZMQSerializationEndToEnd`, callable/object, file-content, clock/heartbeat,
+monitoring, and provider models add bounded drops, duplicate deliveries, symbolic object graphs,
+and source-specific response handling without changing the logical-task/physical-attempt boundary.
 
 `DropTaskMessage` and `DropResultMessage` add a bounded network-loss hypothesis. A dropped task
 envelope never reaches a worker; a dropped result envelope releases the worker and turns the
