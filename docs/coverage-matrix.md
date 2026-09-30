@@ -127,6 +127,9 @@ mutated.
 File-transfer coverage also includes `ParslHTTPSeparateContentLength` (BUG-220), applying the
 declared-length safety check to the separate-task HTTP helper as well as the in-task wrapper.
 
+Provider coverage also includes `ParslGridEngineSubmitShape` (BUG-221), which validates the
+successful-submit response before admitting a Grid Engine resource.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

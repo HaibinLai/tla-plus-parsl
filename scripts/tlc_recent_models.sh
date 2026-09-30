@@ -322,6 +322,15 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case grid-engine-submit-shape-current counterexample \
+    models/providers/ParslGridEngineSubmitShapeCurrent.cfg \
+    models/providers/ParslGridEngineSubmitShape.tla
+run_case grid-engine-submit-shape-fixed pass \
+    models/providers/ParslGridEngineSubmitShapeFixed.cfg \
+    models/providers/ParslGridEngineSubmitShape.tla
+run_case grid-engine-submit-shape-normal pass \
+    models/providers/ParslGridEngineSubmitShapeNormal.cfg \
+    models/providers/ParslGridEngineSubmitShape.tla
 run_case htex-contact-timeout-starvation-current counterexample \
     models/clock/ParslHtexContactTimeoutStarvationCurrent.cfg \
     models/clock/ParslHtexContactTimeoutStarvation.tla

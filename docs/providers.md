@@ -306,6 +306,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineStatusBa
 /tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_status_batch_runtime.py -v
 ```
 
+`ParslGridEngineSubmitShape.tla` models the submit admission boundary. The current provider
+publishes any first non-empty successful `qsub` output line as a pending resource, including
+warning text; the fixed branch requires a valid scheduler identifier before publication.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineSubmitShapeCurrent.cfg models/providers/ParslGridEngineSubmitShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineSubmitShapeFixed.cfg models/providers/ParslGridEngineSubmitShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineSubmitShapeNormal.cfg models/providers/ParslGridEngineSubmitShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_submit_shape_runtime.py -v
+```
+
 `ParslLocalProviderCancelUnknown.tla` models cancellation after a local job has already been
 removed from `resources`. The current `LocalProvider.cancel()` indexes the missing id and raises
 `KeyError`; the fixed branch treats the stale cancellation as an unsuccessful, non-throwing
