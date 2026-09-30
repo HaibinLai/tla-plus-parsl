@@ -1843,6 +1843,8 @@ monitoring hub close, worker contact timeout, timed heartbeat and wall-clock rol
 HTEX manager/task results, malformed manager messages, and provider polling/status batches.
 Cases 501--520 matched at 100 steps: provider status shape and bad-state handling, provider-kind
 dispatch, AWS status, Azure status/submit/cancel lifecycle, and Google Cloud zone selection.
+Cases 521--540 matched at 100 steps: Google Cloud status/submit/cancel, Condor cancellation,
+chunk-size validation, malformed lines, and status/failure parsing.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
