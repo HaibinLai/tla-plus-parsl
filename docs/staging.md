@@ -114,6 +114,18 @@ stage-out Future and its temporary buffer; `StartConsumer` is the DFK DataFuture
 The concrete byte and DataFuture probes remain in `tests/test_datafuture_runtime.py`,
 `tests/test_multi_output_stageout_runtime.py`, and the staging-provider runtime tests.
 
+`ParslDataManagerCache.tla` isolates the matching stage-in cache boundary. A transfer captures a
+source version before filling a temporary buffer; if the source changes while the copy is in
+flight, the current branch publishes the captured version as ready. The fixed branch rejects the
+stale buffer, retries from the new version, and admits consumers only after an atomic
+version-matching publication. `StartStage`, `CopyComplete`, and the publish actions abstract the
+DataManager staging Future; `StartConsumerA/B` abstract DFK dependency admission.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerCacheCurrent.cfg models/staging/ParslDataManagerCache.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerCacheFixed.cfg models/staging/ParslDataManagerCache.tla
+```
+
 The action mapping follows the current source structure:
 
 - `StartStageOut`/`PublishStageOut` abstract `DataManager.stage_out` and the

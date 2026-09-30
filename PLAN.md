@@ -263,6 +263,9 @@ Recent focused models now connect the previously separate boundaries:
   SHA-256 checksums.
 - `ParslFileTransferRetry` is now in the smoke sweep, checking that source mutation during
   stage-out makes the first publication stale and forces a version-matching retry.
+- `ParslDataManagerCache` is now in the smoke sweep, checking the matching stage-in cache
+  boundary: source mutation during a copy cannot publish a stale version or admit a consumer;
+  the fixed branch rejects the buffer and retries from the current source version.
 - `ParslDataFutureTransfer` is now in the smoke sweep, connecting producer completion, chunk
   checksums, atomic stage-out publication, DataFuture readiness, and consumer admission.
 - `ParslHTTPStatusValidation` now joins the staging sweep, checking that non-2xx response bodies

@@ -1414,6 +1414,12 @@ run_case file-transfer-retry-current counterexample \
 run_case file-transfer-retry-fixed pass \
     models/staging/ParslFileTransferRetryFixed.cfg \
     models/staging/ParslFileTransferRetry.tla
+run_case data-manager-cache-current counterexample \
+    models/staging/ParslDataManagerCacheCurrent.cfg \
+    models/staging/ParslDataManagerCache.tla
+run_case data-manager-cache-fixed pass \
+    models/staging/ParslDataManagerCacheFixed.cfg \
+    models/staging/ParslDataManagerCache.tla
 run_case datafuture-transfer-current counterexample \
     models/staging/ParslDataFutureTransfer.cfg \
     models/staging/ParslDataFutureTransfer.tla
