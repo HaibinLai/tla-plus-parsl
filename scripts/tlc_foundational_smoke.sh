@@ -84,5 +84,8 @@ run_case aws-status-shape \
 run_case google-zone-response-shape \
     models/providers/ParslGoogleCloudZoneResponseShapeFixed.cfg \
     models/providers/ParslGoogleCloudZoneResponseShape.tla
+run_case provider-executor-monitoring \
+    models/executors/ParslProviderExecutorTimedMonitoringFixed.cfg \
+    models/executors/ParslProviderExecutorTimedMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."

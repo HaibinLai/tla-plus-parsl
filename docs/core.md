@@ -147,6 +147,12 @@ The provider cases then sample concrete admission and response boundaries across
 Torque, LocalProvider, AWS, and Google Cloud. They are deliberately small schema/state checks;
 the provider-specific documents and runtime probes remain the authoritative deeper models.
 
+The last case, `ParslProviderExecutorTimedMonitoringFixed`, is the first combined dynamic path in
+this smoke suite: provisioning, manager heartbeat expiry, task timeout/retry, stale old-attempt
+results, monitoring persistence, and scale-in/scale-out admission are checked together. Its
+exhaustive configuration remains documented in `docs/executor-provider-model.md` because the
+full state space is intentionally larger than the smoke bound.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
