@@ -97,6 +97,11 @@ checks both byte-for-byte equality and per-chunk checksums after stage-in.
 The same probe corrupts a stored archive payload and verifies that Zip CRC failure is raised
 before the destination becomes visible.
 
+For a quick complete TLC check, `ParslFileBytesSmoke.cfg` reduces the detailed abstraction to one
+file and one chunk (99 states generated, 44 distinct states). The detailed configuration remains
+available for multi-file and multi-chunk exploration; corruption is bounded to one mutation per
+clean in-flight chunk before a retry can resend it.
+
 `ParslDataManagerStageOutReturn.tla` models the two return shapes of `DataManager.stage_out`: a
 provider may return `None`, in which case the output `DataFuture` follows the application Future,
 or return an independent Future for a separate transfer. The output is publishable only after the

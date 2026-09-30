@@ -388,6 +388,9 @@ run_case stageout-return-none pass \
 run_case stageout-return-future pass \
     models/staging/ParslDataManagerStageOutReturnFuture.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla
+run_case file-bytes-smoke pass \
+    models/staging/ParslFileBytesSmoke.cfg \
+    models/staging/ParslFileBytes.tla
 run_case grid-engine-submit-shape-current counterexample \
     models/providers/ParslGridEngineSubmitShapeCurrent.cfg \
     models/providers/ParslGridEngineSubmitShape.tla
