@@ -95,6 +95,13 @@ tests=(
     tests/test_zip_file_transfer_runtime.py
     tests/test_zip_path_validation_runtime.py
     tests/test_zip_traversal_runtime.py
+    tests/test_kubernetes_polling_runtime.py
+    tests/test_kubernetes_cancel_unknown_runtime.py
+    tests/test_condor_chunk_size_runtime.py
+    tests/test_condor_status_failure_runtime.py
+    tests/test_slurm_batch_strict_runtime.py
+    tests/test_slurm_duplicate_status_runtime.py
+    tests/test_slurm_empty_job_id_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

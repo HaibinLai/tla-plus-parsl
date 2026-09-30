@@ -251,6 +251,10 @@ timeout/failure events, HTTP connection/status cleanup, rsync partial cleanup, a
 traversal/stage-in publication. They keep temporary files and published outputs distinct so failed
 transfers cannot appear ready to dependent tasks.
 
+The additional scheduler cases cover Kubernetes polling/cancel response shapes, empty pod phases,
+Condor chunk-size and command-failure handling, and Slurm strict batch/cancel/duplicate-status/
+empty-ID behavior. These fixed models isolate scheduler response parsing from provider ownership.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and

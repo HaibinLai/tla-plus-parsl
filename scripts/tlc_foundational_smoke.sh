@@ -545,5 +545,35 @@ run_case zip-stage-in \
 run_case zip-traversal \
     models/staging/ParslZipTraversalFixed.cfg \
     models/staging/ParslZipTraversal.tla
+run_case kubernetes-polling \
+    models/providers/ParslKubernetesPollingFixed.cfg \
+    models/providers/ParslKubernetesPolling.tla
+run_case kubernetes-empty-phase \
+    models/providers/ParslKubernetesEmptyPhaseFixed.cfg \
+    models/providers/ParslKubernetesEmptyPhase.tla
+run_case kubernetes-cancel-response \
+    models/providers/ParslKubernetesCancelResponseFixed.cfg \
+    models/providers/ParslKubernetesCancelResponse.tla
+run_case kubernetes-cancel-unknown-job \
+    models/providers/ParslKubernetesCancelUnknownJobFixed.cfg \
+    models/providers/ParslKubernetesCancelUnknownJob.tla
+run_case condor-chunk-size \
+    models/providers/ParslCondorChunkSizeFixed.cfg \
+    models/providers/ParslCondorChunkSize.tla
+run_case condor-status-failure \
+    models/providers/ParslCondorStatusFailureFixedMalformed.cfg \
+    models/providers/ParslCondorStatusFailure.tla
+run_case slurm-batch-strict \
+    models/providers/ParslSlurmBatchStrictFixed.cfg \
+    models/providers/ParslSlurmBatchStrict.tla
+run_case slurm-cancel-batch \
+    models/providers/ParslSlurmCancelBatchFixed.cfg \
+    models/providers/ParslSlurmCancelBatch.tla
+run_case slurm-duplicate-status \
+    models/providers/ParslSlurmDuplicateStatusFixed.cfg \
+    models/providers/ParslSlurmDuplicateStatus.tla
+run_case slurm-empty-job-id \
+    models/providers/ParslSlurmEmptyJobIdFixed.cfg \
+    models/providers/ParslSlurmEmptyJobId.tla
 
 echo "Foundational TLC smoke suite passed."
