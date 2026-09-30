@@ -56,6 +56,15 @@ class CondorSubmitRuntimeTest(unittest.TestCase):
         self.assertEqual(first_job_id, "118907.0")
         self.assertEqual(len(provider.resources), 1)
 
+    def test_repeated_spaces_corrupt_cluster_id_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            provider = self.provider_with_output("5  job(s) submitted to cluster 118907.\n")
+            provider.script_dir = directory
+            first_job_id = provider.submit("echo worker", tasks_per_node=1)
+
+        self.assertEqual(first_job_id, "cluster0")
+        self.assertNotIn("118907.0", provider.resources)
+
 
 if __name__ == "__main__":
     unittest.main()

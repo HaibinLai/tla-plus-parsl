@@ -1405,6 +1405,12 @@ run_case azure-status-shape-current counterexample \
 run_case azure-status-shape-fixed pass \
     models/providers/ParslAzureStatusShapeFixed.cfg \
     models/providers/ParslAzureStatusShape.tla
+run_case condor-submit-whitespace-current counterexample \
+    models/providers/ParslCondorSubmitWhitespaceCurrent.cfg \
+    models/providers/ParslCondorSubmitWhitespace.tla
+run_case condor-submit-whitespace-fixed pass \
+    models/providers/ParslCondorSubmitWhitespaceFixed.cfg \
+    models/providers/ParslCondorSubmitWhitespace.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
