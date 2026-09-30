@@ -1761,6 +1761,13 @@ fails internally on that temporal setup, so it remains documented as a liveness 
 than being reported as a passing safety run. `ParslTimeSafety.cfg` provides the executable
 safety-only counterpart for the time model.
 
+The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
+all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
+completed with their expected Current counterexamples and Fixed passes. Cases 41--60 likewise
+completed: heartbeat rollback, timeout/open, monitoring history, provider-worker scaling,
+join-callable transport, Bash/local-provider outcomes, thread lifecycle, TaskVine factory,
+timer/timeout, apply dispatch, and HTEX shutdown timeout all matched their configured outcomes.
+
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
 implementation detail of Parsl is correct.
