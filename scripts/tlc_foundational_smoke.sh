@@ -542,6 +542,54 @@ run_case htex-worker-frame-continuation \
 run_case htex-manager-task-admission \
     models/executors/ParslHtexManagerTaskAdmissionFixed.cfg \
     models/executors/ParslHtexManagerTaskAdmission.tla
+run_case htex-manager-loss \
+    models/executors/ParslHtexManagerLossFixed.cfg \
+    models/executors/ParslHtexManagerLoss.tla
+run_case htex-capacity-fallback \
+    models/executors/ParslHtexCapacityFallback.cfg \
+    models/executors/ParslHtexCapacityFallback.tla
+run_case htex-cores-per-worker \
+    models/executors/ParslHtexCoresPerWorkerFixed.cfg \
+    models/executors/ParslHtexCoresPerWorker.tla
+run_case htex-dispatch-priority \
+    models/executors/ParslHtexDispatchPriority.cfg \
+    models/executors/ParslHtexDispatchPriority.tla
+run_case htex-scale-in-race \
+    models/executors/ParslHtexScaleInRaceFixed.cfg \
+    models/executors/ParslHtexScaleInRace.tla
+run_case htex-force-scale-in \
+    models/executors/ParslHtexForceScaleInFixed.cfg \
+    models/executors/ParslHtexForceScaleIn.tla
+run_case htex-negative-scale-in-idle \
+    models/executors/ParslHtexNegativeScaleInIdleFixed.cfg \
+    models/executors/ParslHtexNegativeScaleInIdle.tla
+run_case provisioning-admission-monitoring \
+    models/executors/ParslProvisioningAdmissionMonitoringFixed.cfg \
+    models/executors/ParslProvisioningAdmissionMonitoring.tla
+run_case scale-out-failure-monitoring \
+    models/executors/ParslScaleOutFailureMonitoringFixed.cfg \
+    models/executors/ParslScaleOutFailureMonitoring.tla
+run_case htex-shutdown-reap \
+    models/executors/ParslHtexShutdownReapFixed.cfg \
+    models/executors/ParslHtexShutdownReap.tla
+run_case htex-unknown-manager-heartbeat \
+    models/executors/ParslHtexUnknownManagerHeartbeat.cfg \
+    models/executors/ParslHtexUnknownManagerMessage.tla
+run_case htex-unknown-manager-result \
+    models/executors/ParslHtexUnknownManagerResult.cfg \
+    models/executors/ParslHtexUnknownManagerMessage.tla
+run_case htex-unknown-task-result \
+    models/executors/ParslHtexUnknownTaskResultFixed.cfg \
+    models/executors/ParslHtexUnknownTaskResult.tla
+run_case htex-worker-capacity-cpu \
+    models/executors/ParslHtexWorkerCapacityCpu.cfg \
+    models/executors/ParslHtexWorkerCapacity.tla
+run_case htex-worker-capacity-memory \
+    models/executors/ParslHtexWorkerCapacityMemory.cfg \
+    models/executors/ParslHtexWorkerCapacity.tla
+run_case htex-worker-capacity-accelerator \
+    models/executors/ParslHtexWorkerCapacityAccelerator.cfg \
+    models/executors/ParslHtexWorkerCapacity.tla
 run_case htex-registration-shape \
     models/serialization/ParslHtexRegistrationShapeFixed.cfg \
     models/serialization/ParslHtexRegistrationShape.tla

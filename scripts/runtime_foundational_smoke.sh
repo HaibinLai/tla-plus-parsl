@@ -84,6 +84,17 @@ tests=(
     tests/test_googlecloud_submit_runtime.py
     tests/test_htex_cancelled_result_runtime.py
     tests/test_htex_result_queue_runtime.py
+    tests/test_htex_manager_loss_runtime.py
+    tests/test_htex_cores_per_worker_runtime.py
+    tests/test_htex_force_scale_in_runtime.py
+    tests/test_htex_negative_scale_in_runtime.py
+    tests/test_htex_scale_in_race_runtime.py
+    tests/test_scale_out_failure_monitoring_runtime.py
+    tests/test_htex_shutdown_reap_runtime.py
+    tests/test_htex_unknown_manager_runtime.py
+    tests/test_htex_unknown_result_type_runtime.py
+    tests/test_htex_unknown_task_result_runtime.py
+    tests/test_htex_worker_capacity_runtime.py
     tests/test_htex_executor_result_frame_continuation_runtime.py
     tests/test_htex_result_message_malformed_runtime.py
     tests/test_htex_worker_task_batch_shape_runtime.py

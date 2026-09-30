@@ -1136,3 +1136,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerCapacity
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerCapacityAccelerator.cfg models/executors/ParslHtexWorkerCapacity.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_capacity_runtime.py -v
 ```
+
+The unified smoke runner now covers the surrounding HTEX admission and lifecycle boundaries as
+well: manager loss, capacity fallback, cores-per-worker validation, dispatch priority, scale-in
+races and force/idle protection, provisioning admission monitoring, partial scale-out failure,
+shutdown reaping, unknown manager messages/results, and CPU/memory/accelerator worker capacity.
