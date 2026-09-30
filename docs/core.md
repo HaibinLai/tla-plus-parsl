@@ -246,6 +246,11 @@ The monitoring stream cases cover event ordering/status history, malformed worke
 dispatch-envelope validation, ZMQ tuple shape, worker-status atomicity, and lifecycle bookkeeping.
 These models separate transport admission from database transaction state.
 
+The staging-provider cases now cover FTP connection/partial cleanup, Globus endpoint/token/
+timeout/failure events, HTTP connection/status cleanup, rsync partial cleanup, and Zip member/path/
+traversal/stage-in publication. They keep temporary files and published outputs distinct so failed
+transfers cannot appear ready to dependent tasks.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and

@@ -497,5 +497,53 @@ run_case monitoring-worker-status-atomicity \
 run_case monitoring-lifecycle-bookkeeping \
     models/monitoring/ParslMonitoringLifecycleBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
+run_case ftp-stage \
+    models/staging/ParslFTPStageFixed.cfg \
+    models/staging/ParslFTPStage.tla
+run_case ftp-partial-cleanup \
+    models/staging/ParslFTPPartialCleanupFixed.cfg \
+    models/staging/ParslFTPPartialCleanup.tla
+run_case ftp-connection-cleanup \
+    models/staging/ParslFTPConnectionCleanupFixed.cfg \
+    models/staging/ParslFTPConnectionCleanup.tla
+run_case globus-endpoint-path \
+    models/staging/ParslGlobusEndpointPathFixed.cfg \
+    models/staging/ParslGlobusEndpointPath.tla
+run_case globus-failure-event \
+    models/staging/ParslGlobusFailureEventFixed.cfg \
+    models/staging/ParslGlobusFailureEvent.tla
+run_case globus-token-file-atomicity \
+    models/staging/ParslGlobusTokenFileAtomicityFixed.cfg \
+    models/staging/ParslGlobusTokenFileAtomicity.tla
+run_case globus-transfer-timeout \
+    models/staging/ParslGlobusTransferTimeoutFixed.cfg \
+    models/staging/ParslGlobusTransferTimeout.tla
+run_case http-connection-cleanup \
+    models/staging/ParslHTTPConnectionCleanupFixed.cfg \
+    models/staging/ParslHTTPConnectionCleanup.tla
+run_case http-separate-task-cleanup \
+    models/staging/ParslHTTPSeparateTaskCleanupFixed.cfg \
+    models/staging/ParslHTTPSeparateTaskCleanup.tla
+run_case http-status-validation \
+    models/staging/ParslHTTPStatusValidationFixed.cfg \
+    models/staging/ParslHTTPStatusValidation.tla
+run_case rsync-partial-cleanup \
+    models/staging/ParslRsyncPartialCleanupFixed.cfg \
+    models/staging/ParslRsyncPartialCleanup.tla
+run_case zip-member-selection \
+    models/staging/ParslZipMemberSelectionFixed.cfg \
+    models/staging/ParslZipMemberSelection.tla
+run_case zip-path-first-match \
+    models/staging/ParslZipPathFirstMatchFixed.cfg \
+    models/staging/ParslZipPathFirstMatch.tla
+run_case zip-path-validation \
+    models/staging/ParslZipPathValidationFixed.cfg \
+    models/staging/ParslZipPathValidation.tla
+run_case zip-stage-in \
+    models/staging/ParslZipStageInFixed.cfg \
+    models/staging/ParslZipStageIn.tla
+run_case zip-traversal \
+    models/staging/ParslZipTraversalFixed.cfg \
+    models/staging/ParslZipTraversal.tla
 
 echo "Foundational TLC smoke suite passed."

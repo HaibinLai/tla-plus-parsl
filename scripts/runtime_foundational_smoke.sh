@@ -81,6 +81,20 @@ tests=(
     tests/test_monitoring_status_history_runtime.py
     tests/test_monitoring_zmq_tuple_shape_runtime.py
     tests/test_monitoring_worker_status_atomicity_runtime.py
+    tests/test_ftp_connection_cleanup_runtime.py
+    tests/test_ftp_partial_cleanup_runtime.py
+    tests/test_ftp_staging_runtime.py
+    tests/test_globus_endpoint_path_runtime.py
+    tests/test_globus_failure_event_runtime.py
+    tests/test_globus_token_file_atomicity_runtime.py
+    tests/test_globus_transfer_timeout_runtime.py
+    tests/test_http_connection_cleanup_runtime.py
+    tests/test_http_partial_cleanup_runtime.py
+    tests/test_http_status_validation_runtime.py
+    tests/test_rsync_partial_cleanup_runtime.py
+    tests/test_zip_file_transfer_runtime.py
+    tests/test_zip_path_validation_runtime.py
+    tests/test_zip_traversal_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )
