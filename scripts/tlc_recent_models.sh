@@ -1761,6 +1761,24 @@ run_case http-stage-fixed pass \
 run_case http-stage-success pass \
     models/staging/ParslHTTPStageSuccess.cfg \
     models/staging/ParslHTTPStage.tla
+run_case rsync-quoting-current counterexample \
+    models/staging/ParslRsyncQuotingCurrent.cfg \
+    models/staging/ParslRsyncQuoting.tla
+run_case rsync-quoting-fixed pass \
+    models/staging/ParslRsyncQuotingFixed.cfg \
+    models/staging/ParslRsyncQuoting.tla
+run_case rsync-quoting-normal pass \
+    models/staging/ParslRsyncQuotingNormal.cfg \
+    models/staging/ParslRsyncQuoting.tla
+run_case rsync-stage-in-failure pass \
+    models/staging/ParslRsyncStageInFail.cfg \
+    models/staging/ParslRsyncStage.tla
+run_case rsync-stage-out-failure pass \
+    models/staging/ParslRsyncStageOutFail.cfg \
+    models/staging/ParslRsyncStage.tla
+run_case rsync-stage-success pass \
+    models/staging/ParslRsyncStageSuccess.cfg \
+    models/staging/ParslRsyncStage.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

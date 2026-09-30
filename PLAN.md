@@ -847,6 +847,9 @@ remove partial bytes/close connections before exposing success or failure.
 HTTP staging coverage now includes response cleanup, atomic replacement of existing destinations,
 partial-stream cleanup, and non-2xx status validation before user-task execution. Runtime probes
 cover streaming failures and separate/in-task stage-in paths.
+Rsync staging coverage now includes shell-safe path quoting, stage-in gating before app execution,
+stage-out failure after app completion, and successful transfer publication. Runtime probes cover
+the command builder and both in-task/separate staging paths.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
