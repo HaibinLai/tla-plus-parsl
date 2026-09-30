@@ -768,6 +768,10 @@ The Work Queue executor models are now covered as well: result-file decode outco
 shutdown cleanup, cancelled or duplicate result races, resource-category admission, and submit
 serialization/process failures with orphaned-Future rollback candidates. Runtime probes in
 `tests/test_workqueue_*_runtime.py` exercise the corresponding current behavior.
+`ParslAWSProviderStatus.tla` is also in the sweep, covering EC2 pending/running/terminated
+translation, omitted instance responses, and the candidate completion mapping for a missing
+requested instance; the AWS runtime probes cover status, submit, unknown-instance, and cancel
+bookkeeping boundaries.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

@@ -1014,6 +1014,15 @@ run_case poller-bad-state pass \
 run_case provider-kinds pass \
     models/providers/ParslProviderKinds.cfg \
     models/providers/ParslProviderKinds.tla
+run_case aws-provider-status-current counterexample \
+    models/providers/ParslAWSProviderStatus.cfg \
+    models/providers/ParslAWSProviderStatus.tla
+run_case aws-provider-status-fixed pass \
+    models/providers/ParslAWSProviderStatusFixed.cfg \
+    models/providers/ParslAWSProviderStatus.tla
+run_case aws-provider-status-present pass \
+    models/providers/ParslAWSProviderStatusPresent.cfg \
+    models/providers/ParslAWSProviderStatus.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
