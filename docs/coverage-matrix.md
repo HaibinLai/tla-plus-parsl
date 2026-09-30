@@ -239,6 +239,9 @@ It also includes `ParslPbsproStatusBatchIsolation` (BUG-264), which checks that 
 record cannot prevent independent valid records in the same PBS Pro status batch from being
 processed.
 
+Monitoring coverage also includes `ParslMonitoringWorkerTryAtomicity` (BUG-265), which checks
+that a worker STATUS write cannot remain committed after the corresponding TRY update fails.
+
 AWS provider coverage also includes `ParslAwsStatusResponseShape` (BUG-205), which checks that a
 missing top-level `Reservations` field cannot abort status polling.
 

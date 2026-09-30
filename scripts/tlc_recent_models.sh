@@ -2046,6 +2046,12 @@ run_case monitoring-worker-status-atomicity-current counterexample \
 run_case monitoring-worker-status-atomicity-fixed pass \
     models/monitoring/ParslMonitoringWorkerStatusAtomicityFixed.cfg \
     models/monitoring/ParslMonitoringWorkerStatusAtomicity.tla
+run_case monitoring-worker-try-atomicity-current counterexample \
+    models/monitoring/ParslMonitoringWorkerTryAtomicityCurrent.cfg \
+    models/monitoring/ParslMonitoringWorkerTryAtomicity.tla
+run_case monitoring-worker-try-atomicity-fixed pass \
+    models/monitoring/ParslMonitoringWorkerTryAtomicityFixed.cfg \
+    models/monitoring/ParslMonitoringWorkerTryAtomicity.tla
 run_case monitoring-try-insert-fixed pass \
     models/monitoring/ParslMonitoringTryInsertBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringTryInsertBookkeeping.tla

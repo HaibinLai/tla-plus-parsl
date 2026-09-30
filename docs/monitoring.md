@@ -44,6 +44,20 @@ SQLite status-history ordering: an older attempt must not replace a newer termin
 These models cover asynchronous monitoring records, database insertion, batching, retry and
 atomicity, deferred events, close behavior, and batching-threshold edge cases.
 
+`ParslMonitoringWorkerTryAtomicity.tla` complements the worker first-message model. The current
+`DatabaseManager._db_mgmt_loop` commits a `STATUS` insert before updating the corresponding
+`TRY` row; if the second write fails, the two tables disagree. The fixed branch retains the event
+or rolls back the first write until both tables can be made consistent. The runtime probe drives
+the real loop with a successful STATUS write followed by a deterministic TRY update failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkerTryAtomicityCurrent.cfg models/monitoring/ParslMonitoringWorkerTryAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkerTryAtomicityFixed.cfg models/monitoring/ParslMonitoringWorkerTryAtomicity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_worker_try_atomicity_runtime.py -v
+```
+
+This cross-table failure boundary is recorded as BUG-265.
+
 `ParslMonitoringStatusHistory.tla` is the append-only status-history abstraction.  It permits
 event delivery to be reordered but keeps every `(task, run, status, timestamp)` event as a row;
 the latest status is derived from the greatest event version rather than insertion order.  The

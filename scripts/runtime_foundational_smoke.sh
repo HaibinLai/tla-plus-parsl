@@ -143,6 +143,7 @@ tests=(
     tests/test_monitoring_status_history_runtime.py
     tests/test_monitoring_zmq_tuple_shape_runtime.py
     tests/test_monitoring_worker_status_atomicity_runtime.py
+    tests/test_monitoring_worker_try_atomicity_runtime.py
     tests/test_monitoring_deferred_multiplicity_runtime.py
     tests/test_monitoring_last_message_runtime.py
     tests/test_monitoring_task_insert_bookkeeping_runtime.py

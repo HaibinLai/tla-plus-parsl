@@ -872,6 +872,9 @@ run_case monitoring-zmq-tuple-shape \
 run_case monitoring-worker-status-atomicity \
     models/monitoring/ParslMonitoringWorkerStatusAtomicityFixed.cfg \
     models/monitoring/ParslMonitoringWorkerStatusAtomicity.tla
+run_case monitoring-worker-try-atomicity \
+    models/monitoring/ParslMonitoringWorkerTryAtomicityFixed.cfg \
+    models/monitoring/ParslMonitoringWorkerTryAtomicity.tla
 run_case monitoring-lifecycle-bookkeeping \
     models/monitoring/ParslMonitoringLifecycleBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
