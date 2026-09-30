@@ -1099,6 +1099,10 @@ heartbeat updates contact time and emits the expected reply. The runtime bridge 
 failure atomicity, missing-job completion mapping, and terminal-state stability for scheduler
 polls. `tests/test_provider_status_shape_runtime.py` provides the concrete provider status-shape
 bridge.
+`ParslProviderPolling.tla` is now in the provider sweep, covering submit admission, pending/running
+status transitions, unknown-status failure, transient API errors, cancellation rollback, and
+bounded polling. The clock/runtime probes in `tests/test_provider_poll_clock_runtime.py` and
+`tests/test_provider_poll_clock_rollback_runtime.py` exercise the concrete polling boundary.
 `ParslDataManagerStageInOrdering.tla` is now in the staging sweep: the current ordering starts a
 stage-in transfer before wrapper preparation, so wrapper failure can leave an orphaned transfer;
 the fixed branch prepares the wrapper first and only then starts stage-in. This complements the

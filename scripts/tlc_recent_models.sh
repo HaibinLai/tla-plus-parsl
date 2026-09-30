@@ -999,6 +999,9 @@ run_case htex-manager-message-malformed pass \
 run_case provider-status-batch pass \
     models/providers/ParslProviderStatusBatch.cfg \
     models/providers/ParslProviderStatusBatch.tla
+run_case provider-polling pass \
+    models/providers/ParslProviderPolling.cfg \
+    models/providers/ParslProviderPolling.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
