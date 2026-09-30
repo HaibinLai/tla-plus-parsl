@@ -1600,6 +1600,11 @@ Its previous failure/complete actions could fire directly from serialized, leavi
 running state unreachable and under-modeling worker execution. Current/fixed retry and stale-result
 checks now exercise the physical running attempt before failure or completion.
 
+The file-content model also had an unreachable corruption-rejection branch: corruption changed a
+chunk to corrupt before the receiver could inspect its checksum, while rejection required sent.
+ParslFileBytes now keeps corrupted bytes in sent state until RejectCorruptChunk observes the
+mismatch, after which repair and retransmission remain available.
+
 The integrated join model now admits cancellation while an inner physical attempt is running.
 Previously the action contained a running-attempt branch that was unreachable because its guard
 only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,

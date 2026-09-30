@@ -98,11 +98,12 @@ SendChunk(f, c) ==
                     bufferToken, bufferChecksum, availableToken, visibleToken>>
 
 CorruptChunk(f, c) ==
+    \* Corruption changes bytes in flight; the receiver observes the mismatch.
     /\ phase[f] \in {"staging", "stageout"}
     /\ c \in ChunkSet(f)
     /\ wireState[ChunkId(f, c)] = "sent"
     /\ LET x == ChunkId(f, c) IN
-        /\ wireState' = [wireState EXCEPT ![x] = "corrupt"]
+        /\ wireState' = [wireState EXCEPT ![x] = "sent"]
         /\ wireToken' = [wireToken EXCEPT ![x] = wireToken[x] \o ":corrupt"]
     /\ UNCHANGED <<phase, sourceVersion, capturedVersion, sourceToken,
                     wireChecksum, bufferToken, bufferChecksum,
