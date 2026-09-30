@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7bdc236` (`Record Slurm cancellation ledger finding`).
+- Latest pushed commit: `8207d28` (`Refine join return equality validation`).
 - Foundational smoke inventory: 361 TLC cases and 232 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
