@@ -756,6 +756,9 @@ run_case local-executor pass \
 run_case multi-manager-timeout pass \
     models/executors/ParslMultiManagerTimeout.cfg \
     models/core/ParslAbstract.tla
+run_case time-safety pass \
+    models/core/ParslTimeSafety.cfg \
+    models/core/ParslAbstract.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

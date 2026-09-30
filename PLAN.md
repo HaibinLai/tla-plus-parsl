@@ -1559,6 +1559,10 @@ The LocalExecutor and MultiManagerTimeout configurations have now been checked a
 fairness/property configuration triggers the known TLC simulator NullPointerException; it needs a
 dedicated temporal-model migration rather than being relabeled as a safety-only pass.
 
+That migration now exists as `ParslTimeSafety.cfg`: it preserves the original time constants but
+uses the safety-only `Spec` and explicit time/worker/message invariants. TLC simulation passes this
+configuration; the original `ParslTime.cfg` remains available for a future fairness/liveness run.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
