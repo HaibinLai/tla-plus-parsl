@@ -141,15 +141,22 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 377 TLC cases and 334 Python runtime test files.
-On 2026-09-30, all 313 TLC cases passed in segmented runs with `TLC_SIMULATE=10`, and the
-complete runtime suite passed with 196 files; the subsequently added cases were also run
-individually as they were introduced, including the PBS Pro status-batch isolation and
-monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus token-schema, and
-Globus initialization-race, and HTEX serialization-failure
-refinements.
+The current repository smoke runner enumerates 378 TLC cases and 335 Python runtime test files.
+On 2026-09-30, all 378 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+suite passed with 335 entries. The subsequently added cases were also run individually as they
+were introduced, including provider admission/staging dispatch and the PBS Pro status-batch
+isolation, monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus
+token-schema, Globus initialization-race, and HTEX serialization-failure refinements.
 These counts are evidence for the fast regression gate;
 the individual model pages still document larger fixed/current counterexample runs.
+
+`ParslProviderStagingAdmission.tla` is the first compact cross-component admission model in
+this layer. It joins provider block provisioning, chunk-by-chunk file publication,
+`DataFuture` readiness, task admission, and scale-in/retry. Its fixed configuration checks that
+no task runs without both active provider capacity and complete staged content; the current
+configuration is retained as a counterexample for premature publication and for a running task
+left behind after the last provider block is scaled in. The concrete provider-selection
+boundary is exercised by `tests/test_staging_provider_dispatch_runtime.py`.
 
 The final three cases also pin down the first executor-specific refinement after the simple
 abstractions: HTEX submit queue rollback, result-deserialization failure cleanup, and rejection

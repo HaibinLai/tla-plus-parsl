@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `945ed7c` (`Promote remaining provider runtime coverage`).
-- Foundational smoke inventory: 377 TLC cases and 334 Python runtime probes.
+- Latest pushed commit: pending (provider/staging admission abstraction).
+- Foundational smoke inventory: 378 TLC cases and 335 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: added `ParslProviderStagingAdmission`, a compact cross-component model for
+  provider provisioning, chunked file publication, DataFuture readiness, task admission, and
+  scale-in/retry. The fixed configuration passed TLC; the current configuration produces the
+  expected counterexamples for premature publication and capacity loss. The new staging-provider
+  runtime bridge passed, and the complete foundational runtime suite passed 335/335.
 
 - Current stage: promoted eleven concrete provider runtime bridges into the foundational gate:
   HTEX submit, Kubernetes cancel/submit, Azure and Google Cloud cancel, Condor cancel/empty

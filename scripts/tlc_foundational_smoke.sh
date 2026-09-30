@@ -170,6 +170,9 @@ run_case provider-executor-monitoring \
 run_case provider-task-scale-retry \
     models/executors/ParslProviderTaskScaleRetryFixed.cfg \
     models/executors/ParslProviderTaskScaleRetry.tla
+run_case provider-staging-admission \
+    models/core/ParslProviderStagingAdmissionFixed.cfg \
+    models/core/ParslProviderStagingAdmission.tla
 run_case join-full \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla
