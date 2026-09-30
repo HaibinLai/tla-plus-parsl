@@ -39,6 +39,7 @@ EmitWorkerLost ==
 
 RestartWorker ==
     /\ workerState = "dead"
+    /\ lossEnvelope
     /\ workerState' = "restarted"
     /\ restartAttempted' = TRUE
     /\ UNCHANGED <<watchdogState, executorState, taskState,
@@ -46,6 +47,7 @@ RestartWorker ==
 
 RestartFailure ==
     /\ workerState = "dead"
+    /\ lossEnvelope
     /\ workerState' = "restart_failed"
     /\ restartAttempted' = TRUE
     /\ IF USE_FIXED
