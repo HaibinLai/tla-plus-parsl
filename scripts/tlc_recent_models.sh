@@ -2967,6 +2967,12 @@ run_case thread-executor-resource-current counterexample \
 run_case thread-executor-resource-fixed pass \
     models/executors/ParslThreadExecutorResourceSpecFixed.cfg \
     models/executors/ParslThreadExecutorResourceSpec.tla
+run_case thread-executor-empty-resource-current counterexample \
+    models/executors/ParslThreadExecutorEmptyResourceSpecCurrent.cfg \
+    models/executors/ParslThreadExecutorEmptyResourceSpec.tla
+run_case thread-executor-empty-resource-fixed pass \
+    models/executors/ParslThreadExecutorEmptyResourceSpecFixed.cfg \
+    models/executors/ParslThreadExecutorEmptyResourceSpec.tla
 run_case thread-executor-count-current counterexample \
     models/executors/ParslThreadExecutorThreadCountCurrent.cfg \
     models/executors/ParslThreadExecutorThreadCount.tla

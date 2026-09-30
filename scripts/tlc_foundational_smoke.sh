@@ -386,6 +386,9 @@ run_case torque-duplicate-status \
 run_case thread-executor-resource-spec \
     models/executors/ParslThreadExecutorResourceSpecFixed.cfg \
     models/executors/ParslThreadExecutorResourceSpec.tla
+run_case thread-executor-empty-resource-spec \
+    models/executors/ParslThreadExecutorEmptyResourceSpecFixed.cfg \
+    models/executors/ParslThreadExecutorEmptyResourceSpec.tla
 run_case workqueue-submit \
     models/executors/ParslWorkQueueSubmitFixed.cfg \
     models/executors/ParslWorkQueueSubmit.tla

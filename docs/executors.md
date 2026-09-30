@@ -117,6 +117,18 @@ rejects it through the same controlled path. The runtime probe exercises both co
 
 This type-validation escape is recorded as BUG-131.
 
+`ParslThreadExecutorEmptyResourceSpec.tla` refines the same boundary for a falsy malformed
+resource specification. The current `ThreadPoolExecutor.submit` skips validation when the value
+is empty, so an empty list is accepted and the task executes; the fixed branch rejects any
+non-mapping shape before submission. `tests/test_thread_executor_empty_resource_spec_runtime.py`
+exercises the real executor with an empty list. This refinement is recorded as BUG-271.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorEmptyResourceSpecCurrent.cfg models/executors/ParslThreadExecutorEmptyResourceSpec.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorEmptyResourceSpecFixed.cfg models/executors/ParslThreadExecutorEmptyResourceSpec.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_empty_resource_spec_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecCurrent.cfg models/executors/ParslThreadExecutorResourceSpec.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecFixed.cfg models/executors/ParslThreadExecutorResourceSpec.tla
