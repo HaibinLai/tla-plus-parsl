@@ -188,6 +188,12 @@ the current branch; TLC finds the `TerminalCauseSafety` counterexample at depth 
 generated). The fixed branch keeps the timeout/lost terminal cause and records the late result as
 stale, checking 715 distinct states.
 
+`ParslTimeoutMonitoringSmoke.cfg` and `ParslTimeoutMonitoringSmokeFixed.cfg` use a three-tick
+horizon for a fast regression check of the same monitoring boundary. The current smoke reaches
+the expected `TerminalCauseSafety` violation after 1,077 generated / 382 distinct states; the
+fixed smoke preserves the timeout/lost state and passes all five invariants with 1,108 generated /
+328 distinct states at depth 11.
+
 `ParslHeartbeatTimeoutPersistence.tla` is a smaller source-aligned version of that composition.
 It uses the strict `>` heartbeat comparison from `Interchange.expire_bad_managers`, an independent
 task deadline, and a single monitoring persistence event.  The current configuration exposes the
