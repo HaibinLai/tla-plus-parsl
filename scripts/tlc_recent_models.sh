@@ -148,6 +148,9 @@ run_case provider-failure-retry-fixed pass \
 run_case python-object-graph pass \
     models/serialization/ParslPython.cfg \
     models/serialization/ParslPython.tla
+run_case python-object-graph-smoke pass \
+    models/serialization/ParslPythonSmoke.cfg \
+    models/serialization/ParslPython.tla
 run_case python-object-graph-failure pass \
     models/serialization/ParslPythonFailure.cfg \
     models/serialization/ParslPython.tla

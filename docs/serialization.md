@@ -234,6 +234,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObject
 /tmp/parsl-venv/bin/python -m unittest tests/test_function_object_contents_runtime.py -v
 ```
 
+`ParslPythonSmoke.cfg` provides the smallest complete object-graph check for `ParslPython.tla`:
+one function root and one argument root with no nested edges. It generates 92 states (31 distinct)
+and is useful for fast regression checks before exploring the larger cyclic graph.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPythonSmoke.cfg models/serialization/ParslPython.tla
+```
+
 `ParslSerializationFallback.tla` models the facade's serializer iteration: a failed registered
 serializer is suppressed while later serializers are tried, and the final serializer exception is
 re-raised only when every method fails. The runtime probe replaces the data registry with small
