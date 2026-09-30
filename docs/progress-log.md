@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `af476ac` (`Model thread executor empty resource spec`).
-- Foundational smoke inventory: 354 TLC cases and 225 Python runtime probes.
+- Latest pushed commit: `0f6ccec` (`Model callable object serialization error`).
+- Foundational smoke inventory: 355 TLC cases and 226 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -40,6 +40,8 @@ are recorded here in English and committed with the model changes.
   pending internal message remains after a stale `empty()` observation.
 - `af476ac`: ThreadPoolExecutor empty resource-spec validation. A falsy non-mapping resource
   specification must not bypass executor input validation.
+- `0f6ccec`: HTEX callable-object serialization errors. A callable without `__name__` must not
+  mask the original serialization TypeError with an `AttributeError`.
 
 ### Verification convention
 
