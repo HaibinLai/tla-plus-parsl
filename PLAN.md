@@ -1916,6 +1916,11 @@ fan-out.
 Cases 901--912 completed the configured sweep at 100 steps: memo dictionary ordering, ignored
 memo keys/outputs, checkpoint ordering, and exception-checkpoint behavior. All 912 discovered
 cases now have recorded bounded-simulator evidence with their expected Current/Fixed outcomes.
+The new refinement models are now registered in `scripts/tlc_recent_models.sh` as cases 79--93
+and were rerun at 100 steps: dynamic task chain, three-task message correlation, callable-alias
+retry, HTEX heartbeat/version admission, provider provisioning lifecycle, versioned monitoring
+batch, versioned multi-output stage-out, and nested join retry. Every Current/Fixed pair matched
+its expected outcome; the chain and normal-success variants also passed.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every

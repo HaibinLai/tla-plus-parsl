@@ -301,6 +301,51 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case dynamic-task-chain pass \
+    models/dataflow/ParslDynamicTaskChain.cfg \
+    models/dataflow/ParslDynamicTaskChain.tla
+run_case message-correlation-three-current counterexample \
+    models/serialization/ParslMessageCorrelationThreeCurrent.cfg \
+    models/serialization/ParslMessageCorrelationThree.tla
+run_case message-correlation-three-fixed pass \
+    models/serialization/ParslMessageCorrelationThree.cfg \
+    models/serialization/ParslMessageCorrelationThree.tla
+run_case callable-alias-retry-current counterexample \
+    models/serialization/ParslCallableAliasRetryCurrent.cfg \
+    models/serialization/ParslCallableAliasRetry.tla
+run_case callable-alias-retry-fixed pass \
+    models/serialization/ParslCallableAliasRetry.cfg \
+    models/serialization/ParslCallableAliasRetry.tla
+run_case htex-heartbeat-version-current counterexample \
+    models/executors/ParslHtexHeartbeatVersionCurrent.cfg \
+    models/executors/ParslHtexHeartbeatVersion.tla
+run_case htex-heartbeat-version-fixed pass \
+    models/executors/ParslHtexHeartbeatVersion.cfg \
+    models/executors/ParslHtexHeartbeatVersion.tla
+run_case provider-provisioning-lifecycle-current counterexample \
+    models/executors/ParslProviderProvisioningLifecycleCurrent.cfg \
+    models/executors/ParslProviderProvisioningLifecycle.tla
+run_case provider-provisioning-lifecycle-fixed pass \
+    models/executors/ParslProviderProvisioningLifecycle.cfg \
+    models/executors/ParslProviderProvisioningLifecycle.tla
+run_case monitoring-versioned-batch-current counterexample \
+    models/monitoring/ParslMonitoringVersionedBatchCurrent.cfg \
+    models/monitoring/ParslMonitoringVersionedBatch.tla
+run_case monitoring-versioned-batch-fixed pass \
+    models/monitoring/ParslMonitoringVersionedBatch.cfg \
+    models/monitoring/ParslMonitoringVersionedBatch.tla
+run_case multi-output-versioned-stageout-current counterexample \
+    models/staging/ParslMultiOutputVersionedStageOutCurrent.cfg \
+    models/staging/ParslMultiOutputVersionedStageOut.tla
+run_case multi-output-versioned-stageout-fixed pass \
+    models/staging/ParslMultiOutputVersionedStageOut.cfg \
+    models/staging/ParslMultiOutputVersionedStageOut.tla
+run_case nested-join-retry-current counterexample \
+    models/dataflow/ParslNestedJoinRetryCurrent.cfg \
+    models/dataflow/ParslNestedJoinRetry.tla
+run_case nested-join-retry-fixed pass \
+    models/dataflow/ParslNestedJoinRetry.cfg \
+    models/dataflow/ParslNestedJoinRetry.tla
 run_case input-list-mutation-current counterexample \
     models/dataflow/ParslInputListMutationCurrent.cfg \
     models/dataflow/ParslInputListMutation.tla
