@@ -1005,6 +1005,12 @@ run_case stage-in-ordering-current counterexample \
 run_case stage-in-ordering-fixed pass \
     models/staging/ParslDataManagerStageInOrderingFixed.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
+run_case stage-out-ordering-current counterexample \
+    models/staging/ParslDataManagerStageOutOrderingCurrent.cfg \
+    models/staging/ParslDataManagerStageOutOrdering.tla
+run_case stage-out-ordering-fixed pass \
+    models/staging/ParslDataManagerStageOutOrderingFixed.cfg \
+    models/staging/ParslDataManagerStageOutOrdering.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

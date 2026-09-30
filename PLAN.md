@@ -1103,6 +1103,9 @@ bridge.
 stage-in transfer before wrapper preparation, so wrapper failure can leave an orphaned transfer;
 the fixed branch prepares the wrapper first and only then starts stage-in. This complements the
 runtime staging-provider dispatch probes.
+`ParslDataManagerStageOutOrdering.tla` mirrors the output side: wrapper construction must precede
+starting a provider stage-out Future, otherwise wrapper failure leaves a live orphan transfer.
+`tests/test_data_manager_stage_out_ordering_runtime.py` reproduces that current behavior.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
