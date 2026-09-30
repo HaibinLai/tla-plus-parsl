@@ -120,6 +120,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandReceive
 
 This receive-health boundary is recorded as BUG-238.
 
+`ParslCommandClientConcurrentClose.tla` models the inter-thread close race. `run()` holds
+`_lock` while polling and exchanging the command, but the current `close()` path closes the
+socket without that lock. The current model therefore permits a raw socket error from an
+in-flight command; the fixed branch serializes close with the operation boundary. The runtime
+probe uses two threads and a deterministic socket double to close during `poll()`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandClientConcurrentCloseCurrent.cfg models/serialization/ParslCommandClientConcurrentClose.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandClientConcurrentCloseFixed.cfg models/serialization/ParslCommandClientConcurrentClose.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_client_concurrent_close_runtime.py -v
+```
+
+This concurrent-close boundary is recorded as BUG-239.
+
 `ParslHtexResultForwarding.tla` models manager-side task ownership while a serialized result is
 forwarded over the outgoing ZMQ channel. The current implementation removes the task ID from
 the manager record before `send_multipart`; a send exception therefore loses the manager's only

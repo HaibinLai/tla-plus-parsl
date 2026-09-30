@@ -538,6 +538,12 @@ run_case command-receive-failure-current counterexample \
 run_case command-receive-failure-fixed pass \
     models/serialization/ParslCommandReceiveFailureFixed.cfg \
     models/serialization/ParslCommandReceiveFailure.tla
+run_case command-concurrent-close-current counterexample \
+    models/serialization/ParslCommandClientConcurrentCloseCurrent.cfg \
+    models/serialization/ParslCommandClientConcurrentClose.tla
+run_case command-concurrent-close-fixed pass \
+    models/serialization/ParslCommandClientConcurrentCloseFixed.cfg \
+    models/serialization/ParslCommandClientConcurrentClose.tla
 run_case pbspro-submit-shape-current counterexample \
     models/providers/ParslPbsproSubmitShapeCurrent.cfg \
     models/providers/ParslPbsproSubmitShape.tla
