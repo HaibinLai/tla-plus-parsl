@@ -54,6 +54,15 @@ run_case serialization-wire pass \
 run_case serialization-wire-failure pass \
     models/serialization/ParslSerializationWireFailure.cfg \
     models/serialization/ParslSerializationWire.tla
+run_case python-object-graph pass \
+    models/serialization/ParslPython.cfg \
+    models/serialization/ParslPython.tla
+run_case python-object-graph-failure pass \
+    models/serialization/ParslPythonFailure.cfg \
+    models/serialization/ParslPython.tla
+run_case python-object-graph-cyclic pass \
+    models/serialization/ParslPythonCyclic.cfg \
+    models/serialization/ParslPython.tla
 run_case function-object-transport pass \
     models/serialization/ParslFunctionObjectTransport.cfg \
     models/serialization/ParslFunctionObjectTransport.tla

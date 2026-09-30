@@ -232,6 +232,9 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslSerializationWire` and its failure configuration are now in the smoke sweep, checking
   the concrete `C2`/`02` headers, length framing, ordered unpack/decode, and rejection before
   dispatch when one buffer is not serializable.
+- `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,
+  traversing callable roots, globals/defaults/closures, nested arguments, failed object graphs,
+  and self-referential cycles with visited-set protection.
 - `ParslFunctionObjectTransport`, `ParslObjectSnapshotRetry`, and `ParslZMQObjectSnapshot` now
   extend that boundary through queued frames and physical retries, including current/fixed
   stale-payload counterexamples.
