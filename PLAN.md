@@ -1859,6 +1859,9 @@ handling, unknown cancellation IDs, status scoping, submit cleanup, and task-lis
 Cases 641--660 matched at 100 steps: Local unknown jobs, Kubernetes admission/cancel/poll/submit
 and unknown-job handling, duplicate provider job IDs, duplicate executor polling, and provider
 poll-clock behavior.
+Cases 661--680 matched at 100 steps: walltime parsing, ThreadPool executor lifecycle/resource
+validation/thread counts, task execution values/exceptions, execute-wait timeout cleanup, and
+Bash timeout cleanup.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
