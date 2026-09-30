@@ -2718,6 +2718,9 @@ run_case join-running-cancellation-fixed pass \
 run_case dynamic-task-creation pass \
     models/dataflow/ParslDynamicTaskCreation.cfg \
     models/dataflow/ParslDynamicTaskCreation.tla
+run_case dynamic-task-fanout pass \
+    models/dataflow/ParslDynamicTaskFanout.cfg \
+    models/dataflow/ParslDynamicTaskFanout.tla
 run_case memo-dict-ordering-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

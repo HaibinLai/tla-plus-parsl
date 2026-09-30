@@ -1707,7 +1707,7 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   failure aggregation, and invalid-return branches now modeled;
 - manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
 - monitoring as an abstract eventual event stream;
-- richer dynamic task creation beyond the bounded parent-to-one-child workflow model;
+- richer dynamic task creation beyond the bounded parent-to-two-child fan-out model;
 - additional executor/provider-specific models.
 
 ## Validation workflow
