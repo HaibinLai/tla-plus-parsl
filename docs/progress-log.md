@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `769f35c` (`Promote monitoring database runtime coverage`).
-- Foundational smoke inventory: 374 TLC cases and 282 Python runtime probes.
+- Latest pushed commit: pending (join heartbeat retry model).
+- Foundational smoke inventory: 375 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -147,6 +147,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted four monitoring DB runtime bridges into the foundational gate. The probes
   cover batch boundaries, permanent insert/update errors, deferred worker messages, and duplicate
   observations against the installed SQLite-backed DatabaseManager.
+- Current stage: added `ParslJoinHeartbeatRetry`, connecting logical clock and heartbeat expiry to
+  task timeout, manager loss, reprovisioning, and stale-result rejection. The Current branch
+  accepts a late expired-attempt completion; the Fixed branch passed standalone TLC.
 
 ### Verification convention
 
