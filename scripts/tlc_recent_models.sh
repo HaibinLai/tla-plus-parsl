@@ -2010,3 +2010,57 @@ run_case serialization-fallback-failure pass \
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
+run_case serialization-apply-message-arity-current counterexample \
+    models/serialization/ParslApplyMessageArity.cfg \
+    models/serialization/ParslApplyMessageArity.tla
+run_case serialization-apply-message-arity-fixed pass \
+    models/serialization/ParslApplyMessageArityFixed.cfg \
+    models/serialization/ParslApplyMessageArity.tla
+run_case serialization-callable-argument-alias-current counterexample \
+    models/serialization/ParslCallableArgumentAliasCurrent.cfg \
+    models/serialization/ParslCallableArgumentAlias.tla
+run_case serialization-callable-argument-alias-fixed pass \
+    models/serialization/ParslCallableArgumentAliasFixed.cfg \
+    models/serialization/ParslCallableArgumentAlias.tla
+run_case serialization-callable-deserialize-cache-current counterexample \
+    models/serialization/ParslCallableDeserializeCacheCurrent.cfg \
+    models/serialization/ParslCallableDeserializeCache.tla
+run_case serialization-callable-deserialize-cache-fixed pass \
+    models/serialization/ParslCallableDeserializeCacheFixed.cfg \
+    models/serialization/ParslCallableDeserializeCache.tla
+run_case serialization-callable-serializer-cache-current counterexample \
+    models/serialization/ParslCallableSerializerCache.cfg \
+    models/serialization/ParslCallableSerializerCache.tla
+run_case serialization-callable-serializer-cache-fixed pass \
+    models/serialization/ParslCallableSerializerCacheFixed.cfg \
+    models/serialization/ParslCallableSerializerCache.tla
+run_case serialization-pool-executor-callable-cache-current counterexample \
+    models/serialization/ParslPoolExecutorCallableCacheCurrent.cfg \
+    models/serialization/ParslPoolExecutorCallableCache.tla
+run_case serialization-pool-executor-callable-cache-fixed pass \
+    models/serialization/ParslPoolExecutorCallableCacheFixed.cfg \
+    models/serialization/ParslPoolExecutorCallableCache.tla
+run_case serialization-empty-registry-current counterexample \
+    models/serialization/ParslSerializationEmptyRegistryCurrent.cfg \
+    models/serialization/ParslSerializationEmptyRegistry.tla
+run_case serialization-empty-registry-fixed pass \
+    models/serialization/ParslSerializationEmptyRegistryFixed.cfg \
+    models/serialization/ParslSerializationEmptyRegistry.tla
+run_case serialization-registry-collision-current counterexample \
+    models/serialization/ParslSerializerRegistry.cfg \
+    models/serialization/ParslSerializerRegistry.tla
+run_case serialization-registry-collision-fixed pass \
+    models/serialization/ParslSerializerRegistryFixed.cfg \
+    models/serialization/ParslSerializerRegistry.tla
+run_case serialization-registry-normal pass \
+    models/serialization/ParslSerializerRegistryNormal.cfg \
+    models/serialization/ParslSerializerRegistry.tla
+run_case serialization-task-transport pass \
+    models/serialization/ParslTaskTransport.cfg \
+    models/serialization/ParslTaskTransport.tla
+run_case serialization-task-transport-failure pass \
+    models/serialization/ParslTaskTransportFailure.cfg \
+    models/serialization/ParslTaskTransport.tla
+run_case serialization-zmq pass \
+    models/serialization/ParslZMQ.cfg \
+    models/serialization/ParslZMQ.tla

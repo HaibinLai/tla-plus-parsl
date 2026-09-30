@@ -1368,6 +1368,16 @@ invalid returns, duplicate list positions, retry, cancellation, failure aggregat
 join handles; `ParslJoinEndToEnd` adds the logical-Future/physical-attempt split and ordered result
 reconstruction for a retryable duplicate-preserving list.
 
+The callable and wire-serialization boundary models are now in the smoke sweep. `ParslApplyMessageArity`
+checks that the apply-message unpacker cannot expose an unexpected frame count; `ParslCallableArgumentAlias`
+checks alias preservation across callable/argument decoding; and `ParslCallableDeserializeCache` checks
+that a mutable callable is not returned from a stale deserialization cache. `ParslCallableSerializerCache`
+and `ParslPoolExecutorCallableCache` cover unhashable callable admission, while `ParslSerializationEmptyRegistry`
+and `ParslSerializerRegistry` cover explicit empty-registry failure and ambiguous plugin identifiers.
+`ParslTaskTransport` and `ParslZMQ` connect object-graph serializability, framed task/result transport,
+retry identity, duplicate delivery, route validation, and stale-result rejection. Runtime probes cover
+the corresponding Parsl serializer, pool-executor, ZMQ, and task-transport paths.
+
 ### 3. Checked properties
 
 The safety configurations check:
