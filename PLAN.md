@@ -665,6 +665,9 @@ interchange before in-flight cleanup. It also checks that shutdown rejects new s
 The model is now part of `scripts/tlc_recent_models.sh`; the real ThreadPool bridge
 (`tests/test_thread_executor_runtime.py`) passes all three shutdown/resource-admission probes,
 and bounded TLC simulation reaches 100,001 checked states for the invariant set.
+The same sweep now includes `ParslTaskVineFactory.tla` (factory creation, configuration,
+context exit, and construction failure) and `ParslPeriodicTimer.tla` (immediate callback,
+callback-failure isolation, bounded periodic callbacks, and quiescent close).
 `ParslWorkQueueResults.tla` refines WorkQueue's collector result protocol: valid result files,
 deserialization failures, app exceptions, no-result reports, and final cleanup of outstanding
 tasks when the collector exits.

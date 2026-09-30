@@ -150,6 +150,12 @@ run_case thread-future-lifecycle pass \
 run_case executor-shutdown pass \
     models/executors/ParslExecutorShutdown.cfg \
     models/executors/ParslExecutorShutdown.tla
+run_case taskvine-factory pass \
+    models/executors/ParslTaskVineFactory.cfg \
+    models/executors/ParslTaskVineFactory.tla
+run_case periodic-timer pass \
+    models/clock/ParslPeriodicTimer.cfg \
+    models/clock/ParslPeriodicTimer.tla
 run_case apply-dispatch-current counterexample \
     models/serialization/ParslApplyDispatchBoundaryCurrent.cfg \
     models/serialization/ParslApplyDispatchBoundary.tla
