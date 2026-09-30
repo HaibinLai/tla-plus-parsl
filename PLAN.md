@@ -1856,6 +1856,9 @@ Cases 601--620 matched at 100 steps: PBSPro malformed JSON/status/submit, Torque
 duplicate/status parsing, status-failure handling, and submit success.
 Cases 621--640 matched at 100 steps: Torque task-list parsing, LocalProvider exit-file/status
 handling, unknown cancellation IDs, status scoping, submit cleanup, and task-list outcomes.
+Cases 641--660 matched at 100 steps: Local unknown jobs, Kubernetes admission/cancel/poll/submit
+and unknown-job handling, duplicate provider job IDs, duplicate executor polling, and provider
+poll-clock behavior.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
