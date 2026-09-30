@@ -984,6 +984,12 @@ run_case htex-unknown-manager-heartbeat pass \
 run_case htex-unknown-manager-result pass \
     models/executors/ParslHtexUnknownManagerResult.cfg \
     models/executors/ParslHtexUnknownManagerMessage.tla
+run_case htex-unknown-task-result-current counterexample \
+    models/executors/ParslHtexUnknownTaskResultCurrent.cfg \
+    models/executors/ParslHtexUnknownTaskResult.tla
+run_case htex-unknown-task-result-fixed pass \
+    models/executors/ParslHtexUnknownTaskResultFixed.cfg \
+    models/executors/ParslHtexUnknownTaskResult.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

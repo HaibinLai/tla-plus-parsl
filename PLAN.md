@@ -1087,6 +1087,10 @@ reproduces the wall-clock behavior with a deterministic time sequence.
 unknown result messages. The model requires non-registration traffic from an unknown manager to
 be ignored without creating a ready-manager record, replying, or forwarding a result;
 `tests/test_htex_unknown_manager_runtime.py` drives the real interchange handler.
+`ParslHtexUnknownTaskResult.tla` now covers stale result frames whose task IDs were removed by
+retry, cancellation, or teardown: the current result worker dies on an unconditional lookup,
+while the fixed branch discards the stale frame and continues to a live task. The runtime bridge
+is `tests/test_htex_unknown_task_result_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
