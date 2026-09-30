@@ -1927,6 +1927,9 @@ and were rerun at 100 steps: dynamic task chain, three-task message correlation,
 retry, HTEX heartbeat/version admission, provider provisioning lifecycle, versioned monitoring
 batch, versioned multi-output stage-out, and nested join retry. Every Current/Fixed pair matched
 its expected outcome; the chain and normal-success variants also passed.
+The subsequent cases 94--99 rerun also passed their expected outcomes, including multi-block
+provider ownership, timeout/retry stale-result handling, concurrent timeout isolation, and the
+adjacent input-mutation regression case.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
