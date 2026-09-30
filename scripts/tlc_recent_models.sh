@@ -1821,6 +1821,12 @@ run_case globus-compute-config-current counterexample \
 run_case globus-compute-config-fixed pass \
     models/staging/ParslGlobusComputeConfigFixed.cfg \
     models/staging/ParslGlobusComputeConfig.tla
+run_case datafuture-cancel-current counterexample \
+    models/staging/ParslDataFutureCancellationPropagationCurrent.cfg \
+    models/staging/ParslDataFutureCancellationPropagation.tla
+run_case datafuture-cancel-fixed pass \
+    models/staging/ParslDataFutureCancellationPropagationFixed.cfg \
+    models/staging/ParslDataFutureCancellationPropagation.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

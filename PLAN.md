@@ -857,6 +857,9 @@ Globus staging coverage now includes endpoint child-path validation, stage-in/st
 dependencies, atomic token-file publication, and serialized per-submit resource configuration.
 Runtime probes cover endpoint/path and token-cache behavior, including the current race and
 truncation counterexamples.
+DataFuture coverage now includes cancellation propagation: a cancelled parent must not be treated
+as successful file readiness. Runtime probes cover cancelled/failed parents, falsey exceptions,
+clean file copies, and dependent-app gating.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
