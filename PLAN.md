@@ -1595,6 +1595,11 @@ The serialization/ZMQ source-model map is now documented in docs/serialization-z
 It ties facade serialization, the three-buffer apply-message contract, HTEX task/result transport,
 worker result decoding, and attempt correlation to the layered wire-state models.
 
+The callable retry transport model now includes an explicit serialized-to-running dispatch step.
+Its previous failure/complete actions could fire directly from serialized, leaving the declared
+running state unreachable and under-modeling worker execution. Current/fixed retry and stale-result
+checks now exercise the physical running attempt before failure or completion.
+
 The integrated join model now admits cancellation while an inner physical attempt is running.
 Previously the action contained a running-attempt branch that was unreachable because its guard
 only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
