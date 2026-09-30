@@ -910,6 +910,12 @@ run_case http-separate-cleanup-current counterexample \
 run_case http-separate-cleanup-fixed pass \
     models/staging/ParslHTTPSeparateTaskCleanupFixed.cfg \
     models/staging/ParslHTTPSeparateTaskCleanup.tla
+run_case htex-registration-state-current counterexample \
+    models/serialization/ParslHtexRegistrationStatePoisoningCurrent.cfg \
+    models/serialization/ParslHtexRegistrationStatePoisoning.tla
+run_case htex-registration-state-fixed pass \
+    models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
+    models/serialization/ParslHtexRegistrationStatePoisoning.tla
 run_case core-executor-drain pass \
     models/core/ParslExecutorDrain.cfg \
     models/core/ParslAbstract.tla

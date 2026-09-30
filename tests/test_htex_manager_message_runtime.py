@@ -88,6 +88,30 @@ class HtexManagerMessageRuntimeTest(unittest.TestCase):
         with self.assertRaises(AttributeError):
             interchange.process_manager_socket_message(set(), None, object())
 
+    def test_registration_can_overwrite_reserved_tasks_state_currently(self):
+        message = pickle.dumps({
+            "type": "registration",
+            "python_v": "3.11.0",
+            "parsl_v": "current",
+            "start_time": 0,
+            "block_id": "block-1",
+            "max_capacity": 1,
+            "active": True,
+            "draining": False,
+            "tasks": "poisoned",
+        })
+        interchange = self.interchange_with([b"manager-2", message])
+        interchange.current_platform = {"python_v": "3.11.0", "parsl_v": "current"}
+        interchange._check_python_mismatch = True
+        interchange.connected_block_history = []
+        interchange._send_monitoring_info = lambda radio, manager: None
+
+        interesting = set()
+        interchange.process_manager_socket_message(interesting, None, object())
+
+        self.assertIn(b"manager-2", interesting)
+        self.assertEqual(interchange._ready_managers[b"manager-2"]["tasks"], "poisoned")
+
 
 if __name__ == "__main__":
     unittest.main()
