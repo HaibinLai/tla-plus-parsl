@@ -368,5 +368,23 @@ run_case poller-close-scale-in \
 run_case poller-duplicate-executor \
     models/providers/ParslPollerDuplicateExecutorFixed.cfg \
     models/providers/ParslPollerDuplicateExecutor.tla
+run_case executor-kinds \
+    models/executors/ParslExecutorKindsSmoke.cfg \
+    models/executors/ParslExecutorKinds.tla
+run_case executor-provider-bridge \
+    models/executors/ParslProviderExecutorBridgeSmoke.cfg \
+    models/executors/ParslProviderExecutorBridge.tla
+run_case executor-provider-lifecycle \
+    models/executors/ParslExecutorProviderLifecycleFixed.cfg \
+    models/executors/ParslExecutorProviderLifecycle.tla
+run_case executor-selection \
+    models/executors/ParslExecutorSelectionFixed.cfg \
+    models/executors/ParslExecutorSelection.tla
+run_case executor-shutdown \
+    models/executors/ParslExecutorShutdown.cfg \
+    models/executors/ParslExecutorShutdown.tla
+run_case provider-executor-timed \
+    models/executors/ParslProviderExecutorTimedFixed.cfg \
+    models/executors/ParslProviderExecutorTimed.tla
 
 echo "Foundational TLC smoke suite passed."

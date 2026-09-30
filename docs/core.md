@@ -221,6 +221,10 @@ The generic provider cases cover bad-state ordering and mutation, unknown cluste
 submit/cancel cleanup and PID-shape admission, plus poller close/duplicate-executor races. They
 model lifecycle ownership independently of scheduler-specific response parsing.
 
+The shared executor-contract cases add executor-kind admission, provider/executor bridging,
+provider lifecycle, empty-selection rejection, shutdown ordering, and timed provider-backed
+execution. These are the common contracts that concrete backend models refine.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
