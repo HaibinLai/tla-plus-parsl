@@ -1053,6 +1053,12 @@ run_case serialization-truncated-length-fixed pass \
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla
+run_case serialization-plugin-failure-cache-current counterexample \
+    models/serialization/ParslSerializationPluginFailureCacheCurrent.cfg \
+    models/serialization/ParslSerializationPluginFailureCache.tla
+run_case serialization-plugin-failure-cache-fixed pass \
+    models/serialization/ParslSerializationPluginFailureCacheFixed.cfg \
+    models/serialization/ParslSerializationPluginFailureCache.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

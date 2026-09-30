@@ -1130,6 +1130,9 @@ reproduces the current short-payload handoff.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.
+`ParslSerializationPluginFailureCache.tla` is now in the sweep: a plugin that raises during
+decode must not remain cached as if it were healthy. `tests/test_serialization_plugin_failure_cache_runtime.py`
+reproduces the current poisoned-cache behavior.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
