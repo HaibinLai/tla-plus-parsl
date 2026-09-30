@@ -1210,6 +1210,10 @@ The result direction additionally uses `acknowledged` between `received` and `co
 a receiver-side consume acknowledgement before decode without claiming a particular ZMQ wire
 ack implementation.
 
+The ACK/retry refinement is also bridged to a real in-process pyzmq ROUTER/DEALER exchange by
+`tests/test_zmq_ack_retry_runtime.py`: the wire delivers both retransmissions, but receiver-side
+identity tracking dispatches the serialized callable once.
+
 `ParslSerializedResultFile` adds the executor result-file boundary: a serialized `TaskResult` is
 written to a private temporary path, then atomically published before a consumer decodes it. Its
 current branch permits a partial file to become visible, while the fixed branch requires complete

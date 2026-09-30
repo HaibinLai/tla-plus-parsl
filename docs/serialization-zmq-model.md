@@ -43,6 +43,9 @@ the Current configuration reproduces the correlation counterexample.
 second transmission of the same logical envelope; the current branch dispatches both deliveries,
 while the fixed branch treats the second delivery as a duplicate before worker invocation. The
 model checks single-dispatch, ACK-after-completion, and Future consistency.
+`tests/test_zmq_ack_retry_runtime.py` connects the same abstraction to a real in-process
+ROUTER/DEALER pair: pyzmq delivers both retransmissions, while a receiver identity set executes
+the serialized callable only once.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryCurrent.cfg models/serialization/ParslZMQAckRetry.tla

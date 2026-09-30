@@ -235,6 +235,8 @@ Recent focused models now connect the previously separate boundaries:
   dispatch when one buffer is not serializable.
 - `ParslZMQAckRetry` is now in the smoke sweep, checking multipart task retransmission when an ACK
   is delayed; the fixed branch deduplicates the envelope before dispatch and Future resolution.
+  `tests/test_zmq_ack_retry_runtime.py` now validates the same duplicate-delivery and receiver
+  deduplication boundary with a real in-process pyzmq ROUTER/DEALER exchange and `C2`/`02` payload.
 - `ParslMessageLoss` and `ParslMessageDuplicate` are now in the smoke sweep, connecting bounded
   transport loss/duplicate delivery to retry, correlation, cleanup, and terminal-result safety.
 - `ParslMisroute` and `ParslResultMisroute` are now in the smoke sweep, rejecting task/result
