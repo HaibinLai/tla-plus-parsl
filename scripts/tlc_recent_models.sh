@@ -75,6 +75,15 @@ run_case clock-retry-heartbeat pass \
 run_case clock-terminal-timeout pass \
     models/clock/ParslClockTerminal.cfg \
     models/clock/ParslClock.tla
+run_case time-limited-open-current counterexample \
+    models/clock/ParslTimeLimitedOpenTimeoutCurrent.cfg \
+    models/clock/ParslTimeLimitedOpenTimeout.tla
+run_case time-limited-open-fixed pass \
+    models/clock/ParslTimeLimitedOpenTimeoutFixed.cfg \
+    models/clock/ParslTimeLimitedOpenTimeout.tla
+run_case time-limited-open-success pass \
+    models/clock/ParslTimeLimitedOpenTimeoutSuccess.cfg \
+    models/clock/ParslTimeLimitedOpenTimeout.tla
 run_case monitoring-history pass \
     models/monitoring/ParslMonitoringStatusHistory.cfg \
     models/monitoring/ParslMonitoringStatusHistory.tla

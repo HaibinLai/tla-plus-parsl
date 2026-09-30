@@ -238,6 +238,8 @@ Recent focused models now connect the previously separate boundaries:
   stage-out makes the first publication stale and forces a version-matching retry.
 - `ParslClusterSubmitScript` is now in the smoke sweep for a concrete provider boundary: valid
   template publication, missing scheduler arguments, and script-path I/O failure remain distinct.
+- `ParslTimeLimitedOpenTimeout` is now in the smoke sweep, separating a genuine file open from
+  a missing-file timeout and preventing a raw `open()` after the timeout horizon.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
   late completion, and monitoring persistence.
 - `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,
