@@ -842,7 +842,9 @@ the task dictionary during the failure sweep. Current mutation/order failures an
 paths are included in TLC, with runtime probes for each behavior.
 `ParslBadStateTerminalFuture` adds the terminal-Future boundary: a done Future remaining in the
 registry must not abort failure fan-out for later pending tasks. The current branch models the
-unconditional `set_exception` failure; the fixed branch skips terminal entries.
+unconditional `set_exception` failure; the fixed branch skips terminal entries. The existing
+`tests/test_block_provider_bad_state_order_runtime.py` probe reproduces the same `InvalidStateError`
+and leaves the later pending Future unresolved.
 CommandClient coverage now includes REQ/REP timeout poisoning, close/send races, lock acquisition
 past a deadline, unused max-retry behavior, pre-send timeout reuse, and negative poll-timeout
 calculation. Runtime probes exercise the corresponding ZMQ command-client paths.
