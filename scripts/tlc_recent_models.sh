@@ -376,6 +376,9 @@ run_case triple-nested-join-current counterexample \
 run_case triple-nested-join-fixed pass \
     models/dataflow/ParslTripleNestedJoinFixed.cfg \
     models/dataflow/ParslTripleNestedJoin.tla
+run_case join-three-list pass \
+    models/dataflow/ParslJoinThreeList.cfg \
+    models/dataflow/ParslJoinThreeList.tla
 run_case provider-multiblock-current counterexample \
     models/executors/ParslProviderMultiBlockOwnershipCurrent.cfg \
     models/executors/ParslProviderMultiBlockOwnership.tla

@@ -314,3 +314,7 @@ backed by `tests/test_htex_worker_capacity_runtime.py`.
 Monitoring coverage also includes `ParslMonitoringResourceHistory`, an append-only, timestamp-
 ordered model for real SQLite `RESOURCE` samples and duplicate primary-key handling, backed by
 `tests/test_monitoring_resource_history_runtime.py`.
+
+Join coverage also includes `ParslJoinThreeList`, which keeps three distinct inner Futures and
+four ordered list positions (including a duplicate) separate in the outer result, backed by
+`tests/test_join_three_list_runtime.py`.

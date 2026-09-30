@@ -79,3 +79,14 @@ failure.
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTripleNestedJoinCurrent.cfg models/dataflow/ParslTripleNestedJoin.tla
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTripleNestedJoinFixed.cfg models/dataflow/ParslTripleNestedJoin.tla
 ```
+
+`ParslJoinThreeList.tla` extends ordered list aggregation to three distinct inner Futures and
+four list positions, including a duplicate reference. Completion callbacks may arrive in any
+order, but the outer result is released only after all distinct Futures are terminal. The runtime
+probe `tests/test_join_three_list_runtime.py` drives the real `handle_join_update` callback and
+checks the `[third, first, second, first]` result order.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinThreeList.cfg models/dataflow/ParslJoinThreeList.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_three_list_runtime.py -v
+```
