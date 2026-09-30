@@ -79,6 +79,11 @@ tests=(
     tests/test_resource_monitor_clock_runtime.py
     tests/test_monitoring_batch_clock_runtime.py
     tests/test_monitoring_zmq_batch_clock_runtime.py
+    tests/test_worker_initial_probe_timeout_runtime.py
+    tests/test_time_limited_open_timeout_runtime.py
+    tests/test_bash_timeout_cleanup_runtime.py
+    tests/test_python_timeout_parameter_runtime.py
+    tests/test_timer_close_timeout_runtime.py
     tests/test_retry_timeout_runtime.py
     tests/test_timeout_timer_runtime.py
     tests/test_monitoring_db_runtime.py

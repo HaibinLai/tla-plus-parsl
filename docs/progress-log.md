@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7c0a418` (`Add provider task scale retry model`).
-- Foundational smoke inventory: 377 TLC cases and 282 Python runtime probes.
+- Latest pushed commit: pending (timeout and heartbeat runtime coverage).
+- Foundational smoke inventory: 377 TLC cases and 287 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -156,6 +156,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslProviderTaskScaleRetry`, a provider-capacity model for admission,
   scale-in cancellation, retry, result completion, and monitoring. The Current branch leaves a
   running task without capacity; the Fixed branch moves it to `retry_wait` and passed standalone TLC.
+- Current stage: promoted five timeout/heartbeat runtime bridges into the foundational gate:
+  HTEX initial probe timeout, time-limited file open, bash cleanup, Python timeout parameters,
+  and timer close behavior.
 
 ### Verification convention
 
