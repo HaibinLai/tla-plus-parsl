@@ -637,6 +637,12 @@ run_case provider-three-block-current counterexample \
 run_case provider-three-block-fixed pass \
     models/executors/ParslProviderThreeBlockOwnershipFixed.cfg \
     models/executors/ParslProviderThreeBlockOwnership.tla
+run_case provider-three-block-smoke-current counterexample \
+    models/executors/ParslProviderThreeBlockOwnershipSmokeCurrent.cfg \
+    models/executors/ParslProviderThreeBlockOwnership.tla
+run_case provider-three-block-smoke-fixed pass \
+    models/executors/ParslProviderThreeBlockOwnershipSmokeFixed.cfg \
+    models/executors/ParslProviderThreeBlockOwnership.tla
 run_case timeout-retry-stale-current counterexample \
     models/core/ParslTimeoutRetryStaleResultCurrent.cfg \
     models/core/ParslTimeoutRetryStaleResult.tla

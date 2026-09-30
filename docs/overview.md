@@ -972,6 +972,18 @@ pre-manager `pending` phase or the post-registration phase. Terminal observation
 and worker capacity and account for queued/running work as lost. This cross-component model is
 intentionally small so a provider/executor inconsistency produces a short TLC trace.
 
+`ParslProviderThreeBlockOwnership.tla` refines provider ownership with parameterized block/task
+sets. It keeps one-task-per-block capacity, block generations, failed-block retry, stale polling,
+and idle-only scale-in separate. The smoke configurations use one block and one task while the
+current/fixed configurations retain the original three-block scenario.
+The smoke current branch reaches the expected stale-poll counterexample (20 generated / 13
+distinct states); the smoke fixed branch checks 88 generated / 38 distinct states at depth 11.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderThreeBlockOwnershipSmokeCurrent.cfg models/executors/ParslProviderThreeBlockOwnership.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderThreeBlockOwnershipSmokeFixed.cfg models/executors/ParslProviderThreeBlockOwnership.tla
+```
+
 `ParslHeartbeatProvider.tla` adds the time boundary between provider status and HTEX manager
 health. A transient provider `unknown` state does not revoke an otherwise healthy manager;
 heartbeat age is advanced separately, and crossing the threshold removes the manager and marks

@@ -10,16 +10,18 @@ EXTENDS Naturals, FiniteSets
  * branch ignores that poll.
  ***************************************************************************)
 
-CONSTANT USE_FIXED
+CONSTANTS USE_FIXED, BLOCKS, TASKS
 
-Blocks == {"B1", "B2", "B3"}
-Tasks == {"T1", "T2", "T3"}
+Blocks == BLOCKS
+Tasks == TASKS
 
 VARIABLES block, generation, polledGeneration, task, taskBlock, stalePoll
 
 vars == <<block, generation, polledGeneration, task, taskBlock, stalePoll>>
 
 Init ==
+    /\ Blocks # {}
+    /\ Tasks # {}
     /\ block = [b \in Blocks |-> "none"]
     /\ generation = [b \in Blocks |-> 0]
     /\ polledGeneration = [b \in Blocks |-> 0]
