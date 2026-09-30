@@ -926,6 +926,9 @@ run_case globus-token-file-atomicity \
 run_case globus-token-schema \
     models/staging/ParslGlobusTokenSchemaFixed.cfg \
     models/staging/ParslGlobusTokenSchema.tla
+run_case globus-init-race \
+    models/staging/ParslGlobusInitRaceFixed.cfg \
+    models/staging/ParslGlobusInitRace.tla
 run_case globus-transfer-timeout \
     models/staging/ParslGlobusTransferTimeoutFixed.cfg \
     models/staging/ParslGlobusTransferTimeout.tla

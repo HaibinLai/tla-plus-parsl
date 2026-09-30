@@ -8,8 +8,9 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `aab331c` (`Model HTEX malformed task continuation`).
-- Foundational smoke inventory: 347 TLC cases and 218 Python runtime probes.
+- Latest pushed commit: `656c5e7` (`Model Globus token schema validation`).
+- Foundational smoke inventory: 349 TLC cases and 220 Python runtime probes (including the
+  uncommitted Globus initialization-race stage documented in the current working tree).
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -25,6 +26,8 @@ are recorded here in English and committed with the model changes.
   visible after the corresponding `TRY` update fails.
 - `aab331c`: HTEX malformed-task continuation. A malformed task envelope must not stop the ZMQ
   ingress loop before a later valid task is queued.
+- `656c5e7`: Globus token-schema validation. An incomplete cached service mapping must not expose
+  a raw `KeyError` during authorizer construction.
 
 ### Verification convention
 

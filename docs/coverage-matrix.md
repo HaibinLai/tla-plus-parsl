@@ -248,6 +248,8 @@ that the later valid task remains queueable.
 
 Staging coverage also includes `ParslGlobusTokenSchema` (BUG-266), which checks that an incomplete
 but syntactically valid token cache cannot reach service-record indexing as if it were usable.
+It also includes `ParslGlobusInitRace` (BUG-267), which checks that concurrent creation of
+`~/.parsl` cannot turn successful initialization into `FileExistsError`.
 
 AWS provider coverage also includes `ParslAwsStatusResponseShape` (BUG-205), which checks that a
 missing top-level `Reservations` field cannot abort status polling.

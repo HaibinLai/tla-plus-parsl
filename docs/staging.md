@@ -74,6 +74,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTokenSchemaFix
 
 This credential-schema boundary is recorded as BUG-266.
 
+`ParslGlobusInitRace.tla` models the directory-creation boundary in `Globus.init`. The current
+implementation checks whether `~/.parsl` exists and then calls `os.mkdir` as separate operations.
+If another initializer creates the directory between those operations, the second initializer
+raises `FileExistsError` even though the required directory is ready. The fixed branch treats an
+already-created directory as successful initialization. `tests/test_globus_init_race_runtime.py`
+reproduces the exception with a deterministic `isdir`/`mkdir` interleaving against the installed
+Globus implementation. This source-aligned finding is recorded as BUG-267.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusInitRaceCurrent.cfg models/staging/ParslGlobusInitRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusInitRaceFixed.cfg models/staging/ParslGlobusInitRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_init_race_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferTimeoutCurrent.cfg models/staging/ParslGlobusTransferTimeout.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferTimeoutFixed.cfg models/staging/ParslGlobusTransferTimeout.tla

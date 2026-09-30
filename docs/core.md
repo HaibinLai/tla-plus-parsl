@@ -141,11 +141,12 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 348 TLC cases and 219 Python runtime test files.
+The current repository smoke runner enumerates 349 TLC cases and 220 Python runtime test files.
 On 2026-09-30, all 313 TLC cases passed in segmented runs with `TLC_SIMULATE=10`, and the
 complete runtime suite passed with 196 files; the subsequently added cases were also run
 individually as they were introduced, including the PBS Pro status-batch isolation and
-monitoring worker cross-table, malformed-HTEX-ingress continuation, and Globus token-schema
+monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus token-schema, and
+Globus initialization-race
 refinements.
 These counts are evidence for the fast regression gate;
 the individual model pages still document larger fixed/current counterexample runs.

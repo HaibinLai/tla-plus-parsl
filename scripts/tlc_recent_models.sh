@@ -3294,6 +3294,12 @@ run_case globus-token-schema-current counterexample \
 run_case globus-token-schema-fixed pass \
     models/staging/ParslGlobusTokenSchemaFixed.cfg \
     models/staging/ParslGlobusTokenSchema.tla
+run_case globus-init-race-current counterexample \
+    models/staging/ParslGlobusInitRaceCurrent.cfg \
+    models/staging/ParslGlobusInitRace.tla
+run_case globus-init-race-fixed pass \
+    models/staging/ParslGlobusInitRaceFixed.cfg \
+    models/staging/ParslGlobusInitRace.tla
 run_case globus-compute-config-current counterexample \
     models/staging/ParslGlobusComputeConfig.cfg \
     models/staging/ParslGlobusComputeConfig.tla
