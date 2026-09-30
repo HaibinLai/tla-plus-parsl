@@ -1469,6 +1469,13 @@ and zero-node validation. Runtime probes cover seven MPI construction/command pa
 non-divisible and zero-node configurations produce counterexamples, while fixed, valid, and prefix
 configurations pass TLC simulation.
 
+The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
+rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
+ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
+probes cover sixteen Work Queue/TaskVine submission and result paths, including valid, malformed,
+exception, and cancelled reports. Current failure branches produce TLC counterexamples; rollback and
+fixed collector configurations pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

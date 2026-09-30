@@ -402,6 +402,27 @@ run_case mpi-spec-current counterexample \
 run_case mpi-spec-fixed pass \
     models/executors/ParslMPISpecFixed.cfg \
     models/executors/ParslMPISpec.tla
+run_case workqueue-submit pass \
+    models/executors/ParslWorkQueueSubmit.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-failure-current counterexample \
+    models/executors/ParslWorkQueueSubmitFailure.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-failure-fixed pass \
+    models/executors/ParslWorkQueueSubmitFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-serialization-current counterexample \
+    models/executors/ParslWorkQueueSubmitSerializationFailure.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-serialization-fixed pass \
+    models/executors/ParslWorkQueueSubmitSerializationFailureFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case taskvine-cancelled-result-current counterexample \
+    models/executors/ParslTaskVineCancelledResultCurrent.cfg \
+    models/executors/ParslTaskVineCancelledResult.tla
+run_case taskvine-cancelled-result-fixed pass \
+    models/executors/ParslTaskVineCancelledResultFixed.cfg \
+    models/executors/ParslTaskVineCancelledResult.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
