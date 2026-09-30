@@ -66,6 +66,15 @@ publication, dependent-consumer admission, and asynchronous monitoring persisten
 configuration permits a success row (and a ready DataFuture) before all chunks are received;
 the fixed configuration gates both observations on complete stage-out and checks 21 states.
 
+`ParslPipeline.tla` composes the same boundaries with payload serialization, physical worker
+attempts, retry/result correlation, output stage-out, DataFuture readiness, and monitoring
+persistence. Its current configuration reaches the early-monitoring counterexample in 435
+generated / 221 distinct states; the fixed configuration passes in 228 generated / 85 distinct
+states at depth 22. `ParslPipelineSmoke.cfg` is the one-chunk/no-retry fixed check (32 generated /
+16 distinct, depth 13). The action mapping follows `parsl/dataflow/dflow.py`,
+`parsl/data_provider/data_manager.py`, `parsl/serialize/facade.py`, and the monitoring database
+writer.
+
 The combined join configuration `models/core/ParslJoinSafety.cfg` has also been checked against
 the shared `ParslAbstract` module. It explores 427,320 generated states (66,459 distinct states,
 depth 61) with dependency, Future, retry, join-result, join-handle, and join-failure invariants
