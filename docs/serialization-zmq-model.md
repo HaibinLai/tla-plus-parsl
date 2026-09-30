@@ -38,6 +38,12 @@ bounded four-frame queues. It combines out-of-order delivery, late retry generat
 frames, and cross-task retargeting; the fixed configuration checks 106,145 simulated states while
 the Current configuration reproduces the correlation counterexample.
 
+`ParslCallableAliasRetry.tla` combines Python object aliasing with retry snapshots. A mutable
+object is both captured by a callable and passed as an argument; if it mutates while an encoded
+attempt is pending, the fixed path invalidates that snapshot and re-encodes before retry. The
+Current configuration reproduces stale-epoch behavior, while the Fixed configuration checks
+100,001 simulated states.
+
 `ParslSerializerHeaderConsistency` models the lower-level facade contract. `serialize()` emits
 the serializer identifier, a newline delimiter, and the serializer body; the model keeps the
 body's producing serializer separate from the header seen by `deserialize()`. The current branch

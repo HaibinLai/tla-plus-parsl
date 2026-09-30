@@ -1748,6 +1748,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
 - `ParslMonitoringVersionedBatch` now combines transaction rollback with per-task high-water
   protection; larger multi-task transaction batches remain future work;
+- `ParslCallableAliasRetry` now combines shared callable/argument aliasing with mutation-aware
+  retry snapshots; arbitrary Python heap identity remains abstract;
 - multi-level dynamic creation is now represented by `ParslDynamicTaskChain`, with a child-created
   grandchild and explicit dependency/retry safety; broader unbounded fan-out remains future work;
 - additional executor/provider-specific models.

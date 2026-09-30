@@ -280,3 +280,6 @@ during the closing window.
 
 Monitoring coverage now combines batch rollback with per-task version high-water handling in
 `ParslMonitoringVersionedBatch`.
+
+Python object coverage also combines callable/argument aliasing with mutation-aware retry epochs
+in `ParslCallableAliasRetry`.
