@@ -1691,6 +1691,11 @@ children, the second child depends on the first child as well as the parent, and
 bounded physical retry counter. The model checks creation, dependency, Future consistency, retry
 bound, and terminal-state invariants over 100,001 simulated states.
 
+Nested join error propagation now has an explicit `ParslNestedJoinFailure.tla` model. Failed leaf
+Future IDs are retained in the nested error in input order, while the outer join exposes the
+nested Future as one dependency entry; the completion and failure-shape invariants pass over
+100,001 simulated states.
+
 Monitoring now includes `ParslMonitoringEventStream.tla`, a multi-task producer/queue/database
 writer abstraction. It models duplicate and reordered events, bounded write retry, per-task
 database high-water marks, and shutdown drain conditions. The current branch reproduces stale
@@ -1722,7 +1727,7 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   paths;
 - richer message reordering/correlation beyond the two-task bounded result-envelope model;
 - richer join_app behavior beyond the bounded inner-Future set, cancellation, duplicate positions,
-  failure aggregation, and invalid-return branches now modeled;
+  nested failure payload, failure aggregation, and invalid-return branches now modeled;
 - manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
 - richer dynamic task creation beyond the bounded parent-to-two-child fan-out model;

@@ -2547,6 +2547,9 @@ run_case serialization-fallback-failure pass \
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
+run_case nested-join-failure pass \
+    models/dataflow/ParslNestedJoinFailure.cfg \
+    models/dataflow/ParslNestedJoinFailure.tla
 run_case serialization-apply-message-arity-current counterexample \
     models/serialization/ParslApplyMessageArity.cfg \
     models/serialization/ParslApplyMessageArity.tla

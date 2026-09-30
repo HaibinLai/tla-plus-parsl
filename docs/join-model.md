@@ -37,6 +37,12 @@ Focused models refine boundaries that are easy to lose in a set-based abstractio
 - ParslJoinReturnEquality covers user-defined equality raising during return-shape validation;
 - ParslJoinRetryDuplicates combines duplicate input positions with inner physical retries.
 
+ParslNestedJoinFailure adds explicit nested error payloads. Failed leaf IDs remain in the nested
+JoinError in input order, while the outer join records the nested Future as one dependency entry.
+This matches handle_join_update: the nested JoinError is the exception attached to the outer
+Future, while its dependent exception identifiers retain the leaf causes. TLC checks the
+failure-shape and completion invariants over 100,001 simulated states.
+
 The outer callback lock is represented as an atomic callback section. A callback that observes
 an incomplete list returns without finalizing; the callback for the last terminal Future performs
 the all-done check and either constructs the ordered result or aggregates all failures.
