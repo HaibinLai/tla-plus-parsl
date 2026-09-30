@@ -392,6 +392,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINonDivisibleRan
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_nondivisible_runtime.py -v
 ```
 
+The model represents the initial rank value as the tagged state `"zero"` rather than mixing an
+integer with the symbolic states `"integral"` and `"fractional"`; this keeps TLC's `TypeOK`
+check well-typed while preserving the same launch boundary.
+
 `ParslMPINoResourceResult.tla` models the MPI scheduler result path for a task that did not
 request MPI nodes. Such tasks are valid but are not inserted into `_map_tasks_to_nodes`; the
 current `get_result` assertion nevertheless requires a mapping and aborts the scheduler. The

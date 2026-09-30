@@ -12,14 +12,14 @@ CONSTANT USE_FIXED
 
 VARIABLES phase, numNodes, numRanks, ranksPerNode
 vars == <<phase, numNodes, numRanks, ranksPerNode>>
-RankValues == {0, 1, 2, 3, 4, 5, "integral", "fractional"}
+RankValues == {"zero", "integral", "fractional"}
 
 Init ==
     /\ USE_FIXED \in BOOLEAN
     /\ phase = "configured"
     /\ numNodes = 2
     /\ numRanks = 5
-    /\ ranksPerNode = 0
+    /\ ranksPerNode = "zero"
 
 Validate ==
     /\ phase = "configured"
