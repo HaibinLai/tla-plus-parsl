@@ -1016,3 +1016,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDuplicateRegis
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDuplicateRegistrationFixed.cfg models/executors/ParslHtexDuplicateRegistration.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_duplicate_registration_runtime.py -v
 ```
+
+`ParslHtexWorkerCapacity.tla` models the concrete worker-count calculation in
+`HighThroughputExecutor.__init__`.  The derived capacity is the minimum of the configured
+per-node maximum, CPU slots, memory slots, and (when configured) available accelerator slots.
+`tests/test_htex_worker_capacity_runtime.py` exercises CPU-, memory-, and accelerator-limited
+nodes against the real executor constructor.  The model checks that the resulting worker count
+cannot oversubscribe any advertised resource.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerCapacityCpu.cfg models/executors/ParslHtexWorkerCapacity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerCapacityMemory.cfg models/executors/ParslHtexWorkerCapacity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerCapacityAccelerator.cfg models/executors/ParslHtexWorkerCapacity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_worker_capacity_runtime.py -v
+```

@@ -306,3 +306,7 @@ Core DFK coverage also combines timeout-driven retry with late result rejection 
 Time coverage also includes `ParslConcurrentTimeouts` and `ParslThreeConcurrentTimeouts`,
 modeling independent timeout clocks and cross-task late-result isolation for two and three
 concurrent logical tasks.
+
+Executor capacity coverage also includes `ParslHtexWorkerCapacity`, which mirrors the HTEX
+constructor's CPU-, memory-, maximum-worker-, and accelerator-limited worker calculation and is
+backed by `tests/test_htex_worker_capacity_runtime.py`.
