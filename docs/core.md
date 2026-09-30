@@ -183,6 +183,11 @@ duplicate ACK retransmission, serializer-header identity, primary/secondary seri
 failed dynamic-plugin cache eviction, and registry collision handling. They sit below the larger
 ZMQ end-to-end model and keep serializer-specific invariants directly executable.
 
+The scheduler cases sample parser and admission boundaries for Slurm, Condor, PBS Pro, Grid
+Engine, and LSF: foreign or malformed status lines, empty submissions, job-ID aliases, malformed
+JSON, missing jobs, and invalid resource derivation. Each fixed model rejects malformed scheduler
+output without corrupting local resource bookkeeping.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The

@@ -162,5 +162,41 @@ run_case serializer-plugin-failure-cache \
 run_case serializer-registry \
     models/serialization/ParslSerializerRegistryFixed.cfg \
     models/serialization/ParslSerializerRegistry.tla
+run_case slurm-foreign-job \
+    models/providers/ParslSlurmForeignJobFixed.cfg \
+    models/providers/ParslSlurmForeignJob.tla
+run_case slurm-malformed-line \
+    models/providers/ParslSlurmMalformedLineFixed.cfg \
+    models/providers/ParslSlurmMalformedLine.tla
+run_case slurm-tasks-per-node \
+    models/providers/ParslSlurmTasksPerNodeFixed.cfg \
+    models/providers/ParslSlurmTasksPerNode.tla
+run_case condor-empty-submit \
+    models/providers/ParslCondorEmptySubmitFixed.cfg \
+    models/providers/ParslCondorEmptySubmit.tla
+run_case condor-malformed-status \
+    models/providers/ParslCondorMalformedStatusLineFixed.cfg \
+    models/providers/ParslCondorMalformedStatusLine.tla
+run_case condor-status-unknown \
+    models/providers/ParslCondorStatusUnknownFixed.cfg \
+    models/providers/ParslCondorStatusUnknown.tla
+run_case pbspro-job-id-alias \
+    models/providers/ParslPBSProJobIdAliasFixed.cfg \
+    models/providers/ParslPBSProJobIdAlias.tla
+run_case pbspro-malformed-json \
+    models/providers/ParslPBSProMalformedJSONFixed.cfg \
+    models/providers/ParslPBSProMalformedJSON.tla
+run_case grid-engine-duplicate-status \
+    models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
+    models/providers/ParslGridEngineDuplicateStatus.tla
+run_case grid-engine-missing-status \
+    models/providers/ParslGridEngineMissingStatusFixed.cfg \
+    models/providers/ParslGridEngineMissingStatus.tla
+run_case lsf-missing-job \
+    models/providers/ParslLSFMissingJobFixed.cfg \
+    models/providers/ParslLSFMissingJob.tla
+run_case lsf-resource-validation \
+    models/providers/ParslLSFResourceValidationFixed.cfg \
+    models/providers/ParslLSFResourceValidation.tla
 
 echo "Foundational TLC smoke suite passed."
