@@ -65,6 +65,9 @@ run_case content-file-pipeline \
 run_case timeout-retry-stale-result \
     models/core/ParslTimeoutRetryStaleResult.cfg \
     models/core/ParslTimeoutRetryStaleResult.tla
+run_case join-retry-stale-result \
+    models/core/ParslJoinRetryStaleResultFixed.cfg \
+    models/core/ParslJoinRetryStaleResult.tla
 run_case integrated-abstract \
     models/core/ParslAbstractSmoke.cfg \
     models/core/ParslAbstract.tla

@@ -141,7 +141,7 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 369 TLC cases and 270 Python runtime test files.
+The current repository smoke runner enumerates 370 TLC cases and 270 Python runtime test files.
 On 2026-09-30, all 313 TLC cases passed in segmented runs with `TLC_SIMULATE=10`, and the
 complete runtime suite passed with 196 files; the subsequently added cases were also run
 individually as they were introduced, including the PBS Pro status-batch isolation and
@@ -172,6 +172,12 @@ serialized callable admission, duplicate-preserving input positions, inner retry
 outer cancellation, stale-result rejection, failure aggregation, and terminal monitoring to the
 small `ParslJoinApp` protocol. Focused models remain the place for individual callback races and
 backend-specific details.
+
+`ParslJoinRetryStaleResult.tla` is a smaller cross-layer companion. It keeps two logical join
+dependencies separate from their physical attempts, lets one timed-out attempt report late, and
+checks that the outer join cannot become consistent with a stale attempt. The fixed configuration
+is included in the foundational TLC smoke; the Current configuration remains an executable
+counterexample for stale-result acceptance.
 
 The monitoring cases cover the next database refinement: all-or-nothing batch publication,
 persistent retry of transient writes, and explicit terminal handling for permanent insert/update

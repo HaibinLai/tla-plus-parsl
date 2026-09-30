@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `d1b3b7e` (`Promote cross component runtime coverage`).
-- Foundational smoke inventory: 369 TLC cases and 270 Python runtime probes.
+- Latest pushed commit: pending (join retry/stale-result cross-layer model).
+- Foundational smoke inventory: 370 TLC cases and 270 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -123,6 +123,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted five cross-component runtime bridges into the foundational gate. The
   probes cover HTEX result decode failure, result-forwarding ownership loss, optional monitoring
   message handling, scheduler-command timeout cleanup, and negative provider scale-in behavior.
+- Current stage: added `ParslJoinRetryStaleResult`, a cross-layer TLA+ model for two logical join
+  dependencies and bounded physical attempts. The Current branch accepts a late timed-out result
+  and violates result consistency; the Fixed branch classifies it as stale. Fixed TLC passed in the
+  370-case smoke, while the Current configuration produced the intended counterexample.
 
 ### Verification convention
 
