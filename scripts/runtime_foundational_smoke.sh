@@ -37,6 +37,11 @@ tests=(
     tests/test_callable_retry_transport_runtime.py
     tests/test_command_receive_failure_runtime.py
     tests/test_command_send_failure_runtime.py
+    tests/test_command_client_close_runtime.py
+    tests/test_command_client_concurrent_close_runtime.py
+    tests/test_command_send_timeout_runtime.py
+    tests/test_command_lock_timeout_runtime.py
+    tests/test_command_max_retries_runtime.py
     tests/test_pool_executor_callable_cache_runtime.py
     tests/test_results_incoming_close_race_runtime.py
     tests/test_workqueue_malformed_report_runtime.py

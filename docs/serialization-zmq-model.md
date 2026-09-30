@@ -170,3 +170,8 @@ aliasing, empty registries, malformed envelopes, dynamic plugin caching and plug
 task-transport close races, and ZMQ callable retry/object snapshots. These cases make serializer
 cache state and wire-attempt identity explicit instead of treating serialization as a single opaque
 success/failure bit.
+
+Command-client coverage additionally checks concurrent close, pre-send timeout reuse, and lock
+deadline behavior against the real control-channel helper. Historical timeout/reply configuration
+files that reference missing invariants remain outside the runner until their defining module is
+restored.

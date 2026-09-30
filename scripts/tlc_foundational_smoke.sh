@@ -251,6 +251,15 @@ run_case command-receive-failure \
 run_case command-send-failure \
     models/serialization/ParslCommandSendFailureFixed.cfg \
     models/serialization/ParslCommandSendFailure.tla
+run_case command-client-concurrent-close \
+    models/serialization/ParslCommandClientConcurrentCloseFixed.cfg \
+    models/serialization/ParslCommandClientConcurrentClose.tla
+run_case command-client-send-timeout \
+    models/executors/ParslCommandClientSendTimeout.cfg \
+    models/executors/ParslCommandClientSendTimeout.tla
+run_case command-client-lock-timeout \
+    models/executors/ParslCommandClientLockTimeoutFixed.cfg \
+    models/executors/ParslCommandClientLockTimeout.tla
 run_case pool-executor-callable-cache \
     models/serialization/ParslPoolExecutorCallableCacheFixed.cfg \
     models/serialization/ParslPoolExecutorCallableCache.tla
