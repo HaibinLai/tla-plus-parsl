@@ -1554,6 +1554,11 @@ current variant. `ParslTime.cfg`, `ParslLocalExecutor.cfg`, and `ParslMultiManag
 use older constant/spec layouts and are intentionally not classified as passing until they are
 migrated to the current abstract module.
 
+The LocalExecutor and MultiManagerTimeout configurations have now been checked against the current
+`ParslAbstract` module and both pass simulation. `ParslTime.cfg` remains separate because its
+fairness/property configuration triggers the known TLC simulator NullPointerException; it needs a
+dedicated temporal-model migration rather than being relabeled as a safety-only pass.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
