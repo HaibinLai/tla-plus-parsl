@@ -423,6 +423,18 @@ run_case taskvine-cancelled-result-current counterexample \
 run_case taskvine-cancelled-result-fixed pass \
     models/executors/ParslTaskVineCancelledResultFixed.cfg \
     models/executors/ParslTaskVineCancelledResult.tla
+run_case htex-force-scale-in-current counterexample \
+    models/executors/ParslHtexForceScaleInCurrent.cfg \
+    models/executors/ParslHtexForceScaleIn.tla
+run_case htex-force-scale-in-fixed pass \
+    models/executors/ParslHtexForceScaleInFixed.cfg \
+    models/executors/ParslHtexForceScaleIn.tla
+run_case htex-monitoring-batch-current counterexample \
+    models/executors/ParslHtexMonitoringBatchContinuationCurrent.cfg \
+    models/executors/ParslHtexMonitoringBatchContinuation.tla
+run_case htex-monitoring-batch-fixed pass \
+    models/executors/ParslHtexMonitoringBatchContinuationFixed.cfg \
+    models/executors/ParslHtexMonitoringBatchContinuation.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

@@ -1476,6 +1476,13 @@ probes cover sixteen Work Queue/TaskVine submission and result paths, including 
 exception, and cancelled reports. Current failure branches produce TLC counterexamples; rollback and
 fixed collector configurations pass simulation.
 
+Two additional HTEX lifecycle models are now in the sweep. `ParslHtexForceScaleIn` makes the
+busy-block behavior explicit: the current forced scale-in cancels an active worker context, while
+the fixed branch protects it. `ParslHtexMonitoringBatchContinuation` checks that an optional
+monitoring frame cannot abort a following valid task result when monitoring is disabled. Runtime
+probes cover both paths; current configurations produce TLC counterexamples and fixed configurations
+pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
