@@ -239,6 +239,10 @@ tests=(
     tests/test_taskvine_results_runtime.py
     tests/test_workqueue_results_runtime.py
     tests/test_file_path_runtime.py
+    tests/test_command_client_runtime.py
+    tests/test_command_deadline_runtime.py
+    tests/test_timer_interval_validation_runtime.py
+    tests/test_walltime_parsing_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py

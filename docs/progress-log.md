@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `50fd3be` (`Promote result file propagation coverage`).
-- Foundational smoke inventory: 383 TLC cases and 361 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, scaling, memoization, serialization, result-file, and time coverage).
+- Foundational smoke inventory: 383 TLC cases and 365 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,10 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted CommandClient reply/timeout and expired-deadline probes, plus Timer
+  interval and walltime conversion boundaries. Five targeted tests passed, and the affected
+  runtime suffix (222–365) passed after insertion; the prior prefix (1–221) was already green.
 
 - Current stage: promoted TaskVine and Work Queue result-file/Future propagation probes plus
   `File.filepath` resolution. Fourteen targeted tests passed, and the affected runtime suffix
