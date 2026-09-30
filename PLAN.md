@@ -240,6 +240,8 @@ Recent focused models now connect the previously separate boundaries:
   provider attempts and rejecting late results from stale physical attempts.
 - `ParslKubernetesUnknownJob` is now in the smoke sweep, requiring stale job IDs to return an
   explicit UNKNOWN status instead of raising from local resource bookkeeping.
+- `ParslAWSProviderSubmit` is now in the smoke sweep, checking EC2 launch success/failure,
+  empty launch responses, and resource registration consistency.
 - `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,
   traversing callable roots, globals/defaults/closures, nested arguments, failed object graphs,
   and self-referential cycles with visited-set protection.

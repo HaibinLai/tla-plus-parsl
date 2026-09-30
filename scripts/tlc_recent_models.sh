@@ -417,6 +417,12 @@ run_case kubernetes-unknown-job-current counterexample \
 run_case kubernetes-unknown-job-fixed pass \
     models/providers/ParslKubernetesUnknownJobFixed.cfg \
     models/providers/ParslKubernetesUnknownJob.tla
+run_case aws-submit-current counterexample \
+    models/providers/ParslAWSProviderSubmit.cfg \
+    models/providers/ParslAWSProviderSubmit.tla
+run_case aws-submit-fixed pass \
+    models/providers/ParslAWSProviderSubmitFixed.cfg \
+    models/providers/ParslAWSProviderSubmit.tla
 run_case cluster-submit-script-valid pass \
     models/providers/ParslClusterSubmitScript.cfg \
     models/providers/ParslClusterSubmitScript.tla
