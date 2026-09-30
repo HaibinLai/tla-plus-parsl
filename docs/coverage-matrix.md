@@ -18,6 +18,9 @@ The dataflow coverage also includes `ParslAppFutureOutputStreams`, which models 
 `AppFuture.stdout`/`stderr` distinction between raw task-record values and installed stage-out
 `DataFuture` overrides; tuple values remain an explicitly coarse boundary.
 
+It also includes a direct runtime bridge for `ParslFutureWaitTimeout`, distinguishing caller wait
+timeouts from task cancellation or task-level timeout failure.
+
 This repository intentionally uses bounded abstractions. The table below records what is
 currently modeled, which runtime probes corroborate it, and where the abstraction is still
 coarse. A passing TLC run is evidence for the listed finite model, not a proof of all Parsl
