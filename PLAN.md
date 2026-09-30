@@ -1576,6 +1576,11 @@ interleaved at any point, but execution requires a decoded payload and an availa
 published result records the captured versions. TLC simulation checked 100,001 states with all
 pipeline safety invariants enabled.
 
+ParslHeartbeatRetry now connects logical time, a rollback-prone wall clock, manager heartbeat
+expiry, task timeout, physical retry, and a late completion. The current configuration produces a
+counterexample for accepting a late result after timeout; the fixed configuration uses monotonic
+heartbeat age and stale-result classification and checks 100,001 simulated states successfully.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
