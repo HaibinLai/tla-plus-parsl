@@ -48,6 +48,12 @@ run_case callable-retry-fixed pass \
 run_case function-object-contents pass \
     models/serialization/ParslFunctionObjectContents.cfg \
     models/serialization/ParslFunctionObjectContents.tla
+run_case serialization-wire pass \
+    models/serialization/ParslSerializationWire.cfg \
+    models/serialization/ParslSerializationWire.tla
+run_case serialization-wire-failure pass \
+    models/serialization/ParslSerializationWireFailure.cfg \
+    models/serialization/ParslSerializationWire.tla
 run_case function-object-transport pass \
     models/serialization/ParslFunctionObjectTransport.cfg \
     models/serialization/ParslFunctionObjectTransport.tla

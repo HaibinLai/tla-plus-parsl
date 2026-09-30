@@ -229,6 +229,9 @@ Recent focused models now connect the previously separate boundaries:
   snapshots across serialized ZMQ task frames, physical retries, and stale result correlation.
 - `ParslFunctionObjectContents` is included in the smoke sweep as the smallest executable
   callable/argument object snapshot: post-pack mutation cannot change the worker result.
+- `ParslSerializationWire` and its failure configuration are now in the smoke sweep, checking
+  the concrete `C2`/`02` headers, length framing, ordered unpack/decode, and rejection before
+  dispatch when one buffer is not serializable.
 - `ParslFunctionObjectTransport`, `ParslObjectSnapshotRetry`, and `ParslZMQObjectSnapshot` now
   extend that boundary through queued frames and physical retries, including current/fixed
   stale-payload counterexamples.
