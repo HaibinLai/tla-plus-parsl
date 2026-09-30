@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (provider cancellation, bad-state, scaling, memoization, serialization, result-file, time, transport, scheduler-submit, and executor-lifecycle coverage).
+- Latest pushed commit: `f1535b0` (`Promote executor lifecycle coverage`).
 - Foundational smoke inventory: 383 TLC cases and 380 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
