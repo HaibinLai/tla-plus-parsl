@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `1cc300f` (`Model monitoring internal queue drain`).
-- Foundational smoke inventory: 353 TLC cases and 224 Python runtime probes.
+- Latest pushed commit: `af476ac` (`Model thread executor empty resource spec`).
+- Foundational smoke inventory: 354 TLC cases and 225 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,8 @@ are recorded here in English and committed with the model changes.
   not suppress independent executors in the same polling tick.
 - `1cc300f`: monitoring internal-queue drain. Shutdown must not exit the database loop while a
   pending internal message remains after a stale `empty()` observation.
+- `af476ac`: ThreadPoolExecutor empty resource-spec validation. A falsy non-mapping resource
+  specification must not bypass executor input validation.
 
 ### Verification convention
 
