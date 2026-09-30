@@ -15,7 +15,7 @@ worker decode/dispatch, and result correlation.
 | parsl/executors/high_throughput/executor.py result worker | result decode/retry, duplicate/unknown result, and stale-correlation models |
 | parsl/executors/high_throughput/process_worker_pool.py | callable/object snapshot, worker result serialization, and failure payload models |
 | parsl/executors/high_throughput/interchange.py::process_manager_socket_message | manager-message, registration-envelope, heartbeat, and result-frame models |
-| parsl/executors/high_throughput/zmq_pipes.py::CommandClient.run | command deadline, retry, close, and `ParslCommandSendFailure` models |
+| parsl/executors/high_throughput/zmq_pipes.py::CommandClient.run | command deadline, retry, close, send-failure, and receive-failure models |
 
 In ParslZMQSerializationEndToEnd, a task or result message has a serializer identifier,
 sender/receiver route, multipart frame state, and attempt number. The abstract transitions are:
@@ -105,6 +105,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandSendFai
 ```
 
 This transport-health boundary is recorded as BUG-214.
+
+`ParslCommandReceiveFailure.tla` covers the complementary response path. The current
+`CommandClient.run` lets a `recv_pyobj`/deserialization exception escape without changing
+`ok`, leaving the REQ client apparently reusable even though its request/reply state is unknown.
+The fixed branch poisons the client before propagating the error. The runtime probe uses the real
+`CommandClient.run` implementation with a socket double whose `recv_pyobj` raises.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandReceiveFailureCurrent.cfg models/serialization/ParslCommandReceiveFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslCommandReceiveFailureFixed.cfg models/serialization/ParslCommandReceiveFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_command_receive_failure_runtime.py -v
+```
+
+This receive-health boundary is recorded as BUG-238.
 
 `ParslHtexResultForwarding.tla` models manager-side task ownership while a serialized result is
 forwarded over the outgoing ZMQ channel. The current implementation removes the task ID from

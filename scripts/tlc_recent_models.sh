@@ -532,6 +532,12 @@ run_case command-send-failure-fixed pass \
 run_case command-send-failure-normal pass \
     models/serialization/ParslCommandSendFailureNormal.cfg \
     models/serialization/ParslCommandSendFailure.tla
+run_case command-receive-failure-current counterexample \
+    models/serialization/ParslCommandReceiveFailureCurrent.cfg \
+    models/serialization/ParslCommandReceiveFailure.tla
+run_case command-receive-failure-fixed pass \
+    models/serialization/ParslCommandReceiveFailureFixed.cfg \
+    models/serialization/ParslCommandReceiveFailure.tla
 run_case pbspro-submit-shape-current counterexample \
     models/providers/ParslPbsproSubmitShapeCurrent.cfg \
     models/providers/ParslPbsproSubmitShape.tla
