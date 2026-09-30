@@ -1,7 +1,8 @@
 # Parsl abstraction bug ledger
 
-For a component-oriented index, see the [categorized bug ledger](bugs/README.md). This file
-remains the canonical full record for every finding.
+For a component-oriented split, see the [categorized bug ledger](bug-ledger/index.md). The
+earlier [category summary index](bugs/README.md) remains available, while this file remains the
+canonical full record for every finding.
 
 This ledger records behaviors that the bounded TLA+ models and concrete runtime probes have
 reproduced. A `Current` finding describes the behavior observed in the inspected Parsl source;
