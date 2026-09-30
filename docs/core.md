@@ -143,6 +143,10 @@ of a result frame that carries both a result and an exception. Their current con
 kept as counterexamples in the executor/serialization documentation; the smoke suite runs the
 fixed configurations so the foundational path remains green.
 
+The provider cases then sample concrete admission and response boundaries across Kubernetes,
+Torque, LocalProvider, AWS, and Google Cloud. They are deliberately small schema/state checks;
+the provider-specific documents and runtime probes remain the authoritative deeper models.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The

@@ -69,5 +69,20 @@ run_case htex-result-decode-cleanup \
 run_case htex-ambiguous-result-rejection \
     models/executors/ParslHtexAmbiguousResultFixed.cfg \
     models/executors/ParslHtexAmbiguousResult.tla
+run_case kubernetes-admission \
+    models/providers/ParslKubernetesAdmissionFixed.cfg \
+    models/providers/ParslKubernetesAdmission.tla
+run_case torque-submit-shape \
+    models/providers/ParslTorqueSubmitShapeFixed.cfg \
+    models/providers/ParslTorqueSubmitShape.tla
+run_case local-pid-admission \
+    models/providers/ParslLocalPidAdmissionFixed.cfg \
+    models/providers/ParslLocalPidAdmission.tla
+run_case aws-status-shape \
+    models/providers/ParslAwsStatusResponseShapeFixed.cfg \
+    models/providers/ParslAwsStatusResponseShape.tla
+run_case google-zone-response-shape \
+    models/providers/ParslGoogleCloudZoneResponseShapeFixed.cfg \
+    models/providers/ParslGoogleCloudZoneResponseShape.tla
 
 echo "Foundational TLC smoke suite passed."
