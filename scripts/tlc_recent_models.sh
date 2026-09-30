@@ -162,6 +162,12 @@ run_case taskvine-factory pass \
 run_case periodic-timer pass \
     models/clock/ParslPeriodicTimer.cfg \
     models/clock/ParslPeriodicTimer.tla
+run_case timeout-monitoring-current counterexample \
+    models/clock/ParslTimeoutMonitoringCurrent.cfg \
+    models/clock/ParslTimeoutMonitoring.tla
+run_case timeout-monitoring-fixed pass \
+    models/clock/ParslTimeoutMonitoringFixed.cfg \
+    models/clock/ParslTimeoutMonitoring.tla
 run_case apply-dispatch-current counterexample \
     models/serialization/ParslApplyDispatchBoundaryCurrent.cfg \
     models/serialization/ParslApplyDispatchBoundary.tla

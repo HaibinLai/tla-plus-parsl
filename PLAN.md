@@ -675,6 +675,9 @@ and bounded TLC simulation reaches 100,001 checked states for the invariant set.
 The same sweep now includes `ParslTaskVineFactory.tla` (factory creation, configuration,
 context exit, and construction failure) and `ParslPeriodicTimer.tla` (immediate callback,
 callback-failure isolation, bounded periodic callbacks, and quiescent close).
+It also includes the current/fixed `ParslTimeoutMonitoring` configurations, which connect
+heartbeat expiry and task deadlines to late-result rejection and monitoring-status stability;
+`tests/test_retry_timeout_runtime.py` provides the concrete timeout/retry bridge.
 `ParslWorkQueueResults.tla` refines WorkQueue's collector result protocol: valid result files,
 deserialization failures, app exceptions, no-result reports, and final cleanup of outstanding
 tasks when the collector exits.
