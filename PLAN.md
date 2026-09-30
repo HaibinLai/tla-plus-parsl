@@ -288,6 +288,8 @@ Recent focused models now connect the previously separate boundaries:
   double to verify the current non-terminating behavior.
 - `ParslMonitoringBatchAtomicity` now joins the sweep, checking that a duplicate STATUS row does
   not discard valid sibling events; the SQLite batch probe records the current rollback behavior.
+- `ParslMonitoringWorkflowInsertBookkeeping` now joins the sweep, requiring workflow bookkeeping
+  to be recorded only after a successful WORKFLOW row insert.
 - `ParslSlurmStatus` is now in the smoke sweep, checking that foreign scheduler job rows do not
   crash the status poll and that known resource state remains available.
 - `ParslMonitoringZMQRouterFailure` is now in the smoke sweep, connecting the monitoring receive

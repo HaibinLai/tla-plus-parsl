@@ -603,6 +603,12 @@ run_case monitoring-batch-atomicity-fixed pass \
 run_case monitoring-batch-atomicity-success pass \
     models/monitoring/ParslMonitoringBatchAtomicitySuccess.cfg \
     models/monitoring/ParslMonitoringBatchAtomicity.tla
+run_case monitoring-workflow-insert-current counterexample \
+    models/monitoring/ParslMonitoringWorkflowInsertBookkeepingCurrent.cfg \
+    models/monitoring/ParslMonitoringWorkflowInsertBookkeeping.tla
+run_case monitoring-workflow-insert-fixed pass \
+    models/monitoring/ParslMonitoringWorkflowInsertBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringWorkflowInsertBookkeeping.tla
 run_case monitoring-zmq-router-current counterexample \
     models/monitoring/ParslMonitoringZMQRouterFailureCurrent.cfg \
     models/monitoring/ParslMonitoringZMQRouterFailure.tla
