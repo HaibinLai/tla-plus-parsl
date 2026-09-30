@@ -1497,6 +1497,12 @@ without an extra wrapper state. Runtime probes cover ten Radical Pilot/Globus Co
 Radical Pilot configurations produce the expected callback/failure counterexamples; fixed and direct
 SDK propagation configurations pass TLC simulation.
 
+The executor transport lifecycle now includes `ParslResultsIncoming` for multipart receive, poll
+timeout, and close behavior, `ParslResultsIncomingCloseRace` for get-after-close, and
+`ParslTasksOutgoing`/`ParslTasksOutgoingCloseRace` for send and post-close put behavior. Runtime
+probes cover seven real ZMQ pipe paths. Current close-race configurations reproduce socket-use-after-
+close failures; normal, timeout, and fixed configurations pass TLC simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

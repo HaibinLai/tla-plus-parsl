@@ -471,6 +471,27 @@ run_case radical-pilot-unknown-callback-fixed pass \
 run_case globus-compute-result pass \
     models/executors/ParslGlobusComputeResult.cfg \
     models/executors/ParslGlobusComputeResult.tla
+run_case results-incoming pass \
+    models/executors/ParslResultsIncoming.cfg \
+    models/executors/ParslResultsIncoming.tla
+run_case results-incoming-timeout pass \
+    models/executors/ParslResultsIncomingTimeout.cfg \
+    models/executors/ParslResultsIncoming.tla
+run_case results-incoming-close-current counterexample \
+    models/executors/ParslResultsIncomingCloseRaceCurrent.cfg \
+    models/executors/ParslResultsIncomingCloseRace.tla
+run_case results-incoming-close-fixed pass \
+    models/executors/ParslResultsIncomingCloseRaceFixed.cfg \
+    models/executors/ParslResultsIncomingCloseRace.tla
+run_case tasks-outgoing pass \
+    models/executors/ParslTasksOutgoing.cfg \
+    models/executors/ParslTasksOutgoing.tla
+run_case tasks-outgoing-close-current counterexample \
+    models/executors/ParslTasksOutgoingCloseRaceCurrent.cfg \
+    models/executors/ParslTasksOutgoingCloseRace.tla
+run_case tasks-outgoing-close-fixed pass \
+    models/executors/ParslTasksOutgoingCloseRaceFixed.cfg \
+    models/executors/ParslTasksOutgoingCloseRace.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
