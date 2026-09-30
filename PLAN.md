@@ -960,6 +960,8 @@ configuration reproduces the short-line crash; fixed and valid-output configurat
 `ParslGoogleCloudStatus.tla` models direct GCE status-table lookup: the current unknown-status
 configuration produces a depth-2 `KeyError`-style crash, while tolerant and known-status paths
 pass.
+The three GCE status configurations are now part of the recurring smoke sweep, backed by
+`tests/test_googlecloud_status_runtime.py`.
 `ParslTorqueCancel.tla` makes that convention explicit: the current configuration violates a
 strict success-to-`CANCELLED` invariant, while the fixed and failed-cancel configurations pass.
 `tests/test_datafuture_runtime.py` runs a producer/consumer local dataflow with a real File output,

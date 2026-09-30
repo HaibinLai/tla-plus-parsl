@@ -528,6 +528,15 @@ run_case aws-submit-empty-current counterexample \
 run_case aws-submit-empty-fixed pass \
     models/providers/ParslAwsSubmitEmptyResponseFixed.cfg \
     models/providers/ParslAwsSubmitEmptyResponse.tla
+run_case googlecloud-status-current counterexample \
+    models/providers/ParslGoogleCloudStatus.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
+run_case googlecloud-status-fixed pass \
+    models/providers/ParslGoogleCloudStatusFixed.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
+run_case googlecloud-status-present pass \
+    models/providers/ParslGoogleCloudStatusPresent.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
 run_case condor-status-failure-current-valid counterexample \
     models/providers/ParslCondorStatusFailureCurrentValid.cfg \
     models/providers/ParslCondorStatusFailure.tla
