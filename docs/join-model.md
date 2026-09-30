@@ -30,6 +30,7 @@ The integrated ParslJoinFull model covers:
 - terminal outer status emission and persistence into the monitoring database;
 - bounded monitoring database-write failure and retry before terminal persistence;
 - inner failure/cancellation and outer terminal failure;
+- explicit outer cancellation with a terminal JoinError result and ignored later callbacks;
 - ordered successful list results.
 
 Focused models refine boundaries that are easy to lose in a set-based abstraction:

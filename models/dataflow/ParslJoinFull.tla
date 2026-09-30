@@ -18,14 +18,14 @@ INNER == {"I1", "I2"}
 POSITIONS == 1..3
 Inputs == <<"I1", "I2", "I1">>
 Modes == {"none", "single", "list", "empty", "invalid"}
-OuterStates == {"executing", "joining", "succeeded", "failed"}
+OuterStates == {"executing", "joining", "succeeded", "failed", "cancelled"}
 LogicalStates == {"pending", "retry_wait", "succeeded", "failed", "cancelled"}
 AttemptStates == {"absent", "serialized", "queued", "received", "decoded",
                   "running", "succeeded", "failed", "cancelled", "stale"}
 Values == {"I1:value", "I2:value", "unset"}
 ResultValue == Values \cup {"invalid-return", "join-error"} \cup Seq(Values)
 MonitorStates == {"none", "queued", "failed", "persisted"}
-MonitorStatuses == {"none", "succeeded", "failed"}
+MonitorStatuses == {"none", "succeeded", "failed", "cancelled"}
 
 VARIABLES outerState, mode, joinSet, observed, joinHandle,
           logicalState, currentAttempt, attemptState, innerValue,
@@ -239,6 +239,14 @@ Finalize ==
     /\ UNCHANGED <<mode, joinSet, observed, logicalState, currentAttempt,
                     attemptState, innerValue>>
 
+CancelOuter ==
+    /\ outerState \in {"executing", "joining"}
+    /\ outerState' = "cancelled"
+    /\ joinHandle' = FALSE
+    /\ outerResult' = [kind |-> "failure", value |-> "join-error"]
+    /\ UNCHANGED <<mode, joinSet, observed, logicalState, currentAttempt,
+                    attemptState, innerValue, failureCount>>
+
 JoinNext ==
     \/ ReturnSingle \/ ReturnList \/ ReturnEmpty \/ ReturnInvalid
     \/ \E i \in INNER : SerializeAttempt(i) \/ QueueAttempt(i)
@@ -249,10 +257,11 @@ JoinNext ==
     \/ \E i \in INNER : Observe(i)
     \/ \E i \in INNER, a \in 0..MAX_RETRIES : LateAttempt(i, a)
     \/ Finalize
+    \/ CancelOuter
     \/ UNCHANGED vars
 
 EmitOuterStatus ==
-    /\ outerState \in {"succeeded", "failed"}
+    /\ outerState \in {"succeeded", "failed", "cancelled"}
     /\ monitorState = "none"
     /\ monitorState' = "queued"
     /\ monitorStatus' = outerState
@@ -317,6 +326,10 @@ TypeOK ==
 
 JoinWaitSafety == outerState = "joining" => joinHandle
 TerminalHandleSafety == outerState \in {"succeeded", "failed"} => ~joinHandle
+OuterCancellationSafety ==
+    outerState = "cancelled" =>
+        /\ ~joinHandle
+        /\ outerResult["kind"] = "failure"
 RetryBound == \A i \in INNER : currentAttempt[i] <= MAX_RETRIES
 FailureAggregationSafety ==
     outerState = "failed" /\ mode # "invalid"
@@ -345,6 +358,7 @@ LateResultSafety ==
 DatabaseTerminalSafety ==
     /\ dbStatus = "succeeded" => outerState = "succeeded"
     /\ dbStatus = "failed" => outerState = "failed"
+    /\ dbStatus = "cancelled" => outerState = "cancelled"
 
 DatabaseRetryBound ==
     dbFailures <= MAX_DB_FAILURES
