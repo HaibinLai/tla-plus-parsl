@@ -14,8 +14,9 @@ DataFlowKernel -> HighThroughputExecutor -> Interchange -> Manager/worker pool
                -> ExecutionProvider
 ```
 
-Other executors can reuse the same abstract submission boundary, but are not modeled in full
-in the first version.
+Other executors and providers reuse the abstract submission boundary and now have focused
+refinements for concrete admission, callback/result, scaling, cancellation, status, and cleanup.
+These refinements are intentionally bounded and do not claim to represent every backend detail.
 
 ## Completed phases
 
@@ -1697,12 +1698,14 @@ The no-failure configuration adds `EventuallySettled` under `WF_vars(NextCore)` 
 
 ## Planned extensions
 
-After the MVP is stable, possible extensions are:
+The current MVP is stable for the bounded safety scenarios. Remaining extensions are:
 
-- richer DataManager/staging behavior, including stage-in/stage-out failure and checksums;
+- richer DataManager/staging behavior beyond the current atomic chunks, checksums, and failure
+  paths;
 - bounded message reordering and message correlation IDs;
-- richer `join_app` behavior beyond the bounded inner-Future set and invalid-return branch now modeled;
-- manager heartbeat timeout, version mismatch, drain, and richer executor bad-state transitions;
+- richer join_app behavior beyond the bounded inner-Future set, cancellation, duplicate positions,
+  failure aggregation, and invalid-return branches now modeled;
+- manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
 - monitoring as an abstract eventual event stream;
 - dynamic task creation while a workflow is running;
 - additional executor/provider-specific models.
