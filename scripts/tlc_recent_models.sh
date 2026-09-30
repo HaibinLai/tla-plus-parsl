@@ -600,6 +600,42 @@ run_case retry-handler-nonnumeric-current counterexample \
 run_case retry-handler-nonnumeric-fixed pass \
     models/dataflow/ParslRetryHandlerNonNumericCostFixed.cfg \
     models/dataflow/ParslRetryHandlerNonNumericCost.tla
+run_case join-cancellation-current counterexample \
+    models/dataflow/ParslJoinCancellationCurrent.cfg \
+    models/dataflow/ParslJoinCancellation.tla
+run_case join-cancellation-fixed pass \
+    models/dataflow/ParslJoinCancellationFixed.cfg \
+    models/dataflow/ParslJoinCancellation.tla
+run_case join-cancellation-success pass \
+    models/dataflow/ParslJoinCancellationSuccess.cfg \
+    models/dataflow/ParslJoinCancellation.tla
+run_case join-list-cancellation-current counterexample \
+    models/dataflow/ParslJoinListCancellationCurrent.cfg \
+    models/dataflow/ParslJoinListCancellation.tla
+run_case join-list-cancellation-fixed pass \
+    models/dataflow/ParslJoinListCancellationFixed.cfg \
+    models/dataflow/ParslJoinListCancellation.tla
+run_case join-list-cancellation-success pass \
+    models/dataflow/ParslJoinListCancellationSuccess.cfg \
+    models/dataflow/ParslJoinListCancellation.tla
+run_case join-memo-data pass \
+    models/dataflow/ParslJoinMemoData.cfg \
+    models/dataflow/ParslJoinMemoData.tla
+run_case join-retry-duplicates-current counterexample \
+    models/dataflow/ParslJoinRetryDuplicatesCurrent.cfg \
+    models/dataflow/ParslJoinRetryDuplicates.tla
+run_case join-retry-duplicates-fixed pass \
+    models/dataflow/ParslJoinRetryDuplicatesFixed.cfg \
+    models/dataflow/ParslJoinRetryDuplicates.tla
+run_case last-checkpoint-uuid-current counterexample \
+    models/dataflow/ParslLastCheckpointUUIDCurrent.cfg \
+    models/dataflow/ParslLastCheckpointUUID.tla
+run_case last-checkpoint-uuid-fixed pass \
+    models/dataflow/ParslLastCheckpointUUIDFixed.cfg \
+    models/dataflow/ParslLastCheckpointUUID.tla
+run_case result-race pass \
+    models/dataflow/ParslResultRace.cfg \
+    models/dataflow/ParslResultRace.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

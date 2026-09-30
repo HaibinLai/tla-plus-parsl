@@ -1508,6 +1508,14 @@ unbounded; and `ParslRetryHandlerNonNumericCost` covers invalid handler return t
 pending. Runtime probes reproduce all three current behaviors. Current configurations produce TLC
 counterexamples, while fixed and positive-cost configurations pass simulation.
 
+The remaining join/dataflow edge cases are now in the sweep. `ParslJoinCancellation` and
+`ParslJoinListCancellation` cover cancelled inner Futures; `ParslJoinMemoData` combines memo hits,
+DataFuture readiness, and ordered callbacks; `ParslJoinRetryDuplicates` preserves duplicate list
+positions across physical retries; `ParslLastCheckpointUUID` covers UUID-named run directories; and
+`ParslResultRace` models failure/retry versus late success callbacks. Runtime probes cover nine join,
+checkpoint, and memoization paths. Current cancellation/order/checkpoint configurations produce TLC
+counterexamples; fixed, success, memo, and result-race configurations pass simulation.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
