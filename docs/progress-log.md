@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (ZMQ serialization and HTEX runtime coverage).
+- Latest pushed commit: `8fc56e1` (`Promote ZMQ and HTEX runtime coverage`).
 - Foundational smoke inventory: 377 TLC cases and 312 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
