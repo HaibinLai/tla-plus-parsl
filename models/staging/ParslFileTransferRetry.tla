@@ -203,4 +203,9 @@ ContentSafety ==
 StaleSafety ==
     transfer = "stale" => capturedVersion # sourceVersion
 
+CorruptionRejectionSafety ==
+    \A c \in CHUNKS :
+        chunkState[c] = "corrupt"
+            => wireChecksum[c] # Checksum(wireToken[c])
+
 =============================================================================

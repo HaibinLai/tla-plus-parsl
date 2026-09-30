@@ -1613,6 +1613,9 @@ ParslFileTransferRetry now uses the same explicit receiver rejection step before
 keeps stale-version detection and checksum corruption as separate protocol events instead of
 collapsing transport failure into a local chunk state.
 
+Its current/fixed configurations now also check CorruptionRejectionSafety: every corrupt chunk
+must retain a checksum mismatch until repair clears the transfer state.
+
 The integrated join model now admits cancellation while an inner physical attempt is running.
 Previously the action contained a running-attempt branch that was unreachable because its guard
 only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
