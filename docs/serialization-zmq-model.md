@@ -27,6 +27,13 @@ sender/receiver route, multipart frame state, and attempt number. The abstract t
 5. decode and dispatch;
 6. resolve only the current physical attempt, or classify the frame as stale.
 
+The integrated model also flips a bounded result payload's integrity bit after framing. The
+current branch still decodes and can resolve that corrupted frame, violating `PayloadIntegritySafety`;
+the fixed branch rejects it before dispatch. TLC finds the current counterexample after 9,800
+generated / 2,213 distinct states. The fixed full configuration passes all eight invariants with
+1,397,137 generated / 302,560 distinct states at depth 59. The smoke fixed configuration passes
+with 3,981 generated / 1,192 distinct states at depth 31.
+
 `ParslMessageCorrelation` makes the correlation key explicit. Each result carries an
 `origin` logical-task ID and a physical `attempt` number, while the abstract transport also
 tracks the Future selected by its route. The model permits bounded queue reordering, a late

@@ -7,7 +7,8 @@ EXTENDS Naturals, Sequences, FiniteSets
  * Task and result messages use the concrete default serializer identifiers
  * C2 and 02.  Multipart frames must be serialized, framed, routed, received,
  * and decoded before dispatch.  A result for an old attempt is stale; the
- * current branch incorrectly resolves the Future with it.
+ * current branch incorrectly resolves the Future with it.  The wire payload
+ * can also be corrupted after framing; fixed decoding rejects that frame.
  ***************************************************************************)
 
 CONSTANTS MAX_RETRIES, USE_FIXED
@@ -27,16 +28,17 @@ Message(k, kind) ==
      receiver |-> IF kind = "task" THEN "manager" ELSE "dfk"]
 Messages == {Message(k, kind) : k \in Attempts, kind \in Kinds}
 
-VARIABLES frameState, routeOK, txQueue, rxQueue, seen, discarded, rejected,
+VARIABLES frameState, routeOK, payloadOK, txQueue, rxQueue, seen, discarded, rejected,
           taskState, workerDone, currentAttempt, futureState
 
-vars == <<frameState, routeOK, txQueue, rxQueue, seen, discarded, rejected,
+vars == <<frameState, routeOK, payloadOK, txQueue, rxQueue, seen, discarded, rejected,
            taskState, workerDone, currentAttempt, futureState>>
 
 Init ==
     /\ MAX_RETRIES >= 0
     /\ frameState = [m \in Messages |-> "none"]
     /\ routeOK = [m \in Messages |-> TRUE]
+    /\ payloadOK = [m \in Messages |-> TRUE]
     /\ txQueue = <<>>
     /\ rxQueue = <<>>
     /\ seen = {}
@@ -131,7 +133,8 @@ Receive ==
 Decode(m) ==
     /\ m \in seen
     /\ frameState[m] = "received"
-    /\ frameState' = [frameState EXCEPT ![m] = "decoded"]
+    /\ frameState' = [frameState EXCEPT ![m] =
+          IF payloadOK[m] \/ ~USE_FIXED THEN "decoded" ELSE "rejected"]
     /\ UNCHANGED <<routeOK, txQueue, rxQueue, seen, discarded, rejected,
                     taskState, workerDone, currentAttempt, futureState>>
 
@@ -184,7 +187,17 @@ ResolveResult(m) ==
     /\ UNCHANGED <<routeOK, txQueue, rxQueue, seen, discarded, rejected,
                     taskState, workerDone, currentAttempt>>
 
-Next ==
+CorruptPayload(m) ==
+    /\ m \in Messages
+    /\ m.kind = "result"
+    /\ frameState[m] = "framed"
+    /\ payloadOK[m]
+    /\ payloadOK' = [payloadOK EXCEPT ![m] = FALSE]
+    /\ UNCHANGED <<frameState, routeOK, txQueue, rxQueue, seen, discarded,
+                    rejected, taskState, workerDone, currentAttempt,
+                    futureState>>
+
+CoreNext ==
     \/ \E m \in Messages : Encode(m) \/ Frame(m)
     \/ \E m \in Messages : Misroute(m) \/ RestoreRoute(m)
     \/ \E m \in Messages : Send(m)
@@ -197,11 +210,16 @@ Next ==
     \/ LoseCurrent
     \/ UNCHANGED vars
 
+Next ==
+    \/ (CoreNext /\ UNCHANGED payloadOK)
+    \/ \E m \in Messages : CorruptPayload(m)
+
 Spec == Init /\ [][Next]_vars
 
 TypeOK ==
     /\ frameState \in [Messages -> FrameStates]
     /\ routeOK \in [Messages -> BOOLEAN]
+    /\ payloadOK \in [Messages -> BOOLEAN]
     /\ txQueue \in Seq(Messages)
     /\ rxQueue \in Seq(Messages)
     /\ Len(txQueue) <= 2
@@ -219,6 +237,10 @@ FrameSafety ==
         => /\ m \in seen
            /\ m.header \in {"C2", "02"}
            /\ routeOK[m]
+
+PayloadIntegritySafety ==
+    \A m \in Messages : frameState[m] \in {"decoded", "dispatched", "resolved", "stale"}
+        => payloadOK[m]
 
 DispatchSafety ==
     \A m \in Messages : frameState[m] = "dispatched"
