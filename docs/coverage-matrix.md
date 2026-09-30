@@ -576,3 +576,7 @@ configuration violates `NoDuplicateDependency`; the fixed model passes with
 `ParslDependencyIdentityDedup` refines BUG-259 to the cross-position case: one Future appears in
 both a normal kwarg and `inputs`. The current model registers it three times, while the fixed
 model records the Future identity once before callback registration.
+
+Monitoring lifecycle coverage also includes `ParslMonitoringHubCloseBeforeStart` (BUG-260), which
+models cleanup before `MonitoringHub.start()` initializes its active flag. The current branch
+violates `NoCloseCrash`; the fixed branch makes an unstarted close a no-op.

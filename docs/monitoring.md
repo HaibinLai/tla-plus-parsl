@@ -162,6 +162,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubClos
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_runtime.py -v
 ```
 
+`ParslMonitoringHubCloseBeforeStart.tla` covers cleanup before the monitoring hub has been
+started. The current constructor leaves `monitoring_hub_active` undefined, so `close()` raises
+before it can be idempotent; the fixed branch treats an unstarted hub as already closed. The
+runtime probe invokes the real `MonitoringHub.close()` on an unstarted instance.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubCloseBeforeStartCurrent.cfg models/monitoring/ParslMonitoringHubCloseBeforeStart.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringHubCloseBeforeStartFixed.cfg models/monitoring/ParslMonitoringHubCloseBeforeStart.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_hub_close_before_start_runtime.py -v
+```
+
 `ParslMonitoringCloseIdempotence.tla` models repeated abnormal
 `DatabaseManager.close()` calls. The current implementation leaves
 `workflow_end` false after finalization, so each close emits another workflow

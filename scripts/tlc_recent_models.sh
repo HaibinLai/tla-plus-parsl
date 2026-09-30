@@ -364,6 +364,12 @@ run_case dependency-identity-dedup-current counterexample \
 run_case dependency-identity-dedup-fixed pass \
     models/dataflow/ParslDependencyIdentityDedupFixed.cfg \
     models/dataflow/ParslDependencyIdentityDedup.tla
+run_case monitoring-hub-close-before-start-current counterexample \
+    models/monitoring/ParslMonitoringHubCloseBeforeStartCurrent.cfg \
+    models/monitoring/ParslMonitoringHubCloseBeforeStart.tla
+run_case monitoring-hub-close-before-start-fixed pass \
+    models/monitoring/ParslMonitoringHubCloseBeforeStartFixed.cfg \
+    models/monitoring/ParslMonitoringHubCloseBeforeStart.tla
 
 run_case input-dependency-duplicate-current counterexample \
     models/dataflow/ParslInputDependencyDuplicateCurrent.cfg \
