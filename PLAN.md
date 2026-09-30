@@ -1483,6 +1483,12 @@ monitoring frame cannot abort a following valid task result when monitoring is d
 probes cover both paths; current configurations produce TLC counterexamples and fixed configurations
 pass simulation.
 
+Scheduler output parsing is now covered by `ParslJobStatusOutputReadError`, which aligns stdout and
+summary read-error handling, and `ParslJobStatusOutputSummary`, which distinguishes missing files,
+exact-threshold output, and head/tail truncation above the threshold. Runtime probes cover five
+filesystem/status paths. The current summary-read error branch produces a TLC counterexample; fixed
+and all summary-shape configurations pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

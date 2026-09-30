@@ -435,6 +435,21 @@ run_case htex-monitoring-batch-current counterexample \
 run_case htex-monitoring-batch-fixed pass \
     models/executors/ParslHtexMonitoringBatchContinuationFixed.cfg \
     models/executors/ParslHtexMonitoringBatchContinuation.tla
+run_case job-status-read-error-current counterexample \
+    models/executors/ParslJobStatusOutputReadErrorCurrent.cfg \
+    models/executors/ParslJobStatusOutputReadError.tla
+run_case job-status-read-error-fixed pass \
+    models/executors/ParslJobStatusOutputReadErrorFixed.cfg \
+    models/executors/ParslJobStatusOutputReadError.tla
+run_case job-status-summary pass \
+    models/executors/ParslJobStatusOutputSummary.cfg \
+    models/executors/ParslJobStatusOutputSummary.tla
+run_case job-status-summary-large pass \
+    models/executors/ParslJobStatusOutputSummaryLarge.cfg \
+    models/executors/ParslJobStatusOutputSummary.tla
+run_case job-status-summary-missing pass \
+    models/executors/ParslJobStatusOutputSummaryMissing.cfg \
+    models/executors/ParslJobStatusOutputSummary.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
