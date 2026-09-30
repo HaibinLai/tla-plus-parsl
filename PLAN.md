@@ -923,6 +923,10 @@ boundary: incomplete or corrupt payloads cannot enter transport, and a closed se
 publish a ready task. The runtime bridge packs a real callable with `pack_apply_message`, sends
 one task, then reproduces the current post-close send failure.
 
+The bounded file-content model `ParslFileBytes` is now also part of the recurring smoke sweep. It
+checks per-chunk checksums, temporary-buffer isolation, source-version staleness, and atomic
+stage-in/stage-out publication; the runtime Zip probe verifies the same bytes and checksums.
+
 ### 3. Checked properties
 
 The safety configurations check:

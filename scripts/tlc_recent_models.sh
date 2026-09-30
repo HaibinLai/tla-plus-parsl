@@ -396,3 +396,6 @@ run_case task-transport-close-current counterexample \
 run_case task-transport-close-fixed pass \
     models/serialization/ParslTaskTransportCloseRaceFixed.cfg \
     models/serialization/ParslTaskTransportCloseRace.tla
+run_case file-bytes-transfer pass \
+    models/staging/ParslFileBytes.cfg \
+    models/staging/ParslFileBytes.tla
