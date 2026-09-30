@@ -59,8 +59,9 @@ the all-done check and either constructs the ordered result or aggregates all fa
 
 `ParslJoinTimedMonitoring.tla` provides the compact clock boundary for this family: heartbeat
 expiry and task timeout can lose the inner Future while its physical attempt remains capable of a
-late completion. The current branch accepts that completion and violates terminal-cause safety;
-the fixed branch records it as stale before the outer join status is persisted.
+late completion. Two staged chunks must be received and published before the inner Future can
+start. The current branch accepts the late completion and violates terminal-cause safety; the
+fixed branch records it as stale before the outer join status is persisted.
 
 ## Safety properties
 

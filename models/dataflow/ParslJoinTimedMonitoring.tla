@@ -17,11 +17,15 @@ Causes == {"none", "timeout", "manager_lost"}
 LateStates == {"none", "accepted", "stale"}
 MonitorStates == {"none", "queued", "persisted"}
 MonitorStatuses == {"none", "succeeded", "failed"}
+Chunks == 1..2
+ChunkStates == {"missing", "received"}
 
 VARIABLES now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
-          cause, lateResult, monitorState, monitorStatus, dbStatus
+          cause, lateResult, chunkState, dataReady, monitorState,
+          monitorStatus, dbStatus
 vars == <<now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
-           cause, lateResult, monitorState, monitorStatus, dbStatus>>
+           cause, lateResult, chunkState, dataReady, monitorState,
+           monitorStatus, dbStatus>>
 
 Init ==
     /\ MAX_TIME >= 3
@@ -37,6 +41,8 @@ Init ==
     /\ inFlight = FALSE
     /\ cause = "none"
     /\ lateResult = "none"
+    /\ chunkState = [c \in Chunks |-> "missing"]
+    /\ dataReady = FALSE
     /\ monitorState = "none"
     /\ monitorStatus = "none"
     /\ dbStatus = "none"
@@ -59,9 +65,26 @@ ReturnJoin ==
     /\ UNCHANGED <<now, manager, lastHeartbeat, inner, deadline, inFlight,
                     cause, lateResult, monitorState, monitorStatus, dbStatus>>
 
+StageChunk(c) ==
+    /\ c \in Chunks
+    /\ chunkState[c] = "missing"
+    /\ chunkState' = [chunkState EXCEPT ![c] = "received"]
+    /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
+                    inFlight, cause, lateResult, dataReady, monitorState,
+                    monitorStatus, dbStatus>>
+
+PublishData ==
+    /\ ~dataReady
+    /\ \A c \in Chunks: chunkState[c] = "received"
+    /\ dataReady' = TRUE
+    /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
+                    inFlight, cause, lateResult, chunkState, monitorState,
+                    monitorStatus, dbStatus>>
+
 StartInner ==
     /\ outer = "joining"
     /\ inner = "pending"
+    /\ dataReady
     /\ manager = "up"
     /\ inner' = "running"
     /\ deadline' = now + TASK_TIMEOUT
@@ -131,11 +154,16 @@ PersistStatus ==
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
                     inFlight, cause, lateResult, monitorStatus>>
 
-Next ==
+CoreNext ==
     \/ Tick \/ Heartbeat \/ ReturnJoin \/ StartInner \/ CompleteInner
     \/ TimeoutInner \/ ExpireManager \/ LateComplete \/ FinalizeJoin
     \/ EmitStatus \/ PersistStatus
     \/ UNCHANGED vars
+
+Next ==
+    \/ (CoreNext /\ UNCHANGED <<chunkState, dataReady>>)
+    \/ \E c \in Chunks: StageChunk(c)
+    \/ PublishData
 
 Spec == Init /\ [][Next]_vars
 
@@ -149,11 +177,14 @@ TypeOK ==
     /\ inFlight \in BOOLEAN
     /\ cause \in Causes
     /\ lateResult \in LateStates
+    /\ chunkState \in [Chunks -> ChunkStates]
+    /\ dataReady \in BOOLEAN
     /\ monitorState \in MonitorStates
     /\ monitorStatus \in MonitorStatuses
     /\ dbStatus \in MonitorStatuses
 
 JoinSafety == outer = "succeeded" => inner = "succeeded"
+DataReadinessSafety == inner \in {"running", "succeeded"} => dataReady
 TerminalCauseSafety == cause # "none" => inner # "succeeded"
 StaleResultSafety == lateResult = "accepted" => ~USE_FIXED
 DatabaseSafety ==

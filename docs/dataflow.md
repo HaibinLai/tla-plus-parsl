@@ -45,13 +45,14 @@ the full configuration constructs the ordered `<<I1, I2, I1>>` result and TLC ch
 generated / 3,559 distinct states at depth 20.
 
 `ParslJoinTimedMonitoring.tla` is the small clock-focused companion. It combines one inner
-Future, an outer join, manager heartbeat expiry, task timeout, late completion, and terminal
-monitoring persistence. The current configuration reaches the expected `TerminalCauseSafety`
-violation in 1,556 generated / 553 distinct states; the fixed configuration classifies the late
-completion as stale and passes all five invariants with 3,411 generated / 949 distinct states at
-depth 14. The smoke current/fixed configurations use a three-tick horizon for fast regression;
-the current reaches its expected violation in 774 generated / 274 distinct states, while fixed
-passes with 1,502 generated / 436 distinct states at depth 13.
+Future, an outer join, two-chunk data staging, DataFuture readiness, manager heartbeat expiry, task
+timeout, late completion, and terminal monitoring persistence. The current configuration reaches
+the expected `TerminalCauseSafety` violation in 2,290 generated / 721 distinct states; the fixed
+configuration classifies the late completion as stale and passes all six invariants with 4,145
+generated / 1,117 distinct states at depth 17. The smoke current/fixed configurations use a
+three-tick horizon for fast regression; the current reaches its expected violation in 1,220
+generated / 378 distinct states, while fixed passes with 1,948 generated / 540 distinct states at
+depth 16.
 The concrete bridge in `tests/test_join_callable_transport_runtime.py` runs two real serialized
 inner Python apps and verifies the duplicate Future position in the outer result.
 
