@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `ec91f80` (`Promote cyclic serialization coverage`).
-- Foundational smoke inventory: 383 TLC cases and 358 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, scaling, memoization, serialization, and result-file coverage).
+- Foundational smoke inventory: 383 TLC cases and 361 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,10 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted TaskVine and Work Queue result-file/Future propagation probes plus
+  `File.filepath` resolution. Fourteen targeted tests passed, and the affected runtime suffix
+  (219–361) passed after insertion; the prior prefix (1–218) was already green.
 
 - Current stage: promoted serializer-registry precedence and cyclic Python-object round-trip
   coverage. The two targeted runtime probes passed, the new cyclic-object TLC case passed, and

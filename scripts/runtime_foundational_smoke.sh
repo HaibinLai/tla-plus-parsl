@@ -236,6 +236,9 @@ tests=(
     tests/test_memo_ignore_key_runtime.py
     tests/test_serializer_registry_runtime.py
     tests/test_python_cyclic_object_runtime.py
+    tests/test_taskvine_results_runtime.py
+    tests/test_workqueue_results_runtime.py
+    tests/test_file_path_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py
