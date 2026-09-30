@@ -405,3 +405,6 @@ run_case task-transport-close-fixed pass \
 run_case file-bytes-transfer pass \
     models/staging/ParslFileBytes.cfg \
     models/staging/ParslFileBytes.tla
+run_case monitoring-db-core pass \
+    models/monitoring/ParslMonitoringDB.cfg \
+    models/monitoring/ParslMonitoringDB.tla

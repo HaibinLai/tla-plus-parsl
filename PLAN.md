@@ -931,6 +931,11 @@ The combined `ParslClock` model is now in the smoke sweep as well. Its two confi
 heartbeat delivery/expiry, task deadlines, retry after timeout or manager loss, recovery, and
 stale late results, including the zero-retry terminal timeout case.
 
+The core `ParslMonitoringDB` model is now in the smoke sweep. It checks versioned asynchronous
+radio events, bounded queueing and reordering, database write failure/retry, stale-event
+suppression, and terminal-record stability; the SQLite runtime probe covers duplicate STATUS keys
+and transient operational-error retry.
+
 ### 3. Checked properties
 
 The safety configurations check:
