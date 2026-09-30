@@ -1145,6 +1145,10 @@ from private certificate directories and that missing keys or unsafe modes are r
 drain frames decode as distinct control records, while malformed pickle frames are discarded in
 the fixed branch instead of crashing the receive loop. The runtime bridge is
 `tests/test_worker_pool_control_frame_runtime.py`.
+`ParslHtexResultDecodeFailure.tla` is now in the executor sweep: corrupt result payloads must not
+orphan a pending Future after task-map removal. The fixed branch delivers a terminal decode error
+and keeps the result worker alive; `tests/test_htex_result_decode_failure_runtime.py` reproduces
+the current orphaning path.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.
