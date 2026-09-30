@@ -1841,6 +1841,8 @@ messages, close idempotence, shutdown race, and shutdown drain.
 Cases 481--500 matched at 100 steps: deferred monitoring multiplicity and dispatch envelopes,
 monitoring hub close, worker contact timeout, timed heartbeat and wall-clock rollback, unknown
 HTEX manager/task results, malformed manager messages, and provider polling/status batches.
+Cases 501--520 matched at 100 steps: provider status shape and bad-state handling, provider-kind
+dispatch, AWS status, Azure status/submit/cancel lifecycle, and Google Cloud zone selection.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
