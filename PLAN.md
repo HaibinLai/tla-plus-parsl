@@ -1547,6 +1547,13 @@ contains a temporal `EventuallySettled` property and currently triggers a TLC 2.
 NullPointerException in this environment, so it remains documented but is not marked as a passing
 sweep case; this is a verifier/runtime limitation rather than a claimed model result.
 
+The remaining simple aliases now include `ParslMinBlocks` and the original
+`ParslJoinCancellation.cfg` entry. `ParslMinBlocks` passes the shared abstract model; the original
+join-cancellation configuration reproduces the same callback-crash counterexample as its focused
+current variant. `ParslTime.cfg`, `ParslLocalExecutor.cfg`, and `ParslMultiManagerTimeout.cfg` still
+use older constant/spec layouts and are intentionally not classified as passing until they are
+migrated to the current abstract module.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime

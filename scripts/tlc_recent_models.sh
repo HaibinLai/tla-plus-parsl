@@ -744,6 +744,12 @@ run_case monitoring pass \
 run_case serialization-failure pass \
     models/core/ParslSerializationFailure.cfg \
     models/core/ParslAbstract.tla
+run_case min-blocks pass \
+    models/core/ParslMinBlocks.cfg \
+    models/core/ParslAbstract.tla
+run_case join-cancellation-alias-current counterexample \
+    models/dataflow/ParslJoinCancellation.cfg \
+    models/dataflow/ParslJoinCancellation.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
