@@ -141,7 +141,7 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 375 TLC cases and 282 Python runtime test files.
+The current repository smoke runner enumerates 376 TLC cases and 282 Python runtime test files.
 On 2026-09-30, all 313 TLC cases passed in segmented runs with `TLC_SIMULATE=10`, and the
 complete runtime suite passed with 196 files; the subsequently added cases were also run
 individually as they were introduced, including the PBS Pro status-batch isolation and
@@ -202,6 +202,11 @@ Current branch turns a duplicate write into a lost terminal status.
 `ParslJoinHeartbeatRetry.tla` connects logical time and heartbeat expiry to join retries. It
 separates manager loss from task timeout, bounds reprovisioned attempts, and rejects late results
 from the expired attempt in the Fixed configuration.
+
+`ParslAbstractFullSmoke.cfg` exercises the integrated `ParslAbstract` with four tasks, dependency
+and join edges, memoization, object-graph serialization, file outputs, two executors, three workers,
+provider capacity, heartbeat/task deadlines, and monitoring enabled. It keeps failure injection
+disabled for this positive consistency run; dedicated Current/Fixed models cover failure branches.
 
 The monitoring cases cover the next database refinement: all-or-nothing batch publication,
 persistent retry of transient writes, and explicit terminal handling for permanent insert/update

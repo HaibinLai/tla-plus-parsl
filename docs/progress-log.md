@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `b6d2aca` (`Add join heartbeat retry model`).
-- Foundational smoke inventory: 375 TLC cases and 282 Python runtime probes.
+- Latest pushed commit: pending (integrated full abstract smoke configuration).
+- Foundational smoke inventory: 376 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -150,6 +150,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslJoinHeartbeatRetry`, connecting logical clock and heartbeat expiry to
   task timeout, manager loss, reprovisioning, and stale-result rejection. The Current branch
   accepts a late expired-attempt completion; the Fixed branch passed standalone TLC.
+- Current stage: added `ParslAbstractFullSmoke.cfg`, a positive integrated run with four tasks,
+  dependency/join edges, memoization, object graphs, file outputs, two executors, three workers,
+  provider capacity, heartbeat/task deadlines, and monitoring enabled. It passed standalone TLC.
 
 ### Verification convention
 

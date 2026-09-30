@@ -86,6 +86,9 @@ run_case join-heartbeat-retry \
 run_case integrated-abstract \
     models/core/ParslAbstractSmoke.cfg \
     models/core/ParslAbstract.tla
+run_case integrated-abstract-full \
+    models/core/ParslAbstractFullSmoke.cfg \
+    models/core/ParslAbstract.tla
 run_case integrated-abstract-join \
     models/core/ParslAbstractJoinSmoke.cfg \
     models/core/ParslAbstract.tla
