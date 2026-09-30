@@ -540,6 +540,15 @@ run_case workqueue-serialization-failure-current counterexample \
 run_case workqueue-serialization-failure-fixed pass \
     models/executors/ParslWorkQueueSerializationFixed.cfg \
     models/executors/ParslWorkQueueSubmit.tla
+run_case monitoring-db-reorder pass \
+    models/monitoring/ParslMonitoringDBReorder.cfg \
+    models/monitoring/ParslMonitoringDB.tla
+run_case datafuture-cancellation-current counterexample \
+    models/dataflow/ParslDataFutureCancellation.cfg \
+    models/dataflow/ParslDataFutureCancellation.tla
+run_case datafuture-cancellation-fixed pass \
+    models/dataflow/ParslDataFutureCancellationFixed.cfg \
+    models/dataflow/ParslDataFutureCancellation.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

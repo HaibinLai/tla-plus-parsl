@@ -1489,6 +1489,12 @@ fixed configurations exercise the same rollback contract with their concrete rep
 These cases pass or reproduce the expected counterexample under TLC; the existing submit runtime
 probes cover the corresponding Python paths.
 
+The monitoring database reorder configuration is now explicitly included in the sweep using the
+versioned `ParslMonitoringDB` abstraction. I also added the separate `ParslDataFutureCancellation`
+model: a cancelled parent currently publishes its DataFuture as available, while the fixed branch
+propagates terminal failure. The existing DataFuture cancellation runtime probe covers this path;
+current TLC produces the expected counterexample and the fixed configuration passes.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
