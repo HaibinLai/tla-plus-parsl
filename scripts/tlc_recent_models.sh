@@ -363,6 +363,13 @@ run_case join-body-retry pass \
     models/dataflow/ParslJoinBodyRetry.cfg \
     models/dataflow/ParslJoinBodyRetry.tla
 
+run_case local-cancel-failure-current counterexample \
+    models/providers/ParslLocalCancelFailureCurrent.cfg \
+    models/providers/ParslLocalCancelFailure.tla
+run_case local-cancel-failure-fixed pass \
+    models/providers/ParslLocalCancelFailureFixed.cfg \
+    models/providers/ParslLocalCancelFailure.tla
+
 run_case stageout-return-none pass \
     models/staging/ParslDataManagerStageOutReturnNone.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla

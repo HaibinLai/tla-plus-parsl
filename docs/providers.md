@@ -364,6 +364,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCance
 This cancellation-idempotence boundary is recorded as BUG-116: a stale local job ID raises
 `KeyError` instead of being handled as a cancellation miss.
 
+`ParslLocalCancelFailure.tla` covers the adjacent command-result boundary: a non-zero local kill
+must not be returned as successful cancellation while the resource is still running. The runtime
+probe is `tests/test_local_cancel_failure_runtime.py`.
+
 ParslLocalUnknownJobStatus.tla models the analogous stale-id boundary in LocalProvider.status().
 The refined lifecycle explicitly removes a resource before a polling pass requests its old id;
 the current result comprehension then indexes the missing entry and raises KeyError. The fixed
