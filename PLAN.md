@@ -814,6 +814,9 @@ The remaining provider utility contracts are now also covered: duplicate provide
 duplicate poller registration, wall-clock rollback in provider polling, and sub-minute walltime
 conversion. Each has a current counterexample and a fixed/valid TLC configuration; runtime probes
 exercise the corresponding Python helpers.
+The provider-free ThreadPoolExecutor abstraction is now covered: blocking and non-blocking
+shutdown, pending versus running Future cancellation, resource-spec validation, and max-thread
+count validation. Runtime probes exercise the real executor and Future behavior.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

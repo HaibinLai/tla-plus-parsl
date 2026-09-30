@@ -1491,6 +1491,33 @@ run_case walltime-parsing-fixed pass \
 run_case walltime-parsing-valid pass \
     models/providers/ParslWalltimeParsingValid.cfg \
     models/providers/ParslWalltimeParsing.tla
+run_case thread-executor pass \
+    models/executors/ParslThreadExecutor.cfg \
+    models/executors/ParslThreadExecutor.tla
+run_case thread-executor-invalid-resource pass \
+    models/executors/ParslThreadExecutorInvalidResource.cfg \
+    models/executors/ParslThreadExecutor.tla
+run_case thread-executor-nonblocking pass \
+    models/executors/ParslThreadExecutorNonBlocking.cfg \
+    models/executors/ParslThreadExecutor.tla
+run_case thread-executor-future-lifecycle pass \
+    models/executors/ParslThreadExecutorFutureLifecycle.cfg \
+    models/executors/ParslThreadExecutorFutureLifecycle.tla
+run_case thread-executor-resource-current counterexample \
+    models/executors/ParslThreadExecutorResourceSpecCurrent.cfg \
+    models/executors/ParslThreadExecutorResourceSpec.tla
+run_case thread-executor-resource-fixed pass \
+    models/executors/ParslThreadExecutorResourceSpecFixed.cfg \
+    models/executors/ParslThreadExecutorResourceSpec.tla
+run_case thread-executor-count-current counterexample \
+    models/executors/ParslThreadExecutorThreadCountCurrent.cfg \
+    models/executors/ParslThreadExecutorThreadCount.tla
+run_case thread-executor-count-fixed pass \
+    models/executors/ParslThreadExecutorThreadCountFixed.cfg \
+    models/executors/ParslThreadExecutorThreadCount.tla
+run_case thread-executor-count-valid pass \
+    models/executors/ParslThreadExecutorThreadCountValid.cfg \
+    models/executors/ParslThreadExecutorThreadCount.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
