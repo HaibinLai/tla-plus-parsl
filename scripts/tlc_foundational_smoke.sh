@@ -551,6 +551,9 @@ run_case mpi-no-resource-result \
 run_case mpi-malformed-result-cleanup \
     models/executors/ParslMPIMalformedResultCleanupFixed.cfg \
     models/executors/ParslMPIMalformedResultCleanup.tla
+run_case join-return-equality-truthy \
+    models/dataflow/ParslJoinReturnEqualityTruthyFixed.cfg \
+    models/dataflow/ParslJoinReturnEqualityTruthy.tla
 run_case radical-failure-payload \
     models/executors/ParslRadicalPilotFailurePayloadFixed.cfg \
     models/executors/ParslRadicalPilotFailurePayload.tla

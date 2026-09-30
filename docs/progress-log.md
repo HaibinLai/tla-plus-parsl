@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `7bdc236` (`Record Slurm cancellation ledger finding`).
-- Foundational smoke inventory: 360 TLC cases and 231 Python runtime probes.
+- Foundational smoke inventory: 361 TLC cases and 232 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -59,6 +59,9 @@ are recorded here in English and committed with the model changes.
   `ParslSlurmCancel` and `ParslSlurmCancelBatch` models plus the runtime probe document that a
   successful remote `scancel` can still raise on a stale local ID after partially updating a
   batch; this is now tracked as BUG-277.
+- Current stage: refined BUG-084 for truthy user equality. An invalid join return whose
+  `__eq__([])` returns `True` enters the empty-list branch and leaves the outer Future pending;
+  the new Current model has a three-state counterexample and the Fixed model passes.
 
 ### Verification convention
 

@@ -393,6 +393,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnEqualityF
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_return_equality_runtime.py -v
 ```
 
+`ParslJoinReturnEqualityTruthy.tla` refines the same boundary with an invalid object whose
+`__eq__([])` returns `True`. The current path enters the empty-list branch and later leaves the
+outer Future pending when callback processing discovers that `joins` is not a Future or list;
+the fixed branch validates the type before invoking user equality.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnEqualityTruthyCurrent.cfg models/dataflow/ParslJoinReturnEqualityTruthy.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinReturnEqualityTruthyFixed.cfg models/dataflow/ParslJoinReturnEqualityTruthy.tla
+```
+
 `ParslJoinErrorRootCause.tla` captures `PropagatedException` metadata used by `JoinError`: the
 first dependent exception is followed recursively to a non-propagated root, and sibling failures
 are marked with `(+ others)` in the representative path. The runtime probe checks the actual

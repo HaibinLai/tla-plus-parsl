@@ -13,9 +13,19 @@ class ExplosiveEquality:
         raise RuntimeError("user equality should not run during join validation")
 
 
+class TruthyEquality:
+    def __eq__(self, other):
+        return True
+
+
 @join_app
 def join_explosive_return():
     return ExplosiveEquality()
+
+
+@join_app
+def join_truthy_equality_return():
+    return TruthyEquality()
 
 
 class JoinReturnEqualityRuntimeTest(unittest.TestCase):
@@ -23,6 +33,14 @@ class JoinReturnEqualityRuntimeTest(unittest.TestCase):
         config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
         with parsl.load(config):
             result = join_explosive_return()
+            with self.assertRaises(TimeoutError):
+                result.result(timeout=1)
+            self.assertFalse(result.done())
+
+    def test_truthy_equality_spoof_leaves_outer_future_pending_currently(self):
+        config = Config(executors=[ThreadPoolExecutor(max_threads=2)])
+        with parsl.load(config):
+            result = join_truthy_equality_return()
             with self.assertRaises(TimeoutError):
                 result.result(timeout=1)
             self.assertFalse(result.done())

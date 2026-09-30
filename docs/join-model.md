@@ -41,6 +41,7 @@ Focused models refine boundaries that are easy to lose in a set-based abstractio
   duplicate callbacks after outer completion;
 - ParslJoinRunningCancellation models cancellation after an inner attempt has entered running;
 - ParslJoinReturnEquality covers user-defined equality raising during return-shape validation;
+- ParslJoinReturnEqualityTruthy covers an invalid object whose equality with `[]` returns true;
 - ParslJoinRetryDuplicates combines duplicate input positions with inner physical retries.
 
 ParslNestedJoinFailure adds explicit nested error payloads. Failed leaf IDs remain in the nested
