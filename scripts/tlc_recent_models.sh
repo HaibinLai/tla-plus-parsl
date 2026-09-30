@@ -912,6 +912,15 @@ run_case join-failure-aggregation pass \
 run_case join-error-root-cause pass \
     models/dataflow/ParslJoinErrorRootCause.cfg \
     models/dataflow/ParslJoinErrorRootCause.tla
+run_case task-status-future-ordering-current counterexample \
+    models/dataflow/ParslTaskStatusFutureOrderingCurrent.cfg \
+    models/dataflow/ParslTaskStatusFutureOrdering.tla
+run_case task-status-future-ordering-fixed pass \
+    models/dataflow/ParslTaskStatusFutureOrderingFixed.cfg \
+    models/dataflow/ParslTaskStatusFutureOrdering.tla
+run_case task-status-future-ordering-valid pass \
+    models/dataflow/ParslTaskStatusFutureOrderingValid.cfg \
+    models/dataflow/ParslTaskStatusFutureOrdering.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

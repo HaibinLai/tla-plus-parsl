@@ -1035,6 +1035,10 @@ Together they check that all failed inner Futures are collected in join-list ord
 nested `JoinError` preserves the first leaf exception and representative path annotation. The
 runtime bridges are `tests/test_join_failure_aggregation_runtime.py` and
 `tests/test_join_error_root_cause_runtime.py`.
+`ParslTaskStatusFutureOrdering.tla` is also in the sweep: it checks the concrete ordering in
+`_complete_task_result`, where the logical task reaches `exec_done` before the public AppFuture is
+resolved. `tests/test_task_status_future_ordering_runtime.py` records the status observed by the
+Future completion callback.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
