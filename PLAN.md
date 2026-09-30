@@ -246,6 +246,8 @@ Recent focused models now connect the previously separate boundaries:
   `OperationalError` retries in `_update` and a bounded fixed branch with an explicit abort.
 - `ParslSlurmStatus` is now in the smoke sweep, checking that foreign scheduler job rows do not
   crash the status poll and that known resource state remains available.
+- `ParslMonitoringZMQRouterFailure` is now in the smoke sweep, connecting the monitoring receive
+  channel to a bounded failure-stop policy instead of retrying a permanently broken socket.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
   late completion, and monitoring persistence.
 - `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,

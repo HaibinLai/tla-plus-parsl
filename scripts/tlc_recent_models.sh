@@ -339,6 +339,15 @@ run_case monitoring-update-retry-current counterexample \
 run_case monitoring-update-retry-fixed pass \
     models/monitoring/ParslMonitoringUpdatePersistentRetryFixed.cfg \
     models/monitoring/ParslMonitoringUpdatePersistentRetry.tla
+run_case monitoring-zmq-router-current counterexample \
+    models/monitoring/ParslMonitoringZMQRouterFailureCurrent.cfg \
+    models/monitoring/ParslMonitoringZMQRouterFailure.tla
+run_case monitoring-zmq-router-fixed pass \
+    models/monitoring/ParslMonitoringZMQRouterFailureFixed.cfg \
+    models/monitoring/ParslMonitoringZMQRouterFailure.tla
+run_case monitoring-zmq-router-valid pass \
+    models/monitoring/ParslMonitoringZMQRouterFailureValid.cfg \
+    models/monitoring/ParslMonitoringZMQRouterFailure.tla
 run_case globus-transfer-timeout-current counterexample \
     models/staging/ParslGlobusTransferTimeoutCurrent.cfg \
     models/staging/ParslGlobusTransferTimeout.tla
