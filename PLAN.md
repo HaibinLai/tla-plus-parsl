@@ -252,6 +252,8 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslJoinMonitoring` is now in the smoke sweep, connecting memoized, staged, and ordinary
   inner Futures to versioned outer status events, reordered delivery, database-write retry, and
   terminal monitoring-record stability.
+- `ParslHtexResultBatchContinuation` is now in the smoke sweep, requiring a malformed result
+  frame to be discarded without aborting later valid results in the same manager batch.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 

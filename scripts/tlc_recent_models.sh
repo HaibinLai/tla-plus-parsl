@@ -147,6 +147,12 @@ run_case htex-result-message-current counterexample \
 run_case htex-result-message-fixed pass \
     models/executors/ParslHtexResultMessageMalformedFixed.cfg \
     models/executors/ParslHtexResultMessageMalformed.tla
+run_case htex-result-batch-current counterexample \
+    models/executors/ParslHtexResultBatchContinuationCurrent.cfg \
+    models/executors/ParslHtexResultBatchContinuation.tla
+run_case htex-result-batch-fixed pass \
+    models/executors/ParslHtexResultBatchContinuationFixed.cfg \
+    models/executors/ParslHtexResultBatchContinuation.tla
 run_case htex-priority-current counterexample \
     models/executors/ParslHtexTaskPriorityTypeCurrent.cfg \
     models/executors/ParslHtexTaskPriorityType.tla
