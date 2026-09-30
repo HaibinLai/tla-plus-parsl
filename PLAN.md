@@ -1127,6 +1127,9 @@ reproduces the current partial-slice then parse failure.
 `ParslSerializationTruncatedLength.tla` adds declared-length validation: a frame claiming more
 bytes than remain must be rejected before deserialization. `tests/test_serialization_truncated_length_runtime.py`
 reproduces the current short-payload handoff.
+`ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
+loading exactly once and stable reuse for a second payload. The concrete bridge is
+`tests/test_serialization_plugin_cache_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
