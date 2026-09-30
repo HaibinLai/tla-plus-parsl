@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7b87db6` (`Refine cluster provider unknown job model`).
-- Foundational smoke inventory: 382 TLC cases and 340 Python runtime probes.
+- Latest pushed commit: pending (scheduler duplicate-status runtime coverage).
+- Foundational smoke inventory: 382 TLC cases and 344 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted duplicate-status runtime probes for Grid Engine, LSF, Slurm, and
+  Torque. All four current implementations reproduce the expected `ValueError`/`KeyError`
+  failure on duplicate scheduler rows; their Fixed TLC models remain green. The complete
+  foundational runtime suite passed 344/344 entries.
 
 - Current stage: deepened `ParslClusterProviderUnknownJob` to a mixed status poll containing a
   valid known job and a stale unknown ID. The Fixed branch preserves the valid RUNNING update
