@@ -195,6 +195,16 @@ tests=(
     tests/test_globus_staging_runtime.py
     tests/test_globus_transfer_failure_runtime.py
     tests/test_rsync_staging_runtime.py
+    tests/test_serialization_fallback_runtime.py
+    tests/test_serialization_plugin_failure_cache_runtime.py
+    tests/test_curvezmq_certificate_runtime.py
+    tests/test_monitoring_zmq_router_failure_runtime.py
+    tests/test_htex_ambiguous_result_runtime.py
+    tests/test_htex_duplicate_registration_runtime.py
+    tests/test_htex_manager_drain_runtime.py
+    tests/test_htex_submit_counter_race_runtime.py
+    tests/test_htex_watchdog_result_race_runtime.py
+    tests/test_htex_worker_watchdog_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py

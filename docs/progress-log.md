@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `61976ac` (`Promote file transfer provider coverage`).
-- Foundational smoke inventory: 377 TLC cases and 302 Python runtime probes.
+- Latest pushed commit: pending (ZMQ serialization and HTEX runtime coverage).
+- Foundational smoke inventory: 377 TLC cases and 312 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -165,6 +165,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted six file-transfer provider runtime bridges into the foundational gate:
   Globus Compute resource/submit/shutdown behavior, Globus stage-in/out dependency wiring,
   Globus terminal transfer failure, and rsync stage-in/out ordering.
+- Current stage: promoted ten serialization/ZMQ/HTEX runtime bridges into the foundational gate:
+  serializer fallback/cache behavior, CurveZMQ certificate validation, monitoring-router failure,
+  ambiguous and duplicate HTEX messages, submit-counter races, manager drain, and worker watchdog
+  result races.
 
 ### Verification convention
 
