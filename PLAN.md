@@ -1773,6 +1773,8 @@ checkpoints, and input/output list mutation boundaries.
 Cases 81--100 matched as well: output-list mutation, executor-kind admission, negative scale-in,
 strategy capacity, AWS cancellation, LocalProvider, Flux cancellation/status/result paths, and
 HTEX address-probe timeout behavior.
+Cases 101--120 matched as well: HTEX cores-per-worker and priority admission, version mismatch,
+task ID/context validation, manager loss/admission, and worker task batch/frame shape handling.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
