@@ -137,6 +137,12 @@ JAVA_BIN=/path/to/java TLA_JAR=/path/to/tla2tools.jar \
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
+The final three cases also pin down the first executor-specific refinement after the simple
+abstractions: HTEX submit queue rollback, result-deserialization failure cleanup, and rejection
+of a result frame that carries both a result and an exception. Their current configurations are
+kept as counterexamples in the executor/serialization documentation; the smoke suite runs the
+fixed configurations so the foundational path remains green.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The

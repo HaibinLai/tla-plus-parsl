@@ -60,5 +60,14 @@ run_case join-app \
 run_case zmq-serialization \
     models/serialization/ParslZMQSerializationEndToEndSmoke.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla
+run_case htex-submit-queue-cleanup \
+    models/executors/ParslHtexSubmitLifecycleQueueFailureFixed.cfg \
+    models/executors/ParslHtexSubmitLifecycle.tla
+run_case htex-result-decode-cleanup \
+    models/executors/ParslHtexResultDecodeFailureFixed.cfg \
+    models/executors/ParslHtexResultDecodeFailure.tla
+run_case htex-ambiguous-result-rejection \
+    models/executors/ParslHtexAmbiguousResultFixed.cfg \
+    models/executors/ParslHtexAmbiguousResult.tla
 
 echo "Foundational TLC smoke suite passed."
