@@ -8,9 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `b8c3e41` (`Model Globus initialization race`).
-- Foundational smoke inventory: 350 TLC cases and 221 Python runtime probes (including the
-  uncommitted HTEX serialization-failure stage documented in the current working tree).
+- Latest pushed commit: `00c18d9` (`Model HTEX serialization failure normalization`).
+- Foundational smoke inventory: 350 TLC cases and 221 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -30,6 +29,8 @@ are recorded here in English and committed with the model changes.
   a raw `KeyError` during authorizer construction.
 - `b8c3e41`: Globus initialization race. Concurrent creation of `~/.parsl` must not turn ready
   directory state into `FileExistsError`.
+- `00c18d9`: HTEX serialization-failure normalization. Non-`TypeError` serializer failures must
+  not escape the public submit boundary as raw implementation exceptions.
 
 ### Verification convention
 
