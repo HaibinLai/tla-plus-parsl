@@ -2836,6 +2836,12 @@ run_case htex-cancellation-admission-current counterexample \
 run_case htex-cancellation-admission-fixed pass \
     models/executors/ParslHtexCancellationAdmissionFixed.cfg \
     models/executors/ParslHtexCancellationAdmission.tla
+run_case mpi-nonpositive-resources-current counterexample \
+    models/executors/ParslMPINonPositiveResourcesCurrent.cfg \
+    models/executors/ParslMPINonPositiveResources.tla
+run_case mpi-nonpositive-resources-fixed pass \
+    models/executors/ParslMPINonPositiveResourcesFixed.cfg \
+    models/executors/ParslMPINonPositiveResources.tla
 run_case htex-duplicate-result-current counterexample \
     models/executors/ParslHtexDuplicateResultCurrent.cfg \
     models/executors/ParslHtexDuplicateResult.tla

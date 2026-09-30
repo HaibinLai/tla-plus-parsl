@@ -1974,6 +1974,12 @@ the current HTEX task remains in both the task map and outgoing wire, allowing c
 execute and crash result handling. The focused runtime probe passed, and the TLC Current/Fixed
 pair produced the expected counterexample/pass outcomes.
 The HTEX cancellation-admission probe then completed 530 tests with `OK`.
+`ParslMPINonPositiveResources` now models MPI resource admission before rank
+derivation. It records BUG-197: the current helper accepts zero/negative node and rank counts
+and can either emit invalid launcher values or raise raw division errors. The Current/Fixed TLC
+pair produced the expected counterexample/pass outcomes, and the runtime probe covered zero and
+negative values across all three resource fields.
+The MPI non-positive-resource probe then completed 531 tests with `OK`.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
