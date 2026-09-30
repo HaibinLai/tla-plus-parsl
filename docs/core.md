@@ -141,6 +141,11 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
+The current repository smoke audit covers 313 TLC cases and 196 Python runtime test files. On
+2026-09-30, all 313 TLC cases passed in segmented runs with `TLC_SIMULATE=10`, and the complete
+runtime suite passed with 196 files. These counts are evidence for the fast regression gate; the
+individual model pages still document larger fixed/current counterexample runs.
+
 The final three cases also pin down the first executor-specific refinement after the simple
 abstractions: HTEX submit queue rollback, result-deserialization failure cleanup, and rejection
 of a result frame that carries both a result and an exception. Their current configurations are
