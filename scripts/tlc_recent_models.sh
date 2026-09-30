@@ -807,6 +807,9 @@ run_case flux-submission-failure pass \
 run_case taskvine-results pass \
     models/executors/ParslTaskVineResults.cfg \
     models/executors/ParslTaskVineResults.tla
+run_case workqueue-shutdown pass \
+    models/executors/ParslWorkQueueShutdown.cfg \
+    models/executors/ParslWorkQueueShutdown.tla
 run_case join-full pass \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla
