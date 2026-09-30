@@ -197,3 +197,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeoutMonitoringFixed
 contact/deadline checks. `EmitStatus` and `PersistStatus` abstract DFK monitoring event and
 database delivery. Runtime evidence comes from the heartbeat, retry/timeout, and monitoring
 database probes under `tests/`.
+
+`ParslHtexContactTimeoutStarvation.tla` refines the communicator loop with a bounded result
+stream. The current source checks contact expiry only in the no-socket-event branch, so repeated
+result forwarding can starve the timeout; the fixed branch checks the deadline on every iteration.
+The deterministic runtime probe drives the installed loop with fake ZMQ sockets.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationCurrent.cfg models/clock/ParslHtexContactTimeoutStarvation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationFixed.cfg models/clock/ParslHtexContactTimeoutStarvation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_contact_timeout_starvation_runtime.py -v
+```

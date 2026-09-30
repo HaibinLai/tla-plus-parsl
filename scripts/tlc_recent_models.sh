@@ -322,6 +322,15 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case htex-contact-timeout-starvation-current counterexample \
+    models/clock/ParslHtexContactTimeoutStarvationCurrent.cfg \
+    models/clock/ParslHtexContactTimeoutStarvation.tla
+run_case htex-contact-timeout-starvation-fixed pass \
+    models/clock/ParslHtexContactTimeoutStarvationFixed.cfg \
+    models/clock/ParslHtexContactTimeoutStarvation.tla
+run_case htex-contact-timeout-starvation-normal pass \
+    models/clock/ParslHtexContactTimeoutStarvationNormal.cfg \
+    models/clock/ParslHtexContactTimeoutStarvation.tla
 run_case http-separate-status-current counterexample \
     models/staging/ParslHTTPSeparateStatusCurrent.cfg \
     models/staging/ParslHTTPSeparateStatus.tla
