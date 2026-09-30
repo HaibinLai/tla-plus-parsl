@@ -80,10 +80,11 @@ SendChunk(c) ==
                     consumerState, observed>>
 
 CorruptChunk(c) ==
+    \* Corruption remains in flight until the receiver rejects the checksum.
     /\ stageState = "sending"
     /\ c \in CHUNKS
     /\ chunkState[c] = "sent"
-    /\ chunkState' = [chunkState EXCEPT ![c] = "corrupt"]
+    /\ chunkState' = [chunkState EXCEPT ![c] = "sent"]
     /\ wireToken' = [wireToken EXCEPT ![c] = @ \o ":corrupt"]
     /\ UNCHANGED <<producerState, stageState, wireChecksum, bufferToken,
                     dataFuture, consumerState, observed>>

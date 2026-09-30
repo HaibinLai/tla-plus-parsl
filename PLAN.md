@@ -1605,6 +1605,10 @@ chunk to corrupt before the receiver could inspect its checksum, while rejection
 ParslFileBytes now keeps corrupted bytes in sent state until RejectCorruptChunk observes the
 mismatch, after which repair and retransmission remain available.
 
+The same protocol correction is applied to ParslDataFutureTransfer: a corrupt stage-out chunk
+remains sent until RejectCorrupt checks its checksum, so DataFuture publication cannot bypass the
+receiver-side rejection path.
+
 The integrated join model now admits cancellation while an inner physical attempt is running.
 Previously the action contained a running-attempt branch that was unreachable because its guard
 only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
