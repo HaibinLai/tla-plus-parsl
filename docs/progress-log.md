@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7178406` (`Refine Flux callable serialization errors`).
+- Latest pushed commit: `0d908e2` (`Record Flux serialization refinement`).
 - Foundational smoke inventory: 356 TLC cases and 227 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
@@ -62,3 +62,6 @@ and monitoring records rather than duplicating an existing single-boundary model
 
 The repository preserves the implementation artifacts and project decisions. It does not claim to
 archive the external chat transcript or control platform-level conversation retention.
+
+For continuity, treat this file as the durable handoff point: after each meaningful stage, update
+the latest commit, verification counts, completed work, and next audit direction before pushing.
