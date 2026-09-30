@@ -322,6 +322,15 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case http-separate-status-current counterexample \
+    models/staging/ParslHTTPSeparateStatusCurrent.cfg \
+    models/staging/ParslHTTPSeparateStatus.tla
+run_case http-separate-status-fixed pass \
+    models/staging/ParslHTTPSeparateStatusFixed.cfg \
+    models/staging/ParslHTTPSeparateStatus.tla
+run_case http-separate-status-normal pass \
+    models/staging/ParslHTTPSeparateStatusNormal.cfg \
+    models/staging/ParslHTTPSeparateStatus.tla
 run_case monitoring-workflow-duration-current counterexample \
     models/monitoring/ParslMonitoringWorkflowDurationCurrent.cfg \
     models/monitoring/ParslMonitoringWorkflowDuration.tla

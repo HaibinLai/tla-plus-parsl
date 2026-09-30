@@ -114,6 +114,9 @@ parsing before Condor process expansion.
 The files/transfer row also includes `ParslHTTPContentLength` (BUG-172), which checks that a
 declared HTTP content length matches the bytes received before a task is admitted.
 
+It also includes `ParslHTTPSeparateStatus` (BUG-217), which applies the response-status safety
+boundary to the separate-task `_http_stage_in` path rather than only the in-task wrapper.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

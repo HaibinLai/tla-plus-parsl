@@ -323,6 +323,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPContentLengthNor
 
 This content-length boundary is recorded as BUG-172.
 
+`ParslHTTPSeparateStatus.tla` covers the separate-task HTTP helper (`_http_stage_in`). The
+current helper writes any response body and completes successfully even for a non-2xx response;
+the fixed branch validates the status before publishing the staged input.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateStatusCurrent.cfg models/staging/ParslHTTPSeparateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateStatusFixed.cfg models/staging/ParslHTTPSeparateStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateStatusNormal.cfg models/staging/ParslHTTPSeparateStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_separate_status_runtime.py -v
+```
+
 `ParslZipPathValidation.tla` models malformed `zip:` URLs. The current provider checks only the
 scheme, so a path without the required `.zip/` separator is accepted and `zip_path_split` derives
 truncated archive and member paths. The fixed branch rejects the URL before staging. The runtime
