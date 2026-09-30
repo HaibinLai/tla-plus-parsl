@@ -266,6 +266,9 @@ Recent focused models now connect the previously separate boundaries:
   checksums, atomic stage-out publication, DataFuture readiness, and consumer admission.
 - `ParslHTTPStatusValidation` now joins the staging sweep, checking that non-2xx response bodies
   cannot be published or passed to a task, while preserving the successful 2xx path.
+- `ParslRsyncPartialCleanup` now joins the staging sweep, checking that a failed transfer removes
+  partial destination bytes before reporting failure; `tests/test_rsync_partial_cleanup_runtime.py`
+  exercises the current leftover-file behavior.
 - `ParslGlobusTransferFailure` is now in the smoke sweep, distinguishing terminal transfer
   failure reporting from missing diagnostic events and successful event-bearing completion.
 - `ParslClusterSubmitScript` is now in the smoke sweep for a concrete provider boundary: valid

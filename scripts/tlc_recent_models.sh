@@ -756,6 +756,12 @@ run_case http-status-fixed pass \
 run_case http-status-success pass \
     models/staging/ParslHTTPStatusValidationSuccess.cfg \
     models/staging/ParslHTTPStatusValidation.tla
+run_case rsync-partial-current counterexample \
+    models/staging/ParslRsyncPartialCleanupCurrent.cfg \
+    models/staging/ParslRsyncPartialCleanup.tla
+run_case rsync-partial-fixed pass \
+    models/staging/ParslRsyncPartialCleanupFixed.cfg \
+    models/staging/ParslRsyncPartialCleanup.tla
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla
