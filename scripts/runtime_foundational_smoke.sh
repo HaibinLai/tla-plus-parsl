@@ -61,6 +61,14 @@ tests=(
     tests/test_htex_result_message_malformed_runtime.py
     tests/test_htex_worker_task_batch_shape_runtime.py
     tests/test_htex_worker_task_frame_continuation_runtime.py
+    tests/test_htex_manager_message_runtime.py
+    tests/test_htex_manager_selection_runtime.py
+    tests/test_htex_task_context_type_runtime.py
+    tests/test_htex_task_id_type_runtime.py
+    tests/test_htex_task_message_malformed_runtime.py
+    tests/test_htex_task_priority_type_runtime.py
+    tests/test_htex_task_resource_spec_type_runtime.py
+    tests/test_htex_version_mismatch_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

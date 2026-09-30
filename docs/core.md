@@ -234,6 +234,10 @@ The HTEX result cases cover cancelled and duplicate result delivery, corrupt out
 malformed manager result payloads, and worker task batch/frame continuation. They assert that one
 bad or stale message cannot terminate processing for unrelated tasks.
 
+The HTEX schema cases cover manager registration shape/type, version mismatch, task admission,
+task ID/context/priority/resource-spec types, and malformed task messages. Fixed paths reject
+invalid decoded metadata before scheduler state or manager ownership is mutated.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and

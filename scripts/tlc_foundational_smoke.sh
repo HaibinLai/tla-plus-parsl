@@ -428,5 +428,32 @@ run_case htex-worker-batch-shape \
 run_case htex-worker-frame-continuation \
     models/executors/ParslHtexWorkerTaskFrameContinuationFixed.cfg \
     models/executors/ParslHtexWorkerTaskFrameContinuation.tla
+run_case htex-manager-task-admission \
+    models/executors/ParslHtexManagerTaskAdmissionFixed.cfg \
+    models/executors/ParslHtexManagerTaskAdmission.tla
+run_case htex-registration-shape \
+    models/serialization/ParslHtexRegistrationShapeFixed.cfg \
+    models/serialization/ParslHtexRegistrationShape.tla
+run_case htex-registration-types \
+    models/serialization/ParslHtexRegistrationTypesFixed.cfg \
+    models/serialization/ParslHtexRegistrationTypes.tla
+run_case htex-task-context-type \
+    models/executors/ParslHtexTaskContextTypeFixed.cfg \
+    models/executors/ParslHtexTaskContextType.tla
+run_case htex-task-id-type \
+    models/executors/ParslHtexTaskIdTypeFixed.cfg \
+    models/executors/ParslHtexTaskIdType.tla
+run_case htex-task-message-shape \
+    models/executors/ParslHtexTaskMessageMalformedFixed.cfg \
+    models/executors/ParslHtexTaskMessageMalformed.tla
+run_case htex-task-priority-type \
+    models/executors/ParslHtexTaskPriorityTypeFixed.cfg \
+    models/executors/ParslHtexTaskPriorityType.tla
+run_case htex-task-resource-spec-type \
+    models/executors/ParslHtexTaskResourceSpecTypeFixed.cfg \
+    models/executors/ParslHtexTaskResourceSpecType.tla
+run_case htex-version-mismatch \
+    models/executors/ParslHtexVersionMismatchFixed.cfg \
+    models/executors/ParslHtexVersionMismatch.tla
 
 echo "Foundational TLC smoke suite passed."
