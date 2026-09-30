@@ -258,6 +258,11 @@ tests=(
     tests/test_taskvine_resource_spec_shape_runtime.py
     tests/test_workqueue_resource_spec_shape_runtime.py
     tests/test_radical_failure_fanout_runtime.py
+    tests/test_dependency_runtime.py
+    tests/test_input_dependency_duplicate_runtime.py
+    tests/test_apply_dispatch_boundary_runtime.py
+    tests/test_retry_handler_runtime.py
+    tests/test_duplicate_job_id_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py

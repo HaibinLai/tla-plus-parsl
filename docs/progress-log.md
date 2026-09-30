@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `f1535b0` (`Promote executor lifecycle coverage`).
-- Foundational smoke inventory: 383 TLC cases and 380 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, scaling, memoization, serialization, result-file, time, transport, scheduler-submit, executor-lifecycle, and core-boundary coverage).
+- Foundational smoke inventory: 383 TLC cases and 385 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted core dataflow/dispatch probes for Future dependency blocking, duplicate
+  dependency collection, apply-message arity, retry-handler accounting, and duplicate provider
+  job-ID ownership. Seven targeted tests passed, and the affected runtime suffix (241–385)
+  passed after insertion; the prior prefix (1–240) was already green.
 
 - Current stage: promoted TaskVine shutdown/resource-shape, Work Queue resource-shape, and
   Radical-Pilot failure-fanout probes. Four targeted tests passed, and the affected runtime
