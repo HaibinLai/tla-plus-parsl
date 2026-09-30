@@ -330,6 +330,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineStatusBa
 /tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_status_batch_runtime.py -v
 ```
 
+`ParslGridEngineMissingStatus.tla` models a successful but empty `qstat` response. The current
+Grid Engine provider marks every locally known job absent from the response as `COMPLETED`, even
+when the scheduler has not supplied an explicit terminal record. The fixed branch preserves an
+`UNKNOWN` observation until a job record is present. The runtime probe calls the real `_status`
+method with an empty successful response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineMissingStatusCurrent.cfg models/providers/ParslGridEngineMissingStatus.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineMissingStatusFixed.cfg models/providers/ParslGridEngineMissingStatus.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_missing_status_runtime.py -v
+```
+
+This successful-empty status boundary is recorded as BUG-243.
+
 `ParslGridEngineSubmitShape.tla` models the submit admission boundary. The current provider
 publishes any first non-empty successful `qsub` output line as a pending resource, including
 warning text; the fixed branch requires a valid scheduler identifier before publication.

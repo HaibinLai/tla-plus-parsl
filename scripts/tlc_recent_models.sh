@@ -433,6 +433,12 @@ run_case grid-engine-empty-submit-fixed pass \
 run_case grid-engine-empty-submit-normal pass \
     models/providers/ParslGridEngineEmptySubmitNormal.cfg \
     models/providers/ParslGridEngineEmptySubmit.tla
+run_case grid-engine-missing-status-current counterexample \
+    models/providers/ParslGridEngineMissingStatusCurrent.cfg \
+    models/providers/ParslGridEngineMissingStatus.tla
+run_case grid-engine-missing-status-fixed pass \
+    models/providers/ParslGridEngineMissingStatusFixed.cfg \
+    models/providers/ParslGridEngineMissingStatus.tla
 run_case slurm-empty-job-id-current counterexample \
     models/providers/ParslSlurmEmptyJobIdCurrent.cfg \
     models/providers/ParslSlurmEmptyJobId.tla
