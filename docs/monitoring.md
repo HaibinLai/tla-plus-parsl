@@ -125,6 +125,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflo
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_workflow_end_bookkeeping_runtime.py -v
 ```
 
+`ParslMonitoringLifecycleBookkeeping.tla` composes the TASK, TRY, and WORKFLOW insert markers with
+workflow finalization in one small state machine. It checks that each in-memory bookkeeping flag
+advances only after its database row exists, including the close-side end update. The Current
+configuration intentionally permits all four flags to advance after failed writes; the Fixed
+configuration preserves recovery invariants across the complete monitoring lifecycle. The focused
+runtime probes for TASK/TRY/WORKFLOW insert and end bookkeeping exercise the corresponding real
+`DatabaseManager.start` and `close` paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLifecycleBookkeepingCurrent.cfg models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringLifecycleBookkeepingFixed.cfg models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_task_insert_bookkeeping_runtime.py tests/test_monitoring_try_insert_bookkeeping_runtime.py tests/test_monitoring_workflow_insert_bookkeeping_runtime.py tests/test_monitoring_workflow_end_bookkeeping_runtime.py -v
+```
+
 `ParslMonitoringHubClose.tla` models the outer `MonitoringHub.close()` lifecycle. Closing signals
 the DB process, waits for it, closes the resource queue, and joins the queue thread. The active
 flag makes repeated close calls idempotent. The runtime probe uses the real method with counting

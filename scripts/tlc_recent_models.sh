@@ -1507,6 +1507,12 @@ run_case monitoring-workflow-end-current counterexample \
 run_case monitoring-workflow-end-fixed pass \
     models/monitoring/ParslMonitoringWorkflowEndBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringWorkflowEndBookkeeping.tla
+run_case monitoring-lifecycle-bookkeeping-current counterexample \
+    models/monitoring/ParslMonitoringLifecycleBookkeepingCurrent.cfg \
+    models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
+run_case monitoring-lifecycle-bookkeeping-fixed pass \
+    models/monitoring/ParslMonitoringLifecycleBookkeepingFixed.cfg \
+    models/monitoring/ParslMonitoringLifecycleBookkeeping.tla
 run_case monitoring-last-message-current counterexample \
     models/monitoring/ParslMonitoringLastMessageRaceCurrent.cfg \
     models/monitoring/ParslMonitoringLastMessageRace.tla

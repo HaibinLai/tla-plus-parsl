@@ -3,6 +3,9 @@
 The ZMQ/serialization coverage also includes `ParslHtexResultForwarding`, which models manager
 task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 
+The monitoring coverage also includes `ParslMonitoringLifecycleBookkeeping`, which composes
+successful/failed TASK, TRY, and WORKFLOW writes with finalization markers.
+
 This repository intentionally uses bounded abstractions. The table below records what is
 currently modeled, which runtime probes corroborate it, and where the abstraction is still
 coarse. A passing TLC run is evidence for the listed finite model, not a proof of all Parsl
