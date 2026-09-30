@@ -2122,6 +2122,12 @@ run_case timed-heartbeat-current counterexample \
 run_case timed-heartbeat-fixed pass \
     models/clock/ParslTimedHeartbeatFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla
+run_case timed-heartbeat-smoke-current counterexample \
+    models/clock/ParslTimedHeartbeatSmoke.cfg \
+    models/clock/ParslTimedHeartbeat.tla
+run_case timed-heartbeat-smoke-fixed pass \
+    models/clock/ParslTimedHeartbeatSmokeFixed.cfg \
+    models/clock/ParslTimedHeartbeat.tla
 run_case worker-contact-rollback-current counterexample \
     models/clock/ParslWorkerContactClockRollbackCurrent.cfg \
     models/clock/ParslWorkerContactClockRollback.tla

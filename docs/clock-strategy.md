@@ -177,6 +177,11 @@ late result after either event. `ParslTimedHeartbeat.cfg` intentionally violates
 by accepting that late result; `ParslTimedHeartbeatFixed.cfg` classifies it as stale and passes all
 six invariants (3,061 states generated, 848 distinct states).
 
+`ParslTimedHeartbeatSmoke.cfg` and `ParslTimedHeartbeatSmokeFixed.cfg` use a three-tick horizon for
+fast regression while preserving the same heartbeat-expiry, deadline, late-result, and Future
+invariants. The current smoke reaches its expected late-result counterexample in 1,264 generated /
+388 distinct states; the fixed smoke passes in 1,381 generated / 388 distinct states at depth 11.
+
 `ParslTimeoutMonitoring.tla` adds the monitoring database to that clock boundary. A late worker
 completion after heartbeat expiry or task timeout can be emitted and persisted as `succeeded` in
 the current branch; TLC finds the `TerminalCauseSafety` counterexample at depth 8 (553 states
