@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `0411d80` (`Promote BlockProvider bad-state probes`).
-- Foundational smoke inventory: 382 TLC cases and 351 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, and scaling coverage).
+- Foundational smoke inventory: 382 TLC cases and 352 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted the `Strategy` runtime bridge for initial capacity, overload scale-out,
+  idle scale-in with a minimum block floor, and invalid zero-nodes-per-block input. The targeted
+  four tests passed, and the affected runtime suffix (212–352) passed after insertion; the prior
+  prefix (1–211) was already green.
 
 - Current stage: promoted BlockProvider bad-state propagation probes for outstanding Future
   fan-out, completed-Future ordering, and callback-driven task-map mutation. Four targeted tests
