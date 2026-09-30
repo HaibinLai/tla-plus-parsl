@@ -1293,6 +1293,39 @@ run_case slurm-submit-current counterexample \
 run_case slurm-submit-fixed pass \
     models/providers/ParslSlurmSubmitFixed.cfg \
     models/providers/ParslSlurmSubmit.tla
+run_case pbspro-job-alias-current counterexample \
+    models/providers/ParslPBSProJobIdAliasCurrent.cfg \
+    models/providers/ParslPBSProJobIdAlias.tla
+run_case pbspro-job-alias-fixed pass \
+    models/providers/ParslPBSProJobIdAliasFixed.cfg \
+    models/providers/ParslPBSProJobIdAlias.tla
+run_case pbspro-job-alias-unique pass \
+    models/providers/ParslPBSProJobIdAliasUnique.cfg \
+    models/providers/ParslPBSProJobIdAlias.tla
+run_case pbspro-malformed-json-current counterexample \
+    models/providers/ParslPBSProMalformedJSONCurrent.cfg \
+    models/providers/ParslPBSProMalformedJSON.tla
+run_case pbspro-malformed-json-fixed pass \
+    models/providers/ParslPBSProMalformedJSONFixed.cfg \
+    models/providers/ParslPBSProMalformedJSON.tla
+run_case pbspro-status-current counterexample \
+    models/providers/ParslPBSProStatus.cfg \
+    models/providers/ParslPBSProStatus.tla
+run_case pbspro-status-fixed pass \
+    models/providers/ParslPBSProStatusFixed.cfg \
+    models/providers/ParslPBSProStatus.tla
+run_case pbspro-status-known pass \
+    models/providers/ParslPBSProStatusKnown.cfg \
+    models/providers/ParslPBSProStatus.tla
+run_case pbspro-submit-current counterexample \
+    models/providers/ParslPBSProSubmit.cfg \
+    models/providers/ParslPBSProSubmit.tla
+run_case pbspro-submit-fixed pass \
+    models/providers/ParslPBSProSubmitFixed.cfg \
+    models/providers/ParslPBSProSubmit.tla
+run_case pbspro-submit-present pass \
+    models/providers/ParslPBSProSubmitPresent.cfg \
+    models/providers/ParslPBSProSubmit.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

@@ -796,6 +796,9 @@ fixed behavior side by side.
 Slurm coverage now includes strict batching compatibility, duplicate and malformed status records,
 foreign scheduler jobs, cancellation bookkeeping, and custom submit-regex output. The runtime
 probes exercise `sbatch`, `sacct`, and `scancel` boundaries without a live scheduler.
+PBS Pro coverage now includes malformed qstat JSON, foreign jobs, short/qualified job-ID alias
+collisions, and empty versus valid qsub output. The current and candidate-fixed status/submit
+contracts are in the TLC sweep, with runtime probes for the concrete JSON and scheduler paths.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
