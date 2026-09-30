@@ -662,6 +662,9 @@ rejection, admission, drain/recovery, and provider/executor failure cleanup.
 `ParslExecutorShutdown.tla` refines concrete shutdown behavior: ThreadPool waits for accepted
 work, WorkQueue's collector fails tasks left behind during process shutdown, and HTEX closes its
 interchange before in-flight cleanup. It also checks that shutdown rejects new submissions.
+The model is now part of `scripts/tlc_recent_models.sh`; the real ThreadPool bridge
+(`tests/test_thread_executor_runtime.py`) passes all three shutdown/resource-admission probes,
+and bounded TLC simulation reaches 100,001 checked states for the invariant set.
 `ParslWorkQueueResults.tla` refines WorkQueue's collector result protocol: valid result files,
 deserialization failures, app exceptions, no-result reports, and final cleanup of outstanding
 tasks when the collector exits.

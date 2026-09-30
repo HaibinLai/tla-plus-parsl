@@ -147,6 +147,9 @@ run_case local-provider-exit-status pass \
 run_case thread-future-lifecycle pass \
     models/executors/ParslThreadExecutorFutureLifecycle.cfg \
     models/executors/ParslThreadExecutorFutureLifecycle.tla
+run_case executor-shutdown pass \
+    models/executors/ParslExecutorShutdown.cfg \
+    models/executors/ParslExecutorShutdown.tla
 run_case apply-dispatch-current counterexample \
     models/serialization/ParslApplyDispatchBoundaryCurrent.cfg \
     models/serialization/ParslApplyDispatchBoundary.tla
