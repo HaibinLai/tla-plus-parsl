@@ -996,6 +996,9 @@ run_case htex-manager-message-heartbeat pass \
 run_case htex-manager-message-malformed pass \
     models/executors/ParslHtexManagerMessageMalformed.cfg \
     models/executors/ParslHtexManagerMessage.tla
+run_case provider-status-batch pass \
+    models/providers/ParslProviderStatusBatch.cfg \
+    models/providers/ParslProviderStatusBatch.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

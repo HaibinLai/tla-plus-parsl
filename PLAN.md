@@ -1095,6 +1095,10 @@ The recurring sweep also includes `ParslHtexManagerMessage.tla` for malformed mu
 messages and valid heartbeat messages: malformed input is ignored without state changes, while a
 heartbeat updates contact time and emits the expected reply. The runtime bridge is
 `tests/test_htex_manager_message_runtime.py`.
+`ParslProviderStatusBatch.tla` is now in the provider sweep, checking bounded batch size,
+failure atomicity, missing-job completion mapping, and terminal-state stability for scheduler
+polls. `tests/test_provider_status_shape_runtime.py` provides the concrete provider status-shape
+bridge.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
