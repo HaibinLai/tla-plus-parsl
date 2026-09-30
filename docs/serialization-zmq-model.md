@@ -36,8 +36,8 @@ attempt before resolution.
 `ParslSerializerHeaderConsistency` models the lower-level facade contract. `serialize()` emits
 the serializer identifier, a newline delimiter, and the serializer body; the model keeps the
 body's producing serializer separate from the header seen by `deserialize()`. The current branch
-accepts a swapped callable/data header as a decoded object with the wrong content kind, while the
-fixed branch rejects the mismatched envelope. TLC finds the current counterexample and checks
+accepts a swapped callable/data header as a valid decoded object even though the envelope identity
+is inconsistent, while the fixed branch rejects the mismatched envelope. TLC finds the current counterexample and checks
 100,001 fixed states. The configuration uses a callable payload; replacing `OBJECT_KIND` with
 `"data"` exercises the symmetric data serializer path.
 

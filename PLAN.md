@@ -1689,7 +1689,7 @@ configuration produces the expected correlation counterexample; the fixed config
 The serializer facade now has an explicit `ParslSerializerHeaderConsistency.tla` model. It keeps
 the body-producing serializer separate from the newline-delimited header and rejects a swapped
 callable/data header instead of treating the mismatched payload as a valid decode. The current
-configuration produces the expected wrong-content counterexample; the fixed configuration checks
+configuration produces the expected mismatched-header counterexample; the fixed configuration checks
 100,001 simulated states.
 
 Dynamic dataflow now includes `ParslDynamicTaskFanout.tla`: a completed parent creates two logical

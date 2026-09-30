@@ -52,7 +52,7 @@ Decode ==
             THEN /\ state' = "rejected"
                  /\ resultKind' = "none"
             ELSE /\ state' = "decoded"
-                 /\ resultKind' = "wrong"
+                 /\ resultKind' = bodyKind
     /\ UNCHANGED <<bodyKind, wireHeader>>
 
 Next ==
