@@ -25,6 +25,16 @@ tests=(
     tests/test_function_object_transport_runtime.py
     tests/test_callable_argument_alias_runtime.py
     tests/test_python_nested_alias_runtime.py
+    tests/test_callable_deserialize_cache_runtime.py
+    tests/test_callable_serializer_cache_runtime.py
+    tests/test_callable_equal_cache_runtime.py
+    tests/test_callable_mutation_cache_runtime.py
+    tests/test_serialization_empty_registry_runtime.py
+    tests/test_serialization_envelope_malformed_runtime.py
+    tests/test_serialization_plugin_cache_runtime.py
+    tests/test_serialization_plugin_error_runtime.py
+    tests/test_task_transport_close_runtime.py
+    tests/test_callable_retry_transport_runtime.py
     tests/test_file_bytes_transfer_runtime.py
     tests/test_data_manager_stage_in_ordering_runtime.py
     tests/test_data_manager_stage_out_ordering_runtime.py

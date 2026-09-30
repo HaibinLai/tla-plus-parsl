@@ -194,6 +194,39 @@ run_case serializer-plugin-failure-cache \
 run_case serializer-registry \
     models/serialization/ParslSerializerRegistryFixed.cfg \
     models/serialization/ParslSerializerRegistry.tla
+run_case callable-deserialize-cache \
+    models/serialization/ParslCallableDeserializeCacheFixed.cfg \
+    models/serialization/ParslCallableDeserializeCache.tla
+run_case callable-serializer-cache \
+    models/serialization/ParslCallableSerializerCacheFixed.cfg \
+    models/serialization/ParslCallableSerializerCache.tla
+run_case callable-equal-cache \
+    models/serialization/ParslCallableEqualCacheFixed.cfg \
+    models/serialization/ParslCallableEqualCache.tla
+run_case callable-mutation-cache \
+    models/serialization/ParslCallableMutationCacheFixed.cfg \
+    models/serialization/ParslCallableMutationCache.tla
+run_case serialization-empty-registry \
+    models/serialization/ParslSerializationEmptyRegistryFixed.cfg \
+    models/serialization/ParslSerializationEmptyRegistry.tla
+run_case serialization-envelope-malformed \
+    models/serialization/ParslSerializationEnvelopeMalformedFixed.cfg \
+    models/serialization/ParslSerializationEnvelopeMalformed.tla
+run_case serialization-plugin-cache \
+    models/serialization/ParslSerializationPluginCache.cfg \
+    models/serialization/ParslSerializationPluginCache.tla
+run_case serialization-plugin-error \
+    models/serialization/ParslSerializationPluginErrorFixed.cfg \
+    models/serialization/ParslSerializationPluginError.tla
+run_case task-transport-close-race \
+    models/serialization/ParslTaskTransportCloseRaceFixed.cfg \
+    models/serialization/ParslTaskTransportCloseRace.tla
+run_case zmq-callable-retry \
+    models/serialization/ParslZMQCallableRetryFixed.cfg \
+    models/serialization/ParslZMQCallableRetry.tla
+run_case zmq-object-snapshot \
+    models/serialization/ParslZMQObjectSnapshotFixed.cfg \
+    models/serialization/ParslZMQObjectSnapshot.tla
 run_case slurm-foreign-job \
     models/providers/ParslSlurmForeignJobFixed.cfg \
     models/providers/ParslSlurmForeignJob.tla

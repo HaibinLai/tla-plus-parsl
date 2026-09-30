@@ -164,3 +164,9 @@ The concrete header behavior is probed by
 `tests/test_serializer_header_consistency_runtime.py`: the current built-in dill serializers
 accept a data body after its header is changed from `02` to `C2`, which is why the model treats
 the envelope identity as inconsistent even though the decoded Python value is unchanged.
+
+The unified smoke runner now also checks callable serializer/deserializer caches, mutable-callable
+aliasing, empty registries, malformed envelopes, dynamic plugin caching and plugin API errors,
+task-transport close races, and ZMQ callable retry/object snapshots. These cases make serializer
+cache state and wire-attempt identity explicit instead of treating serialization as a single opaque
+success/failure bit.
