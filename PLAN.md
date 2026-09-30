@@ -1968,6 +1968,12 @@ The Kubernetes empty-phase probe then completed 529 tests with `OK`.
 `ParslHtexRegistrationStatePoisoning` now models reserved-field overwrites in the manager
 registration envelope, with BUG-193 runtime evidence showing that a pickleable `tasks` field
 can replace the internal task list before manager admission.
+`ParslHtexCancellationAdmission` now extends the cancelled-result model across the submit,
+queue, dispatch, and late-result boundary. It records BUG-196: `Future.cancel()` succeeds while
+the current HTEX task remains in both the task map and outgoing wire, allowing cancelled work to
+execute and crash result handling. The focused runtime probe passed, and the TLC Current/Fixed
+pair produced the expected counterexample/pass outcomes.
+The HTEX cancellation-admission probe then completed 530 tests with `OK`.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
