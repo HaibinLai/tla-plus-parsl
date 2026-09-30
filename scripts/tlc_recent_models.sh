@@ -204,6 +204,9 @@ run_case resource-admission pass \
 run_case resource-admission-autolabel pass \
     models/dataflow/ParslResourceAdmissionAutolabel.cfg \
     models/dataflow/ParslResourceAdmission.tla
+run_case resource-scaling pass \
+    models/dataflow/ParslResourceScaling.cfg \
+    models/dataflow/ParslResourceScaling.tla
 run_case htex-priority-current counterexample \
     models/executors/ParslHtexTaskPriorityTypeCurrent.cfg \
     models/executors/ParslHtexTaskPriorityType.tla

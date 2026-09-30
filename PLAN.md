@@ -286,6 +286,8 @@ Recent focused models now connect the previously separate boundaries:
   be rejected before `random.choice` can expose a raw `IndexError`.
 - `ParslResourceAdmission` and its autolabel configuration are now in the smoke sweep, checking
   cores/memory/disk/GPU validation, queueing, capacity admission, and resource release.
+- `ParslResourceScaling` is now in the smoke sweep, connecting task core demand to scale-out,
+  pending allocation failures, dispatch capacity, and safe scale-in.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 
