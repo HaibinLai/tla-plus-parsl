@@ -30,11 +30,11 @@ MonitorStatuses == {"none", "succeeded", "failed", "cancelled"}
 VARIABLES outerState, mode, joinSet, observed, joinHandle,
           logicalState, currentAttempt, attemptState, innerValue,
           outerResult, failureCount, monitorState, monitorStatus, dbStatus,
-          dbFailures
+          dbFailures, cancelRequested, cancelError
 vars == <<outerState, mode, joinSet, observed, joinHandle,
            logicalState, currentAttempt, attemptState, innerValue,
            outerResult, failureCount, monitorState, monitorStatus, dbStatus,
-           dbFailures>>
+           dbFailures, cancelRequested, cancelError>>
 
 ExpectedList == [p \in POSITIONS |-> innerValue[Inputs[p]]]
 AllJoinedTerminal ==
@@ -60,6 +60,8 @@ Init ==
     /\ monitorStatus = "none"
     /\ dbStatus = "none"
     /\ dbFailures = 0
+    /\ cancelRequested = FALSE
+    /\ cancelError = FALSE
 
 ReturnSingle ==
     /\ outerState = "executing"
@@ -241,11 +243,16 @@ Finalize ==
 
 CancelOuter ==
     /\ outerState \in {"executing", "joining"}
-    /\ outerState' = "cancelled"
-    /\ joinHandle' = FALSE
-    /\ outerResult' = [kind |-> "failure", value |-> "join-error"]
+    /\ cancelRequested' = TRUE
+    /\ cancelError' = ~USE_FIXED
+    /\ IF USE_FIXED
+       THEN /\ outerState' = "cancelled"
+            /\ joinHandle' = FALSE
+            /\ outerResult' = [kind |-> "failure", value |-> "join-error"]
+       ELSE /\ UNCHANGED <<outerState, joinHandle, outerResult>>
     /\ UNCHANGED <<mode, joinSet, observed, logicalState, currentAttempt,
-                    attemptState, innerValue, failureCount>>
+                    attemptState, innerValue, failureCount, monitorState,
+                    monitorStatus, dbStatus, dbFailures>>
 
 JoinNext ==
     \/ ReturnSingle \/ ReturnList \/ ReturnEmpty \/ ReturnInvalid
@@ -257,7 +264,6 @@ JoinNext ==
     \/ \E i \in INNER : Observe(i)
     \/ \E i \in INNER, a \in 0..MAX_RETRIES : LateAttempt(i, a)
     \/ Finalize
-    \/ CancelOuter
     \/ UNCHANGED vars
 
 EmitOuterStatus ==
@@ -267,7 +273,8 @@ EmitOuterStatus ==
     /\ monitorStatus' = outerState
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     logicalState, currentAttempt, attemptState, innerValue,
-                    outerResult, failureCount, dbStatus, dbFailures>>
+                    outerResult, failureCount, dbStatus, dbFailures,
+                    cancelRequested, cancelError>>
 
 PersistOuterStatus ==
     /\ monitorState = "queued"
@@ -275,7 +282,8 @@ PersistOuterStatus ==
     /\ dbStatus' = monitorStatus
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     logicalState, currentAttempt, attemptState, innerValue,
-                    outerResult, failureCount, monitorStatus, dbFailures>>
+                    outerResult, failureCount, monitorStatus, dbFailures,
+                    cancelRequested, cancelError>>
 
 FailDatabaseWrite ==
     /\ monitorState = "queued"
@@ -284,7 +292,8 @@ FailDatabaseWrite ==
     /\ dbFailures' = dbFailures + 1
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     logicalState, currentAttempt, attemptState, innerValue,
-                    outerResult, failureCount, monitorStatus, dbStatus>>
+                    outerResult, failureCount, monitorStatus, dbStatus,
+                    cancelRequested, cancelError>>
 
 RetryDatabaseWrite ==
     /\ monitorState = "failed"
@@ -292,11 +301,12 @@ RetryDatabaseWrite ==
     /\ UNCHANGED <<outerState, mode, joinSet, observed, joinHandle,
                     logicalState, currentAttempt, attemptState, innerValue,
                     outerResult, failureCount, monitorStatus, dbStatus,
-                    dbFailures>>
+                    dbFailures, cancelRequested, cancelError>>
 
 Next ==
     \/ (JoinNext /\ UNCHANGED <<monitorState, monitorStatus, dbStatus,
-                                  dbFailures>>)
+                                  dbFailures, cancelRequested, cancelError>>)
+    \/ CancelOuter
     \/ EmitOuterStatus
     \/ PersistOuterStatus
     \/ FailDatabaseWrite
@@ -323,6 +333,8 @@ TypeOK ==
     /\ monitorStatus \in MonitorStatuses
     /\ dbStatus \in MonitorStatuses
     /\ dbFailures \in 0..MAX_DB_FAILURES
+    /\ cancelRequested \in BOOLEAN
+    /\ cancelError \in BOOLEAN
 
 JoinWaitSafety == outerState = "joining" => joinHandle
 TerminalHandleSafety == outerState \in {"succeeded", "failed"} => ~joinHandle
@@ -330,6 +342,7 @@ OuterCancellationSafety ==
     outerState = "cancelled" =>
         /\ ~joinHandle
         /\ outerResult["kind"] = "failure"
+CancellationSupportSafety == cancelRequested => outerState = "cancelled"
 RetryBound == \A i \in INNER : currentAttempt[i] <= MAX_RETRIES
 FailureAggregationSafety ==
     outerState = "failed" /\ mode # "invalid"

@@ -9,7 +9,7 @@ This directory is the split, component-oriented view of the complete [Parsl bug 
 | Providers and scheduler adapters | 50 | [providers/README.md](providers/README.md) |
 | Monitoring and database | 18 | [monitoring/README.md](monitoring/README.md) |
 | File staging and transfer | 15 | [staging/README.md](staging/README.md) |
-| join_app and memoization | 5 | [join/README.md](join/README.md) |
+| join_app and memoization | 6 | [join/README.md](join/README.md) |
 | Clock, heartbeat, and timeout | 17 | [clock/README.md](clock/README.md) |
 | Core dataflow and Future lifecycle | 1 | [dataflow/README.md](dataflow/README.md) |
 
