@@ -308,6 +308,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPStatusValidation
 /tmp/parsl-venv/bin/python -m unittest tests/test_http_status_validation_runtime.py -v
 ```
 
+`ParslHTTPContentLength.tla` refines HTTP content validation beyond status codes. The current
+in-task wrapper publishes the bytes yielded by `iter_content` and runs the user function even
+when a response advertises five bytes but yields only three. The fixed branch rejects the short
+transfer before task execution. The runtime probe drives the real wrapper with a truncated
+response double.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPContentLengthCurrent.cfg models/staging/ParslHTTPContentLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPContentLengthFixed.cfg models/staging/ParslHTTPContentLength.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPContentLengthNormal.cfg models/staging/ParslHTTPContentLength.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_content_length_runtime.py -v
+```
+
+This content-length boundary is recorded as BUG-172.
+
 `ParslZipPathValidation.tla` models malformed `zip:` URLs. The current provider checks only the
 scheme, so a path without the required `.zip/` separator is accepted and `zip_path_split` derives
 truncated archive and member paths. The fixed branch rejects the URL before staging. The runtime

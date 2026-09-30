@@ -337,6 +337,15 @@ run_case condor-submit-count-fixed pass \
 run_case condor-submit-count-normal pass \
     models/providers/ParslCondorSubmitCountNormal.cfg \
     models/providers/ParslCondorSubmitCount.tla
+run_case http-content-length-current counterexample \
+    models/staging/ParslHTTPContentLengthCurrent.cfg \
+    models/staging/ParslHTTPContentLength.tla
+run_case http-content-length-fixed pass \
+    models/staging/ParslHTTPContentLengthFixed.cfg \
+    models/staging/ParslHTTPContentLength.tla
+run_case http-content-length-normal pass \
+    models/staging/ParslHTTPContentLengthNormal.cfg \
+    models/staging/ParslHTTPContentLength.tla
 run_case dynamic-task-chain pass \
     models/dataflow/ParslDynamicTaskChain.cfg \
     models/dataflow/ParslDynamicTaskChain.tla

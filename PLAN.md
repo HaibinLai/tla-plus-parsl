@@ -1812,6 +1812,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   requested job ID has been removed from local bookkeeping, with BUG-170 runtime evidence.
 - `ParslCondorSubmitCount` now models complete parsing of multi-digit `condor_submit` job counts,
   with BUG-171 runtime evidence.
+- `ParslHTTPContentLength` now models declared HTTP content-length validation before in-task
+  execution, with BUG-172 runtime evidence.
 
 ## Validation workflow
 
@@ -1866,6 +1868,8 @@ The generic ClusterProvider stale-ID probe then completed 504 tests in 12.529 se
 including the known-ID projection and the stale-ID failure boundary.
 The Condor multi-digit submit probe then completed 505 tests in 12.897 seconds with `OK`,
 including the ten-process count boundary.
+The HTTP content-length probe then completed 506 tests in 12.697 seconds with `OK`,
+including the truncated-response rejection boundary.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
