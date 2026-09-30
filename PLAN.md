@@ -837,6 +837,10 @@ calculation. Runtime probes exercise the corresponding ZMQ command-client paths.
 Heartbeat coverage now includes strict expiry thresholds, in-flight task loss accounting, wall-clock
 jumps versus monotonic age, stale late acknowledgements, and provider UNKNOWN versus terminal
 states. Runtime probes cover manager expiry, heartbeat messages, and clock-jump behavior.
+Monitoring coverage now includes atomic filesystem-radio publication, file-transfer version checks,
+zero-interval batching, monotonic batch clocks, close idempotence, permanent and transient DB
+errors, ordered event delivery, and zero-threshold queue handling. SQLite/runtime probes exercise
+the corresponding DatabaseManager and radio paths.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

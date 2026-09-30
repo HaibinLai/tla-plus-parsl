@@ -1644,6 +1644,69 @@ run_case heartbeat-late-ack-fixed pass \
 run_case heartbeat-provider pass \
     models/executors/ParslHeartbeatProvider.cfg \
     models/executors/ParslHeartbeatProvider.tla
+run_case file-transfer-monitoring-current counterexample \
+    models/monitoring/ParslFileTransferMonitoringCurrent.cfg \
+    models/monitoring/ParslFileTransferMonitoring.tla
+run_case file-transfer-monitoring-fixed pass \
+    models/monitoring/ParslFileTransferMonitoringFixed.cfg \
+    models/monitoring/ParslFileTransferMonitoring.tla
+run_case filesystem-radio-current counterexample \
+    models/monitoring/ParslFilesystemRadioAtomicityCurrent.cfg \
+    models/monitoring/ParslFilesystemRadioAtomicity.tla
+run_case filesystem-radio-fixed pass \
+    models/monitoring/ParslFilesystemRadioAtomicityFixed.cfg \
+    models/monitoring/ParslFilesystemRadioAtomicity.tla
+run_case monitoring-batch-current counterexample \
+    models/monitoring/ParslMonitoringBatchCurrent.cfg \
+    models/monitoring/ParslMonitoringBatch.tla
+run_case monitoring-batch-fixed pass \
+    models/monitoring/ParslMonitoringBatchFixed.cfg \
+    models/monitoring/ParslMonitoringBatch.tla
+run_case monitoring-batch-positive pass \
+    models/monitoring/ParslMonitoringBatchPositive.cfg \
+    models/monitoring/ParslMonitoringBatch.tla
+run_case monitoring-batch-clock-current counterexample \
+    models/monitoring/ParslMonitoringBatchClockCurrent.cfg \
+    models/monitoring/ParslMonitoringBatchClock.tla
+run_case monitoring-batch-clock-fixed pass \
+    models/monitoring/ParslMonitoringBatchClockFixed.cfg \
+    models/monitoring/ParslMonitoringBatchClock.tla
+run_case monitoring-close-abnormal pass \
+    models/monitoring/ParslMonitoringCloseAbnormal.cfg \
+    models/monitoring/ParslMonitoringClose.tla
+run_case monitoring-close-normal pass \
+    models/monitoring/ParslMonitoringCloseNormal.cfg \
+    models/monitoring/ParslMonitoringClose.tla
+run_case monitoring-close-idempotence-current counterexample \
+    models/monitoring/ParslMonitoringCloseIdempotenceCurrent.cfg \
+    models/monitoring/ParslMonitoringCloseIdempotence.tla
+run_case monitoring-close-idempotence-fixed pass \
+    models/monitoring/ParslMonitoringCloseIdempotenceFixed.cfg \
+    models/monitoring/ParslMonitoringCloseIdempotence.tla
+run_case monitoring-db-permanent-current counterexample \
+    models/monitoring/ParslMonitoringDBPermanentErrorCurrent.cfg \
+    models/monitoring/ParslMonitoringDBPermanentError.tla
+run_case monitoring-db-permanent-fixed pass \
+    models/monitoring/ParslMonitoringDBPermanentErrorFixed.cfg \
+    models/monitoring/ParslMonitoringDBPermanentError.tla
+run_case monitoring-db-retry pass \
+    models/monitoring/ParslMonitoringDBRetry.cfg \
+    models/monitoring/ParslMonitoringDBRetry.tla
+run_case monitoring-db-retry-integrity pass \
+    models/monitoring/ParslMonitoringDBRetryIntegrity.cfg \
+    models/monitoring/ParslMonitoringDBRetry.tla
+run_case monitoring-delivery-current counterexample \
+    models/monitoring/ParslMonitoringDelivery.cfg \
+    models/monitoring/ParslMonitoringDelivery.tla
+run_case monitoring-delivery-fixed pass \
+    models/monitoring/ParslMonitoringDeliveryFixed.cfg \
+    models/monitoring/ParslMonitoringDelivery.tla
+run_case monitoring-threshold-current counterexample \
+    models/monitoring/ParslMonitoringThreshold.cfg \
+    models/monitoring/ParslMonitoringThreshold.tla
+run_case monitoring-threshold-fixed pass \
+    models/monitoring/ParslMonitoringThresholdFixed.cfg \
+    models/monitoring/ParslMonitoringThreshold.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
