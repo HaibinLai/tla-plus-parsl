@@ -2721,6 +2721,12 @@ run_case pbspro-status-shape-current counterexample \
 run_case pbspro-status-shape-fixed pass \
     models/providers/ParslPbsproStatusShapeFixed.cfg \
     models/providers/ParslPbsproStatusShape.tla
+run_case pbspro-status-batch-isolation-current counterexample \
+    models/providers/ParslPbsproStatusBatchIsolationCurrent.cfg \
+    models/providers/ParslPbsproStatusBatchIsolation.tla
+run_case pbspro-status-batch-isolation-fixed pass \
+    models/providers/ParslPbsproStatusBatchIsolationFixed.cfg \
+    models/providers/ParslPbsproStatusBatchIsolation.tla
 run_case pbspro-missing-status-current counterexample \
     models/providers/ParslPbsproMissingStatusCurrent.cfg \
     models/providers/ParslPbsproMissingStatus.tla

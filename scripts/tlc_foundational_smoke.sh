@@ -668,6 +668,9 @@ run_case azure-cancel-bookkeeping \
 run_case pbspro-status-shape \
     models/providers/ParslPbsproStatusShapeFixed.cfg \
     models/providers/ParslPbsproStatusShape.tla
+run_case pbspro-status-batch-isolation \
+    models/providers/ParslPbsproStatusBatchIsolationFixed.cfg \
+    models/providers/ParslPbsproStatusBatchIsolation.tla
 run_case local-submit-pid-shape \
     models/providers/ParslLocalSubmitPidShapeFixed.cfg \
     models/providers/ParslLocalSubmitPidShape.tla

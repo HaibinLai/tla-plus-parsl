@@ -681,6 +681,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproMissingStatu
 
 This successful-empty status boundary is recorded as BUG-236.
 
+`ParslPbsproStatusBatchIsolation.tla` composes the same parser boundary with a two-job polling
+batch: one malformed JSON record and one valid running record. The current implementation aborts
+inside the malformed record before the independent valid observation is processed. The fixed
+branch isolates the malformed entry as `UNKNOWN`, preserves the polling loop, and still records
+the valid job. The runtime probe feeds the real `_status` method both records and confirms that
+the current branch raises before processing the valid record.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproStatusBatchIsolationCurrent.cfg models/providers/ParslPbsproStatusBatchIsolation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproStatusBatchIsolationFixed.cfg models/providers/ParslPbsproStatusBatchIsolation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_status_batch_isolation_runtime.py -v
+```
+
+This batch-isolation boundary is recorded as BUG-264.
+
 `ParslProviderPollClockRollback.tla` models `BlockProviderExecutor.poll_facade` from
 [`executors/status_handling.py`](https://github.com/Parsl/Parsl/blob/master/parsl/executors/status_handling.py).
 The current wall-clock guard can suppress provider status polling after `time.time()` moves

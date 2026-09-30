@@ -202,6 +202,7 @@ tests=(
     tests/test_torque_cancel_unknown_runtime.py
     tests/test_azure_cancel_bookkeeping_runtime.py
     tests/test_pbspro_status_shape_runtime.py
+    tests/test_pbspro_status_batch_isolation_runtime.py
     tests/test_azure_status_ordering_runtime.py
     tests/test_azure_status_remote_failure_runtime.py
     tests/test_googlecloud_status_remote_failure_runtime.py
