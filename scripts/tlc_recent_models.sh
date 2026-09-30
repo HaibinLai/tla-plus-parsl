@@ -549,6 +549,36 @@ run_case datafuture-cancellation-current counterexample \
 run_case datafuture-cancellation-fixed pass \
     models/dataflow/ParslDataFutureCancellationFixed.cfg \
     models/dataflow/ParslDataFutureCancellation.tla
+run_case dependency-traversal-deep-list pass \
+    models/dataflow/ParslDependencyTraversal.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-dict pass \
+    models/dataflow/ParslDependencyTraversalDeepDict.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-dict-key pass \
+    models/dataflow/ParslDependencyTraversalDeepDictKey.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-set pass \
+    models/dataflow/ParslDependencyTraversalDeepSet.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-deep-tuple pass \
+    models/dataflow/ParslDependencyTraversalDeepTuple.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-shallow-current counterexample \
+    models/dataflow/ParslDependencyTraversalShallow.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case dependency-traversal-shallow-dict-current counterexample \
+    models/dataflow/ParslDependencyTraversalShallowDict.cfg \
+    models/dataflow/ParslDependencyTraversal.tla
+run_case join-internal-executor-current counterexample \
+    models/dataflow/ParslJoinInternalExecutorCurrent.cfg \
+    models/dataflow/ParslJoinInternalExecutor.tla
+run_case join-internal-executor-fixed pass \
+    models/dataflow/ParslJoinInternalExecutorFixed.cfg \
+    models/dataflow/ParslJoinInternalExecutor.tla
+run_case join-value-list pass \
+    models/dataflow/ParslJoinValueList.cfg \
+    models/dataflow/ParslJoinMixedList.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

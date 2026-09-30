@@ -1495,6 +1495,13 @@ model: a cancelled parent currently publishes its DataFuture as available, while
 propagates terminal failure. The existing DataFuture cancellation runtime probe covers this path;
 current TLC produces the expected counterexample and the fixed configuration passes.
 
+The dependency and join input layer is now expanded. `ParslDependencyTraversal` covers direct,
+list, tuple, set, and dictionary Future locations under shallow versus deep traversal; shallow list
+and dict configurations reproduce nested-Future leakage, while all deep shapes pass. The join sweep
+also includes `ParslJoinValueList` (rejecting non-Future values) and `ParslJoinInternalExecutor`
+(ensuring the outer join task targets `_parsl_internal`). Runtime probes cover twelve dependency/join
+paths, including internal-executor selection and nested container unwrapping.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
