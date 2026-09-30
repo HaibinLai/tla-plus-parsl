@@ -1679,6 +1679,24 @@ timeout, and close behavior, `ParslResultsIncomingCloseRace` for get-after-close
 probes cover seven real ZMQ pipe paths. Current close-race configurations reproduce socket-use-after-
 close failures; normal, timeout, and fixed configurations pass TLC simulation.
 
+The serialization layer now has an explicit two-task correlation model in
+`ParslMessageCorrelation.tla`. It separates logical task identity from physical attempt identity,
+permits bounded queue reordering, duplicate delivery, late retry results, and misrouting, and
+requires both the origin task and current attempt before a Future is resolved. The current
+configuration produces the expected correlation counterexample; the fixed configuration checks
+100,907 simulated states.
+
+Dynamic dataflow now includes `ParslDynamicTaskFanout.tla`: a completed parent creates two logical
+children, the second child depends on the first child as well as the parent, and each child has a
+bounded physical retry counter. The model checks creation, dependency, Future consistency, retry
+bound, and terminal-state invariants over 100,001 simulated states.
+
+Monitoring now includes `ParslMonitoringEventStream.tla`, a multi-task producer/queue/database
+writer abstraction. It models duplicate and reordered events, bounded write retry, per-task
+database high-water marks, and shutdown drain conditions. The current branch reproduces stale
+event rollback; the fixed branch checks 100,001 simulated states while preserving the latest
+version for each task.
+
 ### 3. Checked properties
 
 The safety configurations check:
