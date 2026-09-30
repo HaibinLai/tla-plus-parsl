@@ -821,6 +821,9 @@ The command-execution boundary is now covered as well: malformed packed task mes
 before invocation, callable values and exceptions cross the execution boundary, and timeout paths
 explicitly distinguish process cleanup from merely re-raising an exception. Runtime probes cover
 `execute_task`, `execute_wait`, and the Bash timeout helper.
+`ParslPoolExecutorMap` is now in the sweep, checking eager submission, input-order result
+iteration, iterator timeout, and late completion without implicit Future cancellation; the runtime
+probe covers the same timeout/cancellation contract.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

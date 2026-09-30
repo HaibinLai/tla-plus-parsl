@@ -1542,6 +1542,9 @@ run_case bash-timeout-cleanup-current counterexample \
 run_case bash-timeout-cleanup-fixed pass \
     models/executors/ParslBashTimeoutCleanupFixed.cfg \
     models/executors/ParslBashTimeoutCleanup.tla
+run_case pool-executor-map pass \
+    models/executors/ParslPoolExecutorMap.cfg \
+    models/executors/ParslPoolExecutorMap.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
