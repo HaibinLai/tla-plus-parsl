@@ -1865,6 +1865,9 @@ Bash timeout cleanup.
 Cases 681--700 matched at 100 steps: pool executor mapping, HTEX submit counter/failure/lifecycle
 and serialization failure, bad-state task mutation, BlockProvider bad-state/order handling, and
 command-client reply/timeout/close behavior.
+Cases 701--720 matched at 100 steps: command-client lock/retry/deadline/send timeout, heartbeat
+clock boundaries and late acknowledgements, heartbeat provider behavior, file-transfer monitoring,
+filesystem radio, and monitoring batch handling.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
