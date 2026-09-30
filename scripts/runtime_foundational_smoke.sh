@@ -102,6 +102,9 @@ tests=(
     tests/test_slurm_batch_strict_runtime.py
     tests/test_slurm_duplicate_status_runtime.py
     tests/test_slurm_empty_job_id_runtime.py
+    tests/test_htex_worker_restart_failure_runtime.py
+    tests/test_pbspro_missing_status_runtime.py
+    tests/test_mpi_nondivisible_runtime.py
     tests/test_datafuture_runtime.py
     tests/test_datafuture_cancellation_runtime.py
     tests/test_datafuture_falsey_exception_runtime.py

@@ -305,6 +305,9 @@ run_case mpi-nonpositive-resources \
 run_case mpi-nondivisible-ranks \
     models/executors/ParslMPINonDivisibleRanksFixed.cfg \
     models/executors/ParslMPINonDivisibleRanks.tla
+run_case htex-worker-restart-failure \
+    models/executors/ParslHtexWorkerRestartFailureFixed.cfg \
+    models/executors/ParslHtexWorkerRestartFailure.tla
 run_case mpi-no-resource-result \
     models/executors/ParslMPINoResourceResultFixed.cfg \
     models/executors/ParslMPINoResourceResult.tla
@@ -575,6 +578,9 @@ run_case slurm-duplicate-status \
 run_case slurm-empty-job-id \
     models/providers/ParslSlurmEmptyJobIdFixed.cfg \
     models/providers/ParslSlurmEmptyJobId.tla
+run_case pbspro-missing-status \
+    models/providers/ParslPbsproMissingStatusFixed.cfg \
+    models/providers/ParslPbsproMissingStatus.tla
 run_case data-ready-execution \
     models/core/ParslDataReadyExecutionFixed.cfg \
     models/core/ParslDataReadyExecution.tla
