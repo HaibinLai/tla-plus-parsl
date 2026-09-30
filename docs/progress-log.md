@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `ee21c20` (`Model AWS instance state shape`).
-- Foundational smoke inventory: 367 TLC cases and 235 Python runtime probes.
+- Latest pushed commit: pending (HTEX null registration block ID refinement).
+- Foundational smoke inventory: 368 TLC cases and 235 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -96,6 +96,10 @@ are recorded here in English and committed with the model changes.
   `AWSProvider.get_instance_state`. The Current model produces a two-state `NoRawIndexError`
   counterexample, the Fixed model passes in four generated/two distinct states, and the provider
   probe reproduces the concrete `IndexError`.
+- Current stage: added `ParslHtexRegistrationBlockId` for a null manager registration block ID.
+  The current interchange reaches an internal assertion after decoding the ZMQ registration;
+  the Current model produces a two-state `NoRawAssertion` counterexample, the Fixed model passes
+  in four generated/two distinct states, and the manager-message runtime suite now passes 6/6.
 
 ### Verification convention
 

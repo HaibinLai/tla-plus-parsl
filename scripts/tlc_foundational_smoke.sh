@@ -272,6 +272,9 @@ run_case worker-pool-control-frame \
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla
+run_case htex-registration-block-id \
+    models/executors/ParslHtexRegistrationBlockIdFixed.cfg \
+    models/executors/ParslHtexRegistrationBlockId.tla
 run_case htex-registration-types \
     models/serialization/ParslHtexRegistrationTypesFixed.cfg \
     models/serialization/ParslHtexRegistrationTypes.tla

@@ -112,6 +112,26 @@ class HtexManagerMessageRuntimeTest(unittest.TestCase):
         self.assertIn(b"manager-2", interesting)
         self.assertEqual(interchange._ready_managers[b"manager-2"]["tasks"], "poisoned")
 
+    def test_registration_with_null_block_id_escapes_assertion_currently(self):
+        message = pickle.dumps({
+            "type": "registration",
+            "python_v": "3.11.0",
+            "parsl_v": "current",
+            "start_time": 0,
+            "block_id": None,
+            "max_capacity": 1,
+            "active": True,
+            "draining": False,
+        })
+        interchange = self.interchange_with([b"manager-2", message])
+        interchange.current_platform = {"python_v": "3.11.0", "parsl_v": "current"}
+        interchange._check_python_mismatch = True
+        interchange.connected_block_history = []
+        interchange._send_monitoring_info = lambda radio, manager: None
+
+        with self.assertRaises(AssertionError):
+            interchange.process_manager_socket_message(set(), None, object())
+
 
 if __name__ == "__main__":
     unittest.main()

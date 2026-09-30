@@ -1332,6 +1332,12 @@ run_case htex-registration-state-current counterexample \
 run_case htex-registration-state-fixed pass \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla
+run_case htex-registration-block-id-current counterexample \
+    models/executors/ParslHtexRegistrationBlockIdCurrent.cfg \
+    models/executors/ParslHtexRegistrationBlockId.tla
+run_case htex-registration-block-id-fixed pass \
+    models/executors/ParslHtexRegistrationBlockIdFixed.cfg \
+    models/executors/ParslHtexRegistrationBlockId.tla
 run_case google-zone-shape-current counterexample \
     models/providers/ParslGoogleCloudZoneResponseShapeCurrent.cfg \
     models/providers/ParslGoogleCloudZoneResponseShape.tla
