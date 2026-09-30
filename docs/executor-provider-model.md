@@ -63,6 +63,15 @@ states while preserving retry, admission, and scale-in safety.
 tasks. It checks that scale-in removes only idle blocks, running tasks retain active ownership,
 and stale polls cannot revive a failed generation; the fixed configuration checks 100,001 states.
 
+`ParslProviderThreeBlockOwnership.tla` extends the same protocol to three blocks and three
+logical tasks. It adds an explicit one-task-per-block capacity invariant while preserving failure,
+retry, stale-poll, ownership, and idle-only scale-in checks.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderThreeBlockOwnershipCurrent.cfg models/executors/ParslProviderThreeBlockOwnership.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslProviderThreeBlockOwnershipFixed.cfg models/executors/ParslProviderThreeBlockOwnership.tla
+```
+
 `ParslManagerLivenessPool.tla` provides the small manager-pool refinement. Heartbeat expiry marks
 M1 unavailable; a lost task can retry on M2, while admission must not select the expired manager.
 The current branch also accepts a late result from the expired manager, whereas the fixed branch

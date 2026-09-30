@@ -1760,6 +1760,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   dispatch admission, and scale-in; multi-block provider generations remain future work;
 - `ParslProviderMultiBlockOwnership` now covers two-block task ownership and idle-only scale-in;
   larger provider fleets remain future work;
+- `ParslProviderThreeBlockOwnership` extends ownership and idle-only scale-in to three blocks and
+  three tasks, adding an explicit one-task-per-block capacity invariant.
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
 - `ParslMonitoringVersionedBatch` now combines transaction rollback with per-task high-water
   protection; larger multi-task transaction batches remain future work;
