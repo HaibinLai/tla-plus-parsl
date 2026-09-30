@@ -1816,6 +1816,9 @@ Cases 321--340 also matched at 100 steps: HTEX watchdog/result races and busy/id
 states, Radical-Pilot shutdown/results, AWS unknown-instance status, command-client close,
 Kubernetes admission/unknown-job/submit handling, and AWS submit validation. Current branches
 reproduced their configured counterexamples and Fixed branches passed.
+Cases 341--360 matched at 100 steps: AWS empty-submit, Google Cloud status, Condor malformed and
+failure status, cluster submit/status request validation, equal-callable serializer caching,
+Zip stage-in write failure, and monitoring update permanent-error handling.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
