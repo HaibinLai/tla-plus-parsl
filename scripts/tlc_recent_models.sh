@@ -904,6 +904,12 @@ run_case zip-path-first-match-current counterexample \
 run_case zip-path-first-match-fixed pass \
     models/staging/ParslZipPathFirstMatchFixed.cfg \
     models/staging/ParslZipPathFirstMatch.tla
+run_case http-separate-cleanup-current counterexample \
+    models/staging/ParslHTTPSeparateTaskCleanupCurrent.cfg \
+    models/staging/ParslHTTPSeparateTaskCleanup.tla
+run_case http-separate-cleanup-fixed pass \
+    models/staging/ParslHTTPSeparateTaskCleanupFixed.cfg \
+    models/staging/ParslHTTPSeparateTaskCleanup.tla
 run_case core-executor-drain pass \
     models/core/ParslExecutorDrain.cfg \
     models/core/ParslAbstract.tla

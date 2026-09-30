@@ -6,7 +6,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from parsl.data_provider.files import File
-from parsl.data_provider.http import in_task_transfer_wrapper
+from parsl.data_provider.http import _http_stage_in, in_task_transfer_wrapper
 
 
 class FailingResponse:
@@ -32,6 +32,19 @@ class HTTPConnectionCleanupRuntimeTest(unittest.TestCase):
             with patch("parsl.data_provider.http.requests.get", return_value=response):
                 with self.assertRaises(OSError):
                     wrapped()
+
+            self.assertFalse(response.closed)
+            self.assertEqual(Path(file_obj.local_path).read_bytes(), b"partial-http")
+
+    def test_separate_task_stream_failure_leaves_response_open_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            response = FailingResponse()
+            file_obj = File("http://server/data/input.txt")
+            file_obj.local_path = str(Path(directory) / "input.txt")
+
+            with patch("parsl.data_provider.http.requests.get", return_value=response):
+                with self.assertRaises(OSError):
+                    _http_stage_in(directory, outputs=[file_obj])
 
             self.assertFalse(response.closed)
             self.assertEqual(Path(file_obj.local_path).read_bytes(), b"partial-http")
