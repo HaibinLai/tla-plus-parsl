@@ -1367,6 +1367,18 @@ delivery. The current branch permits a success observation before all chunks arr
 branch gates monitoring success and consumer admission on complete publication (21 distinct
 states checked).
 
+`ParslPipeline.tla` is the compact cross-layer composition. A single logical task passes through
+payload encode/decode, a physical attempt and retry, result correlation, chunked stage-out,
+DataFuture readiness, and monitoring persistence. The current configuration exposes early
+monitoring publication (435 generated / 221 distinct states); the fixed configuration gates both
+staging and monitoring and passes all seven invariants (228 generated / 85 distinct states,
+depth 22).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslPipelineCurrent.cfg models/core/ParslPipeline.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslPipelineFixed.cfg models/core/ParslPipeline.tla
+```
+
 The provider-failure/retry boundary is also modeled:
 
 ```bash

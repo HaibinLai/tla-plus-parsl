@@ -952,6 +952,12 @@ run_case end-to-end-fixed pass \
 run_case end-to-end-smoke pass \
     models/core/ParslEndToEndSmoke.cfg \
     models/core/ParslEndToEnd.tla
+run_case pipeline-current counterexample \
+    models/core/ParslPipelineCurrent.cfg \
+    models/core/ParslPipeline.tla
+run_case pipeline-fixed pass \
+    models/core/ParslPipelineFixed.cfg \
+    models/core/ParslPipeline.tla
 run_case htex-submit-success pass \
     models/executors/ParslHtexSubmitSuccess.cfg \
     models/executors/ParslHtexSubmitFailure.tla
