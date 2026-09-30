@@ -124,6 +124,10 @@ Flux executor coverage also includes `ParslFluxWorkingDirectory` (BUG-200), whic
 relative task path resolves under the configured executor workspace rather than the submitting
 process's current directory.
 
+Globus staging coverage also includes `ParslGlobusFailureEvent` (BUG-201), which checks that a
+failed transfer with no diagnostic events still produces a terminal transfer failure rather than
+an indexing exception.
+
 It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
 HTEX connection probe cannot fall through to a blocking receive.
 

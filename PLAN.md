@@ -2143,3 +2143,8 @@ workspace from the submitting process directory and models relative-path resolut
 Jobspec. The current branch reproduces BUG-200 (`JobspecV1.cwd = os.getcwd()`), while the fixed
 branch propagates `working_dir`; the accompanying runtime probe uses a fake Jobspec to exercise the
 installed `_submit_single_job` path.
+
+The next staging refinement is `ParslGlobusFailureEvent`. It models a terminal Globus `FAILED`
+task with an empty event list and records BUG-201: the current implementation indexes the first
+event unconditionally. The fixed branch preserves a normal transfer-failure outcome, and the
+runtime probe drives `Globus.transfer_file` with a fake SDK response.

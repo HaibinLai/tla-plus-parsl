@@ -1390,6 +1390,12 @@ run_case globus-transfer-timeout-current counterexample \
 run_case globus-transfer-timeout-fixed pass \
     models/staging/ParslGlobusTransferTimeoutFixed.cfg \
     models/staging/ParslGlobusTransferTimeout.tla
+run_case globus-failure-event-current counterexample \
+    models/staging/ParslGlobusFailureEventCurrent.cfg \
+    models/staging/ParslGlobusFailureEvent.tla
+run_case globus-failure-event-fixed pass \
+    models/staging/ParslGlobusFailureEventFixed.cfg \
+    models/staging/ParslGlobusFailureEvent.tla
 run_case globus-transfer-failure-current-empty counterexample \
     models/staging/ParslGlobusTransferFailureCurrentEmpty.cfg \
     models/staging/ParslGlobusTransferFailure.tla
