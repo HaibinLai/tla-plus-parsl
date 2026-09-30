@@ -240,6 +240,8 @@ Recent focused models now connect the previously separate boundaries:
   template publication, missing scheduler arguments, and script-path I/O failure remain distinct.
 - `ParslTimeLimitedOpenTimeout` is now in the smoke sweep, separating a genuine file open from
   a missing-file timeout and preventing a raw `open()` after the timeout horizon.
+- `ParslClusterStatusRequest` is now in the smoke sweep, checking one backend poll, duplicate
+  request-position preservation, and ordered public status projection.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
   late completion, and monitoring persistence.
 - `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,

@@ -306,6 +306,9 @@ run_case cluster-submit-script-missing-key pass \
 run_case cluster-submit-script-io-error pass \
     models/providers/ParslClusterSubmitScriptIOError.cfg \
     models/providers/ParslClusterSubmitScript.tla
+run_case cluster-status-request pass \
+    models/providers/ParslClusterStatusRequest.cfg \
+    models/providers/ParslClusterStatusRequest.tla
 run_case callable-equal-cache-current counterexample \
     models/serialization/ParslCallableEqualCacheCurrent.cfg \
     models/serialization/ParslCallableEqualCache.tla
