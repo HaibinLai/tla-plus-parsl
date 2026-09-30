@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (provider cancellation and BlockProvider bad-state coverage).
+- Latest pushed commit: `0411d80` (`Promote BlockProvider bad-state probes`).
 - Foundational smoke inventory: 382 TLC cases and 351 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
