@@ -1786,6 +1786,9 @@ scale-in/out cancellation and retry monitoring, integrated end-to-end execution,
 serialization failure, monitoring DB reorder, DataFuture cancellation, and deep dependency lists.
 Cases 181--200 matched as well: dependency traversal variants, join internal-executor routing,
 value-list joins, retry-handler validation and cost boundaries, and single/list cancellation.
+Cases 201--220 matched as well: join retry/memo data, checkpoint UUIDs, result races, DFK cleanup
+and wait snapshots, result decode retry, task staging/monitoring, file content/corruption,
+nested serialization, messaging, and Globus stage-out dependency.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
