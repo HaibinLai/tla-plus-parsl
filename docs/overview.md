@@ -3491,6 +3491,7 @@ python3 -m pip install parsl
 python3 parsl_demo.py
 ```
 
-Concrete findings are tracked in the [bug ledger](bug-ledger.md), which records the current source
+Concrete findings are tracked in the [categorized bug ledger](bugs/README.md), with the [full bug ledger](bug-ledger.md)
+recording the current source
 behavior, model configuration, runtime probe, and candidate safety condition for each reproduced
 boundary.

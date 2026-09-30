@@ -1,5 +1,8 @@
 # Parsl abstraction bug ledger
 
+For a component-oriented index, see the [categorized bug ledger](bugs/README.md). This file
+remains the canonical full record for every finding.
+
 This ledger records behaviors that the bounded TLA+ models and concrete runtime probes have
 reproduced. A `Current` finding describes the behavior observed in the inspected Parsl source;
 `Fixed` is a candidate protocol/model change, not a claim that Parsl source has already been
