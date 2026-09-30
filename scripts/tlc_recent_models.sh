@@ -999,6 +999,12 @@ run_case htex-manager-message-malformed pass \
 run_case provider-status-batch pass \
     models/providers/ParslProviderStatusBatch.cfg \
     models/providers/ParslProviderStatusBatch.tla
+run_case stage-in-ordering-current counterexample \
+    models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
+    models/staging/ParslDataManagerStageInOrdering.tla
+run_case stage-in-ordering-fixed pass \
+    models/staging/ParslDataManagerStageInOrderingFixed.cfg \
+    models/staging/ParslDataManagerStageInOrdering.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla

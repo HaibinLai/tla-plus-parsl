@@ -1099,6 +1099,10 @@ heartbeat updates contact time and emits the expected reply. The runtime bridge 
 failure atomicity, missing-job completion mapping, and terminal-state stability for scheduler
 polls. `tests/test_provider_status_shape_runtime.py` provides the concrete provider status-shape
 bridge.
+`ParslDataManagerStageInOrdering.tla` is now in the staging sweep: the current ordering starts a
+stage-in transfer before wrapper preparation, so wrapper failure can leave an orphaned transfer;
+the fixed branch prepares the wrapper first and only then starts stage-in. This complements the
+runtime staging-provider dispatch probes.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.
