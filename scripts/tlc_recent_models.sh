@@ -1090,6 +1090,12 @@ run_case task-staging-monitoring-current counterexample \
 run_case task-staging-monitoring-fixed pass \
     models/core/ParslTaskStagingMonitoringFixed.cfg \
     models/core/ParslTaskStagingMonitoring.tla
+run_case task-staging-monitoring-smoke-current counterexample \
+    models/core/ParslTaskStagingMonitoringSmokeCurrent.cfg \
+    models/core/ParslTaskStagingMonitoring.tla
+run_case task-staging-monitoring-smoke-fixed pass \
+    models/core/ParslTaskStagingMonitoringSmokeFixed.cfg \
+    models/core/ParslTaskStagingMonitoring.tla
 run_case file-content pass \
     models/core/ParslFileContent.cfg \
     models/core/ParslAbstract.tla

@@ -1368,6 +1368,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslTaskStagingMonitoringFi
 delivery. The current branch permits a success observation before all chunks arrive; the fixed
 branch gates monitoring success and consumer admission on complete publication (21 distinct
 states checked).
+The smoke configurations reduce the output to one chunk while preserving the same ordering
+counterexample and fixed safety path: current reaches its expected violation in 46 generated /
+23 distinct states, while fixed passes in 34 generated / 15 distinct states at depth 11.
 
 `ParslPipeline.tla` is the compact cross-layer composition. A single logical task passes through
 payload encode/decode, a physical attempt and retry, result correlation, chunked stage-out,
