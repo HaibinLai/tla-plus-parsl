@@ -110,6 +110,9 @@ as no-ops.
 It also includes `ParslHtexScaleInRace` (BUG-184), which checks duplicate provider cancellation
 caused by concurrent block selection.
 
+It also includes `ParslFluxLateResultCancelledFuture` (BUG-185), which checks that a late successful
+Flux callback cannot write into an already-cancelled user-facing Future.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2

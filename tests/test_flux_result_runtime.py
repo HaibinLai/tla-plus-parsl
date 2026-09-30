@@ -2,6 +2,7 @@
 
 import tempfile
 import unittest
+from concurrent.futures import InvalidStateError
 from pathlib import Path
 
 from parsl.app.errors import AppException
@@ -77,6 +78,18 @@ class FluxResultRuntimeTest(unittest.TestCase):
         self.assertTrue(wrapper.cancel())
         self.assertTrue(flux_future.cancelled())
         self.assertTrue(wrapper.cancelled())
+
+    def test_late_success_result_writes_cancelled_wrapper_currently(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result_path = Path(directory) / "result.pkl"
+            result_path.write_bytes(serialize(TaskResult("late", None)))
+            wrapper = FluxFutureWrapper()
+            self.assertTrue(wrapper.cancel())
+
+            with self.assertRaises(InvalidStateError):
+                _complete_future(str(result_path), wrapper, FakeFluxFuture())
+
+            self.assertTrue(wrapper.cancelled())
 
 
 if __name__ == "__main__":

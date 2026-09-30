@@ -1453,6 +1453,12 @@ run_case htex-scale-in-race-current counterexample \
 run_case htex-scale-in-race-fixed pass \
     models/executors/ParslHtexScaleInRaceFixed.cfg \
     models/executors/ParslHtexScaleInRace.tla
+run_case flux-late-cancelled-current counterexample \
+    models/executors/ParslFluxLateResultCancelledFutureCurrent.cfg \
+    models/executors/ParslFluxLateResultCancelledFuture.tla
+run_case flux-late-cancelled-fixed pass \
+    models/executors/ParslFluxLateResultCancelledFutureFixed.cfg \
+    models/executors/ParslFluxLateResultCancelledFuture.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
