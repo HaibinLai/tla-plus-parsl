@@ -1422,6 +1422,14 @@ of an `outputs` list. Both current branches mutate the caller-visible value, whi
 branches preserve it. The two runtime probes reproduce the current behavior and both fixed models
 pass TLC simulation.
 
+The executor/strategy baseline is now extended with `ParslExecutorKinds`, which distinguishes
+provider-free local executors from manager/provider-backed HTEX, MPI, and Work Queue paths and checks
+admission, drain, failure cleanup, and resource-request restrictions. `ParslNegativeScaleIn` models
+negative `scale_in` slicing, while `ParslStrategy` and `ParslStrategyBlockCapacity` cover idle scale-in,
+overload scale-out, minimum-block bounds, and zero-capacity validation. Runtime probes cover strategy
+polling and negative scale-in. The current negative-input and zero-capacity branches produce TLC
+counterexamples; fixed and normal configurations pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:

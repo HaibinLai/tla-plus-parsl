@@ -258,6 +258,27 @@ run_case output-list-mutation-current counterexample \
 run_case output-list-mutation-fixed pass \
     models/dataflow/ParslOutputListMutationFixed.cfg \
     models/dataflow/ParslOutputListMutation.tla
+run_case executor-kinds pass \
+    models/executors/ParslExecutorKinds.cfg \
+    models/executors/ParslExecutorKinds.tla
+run_case negative-scale-in-current counterexample \
+    models/executors/ParslNegativeScaleInCurrent.cfg \
+    models/executors/ParslNegativeScaleIn.tla
+run_case negative-scale-in-fixed pass \
+    models/executors/ParslNegativeScaleInFixed.cfg \
+    models/executors/ParslNegativeScaleIn.tla
+run_case strategy pass \
+    models/strategy/ParslStrategy.cfg \
+    models/strategy/ParslStrategy.tla
+run_case strategy-block-capacity-current counterexample \
+    models/strategy/ParslStrategyBlockCapacityCurrent.cfg \
+    models/strategy/ParslStrategyBlockCapacity.tla
+run_case strategy-block-capacity-fixed pass \
+    models/strategy/ParslStrategyBlockCapacityFixed.cfg \
+    models/strategy/ParslStrategyBlockCapacity.tla
+run_case strategy-block-capacity-success pass \
+    models/strategy/ParslStrategyBlockCapacitySuccess.cfg \
+    models/strategy/ParslStrategyBlockCapacity.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla
