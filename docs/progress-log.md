@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `f2e0630` (`Refine cancelled executor failure results`).
+- Latest pushed commit: `05431ed` (`Refine Radical Pilot late failure callbacks`).
 - Foundational smoke inventory: 359 TLC cases and 230 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
