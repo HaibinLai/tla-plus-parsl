@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `f6d56a8` (`Include monitoring resource history in smoke`).
-- Foundational smoke inventory: 369 TLC cases and 236 Python runtime probes.
+- Latest pushed commit: pending (three-level join runtime coverage).
+- Foundational smoke inventory: 369 TLC cases and 237 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -104,6 +104,9 @@ are recorded here in English and committed with the model changes.
   into the foundational smoke inventory. It checks append-only RESOURCE rows, out-of-order sample
   delivery, duplicate primary-key rejection, and latest-by-timestamp selection; the model and
   runtime probe are now part of the 369/236 regression gate.
+- Current stage: promoted `tests/test_join_three_list_runtime.py` into the foundational runtime
+  gate. The probe confirms three distinct inner Futures preserve four ordered output positions,
+  including a duplicate reference, matching the existing `ParslJoinThreeList` model.
 
 ### Verification convention
 
