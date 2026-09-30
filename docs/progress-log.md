@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `9dae7f4` (`Promote serialization and staging runtime coverage`).
-- Foundational smoke inventory: 369 TLC cases and 243 Python runtime probes.
+- Latest pushed commit: pending (clock, heartbeat, and timeout runtime coverage).
+- Foundational smoke inventory: 369 TLC cases and 251 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -111,6 +111,9 @@ are recorded here in English and committed with the model changes.
   foundational gate. The probes now exercise closure/object snapshotting, serializer frame and
   header validation, clean-copy normalization, filesystem-radio atomic publication, and HTTP
   staging failure behavior against the installed Parsl source.
+- Current stage: promoted eight clock/heartbeat runtime bridges into the foundational gate. The
+  probes cover HTEX drain and heartbeat message timing, address-probe timeout propagation,
+  provider polling after clock rollback, resource-monitor sampling, and monitoring batch deadlines.
 
 ### Verification convention
 

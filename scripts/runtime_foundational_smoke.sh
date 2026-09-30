@@ -69,8 +69,16 @@ tests=(
     tests/test_htex_contact_timeout_starvation_runtime.py
     tests/test_periodic_timer_runtime.py
     tests/test_htex_shutdown_timeout_runtime.py
+    tests/test_htex_address_probe_timeout_runtime.py
+    tests/test_htex_worker_drain_clock_runtime.py
+    tests/test_worker_pool_heartbeat_runtime.py
     tests/test_heartbeat_parameter_validation_runtime.py
     tests/test_worker_contact_clock_rollback_runtime.py
+    tests/test_provider_poll_clock_runtime.py
+    tests/test_provider_poll_clock_rollback_runtime.py
+    tests/test_resource_monitor_clock_runtime.py
+    tests/test_monitoring_batch_clock_runtime.py
+    tests/test_monitoring_zmq_batch_clock_runtime.py
     tests/test_retry_timeout_runtime.py
     tests/test_timeout_timer_runtime.py
     tests/test_monitoring_db_runtime.py
