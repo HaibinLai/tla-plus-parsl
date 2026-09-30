@@ -53,3 +53,8 @@ expiry threshold both close the interchange and queue a fatal result. The fixed 
 blocks immediately on `failureSeen`, `fatalPending`, or a non-ready manager; the current action
 can accept a task in that window. TLC finds the current admission counterexample and checks
 100,001 fixed states.
+
+`ParslProviderProvisioningLifecycle.tla` models a provider block across request, provisioning,
+failure, retry, stale status polling, dispatch, completion, and scale-in. A poll from an older
+generation can arrive after provider failure; the fixed branch ignores it and checks 100,001
+states while preserving retry, admission, and scale-in safety.

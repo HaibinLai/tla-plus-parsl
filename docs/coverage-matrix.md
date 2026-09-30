@@ -278,6 +278,9 @@ HTEX admission coverage now combines registration version mismatch with heartbea
 `ParslHtexHeartbeatVersion`; the fixed model checks fatal-result ordering and rejects submissions
 during the closing window.
 
+Provider coverage also includes `ParslProviderProvisioningLifecycle`, combining provisioning
+retry, stale generation polling, dispatch admission, and scale-in safety.
+
 Monitoring coverage now combines batch rollback with per-task version high-water handling in
 `ParslMonitoringVersionedBatch`.
 
