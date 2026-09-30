@@ -16,6 +16,14 @@ class ZipPathValidationRuntimeTest(unittest.TestCase):
         self.assertNotIn(".zip/", file_obj.path)
         self.assertNotEqual(inside_path, "")
 
+    def test_parent_directory_with_zip_suffix_is_split_at_first_match_currently(self):
+        path = "/tmp/cache.zip/data/archive.zip/result.bin"
+
+        zip_path, inside_path = zip_path_split(path)
+
+        self.assertEqual(zip_path, "/tmp/cache.zip")
+        self.assertEqual(inside_path, "data/archive.zip/result.bin")
+
 
 if __name__ == "__main__":
     unittest.main()

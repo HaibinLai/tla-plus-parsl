@@ -898,6 +898,12 @@ run_case zip-member-selection-current counterexample \
 run_case zip-member-selection-fixed pass \
     models/staging/ParslZipMemberSelectionFixed.cfg \
     models/staging/ParslZipMemberSelection.tla
+run_case zip-path-first-match-current counterexample \
+    models/staging/ParslZipPathFirstMatchCurrent.cfg \
+    models/staging/ParslZipPathFirstMatch.tla
+run_case zip-path-first-match-fixed pass \
+    models/staging/ParslZipPathFirstMatchFixed.cfg \
+    models/staging/ParslZipPathFirstMatch.tla
 run_case core-executor-drain pass \
     models/core/ParslExecutorDrain.cfg \
     models/core/ParslAbstract.tla

@@ -1856,6 +1856,9 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - `ParslZipMemberSelection` now models the read-side consequence of duplicate archive members:
   current stage-in silently selects the last member, while the fixed branch rejects ambiguity,
   with BUG-190 runtime evidence from a real duplicate-member ZIP.
+- `ParslZipPathFirstMatch` now models the multi-suffix path boundary: current parsing stops at
+  the first `.zip/`, while the fixed branch selects the final separator, with BUG-191 runtime
+  evidence from a parent directory whose name ends in `.zip`.
 
 ## Validation workflow
 
@@ -1864,7 +1867,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 524 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 525 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1948,6 +1951,8 @@ The Torque malformed-status probe then completed 523 tests in 13.0 seconds with 
 including isolation of a truncated qstat record before state parsing.
 The Zip duplicate-member probe then completed 524 tests with `OK`, including the read-side
 selection of the last duplicate archive member.
+The Zip multi-suffix path probe then completed 525 tests with `OK`, including the first-match
+path split behavior for a `.zip` parent directory.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
