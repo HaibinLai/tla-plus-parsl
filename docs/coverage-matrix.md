@@ -298,3 +298,6 @@ Join coverage also combines nested joins, leaf retry, and stale leaf-result reje
 
 Core DFK coverage also combines timeout-driven retry with late result rejection in
 `ParslTimeoutRetryStaleResult`.
+
+Time coverage also includes `ParslConcurrentTimeouts`, modeling independent timeout clocks and
+cross-task late-result isolation for two concurrent logical tasks.
