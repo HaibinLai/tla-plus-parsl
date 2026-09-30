@@ -914,6 +914,10 @@ The monitoring TRY-row bookkeeping model is now included in the recurring TLC sm
 the current configuration produces the failed-insert counterexample, while the fixed
 configuration verifies that an unsuccessful insert does not poison the retry classification.
 
+The `TasksOutgoing` close/put lifecycle is also in the smoke sweep. Its current branch reaches
+the terminated DEALER socket after close, while the fixed branch rejects post-close submission
+before touching the transport.
+
 ### 3. Checked properties
 
 The safety configurations check:

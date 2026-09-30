@@ -384,3 +384,9 @@ run_case monitoring-try-insert-current counterexample \
 run_case monitoring-try-insert-fixed pass \
     models/monitoring/ParslMonitoringTryInsertBookkeepingFixed.cfg \
     models/monitoring/ParslMonitoringTryInsertBookkeeping.tla
+run_case tasks-outgoing-close-current counterexample \
+    models/executors/ParslTasksOutgoingCloseRaceCurrent.cfg \
+    models/executors/ParslTasksOutgoingCloseRace.tla
+run_case tasks-outgoing-close-fixed pass \
+    models/executors/ParslTasksOutgoingCloseRaceFixed.cfg \
+    models/executors/ParslTasksOutgoingCloseRace.tla
