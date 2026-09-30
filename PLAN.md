@@ -407,6 +407,8 @@ database record. Queue reordering exposes the stale-event overwrite in the curre
 returns, duplicate references, empty and invalid returns, `None` results, and inner cancellation.
 The current branch's set-like duplicate handling violates `JoinResultSafety`; the fixed branch
 preserves the returned sequence.
+Both current and fixed configurations are now in the recurring smoke sweep, alongside the real
+join callback, return-shape, cancellation, and aggregation probes.
 `ParslSerializerRegistry.tla` models the concrete code/data serializer registries and their
 code-first dispatch order. An identifier collision is a current-path counterexample and a fixed
 path rejection; the runtime probe confirms the current facade behavior.

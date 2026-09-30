@@ -708,6 +708,12 @@ run_case join-monitoring pass \
 run_case join-app-core pass \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
+run_case join-complete-current counterexample \
+    models/dataflow/ParslJoinComplete.cfg \
+    models/dataflow/ParslJoinComplete.tla
+run_case join-complete-fixed pass \
+    models/dataflow/ParslJoinCompleteFixed.cfg \
+    models/dataflow/ParslJoinComplete.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
