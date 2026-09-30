@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (Flux running-wrapper cancellation race).
+- Latest pushed commit: `8a8d7e0` (`Model Flux running cancellation race`).
 - Foundational smoke inventory: 365 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
