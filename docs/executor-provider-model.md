@@ -62,3 +62,14 @@ states while preserving retry, admission, and scale-in safety.
 `ParslProviderMultiBlockOwnership.tla` extends this to two independently owned blocks and two
 tasks. It checks that scale-in removes only idle blocks, running tasks retain active ownership,
 and stale polls cannot revive a failed generation; the fixed configuration checks 100,001 states.
+
+`ParslManagerLivenessPool.tla` provides the small manager-pool refinement. Heartbeat expiry marks
+M1 unavailable; a lost task can retry on M2, while admission must not select the expired manager.
+The current branch also accepts a late result from the expired manager, whereas the fixed branch
+classifies it as stale. `LiveManagerAdmission` and `NoLateResultAcceptance` are checked in both
+configurations.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslManagerLivenessPoolCurrent.cfg models/executors/ParslManagerLivenessPool.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslManagerLivenessPoolFixed.cfg models/executors/ParslManagerLivenessPool.tla
+```

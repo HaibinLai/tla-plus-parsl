@@ -309,6 +309,9 @@ Recent focused models now connect the previously separate boundaries:
   with a real SQLite insertion/query bridge.
 - `ParslProviderWorkerScaling` separates provider blocks from registered executor worker slots and
   is bridged to the real `BlockProviderExecutor` block/job mapping.
+- `ParslManagerLivenessPool` now models two-manager heartbeat expiry, retry after manager loss,
+  live-manager admission, and stale results from an expired manager; its current branch exposes
+  the admission/late-result counterexample and the fixed branch passes TLC.
 - `ParslJoinCallableTransport` combines serialized inner callable snapshots, retry attempts,
   stale results, and ordered duplicate positions in an outer `join_app`; a real Parsl runtime
   bridge exercises the same result shape.

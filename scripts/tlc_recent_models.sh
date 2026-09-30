@@ -208,6 +208,12 @@ run_case monitoring-history pass \
 run_case provider-worker-scaling pass \
     models/executors/ParslProviderWorkerScaling.cfg \
     models/executors/ParslProviderWorkerScaling.tla
+run_case manager-liveness-current counterexample \
+    models/executors/ParslManagerLivenessPoolCurrent.cfg \
+    models/executors/ParslManagerLivenessPool.tla
+run_case manager-liveness-fixed pass \
+    models/executors/ParslManagerLivenessPoolFixed.cfg \
+    models/executors/ParslManagerLivenessPool.tla
 run_case join-callable-transport pass \
     models/dataflow/ParslJoinCallableTransport.cfg \
     models/dataflow/ParslJoinCallableTransport.tla
