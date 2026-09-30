@@ -1043,6 +1043,10 @@ The monitoring sweep also includes `ParslMonitoringMalformedWorkerMessage.tla`: 
 task envelopes with neither `first_msg` nor `last_msg` must be discarded without killing the
 database worker. `tests/test_monitoring_malformed_worker_message_runtime.py` reproduces the
 current thread failure against the real `DatabaseManager`.
+`ParslMonitoringCloseIdempotence.tla` now covers repeated abnormal shutdown: the first close
+publishes the workflow finalization, while later closes must be no-ops. The runtime bridge
+`tests/test_monitoring_close_idempotence_runtime.py` reproduces the duplicate update in the
+current implementation.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

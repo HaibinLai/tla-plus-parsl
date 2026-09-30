@@ -927,6 +927,12 @@ run_case monitoring-malformed-worker-current counterexample \
 run_case monitoring-malformed-worker-fixed pass \
     models/monitoring/ParslMonitoringMalformedWorkerMessageFixed.cfg \
     models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
+run_case monitoring-close-idempotence-current counterexample \
+    models/monitoring/ParslMonitoringCloseIdempotenceCurrent.cfg \
+    models/monitoring/ParslMonitoringCloseIdempotence.tla
+run_case monitoring-close-idempotence-fixed pass \
+    models/monitoring/ParslMonitoringCloseIdempotenceFixed.cfg \
+    models/monitoring/ParslMonitoringCloseIdempotence.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
