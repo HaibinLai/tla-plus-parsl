@@ -1591,6 +1591,11 @@ ThreadPoolExecutor, HTEX, MPI, Work Queue, TaskVine, Flux, Globus Compute, and
 BlockProviderExecutor to the unified executor-kind model and its admission, capacity, drain,
 and failure-cleanup properties.
 
+The integrated join model now admits cancellation while an inner physical attempt is running.
+Previously the action contained a running-attempt branch that was unreachable because its guard
+only allowed pending or retry-wait states. TLC still checks the single/list/empty/invalid,
+duplicate-input, retry, and cancellation variants after this coverage correction.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime

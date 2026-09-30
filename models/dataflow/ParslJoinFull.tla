@@ -134,7 +134,7 @@ RetryAttempt(i) ==
 
 CancelInner(i) ==
     /\ i \in INNER
-    /\ logicalState[i] \in {"pending", "retry_wait"}
+    /\ logicalState[i] \in {"pending", "retry_wait", "running"}
     /\ attemptState' = [attemptState EXCEPT
           ![i][currentAttempt[i]] =
               IF @ = "running" THEN "cancelled" ELSE @]
@@ -213,5 +213,10 @@ EmptyJoinSafety ==
 AttemptLogicalSafety ==
     \A i \in INNER :
       logicalState[i] = "succeeded" => attemptState[i][currentAttempt[i]] = "succeeded"
+
+CancellationSafety ==
+    \A i \in INNER :
+      logicalState[i] = "cancelled"
+        => attemptState[i][currentAttempt[i]] \in {"absent", "failed", "cancelled"}
 
 =============================================================================
