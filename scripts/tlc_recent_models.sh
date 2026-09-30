@@ -366,6 +366,13 @@ run_case googlecloud-status-remote-failure-fixed pass \
     models/providers/ParslGoogleCloudStatusRemoteFailureFixed.cfg \
     models/providers/ParslGoogleCloudStatusRemoteFailure.tla
 
+run_case aws-status-reservation-shape-current counterexample \
+    models/providers/ParslAwsStatusReservationShapeCurrent.cfg \
+    models/providers/ParslAwsStatusReservationShape.tla
+run_case aws-status-reservation-shape-fixed pass \
+    models/providers/ParslAwsStatusReservationShapeFixed.cfg \
+    models/providers/ParslAwsStatusReservationShape.tla
+
 run_case appfuture-stream-none pass \
     models/dataflow/ParslAppFutureOutputStreamsNone.cfg \
     models/dataflow/ParslAppFutureOutputStreams.tla
