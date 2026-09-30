@@ -1893,6 +1893,9 @@ timeout timer outcomes.
 Cases 881--900 matched at 100 steps: Future wait/projection, duplicate/mixed/empty join shapes,
 join retry and cancellation (single/running), return-shape variants, and dynamic task creation/
 fan-out.
+Cases 901--912 completed the configured sweep at 100 steps: memo dictionary ordering, ignored
+memo keys/outputs, checkpoint ordering, and exception-checkpoint behavior. All 912 discovered
+cases now have recorded bounded-simulator evidence with their expected Current/Fixed outcomes.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
