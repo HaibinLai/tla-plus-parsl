@@ -1134,6 +1134,10 @@ length abstraction; the strict configuration rejects mismatches before exposing 
 captured at `pack_apply_message` time and remains isolated from later source mutation. The real
 snapshot bridges are `tests/test_function_object_contents_runtime.py`,
 `tests/test_callable_argument_alias_runtime.py`, and `tests/test_callable_retry_transport_runtime.py`.
+`ParslSerializationZMQBridge.tla` is now in the sweep, connecting serializer framing to ZMQ
+transport, route validation, duplicate suppression, retry-attempt correlation, and stale-result
+classification. Concrete bridges include `tests/test_zmq_serialization_runtime.py`,
+`tests/test_callable_retry_transport_runtime.py`, and `tests/test_task_transport_runtime.py`.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.

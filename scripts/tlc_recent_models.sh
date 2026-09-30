@@ -1059,6 +1059,9 @@ run_case serialization-length-fixed pass \
 run_case serialization-snapshot pass \
     models/serialization/ParslSerializationSnapshot.cfg \
     models/serialization/ParslSerializationSnapshot.tla
+run_case serialization-zmq-bridge pass \
+    models/serialization/ParslSerializationZMQBridge.cfg \
+    models/serialization/ParslSerializationZMQBridge.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla
