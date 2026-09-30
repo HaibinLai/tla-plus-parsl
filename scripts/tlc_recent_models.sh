@@ -762,6 +762,15 @@ run_case rsync-partial-current counterexample \
 run_case rsync-partial-fixed pass \
     models/staging/ParslRsyncPartialCleanupFixed.cfg \
     models/staging/ParslRsyncPartialCleanup.tla
+run_case stageout-future-separate pass \
+    models/staging/ParslStageOutFuture.cfg \
+    models/staging/ParslStageOutFuture.tla
+run_case stageout-future-intask pass \
+    models/staging/ParslStageOutInTask.cfg \
+    models/staging/ParslStageOutFuture.tla
+run_case stageout-future-none pass \
+    models/staging/ParslStageOutNone.cfg \
+    models/staging/ParslStageOutFuture.tla
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla

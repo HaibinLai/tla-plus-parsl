@@ -269,6 +269,8 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslRsyncPartialCleanup` now joins the staging sweep, checking that a failed transfer removes
   partial destination bytes before reporting failure; `tests/test_rsync_partial_cleanup_runtime.py`
   exercises the current leftover-file behavior.
+- `ParslStageOutFuture` now joins the sweep for separate-task, in-task, and no-staging modes,
+  checking output publication and dependent-task gating against the real DataFuture tests.
 - `ParslGlobusTransferFailure` is now in the smoke sweep, distinguishing terminal transfer
   failure reporting from missing diagnostic events and successful event-bearing completion.
 - `ParslClusterSubmitScript` is now in the smoke sweep for a concrete provider boundary: valid
