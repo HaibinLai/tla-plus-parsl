@@ -153,6 +153,12 @@ results, monitoring persistence, and scale-in/scale-out admission are checked to
 exhaustive configuration remains documented in `docs/executor-provider-model.md` because the
 full state space is intentionally larger than the smoke bound.
 
+`ParslJoinFull.cfg` is the corresponding fixed join composition. It adds join-body execution,
+serialized callable admission, duplicate-preserving input positions, inner retry attempts,
+outer cancellation, stale-result rejection, failure aggregation, and terminal monitoring to the
+small `ParslJoinApp` protocol. Focused models remain the place for individual callback races and
+backend-specific details.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The

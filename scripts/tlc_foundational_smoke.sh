@@ -87,5 +87,8 @@ run_case google-zone-response-shape \
 run_case provider-executor-monitoring \
     models/executors/ParslProviderExecutorTimedMonitoringFixed.cfg \
     models/executors/ParslProviderExecutorTimedMonitoring.tla
+run_case join-full \
+    models/dataflow/ParslJoinFull.cfg \
+    models/dataflow/ParslJoinFull.tla
 
 echo "Foundational TLC smoke suite passed."
