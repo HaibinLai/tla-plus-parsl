@@ -1197,6 +1197,11 @@ directions and their ordering without enumerating sockets, byte buffers, or mult
 The result direction additionally uses `acknowledged` between `received` and `consumed`, modeling
 a receiver-side consume acknowledgement before decode without claiming a particular ZMQ wire
 ack implementation.
+
+`ParslSerializedResultFile` adds the executor result-file boundary: a serialized `TaskResult` is
+written to a private temporary path, then atomically published before a consumer decodes it. Its
+current branch permits a partial file to become visible, while the fixed branch requires complete
+bytes and a completed physical attempt before publication.
 `ProtocolProgress` gives ACK transitions their own strong-fairness obligation; duplicate/discard
 traffic alone is not treated as useful progress, preventing a livelock from starving decode.
 The next refinement can add bounded drops, duplicate deliveries, and symbolic object graphs

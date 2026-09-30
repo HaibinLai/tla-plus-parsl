@@ -1459,6 +1459,12 @@ run_case flux-late-cancelled-current counterexample \
 run_case flux-late-cancelled-fixed pass \
     models/executors/ParslFluxLateResultCancelledFutureFixed.cfg \
     models/executors/ParslFluxLateResultCancelledFuture.tla
+run_case serialized-result-file-current counterexample \
+    models/core/ParslSerializedResultFileCurrent.cfg \
+    models/core/ParslSerializedResultFile.tla
+run_case serialized-result-file-fixed pass \
+    models/core/ParslSerializedResultFileFixed.cfg \
+    models/core/ParslSerializedResultFile.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla
