@@ -1957,6 +1957,12 @@ run_case slurm-cancel-failure pass \
 run_case slurm-cancel-fixed pass \
     models/providers/ParslSlurmCancelFixed.cfg \
     models/providers/ParslSlurmCancel.tla
+run_case slurm-cancel-batch-current counterexample \
+    models/providers/ParslSlurmCancelBatchCurrent.cfg \
+    models/providers/ParslSlurmCancelBatch.tla
+run_case slurm-cancel-batch-fixed pass \
+    models/providers/ParslSlurmCancelBatchFixed.cfg \
+    models/providers/ParslSlurmCancelBatch.tla
 run_case slurm-duplicate-status-current counterexample \
     models/providers/ParslSlurmDuplicateStatusCurrent.cfg \
     models/providers/ParslSlurmDuplicateStatus.tla

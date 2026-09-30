@@ -29,6 +29,8 @@ for backend-specific probes. The provider-worker scaling bridge is corroborated 
 Slurm provider coverage also includes `ParslSlurmTasksPerNode`, which checks zero
 `tasks_per_node` admission before the `cores_per_node` division and is backed by
 `tests/test_slurm_tasks_per_node_runtime.py`.
+`ParslSlurmCancelBatch` additionally models successful-prefix preservation when a cancellation
+batch contains a stale local ID.
 
 Executor-selection coverage also includes `ParslExecutorSelection`, which isolates the empty-list
 validation boundary before `random.choice`.

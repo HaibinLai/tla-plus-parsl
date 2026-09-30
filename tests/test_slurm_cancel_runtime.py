@@ -28,3 +28,12 @@ class SlurmCancelRuntimeTest(unittest.TestCase):
 
         with self.assertRaises(KeyError):
             provider.cancel(["foreign"])
+
+    def test_batch_cancel_updates_known_prefix_before_stale_id_currently(self):
+        provider = self.provider_with((0, "", ""), resource_ids=("known",))
+
+        with self.assertRaises(KeyError):
+            provider.cancel(["known", "stale"])
+
+        self.assertEqual(provider.resources["known"]["status"].state,
+                         JobState.CANCELLED)

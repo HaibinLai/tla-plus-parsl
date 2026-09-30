@@ -420,6 +420,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictVa
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_batch_strict_runtime.py -v
 ```
 
+`ParslSlurmCancelBatch.tla` refines cancellation to a known job followed by a stale local ID.
+The current batch marks the known prefix cancelled and then raises on the stale entry; the fixed
+branch treats the stale ID as an idempotent miss and completes the batch. The runtime probe in
+`tests/test_slurm_cancel_runtime.py` checks the partial-progress behavior.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmCancelBatchCurrent.cfg models/providers/ParslSlurmCancelBatch.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmCancelBatchFixed.cfg models/providers/ParslSlurmCancelBatch.tla
+```
+
 `ParslSlurmTasksPerNode.tla` covers submit-time resource validation when `cores_per_node` is
 configured. The current `SlurmProvider.submit` divides by `tasks_per_node` before validating it,
 so zero reaches a raw `ZeroDivisionError`; the fixed branch rejects the request before script
