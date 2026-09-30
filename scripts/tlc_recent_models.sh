@@ -246,6 +246,18 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case input-list-mutation-current counterexample \
+    models/dataflow/ParslInputListMutationCurrent.cfg \
+    models/dataflow/ParslInputListMutation.tla
+run_case input-list-mutation-fixed pass \
+    models/dataflow/ParslInputListMutationFixed.cfg \
+    models/dataflow/ParslInputListMutation.tla
+run_case output-list-mutation-current counterexample \
+    models/dataflow/ParslOutputListMutationCurrent.cfg \
+    models/dataflow/ParslOutputListMutation.tla
+run_case output-list-mutation-fixed pass \
+    models/dataflow/ParslOutputListMutationFixed.cfg \
+    models/dataflow/ParslOutputListMutation.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

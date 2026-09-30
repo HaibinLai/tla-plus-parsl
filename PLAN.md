@@ -1416,6 +1416,12 @@ Future reuse with failure persistence across restart. Runtime probes reproduce a
 behaviors. Each current configuration produces its expected TLC counterexample, while fixed and
 homogeneous/valid configurations pass simulation.
 
+The callable/object-content layer now also covers caller-owned list mutation. `ParslInputListMutation`
+models staging rewrites of an `inputs` list, and `ParslOutputListMutation` models clean-copy rewrites
+of an `outputs` list. Both current branches mutate the caller-visible value, while snapshot/fixed
+branches preserve it. The two runtime probes reproduce the current behavior and both fixed models
+pass TLC simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
