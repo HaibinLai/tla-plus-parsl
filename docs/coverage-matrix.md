@@ -80,6 +80,9 @@ normalization before cluster/process ID expansion.
 The join row also includes `ParslJoinImmediateCancellation` (BUG-178), which checks terminal
 failure propagation when cancellation callbacks run synchronously during registration.
 
+The provider row also includes `ParslGoogleCloudSubmitState` (BUG-179), which checks tolerant
+state translation during instance creation.
+
 The same row now includes `ParslClusterStatusUnknown` (BUG-170), which covers the shared
 `ClusterProvider.status` projection when a requested local job ID has gone stale.
 

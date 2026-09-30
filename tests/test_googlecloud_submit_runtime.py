@@ -38,6 +38,19 @@ class GoogleCloudSubmitRuntimeTest(unittest.TestCase):
         # instance was created. This is the TLC current-model counterexample.
         self.assertEqual(provider.num_instances, 1)
 
+    def test_unknown_create_status_raises_before_resource_registration_currently(self):
+        provider = GoogleCloudProvider.__new__(GoogleCloudProvider)
+        provider.launcher = lambda command, tasks, nodes, script_dir: command
+        provider.script_dir = None
+        provider.nodes_per_block = 1
+        provider.resources = {}
+        provider.create_instance = lambda command="": ({"status": "REPAIRING"}, "parslauto0")
+
+        with self.assertRaises(KeyError):
+            provider.submit("worker", tasks_per_node=1)
+
+        self.assertEqual(provider.resources, {})
+
 
 if __name__ == "__main__":
     unittest.main()
