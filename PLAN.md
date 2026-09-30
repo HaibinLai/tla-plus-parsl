@@ -1059,6 +1059,9 @@ drain after the kill event.
 arriving before the TRY row: the fixed branch preserves both deferred observations for replay,
 while the current single-slot map overwrites the earlier one. The concrete bridge is
 `tests/test_monitoring_deferred_multiplicity_runtime.py`.
+The baseline `ParslMonitoringDeferred.tla` is also in the recurring sweep, checking the normal
+first-message deferral/replay path, foreign-key gating, and latest-observation replacement. The
+runtime bridge is `tests/test_monitoring_deferred_runtime.py`.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

@@ -948,6 +948,9 @@ run_case monitoring-deferred-multiplicity-current counterexample \
 run_case monitoring-deferred-multiplicity-fixed pass \
     models/monitoring/ParslMonitoringDeferredMultiplicityFixed.cfg \
     models/monitoring/ParslMonitoringDeferredMultiplicity.tla
+run_case monitoring-deferred pass \
+    models/monitoring/ParslMonitoringDeferred.cfg \
+    models/monitoring/ParslMonitoringDeferred.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
