@@ -827,6 +827,10 @@ probe covers the same timeout/cancellation contract.
 HTEX submit-side coverage now includes concurrent task-counter allocation, queue failure rollback,
 and serialization-before-Future allocation ordering. Runtime probes reproduce the duplicate task ID
 and orphaned pending Future behaviors, while fixed configurations check the cleanup candidates.
+BlockProvider bad-state handling is now covered: marking an executor bad fails outstanding tasks,
+records the cause, rejects later submissions, and must tolerate callbacks mutating or completing
+the task dictionary during the failure sweep. Current mutation/order failures and fixed snapshot
+paths are included in TLC, with runtime probes for each behavior.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

@@ -1566,6 +1566,27 @@ run_case htex-submit-lifecycle-fixed pass \
 run_case htex-submit-lifecycle-serialization-failure pass \
     models/executors/ParslHtexSubmitLifecycleSerializationFailure.cfg \
     models/executors/ParslHtexSubmitLifecycle.tla
+run_case bad-state-task-mutation-current counterexample \
+    models/executors/ParslBadStateTaskMutationCurrent.cfg \
+    models/executors/ParslBadStateTaskMutation.tla
+run_case bad-state-task-mutation-fixed pass \
+    models/executors/ParslBadStateTaskMutationFixed.cfg \
+    models/executors/ParslBadStateTaskMutation.tla
+run_case block-provider-bad-state pass \
+    models/executors/ParslBlockProviderBadState.cfg \
+    models/executors/ParslBlockProviderBadState.tla
+run_case block-provider-bad-state-mutation-current counterexample \
+    models/executors/ParslBlockProviderBadStateMutationCurrent.cfg \
+    models/executors/ParslBlockProviderBadStateMutation.tla
+run_case block-provider-bad-state-mutation-fixed pass \
+    models/executors/ParslBlockProviderBadStateMutationFixed.cfg \
+    models/executors/ParslBlockProviderBadStateMutation.tla
+run_case block-provider-bad-state-order-current counterexample \
+    models/executors/ParslBlockProviderBadStateOrderingCurrent.cfg \
+    models/executors/ParslBlockProviderBadStateOrdering.tla
+run_case block-provider-bad-state-order-fixed pass \
+    models/executors/ParslBlockProviderBadStateOrderingFixed.cfg \
+    models/executors/ParslBlockProviderBadStateOrdering.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
