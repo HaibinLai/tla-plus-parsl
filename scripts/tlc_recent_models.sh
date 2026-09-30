@@ -2232,6 +2232,12 @@ run_case monitoring-delivery-current counterexample \
 run_case monitoring-delivery-fixed pass \
     models/monitoring/ParslMonitoringDeliveryFixed.cfg \
     models/monitoring/ParslMonitoringDelivery.tla
+run_case monitoring-event-stream-current counterexample \
+    models/monitoring/ParslMonitoringEventStreamCurrent.cfg \
+    models/monitoring/ParslMonitoringEventStream.tla
+run_case monitoring-event-stream-fixed pass \
+    models/monitoring/ParslMonitoringEventStreamFixed.cfg \
+    models/monitoring/ParslMonitoringEventStream.tla
 run_case monitoring-threshold-current counterexample \
     models/monitoring/ParslMonitoringThreshold.cfg \
     models/monitoring/ParslMonitoringThreshold.tla

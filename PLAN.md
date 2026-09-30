@@ -1706,7 +1706,7 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - richer join_app behavior beyond the bounded inner-Future set, cancellation, duplicate positions,
   failure aggregation, and invalid-return branches now modeled;
 - manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
-- monitoring as an abstract eventual event stream;
+- richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
 - richer dynamic task creation beyond the bounded parent-to-two-child fan-out model;
 - additional executor/provider-specific models.
 
