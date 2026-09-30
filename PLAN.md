@@ -927,6 +927,10 @@ The bounded file-content model `ParslFileBytes` is now also part of the recurrin
 checks per-chunk checksums, temporary-buffer isolation, source-version staleness, and atomic
 stage-in/stage-out publication; the runtime Zip probe verifies the same bytes and checksums.
 
+The combined `ParslClock` model is now in the smoke sweep as well. Its two configurations cover
+heartbeat delivery/expiry, task deadlines, retry after timeout or manager loss, recovery, and
+stale late results, including the zero-retry terminal timeout case.
+
 ### 3. Checked properties
 
 The safety configurations check:

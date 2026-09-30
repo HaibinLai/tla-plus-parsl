@@ -51,6 +51,12 @@ run_case heartbeat-timeout-current counterexample \
 run_case heartbeat-timeout-fixed pass \
     models/clock/ParslHeartbeatTimeoutPersistenceFixed.cfg \
     models/clock/ParslHeartbeatTimeoutPersistence.tla
+run_case clock-retry-heartbeat pass \
+    models/clock/ParslClock.cfg \
+    models/clock/ParslClock.tla
+run_case clock-terminal-timeout pass \
+    models/clock/ParslClockTerminal.cfg \
+    models/clock/ParslClock.tla
 run_case monitoring-history pass \
     models/monitoring/ParslMonitoringStatusHistory.cfg \
     models/monitoring/ParslMonitoringStatusHistory.tla
