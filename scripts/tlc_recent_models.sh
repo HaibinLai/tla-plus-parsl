@@ -747,6 +747,15 @@ run_case datafuture-transfer-current counterexample \
 run_case datafuture-transfer-fixed pass \
     models/staging/ParslDataFutureTransferFixed.cfg \
     models/staging/ParslDataFutureTransfer.tla
+run_case http-status-current counterexample \
+    models/staging/ParslHTTPStatusValidationCurrent.cfg \
+    models/staging/ParslHTTPStatusValidation.tla
+run_case http-status-fixed pass \
+    models/staging/ParslHTTPStatusValidationFixed.cfg \
+    models/staging/ParslHTTPStatusValidation.tla
+run_case http-status-success pass \
+    models/staging/ParslHTTPStatusValidationSuccess.cfg \
+    models/staging/ParslHTTPStatusValidation.tla
 run_case monitoring-db-core pass \
     models/monitoring/ParslMonitoringDB.cfg \
     models/monitoring/ParslMonitoringDB.tla
