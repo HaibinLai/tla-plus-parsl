@@ -970,6 +970,12 @@ run_case pipeline-fixed pass \
 run_case pipeline-smoke pass \
     models/core/ParslPipelineSmoke.cfg \
     models/core/ParslPipeline.tla
+run_case pipeline-timed-current counterexample \
+    models/core/ParslPipelineTimedCurrent.cfg \
+    models/core/ParslPipelineTimed.tla
+run_case pipeline-timed-fixed pass \
+    models/core/ParslPipelineTimedFixed.cfg \
+    models/core/ParslPipelineTimed.tla
 run_case htex-submit-success pass \
     models/executors/ParslHtexSubmitSuccess.cfg \
     models/executors/ParslHtexSubmitFailure.tla
