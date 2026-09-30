@@ -853,6 +853,10 @@ the command builder and both in-task/separate staging paths.
 File-object coverage now includes clean-copy semantics (preserving URL metadata while clearing
 site-local paths), local versus staged path resolution, and malformed zip URL rejection. Runtime
 probes exercise the corresponding `File` and zip staging helpers.
+Globus staging coverage now includes endpoint child-path validation, stage-in/stage-out Future
+dependencies, atomic token-file publication, and serialized per-submit resource configuration.
+Runtime probes cover endpoint/path and token-cache behavior, including the current race and
+truncation counterexamples.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

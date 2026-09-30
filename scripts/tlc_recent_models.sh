@@ -1794,6 +1794,33 @@ run_case zip-path-current counterexample \
 run_case zip-path-fixed pass \
     models/staging/ParslZipPathValidationFixed.cfg \
     models/staging/ParslZipPathValidation.tla
+run_case globus-endpoint-current counterexample \
+    models/staging/ParslGlobusEndpointPathCurrent.cfg \
+    models/staging/ParslGlobusEndpointPath.tla
+run_case globus-endpoint-fixed pass \
+    models/staging/ParslGlobusEndpointPathFixed.cfg \
+    models/staging/ParslGlobusEndpointPath.tla
+run_case globus-endpoint-valid pass \
+    models/staging/ParslGlobusEndpointPathValid.cfg \
+    models/staging/ParslGlobusEndpointPath.tla
+run_case globus-stage-dependency pass \
+    models/staging/ParslGlobusStageDependency.cfg \
+    models/staging/ParslGlobusStageDependency.tla
+run_case globus-token-current counterexample \
+    models/staging/ParslGlobusTokenFileAtomicityCurrent.cfg \
+    models/staging/ParslGlobusTokenFileAtomicity.tla
+run_case globus-token-fixed pass \
+    models/staging/ParslGlobusTokenFileAtomicityFixed.cfg \
+    models/staging/ParslGlobusTokenFileAtomicity.tla
+run_case globus-token-valid pass \
+    models/staging/ParslGlobusTokenFileAtomicityValid.cfg \
+    models/staging/ParslGlobusTokenFileAtomicity.tla
+run_case globus-compute-config-current counterexample \
+    models/staging/ParslGlobusComputeConfig.cfg \
+    models/staging/ParslGlobusComputeConfig.tla
+run_case globus-compute-config-fixed pass \
+    models/staging/ParslGlobusComputeConfigFixed.cfg \
+    models/staging/ParslGlobusComputeConfig.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
