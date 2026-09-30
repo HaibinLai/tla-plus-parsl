@@ -327,6 +327,12 @@ run_case kubernetes-polling-current counterexample \
 run_case kubernetes-polling-fixed pass \
     models/providers/ParslKubernetesPollingFixed.cfg \
     models/providers/ParslKubernetesPolling.tla
+run_case local-provider-current counterexample \
+    models/providers/ParslLocalProviderCurrent.cfg \
+    models/providers/ParslLocalProvider.tla
+run_case local-provider-fixed pass \
+    models/providers/ParslLocalProviderFixed.cfg \
+    models/providers/ParslLocalProvider.tla
 run_case slurm-malformed-line-current counterexample \
     models/providers/ParslSlurmMalformedLineCurrent.cfg \
     models/providers/ParslSlurmMalformedLine.tla

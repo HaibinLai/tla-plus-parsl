@@ -913,6 +913,8 @@ a cancellation request, yielding `COMPLETED`.
 `ParslLocalProvider.tla` models this provider-specific `.ec`/PID boundary; its current
 configuration finds the late-marker cancellation counterexample and its fixed configuration
 prioritizes cancellation during polling.
+Both configurations are now part of the recurring smoke sweep, backed by the real local-process
+and exit-file checks in `tests/test_local_provider_runtime.py`.
 `ParslLocalProviderStatusScope.tla` models the current `status(job_ids)` implementation's loop
 over all resources. Its current configuration exposes an unrelated missing `.ec` file aborting a
 valid query, while the fixed configuration limits observation to requested IDs.
