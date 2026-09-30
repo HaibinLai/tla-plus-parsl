@@ -1107,6 +1107,8 @@ bounded polling. The clock/runtime probes in `tests/test_provider_poll_clock_run
 must not abort the whole poll; the fixed branch preserves the known result and marks the missing
 observation explicitly. `tests/test_provider_status_shape_runtime.py` reproduces the current
 `IndexError` path.
+`ParslPollerBadState.tla` is now in the provider sweep, checking failure-threshold handling,
+outstanding-task failure, bad-state admission blocking, and the no-scale-after-bad-state rule.
 `ParslDataManagerStageInOrdering.tla` is now in the staging sweep: the current ordering starts a
 stage-in transfer before wrapper preparation, so wrapper failure can leave an orphaned transfer;
 the fixed branch prepares the wrapper first and only then starts stage-in. This complements the

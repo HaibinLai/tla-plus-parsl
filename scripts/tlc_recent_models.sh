@@ -1008,6 +1008,9 @@ run_case provider-status-shape-current counterexample \
 run_case provider-status-shape-fixed pass \
     models/executors/ParslProviderStatusShapeFixed.cfg \
     models/executors/ParslProviderStatusShape.tla
+run_case poller-bad-state pass \
+    models/providers/ParslPollerBadState.cfg \
+    models/providers/ParslPollerBadState.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
