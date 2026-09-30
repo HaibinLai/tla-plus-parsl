@@ -1021,8 +1021,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexDuplicateRegis
 `HighThroughputExecutor.__init__`.  The derived capacity is the minimum of the configured
 per-node maximum, CPU slots, memory slots, and (when configured) available accelerator slots.
 `tests/test_htex_worker_capacity_runtime.py` exercises CPU-, memory-, and accelerator-limited
-nodes against the real executor constructor.  The model checks that the resulting worker count
-cannot oversubscribe any advertised resource.
+nodes against the real executor constructor, as well as the no-provider-hints fallback.  The
+model checks that the resulting worker count cannot oversubscribe any advertised resource.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexWorkerCapacityCpu.cfg models/executors/ParslHtexWorkerCapacity.tla

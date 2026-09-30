@@ -220,6 +220,9 @@ run_case manager-liveness-current counterexample \
 run_case manager-liveness-fixed pass \
     models/executors/ParslManagerLivenessPoolFixed.cfg \
     models/executors/ParslManagerLivenessPool.tla
+run_case htex-capacity-fallback pass \
+    models/executors/ParslHtexCapacityFallback.cfg \
+    models/executors/ParslHtexCapacityFallback.tla
 run_case join-callable-transport pass \
     models/dataflow/ParslJoinCallableTransport.cfg \
     models/dataflow/ParslJoinCallableTransport.tla

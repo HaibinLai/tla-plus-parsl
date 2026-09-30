@@ -347,7 +347,7 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslMemoDictOrdering` is now in the smoke sweep, checking heterogeneous Python dictionary
   keys, canonical fixed ordering, and the homogeneous-key success path.
 
-The runtime suite currently contains 498 probes and passes as a whole:
+The runtime suite currently contains 499 probes and passes as a whole:
 
 ```bash
 PYTHONWARNINGS=ignore PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl \
@@ -1773,6 +1773,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - `ParslHtexWorkerCapacity` now models the concrete HTEX worker-count minimum across configured
   maximum workers, CPU slots, memory slots, and available accelerators, with runtime probes for
   each binding resource.
+- `ParslHtexCapacityFallback` captures the HTEX no-provider-hints branch that normalizes an
+  unbounded worker limit to one worker per node.
 - `ParslMonitoringResourceHistory` now models append-only, timestamp-ordered SQLite resource
   samples, including out-of-order delivery and duplicate-key idempotence.
 - richer monitoring event-stream semantics beyond the bounded multi-task queue/high-water model;
@@ -1808,7 +1810,7 @@ retain normal-success, memoization-hit, retry-success, permanent-failure, provid
 worker-loss, scale-in/out, and late-result scenarios. For each safety property, a deliberately
 broken variant can be added later to ensure TLC produces a counterexample.
 The runtime baseline is reproducible with `python -m unittest discover -s tests -p
-'test_*runtime.py'`; the current suite has 498 passing tests and intentionally uses local/fake
+'test_*runtime.py'`; the current suite has 499 passing tests and intentionally uses local/fake
 providers instead of external scheduler or cloud credentials.
 
 The September 2026 full-suite audit ran all 487 runtime probes in 12.814 seconds with an `OK`
@@ -1842,6 +1844,8 @@ The three-manager liveness probe then completed 497 tests in 12.862 seconds with
 independent preservation of two active managers after one heartbeat expiry.
 The three-element join-cancellation probe then completed 498 tests in 12.464 seconds with `OK`,
 including the current `CancelledError` escape with two successful siblings.
+The HTEX no-hints capacity probe then completed 499 tests in 12.471 seconds with `OK`, including
+the constructor's conservative one-worker fallback.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40

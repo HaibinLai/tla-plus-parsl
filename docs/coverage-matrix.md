@@ -309,7 +309,9 @@ concurrent logical tasks.
 
 Executor capacity coverage also includes `ParslHtexWorkerCapacity`, which mirrors the HTEX
 constructor's CPU-, memory-, maximum-worker-, and accelerator-limited worker calculation and is
-backed by `tests/test_htex_worker_capacity_runtime.py`.
+backed by `tests/test_htex_worker_capacity_runtime.py`.  The same runtime bridge now covers the
+one-worker fallback when all provider resource hints are absent.
+The fallback state machine is `ParslHtexCapacityFallback`.
 
 Monitoring coverage also includes `ParslMonitoringResourceHistory`, an append-only, timestamp-
 ordered model for real SQLite `RESOURCE` samples and duplicate primary-key handling, backed by

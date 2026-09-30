@@ -50,6 +50,15 @@ class HtexWorkerCapacityRuntimeTest(unittest.TestCase):
         )
         self.assertEqual(executor._workers_per_node, 3)
 
+    def test_missing_provider_hints_fall_back_to_one_worker(self):
+        executor = HighThroughputExecutor(
+            provider=LocalProvider(),
+            address="127.0.0.1",
+            encrypted=False,
+            cores_per_worker=1,
+        )
+        self.assertEqual(executor._workers_per_node, 1)
+
 
 if __name__ == "__main__":
     unittest.main()
