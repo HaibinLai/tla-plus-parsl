@@ -1854,6 +1854,8 @@ Cases 581--600 matched at 100 steps: Slurm strict batch, cancel, duplicate/forei
 status, submit behavior, and PBSPro job-alias uniqueness.
 Cases 601--620 matched at 100 steps: PBSPro malformed JSON/status/submit, Torque cancel and
 duplicate/status parsing, status-failure handling, and submit success.
+Cases 621--640 matched at 100 steps: Torque task-list parsing, LocalProvider exit-file/status
+handling, unknown cancellation IDs, status scoping, submit cleanup, and task-list outcomes.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
