@@ -1062,6 +1062,10 @@ while the current single-slot map overwrites the earlier one. The concrete bridg
 The baseline `ParslMonitoringDeferred.tla` is also in the recurring sweep, checking the normal
 first-message deferral/replay path, foreign-key gating, and latest-observation replacement. The
 runtime bridge is `tests/test_monitoring_deferred_runtime.py`.
+`ParslMonitoringDispatchEnvelope.tla` now covers the queue-envelope boundary before internal
+dispatch: malformed tuples must be rejected without terminating the migration thread, while valid
+two-element envelopes are admitted. `tests/test_monitoring_dispatch_envelope_runtime.py`
+reproduces the current assertion on a one-element tuple.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

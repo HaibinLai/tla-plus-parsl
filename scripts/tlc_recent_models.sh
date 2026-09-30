@@ -951,6 +951,15 @@ run_case monitoring-deferred-multiplicity-fixed pass \
 run_case monitoring-deferred pass \
     models/monitoring/ParslMonitoringDeferred.cfg \
     models/monitoring/ParslMonitoringDeferred.tla
+run_case monitoring-dispatch-envelope-current counterexample \
+    models/monitoring/ParslMonitoringDispatchEnvelopeCurrent.cfg \
+    models/monitoring/ParslMonitoringDispatchEnvelope.tla
+run_case monitoring-dispatch-envelope-fixed pass \
+    models/monitoring/ParslMonitoringDispatchEnvelopeFixed.cfg \
+    models/monitoring/ParslMonitoringDispatchEnvelope.tla
+run_case monitoring-dispatch-envelope-valid pass \
+    models/monitoring/ParslMonitoringDispatchEnvelopeValid.cfg \
+    models/monitoring/ParslMonitoringDispatchEnvelope.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
