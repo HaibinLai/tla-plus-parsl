@@ -97,6 +97,19 @@ sequence. A malformed decoded task followed by a valid task leaves the current i
 dead before the valid task can be queued; the fixed branch discards the first envelope and keeps
 processing the channel. This is a temporal refinement of BUG-098 rather than a separate defect.
 
+`ParslHtexSerializationFailure.tla` models the submit-side serialization error boundary. The
+current `HighThroughputExecutor.submit` catches only `TypeError` from `pack_apply_message`; a
+different serializer exception such as `ValueError` escapes as an implementation exception rather
+than Parsl's `SerializationError`. The fixed branch normalizes every serialization failure before
+it leaves submit. `tests/test_htex_serialization_failure_runtime.py` invokes the real executor
+method with deterministic serializer failures. This finding is recorded as BUG-268.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexSerializationFailureCurrent.cfg models/serialization/ParslHtexSerializationFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexSerializationFailureFixed.cfg models/serialization/ParslHtexSerializationFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_serialization_failure_runtime.py -v
+```
+
 `ParslCommandSendFailure.tla` models a transport exception during `CommandClient.run`'s
 `send_pyobj` call. The current branch leaves the REQ client marked healthy, while the fixed branch
 poisons it before the next command can reuse the failed socket. The runtime probe uses the real

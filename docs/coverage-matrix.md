@@ -245,6 +245,8 @@ that a worker STATUS write cannot remain committed after the corresponding TRY u
 Serialization/HTEX coverage also includes `ParslHtexTaskIngressContinuation`, which refines
 BUG-098 from a single malformed envelope to a malformed-then-valid message sequence and checks
 that the later valid task remains queueable.
+`ParslHtexSerializationFailure` checks that non-`TypeError` serializer failures are normalized
+at the HTEX submit boundary instead of escaping as raw implementation exceptions (BUG-268).
 
 Staging coverage also includes `ParslGlobusTokenSchema` (BUG-266), which checks that an incomplete
 but syntactically valid token cache cannot reach service-record indexing as if it were usable.

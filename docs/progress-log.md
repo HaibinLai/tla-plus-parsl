@@ -8,9 +8,9 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `656c5e7` (`Model Globus token schema validation`).
-- Foundational smoke inventory: 349 TLC cases and 220 Python runtime probes (including the
-  uncommitted Globus initialization-race stage documented in the current working tree).
+- Latest pushed commit: `b8c3e41` (`Model Globus initialization race`).
+- Foundational smoke inventory: 350 TLC cases and 221 Python runtime probes (including the
+  uncommitted HTEX serialization-failure stage documented in the current working tree).
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -28,6 +28,8 @@ are recorded here in English and committed with the model changes.
   ingress loop before a later valid task is queued.
 - `656c5e7`: Globus token-schema validation. An incomplete cached service mapping must not expose
   a raw `KeyError` during authorizer construction.
+- `b8c3e41`: Globus initialization race. Concurrent creation of `~/.parsl` must not turn ready
+  directory state into `FileExistsError`.
 
 ### Verification convention
 
