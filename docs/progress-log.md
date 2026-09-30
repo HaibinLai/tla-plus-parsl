@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `57f5aaf` (`Model HTEX cancelled failure results`).
-- Foundational smoke inventory: 363 TLC cases and 233 Python runtime probes.
+- Latest pushed commit: pending (Flux late failure cancellation refinement).
+- Foundational smoke inventory: 364 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -74,6 +74,11 @@ are recorded here in English and committed with the model changes.
   rejects a cancelled Future and its recovery call rejects again; the Current model produces a
   two-state counterexample, the Fixed model passes in seven generated/four distinct states, and
   the runtime probe reproduces the stranded later failure Future.
+- Current stage: added `ParslFluxLateFailureCancelledFuture`, the failure counterpart to the
+  existing late-success cancellation model. `_complete_future` can call `set_exception` on a
+  cancelled wrapper after an underlying Flux job fails; the Current model produces a two-state
+  counterexample, the Fixed model passes in four generated/two distinct states, and the concrete
+  callback probe reproduces the `InvalidStateError`.
 
 ### Verification convention
 

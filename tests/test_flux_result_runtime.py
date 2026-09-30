@@ -91,6 +91,15 @@ class FluxResultRuntimeTest(unittest.TestCase):
 
             self.assertTrue(wrapper.cancelled())
 
+    def test_late_failure_writes_cancelled_wrapper_currently(self):
+        wrapper = FluxFutureWrapper()
+        self.assertTrue(wrapper.cancel())
+
+        with self.assertRaises(InvalidStateError):
+            _complete_future("unused", wrapper, FakeFluxFuture(return_code=7))
+
+        self.assertTrue(wrapper.cancelled())
+
 
 if __name__ == "__main__":
     unittest.main()

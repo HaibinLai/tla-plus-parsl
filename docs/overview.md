@@ -206,6 +206,9 @@ the current orphaned-pending-task behavior.
 `set_exception` path can raise on the cancelled Future and then raise again while handling that
 failure, stranding later failure frames; the fixed branch consumes the stale frame and continues.
 
+`ParslFluxLateFailureCancelledFuture.tla` applies the same terminal-wrapper check to Flux: a late
+failed underlying job must not write an exception into a cancelled user-facing wrapper.
+
 `ParslHtexUnknownTaskResult.tla` models a result whose task id has already been removed from the
 executor task map. The current `tasks.pop(task_id)` raises `KeyError` and terminates the result
 worker, leaving later valid results unprocessed. The fixed branch discards the stale result and

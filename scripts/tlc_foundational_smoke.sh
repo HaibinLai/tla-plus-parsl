@@ -428,6 +428,9 @@ run_case flux-error-cleanup \
 run_case flux-result \
     models/executors/ParslFluxResultFixed.cfg \
     models/executors/ParslFluxResult.tla
+run_case flux-late-failure-cancelled-future \
+    models/executors/ParslFluxLateFailureCancelledFutureFixed.cfg \
+    models/executors/ParslFluxLateFailureCancelledFuture.tla
 run_case flux-submission-failure \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla

@@ -378,6 +378,12 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexCancelledFailu
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_cancelled_result_runtime.py -v
 ```
 
+`ParslFluxLateFailureCancelledFuture.tla` refines the existing Flux late-result model for the
+failure path. `_complete_future` checks cancellation only on the underlying Flux future; a failed
+underlying job can therefore call `set_exception` on an already-cancelled `FluxFutureWrapper`.
+The Current model produces a two-state counterexample and the Fixed model ignores the stale
+callback. `tests/test_flux_result_runtime.py` exercises the concrete callback.
+
 `ParslHtexUnknownTaskResult.tla` covers a stale result whose `task_id` is no longer present in
 the executor task map. The current result worker calls `pop` unconditionally, so a `KeyError`
 terminates the result loop and strands later valid results in the same batch. The fixed branch
