@@ -95,6 +95,12 @@ The symbolic byte/checksum path is also exercised against a real local archive t
 records a SHA-256 checksum for each chunk, stages the file through the real Zip provider, and
 checks both byte-for-byte equality and per-chunk checksums after stage-in.
 
+`ParslDataManagerStageOutReturn.tla` models the two return shapes of `DataManager.stage_out`: a
+provider may return `None`, in which case the output `DataFuture` follows the application Future,
+or return an independent Future for a separate transfer. The output is publishable only after the
+application and the selected transfer are complete. Both paths are checked against the real
+`DataManager` by `tests/test_data_manager_stage_out_return_runtime.py`.
+
 ```bash
 /tmp/parsl-venv/bin/python -m unittest tests/test_file_bytes_transfer_runtime.py -v
 ```

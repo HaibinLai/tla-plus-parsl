@@ -6,6 +6,10 @@ task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 The monitoring coverage also includes `ParslMonitoringLifecycleBookkeeping`, which composes
 successful/failed TASK, TRY, and WORKFLOW writes with finalization markers.
 
+The file-transfer coverage also includes `ParslDataManagerStageOutReturn`, which distinguishes a
+`None` stage-out return (the output follows the application Future) from an independent transfer
+Future and checks output publication ordering with a real `DataManager` probe.
+
 This repository intentionally uses bounded abstractions. The table below records what is
 currently modeled, which runtime probes corroborate it, and where the abstraction is still
 coarse. A passing TLC run is evidence for the listed finite model, not a proof of all Parsl

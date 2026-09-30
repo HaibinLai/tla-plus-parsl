@@ -334,6 +334,13 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+
+run_case stageout-return-none pass \
+    models/staging/ParslDataManagerStageOutReturnNone.cfg \
+    models/staging/ParslDataManagerStageOutReturn.tla
+run_case stageout-return-future pass \
+    models/staging/ParslDataManagerStageOutReturnFuture.cfg \
+    models/staging/ParslDataManagerStageOutReturn.tla
 run_case grid-engine-submit-shape-current counterexample \
     models/providers/ParslGridEngineSubmitShapeCurrent.cfg \
     models/providers/ParslGridEngineSubmitShape.tla
