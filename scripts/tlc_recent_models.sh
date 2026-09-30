@@ -358,6 +358,15 @@ run_case command-send-failure-fixed pass \
 run_case command-send-failure-normal pass \
     models/serialization/ParslCommandSendFailureNormal.cfg \
     models/serialization/ParslCommandSendFailure.tla
+run_case pbspro-submit-shape-current counterexample \
+    models/providers/ParslPbsproSubmitShapeCurrent.cfg \
+    models/providers/ParslPbsproSubmitShape.tla
+run_case pbspro-submit-shape-fixed pass \
+    models/providers/ParslPbsproSubmitShapeFixed.cfg \
+    models/providers/ParslPbsproSubmitShape.tla
+run_case pbspro-submit-shape-normal pass \
+    models/providers/ParslPbsproSubmitShapeNormal.cfg \
+    models/providers/ParslPbsproSubmitShape.tla
 run_case cluster-status-unknown-current counterexample \
     models/providers/ParslClusterStatusUnknownCurrent.cfg \
     models/providers/ParslClusterStatusUnknown.tla

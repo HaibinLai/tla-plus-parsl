@@ -72,6 +72,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalPidAdmissionN
 
 This non-positive launcher-PID boundary is recorded as BUG-212.
 
+`ParslPbsproSubmitShape.tla` models the PBS Pro `qsub` response boundary. The current provider
+records every non-empty stdout line as a job and returns the last line, so an extra warning line
+can become a pseudo-job. The fixed branch requires one validated scheduler ID per submission.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproSubmitShapeCurrent.cfg models/providers/ParslPbsproSubmitShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproSubmitShapeFixed.cfg models/providers/ParslPbsproSubmitShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproSubmitShapeNormal.cfg models/providers/ParslPbsproSubmitShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_submit_shape_runtime.py -v
+```
+
+This PBS Pro submit-response boundary is recorded as BUG-215.
+
 `ParslClusterStatusRequest.tla` captures the common `ClusterProvider.status` projection. A single
 provider-specific `_status()` poll updates local resources, then the public method projects those
 records back in the caller's requested order, including duplicate job IDs. The runtime probe uses

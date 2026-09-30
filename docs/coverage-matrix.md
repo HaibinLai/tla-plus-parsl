@@ -93,6 +93,9 @@ interchange kill is reaped before shutdown closes its dependent channels.
 The serialization/ZMQ row also includes `ParslCommandSendFailure` (BUG-214), which checks that
 failed command sends poison the REQ client instead of allowing unsafe reuse.
 
+The provider row also includes `ParslPbsproSubmitShape` (BUG-215), which checks that a successful
+PBS Pro submission publishes one validated job resource rather than every stdout line.
+
 It also includes `ParslCondorSubmitWhitespace` (BUG-177), which checks scheduler whitespace
 normalization before cluster/process ID expansion.
 
