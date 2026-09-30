@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (ClusterProvider mixed known/unknown status coverage).
+- Latest pushed commit: `7b87db6` (`Refine cluster provider unknown job model`).
 - Foundational smoke inventory: 382 TLC cases and 340 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
