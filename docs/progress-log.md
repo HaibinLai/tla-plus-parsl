@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `8fc56e1` (`Promote ZMQ and HTEX runtime coverage`).
-- Foundational smoke inventory: 377 TLC cases and 312 Python runtime probes.
+- Latest pushed commit: pending (executor and task transport runtime coverage).
+- Foundational smoke inventory: 377 TLC cases and 318 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -169,6 +169,9 @@ are recorded here in English and committed with the model changes.
   serializer fallback/cache behavior, CurveZMQ certificate validation, monitoring-router failure,
   ambiguous and duplicate HTEX messages, submit-counter races, manager drain, and worker watchdog
   result races.
+- Current stage: promoted six executor/task-transport runtime bridges into the foundational gate:
+  ThreadPoolExecutor lifecycle/resource validation, invalid thread counts, ParslPoolExecutor map
+  timeout semantics, real serialized ZMQ task execution, and LocalProvider stale cancellation.
 
 ### Verification convention
 

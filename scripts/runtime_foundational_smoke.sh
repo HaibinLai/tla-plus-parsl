@@ -205,6 +205,12 @@ tests=(
     tests/test_htex_submit_counter_race_runtime.py
     tests/test_htex_watchdog_result_race_runtime.py
     tests/test_htex_worker_watchdog_runtime.py
+    tests/test_thread_executor_runtime.py
+    tests/test_thread_executor_resource_spec_runtime.py
+    tests/test_thread_executor_thread_count_runtime.py
+    tests/test_pool_executor_map_runtime.py
+    tests/test_task_transport_runtime.py
+    tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py
