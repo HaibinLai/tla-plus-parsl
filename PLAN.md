@@ -1789,6 +1789,11 @@ value-list joins, retry-handler validation and cost boundaries, and single/list 
 Cases 201--220 matched as well: join retry/memo data, checkpoint UUIDs, result races, DFK cleanup
 and wait snapshots, result decode retry, task staging/monitoring, file content/corruption,
 nested serialization, messaging, and Globus stage-out dependency.
+Cases 221--238 matched as well: Zip stage-in success/corruption/current-fixed paths and the core
+executor drain, idle-manager timeout, provider failure, registration/recovery, scale-in,
+serialization/submit failure, terminal timeout, and abstract smoke configurations. The remaining
+join smoke cases 239--240 also passed with a reduced 100-step simulator bound after the default
+1,000-step run exceeded the sandbox observation window.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
