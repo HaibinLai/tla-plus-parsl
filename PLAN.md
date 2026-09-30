@@ -1379,7 +1379,8 @@ reconstruction for a retryable duplicate-preserving list.
 
 The callable and wire-serialization boundary models are now in the smoke sweep. `ParslApplyMessageArity`
 checks that the apply-message unpacker cannot expose an unexpected frame count; `ParslCallableArgumentAlias`
-checks alias preservation across callable/argument decoding; and `ParslCallableDeserializeCache` checks
+checks alias preservation across callable/argument decoding; `ParslPythonNestedAlias` extends that
+check to a nested object field; and `ParslCallableDeserializeCache` checks
 that a mutable callable is not returned from a stale deserialization cache. `ParslCallableSerializerCache`
 and `ParslPoolExecutorCallableCache` cover unhashable callable admission, while `ParslSerializationEmptyRegistry`
 and `ParslSerializerRegistry` cover explicit empty-registry failure and ambiguous plugin identifiers.

@@ -2701,6 +2701,12 @@ run_case serialization-callable-argument-alias-current counterexample \
 run_case serialization-callable-argument-alias-fixed pass \
     models/serialization/ParslCallableArgumentAliasFixed.cfg \
     models/serialization/ParslCallableArgumentAlias.tla
+run_case serialization-python-nested-alias-current counterexample \
+    models/serialization/ParslPythonNestedAliasCurrent.cfg \
+    models/serialization/ParslPythonNestedAlias.tla
+run_case serialization-python-nested-alias-fixed pass \
+    models/serialization/ParslPythonNestedAliasFixed.cfg \
+    models/serialization/ParslPythonNestedAlias.tla
 run_case serialization-callable-deserialize-cache-current counterexample \
     models/serialization/ParslCallableDeserializeCacheCurrent.cfg \
     models/serialization/ParslCallableDeserializeCache.tla
