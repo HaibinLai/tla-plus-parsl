@@ -352,6 +352,12 @@ run_case provider-multiblock-current counterexample \
 run_case provider-multiblock-fixed pass \
     models/executors/ParslProviderMultiBlockOwnership.cfg \
     models/executors/ParslProviderMultiBlockOwnership.tla
+run_case timeout-retry-stale-current counterexample \
+    models/core/ParslTimeoutRetryStaleResultCurrent.cfg \
+    models/core/ParslTimeoutRetryStaleResult.tla
+run_case timeout-retry-stale-fixed pass \
+    models/core/ParslTimeoutRetryStaleResult.cfg \
+    models/core/ParslTimeoutRetryStaleResult.tla
 run_case input-list-mutation-current counterexample \
     models/dataflow/ParslInputListMutationCurrent.cfg \
     models/dataflow/ParslInputListMutation.tla

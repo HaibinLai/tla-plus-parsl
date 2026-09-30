@@ -1759,6 +1759,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   retry snapshots; arbitrary Python heap identity remains abstract;
 - `ParslNestedJoinRetry` now combines nested join propagation with leaf retries and stale-result
   rejection; larger nested graphs remain future work;
+- `ParslTimeoutRetryStaleResult` now combines timeout-driven retry with late-result correlation;
+  multiple concurrent timers remain future work;
 - multi-level dynamic creation is now represented by `ParslDynamicTaskChain`, with a child-created
   grandchild and explicit dependency/retry safety; broader unbounded fan-out remains future work;
 - additional executor/provider-specific models.

@@ -295,3 +295,6 @@ retry, and atomic consumer release in `ParslMultiOutputVersionedStageOut`.
 
 Join coverage also combines nested joins, leaf retry, and stale leaf-result rejection in
 `ParslNestedJoinRetry`.
+
+Core DFK coverage also combines timeout-driven retry with late result rejection in
+`ParslTimeoutRetryStaleResult`.
