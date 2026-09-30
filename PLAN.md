@@ -1760,6 +1760,7 @@ contains the temporal `EventuallySettled`/fairness specification. TLC 2.19's sim
 fails internally on that temporal setup, so it remains documented as a liveness follow-up rather
 than being reported as a passing safety run. `ParslTimeSafety.cfg` provides the executable
 safety-only counterpart for the time model.
+An additional rerun of the same suite completed 487 tests in 12.240 seconds with `OK`.
 
 The TLC sweep is also validated in bounded intervals because the sandbox cannot reliably sustain
 all 912 configurations in one process. The first 20 serialization/core cases and cases 21--40
@@ -1811,6 +1812,10 @@ Cases 301--320 matched at a 100-step bound: Torque submit outcomes, Work Queue a
 submit/serialization failures, Flux cleanup, poller scale-in, HTEX duplicate registration,
 and manager drain behavior. Expected Current branches produced counterexamples; Fixed branches
 and normal-success variants passed.
+Cases 321--340 also matched at 100 steps: HTEX watchdog/result races and busy/idle watchdog
+states, Radical-Pilot shutdown/results, AWS unknown-instance status, command-client close,
+Kubernetes admission/unknown-job/submit handling, and AWS submit validation. Current branches
+reproduced their configured counterexamples and Fixed branches passed.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
