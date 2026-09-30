@@ -1384,6 +1384,15 @@ run_case aws-cancel-missing-current counterexample \
 run_case aws-cancel-missing-fixed pass \
     models/providers/ParslAWSProviderCancelMissingFixed.cfg \
     models/providers/ParslAWSProviderCancel.tla
+run_case aws-cancel-duplicates-current counterexample \
+    models/providers/ParslAwsCancelDuplicatesCurrent.cfg \
+    models/providers/ParslAwsCancelDuplicates.tla
+run_case aws-cancel-duplicates-fixed pass \
+    models/providers/ParslAwsCancelDuplicatesFixed.cfg \
+    models/providers/ParslAwsCancelDuplicates.tla
+run_case aws-cancel-duplicates-unique pass \
+    models/providers/ParslAwsCancelDuplicatesUnique.cfg \
+    models/providers/ParslAwsCancelDuplicates.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla

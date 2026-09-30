@@ -44,6 +44,18 @@ class AWSCancelRuntimeTest(unittest.TestCase):
 
         self.assertEqual(provider.client.calls, [{"InstanceIds": ["i-stale"]}])
 
+    def test_duplicate_local_id_raises_after_remote_success_currently(self):
+        provider = self.provider_with(["i-1"])
+
+        with self.assertRaises(ValueError):
+            provider.cancel(["i-1", "i-1"])
+
+        # The remote request and first local removal already happened before
+        # the second list.remove call exposed the exception.
+        self.assertEqual(provider.client.calls, [{"InstanceIds": ["i-1", "i-1"]}])
+        self.assertEqual(provider.instances, [])
+        self.assertEqual(provider.resources["i-1"]["status"].state, JobState.COMPLETED)
+
 
 if __name__ == "__main__":
     unittest.main()
