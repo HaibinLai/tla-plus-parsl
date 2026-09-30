@@ -54,6 +54,12 @@ run_case serialization-wire pass \
 run_case serialization-wire-failure pass \
     models/serialization/ParslSerializationWireFailure.cfg \
     models/serialization/ParslSerializationWire.tla
+run_case callable-closure-memo-current counterexample \
+    models/serialization/ParslCallableClosureMemo.cfg \
+    models/serialization/ParslCallableClosureMemo.tla
+run_case callable-closure-memo-fixed pass \
+    models/serialization/ParslCallableClosureMemoFixed.cfg \
+    models/serialization/ParslCallableClosureMemo.tla
 run_case zmq-serialization-current counterexample \
     models/serialization/ParslZMQSerializationEndToEnd.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla
