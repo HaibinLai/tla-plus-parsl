@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `cfe3b6c` (`Model HTEX null registration block ID`).
-- Foundational smoke inventory: 368 TLC cases and 235 Python runtime probes.
+- Latest pushed commit: pending (monitoring resource-history inventory completion).
+- Foundational smoke inventory: 369 TLC cases and 236 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -100,6 +100,10 @@ are recorded here in English and committed with the model changes.
   The current interchange reaches an internal assertion after decoding the ZMQ registration;
   the Current model produces a two-state `NoRawAssertion` counterexample, the Fixed model passes
   in four generated/two distinct states, and the manager-message runtime suite now passes 6/6.
+- Current stage: promoted the existing `ParslMonitoringResourceHistory` model and SQLite bridge
+  into the foundational smoke inventory. It checks append-only RESOURCE rows, out-of-order sample
+  delivery, duplicate primary-key rejection, and latest-by-timestamp selection; the model and
+  runtime probe are now part of the 369/236 regression gate.
 
 ### Verification convention
 

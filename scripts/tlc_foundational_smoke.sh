@@ -104,6 +104,9 @@ run_case timeout-timer-error \
 run_case monitoring-db \
     models/monitoring/ParslMonitoringDBSmoke.cfg \
     models/monitoring/ParslMonitoringDB.tla
+run_case monitoring-resource-history \
+    models/monitoring/ParslMonitoringResourceHistory.cfg \
+    models/monitoring/ParslMonitoringResourceHistory.tla
 run_case monitoring-internal-queue-drain \
     models/monitoring/ParslMonitoringInternalQueueDrainFixed.cfg \
     models/monitoring/ParslMonitoringInternalQueueDrain.tla
