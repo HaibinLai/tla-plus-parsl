@@ -1630,6 +1630,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportFailure.cfg models/serialization/ParslTaskTransport.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPolling.cfg models/providers/ParslProviderPolling.tla
 java -cp tla2tools.jar tlc2.TLC -depth 10 -config models/executors/ParslExecutorKinds.cfg models/executors/ParslExecutorKinds.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorKindsSmoke.cfg models/executors/ParslExecutorKinds.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorShutdown.cfg models/executors/ParslExecutorShutdown.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueResults.cfg models/executors/ParslWorkQueueResults.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueDuplicateReport.cfg models/executors/ParslWorkQueueDuplicateReport.tla
@@ -2955,6 +2956,9 @@ This probe patches the real interchange clock forward and confirms that the curr
 - `ParslExecutorKinds.cfg`: 50,149,761 states generated, 3,533,824 distinct states, depth 52;
   the bounded depth-10 executor contract run passed provider-free/provider-backed admission,
   manager registration, resource-specification rejection, drain/recovery, and failure cleanup.
+- `ParslExecutorKindsSmoke.cfg`: 251,057 states generated, 25,984 distinct states, depth 36;
+  a two-executor (`threads`/`htex`), single-slot/single-task regression configuration retaining
+  the same executor contract invariants with a much smaller state space.
 - `ParslExecutorShutdown.cfg`: 394,010 states generated, 74,431 distinct states, depth 28;
   shutdown admission rejection, ThreadPool completion-before-stop, WorkQueue collector failure
   cleanup, HTEX interchange closure, and in-flight cleanup all passed.

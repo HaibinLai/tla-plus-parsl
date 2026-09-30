@@ -670,6 +670,9 @@ run_case output-list-mutation-fixed pass \
 run_case executor-kinds pass \
     models/executors/ParslExecutorKinds.cfg \
     models/executors/ParslExecutorKinds.tla
+run_case executor-kinds-smoke pass \
+    models/executors/ParslExecutorKindsSmoke.cfg \
+    models/executors/ParslExecutorKinds.tla
 run_case negative-scale-in-current counterexample \
     models/executors/ParslNegativeScaleInCurrent.cfg \
     models/executors/ParslNegativeScaleIn.tla
