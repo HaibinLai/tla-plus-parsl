@@ -793,6 +793,9 @@ LSF coverage now includes duplicate `bjobs` lines, missing-job completion semant
 cancel handling, non-positive `cores_per_node`, and bsub success/failure/malformed output. The
 runtime probes cover the concrete LSF methods, while TLC keeps current behavior and candidate
 fixed behavior side by side.
+Slurm coverage now includes strict batching compatibility, duplicate and malformed status records,
+foreign scheduler jobs, cancellation bookkeeping, and custom submit-regex output. The runtime
+probes exercise `sbatch`, `sacct`, and `scancel` boundaries without a live scheduler.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual

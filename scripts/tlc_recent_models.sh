@@ -1242,6 +1242,57 @@ run_case lsf-submit-failure pass \
 run_case lsf-submit-malformed pass \
     models/providers/ParslLSFSubmitMalformed.cfg \
     models/providers/ParslLSFSubmit.tla
+run_case slurm-batch-strict-current counterexample \
+    models/providers/ParslSlurmBatchStrictCurrent.cfg \
+    models/providers/ParslSlurmBatchStrict.tla
+run_case slurm-batch-strict-fixed pass \
+    models/providers/ParslSlurmBatchStrictFixed.cfg \
+    models/providers/ParslSlurmBatchStrict.tla
+run_case slurm-batch-strict-valid pass \
+    models/providers/ParslSlurmBatchStrictValid.cfg \
+    models/providers/ParslSlurmBatchStrict.tla
+run_case slurm-cancel-current counterexample \
+    models/providers/ParslSlurmCancel.cfg \
+    models/providers/ParslSlurmCancel.tla
+run_case slurm-cancel-failure pass \
+    models/providers/ParslSlurmCancelFailure.cfg \
+    models/providers/ParslSlurmCancel.tla
+run_case slurm-cancel-fixed pass \
+    models/providers/ParslSlurmCancelFixed.cfg \
+    models/providers/ParslSlurmCancel.tla
+run_case slurm-duplicate-status-current counterexample \
+    models/providers/ParslSlurmDuplicateStatusCurrent.cfg \
+    models/providers/ParslSlurmDuplicateStatus.tla
+run_case slurm-duplicate-status-fixed pass \
+    models/providers/ParslSlurmDuplicateStatusFixed.cfg \
+    models/providers/ParslSlurmDuplicateStatus.tla
+run_case slurm-duplicate-status-unique pass \
+    models/providers/ParslSlurmDuplicateStatusUnique.cfg \
+    models/providers/ParslSlurmDuplicateStatus.tla
+run_case slurm-foreign-job-current counterexample \
+    models/providers/ParslSlurmForeignJobCurrent.cfg \
+    models/providers/ParslSlurmForeignJob.tla
+run_case slurm-foreign-job-fixed pass \
+    models/providers/ParslSlurmForeignJobFixed.cfg \
+    models/providers/ParslSlurmForeignJob.tla
+run_case slurm-malformed-line-current counterexample \
+    models/providers/ParslSlurmMalformedLineCurrent.cfg \
+    models/providers/ParslSlurmMalformedLine.tla
+run_case slurm-malformed-line-fixed pass \
+    models/providers/ParslSlurmMalformedLineFixed.cfg \
+    models/providers/ParslSlurmMalformedLine.tla
+run_case slurm-status-current counterexample \
+    models/providers/ParslSlurmStatusCurrent.cfg \
+    models/providers/ParslSlurmStatus.tla
+run_case slurm-status-fixed pass \
+    models/providers/ParslSlurmStatusFixed.cfg \
+    models/providers/ParslSlurmStatus.tla
+run_case slurm-submit-current counterexample \
+    models/providers/ParslSlurmSubmit.cfg \
+    models/providers/ParslSlurmSubmit.tla
+run_case slurm-submit-fixed pass \
+    models/providers/ParslSlurmSubmitFixed.cfg \
+    models/providers/ParslSlurmSubmit.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
