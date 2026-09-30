@@ -837,6 +837,12 @@ run_case executor-provider-lifecycle-current counterexample \
 run_case executor-provider-lifecycle-fixed pass \
     models/executors/ParslExecutorProviderLifecycleFixed.cfg \
     models/executors/ParslExecutorProviderLifecycle.tla
+run_case mpi-backlog-retry-current counterexample \
+    models/executors/ParslMPIBacklogRetryCurrent.cfg \
+    models/executors/ParslMPIBacklogRetry.tla
+run_case mpi-backlog-retry-fixed pass \
+    models/executors/ParslMPIBacklogRetryFixed.cfg \
+    models/executors/ParslMPIBacklogRetry.tla
 run_case flux-submission-failure pass \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla

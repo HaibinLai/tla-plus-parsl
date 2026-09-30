@@ -696,6 +696,10 @@ provider-backed HTEX/MPI/workqueue paths, including manager registration, resour
 rejection, admission, drain/recovery, and provider/executor failure cleanup.
 `ParslMPISpec.tla` refines the MPI path with resource-specification key validation, derived
 `num_ranks`/`ranks_per_node`, zero-node admission probing, and the positive-node candidate fix.
+`ParslMPIBacklogRetry.tla` models the concrete `MPITaskScheduler._schedule_backlog_tasks` loop:
+when a queued task still cannot fit, the current implementation requeues it and recursively calls
+itself until Python raises `RecursionError`; the fixed branch stops the pass and retries after a
+resource return. `tests/test_mpi_backlog_retry_runtime.py` reproduces the live recursion path.
 `ParslExecutorShutdown.tla` refines concrete shutdown behavior: ThreadPool waits for accepted
 work, WorkQueue's collector fails tasks left behind during process shutdown, and HTEX closes its
 interchange before in-flight cleanup. It also checks that shutdown rejects new submissions.

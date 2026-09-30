@@ -30,4 +30,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-160 | Unknown memoization ignore key exposes raw KeyError | [BUG-160](../bug-ledger.md) |
 | BUG-161 | Ignored `outputs` key is deleted twice during memo hashing | [BUG-161](../bug-ledger.md) |
 | BUG-164 | Equal callable objects collide in serializer cache | [BUG-164](../bug-ledger.md) |
-
+| BUG-166 | MPI backlog retry recurses while resources remain unavailable | [BUG-166](../bug-ledger.md) |
