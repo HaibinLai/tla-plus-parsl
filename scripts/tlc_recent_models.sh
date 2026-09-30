@@ -60,6 +60,12 @@ run_case callable-closure-memo-current counterexample \
 run_case callable-closure-memo-fixed pass \
     models/serialization/ParslCallableClosureMemoFixed.cfg \
     models/serialization/ParslCallableClosureMemo.tla
+run_case callable-mutation-cache-current counterexample \
+    models/serialization/ParslCallableMutationCacheCurrent.cfg \
+    models/serialization/ParslCallableMutationCache.tla
+run_case callable-mutation-cache-fixed pass \
+    models/serialization/ParslCallableMutationCacheFixed.cfg \
+    models/serialization/ParslCallableMutationCache.tla
 run_case zmq-serialization-current counterexample \
     models/serialization/ParslZMQSerializationEndToEnd.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla

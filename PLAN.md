@@ -1019,6 +1019,9 @@ event, while the fixed branch preserves the database high-water mark and termina
 `ParslCallableClosureMemo.tla` connects closure contents to memoization: real serialized
 closures differ when their captured values differ, while the current name/module-only key
 collides and can return the first closure's result.
+`ParslCallableMutationCache.tla` now also runs in the smoke sweep, checking that mutable callable
+state cannot be hidden by a stale Dill serializer payload; `tests/test_callable_mutation_cache_runtime.py`
+demonstrates the current cached-payload behavior.
 
 The monitoring TRY-row bookkeeping model is now included in the recurring TLC smoke sweep:
 the current configuration produces the failed-insert counterexample, while the fixed
