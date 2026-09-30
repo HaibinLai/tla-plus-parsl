@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7ff7f5e` (`Promote scheduler submit coverage`).
-- Foundational smoke inventory: 383 TLC cases and 376 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, scaling, memoization, serialization, result-file, time, transport, scheduler-submit, and executor-lifecycle coverage).
+- Foundational smoke inventory: 383 TLC cases and 380 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,10 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted TaskVine shutdown/resource-shape, Work Queue resource-shape, and
+  Radical-Pilot failure-fanout probes. Four targeted tests passed, and the affected runtime
+  suffix (237–380) passed after insertion; the prior prefix (1–236) was already green.
 
 - Current stage: promoted scheduler-submit runtime probes for Grid Engine, LSF, PBS Pro, Slurm,
   and Torque. Seventeen targeted tests passed, and the affected runtime suffix (230–376) passed

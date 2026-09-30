@@ -254,6 +254,10 @@ tests=(
     tests/test_slurm_submit_runtime.py
     tests/test_torque_submit_runtime.py
     tests/test_torque_submit_shape_runtime.py
+    tests/test_taskvine_shutdown_runtime.py
+    tests/test_taskvine_resource_spec_shape_runtime.py
+    tests/test_workqueue_resource_spec_shape_runtime.py
+    tests/test_radical_failure_fanout_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py

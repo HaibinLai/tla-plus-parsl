@@ -141,9 +141,9 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 383 TLC cases and 376 Python runtime test files.
+The current repository smoke runner enumerates 383 TLC cases and 380 Python runtime test files.
 On 2026-09-30, all 383 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
-suite passed with 376 entries. The subsequently added cases were also run individually as they
+suite passed with 380 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
 isolation, monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus
@@ -217,6 +217,10 @@ including callable invocation, user exceptions, and malformed messages.
 The scheduler-submit probes cover Grid Engine, LSF, PBS Pro, Slurm, and Torque response parsing,
 pending-resource registration, empty/failure output, malformed job identifiers, redirection, and
 multi-line submission behavior.
+
+The executor-lifecycle probes cover TaskVine collector shutdown, TaskVine and Work Queue
+resource-spec shape validation, and Radical-Pilot failure fan-out when callbacks mutate the task
+map. These preserve concrete failure behavior for the corresponding executor lifecycle models.
 
 The Work Queue and TaskVine duplicate-report models add the stale-result collector boundary.
 The fixed branches ignore a report whose task identifier has already been removed, preserving
