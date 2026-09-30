@@ -1117,6 +1117,10 @@ round-trips the same byte classes through the real `pack_buffers`/`unpack_buffer
 before deserialization in the fixed branch, preventing extra frames from being decoded before
 rejection. `tests/test_serialization_frame_count_runtime.py` reproduces the current four-frame
 decode-before-assertion path.
+`ParslSerializationShortFrameCount.tla` complements the extra-frame model for truncated
+two-frame messages: the fixed branch validates the count before decoding, while the current
+branch deserializes available frames first. `tests/test_serialization_short_frame_count_runtime.py`
+reproduces that current path.
 `ParslJoinMemoData.tla` connects joins to memoization and DataFuture readiness: cached inner
 Futures complete without executor attempts, staged file Futures remain unresolved until transfer
 readiness, and the outer join cannot finalize early.

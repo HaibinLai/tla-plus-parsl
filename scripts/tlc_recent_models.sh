@@ -1029,6 +1029,12 @@ run_case serialization-frame-count-fixed pass \
 run_case serialization-frame-count-normal pass \
     models/serialization/ParslSerializationFrameCountNormal.cfg \
     models/serialization/ParslSerializationFrameCount.tla
+run_case serialization-short-frame-current counterexample \
+    models/serialization/ParslSerializationShortFrameCountCurrent.cfg \
+    models/serialization/ParslSerializationShortFrameCount.tla
+run_case serialization-short-frame-fixed pass \
+    models/serialization/ParslSerializationShortFrameCountFixed.cfg \
+    models/serialization/ParslSerializationShortFrameCount.tla
 run_case nested-join pass \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
