@@ -252,6 +252,12 @@ run_case htex-result-queue-current counterexample \
 run_case htex-result-queue-fixed pass \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla
+run_case htex-manager-selection pass \
+    models/executors/ParslHtexManagerSelection.cfg \
+    models/executors/ParslHtexManagerSelection.tla
+run_case htex-manager-selection-block pass \
+    models/executors/ParslHtexManagerSelectionBlock.cfg \
+    models/executors/ParslHtexManagerSelection.tla
 run_case executor-selection-current counterexample \
     models/executors/ParslExecutorSelectionCurrent.cfg \
     models/executors/ParslExecutorSelection.tla
