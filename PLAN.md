@@ -1881,6 +1881,9 @@ truncated-length handling.
 Cases 801--820 matched at 100 steps: serialization length/snapshot/ZMQ bridge, CurveZMQ certificate
 validation, worker-pool control frames, HTEX result decode/ambiguity/cancellation/duplicates, and
 Work Queue cancelled/duplicate result handling.
+Cases 821--840 matched at 100 steps: Work Queue duplicate/resource-category/results/shutdown and
+submit failures, serialization plugin cache/error/fallback behavior, nested join success/failure,
+and callback multiplicity.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
