@@ -44,6 +44,39 @@ class JoinListCancellationRuntimeTest(unittest.TestCase):
         self.assertEqual(kernel.completed, [])
         self.assertEqual(kernel.failed, [])
 
+    def test_three_element_list_still_escapes_on_cancelled_inner_currently(self):
+        kernel = DataFlowKernel.__new__(DataFlowKernel)
+        kernel.completed = []
+        kernel.failed = []
+        kernel.render_future_description = lambda future: "inner"
+        kernel._complete_task_result = lambda record, state, result: (
+            kernel.completed.append((state, result)),
+            record.__setitem__("status", state),
+        )
+        kernel._complete_task_exception = lambda record, state, error: (
+            kernel.failed.append((state, error)),
+            record.__setitem__("status", state),
+        )
+        first, cancelled, third = Future(), Future(), Future()
+        first.set_result(1)
+        cancelled.cancel()
+        third.set_result(3)
+        record = {
+            "id": "outer-three",
+            "status": States.joining,
+            "joins": [first, cancelled, third],
+            "join_lock": threading.Lock(),
+            "fail_history": [],
+            "fail_count": 0,
+        }
+
+        with self.assertRaises(CancelledError):
+            kernel.handle_join_update(record, cancelled)
+
+        self.assertEqual(record["status"], States.joining)
+        self.assertEqual(kernel.completed, [])
+        self.assertEqual(kernel.failed, [])
+
 
 if __name__ == "__main__":
     unittest.main()

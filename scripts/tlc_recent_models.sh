@@ -274,6 +274,12 @@ run_case join-list-cancellation-current counterexample \
 run_case join-list-cancellation-fixed pass \
     models/dataflow/ParslJoinListCancellationFixed.cfg \
     models/dataflow/ParslJoinListCancellation.tla
+run_case join-three-cancellation-current counterexample \
+    models/dataflow/ParslJoinThreeCancellationCurrent.cfg \
+    models/dataflow/ParslJoinThreeCancellation.tla
+run_case join-three-cancellation-fixed pass \
+    models/dataflow/ParslJoinThreeCancellationFixed.cfg \
+    models/dataflow/ParslJoinThreeCancellation.tla
 run_case data-ready-current counterexample \
     models/core/ParslDataReadyExecutionCurrent.cfg \
     models/core/ParslDataReadyExecution.tla

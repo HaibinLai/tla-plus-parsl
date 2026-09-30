@@ -90,3 +90,13 @@ checks the `[third, first, second, first]` result order.
 java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinThreeList.cfg models/dataflow/ParslJoinThreeList.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_three_list_runtime.py -v
 ```
+
+`ParslJoinThreeCancellation.tla` applies the cancellation boundary to a three-element join list.
+The current branch lets `CancelledError` escape from the callback and leaves the outer task in
+`joining`; the fixed branch maps the cancelled inner Future to terminal outer failure. The
+runtime bridge is `test_join_list_cancellation_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinThreeCancellationCurrent.cfg models/dataflow/ParslJoinThreeCancellation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinThreeCancellationFixed.cfg models/dataflow/ParslJoinThreeCancellation.tla
+```
