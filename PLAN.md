@@ -1807,6 +1807,10 @@ returned success directly.
 The subsequent provider-parser interval (cases 281--300) matched as well at 100 steps, covering
 LocalProvider status scoping, Slurm malformed status lines, PBSPro malformed JSON and job-alias
 uniqueness, Condor malformed/unknown jobs, and GridEngine duplicate/status-batch handling.
+Cases 301--320 matched at a 100-step bound: Torque submit outcomes, Work Queue and TaskVine
+submit/serialization failures, Flux cleanup, poller scale-in, HTEX duplicate registration,
+and manager drain behavior. Expected Current branches produced counterexamples; Fixed branches
+and normal-success variants passed.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
