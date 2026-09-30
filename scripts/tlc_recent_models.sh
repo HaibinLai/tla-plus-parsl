@@ -349,6 +349,15 @@ run_case slurm-empty-job-id-fixed pass \
 run_case slurm-empty-job-id-normal pass \
     models/providers/ParslSlurmEmptyJobIdNormal.cfg \
     models/providers/ParslSlurmEmptyJobId.tla
+run_case torque-submit-shape-current counterexample \
+    models/providers/ParslTorqueSubmitShapeCurrent.cfg \
+    models/providers/ParslTorqueSubmitShape.tla
+run_case torque-submit-shape-fixed pass \
+    models/providers/ParslTorqueSubmitShapeFixed.cfg \
+    models/providers/ParslTorqueSubmitShape.tla
+run_case torque-submit-shape-normal pass \
+    models/providers/ParslTorqueSubmitShapeNormal.cfg \
+    models/providers/ParslTorqueSubmitShape.tla
 run_case htex-contact-timeout-starvation-current counterexample \
     models/clock/ParslHtexContactTimeoutStarvationCurrent.cfg \
     models/clock/ParslHtexContactTimeoutStarvation.tla

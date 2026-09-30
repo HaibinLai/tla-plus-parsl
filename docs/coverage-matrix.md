@@ -136,6 +136,9 @@ a successful scheduler command returns no usable job identifier.
 Provider coverage also includes `ParslSlurmEmptyJobId` (BUG-223), which rejects a successful
 Slurm response whose captured scheduler identifier is empty.
 
+It also includes `ParslTorqueSubmitShape` (BUG-224), which prevents multi-line qsub output from
+publishing more than one Torque resource for a single submission.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

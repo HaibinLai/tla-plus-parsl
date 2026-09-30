@@ -339,6 +339,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmEmptyJobIdNor
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_empty_job_id_runtime.py -v
 ```
 
+`ParslTorqueSubmitShape.tla` models the multi-line qsub response boundary. The current provider
+registers every non-empty line and returns the last one; the fixed branch validates and publishes
+exactly one scheduler identifier.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueSubmitShapeCurrent.cfg models/providers/ParslTorqueSubmitShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueSubmitShapeFixed.cfg models/providers/ParslTorqueSubmitShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueSubmitShapeNormal.cfg models/providers/ParslTorqueSubmitShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_torque_submit_shape_runtime.py -v
+```
+
 `ParslLocalProviderCancelUnknown.tla` models cancellation after a local job has already been
 removed from `resources`. The current `LocalProvider.cancel()` indexes the missing id and raises
 `KeyError`; the fixed branch treats the stale cancellation as an unsuccessful, non-throwing
