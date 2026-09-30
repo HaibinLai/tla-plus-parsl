@@ -1083,6 +1083,12 @@ run_case htex-result-decode-fixed pass \
 run_case htex-result-decode-normal pass \
     models/executors/ParslHtexResultDecodeFailureNormal.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
+run_case htex-ambiguous-result-current counterexample \
+    models/executors/ParslHtexAmbiguousResultCurrent.cfg \
+    models/executors/ParslHtexAmbiguousResult.tla
+run_case htex-ambiguous-result-fixed pass \
+    models/executors/ParslHtexAmbiguousResultFixed.cfg \
+    models/executors/ParslHtexAmbiguousResult.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla

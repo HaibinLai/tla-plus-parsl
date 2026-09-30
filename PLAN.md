@@ -1149,6 +1149,10 @@ the fixed branch instead of crashing the receive loop. The runtime bridge is
 orphan a pending Future after task-map removal. The fixed branch delivers a terminal decode error
 and keeps the result worker alive; `tests/test_htex_result_decode_failure_runtime.py` reproduces
 the current orphaning path.
+`ParslHtexAmbiguousResult.tla` is now in the executor sweep: result frames carrying conflicting
+success and exception fields are rejected as malformed in the fixed branch instead of silently
+resolving the Future as success. `tests/test_htex_ambiguous_result_runtime.py` exercises the
+real result handler.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.
