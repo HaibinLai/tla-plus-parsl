@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (monitoring database runtime coverage).
+- Latest pushed commit: `769f35c` (`Promote monitoring database runtime coverage`).
 - Foundational smoke inventory: 374 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
