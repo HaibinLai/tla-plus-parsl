@@ -1343,12 +1343,16 @@ The compact integration check is:
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEnd.cfg models/core/ParslEndToEnd.tla
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEndFixed.cfg models/core/ParslEndToEnd.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslEndToEndSmoke.cfg models/core/ParslEndToEnd.tla
 ```
 
 The first command is an intentional counterexample configuration: an old attempt can resolve the
 Future, including a late result from an attempt that has already timed out. The fixed configuration
 rejects both forms of stale result and passes all seven invariants (`CurrentAttemptResultSafety`
 included).
+`ParslEndToEndSmoke.cfg` checks the fixed one-task/no-dependency path in 198 generated / 72
+distinct states at depth 16, retaining serialization, worker execution, retry, and stale-result
+guards without the larger two-task DAG.
 
 The task/stage-out/monitoring boundary is checked separately:
 
