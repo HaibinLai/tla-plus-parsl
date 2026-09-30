@@ -102,5 +102,17 @@ run_case monitoring-db-permanent-insert \
 run_case monitoring-db-permanent-update \
     models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
+run_case stage-in-ordering \
+    models/staging/ParslDataManagerStageInOrderingFixed.cfg \
+    models/staging/ParslDataManagerStageInOrdering.tla
+run_case stage-out-ordering \
+    models/staging/ParslDataManagerStageOutOrderingFixed.cfg \
+    models/staging/ParslDataManagerStageOutOrdering.tla
+run_case http-content-length \
+    models/staging/ParslHTTPContentLengthFixed.cfg \
+    models/staging/ParslHTTPContentLength.tla
+run_case rsync-path-quoting \
+    models/staging/ParslRsyncQuotingFixed.cfg \
+    models/staging/ParslRsyncQuoting.tla
 
 echo "Foundational TLC smoke suite passed."

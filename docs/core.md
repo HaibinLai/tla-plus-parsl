@@ -164,6 +164,10 @@ persistent retry of transient writes, and explicit terminal handling for permane
 errors. They complement the smaller `ParslMonitoringDBSmoke` path without making the smoke suite
 depend on an unbounded database or queue.
 
+The file-transfer cases extend the byte-level model with DataManager wrapper ordering, HTTP
+content-length validation, and safe rsync path construction. They keep publication atomic and
+make provider-transfer failures visible before dependent task admission.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
