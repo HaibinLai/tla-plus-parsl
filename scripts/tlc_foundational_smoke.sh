@@ -129,5 +129,17 @@ run_case worker-initial-probe-timeout \
 run_case command-deadline \
     models/executors/ParslCommandDeadlineFixed.cfg \
     models/executors/ParslCommandDeadline.tla
+run_case callable-argument-alias \
+    models/serialization/ParslCallableArgumentAliasFixed.cfg \
+    models/serialization/ParslCallableArgumentAlias.tla
+run_case python-nested-alias \
+    models/serialization/ParslPythonNestedAliasFixed.cfg \
+    models/serialization/ParslPythonNestedAlias.tla
+run_case closure-memo-snapshot \
+    models/serialization/ParslCallableClosureMemoFixed.cfg \
+    models/serialization/ParslCallableClosureMemo.tla
+run_case object-snapshot-retry \
+    models/serialization/ParslObjectSnapshotRetryFixed.cfg \
+    models/serialization/ParslObjectSnapshotRetry.tla
 
 echo "Foundational TLC smoke suite passed."

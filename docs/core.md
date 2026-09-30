@@ -173,6 +173,11 @@ worker contact deadlines, initial probe timeout, and command deadline handling. 
 models use logical time while the corresponding runtime probes exercise deterministic clock and
 socket doubles against the actual Parsl loops.
 
+The object-content cases then refine the callable boundary: aliases shared between a callable and
+its argument, nested mutable aliases, closure values used in memoization keys, and per-attempt
+object snapshots. The fixed paths preserve submission-time identity/content rather than allowing
+post-submit mutation to alter execution or cache behavior.
+
 `ParslDataFlowCleanup.tla` captures the DFK shutdown sequence: mark cleanup, close memoization
 and usage tracking, stop the status poller, shut down executors, close monitoring, and terminate
 the task-launch pool. A repeated cleanup call is rejected without re-closing components. The
