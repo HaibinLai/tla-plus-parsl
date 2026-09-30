@@ -492,6 +492,39 @@ run_case tasks-outgoing-close-current counterexample \
 run_case tasks-outgoing-close-fixed pass \
     models/executors/ParslTasksOutgoingCloseRaceFixed.cfg \
     models/executors/ParslTasksOutgoingCloseRace.tla
+run_case probe-addresses pass \
+    models/executors/ParslProbeAddresses.cfg \
+    models/executors/ParslProbeAddresses.tla
+run_case probe-addresses-empty pass \
+    models/executors/ParslProbeAddressesEmpty.cfg \
+    models/executors/ParslProbeAddresses.tla
+run_case probe-addresses-success pass \
+    models/executors/ParslProbeAddressesSuccess.cfg \
+    models/executors/ParslProbeAddresses.tla
+run_case provisioning-admission-monitoring-current counterexample \
+    models/executors/ParslProvisioningAdmissionMonitoringCurrent.cfg \
+    models/executors/ParslProvisioningAdmissionMonitoring.tla
+run_case provisioning-admission-monitoring-fixed pass \
+    models/executors/ParslProvisioningAdmissionMonitoringFixed.cfg \
+    models/executors/ParslProvisioningAdmissionMonitoring.tla
+run_case scale-in-cancel-shape-current counterexample \
+    models/executors/ParslScaleInCancelShapeCurrent.cfg \
+    models/executors/ParslScaleInCancelShape.tla
+run_case scale-in-cancel-shape-fixed pass \
+    models/executors/ParslScaleInCancelShapeFixed.cfg \
+    models/executors/ParslScaleInCancelShape.tla
+run_case scale-in-retry-monitoring-current counterexample \
+    models/executors/ParslScaleInRetryMonitoringCurrent.cfg \
+    models/executors/ParslScaleInRetryMonitoring.tla
+run_case scale-in-retry-monitoring-fixed pass \
+    models/executors/ParslScaleInRetryMonitoringFixed.cfg \
+    models/executors/ParslScaleInRetryMonitoring.tla
+run_case scale-out-failure-monitoring-current counterexample \
+    models/executors/ParslScaleOutFailureMonitoringCurrent.cfg \
+    models/executors/ParslScaleOutFailureMonitoring.tla
+run_case scale-out-failure-monitoring-fixed pass \
+    models/executors/ParslScaleOutFailureMonitoringFixed.cfg \
+    models/executors/ParslScaleOutFailureMonitoring.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

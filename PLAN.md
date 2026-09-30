@@ -1462,6 +1462,14 @@ monitoring-disabled messages, malformed batches, and frame continuation. The cur
 worker receiver, and monitoring-disabled branches produce TLC counterexamples; fixed and enabled
 configurations pass simulation.
 
+Provider/executor resource-provisioning boundaries are now in the sweep. `ParslProbeAddresses`
+covers empty candidate sets, successful probe replies, and timeout failure; `ParslProvisioningAdmissionMonitoring`
+connects block allocation to task admission and failure monitoring; `ParslScaleInCancelShape` handles
+short cancellation responses; `ParslScaleInRetryMonitoring` separates lost-task retry from late
+results; and `ParslScaleOutFailureMonitoring` requires failed blocks to remain visible in monitoring.
+Runtime probes cover five concrete paths. Current configurations reproduce missing monitoring,
+shape-assertion, and late-result counterexamples; fixed/normal configurations pass TLC simulation.
+
 The MPI executor baseline is now in the sweep. `ParslMPINonDivisibleRanks` models rank-per-node
 derivation and rejects fractional allocations in the fixed branch; `ParslMPIPrefix` validates
 launcher prefix selection; and `ParslMPISpec` checks legal resource keys, missing-rank derivation,
