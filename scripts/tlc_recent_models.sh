@@ -373,6 +373,13 @@ run_case aws-status-reservation-shape-fixed pass \
     models/providers/ParslAwsStatusReservationShapeFixed.cfg \
     models/providers/ParslAwsStatusReservationShape.tla
 
+run_case azure-status-ordering-current counterexample \
+    models/providers/ParslAzureStatusOrderingCurrent.cfg \
+    models/providers/ParslAzureStatusOrdering.tla
+run_case azure-status-ordering-fixed pass \
+    models/providers/ParslAzureStatusOrderingFixed.cfg \
+    models/providers/ParslAzureStatusOrdering.tla
+
 run_case appfuture-stream-none pass \
     models/dataflow/ParslAppFutureOutputStreamsNone.cfg \
     models/dataflow/ParslAppFutureOutputStreams.tla

@@ -542,3 +542,8 @@ AWS provider coverage also includes `ParslAwsStatusReservationShape` (BUG-253), 
 that a malformed nested `Reservations` entry cannot abort processing of later healthy entries.
 The current configuration violates `NestedShapeSafety`; the fixed configuration passes, with
 the runtime probe in `tests/test_aws_status_reservation_shape_runtime.py`.
+
+Azure provider coverage also includes `ParslAzureStatusOrdering` (BUG-254), checking that a
+reordered status list cannot turn a running VM into a pending observation. The current model
+violates `RunningStatusSafety`, while the semantic-selection fixed model passes; its runtime
+probe is `tests/test_azure_status_ordering_runtime.py`.
