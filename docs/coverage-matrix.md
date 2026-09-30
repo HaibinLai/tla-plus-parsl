@@ -143,6 +143,9 @@ missing top-level `Reservations` field cannot abort status polling.
 Work Queue executor coverage also includes `ParslWorkQueueResourceSpecShape` (BUG-206), which
 checks that malformed resource specifications are rejected before task-directory side effects.
 
+TaskVine executor coverage also includes `ParslTaskVineResourceSpecShape` (BUG-207), which checks
+that malformed resource specifications are rejected before `.get()` field access.
+
 It also includes `ParslWorkerInitialProbeTimeout` (BUG-186), which checks that a timed-out initial
 HTEX connection probe cannot fall through to a blocking receive.
 

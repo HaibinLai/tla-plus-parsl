@@ -2167,3 +2167,6 @@ UNKNOWN observation instead of exposing `AttributeError`.
 
 The AWS provider refinement `ParslAwsStatusResponseShape` records BUG-205. It models validation of
 the EC2 status envelope and preserves an explicit UNKNOWN observation when `Reservations` is absent.
+
+The TaskVine refinement `ParslTaskVineResourceSpecShape` records BUG-207. It models typed resource
+admission and reproduces the current raw `AttributeError` for a non-mapping request.
