@@ -199,6 +199,11 @@ tests=(
     tests/test_serialization_plugin_failure_cache_runtime.py
     tests/test_curvezmq_certificate_runtime.py
     tests/test_monitoring_zmq_router_failure_runtime.py
+    tests/test_monitoring_close_runtime.py
+    tests/test_monitoring_starter_construction_failure_runtime.py
+    tests/test_monitoring_threshold_runtime.py
+    tests/test_monitoring_udp_pickle_runtime.py
+    tests/test_monitoring_workflow_duration_runtime.py
     tests/test_htex_ambiguous_result_runtime.py
     tests/test_htex_duplicate_registration_runtime.py
     tests/test_htex_manager_drain_runtime.py

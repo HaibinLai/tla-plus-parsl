@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `9898e59` (`Promote executor task transport coverage`).
-- Foundational smoke inventory: 377 TLC cases and 318 Python runtime probes.
+- Latest pushed commit: pending (monitoring lifecycle runtime coverage).
+- Foundational smoke inventory: 377 TLC cases and 323 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -172,6 +172,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted six executor/task-transport runtime bridges into the foundational gate:
   ThreadPoolExecutor lifecycle/resource validation, invalid thread counts, ParslPoolExecutor map
   timeout semantics, real serialized ZMQ task execution, and LocalProvider stale cancellation.
+- Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
+  close/finalization, starter construction failure, zero batching threshold, authenticated malformed
+  UDP payloads, and workflow-duration schema behavior.
 
 ### Verification convention
 
