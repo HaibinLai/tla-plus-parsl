@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (integrated full abstract smoke configuration).
+- Latest pushed commit: `8945d87` (`Add integrated full abstract smoke`).
 - Foundational smoke inventory: 376 TLC cases and 282 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
