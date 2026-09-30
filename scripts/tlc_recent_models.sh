@@ -1423,6 +1423,12 @@ run_case googlecloud-submit-state-current counterexample \
 run_case googlecloud-submit-state-fixed pass \
     models/providers/ParslGoogleCloudSubmitStateFixed.cfg \
     models/providers/ParslGoogleCloudSubmitState.tla
+run_case htex-registration-types-current counterexample \
+    models/serialization/ParslHtexRegistrationTypesCurrent.cfg \
+    models/serialization/ParslHtexRegistrationTypes.tla
+run_case htex-registration-types-fixed pass \
+    models/serialization/ParslHtexRegistrationTypesFixed.cfg \
+    models/serialization/ParslHtexRegistrationTypes.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla

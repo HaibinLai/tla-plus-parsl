@@ -95,6 +95,9 @@ declared HTTP content length matches the bytes received before a task is admitte
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
+It also includes `ParslHtexRegistrationTypes` (BUG-180), which checks registration version-field
+types before string operations and version comparison.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2
