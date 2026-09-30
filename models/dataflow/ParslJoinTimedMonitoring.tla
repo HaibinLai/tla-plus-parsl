@@ -19,12 +19,13 @@ MonitorStates == {"none", "queued", "persisted"}
 MonitorStatuses == {"none", "succeeded", "failed"}
 Chunks == 1..2
 ChunkStates == {"missing", "received"}
+ChecksumStates == {"missing", "valid", "corrupt"}
 
 VARIABLES now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
-          cause, lateResult, chunkState, dataReady, monitorState,
+          cause, lateResult, chunkState, chunkChecksum, dataReady, monitorState,
           monitorStatus, dbStatus
 vars == <<now, manager, lastHeartbeat, outer, inner, deadline, inFlight,
-           cause, lateResult, chunkState, dataReady, monitorState,
+           cause, lateResult, chunkState, chunkChecksum, dataReady, monitorState,
            monitorStatus, dbStatus>>
 
 Init ==
@@ -42,6 +43,7 @@ Init ==
     /\ cause = "none"
     /\ lateResult = "none"
     /\ chunkState = [c \in Chunks |-> "missing"]
+    /\ chunkChecksum = [c \in Chunks |-> "missing"]
     /\ dataReady = FALSE
     /\ monitorState = "none"
     /\ monitorStatus = "none"
@@ -69,16 +71,40 @@ StageChunk(c) ==
     /\ c \in Chunks
     /\ chunkState[c] = "missing"
     /\ chunkState' = [chunkState EXCEPT ![c] = "received"]
+    /\ chunkChecksum' = [chunkChecksum EXCEPT ![c] = "valid"]
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
                     inFlight, cause, lateResult, dataReady, monitorState,
                     monitorStatus, dbStatus>>
 
+CorruptChunk(c) ==
+    /\ ~dataReady
+    /\ c \in Chunks
+    /\ chunkState[c] = "received"
+    /\ chunkChecksum[c] = "valid"
+    /\ chunkChecksum' = [chunkChecksum EXCEPT ![c] = "corrupt"]
+    /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
+                    inFlight, cause, lateResult, chunkState, dataReady,
+                    monitorState, monitorStatus, dbStatus>>
+
+RepairChunk(c) ==
+    /\ c \in Chunks
+    /\ chunkState[c] = "received"
+    /\ chunkChecksum[c] = "corrupt"
+    /\ chunkChecksum' = [chunkChecksum EXCEPT ![c] = "valid"]
+    /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
+                    inFlight, cause, lateResult, chunkState, dataReady,
+                    monitorState, monitorStatus, dbStatus>>
+
 PublishData ==
     /\ ~dataReady
     /\ \A c \in Chunks: chunkState[c] = "received"
+    /\ IF USE_FIXED
+          THEN \A c \in Chunks: chunkChecksum[c] = "valid"
+          ELSE TRUE
     /\ dataReady' = TRUE
     /\ UNCHANGED <<now, manager, lastHeartbeat, outer, inner, deadline,
-                    inFlight, cause, lateResult, chunkState, monitorState,
+                    inFlight, cause, lateResult, chunkState, chunkChecksum,
+                    monitorState,
                     monitorStatus, dbStatus>>
 
 StartInner ==
@@ -161,8 +187,9 @@ CoreNext ==
     \/ UNCHANGED vars
 
 Next ==
-    \/ (CoreNext /\ UNCHANGED <<chunkState, dataReady>>)
+    \/ (CoreNext /\ UNCHANGED <<chunkState, chunkChecksum, dataReady>>)
     \/ \E c \in Chunks: StageChunk(c)
+    \/ \E c \in Chunks: CorruptChunk(c) \/ RepairChunk(c)
     \/ PublishData
 
 Spec == Init /\ [][Next]_vars
@@ -178,6 +205,7 @@ TypeOK ==
     /\ cause \in Causes
     /\ lateResult \in LateStates
     /\ chunkState \in [Chunks -> ChunkStates]
+    /\ chunkChecksum \in [Chunks -> ChecksumStates]
     /\ dataReady \in BOOLEAN
     /\ monitorState \in MonitorStates
     /\ monitorStatus \in MonitorStatuses
@@ -185,6 +213,7 @@ TypeOK ==
 
 JoinSafety == outer = "succeeded" => inner = "succeeded"
 DataReadinessSafety == inner \in {"running", "succeeded"} => dataReady
+ContentSafety == dataReady => \A c \in Chunks: chunkChecksum[c] = "valid"
 TerminalCauseSafety == cause # "none" => inner # "succeeded"
 StaleResultSafety == lateResult = "accepted" => ~USE_FIXED
 DatabaseSafety ==
