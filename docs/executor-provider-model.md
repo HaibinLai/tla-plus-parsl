@@ -39,3 +39,10 @@ and result frames, MPI rank allocation, Work Queue/TaskVine duplicate reports, F
 callback-based Globus/Radical Pilot results, and provider status/cancel shape validation.
 Their current/fixed configurations are included in the TLC sweep and corresponding runtime
 probes are listed in the bug ledger.
+
+Globus Compute has a distinct concurrency boundary: GlobusComputeExecutor.submit temporarily
+mutates one shared SDK Executor's resource specification and endpoint configuration before
+calling submit, then restores defaults in a finally path. ParslGlobusComputeSubmitRace models
+the override/submit/restore critical section and shows that overlapping submissions can observe
+the other task's configuration. The fixed variant serializes the critical section; the runtime
+probe is tests/test_globus_compute_submit_race_runtime.py.

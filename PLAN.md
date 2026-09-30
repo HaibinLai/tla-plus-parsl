@@ -1640,6 +1640,10 @@ captures the epoch, later source mutation is allowed without changing the wire s
 SnapshotEpochSafety checks that decode remains tied to the captured submission epoch. The normal,
 failure, and cyclic object-graph configurations all include this invariant.
 
+The concrete executor mapping now records the Globus Compute shared-configuration race and its
+critical-section refinement, linking the focused model and runtime probe to the actual submit
+implementation.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
