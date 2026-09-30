@@ -247,6 +247,13 @@ tests=(
     tests/test_tasks_outgoing_close_runtime.py
     tests/test_results_incoming_runtime.py
     tests/test_execute_task_runtime.py
+    tests/test_grid_engine_submit_runtime.py
+    tests/test_lsf_submit_runtime.py
+    tests/test_lsf_submit_job_id_runtime.py
+    tests/test_pbspro_submit_runtime.py
+    tests/test_slurm_submit_runtime.py
+    tests/test_torque_submit_runtime.py
+    tests/test_torque_submit_shape_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py
