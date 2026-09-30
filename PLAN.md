@@ -1847,6 +1847,9 @@ Cases 521--540 matched at 100 steps: Google Cloud status/submit/cancel, Condor c
 chunk-size validation, malformed lines, and status/failure parsing.
 Cases 541--560 matched at 100 steps: Condor status-failure/submit/unknown-job handling, Grid
 Engine cancellation and unknown IDs, duplicate/status parsing, and batch-status boundaries.
+Cases 561--580 matched at 100 steps: GridEngine status-batch and submit outcomes, LSF cancel
+unknown IDs, duplicate/missing-job status, resource validation, submit success/failure, and
+malformed submit handling.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
