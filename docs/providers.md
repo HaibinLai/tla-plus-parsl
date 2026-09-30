@@ -420,6 +420,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmBatchStrictVa
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_batch_strict_runtime.py -v
 ```
 
+`ParslSlurmTasksPerNode.tla` covers submit-time resource validation when `cores_per_node` is
+configured. The current `SlurmProvider.submit` divides by `tasks_per_node` before validating it,
+so zero reaches a raw `ZeroDivisionError`; the fixed branch rejects the request before script
+construction. This boundary is recorded as BUG-169 and is exercised by
+`tests/test_slurm_tasks_per_node_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmTasksPerNodeCurrent.cfg models/providers/ParslSlurmTasksPerNode.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmTasksPerNodeFixed.cfg models/providers/ParslSlurmTasksPerNode.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_tasks_per_node_runtime.py -v
+```
+
 This compatibility-boundary finding is recorded as BUG-117: the fallback accepts an incomplete
 final batch even when `strict=True`.
 

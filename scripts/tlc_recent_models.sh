@@ -1942,6 +1942,12 @@ run_case slurm-batch-strict-fixed pass \
 run_case slurm-batch-strict-valid pass \
     models/providers/ParslSlurmBatchStrictValid.cfg \
     models/providers/ParslSlurmBatchStrict.tla
+run_case slurm-tasks-per-node-current counterexample \
+    models/providers/ParslSlurmTasksPerNodeCurrent.cfg \
+    models/providers/ParslSlurmTasksPerNode.tla
+run_case slurm-tasks-per-node-fixed pass \
+    models/providers/ParslSlurmTasksPerNodeFixed.cfg \
+    models/providers/ParslSlurmTasksPerNode.tla
 run_case slurm-cancel-current counterexample \
     models/providers/ParslSlurmCancel.cfg \
     models/providers/ParslSlurmCancel.tla
