@@ -251,6 +251,8 @@ The temporal refinement `ParslHtexResultDecodeContinuation` places a corrupt res
 valid result in one batch and checks that decode failure cannot strand the later Future (BUG-020).
 Provider/executor coverage also includes `ParslPollerExecutorIsolation` (BUG-269), which keeps
 one executor's transient status failure from suppressing independent executors in the same poll.
+Monitoring coverage also includes `ParslMonitoringInternalQueueDrain` (BUG-270), which checks
+that shutdown cannot terminate the database loop while an internal pending message remains.
 
 Staging coverage also includes `ParslGlobusTokenSchema` (BUG-266), which checks that an incomplete
 but syntactically valid token cache cannot reach service-record indexing as if it were usable.

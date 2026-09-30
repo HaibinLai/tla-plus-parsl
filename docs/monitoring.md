@@ -58,6 +58,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkerT
 
 This cross-table failure boundary is recorded as BUG-265.
 
+`ParslMonitoringInternalQueueDrain.tla` models shutdown of the database manager while an
+internal pending queue still contains a message. The current `DatabaseManager.start` loop uses
+`queue.empty()` in its stop condition; a stale true observation after `_kill_event` is set can
+exit the loop without draining that message. The fixed branch drains pending work before exit.
+`tests/test_monitoring_internal_queue_drain_runtime.py` invokes the real `DatabaseManager.start`
+with deterministic stale-empty internal queues. This boundary is recorded as BUG-270.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringInternalQueueDrainCurrent.cfg models/monitoring/ParslMonitoringInternalQueueDrain.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringInternalQueueDrainFixed.cfg models/monitoring/ParslMonitoringInternalQueueDrain.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_internal_queue_drain_runtime.py -v
+```
+
 `ParslMonitoringStatusHistory.tla` is the append-only status-history abstraction.  It permits
 event delivery to be reordered but keeps every `(task, run, status, timestamp)` event as a row;
 the latest status is derived from the greatest event version rather than insertion order.  The

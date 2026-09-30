@@ -9,7 +9,8 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `9f9b4c1` (`Model poller executor failure isolation`).
-- Foundational smoke inventory: 352 TLC cases and 223 Python runtime probes.
+- Foundational smoke inventory: 353 TLC cases and 224 Python runtime probes (including the
+  uncommitted monitoring internal-queue drain stage documented in the current working tree).
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

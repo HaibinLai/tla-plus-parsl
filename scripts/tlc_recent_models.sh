@@ -3159,6 +3159,12 @@ run_case monitoring-db-permanent-current counterexample \
 run_case monitoring-db-permanent-fixed pass \
     models/monitoring/ParslMonitoringDBPermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBPermanentError.tla
+run_case monitoring-internal-queue-drain-current counterexample \
+    models/monitoring/ParslMonitoringInternalQueueDrainCurrent.cfg \
+    models/monitoring/ParslMonitoringInternalQueueDrain.tla
+run_case monitoring-internal-queue-drain-fixed pass \
+    models/monitoring/ParslMonitoringInternalQueueDrainFixed.cfg \
+    models/monitoring/ParslMonitoringInternalQueueDrain.tla
 run_case monitoring-starter-construction-current counterexample \
     models/monitoring/ParslMonitoringStarterConstructionFailureCurrent.cfg \
     models/monitoring/ParslMonitoringStarterConstructionFailure.tla
