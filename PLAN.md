@@ -1737,6 +1737,9 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
 - richer DataManager/staging behavior beyond the current atomic chunks, checksums, and failure
   paths;
 - richer message reordering/correlation beyond the two-task bounded result-envelope model;
+- three-task correlation is now represented by `ParslMessageCorrelationThree`, including bounded
+  queue reordering, cross-task retargeting, duplicate frames, and retry generations; larger
+  unbounded transports remain future work;
 - richer join_app behavior beyond the bounded inner-Future set, cancellation, duplicate positions,
   nested failure payload, failure aggregation, and invalid-return branches now modeled;
 - manager heartbeat/liveness fairness, version mismatch combinations, and richer executor bad-state transitions;
