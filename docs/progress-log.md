@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (join provider/monitoring model).
+- Latest pushed commit: `7da3825` (`Add join provider monitoring model`).
 - Foundational smoke inventory: 371 TLC cases and 270 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
