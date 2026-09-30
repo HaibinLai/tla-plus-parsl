@@ -1623,6 +1623,27 @@ run_case command-deadline-fixed pass \
 run_case command-deadline-normal pass \
     models/executors/ParslCommandDeadlineNormal.cfg \
     models/executors/ParslCommandDeadline.tla
+run_case heartbeat-boundary pass \
+    models/executors/ParslHeartbeatBoundary.cfg \
+    models/executors/ParslHeartbeatBoundary.tla
+run_case heartbeat-clock-current counterexample \
+    models/executors/ParslHeartbeatClockJumpCurrent.cfg \
+    models/executors/ParslHeartbeatClockJump.tla
+run_case heartbeat-clock-fixed pass \
+    models/executors/ParslHeartbeatClockJumpFixed.cfg \
+    models/executors/ParslHeartbeatClockJump.tla
+run_case heartbeat-clock-normal pass \
+    models/executors/ParslHeartbeatClockJumpNormal.cfg \
+    models/executors/ParslHeartbeatClockJump.tla
+run_case heartbeat-late-ack-current counterexample \
+    models/executors/ParslHeartbeatLateAck.cfg \
+    models/executors/ParslHeartbeatLateAck.tla
+run_case heartbeat-late-ack-fixed pass \
+    models/executors/ParslHeartbeatLateAckFixed.cfg \
+    models/executors/ParslHeartbeatLateAck.tla
+run_case heartbeat-provider pass \
+    models/executors/ParslHeartbeatProvider.cfg \
+    models/executors/ParslHeartbeatProvider.tla
 run_case stage-in-ordering-current counterexample \
     models/staging/ParslDataManagerStageInOrderingCurrent.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

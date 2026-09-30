@@ -834,6 +834,9 @@ paths are included in TLC, with runtime probes for each behavior.
 CommandClient coverage now includes REQ/REP timeout poisoning, close/send races, lock acquisition
 past a deadline, unused max-retry behavior, pre-send timeout reuse, and negative poll-timeout
 calculation. Runtime probes exercise the corresponding ZMQ command-client paths.
+Heartbeat coverage now includes strict expiry thresholds, in-flight task loss accounting, wall-clock
+jumps versus monotonic age, stale late acknowledgements, and provider UNKNOWN versus terminal
+states. Runtime probes cover manager expiry, heartbeat messages, and clock-jump behavior.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
