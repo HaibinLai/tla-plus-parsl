@@ -1890,6 +1890,9 @@ transport/ZMQ paths, and heartbeat parameter validation.
 Cases 861--880 matched at 100 steps: heartbeat/Python timeout parameter validation, resource-monitor
 clock and timer intervals, DataFuture copy/falsey exceptions, Future cancellation projections, and
 timeout timer outcomes.
+Cases 881--900 matched at 100 steps: Future wait/projection, duplicate/mixed/empty join shapes,
+join retry and cancellation (single/running), return-shape variants, and dynamic task creation/
+fan-out.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
