@@ -1794,6 +1794,10 @@ executor drain, idle-manager timeout, provider failure, registration/recovery, s
 serialization/submit failure, terminal timeout, and abstract smoke configurations. The remaining
 join smoke cases 239--240 also passed with a reduced 100-step simulator bound after the default
 1,000-step run exceeded the sandbox observation window.
+The next interval covered memo/monitoring/serialization aliases, min-blocks and executor/time
+aliases, memo dictionary ordering, monitoring retry, HTEX malformed task/result messages and
+batches, and result-frame/queue handling. The longer result-frame/queue tail was rerun at 100
+simulation steps and its Current/Fixed expectations passed; manager selection also passed.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
