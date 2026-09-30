@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (HTEX cancelled-failure result refinement).
+- Latest pushed commit: `57f5aaf` (`Model HTEX cancelled failure results`).
 - Foundational smoke inventory: 363 TLC cases and 233 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
