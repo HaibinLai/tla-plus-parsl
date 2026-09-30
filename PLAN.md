@@ -699,6 +699,8 @@ callback-failure isolation, bounded periodic callbacks, and quiescent close).
 It also includes the current/fixed `ParslTimeoutMonitoring` configurations, which connect
 heartbeat expiry and task deadlines to late-result rejection and monitoring-status stability;
 `tests/test_retry_timeout_runtime.py` provides the concrete timeout/retry bridge.
+`ParslTimerReentrantClose` is now included as well, checking callback self-close behavior and
+the fixed no-self-join path with `tests/test_timer_reentrant_close_runtime.py`.
 `ParslWorkQueueResults.tla` refines WorkQueue's collector result protocol: valid result files,
 deserialization failures, app exceptions, no-result reports, and final cleanup of outstanding
 tasks when the collector exits.

@@ -180,6 +180,12 @@ run_case timeout-monitoring-current counterexample \
 run_case timeout-monitoring-fixed pass \
     models/clock/ParslTimeoutMonitoringFixed.cfg \
     models/clock/ParslTimeoutMonitoring.tla
+run_case timer-reentrant-close-current counterexample \
+    models/clock/ParslTimerReentrantCloseCurrent.cfg \
+    models/clock/ParslTimerReentrantClose.tla
+run_case timer-reentrant-close-fixed pass \
+    models/clock/ParslTimerReentrantCloseFixed.cfg \
+    models/clock/ParslTimerReentrantClose.tla
 run_case apply-dispatch-current counterexample \
     models/serialization/ParslApplyDispatchBoundaryCurrent.cfg \
     models/serialization/ParslApplyDispatchBoundary.tla
