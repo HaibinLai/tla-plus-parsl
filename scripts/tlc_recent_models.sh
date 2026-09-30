@@ -2103,3 +2103,33 @@ run_case timer-interval-validation-fixed pass \
 run_case timer-interval-validation-valid pass \
     models/clock/ParslTimerIntervalValidationValid.cfg \
     models/clock/ParslTimerIntervalValidation.tla
+run_case datafuture-copy pass \
+    models/dataflow/ParslDataFutureCopy.cfg \
+    models/dataflow/ParslDataFutureCopy.tla
+run_case datafuture-falsey-exception-current counterexample \
+    models/dataflow/ParslDataFutureFalseyExceptionCurrent.cfg \
+    models/dataflow/ParslDataFutureFalseyException.tla
+run_case datafuture-falsey-exception-fixed pass \
+    models/dataflow/ParslDataFutureFalseyExceptionFixed.cfg \
+    models/dataflow/ParslDataFutureFalseyException.tla
+run_case datafuture-falsey-exception-normal pass \
+    models/dataflow/ParslDataFutureFalseyExceptionNormal.cfg \
+    models/dataflow/ParslDataFutureFalseyException.tla
+run_case future-cancellation-app pass \
+    models/dataflow/ParslFutureCancellationApp.cfg \
+    models/dataflow/ParslFutureCancellation.tla
+run_case future-cancellation-data pass \
+    models/dataflow/ParslFutureCancellationData.cfg \
+    models/dataflow/ParslFutureCancellation.tla
+run_case future-cancellation-underlying pass \
+    models/dataflow/ParslFutureCancellationUnderlying.cfg \
+    models/dataflow/ParslFutureCancellation.tla
+run_case future-projection-invalid pass \
+    models/dataflow/ParslFutureProjectionInvalid.cfg \
+    models/dataflow/ParslFutureProjection.tla
+run_case future-projection-valid pass \
+    models/dataflow/ParslFutureProjectionValid.cfg \
+    models/dataflow/ParslFutureProjection.tla
+run_case future-wait-timeout pass \
+    models/dataflow/ParslFutureWaitTimeout.cfg \
+    models/dataflow/ParslFutureWaitTimeout.tla

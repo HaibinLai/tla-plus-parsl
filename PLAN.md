@@ -1387,6 +1387,16 @@ and `ParslTimerIntervalValidation` checks negative periodic intervals. Runtime p
 boundaries, and the current configurations intentionally produce TLC counterexamples for the unsafe
 branches while fixed and valid configurations pass simulation.
 
+The Future/DataFuture foundation is also in the sweep. `ParslDataFutureCopy` models clean stage-in
+copy isolation and dependency gating; `ParslDataFutureFalseyException` captures failure propagation
+when a user exception has false boolean value; `ParslFutureCancellation` distinguishes public
+AppFuture/DataFuture cancellation from cancellation of an underlying concurrent-futures object;
+`ParslFutureProjection` models deferred `__getitem__`/`__getattr__` tasks and invalid-key/failure
+propagation; and `ParslFutureWaitTimeout` separates caller-side `Future.result(timeout=...)` from
+the app's own wall timeout. Runtime probes cover DataFuture staging, cancellation, falsey exceptions,
+and deferred projections. The falsey-exception current branch produces a TLC counterexample; fixed,
+normal, and other contract configurations pass simulation.
+
 ### 3. Checked properties
 
 The safety configurations check:
