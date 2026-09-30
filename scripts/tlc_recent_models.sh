@@ -468,3 +468,6 @@ run_case join-full pass \
 run_case join-end-to-end pass \
     models/dataflow/ParslJoinEndToEnd.cfg \
     models/dataflow/ParslJoinEndToEnd.tla
+run_case join-monitoring pass \
+    models/dataflow/ParslJoinMonitoring.cfg \
+    models/dataflow/ParslJoinMonitoring.tla

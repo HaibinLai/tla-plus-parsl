@@ -249,6 +249,9 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslJoinCallableTransport` combines serialized inner callable snapshots, retry attempts,
   stale results, and ordered duplicate positions in an outer `join_app`; a real Parsl runtime
   bridge exercises the same result shape.
+- `ParslJoinMonitoring` is now in the smoke sweep, connecting memoized, staged, and ordinary
+  inner Futures to versioned outer status events, reordered delivery, database-write retry, and
+  terminal monitoring-record stability.
 
 The runtime suite currently contains 485 probes and passes as a whole:
 
