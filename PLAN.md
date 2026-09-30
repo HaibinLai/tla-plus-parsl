@@ -1138,6 +1138,9 @@ snapshot bridges are `tests/test_function_object_contents_runtime.py`,
 transport, route validation, duplicate suppression, retry-attempt correlation, and stale-result
 classification. Concrete bridges include `tests/test_zmq_serialization_runtime.py`,
 `tests/test_callable_retry_transport_runtime.py`, and `tests/test_task_transport_runtime.py`.
+`ParslCurveZMQCertificateMode.tla` is now in the ZMQ sweep, checking that secret keys load only
+from private certificate directories and that missing keys or unsafe modes are rejected.
+`tests/test_curvezmq_certificate_runtime.py` drives the real certificate loader.
 `ParslSerializationPluginCache.tla` is now in the serialization sweep, checking dynamic plugin
 loading exactly once and stable reuse for a second payload. The concrete bridge is
 `tests/test_serialization_plugin_cache_runtime.py`.

@@ -1062,6 +1062,12 @@ run_case serialization-snapshot pass \
 run_case serialization-zmq-bridge pass \
     models/serialization/ParslSerializationZMQBridge.cfg \
     models/serialization/ParslSerializationZMQBridge.tla
+run_case curvezmq-certificate-invalid pass \
+    models/serialization/ParslCurveZMQCertificateModeInvalid.cfg \
+    models/serialization/ParslCurveZMQCertificateMode.tla
+run_case curvezmq-certificate-valid pass \
+    models/serialization/ParslCurveZMQCertificateModeValid.cfg \
+    models/serialization/ParslCurveZMQCertificateMode.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla
