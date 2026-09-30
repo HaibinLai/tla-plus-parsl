@@ -810,6 +810,9 @@ run_case taskvine-results pass \
 run_case workqueue-shutdown pass \
     models/executors/ParslWorkQueueShutdown.cfg \
     models/executors/ParslWorkQueueShutdown.tla
+run_case taskvine-shutdown pass \
+    models/executors/ParslTaskVineShutdown.cfg \
+    models/executors/ParslTaskVineShutdown.tla
 run_case join-full pass \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla

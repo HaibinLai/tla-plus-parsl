@@ -706,6 +706,8 @@ deserialization failures, app exceptions, no-result reports, and final cleanup o
 tasks when the collector exits.
 `ParslWorkQueueShutdown.tla` is now in the recurring smoke sweep, with the real collector-finally
 cleanup exercised by `tests/test_workqueue_shutdown_runtime.py`.
+`ParslTaskVineShutdown.tla` now has the same recurring check for TaskVine manager-failure cleanup,
+backed by `tests/test_taskvine_shutdown_runtime.py`.
 `ParslWorkQueueDuplicateReport.tla` refines the same collector with a stale/duplicate report
 interleaving. It captures the current `tasks.pop(task_report.id)` `KeyError` path, the resulting
 collector exit and unrelated-future cleanup, and a candidate guard that ignores reports whose
