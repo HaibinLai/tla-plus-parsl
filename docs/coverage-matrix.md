@@ -433,6 +433,10 @@ Monitoring coverage also includes `ParslMonitoringResourceHistory`, an append-on
 ordered model for real SQLite `RESOURCE` samples and duplicate primary-key handling, backed by
 `tests/test_monitoring_resource_history_runtime.py`.
 
+The monitoring row also includes `ParslMonitoringWorkflowDuration` (BUG-216), which checks that
+workflow-finalization duration is represented in the schema and cannot disappear silently during
+a bulk update.
+
 Join coverage also includes `ParslJoinThreeList`, which keeps three distinct inner Futures and
 four ordered list positions (including a duplicate) separate in the outer result, and
 `ParslJoinThreeCancellation`, which exercises a three-element cancelled-inner list, backed by

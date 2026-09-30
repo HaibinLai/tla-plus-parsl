@@ -66,3 +66,17 @@ database safety contract.
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchThreeCurrent.cfg models/monitoring/ParslMonitoringBatchThree.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringBatchThreeFixed.cfg models/monitoring/ParslMonitoringBatchThree.tla
 ```
+
+`ParslMonitoringWorkflowDuration.tla` models the abnormal-close finalization boundary. The
+current `DatabaseManager` computes `workflow_duration`, but the `WORKFLOW` SQLAlchemy schema has
+no matching column and `bulk_update_mappings` silently drops the field. The fixed branch requires
+the duration to be represented and persisted. The runtime probe uses the real monitoring
+`Database` with SQLite.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflowDurationCurrent.cfg models/monitoring/ParslMonitoringWorkflowDuration.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWorkflowDurationFixed.cfg models/monitoring/ParslMonitoringWorkflowDuration.tla
+PYTHONPATH=/tmp/parsl-source python -m unittest tests.test_monitoring_workflow_duration_runtime -v
+```
+
+This boundary is tracked as BUG-216.

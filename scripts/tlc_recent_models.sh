@@ -322,6 +322,15 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case monitoring-workflow-duration-current counterexample \
+    models/monitoring/ParslMonitoringWorkflowDurationCurrent.cfg \
+    models/monitoring/ParslMonitoringWorkflowDuration.tla
+run_case monitoring-workflow-duration-fixed pass \
+    models/monitoring/ParslMonitoringWorkflowDurationFixed.cfg \
+    models/monitoring/ParslMonitoringWorkflowDuration.tla
+run_case monitoring-workflow-duration-normal pass \
+    models/monitoring/ParslMonitoringWorkflowDurationNormal.cfg \
+    models/monitoring/ParslMonitoringWorkflowDuration.tla
 run_case azure-status-remote-failure-current counterexample \
     models/providers/ParslAzureStatusRemoteFailureCurrent.cfg \
     models/providers/ParslAzureStatusRemoteFailure.tla
