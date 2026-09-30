@@ -709,6 +709,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotLateCa
 
 This late-callback terminal-state violation is recorded as BUG-135.
 
+The same boundary applies to a late `FAILED` callback: `ParslRadicalPilotLateFailureCallback.tla`
+models the unconditional `set_exception` path after cancellation. The Current model produces a
+four-state counterexample and the Fixed model passes; the runtime probe covers both terminal
+callback kinds.
+
 `ParslRadicalPilotBulkShutdown.tla` models Radical Pilot bulk mode during shutdown. The current
 shutdown sets `_terminate` before joining the bulk collector; the collector exits without flushing
 its queue, leaving a queued task and its Future unresolved. The fixed branch flushes queued tasks

@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `f2e0630` (`Refine cancelled executor failure results`).
-- Foundational smoke inventory: 358 TLC cases and 229 Python runtime probes.
+- Foundational smoke inventory: 359 TLC cases and 230 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -48,6 +48,9 @@ are recorded here in English and committed with the model changes.
   can raise from `set_exception` just as it can from `set_result`; both current models produce a
   two-state counterexample, while both fixed models complete in seven generated/four distinct
   states. Runtime probes exercise both collector branches.
+- Current stage: refined BUG-135 for Radical-Pilot late `FAILED` callbacks. A callback arriving
+  after cancellation can raise through `set_exception` just like the existing `DONE` path; the
+  failure Current model produces a four-state counterexample and the Fixed model passes.
 
 ### Verification convention
 

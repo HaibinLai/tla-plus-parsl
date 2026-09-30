@@ -1041,6 +1041,12 @@ run_case radical-pilot-late-callback-current counterexample \
 run_case radical-pilot-late-callback-fixed pass \
     models/executors/ParslRadicalPilotLateCallbackFixed.cfg \
     models/executors/ParslRadicalPilotLateCallback.tla
+run_case radical-pilot-late-failure-callback-current counterexample \
+    models/executors/ParslRadicalPilotLateFailureCallbackCurrent.cfg \
+    models/executors/ParslRadicalPilotLateFailureCallback.tla
+run_case radical-pilot-late-failure-callback-fixed pass \
+    models/executors/ParslRadicalPilotLateFailureCallbackFixed.cfg \
+    models/executors/ParslRadicalPilotLateFailureCallback.tla
 run_case radical-pilot-unknown-callback-current counterexample \
     models/executors/ParslRadicalPilotUnknownCallbackCurrent.cfg \
     models/executors/ParslRadicalPilotUnknownCallback.tla

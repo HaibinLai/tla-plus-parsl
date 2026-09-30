@@ -557,6 +557,9 @@ run_case radical-failure-fanout \
 run_case radical-late-callback \
     models/executors/ParslRadicalPilotLateCallbackFixed.cfg \
     models/executors/ParslRadicalPilotLateCallback.tla
+run_case radical-late-failure-callback \
+    models/executors/ParslRadicalPilotLateFailureCallbackFixed.cfg \
+    models/executors/ParslRadicalPilotLateFailureCallback.tla
 run_case radical-unknown-callback \
     models/executors/ParslRadicalPilotUnknownCallbackFixed.cfg \
     models/executors/ParslRadicalPilotUnknownCallback.tla

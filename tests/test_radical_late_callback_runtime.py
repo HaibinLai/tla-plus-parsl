@@ -49,6 +49,24 @@ class RadicalLateCallbackRuntimeTest(unittest.TestCase):
 
         self.assertEqual(type(context.exception).__name__, "InvalidStateError")
 
+    def test_failed_after_cancel_raises_invalid_state_error(self):
+        executor = radical_executor.RadicalPilotExecutor.__new__(
+            radical_executor.RadicalPilotExecutor
+        )
+        future = Future()
+        executor.future_tasks = {"task-1": future}
+        task = FakeTask()
+        task.mode = RP.TASK_EXECUTABLE
+        task.description = {"mode": RP.TASK_EXECUTABLE}
+
+        with patch.object(radical_executor, "rp", RP, create=True):
+            executor.task_state_cb(task, RP.CANCELED)
+            self.assertTrue(future.cancelled())
+            with self.assertRaises(Exception) as context:
+                executor.task_state_cb(task, RP.FAILED)
+
+        self.assertEqual(type(context.exception).__name__, "InvalidStateError")
+
 
 if __name__ == "__main__":
     unittest.main()

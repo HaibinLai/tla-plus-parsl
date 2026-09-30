@@ -103,6 +103,7 @@ tests=(
     tests/test_flux_submission_failure_runtime.py
     tests/test_globus_compute_result_runtime.py
     tests/test_radical_results_runtime.py
+    tests/test_radical_late_callback_runtime.py
     tests/test_mpi_backlog_retry_runtime.py
     tests/test_taskvine_factory_runtime.py
     tests/test_taskvine_start_failure_cleanup_runtime.py
