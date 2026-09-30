@@ -1835,6 +1835,9 @@ Cases 441--460 matched at 100 steps: monitoring insert presence, executor/provid
 lifecycle, MPI backlog retry and no-resource results, cluster unknown jobs, LSF resource
 validation, Flux submission failure, TaskVine/Work Queue shutdown/results, and full join success
 including end-to-end execution.
+Cases 461--480 matched at 100 steps: join monitoring/core/completion, callback races, return
+equality and failure aggregation, task-status/Future ordering, malformed monitoring worker
+messages, close idempotence, shutdown race, and shutdown drain.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
