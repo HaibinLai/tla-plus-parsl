@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (provider cancellation and missing-job runtime coverage).
+- Latest pushed commit: `b9b1523` (`Promote provider cancellation probes`).
 - Foundational smoke inventory: 382 TLC cases and 348 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
