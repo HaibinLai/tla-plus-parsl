@@ -1483,6 +1483,12 @@ run_case torque-malformed-status-current counterexample \
 run_case torque-malformed-status-fixed pass \
     models/providers/ParslTorqueMalformedStatusLineFixed.cfg \
     models/providers/ParslTorqueMalformedStatusLine.tla
+run_case kubernetes-cancel-response-current counterexample \
+    models/providers/ParslKubernetesCancelResponseCurrent.cfg \
+    models/providers/ParslKubernetesCancelResponse.tla
+run_case kubernetes-cancel-response-fixed pass \
+    models/providers/ParslKubernetesCancelResponseFixed.cfg \
+    models/providers/ParslKubernetesCancelResponse.tla
 run_case azure-submit-current counterexample \
     models/providers/ParslAzureProviderSubmit.cfg \
     models/providers/ParslAzureProviderSubmit.tla

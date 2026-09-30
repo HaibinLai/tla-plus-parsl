@@ -1851,6 +1851,8 @@ The current MVP is stable for the bounded safety scenarios. Remaining extensions
   `Queue.empty()` result, with BUG-187 runtime evidence.
 - `ParslTorqueMalformedStatusLine` now models malformed Torque scheduler-record isolation, with
   BUG-188 runtime evidence.
+- `ParslKubernetesCancelResponse` now models Kubernetes delete-response confirmation, with BUG-189
+  runtime evidence from a returned failure object.
 
 ## Validation workflow
 

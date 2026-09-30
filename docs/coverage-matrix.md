@@ -122,6 +122,9 @@ that shutdown does not trust a stale `Queue.empty()` observation and strand an e
 The provider row also includes `ParslTorqueMalformedStatusLine` (BUG-188), which checks malformed
 Torque scheduler records before state-column indexing.
 
+It also includes `ParslKubernetesCancelResponse` (BUG-189), which checks that a failed delete
+response cannot be published locally as successful cancellation.
+
 The executor/provider row also includes `ParslAwsCancelDuplicates` (BUG-174), which checks that
 duplicate AWS cancellation IDs cannot turn a successful remote termination into a local exception,
 and `ParslAwsStatusOrdering` (BUG-175), which checks request-order projection for out-of-order EC2
