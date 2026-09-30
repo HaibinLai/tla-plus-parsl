@@ -55,6 +55,10 @@ are recorded here in English and committed with the model changes.
   `MPITaskScheduler.get_result`, leaving allocated nodes held while the ferry loop continues;
   the Current model produces a two-state leak counterexample and the Fixed model releases the
   allocation while publishing a terminal decode failure.
+- Current stage: completed the provider ledger mapping for Slurm cancellation. Existing
+  `ParslSlurmCancel` and `ParslSlurmCancelBatch` models plus the runtime probe document that a
+  successful remote `scancel` can still raise on a stale local ID after partially updating a
+  batch; this is now tracked as BUG-277.
 
 ### Verification convention
 
