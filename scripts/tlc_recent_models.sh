@@ -525,6 +525,12 @@ run_case scale-out-failure-monitoring-current counterexample \
 run_case scale-out-failure-monitoring-fixed pass \
     models/executors/ParslScaleOutFailureMonitoringFixed.cfg \
     models/executors/ParslScaleOutFailureMonitoring.tla
+run_case end-to-end-current counterexample \
+    models/core/ParslEndToEnd.cfg \
+    models/core/ParslEndToEnd.tla
+run_case end-to-end-fixed pass \
+    models/core/ParslEndToEndFixed.cfg \
+    models/core/ParslEndToEnd.tla
 run_case memo-dict-order-current counterexample \
     models/dataflow/ParslMemoDictOrderingCurrent.cfg \
     models/dataflow/ParslMemoDictOrdering.tla

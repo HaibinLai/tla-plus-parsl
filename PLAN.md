@@ -1477,6 +1477,12 @@ and zero-node validation. Runtime probes cover seven MPI construction/command pa
 non-divisible and zero-node configurations produce counterexamples, while fixed, valid, and prefix
 configurations pass TLC simulation.
 
+The compact end-to-end protocol `ParslEndToEnd` is now explicitly in the recurring sweep. It joins
+dependency release, physical attempts, wire progress, worker execution, retry, timeout, and late
+result correlation in one small state machine. The current configuration reproduces an old timed-out
+attempt resolving the Future; the fixed configuration rejects it as stale. The corresponding runtime
+probe passes, and the fixed TLC configuration passes simulation.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
