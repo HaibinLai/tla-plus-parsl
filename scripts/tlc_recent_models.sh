@@ -363,6 +363,15 @@ run_case pbspro-malformed-json-current counterexample \
 run_case pbspro-malformed-json-fixed pass \
     models/providers/ParslPBSProMalformedJSONFixed.cfg \
     models/providers/ParslPBSProMalformedJSON.tla
+run_case pbspro-job-alias-current counterexample \
+    models/providers/ParslPBSProJobIdAliasCurrent.cfg \
+    models/providers/ParslPBSProJobIdAlias.tla
+run_case pbspro-job-alias-fixed pass \
+    models/providers/ParslPBSProJobIdAliasFixed.cfg \
+    models/providers/ParslPBSProJobIdAlias.tla
+run_case pbspro-job-alias-unique pass \
+    models/providers/ParslPBSProJobIdAliasUnique.cfg \
+    models/providers/ParslPBSProJobIdAlias.tla
 run_case condor-malformed-line-current counterexample \
     models/providers/ParslCondorMalformedStatusLineCurrent.cfg \
     models/providers/ParslCondorMalformedStatusLine.tla
