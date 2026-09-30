@@ -1872,6 +1872,9 @@ Cases 721--740 matched at 100 steps: monitoring batch clock/close/idempotence, p
 retry integrity, delivery/event-stream ordering, thresholds, and FTP connection cleanup.
 Cases 741--760 matched at 100 steps: FTP partial/stage failures, HTTP connection/existing-destination/
 partial-stage behavior, and Rsync quoting plus stage-in/stage-out failure paths.
+Cases 761--780 matched at 100 steps: Rsync success, clean-copy/path resolution, Zip path validation,
+Globus endpoint/dependency/token/configuration, DataFuture cancellation, multi-output stage-out,
+and staging-provider dispatch.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
