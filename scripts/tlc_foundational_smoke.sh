@@ -341,6 +341,12 @@ run_case taskvine-malformed-report \
 run_case workqueue-start-timeout-cleanup \
     models/executors/ParslWorkQueueStartTimeoutCleanupFixed.cfg \
     models/executors/ParslWorkQueueStartTimeoutCleanup.tla
+run_case workqueue-duplicate-report \
+    models/executors/ParslWorkQueueDuplicateReportFixed.cfg \
+    models/executors/ParslWorkQueueDuplicateReport.tla
+run_case taskvine-duplicate-report \
+    models/executors/ParslTaskVineDuplicateReportFixed.cfg \
+    models/executors/ParslTaskVineDuplicateReport.tla
 run_case slurm-foreign-job \
     models/providers/ParslSlurmForeignJobFixed.cfg \
     models/providers/ParslSlurmForeignJob.tla

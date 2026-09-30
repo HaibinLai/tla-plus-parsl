@@ -215,6 +215,8 @@ tests=(
     tests/test_thread_executor_thread_count_runtime.py
     tests/test_pool_executor_map_runtime.py
     tests/test_task_transport_runtime.py
+    tests/test_workqueue_duplicate_report_runtime.py
+    tests/test_taskvine_duplicate_report_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py

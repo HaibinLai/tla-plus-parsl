@@ -141,9 +141,9 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 380 TLC cases and 337 Python runtime test files.
-On 2026-09-30, all 380 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
-suite passed with 337 entries. The subsequently added cases were also run individually as they
+The current repository smoke runner enumerates 382 TLC cases and 339 Python runtime test files.
+On 2026-09-30, all 382 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+suite passed with 339 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
 isolation, monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus
@@ -168,6 +168,11 @@ fixed configurations so the foundational path remains green.
 The provider cases then sample concrete admission and response boundaries across Kubernetes,
 Torque, LocalProvider, AWS, and Google Cloud. They are deliberately small schema/state checks;
 the provider-specific documents and runtime probes remain the authoritative deeper models.
+
+The Work Queue and TaskVine duplicate-report models add the stale-result collector boundary.
+The fixed branches ignore a report whose task identifier has already been removed, preserving
+the collector and unrelated pending Futures. Their Current configurations and runtime probes
+retain the observed `KeyError`/manager-failure path as an executable counterexample.
 
 The last case, `ParslProviderExecutorTimedMonitoringFixed`, is the first combined dynamic path in
 this smoke suite: provisioning, manager heartbeat expiry, task timeout/retry, stale old-attempt

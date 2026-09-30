@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `b5c910b` (`Promote monitoring shutdown coverage`).
-- Foundational smoke inventory: 380 TLC cases and 337 Python runtime probes.
+- Latest pushed commit: pending (duplicate-result collector coverage).
+- Foundational smoke inventory: 382 TLC cases and 339 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted Work Queue and TaskVine duplicate/late-result collector boundaries.
+  The fixed models ignore an already-consumed task identifier and preserve unrelated Futures;
+  the Current models retain the collector-exit and unrelated-failure counterexample. Both
+  runtime probes passed, and the complete foundational smoke suites passed 382/382 TLC cases
+  and 339/339 runtime entries.
 
 - Current stage: promoted monitoring shutdown boundaries into the foundational gate. The
   external-queue model checks that a stale `empty()` observation cannot strand a message, while
