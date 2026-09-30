@@ -317,6 +317,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineSubmitSh
 /tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_submit_shape_runtime.py -v
 ```
 
+`ParslGridEngineEmptySubmit.tla` covers the empty-success response. The current provider returns
+`None` after a zero exit code with no non-empty output; the fixed branch rejects the submission
+before the scaling layer can publish an invalid block mapping.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitCurrent.cfg models/providers/ParslGridEngineEmptySubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitFixed.cfg models/providers/ParslGridEngineEmptySubmit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitNormal.cfg models/providers/ParslGridEngineEmptySubmit.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_empty_submit_runtime.py -v
+```
+
 `ParslLocalProviderCancelUnknown.tla` models cancellation after a local job has already been
 removed from `resources`. The current `LocalProvider.cancel()` indexes the missing id and raises
 `KeyError`; the fixed branch treats the stale cancellation as an unsuccessful, non-throwing

@@ -331,6 +331,15 @@ run_case grid-engine-submit-shape-fixed pass \
 run_case grid-engine-submit-shape-normal pass \
     models/providers/ParslGridEngineSubmitShapeNormal.cfg \
     models/providers/ParslGridEngineSubmitShape.tla
+run_case grid-engine-empty-submit-current counterexample \
+    models/providers/ParslGridEngineEmptySubmitCurrent.cfg \
+    models/providers/ParslGridEngineEmptySubmit.tla
+run_case grid-engine-empty-submit-fixed pass \
+    models/providers/ParslGridEngineEmptySubmitFixed.cfg \
+    models/providers/ParslGridEngineEmptySubmit.tla
+run_case grid-engine-empty-submit-normal pass \
+    models/providers/ParslGridEngineEmptySubmitNormal.cfg \
+    models/providers/ParslGridEngineEmptySubmit.tla
 run_case htex-contact-timeout-starvation-current counterexample \
     models/clock/ParslHtexContactTimeoutStarvationCurrent.cfg \
     models/clock/ParslHtexContactTimeoutStarvation.tla

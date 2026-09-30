@@ -130,6 +130,9 @@ declared-length safety check to the separate-task HTTP helper as well as the in-
 Provider coverage also includes `ParslGridEngineSubmitShape` (BUG-221), which validates the
 successful-submit response before admitting a Grid Engine resource.
 
+It also includes `ParslGridEngineEmptySubmit` (BUG-222), which requires an explicit failure when
+a successful scheduler command returns no usable job identifier.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
