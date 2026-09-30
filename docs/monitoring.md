@@ -1,5 +1,10 @@
 # Monitoring models
 
+`ParslMonitoringZMQTupleShape.tla` models the router admission boundary before messages enter the
+database queue: exactly two-element tuples are forwarded, while malformed tuple lengths are
+discarded and the listener continues. `tests/test_monitoring_zmq_tuple_shape_runtime.py` drives
+the real `MonitoringRouter.start` loop with one malformed and one valid message.
+
 `ParslMonitoringTaskRetry.tla` binds retry ordering to a logical task. It models DFK state
 transitions, per-attempt status events, queue reordering, and the database current view. The
 current configuration finds a `DatabaseVersionSafety` counterexample when an older retry event

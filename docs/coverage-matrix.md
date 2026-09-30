@@ -18,6 +18,9 @@ The dataflow coverage also includes `ParslAppFutureOutputStreams`, which models 
 `AppFuture.stdout`/`stderr` distinction between raw task-record values and installed stage-out
 `DataFuture` overrides; tuple values remain an explicitly coarse boundary.
 
+Monitoring coverage also includes `ParslMonitoringZMQTupleShape`, which checks malformed-versus-
+valid tuple admission in the real ZMQ monitoring router before queue/database delivery.
+
 It also includes a direct runtime bridge for `ParslFutureWaitTimeout`, distinguishing caller wait
 timeouts from task cancellation or task-level timeout failure.
 

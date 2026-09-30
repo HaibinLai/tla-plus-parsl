@@ -352,6 +352,13 @@ run_case future-wait-timeout pass \
     models/dataflow/ParslFutureWaitTimeout.cfg \
     models/dataflow/ParslFutureWaitTimeout.tla
 
+run_case monitoring-zmq-tuple-valid pass \
+    models/monitoring/ParslMonitoringZMQTupleShapeValid.cfg \
+    models/monitoring/ParslMonitoringZMQTupleShape.tla
+run_case monitoring-zmq-tuple-invalid pass \
+    models/monitoring/ParslMonitoringZMQTupleShapeInvalid.cfg \
+    models/monitoring/ParslMonitoringZMQTupleShape.tla
+
 run_case stageout-return-none pass \
     models/staging/ParslDataManagerStageOutReturnNone.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla
