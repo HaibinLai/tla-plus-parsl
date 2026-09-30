@@ -2550,6 +2550,9 @@ run_case nested-join pass \
 run_case nested-join-failure pass \
     models/dataflow/ParslNestedJoinFailure.cfg \
     models/dataflow/ParslNestedJoinFailure.tla
+run_case join-callback-multiplicity pass \
+    models/dataflow/ParslJoinCallbackMultiplicity.cfg \
+    models/dataflow/ParslJoinCallbackMultiplicity.tla
 run_case serialization-apply-message-arity-current counterexample \
     models/serialization/ParslApplyMessageArity.cfg \
     models/serialization/ParslApplyMessageArity.tla

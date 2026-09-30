@@ -43,6 +43,11 @@ This matches handle_join_update: the nested JoinError is the exception attached 
 Future, while its dependent exception identifiers retain the leaf causes. TLC checks the
 failure-shape and completion invariants over 100,001 simulated states.
 
+ParslJoinCallbackMultiplicity preserves callback multiplicity for a duplicate list such as
+I1, I1, I2. The source registers one callback per list position, so completion of I1 schedules
+two callback invocations. The model keeps those invocations in a sequence and checks that they
+preserve both result positions while only one invocation finalizes the outer Future.
+
 The outer callback lock is represented as an atomic callback section. A callback that observes
 an incomplete list returns without finalizing; the callback for the last terminal Future performs
 the all-done check and either constructs the ordered result or aggregates all failures.

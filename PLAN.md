@@ -1696,6 +1696,11 @@ Future IDs are retained in the nested error in input order, while the outer join
 nested Future as one dependency entry; the completion and failure-shape invariants pass over
 100,001 simulated states.
 
+Callback multiplicity is now explicit in `ParslJoinCallbackMultiplicity.tla`: duplicate list
+positions register duplicate callbacks, but only the first callback that observes all inner
+Futures terminal may finalize the outer Future. The model preserves the duplicated result shape
+and checks single-finalization safety over 100,001 simulated states.
+
 Monitoring now includes `ParslMonitoringEventStream.tla`, a multi-task producer/queue/database
 writer abstraction. It models duplicate and reordered events, bounded write retry, per-task
 database high-water marks, and shutdown drain conditions. The current branch reproduces stale
