@@ -69,6 +69,13 @@ tests=(
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py
+    tests/test_monitoring_hub_close_runtime.py
+    tests/test_monitoring_hub_close_before_start_runtime.py
+    tests/test_monitoring_hub_start_failure_cleanup_runtime.py
+    tests/test_monitoring_hub_repeated_start_runtime.py
+    tests/test_monitoring_close_idempotence_runtime.py
+    tests/test_monitoring_shutdown_drain_runtime.py
+    tests/test_monitoring_shutdown_race_runtime.py
     tests/test_memo_function_identity_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )

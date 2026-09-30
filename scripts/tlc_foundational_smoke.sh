@@ -455,5 +455,26 @@ run_case htex-task-resource-spec-type \
 run_case htex-version-mismatch \
     models/executors/ParslHtexVersionMismatchFixed.cfg \
     models/executors/ParslHtexVersionMismatch.tla
+run_case monitoring-hub-close \
+    models/monitoring/ParslMonitoringHubClose.cfg \
+    models/monitoring/ParslMonitoringHubClose.tla
+run_case monitoring-hub-close-before-start \
+    models/monitoring/ParslMonitoringHubCloseBeforeStartFixed.cfg \
+    models/monitoring/ParslMonitoringHubCloseBeforeStart.tla
+run_case monitoring-hub-start-failure-cleanup \
+    models/monitoring/ParslMonitoringHubStartFailureCleanupFixed.cfg \
+    models/monitoring/ParslMonitoringHubStartFailureCleanup.tla
+run_case monitoring-hub-repeated-start \
+    models/monitoring/ParslMonitoringHubRepeatedStartFixed.cfg \
+    models/monitoring/ParslMonitoringHubRepeatedStart.tla
+run_case monitoring-close-idempotence \
+    models/monitoring/ParslMonitoringCloseIdempotenceFixed.cfg \
+    models/monitoring/ParslMonitoringCloseIdempotence.tla
+run_case monitoring-shutdown-drain \
+    models/monitoring/ParslMonitoringShutdownDrain.cfg \
+    models/monitoring/ParslMonitoringShutdownDrain.tla
+run_case monitoring-shutdown-race \
+    models/monitoring/ParslMonitoringShutdownRaceFixed.cfg \
+    models/monitoring/ParslMonitoringShutdownRace.tla
 
 echo "Foundational TLC smoke suite passed."

@@ -238,6 +238,10 @@ The HTEX schema cases cover manager registration shape/type, version mismatch, t
 task ID/context/priority/resource-spec types, and malformed task messages. Fixed paths reject
 invalid decoded metadata before scheduler state or manager ownership is mutated.
 
+The monitoring lifecycle cases cover hub close before start, startup failure cleanup, repeated
+start protection, idempotent close, shutdown draining, and close/worker races. They make resource
+ownership and queue/process cleanup explicit in addition to database write semantics.
+
 `scripts/runtime_foundational_smoke.sh` is the matching runtime entry point. It runs representative
 Python probes for each foundational area and supports the same one-based `TEST_CASE_START` and
 inclusive `TEST_CASE_LIMIT` interval controls as the TLC runner. Set `PYTHON_BIN` and
