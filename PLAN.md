@@ -942,6 +942,11 @@ drain/recovery, and scale-in; `ParslProviderExecutorBridge` checks provider term
 revoke executor capacity and account for queued/running work. The lifecycle model retains a
 deliberately broken scale-in-floor configuration alongside its fixed configuration.
 
+The integrated join models are now in the smoke sweep: `ParslJoinFull` covers single/list/empty/
+invalid returns, duplicate list positions, retry, cancellation, failure aggregation, and terminal
+join handles; `ParslJoinEndToEnd` adds the logical-Future/physical-attempt split and ordered result
+reconstruction for a retryable duplicate-preserving list.
+
 ### 3. Checked properties
 
 The safety configurations check:
