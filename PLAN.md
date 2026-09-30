@@ -1635,6 +1635,11 @@ The join source/model map is now documented in docs/join-model.md, including the
 between logical inner Futures, physical attempts, callback locking, ordered list positions,
 duplicate references, and JoinError failure multiplicity.
 
+ParslPython now tracks a bounded source epoch separately from object serializability. Encoding
+captures the epoch, later source mutation is allowed without changing the wire snapshot, and
+SnapshotEpochSafety checks that decode remains tied to the captured submission epoch. The normal,
+failure, and cyclic object-graph configurations all include this invariant.
+
 The Work Queue/TaskVine result layer is now covered by `ParslWorkQueueSubmit`, which checks task-map
 rollback after serialization or submit-process failure, and `ParslTaskVineCancelledResult`, which
 ensures a cancelled report does not terminate the collector or fail unrelated later tasks. Runtime
