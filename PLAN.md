@@ -236,6 +236,8 @@ Recent focused models now connect the previously separate boundaries:
   SHA-256 checksums.
 - `ParslFileTransferRetry` is now in the smoke sweep, checking that source mutation during
   stage-out makes the first publication stale and forces a version-matching retry.
+- `ParslClusterSubmitScript` is now in the smoke sweep for a concrete provider boundary: valid
+  template publication, missing scheduler arguments, and script-path I/O failure remain distinct.
 - `ParslHeartbeatTimeoutPersistence` combines strict HTEX heartbeat expiry, task timeout,
   late completion, and monitoring persistence.
 - `ParslMonitoringStatusHistory` models append-only status rows and timestamp-derived latest state,

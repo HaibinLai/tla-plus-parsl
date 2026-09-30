@@ -276,6 +276,15 @@ run_case kubernetes-admission-current counterexample \
 run_case kubernetes-admission-fixed pass \
     models/providers/ParslKubernetesAdmissionFixed.cfg \
     models/providers/ParslKubernetesAdmission.tla
+run_case cluster-submit-script-valid pass \
+    models/providers/ParslClusterSubmitScript.cfg \
+    models/providers/ParslClusterSubmitScript.tla
+run_case cluster-submit-script-missing-key pass \
+    models/providers/ParslClusterSubmitScriptMissingKey.cfg \
+    models/providers/ParslClusterSubmitScript.tla
+run_case cluster-submit-script-io-error pass \
+    models/providers/ParslClusterSubmitScriptIOError.cfg \
+    models/providers/ParslClusterSubmitScript.tla
 run_case callable-equal-cache-current counterexample \
     models/serialization/ParslCallableEqualCacheCurrent.cfg \
     models/serialization/ParslCallableEqualCache.tla
