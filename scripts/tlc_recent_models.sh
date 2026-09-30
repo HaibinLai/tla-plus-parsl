@@ -63,6 +63,12 @@ run_case python-object-graph-failure pass \
 run_case python-object-graph-cyclic pass \
     models/serialization/ParslPythonCyclic.cfg \
     models/serialization/ParslPython.tla
+run_case python-timeout-catch-current counterexample \
+    models/serialization/ParslPythonTimeoutCatch.cfg \
+    models/serialization/ParslPythonTimeoutCatch.tla
+run_case python-timeout-catch-fixed pass \
+    models/serialization/ParslPythonTimeoutCatchFixed.cfg \
+    models/serialization/ParslPythonTimeoutCatch.tla
 run_case function-object-transport pass \
     models/serialization/ParslFunctionObjectTransport.cfg \
     models/serialization/ParslFunctionObjectTransport.tla

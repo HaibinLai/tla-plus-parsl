@@ -235,6 +235,8 @@ Recent focused models now connect the previously separate boundaries:
 - `ParslPython`, `ParslPythonFailure`, and `ParslPythonCyclic` are now in the smoke sweep,
   traversing callable roots, globals/defaults/closures, nested arguments, failed object graphs,
   and self-referential cycles with visited-set protection.
+- `ParslPythonTimeoutCatch` is now in the smoke sweep, checking that a Python app cannot turn an
+  injected walltime timeout into a successful Future by catching the timeout exception.
 - `ParslFunctionObjectTransport`, `ParslObjectSnapshotRetry`, and `ParslZMQObjectSnapshot` now
   extend that boundary through queued frames and physical retries, including current/fixed
   stale-payload counterexamples.
