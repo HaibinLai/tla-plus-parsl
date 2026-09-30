@@ -54,6 +54,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterStatusReque
 /tmp/parsl-venv/bin/python -m unittest tests/test_cluster_status_request_runtime.py -v
 ```
 
+`ParslClusterStatusUnknown.tla` refines the same base-class projection with a job ID that was
+removed during the preceding scheduler poll. The current `ClusterProvider.status` performs an
+unconditional `resources[jid]` lookup and aborts the whole request; the fixed branch preserves
+one response per requested ID by returning an explicit `UNKNOWN` observation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterStatusUnknownCurrent.cfg models/providers/ParslClusterStatusUnknown.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterStatusUnknownFixed.cfg models/providers/ParslClusterStatusUnknown.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_cluster_status_unknown_runtime.py -v
+```
+
+This common cluster-provider stale-ID boundary is recorded as BUG-170.
+
 `ParslAWSProviderCancel.tla` models EC2 cancellation after the remote termination call. The
 current path can raise when local `resources`/`instances` bookkeeping has already forgotten the
 ID; the fixed branch makes that cleanup idempotent. TLC finds the two-state `RemoteSuccessSafety`

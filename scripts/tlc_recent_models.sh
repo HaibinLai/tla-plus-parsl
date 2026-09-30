@@ -322,6 +322,12 @@ run_case memo-exception-checkpoint-current counterexample \
 run_case memo-exception-checkpoint-fixed pass \
     models/dataflow/ParslMemoExceptionCheckpointFixed.cfg \
     models/dataflow/ParslMemoExceptionCheckpoint.tla
+run_case cluster-status-unknown-current counterexample \
+    models/providers/ParslClusterStatusUnknownCurrent.cfg \
+    models/providers/ParslClusterStatusUnknown.tla
+run_case cluster-status-unknown-fixed pass \
+    models/providers/ParslClusterStatusUnknownFixed.cfg \
+    models/providers/ParslClusterStatusUnknown.tla
 run_case dynamic-task-chain pass \
     models/dataflow/ParslDynamicTaskChain.cfg \
     models/dataflow/ParslDynamicTaskChain.tla

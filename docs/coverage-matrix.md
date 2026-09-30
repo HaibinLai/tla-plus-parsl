@@ -71,6 +71,9 @@ failure probe; response lifetime is modeled separately from partial destination 
 The executor/provider row also includes `ParslProviderStatusShape` and its short-status runtime
 probe; status-response cardinality is modeled separately from cancellation-response shape.
 
+The same row now includes `ParslClusterStatusUnknown` (BUG-170), which covers the shared
+`ClusterProvider.status` projection when a requested local job ID has gone stale.
+
 The ZMQ/time row also includes `ParslCommandDeadline` and its expired-deadline poll probe; the
 model separates timeout arithmetic from command-socket poisoning.
 
