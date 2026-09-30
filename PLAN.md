@@ -1887,6 +1887,9 @@ and callback multiplicity.
 Cases 841--860 matched at 100 steps: apply-message arity, callable/argument aliasing and serializer
 cache freshness, pool-executor callable cache, serializer registry empty/collision behavior, task
 transport/ZMQ paths, and heartbeat parameter validation.
+Cases 861--880 matched at 100 steps: heartbeat/Python timeout parameter validation, resource-monitor
+clock and timer intervals, DataFuture copy/falsey exceptions, Future cancellation projections, and
+timeout timer outcomes.
 
 The model is intentionally a bounded protocol abstraction. A passing TLC run means that the
 specified finite abstraction satisfies the listed properties; it does not prove that every
