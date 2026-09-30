@@ -128,6 +128,11 @@ the model isolates return-shape validation from ordinary Future aggregation.
 The files/transfer row also includes `ParslHTTPConnectionCleanup` and its streaming-response
 failure probe; response lifetime is modeled separately from partial destination publication.
 
+It also includes `ParslRsyncQuoting` (BUG-263), which models shell argument splitting when an
+RSync source or destination path contains spaces. The current branch violates
+`PathQuotingSafety`; the fixed branch uses a safely quoted command boundary, with runtime evidence
+from `tests/test_rsync_quoting_runtime.py`.
+
 The executor/provider row also includes `ParslProviderStatusShape` and its short-status runtime
 probe; status-response cardinality is modeled separately from cancellation-response shape.
 

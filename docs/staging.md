@@ -77,6 +77,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupF
 /tmp/parsl-venv/bin/python -m unittest tests/test_rsync_partial_cleanup_runtime.py -v
 ```
 
+`ParslRsyncQuoting.tla` models the command-construction boundary in the same wrapper. The current
+implementation interpolates source and destination paths into `os.system`, so a valid path with
+spaces is split by the shell; the fixed branch quotes each argument. The runtime probe inspects
+the actual command built by the real wrapper.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingCurrent.cfg models/staging/ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingFixed.cfg models/staging/ParslRsyncQuoting.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncQuotingNormal.cfg models/staging/ParslRsyncQuoting.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_rsync_quoting_runtime.py -v
+```
+
 `ParslDataFutureTransfer.tla` connects producer completion, chunked stage-out,
 `DataFuture` readiness, and consumer admission. The current configuration allows
 publication after a single received chunk and violates `AtomicPublishSafety`; the
