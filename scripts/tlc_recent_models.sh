@@ -1116,6 +1116,42 @@ run_case htex-duplicate-result-current counterexample \
 run_case htex-duplicate-result-fixed pass \
     models/executors/ParslHtexDuplicateResultFixed.cfg \
     models/executors/ParslHtexDuplicateResult.tla
+run_case workqueue-cancelled-result-current counterexample \
+    models/executors/ParslWorkQueueCancelledResultCurrent.cfg \
+    models/executors/ParslWorkQueueCancelledResult.tla
+run_case workqueue-cancelled-result-fixed pass \
+    models/executors/ParslWorkQueueCancelledResultFixed.cfg \
+    models/executors/ParslWorkQueueCancelledResult.tla
+run_case workqueue-duplicate-report-current counterexample \
+    models/executors/ParslWorkQueueDuplicateReport.cfg \
+    models/executors/ParslWorkQueueDuplicateReport.tla
+run_case workqueue-duplicate-report-fixed pass \
+    models/executors/ParslWorkQueueDuplicateReportFixed.cfg \
+    models/executors/ParslWorkQueueDuplicateReport.tla
+run_case workqueue-resource-category-current counterexample \
+    models/executors/ParslWorkQueueResourceCategoryCurrent.cfg \
+    models/executors/ParslWorkQueueResourceCategory.tla
+run_case workqueue-resource-category-fixed pass \
+    models/executors/ParslWorkQueueResourceCategoryFixed.cfg \
+    models/executors/ParslWorkQueueResourceCategory.tla
+run_case workqueue-results pass \
+    models/executors/ParslWorkQueueResults.cfg \
+    models/executors/ParslWorkQueueResults.tla
+run_case workqueue-shutdown pass \
+    models/executors/ParslWorkQueueShutdown.cfg \
+    models/executors/ParslWorkQueueShutdown.tla
+run_case workqueue-submit-failure-current counterexample \
+    models/executors/ParslWorkQueueSubmitFailure.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-failure-fixed pass \
+    models/executors/ParslWorkQueueSubmitFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-serialization-current counterexample \
+    models/executors/ParslWorkQueueSubmitSerializationFailure.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
+run_case workqueue-submit-serialization-fixed pass \
+    models/executors/ParslWorkQueueSubmitSerializationFailureFixed.cfg \
+    models/executors/ParslWorkQueueSubmit.tla
 run_case serialization-plugin-cache pass \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla

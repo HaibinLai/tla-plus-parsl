@@ -764,6 +764,10 @@ backends: submit/status/cancel outcomes, backend-to-Parsl state translation, mis
 unknown status, timeout distinction, cancellation failure, and CPU-per-task admission.
 It is now included in the recurring TLC smoke sweep so the provider-kind contract is checked
 alongside the provider poller and status-shape models.
+The Work Queue executor models are now covered as well: result-file decode outcomes, collector
+shutdown cleanup, cancelled or duplicate result races, resource-category admission, and submit
+serialization/process failures with orphaned-Future rollback candidates. Runtime probes in
+`tests/test_workqueue_*_runtime.py` exercise the corresponding current behavior.
 `ParslAWSProviderStatus.tla` adds EC2-specific pending/running/terminated mapping and a missing
 instance response probe with a candidate terminal completion fix.
 `ParslPBSProSubmit.tla` models the PBS Pro `qsub` success/empty-output boundary. The actual
