@@ -289,6 +289,12 @@ run_case data-ready-current counterexample \
 run_case data-ready-fixed pass \
     models/core/ParslDataReadyExecutionFixed.cfg \
     models/core/ParslDataReadyExecution.tla
+run_case data-transfer-dependency-current counterexample \
+    models/core/ParslDataTransferDependencyFailureCurrent.cfg \
+    models/core/ParslDataTransferDependencyFailure.tla
+run_case data-transfer-dependency-fixed pass \
+    models/core/ParslDataTransferDependencyFailureFixed.cfg \
+    models/core/ParslDataTransferDependencyFailure.tla
 run_case dependency-traversal-shallow counterexample \
     models/dataflow/ParslDependencyTraversalShallow.cfg \
     models/dataflow/ParslDependencyTraversal.tla

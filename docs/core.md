@@ -18,6 +18,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyExecutionFixed
 /tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_runtime.py -v
 ```
 
+`ParslDataTransferDependencyFailure.tla` closes the stage-out/dataflow loop.  A producer finishes,
+the DataManager transfers a bounded output in chunks, and a DataFuture becomes ready only after
+publication.  If the stage-out fails, the consumer remains blocked and is completed as a
+dependency failure; it never executes against a partial file.  The Current configuration permits
+consumer admission on a failed DataFuture and TLC finds the counterexample.  The Fixed
+configuration checks no-partial-execution, failure propagation, publication atomicity, and terminal
+result consistency.  The runtime bridge is `tests/test_datafuture_runtime.py`, including the
+failed-output case where the consumer function is never called.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataTransferDependencyFailureCurrent.cfg models/core/ParslDataTransferDependencyFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataTransferDependencyFailureFixed.cfg models/core/ParslDataTransferDependencyFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_runtime.py -v
+```
+
 For a fast executable smoke check, `ParslAbstractSmoke.cfg` reduces the abstraction to one local
 task, one worker, no dependencies, no retries, and no provider blocks. It is useful for validating
 changes to the shared model before launching the much larger multi-task configuration.
