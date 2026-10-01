@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `fad2318` (`Promote Grid Engine cancellation model`).
+- Latest pushed commit: `7033bdd` (`Promote PBS Pro submit boundary model`).
 - Foundational smoke inventory: 412 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
