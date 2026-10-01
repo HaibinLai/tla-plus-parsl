@@ -956,6 +956,9 @@ run_case cluster-submit-script \
 run_case local-provider-submit-cleanup \
     models/providers/ParslLocalProviderSubmitCleanupFixed.cfg \
     models/providers/ParslLocalProviderSubmitCleanup.tla
+run_case local-provider-exit-status \
+    models/providers/ParslLocalProviderExitStatus.cfg \
+    models/providers/ParslLocalProviderExitStatus.tla
 run_case local-cancel-failure \
     models/providers/ParslLocalCancelFailureFixed.cfg \
     models/providers/ParslLocalCancelFailure.tla

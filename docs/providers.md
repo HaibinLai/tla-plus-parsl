@@ -59,6 +59,7 @@ separates an in-flight `-` marker from numeric and malformed markers, process li
 prior cancellation request. Numeric exit codes take precedence over liveness/cancellation, and
 the runtime bridge checks completion precedence and terminal-status caching against the real
 `LocalProvider.status()` implementation.
+The configuration is now part of the foundational smoke gate.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderExitStatus.cfg models/providers/ParslLocalProviderExitStatus.tla

@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `4a605bc` (`Promote Condor cancellation model`).
-- Foundational smoke inventory: 487 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 488 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslLocalProviderExitStatus` as the local `.ec` marker boundary.
+  In-flight `-`, numeric exit codes, malformed contents, process liveness, and cancellation are
+  distinct observations; numeric exit evidence wins over liveness/cancel and terminal status is
+  not regressed by later marker changes. TLC and both LocalProvider runtime probes pass.
 
 - Current stage: promoted `ParslCondorCancel` as the Condor cancellation boundary. Chunked
   scheduler cancellation updates only locally owned IDs, treats unknown IDs as absent rather
