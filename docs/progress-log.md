@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `ccd78a3` (`Promote callable closure memo model`).
+- Latest locally preserved commit: `c280fa7` (`Promote stage-out Future modes`).
 - Foundational smoke inventory: 518 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
