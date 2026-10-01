@@ -431,6 +431,9 @@ post-close result polling as a quiescent boundary.
 Join coverage also includes a concrete nested-join runtime probe for `ParslNestedJoin`, covering
 ordered success and failure propagation through two join layers.
 
+`ParslNestedJoin` is also in the foundational TLC gate, checking inner-handle completion before
+outer observation, ordered nested results, and failure propagation through both join layers.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
