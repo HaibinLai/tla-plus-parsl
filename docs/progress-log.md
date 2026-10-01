@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e912737` (`Add normal HTTP content length case`).
-- Foundational smoke inventory: 442 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `0e6444e` (`Record HTTP content length promotion`).
+- Foundational smoke inventory: 443 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -62,6 +62,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the normal-length `ParslHTTPSeparateContentLength` configuration. The
   staging gate now checks both short-response rejection and successful publication when received
   bytes exactly match the declared `Content-Length`.
+
+- Current stage: promoted `ParslHtexResultQueue` into the executor gate. It models malformed,
+  duplicate, and terminal Future result frames, requiring failed messages to resolve or preserve
+  ownership without killing the result worker.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join

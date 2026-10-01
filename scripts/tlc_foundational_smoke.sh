@@ -107,6 +107,9 @@ run_case callable-object-transport \
 run_case htex-result-forwarding \
     models/serialization/ParslHtexResultForwardingFixed.cfg \
     models/serialization/ParslHtexResultForwarding.tla
+run_case htex-result-queue \
+    models/executors/ParslHtexResultQueueFixed.cfg \
+    models/executors/ParslHtexResultQueue.tla
 run_case file-bytes-transfer \
     models/staging/ParslFileBytesSmoke.cfg \
     models/staging/ParslFileBytes.tla
