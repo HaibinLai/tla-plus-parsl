@@ -197,6 +197,9 @@ run_case provider-poll-clock-rollback \
 run_case provider-result-retry-race \
     models/core/ParslProviderResultRetryRaceFixed.cfg \
     models/core/ParslProviderResultRetryRace.tla
+run_case provider-cancel-future \
+    models/core/ParslProviderCancelFutureFixed.cfg \
+    models/core/ParslProviderCancelFuture.tla
 run_case provider-result-monitoring-db \
     models/core/ParslProviderResultMonitoringDBFixed.cfg \
     models/core/ParslProviderResultMonitoringDB.tla

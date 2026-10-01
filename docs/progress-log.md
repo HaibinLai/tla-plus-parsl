@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `7033bdd` (`Promote PBS Pro submit boundary model`).
-- Foundational smoke inventory: 412 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 413 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -43,6 +43,11 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslPBSProSubmit`. The Fixed model passed TLC and the Current branch
   reproduced successful submission with no trackable resource; three targeted PBS Pro submit
   runtime tests passed.
+
+- Current stage: added `ParslProviderCancelFuture`, the first focused cancellation composition
+  model connecting provider state, one physical attempt, Future terminal state, late-result
+  handling, and monitoring persistence. Fixed passed TLC; Current produced the expected
+  cancellation/Future consistency counterexample.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
