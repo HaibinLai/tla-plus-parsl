@@ -250,6 +250,9 @@ admission only after a ready DataFuture.
 The three `ParslRsyncStage` configurations are also in the foundational gate, covering stage-in
 failure, stage-out failure after application execution, and successful in-task rsync ordering.
 
+`ParslMonitoringDeferred` is also in the foundational gate, checking deferred worker-message replay,
+foreign-key ordering, duplicate replacement/discard, and bounded monitoring status insertion.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

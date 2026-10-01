@@ -746,6 +746,9 @@ run_case rsync-stage-out-failure \
 run_case rsync-stage-success \
     models/staging/ParslRsyncStageSuccess.cfg \
     models/staging/ParslRsyncStage.tla
+run_case monitoring-deferred \
+    models/monitoring/ParslMonitoringDeferred.cfg \
+    models/monitoring/ParslMonitoringDeferred.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
