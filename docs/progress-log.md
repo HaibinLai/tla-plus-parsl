@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `3345c7d` (`Promote heartbeat boundary gate`).
+- Latest locally preserved commit: `0a72eaa` (`Promote HTEX heartbeat version gate`).
 - Foundational smoke inventory: 558 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
