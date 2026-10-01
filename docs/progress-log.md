@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `1dc8f6b` (`Promote join return validation`).
+- Latest locally preserved commit: `e2a55bc` (`Promote single join cancellation`).
 - Foundational smoke inventory: 530 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
