@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `ae3fd5a` (`Model remote exception object transport`).
+- Latest locally preserved commit: `a149eab` (`Compose Flux result file cancellation lifecycle`).
 - Foundational smoke inventory: 622 TLC cases and 422 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 621 TLC cases and 421 Python probes pass as a regression gate;
+- the existing 622 TLC cases and 422 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -38,6 +38,13 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: composed Flux physical-future completion, serialized result-file publication,
+  user-facing wrapper cancellation, and late callback delivery in
+  `ParslFluxResultFileCancellation`. The fixed TLC branch discards the stale callback while the
+  runtime bridge reproduces the current `InvalidStateError` behavior already tracked as BUG-185.
+  Full regression: 622 TLC cases and 422 Python runtime probes passed; 658 unittest methods are
+  present.
 
 - Current stage: added the concrete `join_app`/stage-out cancellation runtime bridge. The probe
   uses the real `DataManager` and `DataFuture` contract to show that an independent transfer can
