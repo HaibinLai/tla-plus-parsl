@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `ec021ed` (`Promote deferred monitoring model`).
+- Latest locally preserved commit: `339d4db` (`Promote timer interval validation`).
 - Foundational smoke inventory: 524 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
