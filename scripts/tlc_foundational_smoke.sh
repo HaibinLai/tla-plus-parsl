@@ -1862,5 +1862,8 @@ run_case curvezmq-certificate-valid \
 run_case curvezmq-certificate-invalid \
     models/serialization/ParslCurveZMQCertificateModeInvalid.cfg \
     models/serialization/ParslCurveZMQCertificateMode.tla
+run_case python-timeout-catch-fixed \
+    models/serialization/ParslPythonTimeoutCatchFixed.cfg \
+    models/serialization/ParslPythonTimeoutCatch.tla
 
 echo "Foundational TLC smoke suite passed."
