@@ -1781,5 +1781,8 @@ run_case monitoring-udp-pickle-fixed \
 run_case monitoring-zmq-batch-clock-fixed \
     models/monitoring/ParslMonitoringZMQBatchClockFixed.cfg \
     models/monitoring/ParslMonitoringZMQBatchClock.tla
+run_case file-transfer-monitoring-fixed \
+    models/monitoring/ParslFileTransferMonitoringFixed.cfg \
+    models/monitoring/ParslFileTransferMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."

@@ -504,6 +504,9 @@ authenticated UDP payload isolation and router survival for subsequent valid mes
 Fixed `ParslMonitoringZMQBatchClock` is also in the foundational TLC gate, checking monotonic
 receive-batch deadlines across wall-clock rollback.
 
+Fixed `ParslFileTransferMonitoring` is also in the foundational TLC gate, composing chunk
+transfer completion, DataFuture readiness, source-version matching, and monitoring persistence.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

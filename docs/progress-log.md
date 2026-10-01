@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `637f85b` (`Promote monitoring ZMQ batch clock gate`).
-- Foundational smoke inventory: 577 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 578 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslFileTransferMonitoring` into the foundational TLC gate.
+  Stage-out now requires all chunks and a version-matching source snapshot before publishing a
+  ready DataFuture or persisting terminal monitoring success.
 
 - Current stage: promoted fixed `ParslMonitoringZMQBatchClock` into the foundational TLC gate.
   Monitoring ZMQ receive batches now use a monotonic deadline, so wall-clock rollback cannot
