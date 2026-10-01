@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `677cfa7` (`Promote Slurm submit boundary model`).
+- Latest pushed commit: `a6b7978` (`Promote Kubernetes submit state model`).
 - Foundational smoke inventory: 429 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
