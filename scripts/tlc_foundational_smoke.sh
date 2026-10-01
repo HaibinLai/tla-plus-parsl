@@ -467,6 +467,9 @@ run_case workqueue-submit-serialization \
 run_case workqueue-resource-category \
     models/executors/ParslWorkQueueResourceCategoryFixed.cfg \
     models/executors/ParslWorkQueueResourceCategory.tla
+run_case workqueue-resource-spec-shape \
+    models/executors/ParslWorkQueueResourceSpecShapeFixed.cfg \
+    models/executors/ParslWorkQueueResourceSpecShape.tla
 run_case workqueue-cancelled-result \
     models/executors/ParslWorkQueueCancelledResultFixed.cfg \
     models/executors/ParslWorkQueueCancelledResult.tla
