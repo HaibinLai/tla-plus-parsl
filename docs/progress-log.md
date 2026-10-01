@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `3c44f99` (`Add cancellation retry monitoring composition`).
+- Latest pushed commit: `9a68f55` (`Add join cancellation retry generation model`).
 - Foundational smoke inventory: 415 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
