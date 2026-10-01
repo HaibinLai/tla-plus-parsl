@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `88f746d` (`Model AWS state file atomicity`).
-- Foundational smoke inventory: 632 TLC cases and 430 Python runtime probes.
+- Foundational smoke inventory: 633 TLC cases and 430 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,13 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: composed logical task retry with physical stage-in transfer generations in
+  `ParslStageInAttemptGeneration`. The Current branch allows a transfer from attempt 0 to publish
+  readiness after the logical task has retried as attempt 1; the Fixed branch requires the
+  transfer generation to match the current logical attempt. Targeted TLC checks produce the
+  Current counterexample and pass the Fixed branch. Full TLC smoke verification passed: 633
+  configurations; the Python runtime baseline remains 430 probes and 669 unittest methods.
 
 - Current stage: modeled AWS provider state-file publication with
   `ParslAwsStateFileAtomicity`. The Current branch writes directly to the final JSON path, so an

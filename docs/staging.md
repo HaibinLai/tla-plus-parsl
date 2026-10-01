@@ -3,6 +3,19 @@
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 
+`ParslStageInAttemptGeneration.tla` is the cross-layer model for logical task retries and
+physical stage-in transfers. A transfer from an earlier task attempt may complete late. The
+Current configuration allows that stale transfer to make the retried task ready; the Fixed
+configuration requires the transfer generation to equal the current logical attempt.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/staging/ParslStageInAttemptGenerationCurrent.cfg models/staging/ParslStageInAttemptGeneration.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -config models/staging/ParslStageInAttemptGenerationFixed.cfg models/staging/ParslStageInAttemptGeneration.tla
+```
+
+This is a protocol-level refinement of the `DataManager` stage-in path; it is intentionally
+kept separate from any provider-specific transfer implementation.
+
 `ParslHTTPInTaskTransferGate.tla` composes HTTP response validation, streamed chunk receipt,
 temporary/final publication, and admission of the wrapped user function.  Its Current
 configuration reproduces the installed `in_task_transfer_wrapper` behavior where a non-2xx

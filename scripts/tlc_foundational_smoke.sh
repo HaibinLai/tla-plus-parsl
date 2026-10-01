@@ -1637,6 +1637,9 @@ run_case zip-stage-out \
 run_case zip-stage-in \
     models/staging/ParslZipStageInFixed.cfg \
     models/staging/ParslZipStageIn.tla
+run_case stage-in-attempt-generation \
+    models/staging/ParslStageInAttemptGenerationFixed.cfg \
+    models/staging/ParslStageInAttemptGeneration.tla
 run_case zip-traversal \
     models/staging/ParslZipTraversalFixed.cfg \
     models/staging/ParslZipTraversal.tla
