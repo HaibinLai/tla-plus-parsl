@@ -71,6 +71,9 @@ decode, callable invocation, value/exception result publication, and malformed-m
 `ParslBashAppOutcome` is now in the foundational gate, checking nonzero shell exits, output-file
 validation, stdout side effects, and terminal Future resolution.
 
+`ParslPoolExecutorMap` is now in the foundational gate, checking eager submission, ordered map
+yielding, timeout-deadline behavior, and non-cancellation of already-submitted tasks.
+
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes

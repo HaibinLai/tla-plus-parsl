@@ -666,6 +666,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslBashAppOutcome` into the foundational TLC gate. The executor-side
   model separates shell exit, stdout side effects, declared output validation, and Future terminal
   success/failure so output publication cannot turn a failed Bash task into success.
+- Current stage: promoted `ParslPoolExecutorMap` into the foundational TLC gate. The map iterator
+  baseline now checks eager submission, ordered result consumption, iterator timeout as a caller
+  deadline, and preservation of already-submitted tasks after timeout.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
