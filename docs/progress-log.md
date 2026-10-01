@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `c857659` (`Promote staging provider dispatch gate`).
+- Latest locally preserved commit: `3345c7d` (`Promote heartbeat boundary gate`).
 - Foundational smoke inventory: 557 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
