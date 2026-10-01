@@ -23,6 +23,7 @@ class FakeTask:
     uid = "task-1"
     mode = "TASK_FUNCTION"
     description = {"mode": "TASK_FUNCTION"}
+    # eval() produces bytes, but the serializer envelope is malformed.
     return_value = "b'not-a-serializer-envelope'"
 
 

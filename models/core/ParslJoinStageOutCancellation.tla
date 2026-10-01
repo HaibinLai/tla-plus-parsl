@@ -8,7 +8,7 @@ EXTENDS Naturals
  * Cancellation can race with a stage-out completion that was already in
  * flight.  The Fixed branch rejects that late publication; Current lets it
  * publish after the outer Future became cancelled.
- ***************************************************************************/
+ ***************************************************************************)
 
 CONSTANT USE_FIXED
 

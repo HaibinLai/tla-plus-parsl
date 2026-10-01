@@ -427,9 +427,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipPathValidationFix
 the current retry appends a second member with the same name; the fixed branch replaces the
 existing member atomically. The model now checks `NoDuplicateArchiveEntry` in both configurations:
 the retry/current configuration produces a counterexample, while the fixed configuration passes.
+The fixed retry configuration is now part of the foundational smoke gate.
 The real `tests/test_zip_file_transfer_runtime.py` probe observes two archive entries after the
 cleanup failure and retry, while preserving the latest bytes on normal ZIP lookup.
-The fixed retry configuration is part of the foundational smoke gate.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageOutRetry.cfg models/staging/ParslZipStageOut.tla

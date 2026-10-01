@@ -49,4 +49,7 @@ TypeOK ==
 NoRawCleanupError ==
     state # "shutdown_error"
 
+TerminalCleanupStable ==
+    state = "stopped" => state' = "stopped" \/ state' = "stopped"
+
 =============================================================================

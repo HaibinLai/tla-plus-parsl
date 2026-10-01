@@ -1,6 +1,14 @@
 --------------------------- MODULE ParslJoinDuplicateCancellation ---------------------------
 EXTENDS Naturals
 
+(***************************************************************************
+ * Composition of duplicate dependency registration and join cancellation.
+ * Two logical list positions refer to one physical Future.  The fixed path
+ * registers one callback per physical Future and converts cancellation into a
+ * terminal outer-join failure; the current path registers two callbacks and
+ * lets CancelledError escape before the outer join can finalize.
+ ***************************************************************************)
+
 CONSTANT USE_FIXED
 
 VARIABLES innerState, callbacks, processed, outerState, callbackRaised
@@ -31,12 +39,13 @@ RunCallback ==
     /\ UNCHANGED <<innerState, callbacks>>
 
 Next == CancelInner \/ RunCallback \/ UNCHANGED vars
+
 Spec == Init /\ [][Next]_vars
 
 TypeOK ==
     /\ innerState \in {"pending", "cancelled"}
     /\ callbacks \in 1..2
-    /\ processed in 0..2
+    /\ processed \in 0..2
     /\ outerState \in {"joining", "failed"}
     /\ callbackRaised \in BOOLEAN
 
