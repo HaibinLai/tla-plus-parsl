@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `a219600` (`Promote provider ownership smoke case`).
-- Foundational smoke inventory: 447 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `63fb556` (`Record provider ownership smoke promotion`).
+- Foundational smoke inventory: 449 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -80,6 +80,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the one-block `ParslProviderThreeBlockOwnershipSmokeFixed` configuration.
   The provider gate now checks the bounded provisioning/assignment/scale-in ownership path in both
   the three-block and minimal smoke-sized state spaces.
+
+- Current stage: promoted both invalid-admission and valid-start configurations for
+  `ParslThreadExecutorThreadCount`. The executor gate now checks early rejection of zero workers
+  and successful construction with one worker.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join

@@ -113,6 +113,12 @@ run_case htex-result-queue \
 run_case htex-manager-drain-present \
     models/executors/ParslHtexManagerDrainPresent.cfg \
     models/executors/ParslHtexManagerDrain.tla
+run_case thread-executor-thread-count \
+    models/executors/ParslThreadExecutorThreadCountFixed.cfg \
+    models/executors/ParslThreadExecutorThreadCount.tla
+run_case thread-executor-thread-count-valid \
+    models/executors/ParslThreadExecutorThreadCountValid.cfg \
+    models/executors/ParslThreadExecutorThreadCount.tla
 run_case file-bytes-transfer \
     models/staging/ParslFileBytesSmoke.cfg \
     models/staging/ParslFileBytes.tla
