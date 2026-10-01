@@ -824,6 +824,9 @@ run_case block-provider-bad-state \
 run_case join-duplicates \
     models/dataflow/ParslJoinDuplicates.cfg \
     models/dataflow/ParslJoinDuplicates.tla
+run_case join-error-root-cause \
+    models/dataflow/ParslJoinErrorRootCause.cfg \
+    models/dataflow/ParslJoinErrorRootCause.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

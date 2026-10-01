@@ -307,6 +307,9 @@ terminal Future preservation, and post-failure submission rejection.
 `ParslJoinDuplicates` is also in the foundational gate, checking ordered duplicate Future positions,
 failure multiplicity, duplicate callback tolerance, and terminal join-handle cleanup.
 
+`ParslJoinErrorRootCause` is also in the foundational gate, checking nested propagated-exception path
+annotations and first-leaf root-cause preservation for `JoinError`.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

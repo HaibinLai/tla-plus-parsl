@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `1aae554` (`Promote duplicate join positions`).
-- Foundational smoke inventory: 547 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 548 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -752,6 +752,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslJoinDuplicates` into the foundational TLC gate. Ordered duplicate Future
   references preserve list positions and repeated failure entries, while duplicate callbacks do not
   alter aggregate results or join-handle cleanup.
+- Current stage: promoted `ParslJoinErrorRootCause` into the foundational TLC gate. Nested propagated
+  join failures now retain the first leaf exception, annotate sibling dependencies, and preserve the
+  root-cause path used by `JoinError`.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
