@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `491ab67` (`Record heartbeat late acknowledgment promotion`).
+- Latest locally preserved commit: `66cafb0` (`Promote HTEX submit failure rollback model`).
 - Foundational smoke inventory: 463 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
