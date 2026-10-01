@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `f2a9105` (`Promote serialization wire model`).
-- Foundational smoke inventory: 476 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 477 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslMultiOutputStageOut` as the small multi-output DataFuture gate.
+  Each output stage-out Future is independently represented but remains gated by the same
+  application Future; a dependent consumer can run only after its own output is published. The
+  early-publication configuration reproduces visibility before application completion, while the
+  normal configuration passes the bounded TLC check and the real `DataManager.stage_out` probe.
 
 - Current stage: promoted `ParslSerializationWire` as the concrete apply-message framing
   boundary. It requires callable, args, and kwargs buffers to serialize, receive the expected

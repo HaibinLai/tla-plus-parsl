@@ -1319,6 +1319,9 @@ run_case http-separate-status \
 run_case http-separate-status-normal \
     models/staging/ParslHTTPSeparateStatusNormal.cfg \
     models/staging/ParslHTTPSeparateStatus.tla
+run_case multi-output-stageout \
+    models/staging/ParslMultiOutputStageOutCurrent.cfg \
+    models/staging/ParslMultiOutputStageOut.tla
 run_case multi-output-versioned-stageout \
     models/staging/ParslMultiOutputVersionedStageOut.cfg \
     models/staging/ParslMultiOutputVersionedStageOut.tla

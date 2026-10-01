@@ -447,6 +447,11 @@ versioning. The current branch can release one output before its sibling or publ
 obsolete source version; the fixed branch requires both transfers to be ready and version-matched
 before releasing either consumer. TLC checks 100,142 simulated fixed states.
 
+`ParslMultiOutputStageOut.tla` is the smaller application-gate abstraction beneath that versioned
+model. It gives each output its own stage-out Future while requiring all outputs to wait on the
+same application Future; the normal configuration is part of the foundational smoke gate, and
+`ParslMultiOutputStageOutEarly.cfg` is retained as the executable early-publication counterexample.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputVersionedStageOutCurrent.cfg models/staging/ParslMultiOutputVersionedStageOut.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslMultiOutputVersionedStageOutFixed.cfg models/staging/ParslMultiOutputVersionedStageOut.tla
