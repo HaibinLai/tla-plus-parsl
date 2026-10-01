@@ -470,6 +470,12 @@ run_case serialization-empty-registry \
 run_case serialization-envelope-malformed \
     models/serialization/ParslSerializationEnvelopeMalformedFixed.cfg \
     models/serialization/ParslSerializationEnvelopeMalformed.tla
+run_case serialization-frame-count-fixed \
+    models/serialization/ParslSerializationFrameCountFixed.cfg \
+    models/serialization/ParslSerializationFrameCount.tla
+run_case serialization-frame-count-normal \
+    models/serialization/ParslSerializationFrameCountNormal.cfg \
+    models/serialization/ParslSerializationFrameCount.tla
 run_case serialization-plugin-cache \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla

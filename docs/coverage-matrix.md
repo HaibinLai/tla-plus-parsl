@@ -434,6 +434,10 @@ ordered success and failure propagation through two join layers.
 `ParslNestedJoin` is also in the foundational TLC gate, checking inner-handle completion before
 outer observation, ordered nested results, and failure propagation through both join layers.
 
+`ParslSerializationFrameCount` is also in the foundational TLC gate. Its fixed branch rejects
+extra apply-message frames before deserialization, while the normal branch preserves the valid
+three-frame decode path; the runtime probe documents the current eager-decode behavior.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
