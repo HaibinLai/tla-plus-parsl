@@ -272,6 +272,18 @@ tests=(
     tests/test_torque_tasks_per_node_runtime.py
     tests/test_local_submit_pid_shape_runtime.py
     tests/test_local_tasks_per_node_runtime.py
+    tests/test_bash_app_outcome_runtime.py
+    tests/test_cluster_submit_script_runtime.py
+    tests/test_job_status_output_read_error_runtime.py
+    tests/test_job_status_output_summary_runtime.py
+    tests/test_mpi_no_resource_result_runtime.py
+    tests/test_mpi_nonpositive_resource_runtime.py
+    tests/test_mpi_prefix_runtime.py
+    tests/test_mpi_spec_runtime.py
+    tests/test_mpi_task_context_shape_runtime.py
+    tests/test_probe_addresses_runtime.py
+    tests/test_radical_bulk_shutdown_runtime.py
+    tests/test_timer_reentrant_close_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py

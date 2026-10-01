@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `6ab08c3` (`Promote provider status probes`).
-- Foundational smoke inventory: 383 TLC cases and 394 Python runtime probes.
+- Latest pushed commit: pending (provider cancellation, bad-state, scaling, memoization, serialization, result-file, time, transport, scheduler-submit, executor-lifecycle, core-boundary, provider-status, and final runtime coverage).
+- Foundational smoke inventory: 383 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted Bash app, cluster script, JobStatus, MPI, HTEX probe, Radical bulk
+  shutdown, and Timer reentrant-close probes. Twenty-three targeted tests passed, and the
+  affected runtime suffix (255–406) passed after insertion; the prior prefix (1–254) was already
+  green.
 
 - Current stage: promoted provider-status/cancellation probes for bad-state callback mutation,
   Grid Engine, LSF, PBS Pro, Slurm, Torque, and LocalProvider. Fourteen targeted tests passed,
