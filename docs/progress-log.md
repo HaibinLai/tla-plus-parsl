@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `f5e7c94` (`Record Azure status translation promotion`).
+- Latest locally preserved commit: `f1a7411` (`Promote monitoring database retry primitive`).
 - Foundational smoke inventory: 433 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
