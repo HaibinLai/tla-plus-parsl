@@ -728,6 +728,9 @@ run_case provider-worker-scaling \
 run_case provider-three-block-ownership \
     models/executors/ParslProviderThreeBlockOwnershipFixed.cfg \
     models/executors/ParslProviderThreeBlockOwnership.tla
+run_case provider-three-block-ownership-smoke \
+    models/executors/ParslProviderThreeBlockOwnershipSmokeFixed.cfg \
+    models/executors/ParslProviderThreeBlockOwnership.tla
 run_case scale-in-retry-monitoring \
     models/executors/ParslScaleInRetryMonitoringFixed.cfg \
     models/executors/ParslScaleInRetryMonitoring.tla
