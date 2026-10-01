@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `3c44f99` (`Add cancellation retry monitoring composition`).
-- Foundational smoke inventory: 414 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 415 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -53,6 +53,10 @@ are recorded here in English and committed with the model changes.
   provider loss, retry generation 2, stale generation-1 result delivery, and monitoring
   persistence. Fixed passed TLC; Current reproduced the expected cancellation consistency
   counterexample.
+
+- Current stage: added `ParslJoinCancelRetryGeneration`, lifting cancellation, retry generation,
+  stale results, and monitoring consistency to a two-dependency join. Fixed passed TLC; Current
+  reproduced the cancelled-join mutation counterexample.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
