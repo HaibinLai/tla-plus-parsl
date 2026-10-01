@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7033bdd` (`Promote PBS Pro submit boundary model`).
+- Latest pushed commit: `1fcc1e2` (`Add provider cancellation Future composition model`).
 - Foundational smoke inventory: 413 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
