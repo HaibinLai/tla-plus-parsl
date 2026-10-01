@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `2acd280` (`Promote scale in cancel shape gate`).
+- Latest locally preserved commit: `0ad8d4e` (`Promote CurveZMQ certificate gate`).
 - Foundational smoke inventory: 604 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
