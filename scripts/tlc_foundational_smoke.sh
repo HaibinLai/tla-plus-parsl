@@ -176,6 +176,9 @@ run_case provider-staging-admission \
 run_case provider-result-retry-race \
     models/core/ParslProviderResultRetryRaceFixed.cfg \
     models/core/ParslProviderResultRetryRace.tla
+run_case provider-result-monitoring-db \
+    models/core/ParslProviderResultMonitoringDBFixed.cfg \
+    models/core/ParslProviderResultMonitoringDB.tla
 run_case join-full \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla

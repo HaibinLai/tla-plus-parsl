@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `a60ef52` (`Add provider result retry race model`).
-- Foundational smoke inventory: 384 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry and monitoring DB race models).
+- Foundational smoke inventory: 385 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: added `ParslProviderResultMonitoringDB`, extending provider failure/retry and
+  stale-result correlation with queued/persisted monitoring status and duplicate persistence.
+  The Fixed configuration passed TLC; the Current configuration produced provider, stale-result,
+  and terminal-row-loss counterexamples. The existing 406-entry runtime gate stays green.
 
 - Current stage: added `ParslProviderResultRetryRace`, combining provider poll failure, executor
   collector loss, physical-attempt retry, late result delivery, and monitoring terminal state.
