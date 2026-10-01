@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `0e6444e` (`Record HTTP content length promotion`).
+- Latest locally preserved commit: `c951eed` (`Promote HTEX result queue model`).
 - Foundational smoke inventory: 443 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
