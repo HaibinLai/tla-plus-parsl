@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `aecad35` (`Promote timed join monitoring model`).
-- Foundational smoke inventory: 388 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 389 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -27,6 +27,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the existing `ParslJoinTimedMonitoring` Fixed case into the
   foundational gate, covering heartbeat expiry, task timeout, cancellation, late completion,
   and monitoring persistence together with join data readiness.
+
+- Current stage: promoted the HTEX unknown-result-type Fixed case, ensuring malformed result
+  frames do not terminate the result worker before independent valid Futures are delivered.
 
 - Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
   stale inner results, two-dependency join completion, and monitoring persistence into one model.

@@ -152,6 +152,9 @@ run_case htex-result-decode-cleanup \
 run_case htex-ambiguous-result-rejection \
     models/executors/ParslHtexAmbiguousResultFixed.cfg \
     models/executors/ParslHtexAmbiguousResult.tla
+run_case htex-unknown-result-type \
+    models/executors/ParslHtexUnknownResultTypeFixed.cfg \
+    models/executors/ParslHtexUnknownResultType.tla
 run_case kubernetes-admission \
     models/providers/ParslKubernetesAdmissionFixed.cfg \
     models/providers/ParslKubernetesAdmission.tla
