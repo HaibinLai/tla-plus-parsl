@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `170b260` (`Promote multi-output stageout model`).
+- Latest locally preserved commit: `86d69dc` (`Promote Globus stage dependency model`).
 - Foundational smoke inventory: 478 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
