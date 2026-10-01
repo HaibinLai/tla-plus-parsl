@@ -86,6 +86,9 @@ run_case join-heartbeat-retry \
 run_case join-stage-retry \
     models/core/ParslJoinStageRetryFixed.cfg \
     models/core/ParslJoinStageRetry.tla
+run_case join-timed-monitoring-cancel \
+    models/dataflow/ParslJoinTimedMonitoringCancelFixed.cfg \
+    models/dataflow/ParslJoinTimedMonitoring.tla
 run_case integrated-abstract \
     models/core/ParslAbstractSmoke.cfg \
     models/core/ParslAbstract.tla
