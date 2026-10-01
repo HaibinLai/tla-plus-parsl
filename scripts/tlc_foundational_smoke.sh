@@ -581,6 +581,9 @@ run_case grid-engine-empty-submit \
 run_case grid-engine-submit-shape \
     models/providers/ParslGridEngineSubmitShapeFixed.cfg \
     models/providers/ParslGridEngineSubmitShape.tla
+run_case grid-engine-submit \
+    models/providers/ParslGridEngineSubmitJob.cfg \
+    models/providers/ParslGridEngineSubmit.tla
 run_case lsf-missing-job \
     models/providers/ParslLSFMissingJobFixed.cfg \
     models/providers/ParslLSFMissingJob.tla

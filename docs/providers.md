@@ -396,6 +396,10 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineSubmitSh
 `None` after a zero exit code with no non-empty output; the fixed branch rejects the submission
 before the scaling layer can publish an invalid block mapping.
 
+`ParslGridEngineSubmit.tla` is the smaller lifecycle abstraction beneath those refinements. It
+separates submit-script publication, qsub failure, empty successful output, and valid job-id
+registration; the valid configuration is now part of the foundational smoke gate.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitCurrent.cfg models/providers/ParslGridEngineEmptySubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitFixed.cfg models/providers/ParslGridEngineEmptySubmit.tla

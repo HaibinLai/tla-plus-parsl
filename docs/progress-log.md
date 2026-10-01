@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `7188255` (`Promote LocalProvider exit status model`).
-- Foundational smoke inventory: 488 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 489 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslGridEngineSubmit` as the basic qsub submission lifecycle.
+  Script publication, command failure, empty successful output, and valid job-id registration
+  are separate terminal paths; only the valid path publishes a pending resource. All three TLC
+  configurations and the concrete Grid Engine submit probes pass.
 
 - Current stage: promoted `ParslLocalProviderExitStatus` as the local `.ec` marker boundary.
   In-flight `-`, numeric exit codes, malformed contents, process liveness, and cancellation are
