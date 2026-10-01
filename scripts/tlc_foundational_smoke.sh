@@ -479,6 +479,12 @@ run_case zmq-multipart-ack \
 run_case zmq-multipart-ack-malformed \
     models/serialization/ParslZMQMultipartAckMalformedFixed.cfg \
     models/serialization/ParslZMQMultipartAck.tla
+run_case zmq-result-attempt \
+    models/serialization/ParslZMQResultAttemptFixed.cfg \
+    models/serialization/ParslZMQResultAttempt.tla
+run_case zmq-result-attempt-malformed \
+    models/serialization/ParslZMQResultAttemptMalformedFixed.cfg \
+    models/serialization/ParslZMQResultAttempt.tla
 run_case serializer-header-consistency \
     models/serialization/ParslSerializerHeaderConsistencyFixed.cfg \
     models/serialization/ParslSerializerHeaderConsistency.tla

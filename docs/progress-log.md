@@ -39,10 +39,10 @@ criteria for this deliverable.
 
 ### Latest completed stages
 
-- Current stage: composed multipart frame-count validation with serialized ACK/retry delivery in
-  `ParslZMQMultipartAck`. The Fixed branch rejects malformed four-buffer envelopes before decode
-  and deduplicates valid retransmissions. Full smoke verification passed: 625 TLC cases and 424
-  Python runtime probes; 661 unittest methods are present.
+- Current stage: composed result delivery with physical-attempt generations in
+  `ParslZMQResultAttempt`. The Fixed branch rejects malformed result payloads, ignores old
+  attempts, and consumes duplicate current results once. Full smoke verification passed: 627 TLC
+  cases and 425 Python runtime probes; 663 unittest methods are present.
 
 - Current stage: composed serialized callable/object snapshots with ZMQ-style ACK-loss
   retransmission in `ParslZMQSerializedAck`. The Current branch dispatches the duplicate envelope

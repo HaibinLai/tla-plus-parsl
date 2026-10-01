@@ -96,6 +96,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartAc
 /tmp/parsl-venv/bin/python -m unittest tests/test_zmq_multipart_ack_runtime.py -v
 ```
 
+`ParslZMQResultAttempt.tla` connects the result envelope to physical-attempt generations. A
+late result from attempt 0 cannot resolve the Future after attempt 1 becomes current; malformed
+result payloads are rejected before resolution, and duplicate valid results are consumed only
+once. The runtime bridge serializes real Flux `TaskResult` values and keeps attempt identity in
+the outer message envelope.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQResultAttemptCurrent.cfg models/serialization/ParslZMQResultAttempt.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQResultAttemptFixed.cfg models/serialization/ParslZMQResultAttempt.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQResultAttemptMalformedCurrent.cfg models/serialization/ParslZMQResultAttempt.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQResultAttemptMalformedFixed.cfg models/serialization/ParslZMQResultAttempt.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zmq_result_attempt_runtime.py -v
+```
+
 `ParslCallableAliasRetry.tla` combines Python object aliasing with retry snapshots. A mutable
 object is both captured by a callable and passed as an argument; if it mutates while an encoded
 attempt is pending, the fixed path invalidates that snapshot and re-encodes before retry. The
