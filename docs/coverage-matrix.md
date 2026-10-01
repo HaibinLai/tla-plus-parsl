@@ -558,6 +558,10 @@ private-directory and secret-key guards before loading network credentials.
 Fixed `ParslPythonTimeoutCatch` is also in the foundational TLC gate, checking that injected
 Python-app walltime timeouts remain terminal rather than being converted into success.
 
+Core `ParslZMQ` is also in the foundational TLC gate, checking bounded task/result multipart
+queues, route and envelope validation, duplicate suppression, corruption rejection, and ACK
+correlation.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

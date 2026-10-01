@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `03c4f73` (`Promote Python timeout catch gate`).
-- Foundational smoke inventory: 605 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 606 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted the core `ParslZMQ` state machine into the foundational TLC gate.
+  Bounded multipart task/result messages now cover route validation, duplicate suppression,
+  corruption rejection, queue delivery, and acknowledgement correlation.
 
 - Current stage: promoted fixed `ParslPythonTimeoutCatch` into the foundational TLC gate. An
   injected walltime timeout cannot be caught and converted into a successful Future result.
