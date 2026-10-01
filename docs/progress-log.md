@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `561fd30` (`Promote serialization frame count gate`).
+- Latest locally preserved commit: `1c497bc` (`Promote serialization length gate`).
 - Foundational smoke inventory: 553 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
