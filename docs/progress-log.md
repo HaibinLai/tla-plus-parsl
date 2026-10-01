@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `aa4004b` (`Record HTEX result queue promotion`).
+- Latest locally preserved commit: `e0b9ed8` (`Promote HTEX manager drain present case`).
 - Foundational smoke inventory: 444 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
