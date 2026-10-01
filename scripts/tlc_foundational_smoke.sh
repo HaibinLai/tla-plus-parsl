@@ -950,6 +950,9 @@ run_case cluster-status-request \
 run_case cluster-status-unknown \
     models/providers/ParslClusterStatusUnknownFixed.cfg \
     models/providers/ParslClusterStatusUnknown.tla
+run_case cluster-submit-script \
+    models/providers/ParslClusterSubmitScript.cfg \
+    models/providers/ParslClusterSubmitScript.tla
 run_case local-provider-submit-cleanup \
     models/providers/ParslLocalProviderSubmitCleanupFixed.cfg \
     models/providers/ParslLocalProviderSubmitCleanup.tla

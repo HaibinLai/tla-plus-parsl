@@ -776,6 +776,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitF
 Valid template substitution publishes the script; missing template keys map to
 `SchedulerMissingArgs`, while target I/O failures map to `ScriptPathError`. The runtime probe
 checks all three outcomes against the real base-class method.
+The valid configuration is now part of the foundational smoke gate; the two error configurations
+remain explicit companion checks for failure mapping and publication safety.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslClusterSubmitScript.cfg models/providers/ParslClusterSubmitScript.tla

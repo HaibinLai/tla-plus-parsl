@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `d6293f6` (`Promote TasksOutgoing model`).
-- Foundational smoke inventory: 483 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 484 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslClusterSubmitScript` as the common scheduler-script boundary.
+  Valid template substitution publishes the script; missing template keys map to a scheduler
+  argument error, and target I/O failures map to a path error without publishing a partial script.
+  All three TLC configurations and the real `ClusterProvider` runtime probes pass.
 
 - Current stage: promoted `ParslTasksOutgoing` as the HTEX task-channel sender boundary. A
   `put()` sends one Python object over the DEALER socket while the sender is open; close tears down
