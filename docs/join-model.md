@@ -1,5 +1,10 @@
 # join_app model map
 
+`ParslJoinStageOutCancellation.tla` connects the logical application Future to its separate
+stage-out Future. The Current branch allows an in-flight stage-out callback to publish after the
+outer join is cancelled; the Fixed branch ignores that late publication. This is intentionally a
+small composition baseline for later provider-specific refinement.
+
 The join abstraction separates the outer logical task from the inner Futures and from each
 inner Future's physical execution attempts. This is necessary because an inner Future can retry,
 complete, fail, or be cancelled independently while the outer task remains in the joining state.

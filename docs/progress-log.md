@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `efbdf3f` (`Promote Zip stageout model`).
-- Foundational smoke inventory: 491 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 492 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: added `ParslJoinStageOutCancellation`, a compact composition of application
+  completion, stage-out publication, outer cancellation, and a late stage-out callback. The
+  Current branch reproduces publication after cancellation; the Fixed branch rejects that stale
+  publication and passes the bounded TLC exploration. This is an abstract safety baseline rather
+  than a claim that every Parsl staging provider currently exposes the same race.
 
 - Current stage: promoted `ParslZipStageOut` as the archive publication boundary. Archive write,
   source cleanup, retry after cleanup failure, source-version change, and duplicate-member handling
