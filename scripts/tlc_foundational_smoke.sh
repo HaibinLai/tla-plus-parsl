@@ -977,6 +977,9 @@ run_case htex-duplicate-registration \
 run_case flux-provider-status-empty \
     models/executors/ParslFluxProviderStatusEmptyFixed.cfg \
     models/executors/ParslFluxProviderStatusEmpty.tla
+run_case heartbeat-late-ack \
+    models/executors/ParslHeartbeatLateAckFixed.cfg \
+    models/executors/ParslHeartbeatLateAck.tla
 run_case join-cancellation \
     models/dataflow/ParslJoinCancellationFixed.cfg \
     models/dataflow/ParslJoinCancellation.tla

@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b8c0db6` (`Promote Flux empty status handling model`).
-- Foundational smoke inventory: 461 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `e7cc1bf` (`Record Flux empty status promotion`).
+- Foundational smoke inventory: 462 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
