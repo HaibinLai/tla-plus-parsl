@@ -113,6 +113,9 @@ run_case htex-result-queue \
 run_case results-incoming \
     models/executors/ParslResultsIncoming.cfg \
     models/executors/ParslResultsIncoming.tla
+run_case tasks-outgoing \
+    models/executors/ParslTasksOutgoing.cfg \
+    models/executors/ParslTasksOutgoing.tla
 run_case htex-manager-drain-present \
     models/executors/ParslHtexManagerDrainPresent.cfg \
     models/executors/ParslHtexManagerDrain.tla

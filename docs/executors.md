@@ -270,6 +270,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslResultsIncomingTim
 DEALER socket without a reply handshake, and `close()` terminates the socket/context so the sender
 is no longer open. `tests/test_tasks_outgoing_runtime.py` checks the real wrapper boundary with a
 fake socket.
+The normal sender configuration is now part of the foundational smoke gate; the close-race
+configuration remains a separate Current/Fixed refinement.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTasksOutgoing.cfg models/executors/ParslTasksOutgoing.tla
