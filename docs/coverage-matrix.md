@@ -444,6 +444,9 @@ fixed/valid configurations, checking declared-versus-actual payload length befor
 `ParslGlobusTransferFailure` is also in the foundational TLC gate with fixed-empty and success
 paths, checking failure publication without indexing an absent diagnostic event.
 
+`ParslStagingProviderDispatch` is also in the foundational TLC gate, checking ordered provider
+selection and the distinction between a completed staging result and a Future dependency.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
