@@ -113,6 +113,9 @@ run_case file-bytes-transfer \
 run_case heartbeat \
     models/clock/ParslTimedHeartbeatSmokeFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla
+run_case heartbeat-full-horizon \
+    models/clock/ParslTimedHeartbeatFixed.cfg \
+    models/clock/ParslTimedHeartbeat.tla
 run_case concurrent-timeouts \
     models/clock/ParslConcurrentTimeouts.cfg \
     models/clock/ParslConcurrentTimeouts.tla

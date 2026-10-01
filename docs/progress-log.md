@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b259bb1` (`Promote HTEX result forwarding model`).
-- Foundational smoke inventory: 440 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `0cab683` (`Record HTEX result forwarding promotion`).
+- Foundational smoke inventory: 441 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -54,6 +54,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslHtexResultForwarding` into the TLC gate. It models manager task
   ownership across serialized result forwarding, send failure, and bounded retry; the Fixed branch
   prevents a failed ZMQ send from silently losing the task record.
+
+- Current stage: promoted the full-horizon `ParslTimedHeartbeatFixed` configuration. The smoke gate
+  now checks both the short and four-tick paths for heartbeat expiry, task timeout, and late-result
+  classification.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join
