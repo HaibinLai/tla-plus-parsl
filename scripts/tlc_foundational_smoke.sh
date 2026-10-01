@@ -1226,6 +1226,9 @@ run_case http-separate-content-length-normal \
 run_case http-separate-status \
     models/staging/ParslHTTPSeparateStatusFixed.cfg \
     models/staging/ParslHTTPSeparateStatus.tla
+run_case http-separate-status-normal \
+    models/staging/ParslHTTPSeparateStatusNormal.cfg \
+    models/staging/ParslHTTPSeparateStatus.tla
 run_case multi-output-versioned-stageout \
     models/staging/ParslMultiOutputVersionedStageOut.cfg \
     models/staging/ParslMultiOutputVersionedStageOut.tla

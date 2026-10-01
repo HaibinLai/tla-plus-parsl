@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `60d22ab` (`Promote monitoring insert present case`).
-- Foundational smoke inventory: 445 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `0f19a78` (`Record monitoring insert present promotion`).
+- Foundational smoke inventory: 446 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -73,6 +73,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the normal `ParslMonitoringDBInsertPresent` configuration. The monitoring
   gate now checks first-write persistence separately from duplicate-event idempotence/drop paths.
+
+- Current stage: promoted the normal `ParslHTTPSeparateStatus` configuration. The staging gate now
+  checks successful 2xx response publication separately from non-success response rejection.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join
