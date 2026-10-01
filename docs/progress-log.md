@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `6f2f242` (`Model strategy idle clock rollback`).
-- Foundational smoke inventory: 493 TLC cases and 408 Python runtime probes.
+- Foundational smoke inventory: 494 TLC cases and 409 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: added `ParslThreadExecutorLifecycle`, covering failed thread-pool startup and
+  cleanup. The Current branch exposes a second raw shutdown error when `start()` never created
+  the underlying pool; the Fixed branch makes shutdown safe for the unstarted state. TLC and the
+  installed ThreadPoolExecutor runtime probe pass.
 
 - Current stage: added `ParslStrategyIdleClock`, which connects idle-resource scale-in to the
   wall-clock/monotonic-clock boundary. The Current branch reproduces suppression of scale-in

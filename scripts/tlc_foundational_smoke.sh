@@ -716,6 +716,9 @@ run_case thread-executor-nonblocking \
 run_case thread-executor-future-lifecycle \
     models/executors/ParslThreadExecutorFutureLifecycle.cfg \
     models/executors/ParslThreadExecutorFutureLifecycle.tla
+run_case thread-executor-lifecycle \
+    models/executors/ParslThreadExecutorLifecycleFixed.cfg \
+    models/executors/ParslThreadExecutorLifecycle.tla
 run_case globus-submit-race \
     models/executors/ParslGlobusComputeSubmitRaceFixed.cfg \
     models/executors/ParslGlobusComputeSubmitRace.tla

@@ -211,6 +211,7 @@ tests=(
     tests/test_htex_watchdog_result_race_runtime.py
     tests/test_htex_worker_watchdog_runtime.py
     tests/test_thread_executor_runtime.py
+    tests/test_thread_executor_lifecycle_runtime.py
     tests/test_thread_executor_resource_spec_runtime.py
     tests/test_thread_executor_thread_count_runtime.py
     tests/test_pool_executor_map_runtime.py

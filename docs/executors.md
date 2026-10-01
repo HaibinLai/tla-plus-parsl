@@ -31,6 +31,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorFutu
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_future_lifecycle_runtime.py -v
 ```
 
+`ParslThreadExecutorLifecycle.tla` models the executor object around startup failure. If the
+underlying `concurrent.futures.ThreadPoolExecutor` rejects its configuration before assigning
+`self.executor`, the Current cleanup path raises a second `AttributeError`; the Fixed path treats
+shutdown of an unstarted executor as an idempotent terminal transition.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorLifecycleCurrent.cfg models/executors/ParslThreadExecutorLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorLifecycleFixed.cfg models/executors/ParslThreadExecutorLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_lifecycle_runtime.py -v
+```
+
 `ParslBashAppOutcome.tla` is a compact app-level boundary model. It separates shell exit,
 stdout side effects, declared-output validation, and Future resolution: a non-zero exit resolves
 the Future with `BashExitFailure`, while a successful exit must pass output validation first.
