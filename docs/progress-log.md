@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `6e24814` (`Promote task transport gate`).
-- Foundational smoke inventory: 580 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 581 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslSerializationSnapshot` into the foundational TLC gate. The
+  serializer boundary now explicitly preserves the captured callable/argument version across
+  source mutation and decode, while keeping serialization failure terminal.
 
 - Current stage: promoted `ParslTaskTransport` normal and serialization-failure configurations
   into the foundational TLC gate. The cross-layer model requires a valid serialized task before

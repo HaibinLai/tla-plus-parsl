@@ -511,6 +511,9 @@ transfer completion, DataFuture readiness, source-version matching, and monitori
 TLC gate, connecting object-graph serialization, task-envelope validation, worker dispatch,
 result correlation, retry bounds, and stale-result rejection.
 
+`ParslSerializationSnapshot` is also in the foundational TLC gate, checking that mutation of the
+original Python object graph cannot change the captured payload or decoded version.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

@@ -1790,5 +1790,8 @@ run_case task-transport \
 run_case task-transport-failure \
     models/serialization/ParslTaskTransportFailure.cfg \
     models/serialization/ParslTaskTransport.tla
+run_case serialization-snapshot \
+    models/serialization/ParslSerializationSnapshot.cfg \
+    models/serialization/ParslSerializationSnapshot.tla
 
 echo "Foundational TLC smoke suite passed."
