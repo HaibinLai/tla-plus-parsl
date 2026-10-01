@@ -749,6 +749,12 @@ run_case rsync-stage-success \
 run_case monitoring-deferred \
     models/monitoring/ParslMonitoringDeferred.cfg \
     models/monitoring/ParslMonitoringDeferred.tla
+run_case timer-interval-fixed \
+    models/clock/ParslTimerIntervalValidationFixed.cfg \
+    models/clock/ParslTimerIntervalValidation.tla
+run_case timer-interval-valid \
+    models/clock/ParslTimerIntervalValidationValid.cfg \
+    models/clock/ParslTimerIntervalValidation.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

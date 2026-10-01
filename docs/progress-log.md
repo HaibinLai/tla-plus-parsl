@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `ec021ed` (`Promote deferred monitoring model`).
-- Foundational smoke inventory: 522 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 524 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -698,6 +698,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslMonitoringDeferred` into the foundational TLC gate. Worker status
   messages received before their TASK_INFO/TRY rows are deferred and replayed only after the foreign
   key exists; duplicate first observations are explicitly bounded and status rows stay admissible.
+- Current stage: promoted the Fixed and valid `ParslTimerIntervalValidation` configurations into the
+  foundational TLC gate. Negative intervals are rejected by the Fixed branch instead of becoming a
+  zero-delay timer; the Current branch remains a deliberate counterexample and runtime probe.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
