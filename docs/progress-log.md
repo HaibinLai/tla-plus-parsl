@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `1e27e3a` (`Promote monitoring router failure model`).
-- Foundational smoke inventory: 500 TLC cases and 411 Python runtime probes.
+- Latest locally preserved commit: `a7c25a8` (`Promote file path resolution model`).
+- Foundational smoke inventory: 501 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
