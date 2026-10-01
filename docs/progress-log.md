@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `1a486ce` (`Promote filesystem radio atomicity gate`).
+- Latest locally preserved commit: `bf382d7` (`Promote monitoring starter failure gate`).
 - Foundational smoke inventory: 574 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
