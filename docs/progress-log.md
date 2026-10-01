@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b211027` (`Record v0.1 report checkpoint`).
+- Latest locally preserved commit: `43c6c55` (`Require validated result envelopes in task transport`).
 - Foundational smoke inventory: 616 TLC cases and 415 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
