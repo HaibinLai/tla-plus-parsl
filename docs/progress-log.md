@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `f544022` (`Promote function object transport model`).
-- Foundational smoke inventory: 439 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `39ba4d7` (`Record function object transport promotion`).
+- Foundational smoke inventory: 440 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -50,6 +50,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslFunctionObjectTransport` into the TLC gate. It models callable
   closure/object snapshot capture before queueing, source mutation while in flight, and execution
   from the decoded snapshot.
+
+- Current stage: promoted `ParslHtexResultForwarding` into the TLC gate. It models manager task
+  ownership across serialized result forwarding, send failure, and bounded retry; the Fixed branch
+  prevents a failed ZMQ send from silently losing the task record.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join

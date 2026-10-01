@@ -104,6 +104,9 @@ run_case callable-object-snapshot \
 run_case callable-object-transport \
     models/serialization/ParslFunctionObjectTransport.cfg \
     models/serialization/ParslFunctionObjectTransport.tla
+run_case htex-result-forwarding \
+    models/serialization/ParslHtexResultForwardingFixed.cfg \
+    models/serialization/ParslHtexResultForwarding.tla
 run_case file-bytes-transfer \
     models/staging/ParslFileBytesSmoke.cfg \
     models/staging/ParslFileBytes.tla
