@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `683b37b` (`Promote falsey exception gate`).
+- Latest locally preserved commit: `7621e11` (`Promote input dependency dedup gate`).
 - Foundational smoke inventory: 584 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
