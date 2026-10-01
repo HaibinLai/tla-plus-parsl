@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b66fb82` (`Record full heartbeat horizon promotion`).
+- Latest locally preserved commit: `e912737` (`Add normal HTTP content length case`).
 - Foundational smoke inventory: 442 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
