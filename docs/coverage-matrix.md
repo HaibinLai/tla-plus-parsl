@@ -571,6 +571,10 @@ resource-spec/endpoint overrides and restoration of shared SDK defaults.
 Core `ParslStrategy` is also in the foundational TLC gate, checking bounded task pressure,
 scale-out, idle timing, scale-in, and block capacity bounds.
 
+Fixed/success `ParslStrategyBlockCapacity` configurations are also in the foundational TLC gate,
+checking rejection of zero capacity before overload arithmetic and the valid scaling path. The
+current configuration remains a deliberate bug-ledger counterexample.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

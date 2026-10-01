@@ -1880,5 +1880,11 @@ run_case globus-compute-config-fixed \
 run_case strategy-core \
     models/strategy/ParslStrategy.cfg \
     models/strategy/ParslStrategy.tla
+run_case strategy-block-capacity-fixed \
+    models/strategy/ParslStrategyBlockCapacityFixed.cfg \
+    models/strategy/ParslStrategyBlockCapacity.tla
+run_case strategy-block-capacity-success \
+    models/strategy/ParslStrategyBlockCapacitySuccess.cfg \
+    models/strategy/ParslStrategyBlockCapacity.tla
 
 echo "Foundational TLC smoke suite passed."
