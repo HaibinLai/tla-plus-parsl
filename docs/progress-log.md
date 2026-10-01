@@ -1016,6 +1016,10 @@ criteria for this deliverable.
   reproduces the orphaned Future after corrupt decode, and the installed SQLite monitoring schema
   accepts an older `try_id` at a newer timestamp; the probe records this as a Current observation
   while the Fixed generation rule remains model-level.
+- Current stage: reconciled the documentation counts with the executable manifests: 617 TLC
+  `run_case` entries, 416 foundational Python probe entries, and 648 repository-wide unittest
+  methods. The README, overview, coverage matrix, and validation report now distinguish these
+  scopes instead of mixing historical counts.
 
 ### Verification convention
 
