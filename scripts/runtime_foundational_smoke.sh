@@ -328,6 +328,7 @@ tests=(
     tests/test_monitoring_malformed_worker_message_runtime.py
     tests/test_monitoring_status_history_runtime.py
     tests/test_monitoring_zmq_tuple_shape_runtime.py
+    tests/test_result_monitoring_attempt_runtime.py
     tests/test_monitoring_batch_runtime.py
     tests/test_monitoring_db_permanent_error_runtime.py
     tests/test_monitoring_db_update_permanent_error_runtime.py

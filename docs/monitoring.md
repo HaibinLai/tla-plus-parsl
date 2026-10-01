@@ -35,6 +35,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRetryFixed.cfg models/monitoring/ParslMonitoringTaskRetry.tla
 ```
 
+`ParslResultMonitoringAttempt.tla` composes that retry ordering with terminal result persistence.
+After attempt 0 is replaced by attempt 1, the Fixed branch turns an old result into a stale event
+instead of resolving the Future or writing `succeeded` for the old attempt. The runtime bridge
+uses the real SQLite `STATUS` table and verifies that the current `try_id` remains the selected
+record.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslResultMonitoringAttemptCurrent.cfg models/monitoring/ParslResultMonitoringAttempt.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslResultMonitoringAttemptFixed.cfg models/monitoring/ParslResultMonitoringAttempt.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_result_monitoring_attempt_runtime.py -v
+```
+
 `ParslMonitoringEventStream.tla` is the compact producer-to-database stream model. It has
 per-task logical status versions, a bounded event queue, duplicate and reordered events, a
 single database writer with bounded write retry, and an explicit producer/database shutdown

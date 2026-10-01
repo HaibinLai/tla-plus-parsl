@@ -425,6 +425,9 @@ run_case monitoring-db-permanent-update \
 run_case monitoring-task-retry \
     models/monitoring/ParslMonitoringTaskRetryFixed.cfg \
     models/monitoring/ParslMonitoringTaskRetry.tla
+run_case monitoring-result-attempt \
+    models/monitoring/ParslResultMonitoringAttemptFixed.cfg \
+    models/monitoring/ParslResultMonitoringAttempt.tla
 run_case stage-in-ordering \
     models/staging/ParslDataManagerStageInOrderingFixed.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

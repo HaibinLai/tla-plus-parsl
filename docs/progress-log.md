@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `5b069df` (`Compose heartbeat expiry and result attempts`).
-- Foundational smoke inventory: 628 TLC cases and 426 Python runtime probes.
+- Foundational smoke inventory: 629 TLC cases and 427 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,12 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: composed retry-result filtering with monitoring persistence in
+  `ParslResultMonitoringAttempt`. The Fixed branch records only the current attempt as terminal
+  `succeeded`; a late old-attempt result becomes stale and does not resolve the Future or database
+  record. Full smoke verification passed: 629 TLC cases and 427 Python runtime probes; 666
+  unittest methods are present.
 
 - Current stage: composed heartbeat expiry with retry-generation result delivery in
   `ParslHeartbeatResultAttempt`. The Fixed branch ignores late heartbeats from expired managers,
