@@ -53,6 +53,11 @@ Focused models refine boundaries that are easy to lose in a set-based abstractio
 - ParslJoinPartialCancellation covers cancellation after a prior list member has already been
   observed successfully;
 - ParslJoinRetryDuplicates combines duplicate input positions with inner physical retries.
+- ParslJoinRetryCancellation combines an inner non-final retry, cancellation during the retry
+  window, and a late callback. The current branch reproduces the installed behavior where
+  `CancelledError` escapes callback handling and leaves the outer join pending; the fixed branch
+  treats cancellation as terminal inner failure and finalizes the outer join. This is the
+  composition boundary between retry bookkeeping and `handle_join_update` cancellation handling.
 
 ParslNestedJoinFailure adds explicit nested error payloads. Failed leaf IDs remain in the nested
 JoinError in input order, while the outer join records the nested Future as one dependency entry.

@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `fd13cad` (`Promote Google Cloud running status case`).
-- Foundational smoke inventory: 450 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `0756865` (`Record Google Cloud status promotion`).
+- Foundational smoke inventory: 451 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

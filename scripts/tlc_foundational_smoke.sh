@@ -977,6 +977,9 @@ run_case join-return-shape \
 run_case join-body-retry \
     models/dataflow/ParslJoinBodyRetry.cfg \
     models/dataflow/ParslJoinBodyRetry.tla
+run_case join-retry-cancellation \
+    models/dataflow/ParslJoinRetryCancellationFixed.cfg \
+    models/dataflow/ParslJoinRetryCancellation.tla
 run_case join-callback-race \
     models/dataflow/ParslJoinCallbackRace.cfg \
     models/dataflow/ParslJoinCallbackRace.tla
