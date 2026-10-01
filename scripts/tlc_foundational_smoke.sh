@@ -755,6 +755,9 @@ run_case provider-three-block-ownership-smoke \
 run_case provider-duplicate-job-id \
     models/providers/ParslDuplicateJobIdFixed.cfg \
     models/providers/ParslDuplicateJobId.tla
+run_case provider-walltime-parsing \
+    models/providers/ParslWalltimeParsingFixed.cfg \
+    models/providers/ParslWalltimeParsing.tla
 run_case scale-in-retry-monitoring \
     models/executors/ParslScaleInRetryMonitoringFixed.cfg \
     models/executors/ParslScaleInRetryMonitoring.tla
