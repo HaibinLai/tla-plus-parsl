@@ -788,6 +788,9 @@ run_case stageout-future-none \
 run_case http-in-task-transfer-gate-fixed \
     models/staging/ParslHTTPInTaskTransferGateFixed.cfg \
     models/staging/ParslHTTPInTaskTransferGate.tla
+run_case http-in-task-admission-fixed \
+    models/staging/ParslHTTPInTaskAdmissionFixed.cfg \
+    models/staging/ParslHTTPInTaskAdmission.tla
 run_case rsync-stage-in-failure \
     models/staging/ParslRsyncStageInFail.cfg \
     models/staging/ParslRsyncStage.tla

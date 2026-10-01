@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c1aa88d` (`Model monitoring resource lifecycle clocks`).
-- Foundational smoke inventory: 619 TLC cases and 419 Python runtime probes.
+- Foundational smoke inventory: 620 TLC cases and 420 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 619 TLC cases and 419 Python probes pass as a regression gate;
+- the existing 620 TLC cases and 420 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -1033,6 +1033,11 @@ criteria for this deliverable.
   resource message. The real monitor bridge confirms rollback does not drop the final message.
   The full gate now contains 619 TLC cases, 419 runtime entries, and 655 discovered unittest
   methods.
+- Current stage: added `ParslHTTPInTaskAdmission`, a joint status/Content-Length/task-admission
+  refinement. It reuses the existing BUG-172 and BUG-288 observations without creating a
+  duplicate ledger entry: Current admits a non-success short response, while Fixed blocks user
+  code until both checks pass. The full gate now contains 620 TLC cases, 420 runtime entries,
+  and 656 discovered unittest methods.
 
 ### Verification convention
 

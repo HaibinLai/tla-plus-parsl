@@ -66,6 +66,7 @@ tests=(
     tests/test_filesystem_radio_runtime.py
     tests/test_http_staging_runtime.py
     tests/test_http_in_task_transfer_gate_runtime.py
+    tests/test_http_in_task_admission_runtime.py
     tests/test_htex_heartbeat_runtime.py
     tests/test_heartbeat_clock_jump_runtime.py
     tests/test_htex_contact_timeout_starvation_runtime.py

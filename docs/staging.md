@@ -15,6 +15,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskTransferGa
 /tmp/parsl-venv/bin/python -m unittest tests/test_http_in_task_transfer_gate_runtime.py -v
 ```
 
+`ParslHTTPInTaskAdmission.tla` is the joint status/length refinement: the wrapped task is
+admitted only when the response is successful and the received byte count equals the declared
+`Content-Length`.  Its Current case combines the two observed failures (BUG-172 and BUG-288),
+while the Fixed case rejects the input before user code runs.  The runtime bridge uses the real
+`in_task_transfer_wrapper` with a non-success, short response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskAdmissionCurrent.cfg models/staging/ParslHTTPInTaskAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskAdmissionFixed.cfg models/staging/ParslHTTPInTaskAdmission.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_in_task_admission_runtime.py -v
+```
+
 Files live in [`models/staging/`](../models/staging/).
 
 The compact cross-layer model [`ParslDataReadyExecution`](../models/core/ParslDataReadyExecution.tla)
