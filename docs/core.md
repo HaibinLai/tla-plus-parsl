@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 394 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 394 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 395 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 395 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -320,6 +320,10 @@ success callback, while Current reproduces the terminal-Future write error from 
 `ParslTaskVineResourceSpecShape.tla` adds a TaskVine admission check: malformed non-mapping
 resource specifications must be rejected deterministically before `.get()` field access. The
 Current branch preserves the raw `AttributeError` path documented in BUG-207.
+
+`ParslWorkQueueResourceCategory.tla` checks the complementary Work Queue schema boundary. The
+Fixed branch accepts the documented `category` resource key and reaches task mapping; Current
+rejects it before the existing category-handling branch, reproducing BUG-095.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the

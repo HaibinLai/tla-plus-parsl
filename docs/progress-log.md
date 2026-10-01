@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `63264d2` (`Promote TaskVine resource validation model`).
-- Foundational smoke inventory: 394 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 395 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -45,6 +45,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the TaskVine resource-spec-shape Fixed case, requiring malformed
   submit resource specifications to fail as controlled admission errors.
+
+- Current stage: promoted the Work Queue category-schema Fixed case, ensuring a valid `category`
+  resource reaches the executor mapping branch rather than being rejected by the schema.
 
 - Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
   stale inner results, two-dependency join completion, and monitoring persistence into one model.
