@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `44c49e6` (`Add Zip stage-out dependency bridge`).
+- Latest locally preserved commit: `94879f8` (`Record Zip stage-out bridge`).
 - Foundational smoke inventory: 615 TLC cases and 414 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
