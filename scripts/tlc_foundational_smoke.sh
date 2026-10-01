@@ -1733,5 +1733,8 @@ run_case htex-worker-watchdog-idle \
 run_case monitoring-threshold-fixed \
     models/monitoring/ParslMonitoringThresholdFixed.cfg \
     models/monitoring/ParslMonitoringThreshold.tla
+run_case monitoring-versioned-batch \
+    models/monitoring/ParslMonitoringVersionedBatch.cfg \
+    models/monitoring/ParslMonitoringVersionedBatch.tla
 
 echo "Foundational TLC smoke suite passed."

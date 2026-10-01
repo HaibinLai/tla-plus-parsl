@@ -459,6 +459,9 @@ checking WorkerLost publication for a failed busy worker and silent replacement 
 Fixed `ParslMonitoringThreshold` is also in the foundational TLC gate, checking zero-threshold
 monitoring batch consumption and preserving the Current queued-event counterexample.
 
+Fixed `ParslMonitoringVersionedBatch` is also in the foundational TLC gate, checking atomic
+transaction rollback and rejection of stale status events below the database version high-water mark.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
