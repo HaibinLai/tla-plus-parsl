@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e2a55bc` (`Promote single join cancellation`).
+- Latest locally preserved commit: `f254956` (`Promote poller bad state model`).
 - Foundational smoke inventory: 531 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
