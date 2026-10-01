@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `0f5f07c` (`Record Kubernetes lifecycle model promotion`).
+- Latest locally preserved commit: `06d8a19` (`Record Kubernetes cancellation poll race`).
 - Foundational smoke inventory: 436 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
