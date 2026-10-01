@@ -229,6 +229,9 @@ code and output into exactly one pending resource, or no resource when submissio
 `ParslTaskVineShutdown` is also in the foundational gate, checking that collector finalization
 resolves every outstanding task Future as a manager failure before executor shutdown completes.
 
+`ParslTaskVineResults` is also in the foundational gate, covering valid result deserialization,
+task exceptions, corrupt or missing result files, no-result reports, and manager-exit cleanup.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

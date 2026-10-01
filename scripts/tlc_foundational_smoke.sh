@@ -716,6 +716,9 @@ run_case taskvine-resource-spec-shape \
 run_case taskvine-shutdown \
     models/executors/ParslTaskVineShutdown.cfg \
     models/executors/ParslTaskVineShutdown.tla
+run_case taskvine-results \
+    models/executors/ParslTaskVineResults.cfg \
+    models/executors/ParslTaskVineResults.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
