@@ -752,6 +752,9 @@ run_case provider-three-block-ownership \
 run_case provider-three-block-ownership-smoke \
     models/executors/ParslProviderThreeBlockOwnershipSmokeFixed.cfg \
     models/executors/ParslProviderThreeBlockOwnership.tla
+run_case provider-duplicate-job-id \
+    models/providers/ParslDuplicateJobIdFixed.cfg \
+    models/providers/ParslDuplicateJobId.tla
 run_case scale-in-retry-monitoring \
     models/executors/ParslScaleInRetryMonitoringFixed.cfg \
     models/executors/ParslScaleInRetryMonitoring.tla

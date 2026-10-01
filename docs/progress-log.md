@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `ec38ac5` (`Promote monitoring task retry ordering model`).
-- Foundational smoke inventory: 455 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `d922b1a` (`Record monitoring task retry promotion`).
+- Foundational smoke inventory: 456 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
