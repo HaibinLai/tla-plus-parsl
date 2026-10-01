@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `bc0c376` (`Promote HTEX worker watchdog gate`).
+- Latest locally preserved commit: `e18d962` (`Promote monitoring threshold gate`).
 - Foundational smoke inventory: 561 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
