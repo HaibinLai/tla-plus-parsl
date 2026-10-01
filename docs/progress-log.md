@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `1fcc1e2` (`Add provider cancellation Future composition model`).
+- Latest pushed commit: `3c44f99` (`Add cancellation retry monitoring composition`).
 - Foundational smoke inventory: 414 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
