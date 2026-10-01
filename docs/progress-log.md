@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `3e9e645` (`Promote provider kinds model`).
-- Foundational smoke inventory: 545 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 546 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -746,6 +746,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslProviderKinds` into the foundational TLC gate. The provider-neutral
   state machine now checks scheduler submit/status translation, missing-job semantics, cancellation,
   scale-in, provider failure/recovery, and CPU/task-per-node admission together.
+- Current stage: promoted `ParslBlockProviderBadState` into the foundational TLC gate. An unrecoverable
+  provider error records its cause, fails all pending tasks, preserves already terminal tasks, and
+  rejects later submissions.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

@@ -818,6 +818,9 @@ run_case monitoring-batch-clock-fixed \
 run_case provider-kinds \
     models/providers/ParslProviderKinds.cfg \
     models/providers/ParslProviderKinds.tla
+run_case block-provider-bad-state \
+    models/executors/ParslBlockProviderBadState.cfg \
+    models/executors/ParslBlockProviderBadState.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
