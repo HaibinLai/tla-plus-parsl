@@ -166,3 +166,7 @@ the permissive Current counterexample visible.
 the current `DataFuture` publishes that late transfer result. The probe does not claim that every
 provider has this return shape; it anchors the model's independent-transfer branch to the actual
 DataManager/DataFuture contract.
+
+The provider-specific bridge `tests/test_zip_staging_dependency_runtime.py` confirms that
+`ZipFileStaging.stage_out` passes the application Future as `parent_fut` to its internal stage-out
+app, so Zip follows the `BOUND_TO_APP = TRUE` branch.
