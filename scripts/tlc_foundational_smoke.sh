@@ -455,6 +455,9 @@ run_case lsf-resource-validation \
 run_case lsf-submit-job-id \
     models/providers/ParslLsfSubmitJobIdFixed.cfg \
     models/providers/ParslLsfSubmitJobId.tla
+run_case lsf-cancel-unknown \
+    models/providers/ParslLSFCancelFixed.cfg \
+    models/providers/ParslLSFCancel.tla
 run_case pbspro-submit-shape \
     models/providers/ParslPbsproSubmitShapeFixed.cfg \
     models/providers/ParslPbsproSubmitShape.tla

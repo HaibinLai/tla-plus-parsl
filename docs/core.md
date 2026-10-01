@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 407 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 407 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 408 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 408 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -369,6 +369,10 @@ valid query when its exit file is missing (BUG-054).
 `ParslLsfSubmitJobId.tla` models the LSF submit-response parser. Fixed rejects a
 successful-looking line without a valid scheduler identifier, while Current publishes the second
 whitespace token as a resource ID (BUG-202).
+
+`ParslLSFCancel.tla` models cancellation after local bookkeeping has already forgotten a job.
+Fixed treats a successful `bkill` for an unknown local ID as a stale/idempotent observation,
+while Current reaches a resource-map crash (BUG-016).
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the

@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `7612a82` (`Promote LSF submit job-id model`).
-- Foundational smoke inventory: 407 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 408 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -25,6 +25,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted `ParslLsfSubmitJobId`. The Fixed model passed TLC and the Current branch
   reproduced publication of a malformed scheduler token; the targeted LSF runtime probe passed.
+
+- Current stage: promoted `ParslLSFCancel`. The Fixed model passed TLC and the Current branch
+  reproduced the unknown-local-ID cancellation crash; three targeted runtime tests passed.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
