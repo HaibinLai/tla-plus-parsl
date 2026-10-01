@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `45fe7a5` (`Promote monitoring batch clock`).
+- Latest locally preserved commit: `3e9e645` (`Promote provider kinds model`).
 - Foundational smoke inventory: 545 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
