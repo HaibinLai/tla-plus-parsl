@@ -489,6 +489,9 @@ ordered four-position result reconstruction, and duplicate input preservation.
 `ParslHeartbeatProvider` is also in the foundational TLC gate, checking provider status versus
 manager heartbeat expiry, capacity admission, and terminal cleanup of in-flight work.
 
+Fixed `ParslFilesystemRadioAtomicity` is also in the foundational TLC gate, checking temporary
+pickle writes, atomic publication, reader visibility, and failure isolation.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

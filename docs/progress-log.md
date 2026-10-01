@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c108392` (`Promote heartbeat provider gate`).
-- Foundational smoke inventory: 572 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 573 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslFilesystemRadioAtomicity` into the foundational TLC gate.
+  Monitoring pickle data is written to a temporary file and atomically renamed into the reader
+  directory; write failures leave only a partial temp file and never expose it as a message.
 
 - Current stage: promoted `ParslHeartbeatProvider` into the foundational TLC gate. Provider
   UNKNOWN status is kept distinct from manager heartbeat expiry; provider terminal states revoke
