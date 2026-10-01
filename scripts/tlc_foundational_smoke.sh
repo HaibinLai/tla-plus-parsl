@@ -968,6 +968,9 @@ run_case command-client-max-retries \
 run_case provider-executor-timed \
     models/executors/ParslProviderExecutorTimedFixed.cfg \
     models/executors/ParslProviderExecutorTimed.tla
+run_case manager-liveness-pool \
+    models/executors/ParslManagerLivenessPoolFixed.cfg \
+    models/executors/ParslManagerLivenessPool.tla
 run_case join-cancellation \
     models/dataflow/ParslJoinCancellationFixed.cfg \
     models/dataflow/ParslJoinCancellation.tla
