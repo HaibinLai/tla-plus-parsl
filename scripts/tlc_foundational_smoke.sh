@@ -1388,6 +1388,9 @@ run_case kubernetes-unknown-status \
 run_case condor-chunk-size \
     models/providers/ParslCondorChunkSizeFixed.cfg \
     models/providers/ParslCondorChunkSize.tla
+run_case condor-cancel \
+    models/providers/ParslCondorCancel.cfg \
+    models/providers/ParslCondorCancel.tla
 run_case condor-status-failure \
     models/providers/ParslCondorStatusFailureFixedMalformed.cfg \
     models/providers/ParslCondorStatusFailure.tla

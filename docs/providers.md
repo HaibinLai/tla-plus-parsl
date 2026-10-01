@@ -665,6 +665,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueTasksPerNode
 This resource-admission boundary is recorded as BUG-119: negative `tasks_per_node` reaches the
 Torque launcher instead of being rejected before script construction.
 
+`ParslCondorCancel.tla` models Condor's chunked cancellation boundary. A successful scheduler
+cancel transitions only locally owned resources, leaves unknown IDs absent, and reports one
+success result per requested ID; a failed chunk preserves local state and reports failure. The
+normal configuration is now part of the foundational smoke gate.
+
 `ParslCondorChunkSize.tla` models Condor's `cmd_chunk_size` batching parameter. The current
 `_chunker` helper silently treats a zero size as an unbounded chunk; the fixed branch rejects
 non-positive sizes before scheduler polling or cancellation. The runtime probe calls the real
