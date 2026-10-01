@@ -1778,5 +1778,8 @@ run_case monitoring-batch-three-fixed \
 run_case monitoring-udp-pickle-fixed \
     models/monitoring/ParslMonitoringUDPPickleIsolationFixed.cfg \
     models/monitoring/ParslMonitoringUDPPickleIsolation.tla
+run_case monitoring-zmq-batch-clock-fixed \
+    models/monitoring/ParslMonitoringZMQBatchClockFixed.cfg \
+    models/monitoring/ParslMonitoringZMQBatchClock.tla
 
 echo "Foundational TLC smoke suite passed."
