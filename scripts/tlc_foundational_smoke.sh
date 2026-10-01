@@ -1157,6 +1157,9 @@ run_case slurm-cancel-batch \
 run_case slurm-duplicate-status \
     models/providers/ParslSlurmDuplicateStatusFixed.cfg \
     models/providers/ParslSlurmDuplicateStatus.tla
+run_case slurm-foreign-status \
+    models/providers/ParslSlurmStatusFixed.cfg \
+    models/providers/ParslSlurmStatus.tla
 run_case slurm-empty-job-id \
     models/providers/ParslSlurmEmptyJobIdFixed.cfg \
     models/providers/ParslSlurmEmptyJobId.tla

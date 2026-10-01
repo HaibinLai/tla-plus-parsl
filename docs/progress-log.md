@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `deb5d92` (`Promote Azure cancel model`).
-- Foundational smoke inventory: 400 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 401 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -63,6 +63,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the Azure missing-local-cancellation Fixed case, treating successful
   remote deletion plus absent local bookkeeping as an idempotent cancellation.
+
+- Current stage: promoted the Slurm foreign-status Fixed case, isolating unrelated scheduler rows
+  instead of crashing the entire provider status poll.
 
 - Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
   stale inner results, two-dependency join completion, and monitoring persistence into one model.
