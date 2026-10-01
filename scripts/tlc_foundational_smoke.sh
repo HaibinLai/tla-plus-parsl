@@ -1802,5 +1802,8 @@ run_case datafuture-falsey-exception-fixed \
 run_case input-dependency-duplicate-fixed \
     models/dataflow/ParslInputDependencyDuplicateFixed.cfg \
     models/dataflow/ParslInputDependencyDuplicate.tla
+run_case retry-handler-zero-cost-fixed \
+    models/dataflow/ParslRetryHandlerFixed.cfg \
+    models/dataflow/ParslRetryHandler.tla
 
 echo "Foundational TLC smoke suite passed."

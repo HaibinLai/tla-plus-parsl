@@ -523,6 +523,9 @@ exception presence is propagated even when the exception object has false boolea
 Fixed `ParslInputDependencyDuplicate` is also in the foundational TLC gate, checking that the
 reserved `inputs` Future is registered once before `join_app`-style callback aggregation.
 
+Fixed `ParslRetryHandler` is also in the foundational TLC gate, checking that zero-cost failure
+handlers cannot bypass the configured retry bound.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
