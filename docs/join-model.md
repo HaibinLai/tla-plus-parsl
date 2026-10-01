@@ -21,6 +21,12 @@ the Fixed configuration is now part of the foundational smoke gate. This corresp
 `DataFlowKernel`'s internal executor construction and `join_app`'s executor selection in
 `parsl/dataflow/dflow.py` and `parsl/app/app.py`.
 
+`ParslJoinMonitoring.tla` composes three inner Future kinds—memoized, staged-file, and compute—
+with outer join completion and versioned monitoring persistence. It requires all inner Futures to
+be terminal before outer finalization, preserves file readiness, and prevents an older monitoring
+event from replacing a terminal database record. The compact configuration is now foundational;
+the more detailed provider/result/monitoring models refine the same protocol.
+
 ## Model layers
 
 The integrated ParslJoinFull model covers:
