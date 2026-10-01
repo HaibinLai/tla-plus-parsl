@@ -200,6 +200,8 @@ DeliverResult(k) ==
 
 AcceptResult(k) ==
     /\ resultState[k] = "received"
+    /\ resultEnvelope[k] = "valid"
+    /\ resultValid[k]
     /\ resultState' = [resultState EXCEPT ![k] =
           IF k = currentAttempt /\ futureState = "unresolved"
           THEN "accepted" ELSE "stale"]
@@ -271,5 +273,11 @@ RetryBoundSafety == currentAttempt \in AttemptIds
 
 FutureResolutionSafety ==
     futureState = "resolved" => resultState[currentAttempt] = "accepted"
+
+ResultDecodeSafety ==
+    /\ \A k \in AttemptIds :
+          resultState[k] = "accepted" =>
+             /\ resultEnvelope[k] = "valid"
+             /\ resultValid[k]
 
 =============================================================================

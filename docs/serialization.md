@@ -209,8 +209,10 @@ payload rejection are checked together.
 
 `ParslTaskTransport.tla` is the smaller cross-layer companion: a bounded callable/argument object
 graph must finish serialization before task transport, decoding must precede worker dispatch, and
-results are correlated with the current physical attempt. TLC checks 859 generated/288 distinct
-states for the default one-retry configuration. `tests/test_task_transport_runtime.py` sends a
+results are correlated with the current physical attempt. Result acceptance additionally requires
+an explicit valid result envelope and payload-validity bit, so an unverified frame cannot resolve
+the logical Future. TLC checks 859 generated/288 distinct states for the default one-retry
+configuration. `tests/test_task_transport_runtime.py` sends a
 real `pack_apply_message` payload through an in-process ZMQ pair, decodes it with the real facade,
 and invokes the reconstructed closure.
 

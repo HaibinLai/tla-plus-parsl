@@ -1004,6 +1004,9 @@ criteria for this deliverable.
   all 616 TLC smoke cases and all 415 Python runtime probe entries passed. Added
   `docs/v0.1-report.md` as the fixed-scope handoff with component mapping, invariant classes,
   Current/Fixed interpretation, limitations, and exact reproduction commands.
+- Current stage: tightened `ParslTaskTransport` result acceptance. A physical result now needs
+  both a valid result envelope and a valid payload bit before it can resolve the logical Future;
+  `ResultDecodeSafety` is checked by TLC and the real serialized-task ZMQ probe still passes.
 
 ### Verification convention
 
