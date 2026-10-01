@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `bea3968` (`Add provider monitoring database race model`).
-- Foundational smoke inventory: 385 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 386 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
+  stale inner results, two-dependency join completion, and monitoring persistence into one model.
+  The Fixed configuration passed TLC; the Current configuration produced the expected provider
+  and stale-inner-result counterexamples. The existing 406-entry runtime gate stays green.
 
 - Current stage: added `ParslProviderResultMonitoringDB`, extending provider failure/retry and
   stale-result correlation with queued/persisted monitoring status and duplicate persistence.

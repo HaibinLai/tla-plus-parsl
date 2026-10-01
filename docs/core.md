@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 385 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 385 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 386 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 386 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -244,6 +244,10 @@ counterexamples.
 and duplicate persistence. The Fixed branch makes terminal writes idempotent and requires a
 persisted row to describe the current attempt; the Current configuration retains provider-loss,
 stale-result, and terminal-row-loss counterexamples.
+
+`ParslJoinProviderResultMonitoringDB.tla` lifts the same protocol to a two-dependency join. It
+requires every inner dependency to resolve in the current generation before outer completion and
+connects that condition to provider retry and persisted monitoring state.
 
 The Work Queue and TaskVine duplicate-report models add the stale-result collector boundary.
 The fixed branches ignore a report whose task identifier has already been removed, preserving

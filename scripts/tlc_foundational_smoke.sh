@@ -179,6 +179,9 @@ run_case provider-result-retry-race \
 run_case provider-result-monitoring-db \
     models/core/ParslProviderResultMonitoringDBFixed.cfg \
     models/core/ParslProviderResultMonitoringDB.tla
+run_case join-provider-result-monitoring-db \
+    models/core/ParslJoinProviderResultMonitoringDBFixed.cfg \
+    models/core/ParslJoinProviderResultMonitoringDB.tla
 run_case join-full \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla
