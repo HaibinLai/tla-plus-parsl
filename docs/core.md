@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 383 TLC cases and 406 Python runtime test files.
-On 2026-09-30, all 383 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 384 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 384 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -233,6 +233,12 @@ validation, and LocalProvider PID/task-count boundaries.
 The final runtime expansion covers Bash app Future/file outcomes, cluster submit-script errors,
 JobStatus output summaries/read failures, MPI resource/prefix/task-context boundaries, HTEX
 address probing, Radical bulk shutdown, and reentrant Timer close behavior.
+
+`ParslProviderResultRetryRace.tla` is the next cross-component refinement after the positive
+integrated smoke. It combines provider poll failure, collector loss, physical-attempt retry,
+late result delivery, and terminal monitoring. The Fixed branch preserves `(task, attempt)` and
+rejects the old result; the Current configuration produces provider-loss and stale-resolution
+counterexamples.
 
 The Work Queue and TaskVine duplicate-report models add the stale-result collector boundary.
 The fixed branches ignore a report whose task identifier has already been removed, preserving
