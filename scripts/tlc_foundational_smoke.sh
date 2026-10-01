@@ -281,6 +281,15 @@ run_case kubernetes-submit-state \
 run_case torque-submit-shape \
     models/providers/ParslTorqueSubmitShapeFixed.cfg \
     models/providers/ParslTorqueSubmitShape.tla
+run_case torque-submit-success \
+    models/providers/ParslTorqueSubmit.cfg \
+    models/providers/ParslTorqueSubmit.tla
+run_case torque-submit-empty-output \
+    models/providers/ParslTorqueSubmitEmpty.cfg \
+    models/providers/ParslTorqueSubmit.tla
+run_case torque-submit-failure \
+    models/providers/ParslTorqueSubmitFailure.cfg \
+    models/providers/ParslTorqueSubmit.tla
 run_case torque-tasks-per-node \
     models/providers/ParslTorqueTasksPerNodeFixed.cfg \
     models/providers/ParslTorqueTasksPerNode.tla

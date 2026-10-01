@@ -222,6 +222,10 @@ Slurm response whose captured scheduler identifier is empty.
 It also includes `ParslTorqueSubmitShape` (BUG-224), which prevents multi-line qsub output from
 publishing more than one Torque resource for a single submission.
 
+The foundational gate also runs the compact `ParslTorqueSubmit` success, empty-output, and qsub-
+failure configurations. Together they check the provider boundary that turns a scheduler return
+code and output into exactly one pending resource, or no resource when submission is unusable.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
