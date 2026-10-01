@@ -188,6 +188,9 @@ run_case execute-wait-timeout \
 run_case htex-submit-counter-race \
     models/executors/ParslHtexSubmitCounterRaceFixed.cfg \
     models/executors/ParslHtexSubmitCounterRace.tla
+run_case htex-cancellation-admission \
+    models/executors/ParslHtexCancellationAdmissionFixed.cfg \
+    models/executors/ParslHtexCancellationAdmission.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
