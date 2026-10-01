@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `8de79bf` (`Promote LocalProvider lifecycle baseline`).
-- Foundational smoke inventory: 435 TLC cases and 406 Python runtime probes.
+- Latest locally preserved commit: `30da61f` (`Record LocalProvider lifecycle promotion`).
+- Foundational smoke inventory: 436 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -30,6 +30,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the concrete `ParslLocalProvider` lifecycle baseline. The fixed branch
   preserves `.ec` exit-marker precedence and strict cancellation semantics; the runtime bridge
   exercises the corresponding LocalProvider status behavior.
+
+- Current stage: added `ParslKubernetesLifecycle`, a cross-boundary provider model combining pod
+  phase translation, read errors, cancellation, and late poll responses. The Current branch
+  produces stale-terminal and hidden-error counterexamples; the Fixed branch is smoke-gated.
 
 - Current stage: promoted `ParslLocalProviderStatusScope`. The Fixed model passed TLC and the
   Current branch reproduced the stale unrelated-resource query failure; the targeted runtime

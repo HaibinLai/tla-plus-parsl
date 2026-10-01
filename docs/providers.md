@@ -289,6 +289,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesPollingF
 /tmp/parsl-venv/bin/python -m unittest tests/test_kubernetes_polling_runtime.py -v
 ```
 
+`ParslKubernetesLifecycle.tla` composes the Kubernetes submit, polling, and cancellation
+boundaries into one small state machine. It requires terminal snapshots to remain stable, makes
+poll errors visible as `UNKNOWN`, and rejects a late pod phase after local cancellation. The
+current configuration deliberately exposes stale-terminal and hidden-error counterexamples; the
+fixed configuration is the smoke-gated baseline. The existing submit, polling, and cancellation
+runtime probes provide source-level evidence for the individual transitions.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesLifecycleCurrent.cfg models/providers/ParslKubernetesLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslKubernetesLifecycleFixed.cfg models/providers/ParslKubernetesLifecycle.tla
+```
+
 `ParslCondorUnknownJob.tla` covers the same stale-id boundary in Condor's status path. The
 current provider raises `KeyError` when the requested id is absent from `resources`; the fixed
 branch returns UNKNOWN. The runtime probe isolates the lookup with an empty resource map.

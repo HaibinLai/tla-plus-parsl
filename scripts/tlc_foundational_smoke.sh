@@ -1223,6 +1223,9 @@ run_case zip-traversal \
 run_case kubernetes-polling \
     models/providers/ParslKubernetesPollingFixed.cfg \
     models/providers/ParslKubernetesPolling.tla
+run_case kubernetes-lifecycle \
+    models/providers/ParslKubernetesLifecycleFixed.cfg \
+    models/providers/ParslKubernetesLifecycle.tla
 run_case kubernetes-empty-phase \
     models/providers/ParslKubernetesEmptyPhaseFixed.cfg \
     models/providers/ParslKubernetesEmptyPhase.tla
