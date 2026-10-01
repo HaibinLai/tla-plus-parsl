@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `38dd04d` (`Record HTEX poll priority counterexample`).
+- Latest locally preserved commit: `07210bd` (`Document monitoring queue fairness audit`).
 - Foundational smoke inventory: 616 TLC cases and 415 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
@@ -995,6 +995,11 @@ criteria for this deliverable.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
+- Current stage: strengthened the HTEX worker poll-priority runtime bridge to sustain three
+  consecutive iterations where task and result sockets are both readable. The installed source
+  continues to service the task socket first and leaves the result socket unread in every iteration;
+  this is now aligned with the `ParslHtexWorkerPollPriority` TLC counterexample rather than a
+  one-shot scheduling artifact.
 
 ### Verification convention
 

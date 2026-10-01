@@ -33,7 +33,10 @@ class FakeSocket:
         if self.name == "ix" and self.recv_count == 1:
             return b""  # connection probe reply
         if self.name == "ix":
-            self.manager._stop_event.set()
+            # Keep both channels readable for three communicator iterations.
+            # The current task-first branch never reaches results_sock.recv().
+            if self.recv_count >= 4:
+                self.manager._stop_event.set()
             return pickle.dumps([{"task_id": 7, "context": {}}])
         raise AssertionError("the result socket should be starved in this iteration")
 
@@ -97,6 +100,7 @@ class HtexWorkerPollPriorityRuntimeTest(unittest.TestCase):
 
         results, _ = context.sockets
         self.assertEqual(results.recv_count, 0)
+        self.assertEqual(context.sockets[1].recv_count, 4)
 
 
 if __name__ == "__main__":
