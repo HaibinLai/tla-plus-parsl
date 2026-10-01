@@ -450,6 +450,9 @@ selection and the distinction between a completed staging result and a Future de
 `ParslHeartbeatBoundary` is also in the foundational TLC gate, checking the strict heartbeat
 threshold, reset behavior, and cleanup of tasks in flight when a manager expires.
 
+The fixed `ParslHtexHeartbeatVersion` configuration is also in the foundational TLC gate,
+composing registration mismatch, heartbeat expiry, fatal-result ordering, and admission blocking.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
