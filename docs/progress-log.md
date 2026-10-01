@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `ae3fd5a` (`Model remote exception object transport`).
-- Foundational smoke inventory: 621 TLC cases and 421 Python runtime probes.
+- Foundational smoke inventory: 622 TLC cases and 422 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

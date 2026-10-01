@@ -336,6 +336,9 @@ caused by concurrent block selection.
 It also includes `ParslFluxLateResultCancelledFuture` (BUG-185), which checks that a late successful
 Flux callback cannot write into an already-cancelled user-facing Future.
 
+The composed `ParslFluxResultFileCancellation` model extends BUG-185 across physical Flux
+completion and serialized result-file publication; its fixed branch ignores the late callback.
+
 Flux executor coverage also includes `ParslFluxWorkingDirectory` (BUG-200), which checks that a
 relative task path resolves under the configured executor workspace rather than the submitting
 process's current directory.

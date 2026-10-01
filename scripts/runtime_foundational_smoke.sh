@@ -132,6 +132,7 @@ tests=(
     tests/test_workqueue_cancelled_result_runtime.py
     tests/test_taskvine_cancelled_result_runtime.py
     tests/test_flux_result_runtime.py
+    tests/test_flux_result_file_cancellation_runtime.py
     tests/test_scale_in_result_shape_runtime.py
     tests/test_flux_submission_failure_runtime.py
     tests/test_globus_compute_result_runtime.py

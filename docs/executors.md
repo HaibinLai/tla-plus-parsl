@@ -405,6 +405,19 @@ underlying job can therefore call `set_exception` on an already-cancelled `FluxF
 The Current model produces a two-state counterexample and the Fixed model ignores the stale
 callback. `tests/test_flux_result_runtime.py` exercises the concrete callback.
 
+`ParslFluxResultFileCancellation.tla` composes that race with result-file publication: the
+physical Flux future may succeed, write a valid serialized `TaskResult`, and only then deliver a
+callback after the user-facing wrapper was cancelled. The fixed branch treats the callback as
+stale, while still accepting valid files for live wrappers. The runtime bridge is
+`tests/test_flux_result_file_cancellation_runtime.py`; it reproduces the current
+`InvalidStateError` behavior already tracked as BUG-185.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxResultFileCancellationCurrent.cfg models/executors/ParslFluxResultFileCancellation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxResultFileCancellationFixed.cfg models/executors/ParslFluxResultFileCancellation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_result_file_cancellation_runtime.py -v
+```
+
 `ParslHtexUnknownTaskResult.tla` covers a stale result whose `task_id` is no longer present in
 the executor task map. The current result worker calls `pop` unconditionally, so a `KeyError`
 terminates the result loop and strands later valid results in the same batch. The fixed branch

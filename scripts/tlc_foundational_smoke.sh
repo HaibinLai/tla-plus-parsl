@@ -899,6 +899,9 @@ run_case flux-late-failure-cancelled-future \
 run_case flux-late-result-cancelled-future \
     models/executors/ParslFluxLateResultCancelledFutureFixed.cfg \
     models/executors/ParslFluxLateResultCancelledFuture.tla
+run_case flux-result-file-cancellation \
+    models/executors/ParslFluxResultFileCancellationFixed.cfg \
+    models/executors/ParslFluxResultFileCancellation.tla
 run_case flux-cancel-running-race \
     models/executors/ParslFluxCancelRunningRaceFixed.cfg \
     models/executors/ParslFluxCancelRunningRace.tla
