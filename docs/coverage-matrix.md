@@ -256,6 +256,9 @@ foreign-key ordering, duplicate replacement/discard, and bounded monitoring stat
 The Fixed and valid `ParslTimerIntervalValidation` configurations are also in the foundational gate;
 the Current configuration remains a counterexample for silent negative-interval clamping.
 
+The basic `ParslCommandClient` reply and timeout configurations are also in the foundational gate,
+covering successful REQ/REP completion and permanent bad-client state after response timeout.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

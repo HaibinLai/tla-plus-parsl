@@ -755,6 +755,12 @@ run_case timer-interval-fixed \
 run_case timer-interval-valid \
     models/clock/ParslTimerIntervalValidationValid.cfg \
     models/clock/ParslTimerIntervalValidation.tla
+run_case command-client-reply \
+    models/executors/ParslCommandClientReply.cfg \
+    models/executors/ParslCommandClient.tla
+run_case command-client-timeout \
+    models/executors/ParslCommandClientTimeout.cfg \
+    models/executors/ParslCommandClient.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
