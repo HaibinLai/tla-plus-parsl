@@ -191,6 +191,9 @@ run_case htex-submit-counter-race \
 run_case htex-cancellation-admission \
     models/executors/ParslHtexCancellationAdmissionFixed.cfg \
     models/executors/ParslHtexCancellationAdmission.tla
+run_case htex-manager-drain-stale \
+    models/executors/ParslHtexManagerDrainFixed.cfg \
+    models/executors/ParslHtexManagerDrain.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
