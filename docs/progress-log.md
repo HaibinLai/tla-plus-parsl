@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `d5ef5b1` (`Record provider polling lifecycle promotion`).
-- Foundational smoke inventory: 434 TLC cases and 406 Python runtime probes.
+- Latest locally preserved commit: `618ab93` (`Clarify provider polling stage record`).
+- Foundational smoke inventory: 435 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -26,6 +26,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslProviderPolling` as the provider-neutral lifecycle baseline. It
   separates submit, status, transient API failure, unknown status, and cancellation rollback
   before scheduler-specific provider behavior is refined.
+
+- Current stage: promoted the concrete `ParslLocalProvider` lifecycle baseline. The fixed branch
+  preserves `.ec` exit-marker precedence and strict cancellation semantics; the runtime bridge
+  exercises the corresponding LocalProvider status behavior.
 
 - Current stage: promoted `ParslLocalProviderStatusScope`. The Fixed model passed TLC and the
   Current branch reproduced the stale unrelated-resource query failure; the targeted runtime

@@ -485,6 +485,9 @@ run_case local-unknown-job-status \
 run_case local-provider-status-scope \
     models/providers/ParslLocalProviderStatusScopeFixed.cfg \
     models/providers/ParslLocalProviderStatusScope.tla
+run_case local-provider-lifecycle \
+    models/providers/ParslLocalProviderFixed.cfg \
+    models/providers/ParslLocalProvider.tla
 run_case grid-engine-missing-status \
     models/providers/ParslGridEngineMissingStatusFixed.cfg \
     models/providers/ParslGridEngineMissingStatus.tla

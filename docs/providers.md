@@ -739,8 +739,14 @@ provider poll until the old wall-clock baseline is reached.
 `ParslLocalProvider.tla` models the `.ec` exit marker, process liveness, cancellation marker, and
 status polling race. The current configuration allows a late successful exit marker to override a
 previous cancellation request and violates `StrictCancellation`; the fixed configuration gives
-cancellation precedence. `tests/test_local_provider_runtime.py` reproduces the same behavior with
-a fake `.ec` file and a dead process.
+cancellation precedence. `tests/test_local_provider_exit_status_runtime.py` reproduces the same
+source behavior with a fake `.ec` file and a cancellation marker.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderCurrent.cfg models/providers/ParslLocalProvider.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderFixed.cfg models/providers/ParslLocalProvider.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_exit_status_runtime.py -v
+```
 
 `ParslCondorEmptySubmit.tla` models the successful-but-empty `condor_submit` response boundary in
 `CondorProvider.submit`. The current parser builds an empty job-ID list and then indexes its first
