@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `25b25f3` (`Promote timed provider monitoring gate`).
-- Foundational smoke inventory: 563 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 564 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslJoinRetry` into the foundational TLC gate. Logical inner Futures
+  now remain unresolved across non-final physical attempts; the outer join observes only the final
+  result or final failure and preserves ordered aggregation.
 
 - Current stage: promoted fixed `ParslProviderExecutorTimedMonitoring` into the foundational TLC
   gate. This cross-component model composes provider provisioning, manager heartbeat expiry,

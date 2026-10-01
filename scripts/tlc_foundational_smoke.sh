@@ -344,6 +344,9 @@ run_case join-stageout-cancellation \
 run_case join-future-propagation \
     models/dataflow/ParslJoinCompleteFixed.cfg \
     models/dataflow/ParslJoinComplete.tla
+run_case join-retry-basic \
+    models/dataflow/ParslJoinRetry.cfg \
+    models/dataflow/ParslJoinRetry.tla
 run_case triple-nested-join \
     models/dataflow/ParslTripleNestedJoinFixed.cfg \
     models/dataflow/ParslTripleNestedJoin.tla

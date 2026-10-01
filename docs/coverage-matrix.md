@@ -465,6 +465,9 @@ transaction rollback and rejection of stale status events below the database ver
 Fixed `ParslProviderExecutorTimedMonitoring` is also in the foundational TLC gate, composing
 provider/manager liveness, retry and stale-result handling, scale-in, and monitoring persistence.
 
+`ParslJoinRetry` is also in the foundational TLC gate, checking logical-Future versus physical-
+attempt separation and preventing an outer join from failing on a non-final inner retry.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
