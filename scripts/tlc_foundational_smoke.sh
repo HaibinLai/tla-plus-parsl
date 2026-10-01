@@ -785,6 +785,12 @@ run_case python-timeout-fixed \
 run_case python-timeout-valid \
     models/clock/ParslPythonTimeoutParameterValid.cfg \
     models/clock/ParslPythonTimeoutParameter.tla
+run_case file-open-timeout-fixed \
+    models/clock/ParslTimeLimitedOpenTimeoutFixed.cfg \
+    models/clock/ParslTimeLimitedOpenTimeout.tla
+run_case file-open-timeout-success \
+    models/clock/ParslTimeLimitedOpenTimeoutSuccess.cfg \
+    models/clock/ParslTimeLimitedOpenTimeout.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
