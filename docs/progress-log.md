@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b9301e2` (`Model callable global and default snapshots`).
+- Latest locally preserved commit: `b2858a5` (`Model Globus Compute restore failure`).
 - Foundational smoke inventory: 631 TLC cases and 429 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
