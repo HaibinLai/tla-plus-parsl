@@ -200,6 +200,9 @@ run_case flux-cancel-underlying-state \
 run_case bash-timeout-cleanup \
     models/executors/ParslBashTimeoutCleanupFixed.cfg \
     models/executors/ParslBashTimeoutCleanup.tla
+run_case command-client-close-race \
+    models/executors/ParslCommandClientCloseRaceFixed.cfg \
+    models/executors/ParslCommandClientCloseRace.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
