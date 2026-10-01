@@ -226,6 +226,9 @@ The foundational gate also runs the compact `ParslTorqueSubmit` success, empty-o
 failure configurations. Together they check the provider boundary that turns a scheduler return
 code and output into exactly one pending resource, or no resource when submission is unusable.
 
+`ParslTaskVineShutdown` is also in the foundational gate, checking that collector finalization
+resolves every outstanding task Future as a manager failure before executor shutdown completes.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

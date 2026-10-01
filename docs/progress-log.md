@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `77b81f8` (`Promote Torque submit provider model`).
-- Foundational smoke inventory: 510 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 511 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -673,6 +673,9 @@ are recorded here in English and committed with the model changes.
   gate. Its success, empty-output, and qsub-failure configurations now check that scheduler output
   creates one pending resource only for a usable job identifier, while the runtime probe exercises
   the installed `TorqueProvider.submit` implementation including its multi-line response behavior.
+- Current stage: promoted `ParslTaskVineShutdown` into the foundational TLC gate. The collector
+  shutdown path now checks that outstanding Futures are failed with manager-failure semantics before
+  the collector exits; the focused runtime probe invokes the installed collector implementation.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
