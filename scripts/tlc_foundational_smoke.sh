@@ -959,6 +959,9 @@ run_case executor-selection \
 run_case executor-shutdown \
     models/executors/ParslExecutorShutdown.cfg \
     models/executors/ParslExecutorShutdown.tla
+run_case command-client-max-retries \
+    models/executors/ParslCommandClientMaxRetriesFixed.cfg \
+    models/executors/ParslCommandClientMaxRetries.tla
 run_case provider-executor-timed \
     models/executors/ParslProviderExecutorTimedFixed.cfg \
     models/executors/ParslProviderExecutorTimed.tla
