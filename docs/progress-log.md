@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `0cd1ff5` (`Promote Grid Engine submit model`).
-- Foundational smoke inventory: 489 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 490 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslLSFSubmit` as the LSF `bsub` submission lifecycle. Script writing,
+  scheduler failure, empty/malformed successful output, and valid marker/job-id registration are
+  separate paths; only valid output publishes a resource. Three TLC configurations and five LSF
+  submit runtime probes pass.
 
 - Current stage: promoted `ParslGridEngineSubmit` as the basic qsub submission lifecycle.
   Script publication, command failure, empty successful output, and valid job-id registration
