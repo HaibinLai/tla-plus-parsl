@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Latest pushed commit: `d27107e` (`Promote LocalProvider status scope model`).
 - Foundational smoke inventory: 406 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
