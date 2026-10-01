@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `a940dbb` (`Model thread executor startup cleanup`).
+- Latest locally preserved commit: `c3a6918` (`Model Flux shutdown lifecycle`).
 - Foundational smoke inventory: 495 TLC cases and 410 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
