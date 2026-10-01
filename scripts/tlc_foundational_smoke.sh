@@ -800,6 +800,9 @@ run_case monitoring-close-normal \
 run_case monitoring-close-abnormal \
     models/monitoring/ParslMonitoringCloseAbnormal.cfg \
     models/monitoring/ParslMonitoringClose.tla
+run_case htex-worker-drain-clock-fixed \
+    models/clock/ParslHtexWorkerDrainClockFixed.cfg \
+    models/clock/ParslHtexWorkerDrainClock.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

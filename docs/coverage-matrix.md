@@ -286,6 +286,9 @@ close cannot report completion before its callback thread is quiescent.
 The normal and abnormal `ParslMonitoringClose` configurations are also in the foundational gate,
 covering workflow-finalization guards and shutdown/drain signaling.
 
+The Fixed `ParslHtexWorkerDrainClock` configuration is also in the foundational gate, checking
+monotonic worker-drain deadlines against wall-clock rollback.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
