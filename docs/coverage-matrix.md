@@ -441,6 +441,9 @@ three-frame decode path; the runtime probe documents the current eager-decode be
 `ParslSerializationLength` is also in the foundational TLC gate with separate fixed/truncated and
 fixed/valid configurations, checking declared-versus-actual payload length before acceptance.
 
+`ParslGlobusTransferFailure` is also in the foundational TLC gate with fixed-empty and success
+paths, checking failure publication without indexing an absent diagnostic event.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

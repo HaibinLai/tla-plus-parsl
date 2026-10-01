@@ -1661,6 +1661,12 @@ run_case data-manager-cache \
 run_case globus-stage-dependency \
     models/staging/ParslGlobusStageDependency.cfg \
     models/staging/ParslGlobusStageDependency.tla
+run_case globus-transfer-failure-fixed-empty \
+    models/staging/ParslGlobusTransferFailureFixedEmpty.cfg \
+    models/staging/ParslGlobusTransferFailure.tla
+run_case globus-transfer-failure-success \
+    models/staging/ParslGlobusTransferFailureSuccess.cfg \
+    models/staging/ParslGlobusTransferFailure.tla
 run_case data-manager-stage-out-return \
     models/staging/ParslDataManagerStageOutReturnFuture.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla

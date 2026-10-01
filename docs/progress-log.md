@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `1c497bc` (`Promote serialization length gate`).
-- Foundational smoke inventory: 553 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 555 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,11 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted the fixed-empty and successful `ParslGlobusTransferFailure`
+  configurations. The staging model now requires a terminal Globus failure to become a reported
+  transfer failure even when no diagnostic event is available, while preserving successful
+  transfer handling.
 
 - Current stage: promoted the fixed and valid `ParslSerializationLength` configurations. The
   length model now distinguishes a truncated payload, which must be rejected, from a complete
