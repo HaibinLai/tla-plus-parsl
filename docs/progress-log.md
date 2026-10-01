@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `866fd9f` (`Promote clean file copy model`).
+- Latest pushed commit: `79f971d` (`Promote terminal Future bad-state model`).
 - Foundational smoke inventory: 423 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
