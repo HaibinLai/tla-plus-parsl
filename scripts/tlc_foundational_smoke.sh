@@ -326,6 +326,9 @@ run_case task-transport-close-race \
 run_case zmq-callable-retry \
     models/serialization/ParslZMQCallableRetryFixed.cfg \
     models/serialization/ParslZMQCallableRetry.tla
+run_case message-correlation-three \
+    models/serialization/ParslMessageCorrelationThree.cfg \
+    models/serialization/ParslMessageCorrelationThree.tla
 run_case zmq-object-snapshot \
     models/serialization/ParslZMQObjectSnapshotFixed.cfg \
     models/serialization/ParslZMQObjectSnapshot.tla

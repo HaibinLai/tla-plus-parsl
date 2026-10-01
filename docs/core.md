@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 417 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 417 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 418 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 418 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -412,6 +412,11 @@ shape that loses duplicate references (BUG-008).
 `ParslTripleNestedJoin.tla` checks three dependency levels: leaves A/B feed J1, J1 and C feed
 J2, and J2 feeds the root. Fixed requires every upstream input to be terminal before evaluation;
 Current can evaluate J2 while one input is still pending.
+
+`ParslMessageCorrelationThree.tla` models four logical tasks with two physical attempts each,
+multipart queue delivery, decode, retargeting, duplication, and stale results. Fixed validates
+both message origin and attempt before resolving a Future; Current can resolve a retargeted or
+obsolete message.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the

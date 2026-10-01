@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `ea4907b` (`Promote triple nested join model`).
-- Foundational smoke inventory: 417 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 418 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -65,6 +65,11 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslTripleNestedJoin`, extending dependency blocking and failure
   propagation to three nested join levels. Fixed passed TLC; Current reproduced premature J2
   evaluation with an unresolved input.
+
+- Current stage: promoted `ParslMessageCorrelationThree`, extending ZMQ/serialization coverage
+  to four logical tasks, two attempts, multipart delivery, retargeting, duplicates, and stale
+  results. Fixed passed TLC; Current reproduced incorrect resolution of an obsolete/retargeted
+  message.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
