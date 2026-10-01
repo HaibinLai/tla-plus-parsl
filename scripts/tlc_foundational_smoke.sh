@@ -581,6 +581,9 @@ run_case aws-status-missing-result \
 run_case aws-status-ordering \
     models/providers/ParslAwsStatusOrderingFixed.cfg \
     models/providers/ParslAwsStatusOrdering.tla
+run_case azure-cancel-missing-local \
+    models/providers/ParslAzureCancelMissingFixed.cfg \
+    models/providers/ParslAzureCancel.tla
 run_case azure-submit \
     models/providers/ParslAzureProviderSubmitFixed.cfg \
     models/providers/ParslAzureProviderSubmit.tla

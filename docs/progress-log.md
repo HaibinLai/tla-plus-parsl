@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `a349782` (`Promote AWS status model`).
-- Foundational smoke inventory: 399 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 400 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -60,6 +60,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the AWS provider missing-instance Fixed case, requiring every requested
   instance to receive a deterministic status observation even when EC2 omits it.
+
+- Current stage: promoted the Azure missing-local-cancellation Fixed case, treating successful
+  remote deletion plus absent local bookkeeping as an idempotent cancellation.
 
 - Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
   stale inner results, two-dependency join completion, and monitoring persistence into one model.
