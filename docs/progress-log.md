@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `77b81f8` (`Promote Torque submit provider model`).
+- Latest locally preserved commit: `7dca206` (`Promote TaskVine shutdown model`).
 - Foundational smoke inventory: 511 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
