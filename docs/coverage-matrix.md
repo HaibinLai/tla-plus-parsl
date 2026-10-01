@@ -517,6 +517,9 @@ original Python object graph cannot change the captured payload or decoded versi
 Fixed `ParslDataFutureCancellation` is also in the foundational TLC gate, checking cancellation
 propagation from a parent Future to the dependent DataFuture readiness state.
 
+Fixed `ParslDataFutureFalseyException` is also in the foundational TLC gate, checking that
+exception presence is propagated even when the exception object has false boolean value.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

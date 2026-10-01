@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `ab08dcf` (`Promote DataFuture cancellation gate`).
-- Foundational smoke inventory: 582 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 583 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslDataFutureFalseyException` into the foundational TLC gate.
+  Exception presence is now modeled independently of exception truthiness, so a falsey user
+  exception cannot make a failed DataFuture appear successful.
 
 - Current stage: promoted fixed `ParslDataFutureCancellation` into the foundational TLC gate.
   A cancelled parent Future now propagates terminal failure to the dependent DataFuture instead

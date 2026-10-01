@@ -1796,5 +1796,8 @@ run_case serialization-snapshot \
 run_case datafuture-cancellation-fixed \
     models/dataflow/ParslDataFutureCancellationFixed.cfg \
     models/dataflow/ParslDataFutureCancellation.tla
+run_case datafuture-falsey-exception-fixed \
+    models/dataflow/ParslDataFutureFalseyExceptionFixed.cfg \
+    models/dataflow/ParslDataFutureFalseyException.tla
 
 echo "Foundational TLC smoke suite passed."
