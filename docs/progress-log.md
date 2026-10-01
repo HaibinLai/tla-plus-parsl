@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b35382e` (`Promote pool executor map model`).
+- Latest locally preserved commit: `77b81f8` (`Promote Torque submit provider model`).
 - Foundational smoke inventory: 510 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
