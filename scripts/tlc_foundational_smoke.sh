@@ -317,6 +317,9 @@ run_case join-provider-result-monitoring-db \
 run_case join-full \
     models/dataflow/ParslJoinFull.cfg \
     models/dataflow/ParslJoinFull.tla
+run_case join-end-to-end \
+    models/dataflow/ParslJoinEndToEnd.cfg \
+    models/dataflow/ParslJoinEndToEnd.tla
 run_case monitoring-batch-atomicity \
     models/monitoring/ParslMonitoringBatchAtomicityFixed.cfg \
     models/monitoring/ParslMonitoringBatchAtomicity.tla

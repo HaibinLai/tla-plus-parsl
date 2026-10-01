@@ -640,6 +640,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted six executor/task-transport runtime bridges into the foundational gate:
   ThreadPoolExecutor lifecycle/resource validation, invalid thread counts, ParslPoolExecutor map
   timeout semantics, real serialized ZMQ task execution, and LocalProvider stale cancellation.
+- Current stage: promoted `ParslJoinEndToEnd` into the foundational TLC gate. The model keeps
+  logical inner Futures separate from physical retry attempts and checks ordered join observation,
+  cancellation/failure aggregation, terminal outer state, and result-shape safety in one compact
+  cross-layer state machine.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
