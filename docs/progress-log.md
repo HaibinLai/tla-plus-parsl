@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e32c615` (`Add join stage-out cancellation runtime bridge`).
-- Foundational smoke inventory: 614 TLC cases and 413 Python runtime probes.
+- Latest locally preserved commit: `367e865` (`Record join stage-out cancellation bridge`).
+- Foundational smoke inventory: 615 TLC cases and 413 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 614 TLC cases and 412 Python probes pass as a regression gate;
+- the existing 615 TLC cases and 413 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -43,6 +43,10 @@ criteria for this deliverable.
   uses the real `DataManager` and `DataFuture` contract to show that an independent transfer can
   publish after application cancellation, matching the Current branch of
   `ParslJoinStageOutCancellation`.
+
+- Current stage: refined `ParslJoinStageOutCancellation` with an explicit `BOUND_TO_APP` provider
+  parameter. The bound-provider TLC case now verifies cancellation safety for Globus/Zip-style
+  dependency wiring, while the independent-provider Current counterexample remains visible.
 
 - Current stage: completed the full foundational Python runtime regression after adding the
   duplicate-cancellation join probe. All 412/412 probes pass against the pinned Parsl source;

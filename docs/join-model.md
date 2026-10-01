@@ -155,6 +155,12 @@ stage-out Future. The Current branch allows an in-flight stage-out callback to p
 outer join is cancelled; the Fixed branch ignores that late publication. This is intentionally a
 small composition baseline for later provider-specific refinement.
 
+The model now has an explicit `BOUND_TO_APP` parameter. Globus and Zip-style providers set this
+to true because their stage-out task receives the application Future as an input; an independent
+provider-returned Future sets it to false. The bound-provider configuration checks that cancellation
+cannot publish a transfer even when `USE_FIXED` is false, while the independent configuration keeps
+the permissive Current counterexample visible.
+
 `tests/test_join_stageout_cancellation_runtime.py` supplies the concrete bridge: an independent
 `DataManager.stage_out` Future can complete after its application Future has been cancelled, and
 the current `DataFuture` publishes that late transfer result. The probe does not claim that every

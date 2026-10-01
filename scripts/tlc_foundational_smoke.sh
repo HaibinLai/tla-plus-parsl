@@ -341,6 +341,9 @@ run_case join-cancel-retry-generation \
 run_case join-stageout-cancellation \
     models/core/ParslJoinStageOutCancellationFixed.cfg \
     models/core/ParslJoinStageOutCancellation.tla
+run_case join-stageout-cancellation-bound-provider \
+    models/core/ParslJoinStageOutCancellationBound.cfg \
+    models/core/ParslJoinStageOutCancellation.tla
 run_case join-future-propagation \
     models/dataflow/ParslJoinCompleteFixed.cfg \
     models/dataflow/ParslJoinComplete.tla

@@ -10,7 +10,7 @@ EXTENDS Naturals
  * publish after the outer Future became cancelled.
  ***************************************************************************)
 
-CONSTANT USE_FIXED
+CONSTANT USE_FIXED, BOUND_TO_APP
 
 AppStates == {"pending", "running", "succeeded", "failed", "cancelled"}
 StageStates == {"blocked", "running", "published", "failed", "cancelled"}
@@ -21,6 +21,7 @@ vars == <<app, stage, outer, latePublication>>
 
 Init ==
     /\ USE_FIXED \in BOOLEAN
+    /\ BOUND_TO_APP \in BOOLEAN
     /\ app = "pending"
     /\ stage = "blocked"
     /\ outer = "running"
@@ -63,7 +64,7 @@ LateStagePublication ==
     /\ stage = "cancelled"
     /\ latePublication = FALSE
     /\ latePublication' = TRUE
-    /\ stage' = IF USE_FIXED THEN stage ELSE "published"
+    /\ stage' = IF USE_FIXED \/ BOUND_TO_APP THEN stage ELSE "published"
     /\ UNCHANGED <<app, outer>>
 
 Next ==
@@ -79,6 +80,7 @@ Spec == Init /\ [][Next]_vars
 
 TypeOK ==
     /\ USE_FIXED \in BOOLEAN
+    /\ BOUND_TO_APP \in BOOLEAN
     /\ app \in AppStates
     /\ stage \in StageStates
     /\ outer \in OuterStates
@@ -95,5 +97,8 @@ CancellationPublicationSafety ==
 
 TerminalStateStability ==
     outer = "cancelled" => app = "cancelled" \/ app = "succeeded" \/ app = "failed"
+
+BoundProviderCancellationSafety ==
+    BOUND_TO_APP => (outer = "cancelled" => stage # "published")
 
 ================================================================================

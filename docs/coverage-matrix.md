@@ -891,3 +891,8 @@ rolls back the allocated lifecycle state.
 `ParslMonitoringHubRepeatedStart` (BUG-262) checks single ownership across repeated monitoring
 hub starts. The current branch creates a second process/queue and loses the first handles; the
 fixed branch rejects the duplicate start without allocating resources.
+
+Join/staging coverage also includes `ParslJoinStageOutCancellation`. Its `BOUND_TO_APP` parameter
+distinguishes Globus/Zip-style stage-out Futures that depend on the application Future from an
+independent provider-returned Future; the foundational gate checks both the fixed independent path
+and the bound-provider cancellation invariant.
