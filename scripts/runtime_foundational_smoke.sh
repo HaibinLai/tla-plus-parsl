@@ -350,6 +350,7 @@ tests=(
     tests/test_zip_traversal_runtime.py
     tests/test_multi_output_stageout_runtime.py
     tests/test_kubernetes_polling_runtime.py
+    tests/test_kubernetes_cancel_poll_race_runtime.py
     tests/test_kubernetes_cancel_unknown_runtime.py
     tests/test_condor_chunk_size_runtime.py
     tests/test_condor_status_failure_runtime.py

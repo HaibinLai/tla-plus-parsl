@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `f691b47` (`Add Kubernetes lifecycle composition model`).
-- Foundational smoke inventory: 436 TLC cases and 406 Python runtime probes.
+- Latest locally preserved commit: `0f5f07c` (`Record Kubernetes lifecycle model promotion`).
+- Foundational smoke inventory: 436 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -34,6 +34,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: added `ParslKubernetesLifecycle`, a cross-boundary provider model combining pod
   phase translation, read errors, cancellation, and late poll responses. The Current branch
   produces stale-terminal and hidden-error counterexamples; the Fixed branch is smoke-gated.
+
+- Current stage: added a re-entrant Kubernetes runtime probe for a poll/cancel race. It reproduces
+  BUG-282 against the installed provider: `_status()` can publish a late terminal pod phase after
+  `cancel()` has already published `CANCELLED`.
 
 - Current stage: promoted `ParslLocalProviderStatusScope`. The Fixed model passed TLC and the
   Current branch reproduced the stale unrelated-resource query failure; the targeted runtime
