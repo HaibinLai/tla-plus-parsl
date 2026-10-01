@@ -347,6 +347,9 @@ run_case join-future-propagation \
 run_case join-retry-basic \
     models/dataflow/ParslJoinRetry.cfg \
     models/dataflow/ParslJoinRetry.tla
+run_case join-retry-duplicates-fixed \
+    models/dataflow/ParslJoinRetryDuplicatesFixed.cfg \
+    models/dataflow/ParslJoinRetryDuplicates.tla
 run_case triple-nested-join \
     models/dataflow/ParslTripleNestedJoinFixed.cfg \
     models/dataflow/ParslTripleNestedJoin.tla

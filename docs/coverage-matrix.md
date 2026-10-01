@@ -468,6 +468,9 @@ provider/manager liveness, retry and stale-result handling, scale-in, and monito
 `ParslJoinRetry` is also in the foundational TLC gate, checking logical-Future versus physical-
 attempt separation and preventing an outer join from failing on a non-final inner retry.
 
+Fixed `ParslJoinRetryDuplicates` is also in the foundational TLC gate, checking duplicate input
+positions remain ordered after a logical inner Future retries.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
