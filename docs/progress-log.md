@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `0a72eaa` (`Promote HTEX heartbeat version gate`).
-- Foundational smoke inventory: 558 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 560 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted the busy and idle `ParslHtexWorkerWatchdog` configurations into the
+  foundational TLC gate. The model separates physical worker death from logical task state,
+  emits one WorkerLost result for a failed busy worker, and restarts idle capacity without a task result.
 
 - Current stage: promoted the fixed `ParslHtexHeartbeatVersion` configuration into the
   foundational TLC gate. The combined model rejects task admission after registration or

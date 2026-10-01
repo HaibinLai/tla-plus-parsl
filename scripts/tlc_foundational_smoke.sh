@@ -1724,5 +1724,11 @@ run_case heartbeat-boundary \
 run_case htex-heartbeat-version \
     models/executors/ParslHtexHeartbeatVersion.cfg \
     models/executors/ParslHtexHeartbeatVersion.tla
+run_case htex-worker-watchdog-busy \
+    models/executors/ParslHtexWorkerWatchdog.cfg \
+    models/executors/ParslHtexWorkerWatchdog.tla
+run_case htex-worker-watchdog-idle \
+    models/executors/ParslHtexWorkerWatchdogIdle.cfg \
+    models/executors/ParslHtexWorkerWatchdog.tla
 
 echo "Foundational TLC smoke suite passed."

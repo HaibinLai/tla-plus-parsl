@@ -453,6 +453,9 @@ threshold, reset behavior, and cleanup of tasks in flight when a manager expires
 The fixed `ParslHtexHeartbeatVersion` configuration is also in the foundational TLC gate,
 composing registration mismatch, heartbeat expiry, fatal-result ordering, and admission blocking.
 
+The busy and idle `ParslHtexWorkerWatchdog` configurations are also in the foundational TLC gate,
+checking WorkerLost publication for a failed busy worker and silent replacement of idle capacity.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
