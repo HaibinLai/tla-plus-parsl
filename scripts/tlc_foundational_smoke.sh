@@ -185,6 +185,9 @@ run_case bad-state-task-mutation \
 run_case execute-wait-timeout \
     models/executors/ParslExecuteWaitTimeoutFixed.cfg \
     models/executors/ParslExecuteWaitTimeout.tla
+run_case htex-submit-counter-race \
+    models/executors/ParslHtexSubmitCounterRaceFixed.cfg \
+    models/executors/ParslHtexSubmitCounterRace.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
