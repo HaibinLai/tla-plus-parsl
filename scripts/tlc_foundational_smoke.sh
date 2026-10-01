@@ -1817,5 +1817,14 @@ run_case htex-manager-message-malformed \
 run_case htex-zero-scale-in-idle-fixed \
     models/executors/ParslHtexZeroScaleInIdleFixed.cfg \
     models/executors/ParslHtexZeroScaleInIdle.tla
+run_case htex-probe-addresses-timeout \
+    models/executors/ParslProbeAddresses.cfg \
+    models/executors/ParslProbeAddresses.tla
+run_case htex-probe-addresses-empty \
+    models/executors/ParslProbeAddressesEmpty.cfg \
+    models/executors/ParslProbeAddresses.tla
+run_case htex-probe-addresses-success \
+    models/executors/ParslProbeAddressesSuccess.cfg \
+    models/executors/ParslProbeAddresses.tla
 
 echo "Foundational TLC smoke suite passed."
