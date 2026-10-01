@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `03c4f73` (`Promote Python timeout catch gate`).
+- Latest locally preserved commit: `22efdfa` (`Promote core ZMQ state machine gate`).
 - Foundational smoke inventory: 606 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
