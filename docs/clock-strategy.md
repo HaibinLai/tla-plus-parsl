@@ -81,6 +81,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/strategy/ParslStrategyBlockCapaci
 /tmp/parsl-venv/bin/python -m unittest tests/test_strategy_runtime.py -v
 ```
 
+`ParslStrategyIdleClock.tla` models the idle scale-in timer in `parsl.jobs.strategy.Strategy`.
+The current branch uses an adjustable wall clock and can suppress scale-in after a rollback even
+when monotonic elapsed time has crossed `max_idletime`; the fixed branch uses monotonic elapsed
+time. The runtime probe patches the installed strategy's wall clock and observes the suppressed
+scale-in request.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslStrategyIdleClockCurrent.cfg models/clock/ParslStrategyIdleClock.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslStrategyIdleClockFixed.cfg models/clock/ParslStrategyIdleClock.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_strategy_idle_clock_runtime.py -v
+```
+
 `ParslPeriodicTimer.tla` models the shared `parsl.utils.Timer` lifecycle used by the job-status
 poller and periodic checkpointing. It captures the immediate first callback, periodic callbacks,
 the fact that callback exceptions are logged without stopping the timer, and the quiescent

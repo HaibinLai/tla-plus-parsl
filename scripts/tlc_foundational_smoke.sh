@@ -1526,5 +1526,8 @@ run_case dataflow-wait-snapshot \
 run_case dependency-failure-propagation \
     models/dataflow/ParslDependencyFailurePropagationFixed.cfg \
     models/dataflow/ParslDependencyFailurePropagation.tla
+run_case strategy-idle-clock \
+    models/clock/ParslStrategyIdleClockFixed.cfg \
+    models/clock/ParslStrategyIdleClock.tla
 
 echo "Foundational TLC smoke suite passed."

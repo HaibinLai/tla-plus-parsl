@@ -230,6 +230,7 @@ tests=(
     tests/test_block_provider_bad_state_order_runtime.py
     tests/test_block_provider_bad_state_mutation_runtime.py
     tests/test_strategy_runtime.py
+    tests/test_strategy_idle_clock_runtime.py
     tests/test_memoization_runtime.py
     tests/test_memo_closure_runtime.py
     tests/test_memo_dict_ordering_runtime.py
