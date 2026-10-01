@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `c41bc2f` (`Compose decode retry and monitoring generations`).
+- Latest locally preserved commit: `aa0c67a` (`Add runtime bridge for decode retry monitoring`).
 - Foundational smoke inventory: 617 TLC cases and 416 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
