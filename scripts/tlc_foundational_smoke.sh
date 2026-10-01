@@ -470,6 +470,9 @@ run_case closure-memo-snapshot \
 run_case object-snapshot-retry \
     models/serialization/ParslObjectSnapshotRetryFixed.cfg \
     models/serialization/ParslObjectSnapshotRetry.tla
+run_case function-global-default-snapshot \
+    models/serialization/ParslFunctionGlobalDefaultSnapshotFixed.cfg \
+    models/serialization/ParslFunctionGlobalDefaultSnapshot.tla
 run_case message-correlation \
     models/serialization/ParslMessageCorrelationFixed.cfg \
     models/serialization/ParslMessageCorrelation.tla

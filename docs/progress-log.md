@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `d1d1d97` (`Compose retry result and monitoring persistence`).
-- Foundational smoke inventory: 629 TLC cases and 427 Python runtime probes.
+- Foundational smoke inventory: 630 TLC cases and 428 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,12 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: refined Python callable contents with separate global/default roots in
+  `ParslFunctionGlobalDefaultSnapshot`. The Current branch reproduces a live module-global read
+  after serialization while retaining the default snapshot; the Fixed branch requires one epoch.
+  Full smoke verification passed: 630 TLC cases and 428 Python runtime probes; 667 unittest
+  methods are present.
 
 - Current stage: composed retry-result filtering with monitoring persistence in
   `ParslResultMonitoringAttempt`. The Fixed branch records only the current attempt as terminal

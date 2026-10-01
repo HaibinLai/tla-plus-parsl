@@ -248,6 +248,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObject
 /tmp/parsl-venv/bin/python -m unittest tests/test_function_object_contents_runtime.py -v
 ```
 
+`ParslFunctionGlobalDefaultSnapshot.tla` separates two Python callable roots that are often
+collapsed into one opaque function: module-global state and default arguments. The runtime probe
+shows the current `pack_apply_message` behavior: the default is captured, while a module global is
+looked up when the decoded callable executes. The Current model records this mixed-epoch result;
+the Fixed branch requires a single callable snapshot epoch. This behavior is recorded as BUG-303.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionGlobalDefaultSnapshotCurrent.cfg models/serialization/ParslFunctionGlobalDefaultSnapshot.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionGlobalDefaultSnapshotFixed.cfg models/serialization/ParslFunctionGlobalDefaultSnapshot.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_function_global_default_snapshot_runtime.py -v
+```
+
 `ParslPythonSmoke.cfg` provides the smallest complete object-graph check for `ParslPython.tla`:
 one function root and one argument root with no nested edges. It generates 92 states (31 distinct)
 and is useful for fast regression checks before exploring the larger cyclic graph.

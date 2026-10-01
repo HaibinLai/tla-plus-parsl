@@ -25,6 +25,7 @@ tests=(
     tests/test_zmq_multipart_ack_runtime.py
     tests/test_zmq_result_attempt_runtime.py
     tests/test_function_object_contents_runtime.py
+    tests/test_function_global_default_snapshot_runtime.py
     tests/test_function_object_transport_runtime.py
     tests/test_callable_argument_alias_runtime.py
     tests/test_python_nested_alias_runtime.py
