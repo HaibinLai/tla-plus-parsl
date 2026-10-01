@@ -419,6 +419,9 @@ run_case pbspro-malformed-json \
 run_case grid-engine-duplicate-status \
     models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
     models/providers/ParslGridEngineDuplicateStatus.tla
+run_case grid-engine-status-batch \
+    models/providers/ParslGridEngineStatusBatchFixed.cfg \
+    models/providers/ParslGridEngineStatusBatch.tla
 run_case lsf-duplicate-status \
     models/providers/ParslLSFDuplicateStatusFixed.cfg \
     models/providers/ParslLSFDuplicateStatus.tla

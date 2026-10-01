@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `e399535` (`Promote Condor status model`).
-- Foundational smoke inventory: 402 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 403 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -69,6 +69,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the Condor malformed-status-line Fixed case, preserving known resource
   state while skipping truncated scheduler records.
+
+- Current stage: promoted the Grid Engine status-batch Fixed case, isolating malformed scheduler
+  records so later valid jobs in the same poll still update.
 
 - Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
   stale inner results, two-dependency join completion, and monitoring persistence into one model.
