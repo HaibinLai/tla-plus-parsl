@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `637f85b` (`Promote monitoring ZMQ batch clock gate`).
+- Latest locally preserved commit: `012e17e` (`Promote file transfer monitoring gate`).
 - Foundational smoke inventory: 578 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
