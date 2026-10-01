@@ -662,6 +662,9 @@ run_case azure-status-remote-failure \
 run_case azure-status-shape \
     models/providers/ParslAzureStatusShapeFixed.cfg \
     models/providers/ParslAzureStatusShape.tla
+run_case azure-status-translation \
+    models/providers/ParslAzureStatus.cfg \
+    models/providers/ParslAzureStatus.tla
 run_case google-submit \
     models/providers/ParslGoogleCloudSubmitFixed.cfg \
     models/providers/ParslGoogleCloudSubmit.tla
