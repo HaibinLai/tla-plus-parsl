@@ -170,6 +170,9 @@ run_case kubernetes-admission \
 run_case torque-submit-shape \
     models/providers/ParslTorqueSubmitShapeFixed.cfg \
     models/providers/ParslTorqueSubmitShape.tla
+run_case torque-tasks-per-node \
+    models/providers/ParslTorqueTasksPerNodeFixed.cfg \
+    models/providers/ParslTorqueTasksPerNode.tla
 run_case local-pid-admission \
     models/providers/ParslLocalPidAdmissionFixed.cfg \
     models/providers/ParslLocalPidAdmission.tla
