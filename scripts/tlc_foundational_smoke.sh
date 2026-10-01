@@ -794,6 +794,12 @@ run_case file-open-timeout-success \
 run_case timer-close-timeout-fixed \
     models/clock/ParslTimerCloseTimeoutFixed.cfg \
     models/clock/ParslTimerCloseTimeout.tla
+run_case monitoring-close-normal \
+    models/monitoring/ParslMonitoringCloseNormal.cfg \
+    models/monitoring/ParslMonitoringClose.tla
+run_case monitoring-close-abnormal \
+    models/monitoring/ParslMonitoringCloseAbnormal.cfg \
+    models/monitoring/ParslMonitoringClose.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

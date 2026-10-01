@@ -283,6 +283,9 @@ the Current configuration remains a counterexample for opening after the file wa
 The Fixed `ParslTimerCloseTimeout` configuration is also in the foundational gate, ensuring a timer
 close cannot report completion before its callback thread is quiescent.
 
+The normal and abnormal `ParslMonitoringClose` configurations are also in the foundational gate,
+covering workflow-finalization guards and shutdown/drain signaling.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
