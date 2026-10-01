@@ -863,6 +863,9 @@ run_case pbspro-status-shape \
 run_case pbspro-status-batch-isolation \
     models/providers/ParslPbsproStatusBatchIsolationFixed.cfg \
     models/providers/ParslPbsproStatusBatchIsolation.tla
+run_case pbspro-status-foreign-job \
+    models/providers/ParslPBSProStatusFixed.cfg \
+    models/providers/ParslPBSProStatus.tla
 run_case local-submit-pid-shape \
     models/providers/ParslLocalSubmitPidShapeFixed.cfg \
     models/providers/ParslLocalSubmitPidShape.tla
