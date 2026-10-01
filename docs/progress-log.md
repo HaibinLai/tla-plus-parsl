@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `0c02e72` (`Refine HTTP task admission contract`).
-- Foundational smoke inventory: 620 TLC cases and 420 Python runtime probes.
+- Foundational smoke inventory: 621 TLC cases and 421 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 620 TLC cases and 420 Python probes pass as a regression gate;
+- the existing 621 TLC cases and 421 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -1038,6 +1038,10 @@ criteria for this deliverable.
   duplicate ledger entry: Current admits a non-success short response, while Fixed blocks user
   code until both checks pass. The full gate now contains 620 TLC cases, 420 runtime entries,
   and 656 discovered unittest methods.
+- Current stage: added `ParslRemoteExceptionTransport`. It models a nested
+  `RemoteExceptionWrapper` cause surviving serialization and becoming a terminal Future failure;
+  the real HTEX result worker probe verifies the leaf cause after decoding. The full gate now
+  contains 621 TLC cases, 421 runtime entries, and 657 discovered unittest methods.
 
 ### Verification convention
 

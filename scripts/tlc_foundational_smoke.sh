@@ -110,6 +110,9 @@ run_case htex-result-forwarding \
 run_case htex-result-queue \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla
+run_case remote-exception-transport \
+    models/serialization/ParslRemoteExceptionTransport.cfg \
+    models/serialization/ParslRemoteExceptionTransport.tla
 run_case results-incoming \
     models/executors/ParslResultsIncoming.cfg \
     models/executors/ParslResultsIncoming.tla

@@ -148,6 +148,7 @@ tests=(
     tests/test_googlecloud_submit_runtime.py
     tests/test_htex_cancelled_result_runtime.py
     tests/test_htex_result_queue_runtime.py
+    tests/test_remote_exception_transport_runtime.py
     tests/test_htex_manager_loss_runtime.py
     tests/test_htex_cores_per_worker_runtime.py
     tests/test_htex_force_scale_in_runtime.py

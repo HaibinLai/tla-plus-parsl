@@ -4,6 +4,11 @@ The serialization abstraction is layered rather than treating a task as one opaq
 The models distinguish serializer bytes, multipart framing, ZMQ queueing, route validation,
 worker decode/dispatch, and result correlation.
 
+`ParslRemoteExceptionTransport.tla` adds the exception-object boundary: a worker-side
+`RemoteExceptionWrapper` with a nested `__cause__` is serialized, decoded by the result worker,
+and reraised into a terminal Future failure.  The runtime bridge uses the installed HTEX result
+worker and verifies that the leaf cause survives the real serializer.
+
 ## Source-to-model mapping
 
 | Parsl source | Model |
