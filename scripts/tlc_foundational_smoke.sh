@@ -1160,6 +1160,9 @@ run_case htex-serialization-error-name \
 run_case htex-result-decode-continuation \
     models/serialization/ParslHtexResultDecodeContinuationFixed.cfg \
     models/serialization/ParslHtexResultDecodeContinuation.tla
+run_case htex-monitoring-message \
+    models/executors/ParslHtexMonitoringMessageFixed.cfg \
+    models/executors/ParslHtexMonitoringMessage.tla
 run_case htex-task-priority-type \
     models/executors/ParslHtexTaskPriorityTypeFixed.cfg \
     models/executors/ParslHtexTaskPriorityType.tla

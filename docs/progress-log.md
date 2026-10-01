@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `38bdc8f` (`Promote command client close race model`).
-- Foundational smoke inventory: 472 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 473 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslHtexMonitoringMessage` as the HTEX optional-monitoring-frame
+  boundary. The Current configuration reproduces a crash when an optional monitoring payload is
+  handled on a path where monitoring is disabled; the Fixed configuration ignores that payload
+  while preserving task-result forwarding. The TLC counterexample, fixed run, and Python runtime
+  probe all pass, and the fixed configuration is now part of the foundational smoke gate.
 
 - Current stage: added the compact `ParslMonitoringDBRetry` insert primitive. The operational
   configuration models rollback/retry and single-row persistence; the integrity configuration
