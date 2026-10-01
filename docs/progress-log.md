@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `3b2cc34` (`Promote join retry duplicates gate`).
-- Foundational smoke inventory: 565 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 566 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslJoinRunningCancellation` into the foundational TLC gate.
+  Cancellation of an already-running inner Future now resolves the outer join as terminal
+  failure, and the callback cannot escape as an unhandled exception.
 
 - Current stage: promoted fixed `ParslJoinRetryDuplicates` into the foundational TLC gate. The
   model preserves every duplicate input position after an inner physical retry while still

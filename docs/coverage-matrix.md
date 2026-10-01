@@ -471,6 +471,9 @@ attempt separation and preventing an outer join from failing on a non-final inne
 Fixed `ParslJoinRetryDuplicates` is also in the foundational TLC gate, checking duplicate input
 positions remain ordered after a logical inner Future retries.
 
+Fixed `ParslJoinRunningCancellation` is also in the foundational TLC gate, checking cancellation
+of a running inner Future produces terminal outer failure with contained callback handling.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

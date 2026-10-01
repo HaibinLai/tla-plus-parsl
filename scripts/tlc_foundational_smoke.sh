@@ -350,6 +350,9 @@ run_case join-retry-basic \
 run_case join-retry-duplicates-fixed \
     models/dataflow/ParslJoinRetryDuplicatesFixed.cfg \
     models/dataflow/ParslJoinRetryDuplicates.tla
+run_case join-running-cancellation-fixed \
+    models/dataflow/ParslJoinRunningCancellationFixed.cfg \
+    models/dataflow/ParslJoinRunningCancellation.tla
 run_case triple-nested-join \
     models/dataflow/ParslTripleNestedJoinFixed.cfg \
     models/dataflow/ParslTripleNestedJoin.tla
