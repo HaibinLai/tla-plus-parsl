@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `d2955c0` (`Promote join list mutation gates`).
-- Foundational smoke inventory: 570 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 571 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslJoinThreeList` into the foundational TLC gate. Three distinct
+  logical inner Futures may complete in any order, while the outer result reconstructs all four
+  ordered list positions, including a duplicate reference.
 
 - Current stage: promoted fixed and stable `ParslJoinListMutation` configurations into the
   foundational TLC gate. Join registration now snapshots mutable list membership before callbacks;

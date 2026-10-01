@@ -365,6 +365,9 @@ run_case join-list-mutation-fixed \
 run_case join-list-mutation-stable \
     models/dataflow/ParslJoinListMutationStable.cfg \
     models/dataflow/ParslJoinListMutation.tla
+run_case join-three-list \
+    models/dataflow/ParslJoinThreeList.cfg \
+    models/dataflow/ParslJoinThreeList.tla
 run_case triple-nested-join \
     models/dataflow/ParslTripleNestedJoinFixed.cfg \
     models/dataflow/ParslTripleNestedJoin.tla
