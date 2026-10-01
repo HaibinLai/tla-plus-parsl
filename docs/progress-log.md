@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `bf382d7` (`Promote monitoring starter failure gate`).
-- Foundational smoke inventory: 574 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 575 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslMonitoringBatchThree` into the foundational TLC gate. A
+  three-event monitoring transaction restores its snapshot after a failure on the second write,
+  preventing partial rows from becoming visible.
 
 - Current stage: promoted fixed `ParslMonitoringStarterConstructionFailure` into the foundational
   TLC gate. A database-constructor exception now remains the original startup failure instead of
