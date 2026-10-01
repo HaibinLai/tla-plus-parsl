@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `fe58220` (`Promote join Future propagation model`).
-- Foundational smoke inventory: 416 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 417 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -61,6 +61,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the compact `ParslJoinComplete` Future-propagation model. Fixed passed
   TLC and the Current branch reproduced duplicate-list position loss; existing join runtime
   probes cover ordered values, failure propagation, and duplicate references.
+
+- Current stage: promoted `ParslTripleNestedJoin`, extending dependency blocking and failure
+  propagation to three nested join levels. Fixed passed TLC; Current reproduced premature J2
+  evaluation with an unresolved input.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed

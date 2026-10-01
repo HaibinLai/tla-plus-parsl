@@ -209,6 +209,9 @@ run_case join-cancel-retry-generation \
 run_case join-future-propagation \
     models/dataflow/ParslJoinCompleteFixed.cfg \
     models/dataflow/ParslJoinComplete.tla
+run_case triple-nested-join \
+    models/dataflow/ParslTripleNestedJoinFixed.cfg \
+    models/dataflow/ParslTripleNestedJoin.tla
 run_case provider-result-monitoring-db \
     models/core/ParslProviderResultMonitoringDBFixed.cfg \
     models/core/ParslProviderResultMonitoringDB.tla
