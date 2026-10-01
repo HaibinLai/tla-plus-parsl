@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `4bdf15b` (`Promote executor provider baseline model`).
+- Latest locally preserved commit: `4a605bc` (`Promote Condor cancellation model`).
 - Foundational smoke inventory: 487 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
