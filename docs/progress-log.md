@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `47c1fc4` (`Promote Flux underlying cancellation model`).
-- Foundational smoke inventory: 470 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `d1a04cb` (`Record Flux underlying cancellation promotion`).
+- Foundational smoke inventory: 471 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

@@ -197,6 +197,9 @@ run_case htex-manager-drain-stale \
 run_case flux-cancel-underlying-state \
     models/executors/ParslFluxCancelUnderlyingStateFixed.cfg \
     models/executors/ParslFluxCancelUnderlyingState.tla
+run_case bash-timeout-cleanup \
+    models/executors/ParslBashTimeoutCleanupFixed.cfg \
+    models/executors/ParslBashTimeoutCleanup.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
