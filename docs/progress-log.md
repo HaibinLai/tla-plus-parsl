@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `3e9e645` (`Promote provider kinds model`).
+- Latest locally preserved commit: `bab5b3f` (`Promote block provider bad state`).
 - Foundational smoke inventory: 546 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
