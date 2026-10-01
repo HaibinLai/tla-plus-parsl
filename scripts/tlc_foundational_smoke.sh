@@ -770,6 +770,9 @@ run_case join-none-list \
 run_case join-return-equality-fixed \
     models/dataflow/ParslJoinReturnEqualityFixed.cfg \
     models/dataflow/ParslJoinReturnEquality.tla
+run_case join-single-cancellation-fixed \
+    models/dataflow/ParslJoinSingleCancellationFixed.cfg \
+    models/dataflow/ParslJoinSingleCancellation.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

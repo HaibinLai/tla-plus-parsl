@@ -265,6 +265,9 @@ single and list joins whose inner Future values are `None` rather than failures 
 The Fixed `ParslJoinReturnEquality` configuration is also in the foundational gate, ensuring
 invalid return validation reaches a terminal failure without invoking hostile user equality.
 
+The Fixed `ParslJoinSingleCancellation` configuration is also in the foundational gate, converting
+single-inner cancellation into terminal outer join failure instead of leaving the join pending.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
