@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `7b663ae` (`Record full ZMQ serialization promotion`).
+- Latest locally preserved commit: `7426f9c` (`Promote full file bytes transfer model`).
 - Foundational smoke inventory: 453 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
