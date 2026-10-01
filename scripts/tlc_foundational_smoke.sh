@@ -1877,5 +1877,8 @@ run_case http-stage-in-task-success \
 run_case globus-compute-config-fixed \
     models/staging/ParslGlobusComputeConfigFixed.cfg \
     models/staging/ParslGlobusComputeConfig.tla
+run_case strategy-core \
+    models/strategy/ParslStrategy.cfg \
+    models/strategy/ParslStrategy.tla
 
 echo "Foundational TLC smoke suite passed."
