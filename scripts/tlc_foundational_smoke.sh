@@ -179,6 +179,9 @@ run_case htex-submit-queue-cleanup \
 run_case htex-submit-failure-rollback \
     models/executors/ParslHtexSubmitFailureFixed.cfg \
     models/executors/ParslHtexSubmitFailure.tla
+run_case bad-state-task-mutation \
+    models/executors/ParslBadStateTaskMutationFixed.cfg \
+    models/executors/ParslBadStateTaskMutation.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
