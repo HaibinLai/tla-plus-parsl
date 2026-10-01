@@ -200,6 +200,9 @@ run_case provider-result-retry-race \
 run_case provider-cancel-future \
     models/core/ParslProviderCancelFutureFixed.cfg \
     models/core/ParslProviderCancelFuture.tla
+run_case provider-cancel-retry-monitoring \
+    models/core/ParslProviderCancelRetryMonitoringFixed.cfg \
+    models/core/ParslProviderCancelRetryMonitoring.tla
 run_case provider-result-monitoring-db \
     models/core/ParslProviderResultMonitoringDBFixed.cfg \
     models/core/ParslProviderResultMonitoringDB.tla

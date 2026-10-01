@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `1fcc1e2` (`Add provider cancellation Future composition model`).
-- Foundational smoke inventory: 413 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 414 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -48,6 +48,11 @@ are recorded here in English and committed with the model changes.
   model connecting provider state, one physical attempt, Future terminal state, late-result
   handling, and monitoring persistence. Fixed passed TLC; Current produced the expected
   cancellation/Future consistency counterexample.
+
+- Current stage: added `ParslProviderCancelRetryMonitoring`, extending cancellation through
+  provider loss, retry generation 2, stale generation-1 result delivery, and monitoring
+  persistence. Fixed passed TLC; Current reproduced the expected cancellation consistency
+  counterexample.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
