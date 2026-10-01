@@ -258,6 +258,12 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslResultDecodeRetryMonito
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslResultDecodeRetryMonitoringFixed.cfg models/core/ParslResultDecodeRetryMonitoring.tla
 ```
 
+`tests/test_result_decode_retry_monitoring_runtime.py` bridges the same evidence with the real
+HTEX result worker and SQLite monitoring `Database`: a corrupt result leaves the Future orphaned,
+and the append-only STATUS table accepts a later timestamp for the older try. The probe is kept as
+a Current-source observation; the Fixed generation rule remains a model-level candidate until the
+implementation is changed.
+
 `ParslJoinProviderResultMonitoringDB.tla` lifts the same protocol to a two-dependency join. It
 requires every inner dependency to resolve in the current generation before outer completion and
 connects that condition to provider retry and persisted monitoring state.

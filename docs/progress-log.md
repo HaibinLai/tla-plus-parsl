@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c41bc2f` (`Compose decode retry and monitoring generations`).
-- Foundational smoke inventory: 617 TLC cases and 415 Python runtime probes.
+- Foundational smoke inventory: 617 TLC cases and 416 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 617 TLC cases and 415 Python probes pass as a regression gate;
+- the existing 617 TLC cases and 416 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -1012,6 +1012,10 @@ criteria for this deliverable.
   status persistence. The Current case reaches a stale-success monitoring counterexample; the
   Fixed case rejects the old result, resets the monitoring high-water mark at retry, and passes
   100,001 simulated states.
+- Current stage: added a real runtime bridge for that composition. The installed HTEX result worker
+  reproduces the orphaned Future after corrupt decode, and the installed SQLite monitoring schema
+  accepts an older `try_id` at a newer timestamp; the probe records this as a Current observation
+  while the Fixed generation rule remains model-level.
 
 ### Verification convention
 

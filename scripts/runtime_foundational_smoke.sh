@@ -170,6 +170,7 @@ tests=(
     tests/test_htex_serialization_error_name_runtime.py
     tests/test_htex_result_decode_continuation_runtime.py
     tests/test_htex_result_decode_failure_runtime.py
+    tests/test_result_decode_retry_monitoring_runtime.py
     tests/test_htex_result_forwarding_runtime.py
     tests/test_htex_monitoring_message_runtime.py
     tests/test_execute_wait_timeout_runtime.py
