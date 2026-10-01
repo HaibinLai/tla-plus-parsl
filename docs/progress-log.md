@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `9644f34` (`Promote Globus Compute config gate`).
+- Latest locally preserved commit: `ed339d0` (`Promote core strategy state machine gate`).
 - Foundational smoke inventory: 610 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
