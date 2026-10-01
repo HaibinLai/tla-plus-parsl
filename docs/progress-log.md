@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `38bdc8f` (`Promote command client close race model`).
+- Latest locally preserved commit: `833b395` (`Promote HTEX monitoring message model`).
 - Foundational smoke inventory: 473 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
