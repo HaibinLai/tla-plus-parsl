@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `bf190c1` (`Record Kubernetes race ledger promotion`).
+- Latest locally preserved commit: `324a925` (`Promote join callable transport model`).
 - Foundational smoke inventory: 437 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
