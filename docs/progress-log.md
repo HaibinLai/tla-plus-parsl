@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `171a0f1` (`Promote thread executor count cases`).
-- Foundational smoke inventory: 449 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `67e813a` (`Record thread executor count promotion`).
+- Foundational smoke inventory: 450 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -84,6 +84,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted both invalid-admission and valid-start configurations for
   `ParslThreadExecutorThreadCount`. The executor gate now checks early rejection of zero workers
   and successful construction with one worker.
+
+- Current stage: promoted `ParslGoogleCloudStatusPresent`. The provider gate now checks normal
+  `RUNNING` translation separately from unknown-status tolerance and remote-failure handling.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join

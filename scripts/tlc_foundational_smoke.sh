@@ -713,6 +713,9 @@ run_case google-cancel \
 run_case google-status \
     models/providers/ParslGoogleCloudStatusFixed.cfg \
     models/providers/ParslGoogleCloudStatus.tla
+run_case google-status-present \
+    models/providers/ParslGoogleCloudStatusPresent.cfg \
+    models/providers/ParslGoogleCloudStatus.tla
 run_case google-status-remote-failure \
     models/providers/ParslGoogleCloudStatusRemoteFailureFixed.cfg \
     models/providers/ParslGoogleCloudStatusRemoteFailure.tla
