@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `b985c0b` (`Promote HTEX address probe gate`).
-- Foundational smoke inventory: 592 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 593 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslJobStatusOutputReadError` into the foundational TLC gate.
+  JobStatus output and summary reads now share the same defensive read-error policy instead of
+  allowing permission/I/O errors to escape only through summary properties.
 
 - Current stage: promoted HTEX `probe_addresses` timeout, empty-input, and success configurations
   into the foundational TLC gate. Address probing now distinguishes rejected empty input,

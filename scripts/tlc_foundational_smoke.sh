@@ -1826,5 +1826,8 @@ run_case htex-probe-addresses-empty \
 run_case htex-probe-addresses-success \
     models/executors/ParslProbeAddressesSuccess.cfg \
     models/executors/ParslProbeAddresses.tla
+run_case job-status-output-read-error-fixed \
+    models/executors/ParslJobStatusOutputReadErrorFixed.cfg \
+    models/executors/ParslJobStatusOutputReadError.tla
 
 echo "Foundational TLC smoke suite passed."
