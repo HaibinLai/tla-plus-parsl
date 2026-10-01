@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `9fed28a` (`Promote HTEX worker drain clock`).
+- Latest locally preserved commit: `316d00e` (`Promote resource monitor clock`).
 - Foundational smoke inventory: 541 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
