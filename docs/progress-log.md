@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `2ee6635` (`Promote provider polling lifecycle baseline`).
+- Latest locally preserved commit: `d5ef5b1` (`Record provider polling lifecycle promotion`).
 - Foundational smoke inventory: 434 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
   configuration models rollback/retry and single-row persistence; the integrity configuration
   models a non-retry drop. Both configurations are now part of the TLC smoke gate.
 
-- Next stage: promoted `ParslProviderPolling` as the provider-neutral lifecycle baseline. It
+- Current stage: promoted `ParslProviderPolling` as the provider-neutral lifecycle baseline. It
   separates submit, status, transient API failure, unknown status, and cancellation rollback
   before scheduler-specific provider behavior is refined.
 
