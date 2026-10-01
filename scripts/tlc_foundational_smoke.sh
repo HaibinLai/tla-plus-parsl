@@ -767,6 +767,9 @@ run_case join-none-single \
 run_case join-none-list \
     models/dataflow/ParslJoinNoneResultList.cfg \
     models/dataflow/ParslJoinNoneResult.tla
+run_case join-return-equality-fixed \
+    models/dataflow/ParslJoinReturnEqualityFixed.cfg \
+    models/dataflow/ParslJoinReturnEquality.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

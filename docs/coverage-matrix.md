@@ -262,6 +262,9 @@ covering successful REQ/REP completion and permanent bad-client state after resp
 Both `ParslJoinNoneResult` configurations are also in the foundational gate, checking successful
 single and list joins whose inner Future values are `None` rather than failures or missing values.
 
+The Fixed `ParslJoinReturnEquality` configuration is also in the foundational gate, ensuring
+invalid return validation reaches a terminal failure without invoking hostile user equality.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

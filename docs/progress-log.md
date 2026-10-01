@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `599a598` (`Promote join None result semantics`).
-- Foundational smoke inventory: 528 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 529 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -707,6 +707,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted both `ParslJoinNoneResult` configurations into the foundational TLC gate.
   Single-Future and list joins preserve `None` as a successful result, keep list positions intact,
   and release the join handle only after all selected inner Futures are observed.
+- Current stage: promoted the Fixed `ParslJoinReturnEquality` configuration into the foundational
+  TLC gate. Invalid join returns now take a terminal validation-failure path before user-defined
+  equality can raise; the Current and truthy-equality variants remain documented counterexamples.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
