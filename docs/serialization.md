@@ -201,6 +201,9 @@ not resolve a Future that is already rejected. The concrete HTEX result-worker p
 cancelled Future after the task bookkeeping entry has already been removed.
 `ParslZMQSerializationEndToEndSmoke.cfg` fixes `MAX_RETRIES = 0` and the corrected route/result
 invariants complete in 2,589 generated and 760 distinct states, providing a fast regression run.
+The full `ParslZMQSerializationEndToEndFixed.cfg` configuration is also in the foundational smoke
+gate, retaining one retry so late result correlation, duplicate frames, route recovery, and
+payload rejection are checked together.
 
 `ParslTaskTransport.tla` is the smaller cross-layer companion: a bounded callable/argument object
 graph must finish serialization before task transport, decoding must precede worker dispatch, and

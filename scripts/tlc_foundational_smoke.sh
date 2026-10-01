@@ -164,6 +164,9 @@ run_case join-app \
 run_case zmq-serialization \
     models/serialization/ParslZMQSerializationEndToEndSmoke.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla
+run_case zmq-serialization-end-to-end \
+    models/serialization/ParslZMQSerializationEndToEndFixed.cfg \
+    models/serialization/ParslZMQSerializationEndToEnd.tla
 run_case htex-submit-queue-cleanup \
     models/executors/ParslHtexSubmitLifecycleQueueFailureFixed.cfg \
     models/executors/ParslHtexSubmitLifecycle.tla
