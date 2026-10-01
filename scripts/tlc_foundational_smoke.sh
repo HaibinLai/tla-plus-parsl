@@ -194,6 +194,9 @@ run_case htex-cancellation-admission \
 run_case htex-manager-drain-stale \
     models/executors/ParslHtexManagerDrainFixed.cfg \
     models/executors/ParslHtexManagerDrain.tla
+run_case flux-cancel-underlying-state \
+    models/executors/ParslFluxCancelUnderlyingStateFixed.cfg \
+    models/executors/ParslFluxCancelUnderlyingState.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla

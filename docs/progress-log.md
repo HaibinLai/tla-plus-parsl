@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e039d78` (`Promote HTEX stale manager drain model`).
-- Foundational smoke inventory: 469 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `d6fea00` (`Record HTEX stale manager drain promotion`).
+- Foundational smoke inventory: 470 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
