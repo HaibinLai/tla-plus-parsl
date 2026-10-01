@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e721aa5` (`Promote monitoring versioned batch gate`).
+- Latest locally preserved commit: `25b25f3` (`Promote timed provider monitoring gate`).
 - Foundational smoke inventory: 563 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
