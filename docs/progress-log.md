@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b0cbf71` (`Record join callable transport promotion`).
+- Latest locally preserved commit: `a334156` (`Promote immediate join callback model`).
 - Foundational smoke inventory: 438 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
