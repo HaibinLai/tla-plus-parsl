@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `cb66a8b` (`Promote monitoring batch model`).
-- Foundational smoke inventory: 543 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 544 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -740,6 +740,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the Fixed and positive `ParslMonitoringBatch` configurations into the
   foundational TLC gate. A zero batching interval still consumes an available message in the Fixed
   path; the Current configuration remains the empty-batch counterexample.
+- Current stage: promoted the Fixed `ParslMonitoringBatchClock` configuration into the foundational
+  TLC gate. Batch deadlines now use monotonic elapsed time; the Current configuration remains a wall-
+  clock rollback counterexample that drains past the intended deadline.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

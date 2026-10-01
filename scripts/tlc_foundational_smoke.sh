@@ -812,6 +812,9 @@ run_case monitoring-batch-fixed \
 run_case monitoring-batch-positive \
     models/monitoring/ParslMonitoringBatchPositive.cfg \
     models/monitoring/ParslMonitoringBatch.tla
+run_case monitoring-batch-clock-fixed \
+    models/monitoring/ParslMonitoringBatchClockFixed.cfg \
+    models/monitoring/ParslMonitoringBatchClock.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
