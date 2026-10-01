@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `22efdfa` (`Promote core ZMQ state machine gate`).
-- Foundational smoke inventory: 606 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 608 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed and successful `ParslHTTPStage` configurations into the
+  foundational TLC gate. In-task HTTP staging now rejects non-success status before app execution
+  while preserving the successful response path.
 
 - Current stage: promoted the core `ParslZMQ` state machine into the foundational TLC gate.
   Bounded multipart task/result messages now cover route validation, duplicate suppression,

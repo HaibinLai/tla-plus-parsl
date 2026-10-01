@@ -562,6 +562,9 @@ Core `ParslZMQ` is also in the foundational TLC gate, checking bounded task/resu
 queues, route and envelope validation, duplicate suppression, corruption rejection, and ACK
 correlation.
 
+Fixed and success `ParslHTTPStage` configurations are also in the foundational TLC gate, checking
+HTTP status validation before in-task application execution.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

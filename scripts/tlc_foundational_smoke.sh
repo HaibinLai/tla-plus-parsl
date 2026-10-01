@@ -1868,5 +1868,11 @@ run_case python-timeout-catch-fixed \
 run_case zmq-core-state-machine \
     models/serialization/ParslZMQ.cfg \
     models/serialization/ParslZMQ.tla
+run_case http-stage-in-task-fixed \
+    models/staging/ParslHTTPStageFixed.cfg \
+    models/staging/ParslHTTPStage.tla
+run_case http-stage-in-task-success \
+    models/staging/ParslHTTPStageSuccess.cfg \
+    models/staging/ParslHTTPStage.tla
 
 echo "Foundational TLC smoke suite passed."
