@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `f1a7411` (`Promote monitoring database retry primitive`).
-- Foundational smoke inventory: 433 TLC cases and 406 Python runtime probes.
+- Latest locally preserved commit: `5340174` (`Record monitoring database retry promotion`).
+- Foundational smoke inventory: 434 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -22,6 +22,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: added the compact `ParslMonitoringDBRetry` insert primitive. The operational
   configuration models rollback/retry and single-row persistence; the integrity configuration
   models a non-retry drop. Both configurations are now part of the TLC smoke gate.
+
+- Next stage: promoted `ParslProviderPolling` as the provider-neutral lifecycle baseline. It
+  separates submit, status, transient API failure, unknown status, and cancellation rollback
+  before scheduler-specific provider behavior is refined.
 
 - Current stage: promoted `ParslLocalProviderStatusScope`. The Fixed model passed TLC and the
   Current branch reproduced the stale unrelated-resource query failure; the targeted runtime

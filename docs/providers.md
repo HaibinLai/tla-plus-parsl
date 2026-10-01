@@ -6,6 +6,17 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslProviderPolling.tla` is the compact provider lifecycle baseline. It separates block
+submission from acceptance/rejection, status polling, transient API errors, unknown-status
+failure, and cancellation rollback. `TargetSafety` keeps the provider target within capacity;
+`CallSafety` ensures that an in-flight status or cancel operation names the matching block. The
+model is intentionally provider-neutral and is the abstraction layer beneath the scheduler-
+specific models below.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslProviderPolling.cfg models/providers/ParslProviderPolling.tla
+```
+
 `ParslAzureCancelBookkeeping.tla` models the post-delete local bookkeeping boundary. The current
 Azure provider removes a VM from `instances` but leaves its `resources` entry present; the fixed
 branch clears both records after remote deletion.

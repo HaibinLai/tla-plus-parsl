@@ -94,6 +94,7 @@ StatusUnknown ==
 
 StatusError ==
     /\ callKind = "status"
+    /\ callBlock \in BLOCKS
     /\ apiFailures < MAX_API_FAILURES
     /\ apiFailures' = apiFailures + 1
     /\ callKind' = "none"
