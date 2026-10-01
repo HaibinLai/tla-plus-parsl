@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `f254956` (`Promote poller bad state model`).
-- Foundational smoke inventory: 531 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 532 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -716,6 +716,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslPollerBadState` into the foundational TLC gate. Provider polling,
   failure-threshold handling, outstanding-task failure, and scale-out/scale-in suppression after a
   bad executor state are now checked in one bounded provider state machine.
+- Current stage: promoted the Fixed `ParslApplyDispatchBoundary` configuration into the foundational
+  TLC gate. Malformed four-frame apply messages are rejected at the serialization facade before worker
+  invocation; the Current configuration remains a deliberate arity counterexample.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

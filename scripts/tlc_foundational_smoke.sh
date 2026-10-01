@@ -776,6 +776,9 @@ run_case join-single-cancellation-fixed \
 run_case poller-bad-state \
     models/providers/ParslPollerBadState.cfg \
     models/providers/ParslPollerBadState.tla
+run_case apply-dispatch-boundary-fixed \
+    models/serialization/ParslApplyDispatchBoundaryFixed.cfg \
+    models/serialization/ParslApplyDispatchBoundary.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

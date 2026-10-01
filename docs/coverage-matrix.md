@@ -271,6 +271,9 @@ single-inner cancellation into terminal outer join failure instead of leaving th
 `ParslPollerBadState` is also in the foundational gate, checking provider polling status, failure
 thresholds, outstanding-task cleanup, and admission/scaling suppression after executor bad state.
 
+The Fixed `ParslApplyDispatchBoundary` configuration is also in the foundational gate, rejecting
+malformed apply-message arity before it reaches worker invocation.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
