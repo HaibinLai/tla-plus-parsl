@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `4ec5c6d` (`Model HTTP in-task transfer gating`).
-- Foundational smoke inventory: 618 TLC cases and 418 Python runtime probes.
+- Foundational smoke inventory: 619 TLC cases and 419 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 618 TLC cases and 418 Python probes pass as a regression gate;
+- the existing 619 TLC cases and 419 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -1028,6 +1028,11 @@ criteria for this deliverable.
   reproduces a non-2xx response reaching user code; the Fixed case requires successful complete
   publication. The real wrapper probe passes, and the full gate now contains 618 TLC cases,
   418 runtime entries, and 654 discovered unittest methods.
+- Current stage: added `ParslMonitoringRemoteLifecycle`. The model connects periodic resource
+  sampling, wall-clock rollback, monotonic scheduling, termination, and the unconditional final
+  resource message. The real monitor bridge confirms rollback does not drop the final message.
+  The full gate now contains 619 TLC cases, 419 runtime entries, and 655 discovered unittest
+  methods.
 
 ### Verification convention
 

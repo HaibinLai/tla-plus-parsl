@@ -800,6 +800,9 @@ run_case rsync-stage-success \
 run_case monitoring-deferred \
     models/monitoring/ParslMonitoringDeferred.cfg \
     models/monitoring/ParslMonitoringDeferred.tla
+run_case monitoring-remote-lifecycle \
+    models/monitoring/ParslMonitoringRemoteLifecycleFixed.cfg \
+    models/monitoring/ParslMonitoringRemoteLifecycle.tla
 run_case timer-interval-fixed \
     models/clock/ParslTimerIntervalValidationFixed.cfg \
     models/clock/ParslTimerIntervalValidation.tla

@@ -1,5 +1,18 @@
 # Monitoring models
 
+`ParslMonitoringRemoteLifecycle.tla` composes the remote resource monitor's periodic
+intermediate samples with its unconditional final resource message.  The model keeps wall
+clock and monotonic time separate: a rollback may suppress a wall-clock intermediate sample in
+the Current path, but termination still produces exactly one final message.  The Fixed path
+uses monotonic elapsed time for scheduling.  The runtime bridge is
+`tests/test_monitoring_remote_lifecycle_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringRemoteLifecycleCurrent.cfg models/monitoring/ParslMonitoringRemoteLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringRemoteLifecycleFixed.cfg models/monitoring/ParslMonitoringRemoteLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_remote_lifecycle_runtime.py -v
+```
+
 `ParslMonitoringZMQTupleShape.tla` models the router admission boundary before messages enter the
 database queue: exactly two-element tuples are forwarded, while malformed tuple lengths are
 discarded and the listener continues. `tests/test_monitoring_zmq_tuple_shape_runtime.py` drives

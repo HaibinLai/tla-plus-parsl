@@ -315,6 +315,7 @@ tests=(
     tests/test_monitoring_hub_repeated_start_runtime.py
     tests/test_monitoring_close_idempotence_runtime.py
     tests/test_monitoring_shutdown_drain_runtime.py
+    tests/test_monitoring_remote_lifecycle_runtime.py
     tests/test_monitoring_shutdown_race_runtime.py
     tests/test_monitoring_dispatch_envelope_runtime.py
     tests/test_monitoring_malformed_worker_message_runtime.py
