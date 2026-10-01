@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `7426f9c` (`Promote full file bytes transfer model`).
-- Foundational smoke inventory: 453 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `5fb09c6` (`Record full file bytes promotion`).
+- Foundational smoke inventory: 454 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

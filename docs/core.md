@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 453 TLC cases and 407 Python runtime test files.
-On 2026-10-01, all 453 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 454 TLC cases and 407 Python runtime test files.
+On 2026-10-01, all 454 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 407 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -421,6 +421,13 @@ obsolete message.
 `ParslHeartbeatClockJump.tla` models HTEX heartbeat expiry with separate wall and monotonic
 ages. Fixed makes expiry decisions from monotonic elapsed time, so a forward wall-clock jump
 cannot evict a healthy manager (BUG-026) and a backward jump cannot defer expiry (BUG-089).
+
+`ParslHeartbeatTimeoutPersistence.tla` is the compact cross-layer timing model: a manager can be
+lost by heartbeat age, a task can independently reach its deadline, and the terminal status is
+queued before being persisted to the monitoring database. The Current branch accepts a late worker
+completion and turns a timed-out/lost task back into success; the Fixed branch classifies that
+completion as stale and preserves the persisted terminal cause. Its Fixed configuration is now in
+the foundational smoke gate.
 
 `ParslMonitoringDBInsert.tla` models the monitoring `STATUS` primary-key boundary. Fixed treats
 duplicate terminal/event rows as idempotent, while Current rolls back and drops the duplicate
