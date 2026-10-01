@@ -549,6 +549,9 @@ MPI prefix-valid/invalid, fixed resource-spec, and task-context normal/fixed con
 also in the foundational TLC gate, checking launcher selection, resource validation, and malformed
 task admission.
 
+Fixed `ParslScaleInCancelShape` is also in the foundational TLC gate, checking partial provider
+cancellation responses without discarding already-cancelled blocks.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

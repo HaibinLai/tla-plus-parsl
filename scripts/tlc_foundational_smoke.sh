@@ -1853,5 +1853,8 @@ run_case mpi-task-context-fixed \
 run_case mpi-task-context-normal \
     models/executors/ParslMPITaskContextShapeNormal.cfg \
     models/executors/ParslMPITaskContextShape.tla
+run_case scale-in-cancel-shape-fixed \
+    models/executors/ParslScaleInCancelShapeFixed.cfg \
+    models/executors/ParslScaleInCancelShape.tla
 
 echo "Foundational TLC smoke suite passed."

@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `6bf33cc` (`Promote MPI executor boundary gates`).
-- Foundational smoke inventory: 601 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 602 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslScaleInCancelShape` into the foundational TLC gate. A
+  partial provider cancellation response now preserves the successful cancellation prefix and
+  reports partial progress instead of aborting with a raw assertion.
 
 - Current stage: promoted MPI prefix, resource-spec, and task-context configurations into the
   foundational TLC gate. MPI launchers are selected only from supported prefixes, non-positive
