@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `be57418` (`Promote integrated clock model`).
-- Foundational smoke inventory: 474 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 475 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslThreeConcurrentTimeouts` as the multi-task timeout boundary.
+  Three independent logical tasks have distinct deadlines and retry generations; a late result
+  is accepted only when its task and generation are still current. The Current configuration
+  reproduces acceptance of a stale result, while the Fixed configuration preserves independent
+  task terminal state and passes the bounded TLC exploration.
 
 - Current stage: promoted the compact integrated `ParslClock` smoke model. It combines logical
   wall-clock ticks, heartbeat send/deliver/drop, manager expiry/recovery, task deadlines,

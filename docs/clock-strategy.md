@@ -21,6 +21,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslClockSmoke.cfg models/
 `ParslThreeConcurrentTimeouts.tla` extends the independent timer model to three logical tasks
 with deadlines 1, 2, and 3. Each task has its own retry generation and late-result token; the
 fixed branch rejects an old generation without affecting the other timers.
+The fixed configuration is included in the foundational smoke gate so cross-task timeout
+isolation is checked alongside the single-task clock model.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslThreeConcurrentTimeoutsCurrent.cfg models/clock/ParslThreeConcurrentTimeouts.tla

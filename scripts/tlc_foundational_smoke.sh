@@ -140,6 +140,9 @@ run_case heartbeat-full-horizon \
 run_case concurrent-timeouts \
     models/clock/ParslConcurrentTimeouts.cfg \
     models/clock/ParslConcurrentTimeouts.tla
+run_case three-concurrent-timeouts \
+    models/clock/ParslThreeConcurrentTimeoutsFixed.cfg \
+    models/clock/ParslThreeConcurrentTimeouts.tla
 run_case periodic-timer \
     models/clock/ParslPeriodicTimer.cfg \
     models/clock/ParslPeriodicTimer.tla
