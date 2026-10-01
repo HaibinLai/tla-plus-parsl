@@ -938,6 +938,9 @@ run_case join-list-cancellation \
 run_case join-callback-multiplicity \
     models/dataflow/ParslJoinCallbackMultiplicity.cfg \
     models/dataflow/ParslJoinCallbackMultiplicity.tla
+run_case join-immediate-callback \
+    models/dataflow/ParslJoinImmediateCallback.cfg \
+    models/dataflow/ParslJoinImmediateCallback.tla
 run_case join-return-shape \
     models/dataflow/ParslJoinReturnShapeFuture.cfg \
     models/dataflow/ParslJoinReturnShape.tla

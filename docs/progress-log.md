@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `324a925` (`Promote join callable transport model`).
-- Foundational smoke inventory: 437 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `b0cbf71` (`Record join callable transport promotion`).
+- Foundational smoke inventory: 438 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -42,6 +42,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslJoinCallableTransport` into the TLC gate. It composes callable
   snapshots, retry generations, stale result rejection, logical Future completion, and ordered
   duplicate join positions.
+
+- Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
+  completed dependency invoking its callback during registration and verifies that outer join
+  completion remains gated by the remaining dependency.
 
 - Current stage: promoted `ParslLocalProviderStatusScope`. The Fixed model passed TLC and the
   Current branch reproduced the stale unrelated-resource query failure; the targeted runtime

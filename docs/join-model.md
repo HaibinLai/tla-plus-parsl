@@ -38,6 +38,10 @@ Focused models refine boundaries that are easy to lose in a set-based abstractio
 - `ParslJoinCallableTransport` connects serialized callable/object snapshots to retry generations,
   rejects obsolete physical-attempt results, and reconstructs duplicate input positions in order.
   Its runtime bridge is `tests/test_join_callable_transport_runtime.py`.
+- `ParslJoinImmediateCallback` models `add_done_callback` invoking immediately for an already
+  completed inner Future. The outer join enters `joining` and installs its callback gate before
+  registration, so the early callback cannot finalize until every inner Future is terminal.
+  `tests/test_join_callback_runtime.py` exercises the corresponding `handle_join_update` path.
 
 - ParslJoinDuplicates and ParslJoinDuplicateFailureAggregation preserve list positions and
   count a failed Future once per occurrence;
