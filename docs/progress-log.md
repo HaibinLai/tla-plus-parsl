@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `d3dcaea` (`Model Radical Pilot decode failure`).
-- Foundational smoke inventory: 496 TLC cases and 411 Python runtime probes.
+- Latest locally preserved commit: `6ae091a` (`Promote end-to-end join model`).
+- Foundational smoke inventory: 497 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
