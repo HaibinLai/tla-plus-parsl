@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `4854307` (`Record duplicate provider job ID promotion`).
+- Latest locally preserved commit: `94bc2db` (`Promote command client retry model`).
 - Foundational smoke inventory: 457 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
