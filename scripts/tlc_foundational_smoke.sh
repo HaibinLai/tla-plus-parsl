@@ -1808,5 +1808,11 @@ run_case retry-handler-zero-cost-fixed \
 run_case timer-reentrant-close-fixed \
     models/clock/ParslTimerReentrantCloseFixed.cfg \
     models/clock/ParslTimerReentrantClose.tla
+run_case htex-manager-message-heartbeat \
+    models/executors/ParslHtexManagerMessageHeartbeat.cfg \
+    models/executors/ParslHtexManagerMessage.tla
+run_case htex-manager-message-malformed \
+    models/executors/ParslHtexManagerMessageMalformed.cfg \
+    models/executors/ParslHtexManagerMessage.tla
 
 echo "Foundational TLC smoke suite passed."

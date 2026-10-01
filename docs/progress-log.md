@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `2cff379` (`Promote timer reentrant close gate`).
-- Foundational smoke inventory: 586 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 588 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted HTEX manager-message heartbeat and malformed-message configurations
+  into the foundational TLC gate. Valid heartbeats update liveness time and reply; malformed
+  messages remain isolated without mutating manager state.
 
 - Current stage: promoted fixed `ParslTimerReentrantClose` into the foundational TLC gate. A
   timer callback can now close its own timer without attempting to join the current thread.
