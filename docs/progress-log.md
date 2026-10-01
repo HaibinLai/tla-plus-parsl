@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c857659` (`Promote staging provider dispatch gate`).
-- Foundational smoke inventory: 556 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 557 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslHeartbeatBoundary` into the foundational TLC gate. The compact
+  model checks strict heartbeat expiry, heartbeat reset at the exact threshold, in-flight task
+  accounting when a manager expires, and suppression of post-loss heartbeats.
 
 - Current stage: promoted `ParslStagingProviderDispatch` into the foundational TLC gate. The
   model checks first-capable provider selection, terminal `None` staging results, Future-backed

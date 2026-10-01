@@ -1718,5 +1718,8 @@ run_case dependency-failure-propagation \
 run_case strategy-idle-clock \
     models/clock/ParslStrategyIdleClockFixed.cfg \
     models/clock/ParslStrategyIdleClock.tla
+run_case heartbeat-boundary \
+    models/executors/ParslHeartbeatBoundary.cfg \
+    models/executors/ParslHeartbeatBoundary.tla
 
 echo "Foundational TLC smoke suite passed."

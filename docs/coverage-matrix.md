@@ -447,6 +447,9 @@ paths, checking failure publication without indexing an absent diagnostic event.
 `ParslStagingProviderDispatch` is also in the foundational TLC gate, checking ordered provider
 selection and the distinction between a completed staging result and a Future dependency.
 
+`ParslHeartbeatBoundary` is also in the foundational TLC gate, checking the strict heartbeat
+threshold, reset behavior, and cleanup of tasks in flight when a manager expires.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
