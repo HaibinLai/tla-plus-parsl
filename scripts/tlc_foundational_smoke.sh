@@ -1805,5 +1805,8 @@ run_case input-dependency-duplicate-fixed \
 run_case retry-handler-zero-cost-fixed \
     models/dataflow/ParslRetryHandlerFixed.cfg \
     models/dataflow/ParslRetryHandler.tla
+run_case timer-reentrant-close-fixed \
+    models/clock/ParslTimerReentrantCloseFixed.cfg \
+    models/clock/ParslTimerReentrantClose.tla
 
 echo "Foundational TLC smoke suite passed."

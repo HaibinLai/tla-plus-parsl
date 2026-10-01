@@ -526,6 +526,9 @@ reserved `inputs` Future is registered once before `join_app`-style callback agg
 Fixed `ParslRetryHandler` is also in the foundational TLC gate, checking that zero-cost failure
 handlers cannot bypass the configured retry bound.
 
+Fixed `ParslTimerReentrantClose` is also in the foundational TLC gate, checking the callback-side
+close path without self-joining the timer thread.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
