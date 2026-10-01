@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `de2b73e` (`Promote cluster submit script model`).
-- Foundational smoke inventory: 484 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 485 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslProviderStatusBatch` as the provider-neutral batched status
+  projection boundary. It models bounded scheduler batches, atomic preservation on command failure,
+  translation of reported states, and explicit completion of jobs absent from a successful batch.
+  The full bounded TLC configuration and targeted Slurm status probes pass.
 
 - Current stage: promoted `ParslClusterSubmitScript` as the common scheduler-script boundary.
   Valid template substitution publishes the script; missing template keys map to a scheduler

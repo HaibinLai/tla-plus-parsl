@@ -686,6 +686,11 @@ implementation indexes it directly and raises `KeyError`. The fixed branch ignor
 records and keeps polling local jobs. The runtime probe drives the real `_status` method with a
 foreign scheduler line.
 
+`ParslProviderStatusBatch.tla` is the provider-neutral abstraction beneath that scheduler-specific
+path. It bounds batch size, preserves all previously observed states when the scheduler command
+fails, and makes missing jobs explicit rather than silently mixing partial updates. The full
+configuration is now part of the foundational smoke gate.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmForeignJobCurrent.cfg models/providers/ParslSlurmForeignJob.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmForeignJobFixed.cfg models/providers/ParslSlurmForeignJob.tla

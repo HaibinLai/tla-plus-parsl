@@ -1403,6 +1403,9 @@ run_case slurm-duplicate-status \
 run_case slurm-foreign-status \
     models/providers/ParslSlurmStatusFixed.cfg \
     models/providers/ParslSlurmStatus.tla
+run_case provider-status-batch \
+    models/providers/ParslProviderStatusBatch.cfg \
+    models/providers/ParslProviderStatusBatch.tla
 run_case slurm-empty-job-id \
     models/providers/ParslSlurmEmptyJobIdFixed.cfg \
     models/providers/ParslSlurmEmptyJobId.tla
