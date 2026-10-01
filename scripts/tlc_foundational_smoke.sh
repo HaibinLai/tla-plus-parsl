@@ -1154,6 +1154,9 @@ run_case rsync-partial-cleanup \
 run_case file-transfer-retry \
     models/staging/ParslFileTransferRetryFixed.cfg \
     models/staging/ParslFileTransferRetry.tla
+run_case file-clean-copy \
+    models/staging/ParslFileCleanCopyFixed.cfg \
+    models/staging/ParslFileCleanCopy.tla
 run_case http-existing-destination \
     models/staging/ParslHTTPExistingDestinationFixed.cfg \
     models/staging/ParslHTTPExistingDestination.tla

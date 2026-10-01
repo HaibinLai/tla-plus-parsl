@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 421 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 421 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 422 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 422 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -429,6 +429,10 @@ event after an integrity error (BUG-070).
 `ParslHTTPPartialCleanup.tla` models streamed HTTP stage-in publication. Fixed removes partial
  destination bytes when a later chunk fails; Current leaves the first chunk visible as a complete
 looking destination (BUG-077).
+
+`ParslFileCleanCopy.tla` models `File.cleancopy()`: immutable URL metadata must survive while
+mutable site-local `local_path` metadata is cleared. Current aliases the old worker-local path;
+Fixed produces a clean DataFuture copy (BUG-066).
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the

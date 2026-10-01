@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `b1f4f4e` (`Promote HTTP partial cleanup model`).
-- Foundational smoke inventory: 421 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 422 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -81,6 +81,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslHTTPPartialCleanup`. Fixed passed TLC and the targeted HTTP
   streaming runtime probe passed; Current reproduced partial destination publication after a
   later chunk failure.
+
+- Current stage: promoted `ParslFileCleanCopy`. Fixed passed TLC and the targeted runtime probe
+  passed; Current reproduced site-local path aliasing in a clean DataFuture copy.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
