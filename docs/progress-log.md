@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `f4b298e` (`Reconcile executable coverage counts`).
-- Foundational smoke inventory: 617 TLC cases and 416 Python runtime probes.
+- Foundational smoke inventory: 617 TLC cases and 417 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 617 TLC cases and 416 Python probes pass as a regression gate;
+- the existing 617 TLC cases and 417 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -1020,6 +1020,9 @@ criteria for this deliverable.
   `run_case` entries, 416 foundational Python probe entries, and 648 repository-wide unittest
   methods. The README, overview, coverage matrix, and validation report now distinguish these
   scopes instead of mixing historical counts.
+- Current stage: added a real `join_app` retry/monitoring bridge. A decorated join with a real
+  retried inner Python app reaches inner `try_id = 1`, while the SQLite STATUS table still accepts
+  a later timestamp for `try_id = 0`; the probe is now part of the 417-entry runtime gate.
 
 ### Verification convention
 

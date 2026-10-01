@@ -92,6 +92,7 @@ tests=(
     tests/test_monitoring_batch_atomicity_runtime.py
     tests/test_monitoring_persistent_retry_runtime.py
     tests/test_join_runtime.py
+    tests/test_join_monitoring_runtime.py
     tests/test_join_retry_runtime.py
     tests/test_nested_join_retry_runtime.py
     tests/test_dependency_traversal_runtime.py
