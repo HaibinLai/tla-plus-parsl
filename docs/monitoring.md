@@ -14,6 +14,9 @@ is written after a newer event; the fixed configuration preserves the high-water
 The action mapping follows `DataFlowKernel._update_task_state` in `dataflow/dflow.py`, and the
 `Status` table plus `_insert` retry/rollback path in `monitoring/db_manager.py`.
 
+The Fixed configuration is now part of the foundational smoke gate, so retry-event reordering is
+checked together with the other monitoring database boundaries.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRetry.cfg models/monitoring/ParslMonitoringTaskRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRetryFixed.cfg models/monitoring/ParslMonitoringTaskRetry.tla

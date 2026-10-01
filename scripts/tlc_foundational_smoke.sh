@@ -290,6 +290,9 @@ run_case monitoring-db-insert-present \
 run_case monitoring-db-permanent-update \
     models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
+run_case monitoring-task-retry \
+    models/monitoring/ParslMonitoringTaskRetryFixed.cfg \
+    models/monitoring/ParslMonitoringTaskRetry.tla
 run_case stage-in-ordering \
     models/staging/ParslDataManagerStageInOrderingFixed.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla
