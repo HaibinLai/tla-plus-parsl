@@ -10,6 +10,11 @@ The file-transfer coverage also includes `ParslDataManagerStageOutReturn`, which
 `None` stage-out return (the output follows the application Future) from an independent transfer
 Future and checks output publication ordering with a real `DataManager` probe.
 
+The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
+callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
+deduplication. The current baseline is 623 TLC cases and 423 runtime entries (659 unittest
+methods).
+
 The heartbeat coverage also has a runtime bridge for `ParslHeartbeatLateAck`: a heartbeat-shaped
 message from an expired manager is ignored by the real interchange path rather than resurrecting
 the manager.

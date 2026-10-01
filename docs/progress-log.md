@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `a149eab` (`Compose Flux result file cancellation lifecycle`).
-- Foundational smoke inventory: 622 TLC cases and 422 Python runtime probes.
+- Foundational smoke inventory: 623 TLC cases and 423 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,11 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: composed serialized callable/object snapshots with ZMQ-style ACK-loss
+  retransmission in `ParslZMQSerializedAck`. The Current branch dispatches the duplicate envelope
+  twice; the Fixed branch deduplicates by task/attempt identity. Full smoke verification is the
+  next checkpoint for this stage.
 
 - Current stage: composed Flux physical-future completion, serialized result-file publication,
   user-facing wrapper cancellation, and late callback delivery in

@@ -21,6 +21,7 @@ tests=(
     tests/test_end_to_end_runtime.py
     tests/test_zmq_serialization_runtime.py
     tests/test_zmq_ack_retry_runtime.py
+    tests/test_zmq_serialized_ack_runtime.py
     tests/test_function_object_contents_runtime.py
     tests/test_function_object_transport_runtime.py
     tests/test_callable_argument_alias_runtime.py

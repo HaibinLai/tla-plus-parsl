@@ -67,10 +67,19 @@ model checks single-dispatch, ACK-after-completion, and Future consistency.
 ROUTER/DEALER pair: pyzmq delivers both retransmissions, while a receiver identity set executes
 the serialized callable only once.
 
+`ParslZMQSerializedAck.tla` composes the ACK race with the Python object snapshot boundary. The
+envelope captures the callable/object version before the source mutates; a retransmission reuses
+those bytes rather than re-encoding the changed source. The Current branch dispatches the
+duplicate envelope twice, while the Fixed branch deduplicates by task/attempt identity. The
+runtime bridge is `tests/test_zmq_serialized_ack_runtime.py` and uses Parsl's real serializer.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializationEndToEndSmoke.cfg models/serialization/ParslZMQSerializationEndToEnd.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryCurrent.cfg models/serialization/ParslZMQAckRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryFixed.cfg models/serialization/ParslZMQAckRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckCurrent.cfg models/serialization/ParslZMQSerializedAck.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFixed.cfg models/serialization/ParslZMQSerializedAck.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialized_ack_runtime.py -v
 ```
 
 `ParslCallableAliasRetry.tla` combines Python object aliasing with retry snapshots. A mutable

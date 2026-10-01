@@ -470,6 +470,9 @@ run_case message-correlation \
 run_case zmq-ack-retry \
     models/serialization/ParslZMQAckRetryFixed.cfg \
     models/serialization/ParslZMQAckRetry.tla
+run_case zmq-serialized-ack \
+    models/serialization/ParslZMQSerializedAckFixed.cfg \
+    models/serialization/ParslZMQSerializedAck.tla
 run_case serializer-header-consistency \
     models/serialization/ParslSerializerHeaderConsistencyFixed.cfg \
     models/serialization/ParslSerializerHeaderConsistency.tla
