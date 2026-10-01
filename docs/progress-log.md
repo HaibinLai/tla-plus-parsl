@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `68aad8e` (`Record command client retry promotion`).
+- Latest locally preserved commit: `19b1374` (`Promote provider walltime parsing model`).
 - Foundational smoke inventory: 458 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
