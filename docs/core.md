@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 386 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 386 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 387 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 387 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -287,6 +287,11 @@ dispatch version; `DispatchSnapshotSafety` requires the latter two to agree.
 `ParslJoinFileStaging.tla` isolates the file-content gate before join execution. Two chunks carry
 checksum state and a source version; publication requires a complete, valid snapshot in the
 Fixed configuration, so corrupt or stale bytes cannot make a dependent Future runnable.
+
+`ParslJoinStageRetry.tla` combines that file gate with physical-attempt retry and join result
+correlation. Each dependency stages and publishes its own two-chunk snapshot before execution;
+the Fixed branch rejects checksum-blind publication and late results from obsolete attempts,
+while the Current configuration produces both counterexamples.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
