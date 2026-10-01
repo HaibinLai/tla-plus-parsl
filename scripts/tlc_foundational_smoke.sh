@@ -233,6 +233,9 @@ run_case monitoring-persistent-retry \
 run_case monitoring-db-permanent-insert \
     models/monitoring/ParslMonitoringDBPermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBPermanentError.tla
+run_case monitoring-db-insert \
+    models/monitoring/ParslMonitoringDBInsertFixed.cfg \
+    models/monitoring/ParslMonitoringDBInsert.tla
 run_case monitoring-db-permanent-update \
     models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBUpdatePermanentError.tla

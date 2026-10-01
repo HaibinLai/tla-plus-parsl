@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `0240033` (`Promote heartbeat clock jump model`).
-- Foundational smoke inventory: 419 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 420 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -74,6 +74,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslHeartbeatClockJump`. Fixed passed TLC and two targeted runtime
   probes passed; Current reproduced both forward-jump premature expiry and backward-jump delayed
   expiry behavior.
+
+- Current stage: promoted `ParslMonitoringDBInsert`. Fixed passed TLC and three targeted runtime
+  probes passed; Current reproduced duplicate STATUS event loss after an integrity rollback.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
