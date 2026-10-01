@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `0c80e01` (`Promote failure fanout mutation model`).
-- Foundational smoke inventory: 465 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `10153e3` (`Record failure fanout mutation promotion`).
+- Foundational smoke inventory: 466 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

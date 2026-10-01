@@ -182,6 +182,9 @@ run_case htex-submit-failure-rollback \
 run_case bad-state-task-mutation \
     models/executors/ParslBadStateTaskMutationFixed.cfg \
     models/executors/ParslBadStateTaskMutation.tla
+run_case execute-wait-timeout \
+    models/executors/ParslExecuteWaitTimeoutFixed.cfg \
+    models/executors/ParslExecuteWaitTimeout.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
