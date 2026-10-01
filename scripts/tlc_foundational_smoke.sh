@@ -818,6 +818,9 @@ run_case block-provider-bad-state-ordering \
 run_case block-provider-bad-state-mutation \
     models/executors/ParslBlockProviderBadStateMutationFixed.cfg \
     models/executors/ParslBlockProviderBadStateMutation.tla
+run_case bad-state-terminal-future \
+    models/executors/ParslBadStateTerminalFutureFixed.cfg \
+    models/executors/ParslBadStateTerminalFuture.tla
 run_case cluster-provider-unknown-job \
     models/providers/ParslClusterProviderUnknownJobFixed.cfg \
     models/providers/ParslClusterProviderUnknownJob.tla
