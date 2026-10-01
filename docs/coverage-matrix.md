@@ -533,6 +533,9 @@ close path without self-joining the timer thread.
 foundational TLC gate, checking manager liveness updates, heartbeat replies, and malformed
 message isolation.
 
+Fixed `ParslHtexZeroScaleInIdle` is also in the foundational TLC gate, checking that a zero
+idle-only scale-in request does not select or cancel any blocks.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

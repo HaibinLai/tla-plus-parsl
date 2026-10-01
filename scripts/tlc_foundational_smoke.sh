@@ -1814,5 +1814,8 @@ run_case htex-manager-message-heartbeat \
 run_case htex-manager-message-malformed \
     models/executors/ParslHtexManagerMessageMalformed.cfg \
     models/executors/ParslHtexManagerMessage.tla
+run_case htex-zero-scale-in-idle-fixed \
+    models/executors/ParslHtexZeroScaleInIdleFixed.cfg \
+    models/executors/ParslHtexZeroScaleInIdle.tla
 
 echo "Foundational TLC smoke suite passed."
