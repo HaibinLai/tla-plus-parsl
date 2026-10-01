@@ -59,6 +59,9 @@ workflow-finalization duration to an explicit persisted database field.
 `ParslMonitoringZMQRouterFailure` is also in the foundational gate, isolating terminal handling
 of a permanently broken monitoring receive channel before database delivery can proceed.
 
+`ParslFilePathResolution` is now in the foundational gate, checking the lower-level `File.filepath`
+contract that local URLs resolve directly while remote URLs require a staged local path.
+
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes
