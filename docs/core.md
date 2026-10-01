@@ -143,7 +143,7 @@ the concrete Python runtime probes documented by each module.
 
 The current repository smoke runner enumerates 495 TLC cases and 410 Python runtime test files.
 On 2026-10-01, all 495 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
-suite passed with 407 entries. The subsequently added cases were also run individually as they
+suite passed with 410 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
 isolation, monitoring worker cross-table, malformed-HTEX-ingress continuation, Globus
