@@ -11,6 +11,8 @@ idle limits.
 `ParslClockSmoke.cfg` is a fast bounded regression configuration for `ParslClock.tla`. It keeps
 one worker, one retry, and a three-tick horizon while checking all six clock/result invariants.
 Use it for quick edits before running the larger `ParslClock.cfg` exploration.
+The smoke configuration is also part of the foundational TLC gate, so the integrated heartbeat,
+deadline, retry, and stale-result boundary is checked on every regression run.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslClockSmoke.cfg models/clock/ParslClock.tla

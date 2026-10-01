@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `833b395` (`Promote HTEX monitoring message model`).
-- Foundational smoke inventory: 473 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 474 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted the compact integrated `ParslClock` smoke model. It combines logical
+  wall-clock ticks, heartbeat send/deliver/drop, manager expiry/recovery, task deadlines,
+  physical-attempt retry, and stale-result classification in one bounded state machine. The
+  smoke configuration uses one worker, one retry, and a three-tick horizon while checking clock,
+  heartbeat, timeout, result, and Future safety invariants.
 
 - Current stage: promoted `ParslHtexMonitoringMessage` as the HTEX optional-monitoring-frame
   boundary. The Current configuration reproduces a crash when an optional monitoring payload is

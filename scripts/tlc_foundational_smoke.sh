@@ -128,6 +128,9 @@ run_case file-bytes-transfer-full \
 run_case heartbeat \
     models/clock/ParslTimedHeartbeatSmokeFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla
+run_case integrated-clock \
+    models/clock/ParslClockSmoke.cfg \
+    models/clock/ParslClock.tla
 run_case heartbeat-timeout-persistence \
     models/clock/ParslHeartbeatTimeoutPersistenceFixed.cfg \
     models/clock/ParslHeartbeatTimeoutPersistence.tla
