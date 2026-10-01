@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `86d69dc` (`Promote Globus stage dependency model`).
-- Foundational smoke inventory: 478 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 479 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslJoinInternalExecutor` as the executor-admission boundary for
+  `join_app`. The fixed branch routes the outer join through `_parsl_internal`, while the Current
+  branch reproduces accidental dispatch through the user's `all` executor set. The focused TLC
+  model and existing `join_app` runtime test both pass.
 
 - Current stage: promoted `ParslGlobusStageDependency` as the explicit stage-in/stage-out Future
   dependency boundary. Stage-in cannot start until its parent DataFuture is ready, and stage-out

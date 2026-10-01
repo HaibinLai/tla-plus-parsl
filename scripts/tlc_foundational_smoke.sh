@@ -173,6 +173,9 @@ run_case monitoring-internal-queue-drain \
 run_case join-app \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
+run_case join-internal-executor \
+    models/dataflow/ParslJoinInternalExecutorFixed.cfg \
+    models/dataflow/ParslJoinInternalExecutor.tla
 run_case zmq-serialization \
     models/serialization/ParslZMQSerializationEndToEndSmoke.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla

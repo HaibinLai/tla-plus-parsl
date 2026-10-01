@@ -14,6 +14,13 @@ complete, fail, or be cancelled independently while the outer task remains in th
 | parsl/app/app.py::join_app | outer task marked as a join task and inner Future/list return shape |
 | AppFuture cancellation paths | running-inner cancellation and late callback handling |
 
+`ParslJoinInternalExecutor.tla` models the executor choice that sits underneath the outer join:
+`join_app` must use the DataFlowKernel's `_parsl_internal` ThreadPoolExecutor rather than the
+user-facing `all` executor set. The Current configuration retains the wrong-target counterexample;
+the Fixed configuration is now part of the foundational smoke gate. This corresponds to
+`DataFlowKernel`'s internal executor construction and `join_app`'s executor selection in
+`parsl/dataflow/dflow.py` and `parsl/app/app.py`.
+
 ## Model layers
 
 The integrated ParslJoinFull model covers:
