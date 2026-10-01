@@ -552,6 +552,9 @@ task admission.
 Fixed `ParslScaleInCancelShape` is also in the foundational TLC gate, checking partial provider
 cancellation responses without discarding already-cancelled blocks.
 
+CurveZMQ certificate valid/invalid configurations are also in the foundational TLC gate, checking
+private-directory and secret-key guards before loading network credentials.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

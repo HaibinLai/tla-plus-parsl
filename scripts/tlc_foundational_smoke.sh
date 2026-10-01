@@ -1856,5 +1856,11 @@ run_case mpi-task-context-normal \
 run_case scale-in-cancel-shape-fixed \
     models/executors/ParslScaleInCancelShapeFixed.cfg \
     models/executors/ParslScaleInCancelShape.tla
+run_case curvezmq-certificate-valid \
+    models/serialization/ParslCurveZMQCertificateModeValid.cfg \
+    models/serialization/ParslCurveZMQCertificateMode.tla
+run_case curvezmq-certificate-invalid \
+    models/serialization/ParslCurveZMQCertificateModeInvalid.cfg \
+    models/serialization/ParslCurveZMQCertificateMode.tla
 
 echo "Foundational TLC smoke suite passed."
