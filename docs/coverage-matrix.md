@@ -545,6 +545,10 @@ handling of output and summary read failures.
 `ParslJobStatusOutputSummary` threshold, large-file, and missing-file configurations are also in
 the foundational TLC gate, checking full output, head/tail truncation, and no-output semantics.
 
+MPI prefix-valid/invalid, fixed resource-spec, and task-context normal/fixed configurations are
+also in the foundational TLC gate, checking launcher selection, resource validation, and malformed
+task admission.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

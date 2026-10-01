@@ -1838,5 +1838,20 @@ run_case job-status-summary-large \
 run_case job-status-summary-missing \
     models/executors/ParslJobStatusOutputSummaryMissing.cfg \
     models/executors/ParslJobStatusOutputSummary.tla
+run_case mpi-prefix-valid \
+    models/executors/ParslMPIPrefix.cfg \
+    models/executors/ParslMPIPrefix.tla
+run_case mpi-prefix-invalid \
+    models/executors/ParslMPIPrefixInvalid.cfg \
+    models/executors/ParslMPIPrefix.tla
+run_case mpi-spec-fixed \
+    models/executors/ParslMPISpecFixed.cfg \
+    models/executors/ParslMPISpec.tla
+run_case mpi-task-context-fixed \
+    models/executors/ParslMPITaskContextShapeFixed.cfg \
+    models/executors/ParslMPITaskContextShape.tla
+run_case mpi-task-context-normal \
+    models/executors/ParslMPITaskContextShapeNormal.cfg \
+    models/executors/ParslMPITaskContextShape.tla
 
 echo "Foundational TLC smoke suite passed."
