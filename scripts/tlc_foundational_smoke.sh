@@ -1241,6 +1241,9 @@ run_case slurm-foreign-status \
 run_case slurm-empty-job-id \
     models/providers/ParslSlurmEmptyJobIdFixed.cfg \
     models/providers/ParslSlurmEmptyJobId.tla
+run_case slurm-submit-boundary \
+    models/providers/ParslSlurmSubmitFixed.cfg \
+    models/providers/ParslSlurmSubmit.tla
 run_case pbspro-missing-status \
     models/providers/ParslPbsproMissingStatusFixed.cfg \
     models/providers/ParslPbsproMissingStatus.tla
