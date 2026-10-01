@@ -341,6 +341,7 @@ tests=(
     tests/test_monitoring_external_queue_empty_runtime.py
     tests/test_monitoring_udp_drain_clock_runtime.py
     tests/test_monitoring_deferred_multiplicity_runtime.py
+    tests/test_monitoring_task_try_worker_lifecycle_runtime.py
     tests/test_monitoring_last_message_runtime.py
     tests/test_monitoring_task_insert_bookkeeping_runtime.py
     tests/test_monitoring_try_insert_bookkeeping_runtime.py

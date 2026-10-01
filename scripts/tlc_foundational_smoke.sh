@@ -1523,6 +1523,9 @@ run_case monitoring-lifecycle-bookkeeping \
 run_case monitoring-deferred-multiplicity \
     models/monitoring/ParslMonitoringDeferredMultiplicityFixed.cfg \
     models/monitoring/ParslMonitoringDeferredMultiplicity.tla
+run_case monitoring-task-try-worker-lifecycle \
+    models/monitoring/ParslMonitoringTaskTryWorkerLifecycleFixed.cfg \
+    models/monitoring/ParslMonitoringTaskTryWorkerLifecycle.tla
 run_case monitoring-last-message-race \
     models/monitoring/ParslMonitoringLastMessageRaceFixed.cfg \
     models/monitoring/ParslMonitoringLastMessageRace.tla

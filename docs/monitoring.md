@@ -1,5 +1,17 @@
 # Monitoring models
 
+`ParslMonitoringTaskTryWorkerLifecycle.tla` composes the deferred worker-first path with the
+TASK/TRY inserts and the paired STATUS/TRY running update. The Current branch permits one table
+to advance when the other write fails; the Fixed branch retains the worker event and avoids a
+partial cross-table observation. The runtime bridge is
+`tests/test_monitoring_task_try_worker_lifecycle_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/monitoring/ParslMonitoringTaskTryWorkerLifecycleCurrent.cfg models/monitoring/ParslMonitoringTaskTryWorkerLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -config models/monitoring/ParslMonitoringTaskTryWorkerLifecycleFixed.cfg models/monitoring/ParslMonitoringTaskTryWorkerLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_task_try_worker_lifecycle_runtime.py -v
+```
+
 `ParslMonitoringRemoteLifecycle.tla` composes the remote resource monitor's periodic
 intermediate samples with its unconditional final resource message.  The model keeps wall
 clock and monotonic time separate: a rollback may suppress a wall-clock intermediate sample in

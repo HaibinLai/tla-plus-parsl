@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c9c5e59` (`Model stage-in attempt generations`).
-- Foundational smoke inventory: 633 TLC cases and 430 Python runtime probes.
+- Foundational smoke inventory: 634 TLC cases and 431 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 632 TLC cases and 430 Python probes pass as a regression gate;
+- the existing 634 TLC cases and 431 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -38,6 +38,12 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: composed deferred worker-first monitoring with TASK/TRY creation and STATUS/TRY
+  persistence in `ParslMonitoringTaskTryWorkerLifecycle`. The Current branch reproduces a
+  partial cross-table observation when STATUS writing fails during replay; the Fixed branch keeps
+  the deferred event pending instead. Full smoke verification passed: 634 TLC configurations and
+  431 Python runtime probes; 670 unittest methods are present.
 
 - Current stage: composed logical task retry with physical stage-in transfer generations in
   `ParslStageInAttemptGeneration`. The Current branch allows a transfer from attempt 0 to publish
