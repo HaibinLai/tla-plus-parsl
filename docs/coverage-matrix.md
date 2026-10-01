@@ -575,6 +575,9 @@ Fixed/success `ParslStrategyBlockCapacity` configurations are also in the founda
 checking rejection of zero capacity before overload arithmetic and the valid scaling path. The
 current configuration remains a deliberate bug-ledger counterexample.
 
+Fixed `ParslCallableAliasRetry` is also in the foundational TLC gate, checking callable/argument
+alias identity and per-attempt object snapshots across retry.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

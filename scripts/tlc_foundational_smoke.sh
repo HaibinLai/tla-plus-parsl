@@ -1886,5 +1886,8 @@ run_case strategy-block-capacity-fixed \
 run_case strategy-block-capacity-success \
     models/strategy/ParslStrategyBlockCapacitySuccess.cfg \
     models/strategy/ParslStrategyBlockCapacity.tla
+run_case callable-alias-retry-fixed \
+    models/serialization/ParslCallableAliasRetry.cfg \
+    models/serialization/ParslCallableAliasRetry.tla
 
 echo "Foundational TLC smoke suite passed."
