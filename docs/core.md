@@ -245,6 +245,19 @@ and duplicate persistence. The Fixed branch makes terminal writes idempotent and
 persisted row to describe the current attempt; the Current configuration retains provider-loss,
 stale-result, and terminal-row-loss counterexamples.
 
+`ParslResultDecodeRetryMonitoring.tla` composes the serialization-side decode boundary with the
+same logical/physical separation. A failed result decode moves attempt 0 into retry, attempt 1
+becomes current, and a late attempt-0 result is either marked stale or incorrectly resolves the
+logical Future. Monitoring events follow the same generation rule: the Fixed branch clears the
+old high-water status at retry and accepts only current-attempt events, while the Current branch
+permits an old success event to overwrite the retry's status. The Fixed TLC case is in the
+foundational gate; the Current case is retained as a counterexample configuration.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslResultDecodeRetryMonitoringCurrent.cfg models/core/ParslResultDecodeRetryMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslResultDecodeRetryMonitoringFixed.cfg models/core/ParslResultDecodeRetryMonitoring.tla
+```
+
 `ParslJoinProviderResultMonitoringDB.tla` lifts the same protocol to a two-dependency join. It
 requires every inner dependency to resolve in the current generation before outer completion and
 connects that condition to provider retry and persisted monitoring state.

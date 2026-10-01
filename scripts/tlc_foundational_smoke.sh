@@ -380,6 +380,9 @@ run_case nested-join \
 run_case provider-result-monitoring-db \
     models/core/ParslProviderResultMonitoringDBFixed.cfg \
     models/core/ParslProviderResultMonitoringDB.tla
+run_case result-decode-retry-monitoring \
+    models/core/ParslResultDecodeRetryMonitoringFixed.cfg \
+    models/core/ParslResultDecodeRetryMonitoring.tla
 run_case join-provider-result-monitoring-db \
     models/core/ParslJoinProviderResultMonitoringDBFixed.cfg \
     models/core/ParslJoinProviderResultMonitoringDB.tla

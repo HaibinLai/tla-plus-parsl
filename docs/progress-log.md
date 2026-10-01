@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `43c6c55` (`Require validated result envelopes in task transport`).
-- Foundational smoke inventory: 616 TLC cases and 415 Python runtime probes.
+- Foundational smoke inventory: 617 TLC cases and 415 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 616 TLC cases and 415 Python probes pass as a regression gate;
+- the existing 617 TLC cases and 415 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -1001,12 +1001,17 @@ criteria for this deliverable.
   this is now aligned with the `ParslHtexWorkerPollPriority` TLC counterexample rather than a
   one-shot scheduling artifact.
 - Current stage: reran the complete bounded v0.1 regression after the source-aligned refinements:
-  all 616 TLC smoke cases and all 415 Python runtime probe entries passed. Added
+  all 617 TLC smoke cases and all 415 Python runtime probe entries passed. Added
   `docs/v0.1-report.md` as the fixed-scope handoff with component mapping, invariant classes,
   Current/Fixed interpretation, limitations, and exact reproduction commands.
 - Current stage: tightened `ParslTaskTransport` result acceptance. A physical result now needs
   both a valid result envelope and a valid payload bit before it can resolve the logical Future;
   `ResultDecodeSafety` is checked by TLC and the real serialized-task ZMQ probe still passes.
+- Current stage: added `ParslResultDecodeRetryMonitoring`, a bounded cross-layer model combining
+  result decode failure, physical retry generation, late old-attempt delivery, and monitoring
+  status persistence. The Current case reaches a stale-success monitoring counterexample; the
+  Fixed case rejects the old result, resets the monitoring high-water mark at retry, and passes
+  100,001 simulated states.
 
 ### Verification convention
 
