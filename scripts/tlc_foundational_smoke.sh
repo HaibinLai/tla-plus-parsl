@@ -725,6 +725,9 @@ run_case workqueue-results \
 run_case callable-retry-transport-fixed \
     models/serialization/ParslCallableRetryTransportFixed.cfg \
     models/serialization/ParslCallableRetryTransport.tla
+run_case callable-closure-memo-fixed \
+    models/serialization/ParslCallableClosureMemoFixed.cfg \
+    models/serialization/ParslCallableClosureMemo.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

@@ -239,6 +239,10 @@ The Fixed `ParslCallableRetryTransport` configuration is also in the foundationa
 per-attempt callable/closure snapshots to serialized ZMQ payloads and rejects stale results from an
 older physical attempt; the Current configuration remains a deliberate counterexample.
 
+The Fixed `ParslCallableClosureMemo` configuration is also in the foundational gate. It requires
+memoization identity to distinguish callable closure contents; its Current configuration documents
+the name/module collision found by the runtime probe.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
