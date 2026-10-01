@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `cf485fe` (`Compose serialized ZMQ ACK retry snapshot`).
+- Latest locally preserved commit: `6e97ffb` (`Compose multipart ZMQ ACK validation`).
 - Foundational smoke inventory: 625 TLC cases and 424 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
