@@ -456,6 +456,9 @@ composing registration mismatch, heartbeat expiry, fatal-result ordering, and ad
 The busy and idle `ParslHtexWorkerWatchdog` configurations are also in the foundational TLC gate,
 checking WorkerLost publication for a failed busy worker and silent replacement of idle capacity.
 
+Fixed `ParslMonitoringThreshold` is also in the foundational TLC gate, checking zero-threshold
+monitoring batch consumption and preserving the Current queued-event counterexample.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
