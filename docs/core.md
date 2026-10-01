@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 418 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 418 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 419 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 419 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -417,6 +417,10 @@ Current can evaluate J2 while one input is still pending.
 multipart queue delivery, decode, retargeting, duplication, and stale results. Fixed validates
 both message origin and attempt before resolving a Future; Current can resolve a retargeted or
 obsolete message.
+
+`ParslHeartbeatClockJump.tla` models HTEX heartbeat expiry with separate wall and monotonic
+ages. Fixed makes expiry decisions from monotonic elapsed time, so a forward wall-clock jump
+cannot evict a healthy manager (BUG-026) and a backward jump cannot defer expiry (BUG-089).
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the

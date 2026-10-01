@@ -161,6 +161,9 @@ run_case htex-unknown-result-type \
 run_case htex-watchdog-result-race \
     models/executors/ParslHtexWatchdogResultRaceFixed.cfg \
     models/executors/ParslHtexWatchdogResultRace.tla
+run_case heartbeat-clock-jump \
+    models/executors/ParslHeartbeatClockJumpFixed.cfg \
+    models/executors/ParslHeartbeatClockJump.tla
 run_case kubernetes-admission \
     models/providers/ParslKubernetesAdmissionFixed.cfg \
     models/providers/ParslKubernetesAdmission.tla
