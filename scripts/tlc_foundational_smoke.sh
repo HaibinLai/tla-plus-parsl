@@ -1004,6 +1004,9 @@ run_case executor-kinds \
 run_case executor-provider-bridge \
     models/executors/ParslProviderExecutorBridgeSmoke.cfg \
     models/executors/ParslProviderExecutorBridge.tla
+run_case executor-provider \
+    models/executors/ParslExecutorProvider.cfg \
+    models/executors/ParslExecutorProvider.tla
 run_case executor-provider-lifecycle \
     models/executors/ParslExecutorProviderLifecycleFixed.cfg \
     models/executors/ParslExecutorProviderLifecycle.tla

@@ -962,6 +962,11 @@ worker slots, queued/running tasks, executor drain, and provider terminal cleanu
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
 below `MIN_BLOCKS`; the fixed configuration enforces the floor and checks 161 states.
 
+`ParslExecutorProvider.tla` is the smaller provider/executor baseline beneath that lifecycle
+refinement. It separates provider block requests, manager/worker ownership, executor admission,
+task dispatch, provider failure, and block-granular scale-in. The baseline configuration is now
+part of the foundational smoke gate.
+
 `ParslHeartbeatLateAck.tla` isolates the in-flight heartbeat race: a manager can expire before an
 old heartbeat reaches the interchange. The current branch accepts that stale acknowledgement and
 resurrects the manager, violating `ExpiryTerminal`; the fixed branch ignores it as stale. This
