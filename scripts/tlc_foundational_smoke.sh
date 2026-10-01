@@ -428,6 +428,9 @@ run_case grid-engine-status-batch \
 run_case grid-engine-status-line \
     models/providers/ParslGridEngineStatusFixed.cfg \
     models/providers/ParslGridEngineStatus.tla
+run_case grid-engine-cancel-unknown \
+    models/providers/ParslGridEngineCancelFixed.cfg \
+    models/providers/ParslGridEngineCancel.tla
 run_case lsf-duplicate-status \
     models/providers/ParslLSFDuplicateStatusFixed.cfg \
     models/providers/ParslLSFDuplicateStatus.tla

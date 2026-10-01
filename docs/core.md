@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 410 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 410 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 411 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 411 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -381,6 +381,10 @@ as cancellation success (BUG-189).
 `ParslCondorSubmit.tla` models the Condor submit-output boundary. Fixed rejects empty or
 malformed successful output before resource registration; Current reaches the raw parser/indexing
 failure path (BUG-246 and related submit parsing findings).
+
+`ParslGridEngineCancel.tla` models `qdel` cancellation after local cleanup. Fixed treats a
+successful delete for an unknown local ID as stale/idempotent; Current reaches the resource-map
+crash path (BUG-015).
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
