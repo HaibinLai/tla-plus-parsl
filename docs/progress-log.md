@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `a940dbb` (`Model thread executor startup cleanup`).
-- Foundational smoke inventory: 494 TLC cases and 409 Python runtime probes.
+- Foundational smoke inventory: 495 TLC cases and 410 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: added `ParslFluxShutdownLifecycle`, covering shutdown before FluxExecutor
+  startup. The Current branch joins an unstarted submission thread and raises `RuntimeError`; the
+  Fixed branch treats the unstarted executor as quiescent. TLC and the concrete FluxExecutor
+  runtime probe pass without requiring a Flux service.
 
 - Current stage: added `ParslThreadExecutorLifecycle`, covering failed thread-pool startup and
   cleanup. The Current branch exposes a second raw shutdown error when `start()` never created

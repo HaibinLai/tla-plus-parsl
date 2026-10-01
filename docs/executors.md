@@ -1231,3 +1231,14 @@ The unified smoke runner now covers the surrounding HTEX admission and lifecycle
 well: manager loss, capacity fallback, cores-per-worker validation, dispatch priority, scale-in
 races and force/idle protection, provisioning admission monitoring, partial scale-out failure,
 shutdown reaping, unknown manager messages/results, and CPU/memory/accelerator worker capacity.
+
+`ParslFluxShutdownLifecycle.tla` models the Flux executor's submission-thread lifecycle. The
+Current `shutdown()` path calls `join()` even when `start()` was never called, while the Fixed path
+accepts an unstarted executor as already quiescent. The runtime probe constructs the real executor
+with a harmless executable path and exercises shutdown before startup.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxShutdownLifecycleCurrent.cfg models/executors/ParslFluxShutdownLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxShutdownLifecycleFixed.cfg models/executors/ParslFluxShutdownLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_shutdown_lifecycle_runtime.py -v
+```
