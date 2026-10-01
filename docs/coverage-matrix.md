@@ -514,6 +514,9 @@ result correlation, retry bounds, and stale-result rejection.
 `ParslSerializationSnapshot` is also in the foundational TLC gate, checking that mutation of the
 original Python object graph cannot change the captured payload or decoded version.
 
+Fixed `ParslDataFutureCancellation` is also in the foundational TLC gate, checking cancellation
+propagation from a parent Future to the dependent DataFuture readiness state.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

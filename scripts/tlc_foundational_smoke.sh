@@ -1793,5 +1793,8 @@ run_case task-transport-failure \
 run_case serialization-snapshot \
     models/serialization/ParslSerializationSnapshot.cfg \
     models/serialization/ParslSerializationSnapshot.tla
+run_case datafuture-cancellation-fixed \
+    models/dataflow/ParslDataFutureCancellationFixed.cfg \
+    models/dataflow/ParslDataFutureCancellation.tla
 
 echo "Foundational TLC smoke suite passed."
