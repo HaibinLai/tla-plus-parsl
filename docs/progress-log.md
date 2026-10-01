@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `2740d71` (`Promote Work Queue resource shape model`).
-- Foundational smoke inventory: 396 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 397 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -51,6 +51,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the Work Queue resource-spec-shape Fixed case, requiring validation
   before task-directory and Future-registration side effects.
+
+- Current stage: promoted the HTEX address-probe-timeout Fixed case, preserving explicit zero
+  timeout values instead of silently substituting the worker default.
 
 - Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
   stale inner results, two-dependency join completion, and monitoring persistence into one model.
