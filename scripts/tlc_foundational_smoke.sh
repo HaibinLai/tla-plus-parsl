@@ -155,6 +155,9 @@ run_case htex-ambiguous-result-rejection \
 run_case htex-unknown-result-type \
     models/executors/ParslHtexUnknownResultTypeFixed.cfg \
     models/executors/ParslHtexUnknownResultType.tla
+run_case htex-watchdog-result-race \
+    models/executors/ParslHtexWatchdogResultRaceFixed.cfg \
+    models/executors/ParslHtexWatchdogResultRace.tla
 run_case kubernetes-admission \
     models/providers/ParslKubernetesAdmissionFixed.cfg \
     models/providers/ParslKubernetesAdmission.tla

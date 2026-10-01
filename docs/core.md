@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 389 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 389 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 390 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 390 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -300,6 +300,10 @@ cancellation, late completion, and bounded monitoring persistence in one executa
 `ParslHtexUnknownResultType.tla` is also promoted into the gate. It models the result worker's
 malformed-type boundary: the Fixed branch discards an unknown frame and continues to the next
 valid Future, while the Current branch records the worker-stop behavior documented in BUG-255.
+
+`ParslHtexWatchdogResultRace.tla` adds the worker-watchdog ordering boundary. The Fixed branch
+prevents a `WorkerLost` frame after a successful result has already been queued; the Current
+branch retains the duplicate terminal-result counterexample from BUG-139.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
