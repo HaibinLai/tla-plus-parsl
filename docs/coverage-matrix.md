@@ -462,6 +462,9 @@ monitoring batch consumption and preserving the Current queued-event counterexam
 Fixed `ParslMonitoringVersionedBatch` is also in the foundational TLC gate, checking atomic
 transaction rollback and rejection of stale status events below the database version high-water mark.
 
+Fixed `ParslProviderExecutorTimedMonitoring` is also in the foundational TLC gate, composing
+provider/manager liveness, retry and stale-result handling, scale-in, and monitoring persistence.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
