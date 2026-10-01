@@ -1367,6 +1367,9 @@ run_case zip-path-first-match \
 run_case zip-path-validation \
     models/staging/ParslZipPathValidationFixed.cfg \
     models/staging/ParslZipPathValidation.tla
+run_case zip-stage-out \
+    models/staging/ParslZipStageOutRetryFixed.cfg \
+    models/staging/ParslZipStageOut.tla
 run_case zip-stage-in \
     models/staging/ParslZipStageInFixed.cfg \
     models/staging/ParslZipStageIn.tla

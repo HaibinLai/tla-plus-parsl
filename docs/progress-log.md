@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `1d141c4` (`Promote LSF submit model`).
-- Foundational smoke inventory: 490 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `6e4321c` (`Record LSF submit promotion`).
+- Foundational smoke inventory: 491 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslZipStageOut` as the archive publication boundary. Archive write,
+  source cleanup, retry after cleanup failure, source-version change, and duplicate-member handling
+  are explicit; the fixed branch replaces an existing member rather than appending a duplicate.
+  The fixed TLC configuration and six real ZIP staging probes pass.
+
 
 - Current stage: promoted `ParslLSFSubmit` as the LSF `bsub` submission lifecycle. Script writing,
   scheduler failure, empty/malformed successful output, and valid marker/job-id registration are
