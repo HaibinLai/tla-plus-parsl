@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `4762071` (`Compose serialized result attempt delivery`).
+- Latest locally preserved commit: `5b069df` (`Compose heartbeat expiry and result attempts`).
 - Foundational smoke inventory: 628 TLC cases and 426 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
