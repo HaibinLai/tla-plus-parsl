@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `7612a82` (`Promote LSF submit job-id model`).
+- Latest pushed commit: `33a174c` (`Promote LSF cancellation model`).
 - Foundational smoke inventory: 408 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
