@@ -464,6 +464,9 @@ run_case torque-status-failure \
 run_case torque-duplicate-status \
     models/providers/ParslTorqueDuplicateStatusFixed.cfg \
     models/providers/ParslTorqueDuplicateStatus.tla
+run_case torque-foreign-status \
+    models/providers/ParslTorqueStatusFixed.cfg \
+    models/providers/ParslTorqueStatus.tla
 run_case thread-executor-resource-spec \
     models/executors/ParslThreadExecutorResourceSpecFixed.cfg \
     models/executors/ParslThreadExecutorResourceSpec.tla
