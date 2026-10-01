@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `ed94022` (`Promote heartbeat retry model`).
-- Foundational smoke inventory: 498 TLC cases and 411 Python runtime probes.
+- Latest locally preserved commit: `500f626` (`Promote workflow duration model`).
+- Foundational smoke inventory: 499 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
