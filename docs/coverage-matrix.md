@@ -259,6 +259,9 @@ the Current configuration remains a counterexample for silent negative-interval 
 The basic `ParslCommandClient` reply and timeout configurations are also in the foundational gate,
 covering successful REQ/REP completion and permanent bad-client state after response timeout.
 
+Both `ParslJoinNoneResult` configurations are also in the foundational gate, checking successful
+single and list joins whose inner Future values are `None` rather than failures or missing values.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

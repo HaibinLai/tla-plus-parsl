@@ -761,6 +761,12 @@ run_case command-client-reply \
 run_case command-client-timeout \
     models/executors/ParslCommandClientTimeout.cfg \
     models/executors/ParslCommandClient.tla
+run_case join-none-single \
+    models/dataflow/ParslJoinNoneResultSingle.cfg \
+    models/dataflow/ParslJoinNoneResult.tla
+run_case join-none-list \
+    models/dataflow/ParslJoinNoneResultList.cfg \
+    models/dataflow/ParslJoinNoneResult.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
