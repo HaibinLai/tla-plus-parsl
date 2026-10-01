@@ -857,6 +857,9 @@ run_case provider-status-shape \
 run_case torque-cancel-unknown \
     models/providers/ParslTorqueCancelUnknownFixed.cfg \
     models/providers/ParslTorqueCancelUnknown.tla
+run_case torque-cancel-state \
+    models/providers/ParslTorqueCancelFixed.cfg \
+    models/providers/ParslTorqueCancel.tla
 run_case azure-cancel-bookkeeping \
     models/providers/ParslAzureCancelBookkeepingFixed.cfg \
     models/providers/ParslAzureCancelBookkeeping.tla

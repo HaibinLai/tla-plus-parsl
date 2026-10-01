@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `a6b7978` (`Promote Kubernetes submit state model`).
-- Foundational smoke inventory: 429 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 430 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -106,6 +106,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted `ParslKubernetesSubmit`. Fixed passed TLC and two targeted runtime tests
   passed; Current reproduced a newly created Pending pod being recorded as RUNNING.
+
+- Current stage: promoted `ParslTorqueCancel`, making the provider's successful-cancel state
+  convention explicit. Fixed passed TLC; three targeted Torque cancellation runtime tests passed.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed

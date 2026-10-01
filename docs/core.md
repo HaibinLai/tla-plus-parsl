@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 429 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 429 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 430 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 430 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -458,6 +458,11 @@ Current reaches the raw regex-group failure path.
 `ParslKubernetesSubmit.tla` models pod creation versus local admission state. Fixed records a
 newly created pod as PENDING until a status poll observes Running; Current immediately records
 RUNNING after API creation (BUG-126).
+
+`ParslTorqueCancel.tla` makes Torque's cancellation state convention explicit: remote `qdel`
+success returns success and the Fixed branch records a strict CANCELLED state, while Current
+records COMPLETED/“exiting” as implemented by the provider. The separate stale-ID model covers
+idempotent cleanup.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
