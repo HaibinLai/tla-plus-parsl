@@ -274,6 +274,9 @@ thresholds, outstanding-task cleanup, and admission/scaling suppression after ex
 The Fixed `ParslApplyDispatchBoundary` configuration is also in the foundational gate, rejecting
 malformed apply-message arity before it reaches worker invocation.
 
+The Fixed and valid `ParslPythonTimeoutParameter` configurations are also in the foundational gate;
+the Current configuration remains a counterexample for immediate failure from non-positive delays.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

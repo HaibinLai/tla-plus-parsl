@@ -779,6 +779,12 @@ run_case poller-bad-state \
 run_case apply-dispatch-boundary-fixed \
     models/serialization/ParslApplyDispatchBoundaryFixed.cfg \
     models/serialization/ParslApplyDispatchBoundary.tla
+run_case python-timeout-fixed \
+    models/clock/ParslPythonTimeoutParameterFixed.cfg \
+    models/clock/ParslPythonTimeoutParameter.tla
+run_case python-timeout-valid \
+    models/clock/ParslPythonTimeoutParameterValid.cfg \
+    models/clock/ParslPythonTimeoutParameter.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

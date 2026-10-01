@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `cd2addf` (`Promote apply dispatch boundary`).
-- Foundational smoke inventory: 532 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 534 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -719,6 +719,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the Fixed `ParslApplyDispatchBoundary` configuration into the foundational
   TLC gate. Malformed four-frame apply messages are rejected at the serialization facade before worker
   invocation; the Current configuration remains a deliberate arity counterexample.
+- Current stage: promoted the Fixed and valid `ParslPythonTimeoutParameter` configurations into the
+  foundational TLC gate. Non-positive Python-app timeout values are rejected before wrapper execution;
+  the Current configuration remains a deliberate immediate-timeout counterexample.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
