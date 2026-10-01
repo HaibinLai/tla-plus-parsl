@@ -292,6 +292,9 @@ monotonic worker-drain deadlines against wall-clock rollback.
 The Fixed `ParslResourceMonitorClock` configuration is also in the foundational gate, checking
 monotonic remote resource-monitor sampling across wall-clock rollback.
 
+The Fixed and positive `ParslMonitoringBatch` configurations are also in the foundational gate,
+checking zero-interval batch collection and available-message consumption.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
