@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `beda8fc` (`Promote file open timeout model`).
-- Foundational smoke inventory: 536 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 537 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -725,6 +725,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the Fixed and success `ParslTimeLimitedOpenTimeout` configurations into the
   foundational TLC gate. A missing file now produces an explicit timeout before `open()` is attempted;
   the Current configuration remains a raw FileNotFoundError counterexample.
+- Current stage: promoted the Fixed `ParslTimerCloseTimeout` configuration into the foundational TLC
+  gate. A timed close reports an explicit closing/timeout outcome while the callback remains alive;
+  the Current configuration remains a premature-closed counterexample.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

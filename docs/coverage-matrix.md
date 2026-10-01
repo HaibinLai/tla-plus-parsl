@@ -280,6 +280,9 @@ the Current configuration remains a counterexample for immediate failure from no
 The Fixed and success `ParslTimeLimitedOpenTimeout` configurations are also in the foundational gate;
 the Current configuration remains a counterexample for opening after the file wait deadline expires.
 
+The Fixed `ParslTimerCloseTimeout` configuration is also in the foundational gate, ensuring a timer
+close cannot report completion before its callback thread is quiescent.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
