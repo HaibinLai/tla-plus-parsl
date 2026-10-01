@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 392 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 392 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 393 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 393 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -312,6 +312,10 @@ leaving an inflight orphan while the submission thread stops (BUG-242).
 `ParslFluxCancelSubmitRace.tla` models cancellation before the underlying Flux Future is bound.
 The Fixed branch carries the cancellation request into binding and suppresses the late callback;
 the Current branch retains the cancelled-wrapper callback error and late-publication behavior.
+
+`ParslFluxLateResultCancelledFuture.tla` covers the complementary case where the wrapper is
+cancelled first and the underlying task completes afterward. The Fixed branch ignores the late
+success callback, while Current reproduces the terminal-Future write error from BUG-185.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
