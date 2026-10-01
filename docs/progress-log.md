@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `a2723f4` (`Promote job status read error gate`).
-- Foundational smoke inventory: 593 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 596 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslJobStatusOutputSummary` threshold, large-file, and missing-file
+  configurations into the foundational TLC gate. Summary output now distinguishes no output,
+  full-at-threshold content, and head/tail truncation.
 
 - Current stage: promoted fixed `ParslJobStatusOutputReadError` into the foundational TLC gate.
   JobStatus output and summary reads now share the same defensive read-error policy instead of

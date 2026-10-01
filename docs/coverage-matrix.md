@@ -542,6 +542,9 @@ foundational TLC gate, checking HTEX endpoint selection and timeout/rejection be
 Fixed `ParslJobStatusOutputReadError` is also in the foundational TLC gate, checking consistent
 handling of output and summary read failures.
 
+`ParslJobStatusOutputSummary` threshold, large-file, and missing-file configurations are also in
+the foundational TLC gate, checking full output, head/tail truncation, and no-output semantics.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
