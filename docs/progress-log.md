@@ -657,6 +657,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslFilePathResolution` into the foundational TLC gate. The model
   separates local `file:` URLs from staged remote paths and rejects remote reads without a
   site-local annotation before the higher-level transfer/publication models run.
+- Current stage: promoted `ParslSerializationZMQBridge` into the foundational TLC gate. This
+  compact bridge connects serializer tokens and attempt IDs to framing, route validation,
+  duplicate/discard handling, worker dispatch, result decoding, and stale-result rejection.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

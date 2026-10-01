@@ -62,6 +62,9 @@ of a permanently broken monitoring receive channel before database delivery can 
 `ParslFilePathResolution` is now in the foundational gate, checking the lower-level `File.filepath`
 contract that local URLs resolve directly while remote URLs require a staged local path.
 
+`ParslSerializationZMQBridge` is now in the foundational gate, providing the small executable
+serializer-token/frame/route/correlation baseline used by the larger ZMQ retry models.
+
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes
