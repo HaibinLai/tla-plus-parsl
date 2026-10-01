@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `30da61f` (`Record LocalProvider lifecycle promotion`).
+- Latest locally preserved commit: `f691b47` (`Add Kubernetes lifecycle composition model`).
 - Foundational smoke inventory: 436 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
