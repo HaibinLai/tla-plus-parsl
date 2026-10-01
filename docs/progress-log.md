@@ -1000,6 +1000,10 @@ criteria for this deliverable.
   continues to service the task socket first and leaves the result socket unread in every iteration;
   this is now aligned with the `ParslHtexWorkerPollPriority` TLC counterexample rather than a
   one-shot scheduling artifact.
+- Current stage: reran the complete bounded v0.1 regression after the source-aligned refinements:
+  all 616 TLC smoke cases and all 415 Python runtime probe entries passed. Added
+  `docs/v0.1-report.md` as the fixed-scope handoff with component mapping, invariant classes,
+  Current/Fixed interpretation, limitations, and exact reproduction commands.
 
 ### Verification convention
 

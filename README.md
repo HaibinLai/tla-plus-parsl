@@ -16,6 +16,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Monitoring models](docs/monitoring.md)
 - [Clock and strategy models](docs/clock-strategy.md)
 - [Coverage matrix](docs/coverage-matrix.md)
+- [v0.1 validation report](docs/v0.1-report.md)
 - [Project progress log](docs/progress-log.md)
 
 Runtime probes are under [`tests/`](tests/). The complete runtime baseline is 485 passing tests.
