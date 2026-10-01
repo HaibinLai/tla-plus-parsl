@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `a6b7978` (`Promote Kubernetes submit state model`).
+- Latest pushed commit: `84ae522` (`Promote Torque cancellation state model`).
 - Foundational smoke inventory: 430 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
