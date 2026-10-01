@@ -316,6 +316,8 @@ monitoring worker thread.
 versions, an asynchronous queue, reordering, and database writes. The current configuration finds
 a `DatabaseMonotonic` counterexample when an older event overwrites a newer record. The fixed
 configuration ignores that stale event and checks 1,978 states with all four invariants passing.
+The fixed configuration is now part of the foundational smoke gate, while the Current
+configuration remains an executable stale-write counterexample.
 
 `ParslFileTransferMonitoring.tla` connects that database path to output-file publication. A
 terminal event carries the stage-out's captured file version. The current configuration can write

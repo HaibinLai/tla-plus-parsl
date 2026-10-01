@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `31caf67` (`Promote join internal executor model`).
-- Foundational smoke inventory: 479 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 480 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslMonitoringDelivery` as the compact logical-task to database
+  event path. It models versioned status events, asynchronous queue delivery, reordering, and
+  stale-write rejection at the database high-water mark. The Current configuration reproduces
+  an older event overwriting a newer record; the Fixed configuration is smoke-gated, and the
+  monitoring status-history/database runtime probes pass.
 
 - Current stage: promoted `ParslJoinInternalExecutor` as the executor-admission boundary for
   `join_app`. The fixed branch routes the outer join through `_parsl_internal`, while the Current

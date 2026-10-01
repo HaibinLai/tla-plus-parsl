@@ -1208,6 +1208,9 @@ run_case monitoring-shutdown-race \
 run_case monitoring-event-stream \
     models/monitoring/ParslMonitoringEventStreamFixed.cfg \
     models/monitoring/ParslMonitoringEventStream.tla
+run_case monitoring-delivery \
+    models/monitoring/ParslMonitoringDeliveryFixed.cfg \
+    models/monitoring/ParslMonitoringDelivery.tla
 run_case monitoring-status-history \
     models/monitoring/ParslMonitoringStatusHistory.cfg \
     models/monitoring/ParslMonitoringStatusHistory.tla
