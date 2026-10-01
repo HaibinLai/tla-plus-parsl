@@ -506,6 +506,9 @@ run_case scale-in-result-shape \
 run_case flux-submission-failure \
     models/executors/ParslFluxSubmissionFailure.cfg \
     models/executors/ParslFluxSubmissionFailure.tla
+run_case flux-inflight-submission-failure \
+    models/executors/ParslFluxInflightSubmissionFailureFixed.cfg \
+    models/executors/ParslFluxInflightSubmissionFailure.tla
 run_case globus-compute-result \
     models/executors/ParslGlobusComputeResult.cfg \
     models/executors/ParslGlobusComputeResult.tla
