@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `bab5b3f` (`Promote block provider bad state`).
-- Foundational smoke inventory: 546 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 547 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -749,6 +749,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslBlockProviderBadState` into the foundational TLC gate. An unrecoverable
   provider error records its cause, fails all pending tasks, preserves already terminal tasks, and
   rejects later submissions.
+- Current stage: promoted `ParslJoinDuplicates` into the foundational TLC gate. Ordered duplicate Future
+  references preserve list positions and repeated failure entries, while duplicate callbacks do not
+  alter aggregate results or join-handle cleanup.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

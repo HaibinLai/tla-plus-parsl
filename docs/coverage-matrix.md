@@ -304,6 +304,9 @@ missing-job handling, cancellation, scale-in, failure/recovery, and resource adm
 `ParslBlockProviderBadState` is also in the foundational gate, checking provider-error cleanup,
 terminal Future preservation, and post-failure submission rejection.
 
+`ParslJoinDuplicates` is also in the foundational gate, checking ordered duplicate Future positions,
+failure multiplicity, duplicate callback tolerance, and terminal join-handle cleanup.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
