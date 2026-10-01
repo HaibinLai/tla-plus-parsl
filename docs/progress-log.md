@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `86d1948` (`Promote LocalProvider tasks-per-node model`).
-- Foundational smoke inventory: 425 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 426 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -93,6 +93,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted `ParslLocalTasksPerNode`. Fixed passed TLC and the targeted runtime
   probe passed; Current reproduced zero `tasks_per_node` launching a failed local job.
+
+- Current stage: promoted `ParslKubernetesUnknownJob`. Fixed passed TLC and the targeted runtime
+  probe passed; Current reproduced stale status lookup raising a missing-resource error.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed

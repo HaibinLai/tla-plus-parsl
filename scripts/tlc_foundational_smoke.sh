@@ -1211,6 +1211,9 @@ run_case kubernetes-cancel-unknown-job \
 run_case kubernetes-cancel-boundary \
     models/providers/ParslKubernetesCancelFixed.cfg \
     models/providers/ParslKubernetesCancel.tla
+run_case kubernetes-unknown-status \
+    models/providers/ParslKubernetesUnknownJobFixed.cfg \
+    models/providers/ParslKubernetesUnknownJob.tla
 run_case condor-chunk-size \
     models/providers/ParslCondorChunkSizeFixed.cfg \
     models/providers/ParslCondorChunkSize.tla
