@@ -974,6 +974,9 @@ run_case manager-liveness-pool \
 run_case htex-duplicate-registration \
     models/executors/ParslHtexDuplicateRegistrationFixed.cfg \
     models/executors/ParslHtexDuplicateRegistration.tla
+run_case flux-provider-status-empty \
+    models/executors/ParslFluxProviderStatusEmptyFixed.cfg \
+    models/executors/ParslFluxProviderStatusEmpty.tla
 run_case join-cancellation \
     models/dataflow/ParslJoinCancellationFixed.cfg \
     models/dataflow/ParslJoinCancellation.tla
