@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `6e24814` (`Promote task transport gate`).
+- Latest locally preserved commit: `1be2bc8` (`Promote serialization snapshot gate`).
 - Foundational smoke inventory: 581 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
