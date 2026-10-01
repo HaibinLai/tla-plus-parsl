@@ -101,6 +101,9 @@ run_case integrated-abstract-join \
 run_case callable-object-snapshot \
     models/serialization/ParslFunctionObjectContents.cfg \
     models/serialization/ParslFunctionObjectContents.tla
+run_case callable-object-transport \
+    models/serialization/ParslFunctionObjectTransport.cfg \
+    models/serialization/ParslFunctionObjectTransport.tla
 run_case file-bytes-transfer \
     models/staging/ParslFileBytesSmoke.cfg \
     models/staging/ParslFileBytes.tla
