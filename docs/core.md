@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 415 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 415 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 416 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 416 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -403,6 +403,11 @@ monitoring row; the Current branch retains the cancellation and stale-result cou
 The outer join cancels both dependencies, and Fixed ignores a generation-1 result after retry;
 Current mutates one cancelled dependency to succeeded while the outer join and monitoring row
 remain cancelled.
+
+`ParslJoinComplete.tla` is the compact Future-propagation join model. It blocks outer
+finalization until every referenced inner Future is terminal, propagates inner failure/cancel,
+and preserves ordered duplicate list positions in Fixed. Current reproduces the set-like result
+shape that loses duplicate references (BUG-008).
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the

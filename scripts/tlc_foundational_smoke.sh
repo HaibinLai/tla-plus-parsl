@@ -206,6 +206,9 @@ run_case provider-cancel-retry-monitoring \
 run_case join-cancel-retry-generation \
     models/core/ParslJoinCancelRetryGenerationFixed.cfg \
     models/core/ParslJoinCancelRetryGeneration.tla
+run_case join-future-propagation \
+    models/dataflow/ParslJoinCompleteFixed.cfg \
+    models/dataflow/ParslJoinComplete.tla
 run_case provider-result-monitoring-db \
     models/core/ParslProviderResultMonitoringDBFixed.cfg \
     models/core/ParslProviderResultMonitoringDB.tla
