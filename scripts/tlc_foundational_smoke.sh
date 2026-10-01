@@ -1139,6 +1139,9 @@ run_case globus-transfer-timeout \
 run_case http-connection-cleanup \
     models/staging/ParslHTTPConnectionCleanupFixed.cfg \
     models/staging/ParslHTTPConnectionCleanup.tla
+run_case http-partial-cleanup \
+    models/staging/ParslHTTPPartialCleanupFixed.cfg \
+    models/staging/ParslHTTPPartialCleanup.tla
 run_case http-separate-task-cleanup \
     models/staging/ParslHTTPSeparateTaskCleanupFixed.cfg \
     models/staging/ParslHTTPSeparateTaskCleanup.tla

@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `e3cac91` (`Promote monitoring DB insert model`).
-- Foundational smoke inventory: 420 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 421 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -77,6 +77,10 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted `ParslMonitoringDBInsert`. Fixed passed TLC and three targeted runtime
   probes passed; Current reproduced duplicate STATUS event loss after an integrity rollback.
+
+- Current stage: promoted `ParslHTTPPartialCleanup`. Fixed passed TLC and the targeted HTTP
+  streaming runtime probe passed; Current reproduced partial destination publication after a
+  later chunk failure.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed

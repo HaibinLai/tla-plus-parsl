@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 420 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 420 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 421 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 421 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -425,6 +425,10 @@ cannot evict a healthy manager (BUG-026) and a backward jump cannot defer expiry
 `ParslMonitoringDBInsert.tla` models the monitoring `STATUS` primary-key boundary. Fixed treats
 duplicate terminal/event rows as idempotent, while Current rolls back and drops the duplicate
 event after an integrity error (BUG-070).
+
+`ParslHTTPPartialCleanup.tla` models streamed HTTP stage-in publication. Fixed removes partial
+ destination bytes when a later chunk fails; Current leaves the first chunk visible as a complete
+looking destination (BUG-077).
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
