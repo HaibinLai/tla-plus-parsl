@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `fe58220` (`Promote join Future propagation model`).
+- Latest pushed commit: `ea4907b` (`Promote triple nested join model`).
 - Foundational smoke inventory: 417 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
