@@ -1799,5 +1799,8 @@ run_case datafuture-cancellation-fixed \
 run_case datafuture-falsey-exception-fixed \
     models/dataflow/ParslDataFutureFalseyExceptionFixed.cfg \
     models/dataflow/ParslDataFutureFalseyException.tla
+run_case input-dependency-duplicate-fixed \
+    models/dataflow/ParslInputDependencyDuplicateFixed.cfg \
+    models/dataflow/ParslInputDependencyDuplicate.tla
 
 echo "Foundational TLC smoke suite passed."
