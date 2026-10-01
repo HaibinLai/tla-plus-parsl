@@ -488,6 +488,9 @@ run_case taskvine-cancelled-result \
 run_case taskvine-cancelled-failure-result \
     models/executors/ParslTaskVineCancelledFailureResultFixed.cfg \
     models/executors/ParslTaskVineCancelledFailureResult.tla
+run_case taskvine-resource-spec-shape \
+    models/executors/ParslTaskVineResourceSpecShapeFixed.cfg \
+    models/executors/ParslTaskVineResourceSpecShape.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
