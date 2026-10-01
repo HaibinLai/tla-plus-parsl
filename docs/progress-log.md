@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `d637a52` (`Promote join monitoring model`).
-- Foundational smoke inventory: 481 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 482 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslResultsIncoming` as the minimal HTEX result-channel boundary. A
+  readable DEALER socket yields one multipart message, a poll timeout yields no message, and
+  close terminates the receiver context. Both TLC configurations and the real wrapper probes pass;
+  the separate close-race model continues to document post-close access behavior.
 
 - Current stage: promoted `ParslJoinMonitoring` as the first compact join/monitoring composition.
   It combines memoized, staged-file, and compute inner Futures with outer join finalization,

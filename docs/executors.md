@@ -257,6 +257,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexTaskMessageMal
 returns `None`, and `close()` shuts down both the socket and its ZMQ context. The two configurations
 cover readable and timeout paths, while `tests/test_results_incoming_runtime.py` drives the real
 wrapper with a fake socket.
+The readable configuration is now part of the foundational smoke gate; the timeout configuration
+remains an explicit companion check for the no-message path.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslResultsIncoming.cfg models/executors/ParslResultsIncoming.tla
