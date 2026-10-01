@@ -188,6 +188,9 @@ run_case provider-task-scale-retry \
 run_case provider-staging-admission \
     models/core/ParslProviderStagingAdmissionFixed.cfg \
     models/core/ParslProviderStagingAdmission.tla
+run_case provider-poll-clock-rollback \
+    models/providers/ParslProviderPollClockRollbackFixed.cfg \
+    models/providers/ParslProviderPollClockRollback.tla
 run_case provider-result-retry-race \
     models/core/ParslProviderResultRetryRaceFixed.cfg \
     models/core/ParslProviderResultRetryRace.tla
