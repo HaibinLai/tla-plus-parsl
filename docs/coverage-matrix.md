@@ -12,8 +12,11 @@ Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 623 TLC cases and 423 runtime entries (659 unittest
+deduplication. The current baseline is 625 TLC cases and 424 runtime entries (661 unittest
 methods).
+
+It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode
+and preserves receiver-side deduplication across valid retransmission.
 
 The heartbeat coverage also has a runtime bridge for `ParslHeartbeatLateAck`: a heartbeat-shaped
 message from an expired manager is ignored by the real interchange path rather than resurrecting

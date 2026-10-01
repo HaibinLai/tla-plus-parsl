@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `cf485fe` (`Compose serialized ZMQ ACK retry snapshot`).
-- Foundational smoke inventory: 623 TLC cases and 423 Python runtime probes.
+- Foundational smoke inventory: 625 TLC cases and 424 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,11 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: composed multipart frame-count validation with serialized ACK/retry delivery in
+  `ParslZMQMultipartAck`. The Fixed branch rejects malformed four-buffer envelopes before decode
+  and deduplicates valid retransmissions. Full smoke verification passed: 625 TLC cases and 424
+  Python runtime probes; 661 unittest methods are present.
 
 - Current stage: composed serialized callable/object snapshots with ZMQ-style ACK-loss
   retransmission in `ParslZMQSerializedAck`. The Current branch dispatches the duplicate envelope

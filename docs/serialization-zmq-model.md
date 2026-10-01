@@ -82,6 +82,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedA
 /tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialized_ack_runtime.py -v
 ```
 
+`ParslZMQMultipartAck.tla` adds multipart validation to the same path. A valid three-buffer
+envelope can be retransmitted after ACK loss and remains at-most-once at dispatch. A malformed
+four-buffer envelope is rejected before the Fixed branch decodes it; the Current configuration
+keeps the decode-before-reject behavior represented by `ParslSerializationFrameCount`. The
+runtime bridge is `tests/test_zmq_multipart_ack_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartAckCurrent.cfg models/serialization/ParslZMQMultipartAck.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartAckFixed.cfg models/serialization/ParslZMQMultipartAck.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartAckMalformedCurrent.cfg models/serialization/ParslZMQMultipartAck.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartAckMalformedFixed.cfg models/serialization/ParslZMQMultipartAck.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zmq_multipart_ack_runtime.py -v
+```
+
 `ParslCallableAliasRetry.tla` combines Python object aliasing with retry snapshots. A mutable
 object is both captured by a callable and passed as an argument; if it mutates while an encoded
 attempt is pending, the fixed path invalidates that snapshot and re-encodes before retry. The
