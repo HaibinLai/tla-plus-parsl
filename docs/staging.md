@@ -183,6 +183,11 @@ stale buffer, retries from the new version, and admits consumers only after an a
 version-matching publication. `StartStage`, `CopyComplete`, and the publish actions abstract the
 DataManager staging Future; `StartConsumerA/B` abstract DFK dependency admission.
 
+`ParslGlobusStageDependency.tla` is the small dependency-wiring model beneath the concrete Globus
+transfer paths. It keeps the parent DataFuture attached to stage-in and the application Future
+attached to stage-out, so neither transfer can start before its producer is ready. The model is
+now part of the foundational smoke gate.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerCacheCurrent.cfg models/staging/ParslDataManagerCache.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslDataManagerCacheFixed.cfg models/staging/ParslDataManagerCache.tla

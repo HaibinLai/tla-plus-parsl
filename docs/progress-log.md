@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `170b260` (`Promote multi-output stageout model`).
-- Foundational smoke inventory: 477 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 478 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslGlobusStageDependency` as the explicit stage-in/stage-out Future
+  dependency boundary. Stage-in cannot start until its parent DataFuture is ready, and stage-out
+  cannot start until the application Future is done. The bounded TLC model and both real Globus
+  staging dependency probes pass.
 
 - Current stage: promoted `ParslMultiOutputStageOut` as the small multi-output DataFuture gate.
   Each output stage-out Future is independently represented but remains gated by the same

@@ -1436,6 +1436,9 @@ run_case app-future-output-streams-tuple \
 run_case data-manager-cache \
     models/staging/ParslDataManagerCacheFixed.cfg \
     models/staging/ParslDataManagerCache.tla
+run_case globus-stage-dependency \
+    models/staging/ParslGlobusStageDependency.cfg \
+    models/staging/ParslGlobusStageDependency.tla
 run_case data-manager-stage-out-return \
     models/staging/ParslDataManagerStageOutReturnFuture.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla
