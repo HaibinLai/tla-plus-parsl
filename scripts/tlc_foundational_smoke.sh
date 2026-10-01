@@ -434,6 +434,9 @@ run_case aws-unknown-instance \
 run_case local-unknown-job-status \
     models/providers/ParslLocalUnknownJobStatusFixed.cfg \
     models/providers/ParslLocalUnknownJobStatus.tla
+run_case local-provider-status-scope \
+    models/providers/ParslLocalProviderStatusScopeFixed.cfg \
+    models/providers/ParslLocalProviderStatusScope.tla
 run_case grid-engine-missing-status \
     models/providers/ParslGridEngineMissingStatusFixed.cfg \
     models/providers/ParslGridEngineMissingStatus.tla
