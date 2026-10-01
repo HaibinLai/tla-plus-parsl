@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e683701` (`Promote three-way join cancellation gate`).
+- Latest locally preserved commit: `0542635` (`Promote result race gate`).
 - Foundational smoke inventory: 568 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
