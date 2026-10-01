@@ -359,6 +359,12 @@ run_case join-three-cancellation-fixed \
 run_case result-race \
     models/dataflow/ParslResultRace.cfg \
     models/dataflow/ParslResultRace.tla
+run_case join-list-mutation-fixed \
+    models/dataflow/ParslJoinListMutationFixed.cfg \
+    models/dataflow/ParslJoinListMutation.tla
+run_case join-list-mutation-stable \
+    models/dataflow/ParslJoinListMutationStable.cfg \
+    models/dataflow/ParslJoinListMutation.tla
 run_case triple-nested-join \
     models/dataflow/ParslTripleNestedJoinFixed.cfg \
     models/dataflow/ParslTripleNestedJoin.tla

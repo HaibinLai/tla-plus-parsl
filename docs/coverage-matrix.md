@@ -480,6 +480,9 @@ inside a three-element join list and callback containment during failure aggrega
 `ParslResultRace` is also in the foundational TLC gate, checking retry-bound attempt correlation,
 late-success classification, and logical Future terminal-state consistency.
 
+Fixed and stable `ParslJoinListMutation` are also in the foundational TLC gate, checking that
+mutable join-result lists cannot change callback membership after registration.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
