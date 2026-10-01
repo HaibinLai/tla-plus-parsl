@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `c951eed` (`Promote HTEX result queue model`).
-- Foundational smoke inventory: 443 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `aa4004b` (`Record HTEX result queue promotion`).
+- Foundational smoke inventory: 444 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -66,6 +66,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslHtexResultQueue` into the executor gate. It models malformed,
   duplicate, and terminal Future result frames, requiring failed messages to resolve or preserve
   ownership without killing the result worker.
+
+- Current stage: promoted the present-manager `ParslHtexManagerDrain` path. The smoke gate now
+  checks the normal drained-manager acknowledgement/removal behavior alongside the stale-ID Fixed
+  path and its existing runtime probe.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join
