@@ -728,6 +728,15 @@ run_case callable-retry-transport-fixed \
 run_case callable-closure-memo-fixed \
     models/serialization/ParslCallableClosureMemoFixed.cfg \
     models/serialization/ParslCallableClosureMemo.tla
+run_case stageout-future-separate \
+    models/staging/ParslStageOutFuture.cfg \
+    models/staging/ParslStageOutFuture.tla
+run_case stageout-future-in-task \
+    models/staging/ParslStageOutInTask.cfg \
+    models/staging/ParslStageOutFuture.tla
+run_case stageout-future-none \
+    models/staging/ParslStageOutNone.cfg \
+    models/staging/ParslStageOutFuture.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

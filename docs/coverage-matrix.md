@@ -243,6 +243,10 @@ The Fixed `ParslCallableClosureMemo` configuration is also in the foundational g
 memoization identity to distinguish callable closure contents; its Current configuration documents
 the name/module collision found by the runtime probe.
 
+The three `ParslStageOutFuture` configurations are also in the foundational gate. They cover
+separate stage-out, in-task publication, and no-stage output readiness, including dependent-task
+admission only after a ready DataFuture.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
