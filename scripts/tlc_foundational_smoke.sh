@@ -467,6 +467,9 @@ run_case lsf-cancel-unknown \
 run_case pbspro-submit-shape \
     models/providers/ParslPbsproSubmitShapeFixed.cfg \
     models/providers/ParslPbsproSubmitShape.tla
+run_case pbspro-submit-boundary \
+    models/providers/ParslPBSProSubmitFixed.cfg \
+    models/providers/ParslPBSProSubmit.tla
 run_case torque-malformed-status \
     models/providers/ParslTorqueMalformedStatusLineFixed.cfg \
     models/providers/ParslTorqueMalformedStatusLine.tla
