@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `a5acc3f` (`Promote join root cause model`).
+- Latest locally preserved commit: `2a8d5dd` (`Promote nested join gate`).
 - Foundational smoke inventory: 549 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
