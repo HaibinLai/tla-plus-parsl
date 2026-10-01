@@ -176,6 +176,9 @@ run_case zmq-serialization-end-to-end \
 run_case htex-submit-queue-cleanup \
     models/executors/ParslHtexSubmitLifecycleQueueFailureFixed.cfg \
     models/executors/ParslHtexSubmitLifecycle.tla
+run_case htex-submit-failure-rollback \
+    models/executors/ParslHtexSubmitFailureFixed.cfg \
+    models/executors/ParslHtexSubmitFailure.tla
 run_case htex-result-decode-cleanup \
     models/executors/ParslHtexResultDecodeFailureFixed.cfg \
     models/executors/ParslHtexResultDecodeFailure.tla
