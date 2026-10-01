@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `5bd490d` (`Promote Slurm foreign status model`).
-- Foundational smoke inventory: 401 TLC cases and 406 Python runtime probes.
+- Latest pushed commit: pending (provider-result retry, monitoring DB, and join race models).
+- Foundational smoke inventory: 402 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -66,6 +66,9 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the Slurm foreign-status Fixed case, isolating unrelated scheduler rows
   instead of crashing the entire provider status poll.
+
+- Current stage: promoted the Condor malformed-status-line Fixed case, preserving known resource
+  state while skipping truncated scheduler records.
 
 - Current stage: added `ParslJoinProviderResultMonitoringDB`, lifting provider failure/retry,
   stale inner results, two-dependency join completion, and monitoring persistence into one model.

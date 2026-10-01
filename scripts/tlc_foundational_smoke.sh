@@ -1148,6 +1148,9 @@ run_case condor-chunk-size \
 run_case condor-status-failure \
     models/providers/ParslCondorStatusFailureFixedMalformed.cfg \
     models/providers/ParslCondorStatusFailure.tla
+run_case condor-status-malformed-line \
+    models/providers/ParslCondorStatusFixed.cfg \
+    models/providers/ParslCondorStatus.tla
 run_case slurm-batch-strict \
     models/providers/ParslSlurmBatchStrictFixed.cfg \
     models/providers/ParslSlurmBatchStrict.tla
