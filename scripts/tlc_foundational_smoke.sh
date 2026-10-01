@@ -176,6 +176,9 @@ run_case torque-tasks-per-node \
 run_case local-pid-admission \
     models/providers/ParslLocalPidAdmissionFixed.cfg \
     models/providers/ParslLocalPidAdmission.tla
+run_case local-tasks-per-node \
+    models/providers/ParslLocalTasksPerNodeFixed.cfg \
+    models/providers/ParslLocalTasksPerNode.tla
 run_case aws-status-shape \
     models/providers/ParslAwsStatusResponseShapeFixed.cfg \
     models/providers/ParslAwsStatusResponseShape.tla
