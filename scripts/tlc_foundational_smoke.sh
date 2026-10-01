@@ -722,6 +722,9 @@ run_case taskvine-results \
 run_case workqueue-results \
     models/executors/ParslWorkQueueResults.cfg \
     models/executors/ParslWorkQueueResults.tla
+run_case callable-retry-transport-fixed \
+    models/serialization/ParslCallableRetryTransportFixed.cfg \
+    models/serialization/ParslCallableRetryTransport.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

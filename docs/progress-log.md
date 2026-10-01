@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `8a3b178` (`Promote Work Queue result model`).
-- Foundational smoke inventory: 513 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 514 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -682,6 +682,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslWorkQueueResults` into the foundational TLC gate. The Work Queue
   collector baseline now covers valid result files, serialized app exceptions, corrupt output,
   collector failure cleanup, and terminal-state stability for multiple task records.
+- Current stage: promoted the Fixed `ParslCallableRetryTransport` configuration into the foundational
+  TLC gate. Each retry captures an immutable callable/object snapshot; the Current configuration is
+  retained as a deliberate TLC counterexample for late old-attempt acceptance, while the Fixed gate
+  rejects it using attempt correlation.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

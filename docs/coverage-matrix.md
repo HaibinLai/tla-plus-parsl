@@ -235,6 +235,10 @@ task exceptions, corrupt or missing result files, no-result reports, and manager
 `ParslWorkQueueResults` is also in the foundational gate, covering valid result files, serialized
 application exceptions, corrupt output, collector failure cleanup, and terminal-state stability.
 
+The Fixed `ParslCallableRetryTransport` configuration is also in the foundational gate. It connects
+per-attempt callable/closure snapshots to serialized ZMQ payloads and rejects stale results from an
+older physical attempt; the Current configuration remains a deliberate counterexample.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
