@@ -773,6 +773,9 @@ run_case join-return-equality-fixed \
 run_case join-single-cancellation-fixed \
     models/dataflow/ParslJoinSingleCancellationFixed.cfg \
     models/dataflow/ParslJoinSingleCancellation.tla
+run_case poller-bad-state \
+    models/providers/ParslPollerBadState.cfg \
+    models/providers/ParslPollerBadState.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla

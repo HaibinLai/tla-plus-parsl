@@ -268,6 +268,9 @@ invalid return validation reaches a terminal failure without invoking hostile us
 The Fixed `ParslJoinSingleCancellation` configuration is also in the foundational gate, converting
 single-inner cancellation into terminal outer join failure instead of leaving the join pending.
 
+`ParslPollerBadState` is also in the foundational gate, checking provider polling status, failure
+thresholds, outstanding-task cleanup, and admission/scaling suppression after executor bad state.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

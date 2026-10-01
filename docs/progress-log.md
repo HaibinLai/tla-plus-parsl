@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `e2a55bc` (`Promote single join cancellation`).
-- Foundational smoke inventory: 530 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 531 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -713,6 +713,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the Fixed `ParslJoinSingleCancellation` configuration into the foundational
   TLC gate. A cancelled inner Future now becomes terminal outer join failure; the Current branch
   remains a counterexample where `CancelledError` escapes and leaves the outer join pending.
+- Current stage: promoted `ParslPollerBadState` into the foundational TLC gate. Provider polling,
+  failure-threshold handling, outstanding-task failure, and scale-out/scale-in suppression after a
+  bad executor state are now checked in one bounded provider state machine.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
