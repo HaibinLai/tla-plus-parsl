@@ -648,6 +648,9 @@ are recorded here in English and committed with the model changes.
   It provides the simple clock/heartbeat baseline: monotonic manager expiry, task timeout,
   bounded retry, and rejection of late results before the more detailed provider/join timing
   compositions.
+- Current stage: promoted `ParslMonitoringWorkflowDuration` into the foundational TLC gate. This
+  small database-contract model checks that workflow duration survives the close/finalization
+  update instead of being silently ignored by a schema mismatch.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

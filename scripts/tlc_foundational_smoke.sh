@@ -173,6 +173,9 @@ run_case timeout-timer-error \
 run_case monitoring-db \
     models/monitoring/ParslMonitoringDBSmoke.cfg \
     models/monitoring/ParslMonitoringDB.tla
+run_case monitoring-workflow-duration \
+    models/monitoring/ParslMonitoringWorkflowDurationFixed.cfg \
+    models/monitoring/ParslMonitoringWorkflowDuration.tla
 run_case monitoring-resource-history \
     models/monitoring/ParslMonitoringResourceHistory.cfg \
     models/monitoring/ParslMonitoringResourceHistory.tla

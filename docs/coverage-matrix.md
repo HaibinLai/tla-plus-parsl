@@ -53,6 +53,9 @@ The compact `ParslHeartbeatRetry` model is now in the foundational TLC gate. It 
 monotonic heartbeat expiry, task timeout/retry, and stale late-result rejection before the larger
 provider and join timing compositions.
 
+`ParslMonitoringWorkflowDuration` is also in the foundational gate, connecting the computed
+workflow-finalization duration to an explicit persisted database field.
+
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes
