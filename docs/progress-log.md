@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `3110559` (`Promote TaskVine result model`).
-- Foundational smoke inventory: 512 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 513 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -679,6 +679,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslTaskVineResults` into the foundational TLC gate. The result path now
   separates valid payloads, task exceptions, corrupt/missing output, no-result reports, and manager
   failure while preserving Future terminal-state and outstanding-task invariants.
+- Current stage: promoted `ParslWorkQueueResults` into the foundational TLC gate. The Work Queue
+  collector baseline now covers valid result files, serialized app exceptions, corrupt output,
+  collector failure cleanup, and terminal-state stability for multiple task records.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

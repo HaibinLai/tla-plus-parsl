@@ -232,6 +232,9 @@ resolves every outstanding task Future as a manager failure before executor shut
 `ParslTaskVineResults` is also in the foundational gate, covering valid result deserialization,
 task exceptions, corrupt or missing result files, no-result reports, and manager-exit cleanup.
 
+`ParslWorkQueueResults` is also in the foundational gate, covering valid result files, serialized
+application exceptions, corrupt output, collector failure cleanup, and terminal-state stability.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 
