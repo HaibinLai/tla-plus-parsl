@@ -1769,5 +1769,8 @@ run_case monitoring-versioned-batch \
 run_case filesystem-radio-atomicity-fixed \
     models/monitoring/ParslFilesystemRadioAtomicityFixed.cfg \
     models/monitoring/ParslFilesystemRadioAtomicity.tla
+run_case monitoring-starter-construction-fixed \
+    models/monitoring/ParslMonitoringStarterConstructionFailureFixed.cfg \
+    models/monitoring/ParslMonitoringStarterConstructionFailure.tla
 
 echo "Foundational TLC smoke suite passed."
