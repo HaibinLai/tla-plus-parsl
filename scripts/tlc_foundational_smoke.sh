@@ -545,6 +545,9 @@ run_case command-client-lock-timeout \
 run_case worker-pool-control-frame \
     models/serialization/ParslWorkerPoolControlFrameFixed.cfg \
     models/serialization/ParslWorkerPoolControlFrame.tla
+run_case htex-worker-poll-priority \
+    models/executors/ParslHtexWorkerPollPriorityFixed.cfg \
+    models/executors/ParslHtexWorkerPollPriority.tla
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla

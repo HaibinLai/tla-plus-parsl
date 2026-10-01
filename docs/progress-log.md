@@ -8,22 +8,22 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `94879f8` (`Record Zip stage-out bridge`).
-- Foundational smoke inventory: 615 TLC cases and 414 Python runtime probes.
+- Latest locally preserved commit: `94760cd` (`Record Zip stage-out smoke result`).
+- Foundational smoke inventory: 616 TLC cases and 415 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
 - The bug ledger records source/runtime findings separately from candidate fixed semantics. Current
   and fixed configurations are intentionally kept where a TLC counterexample documents the source
   behavior.
-- Full Python runtime smoke was rerun after the Zip provider bridge: all 414/414 probes passed.
+- Full Python runtime smoke was rerun after the HTEX worker poll-priority bridge: all 415/415 probes passed.
 
 ### Bounded v0.1 target (scope frozen)
 
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 615 TLC cases and 414 Python probes pass as a regression gate;
+- the existing 616 TLC cases and 415 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -51,6 +51,10 @@ criteria for this deliverable.
 - Current stage: added the Zip provider bridge. The real `ZipFileStaging.stage_out` implementation
   passes the application Future as `parent_fut`, corroborating the bound-provider branch with a
   focused runtime probe.
+
+- Current stage: added `ParslHtexWorkerPollPriority`, exposing the task-first branch of the worker
+  communicator when task and result sockets are simultaneously readable. The fixed branch gives a
+  ready result bounded service priority, with a deterministic fake-ZMQ runtime reproduction.
 
 - Current stage: completed the full foundational Python runtime regression after adding the
   duplicate-cancellation join probe. All 412/412 probes pass against the pinned Parsl source;

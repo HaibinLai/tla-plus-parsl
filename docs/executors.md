@@ -1232,6 +1232,11 @@ well: manager loss, capacity fallback, cores-per-worker validation, dispatch pri
 races and force/idle protection, provisioning admission monitoring, partial scale-out failure,
 shutdown reaping, unknown manager messages/results, and CPU/memory/accelerator worker capacity.
 
+`ParslHtexWorkerPollPriority.tla` models the worker communicator's two readable ZMQ channels.
+The current branch always services the interchange task socket first, while the fixed branch gives
+a ready result precedence so continuous task traffic cannot postpone result forwarding. The runtime
+probe uses deterministic fake sockets and confirms the current branch's task-first behavior.
+
 `ParslFluxShutdownLifecycle.tla` models the Flux executor's submission-thread lifecycle. The
 Current `shutdown()` path calls `join()` even when `start()` was never called, while the Fixed path
 accepts an unstarted executor as already quiescent. The runtime probe constructs the real executor

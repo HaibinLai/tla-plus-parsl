@@ -33,3 +33,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-166 | MPI backlog retry recurses while resources remain unavailable | [BUG-166](../bug-ledger.md) |
 | BUG-167 | MPI result path asserts for tasks without node allocation | [BUG-167](../bug-ledger.md) |
 | BUG-168 | Bad-state cleanup calls `set_exception` on terminal Future | [BUG-168](../bug-ledger.md) |
+| BUG-287 | HTEX worker poll prioritizes tasks over results | [BUG-287](../bug-ledger.md) |

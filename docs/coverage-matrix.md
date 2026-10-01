@@ -896,3 +896,6 @@ Join/staging coverage also includes `ParslJoinStageOutCancellation`. Its `BOUND_
 distinguishes Globus/Zip-style stage-out Futures that depend on the application Future from an
 independent provider-returned Future; the foundational gate checks both the fixed independent path
 and the bound-provider cancellation invariant.
+
+HTEX worker transport coverage also includes `ParslHtexWorkerPollPriority`, which makes the
+two-readable-socket scheduling choice explicit and checks a bounded result-service guarantee.
