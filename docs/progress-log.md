@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e0b9ed8` (`Promote HTEX manager drain present case`).
-- Foundational smoke inventory: 444 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `affc0ed` (`Record HTEX manager drain promotion`).
+- Foundational smoke inventory: 445 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -70,6 +70,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the present-manager `ParslHtexManagerDrain` path. The smoke gate now
   checks the normal drained-manager acknowledgement/removal behavior alongside the stale-ID Fixed
   path and its existing runtime probe.
+
+- Current stage: promoted the normal `ParslMonitoringDBInsertPresent` configuration. The monitoring
+  gate now checks first-write persistence separately from duplicate-event idempotence/drop paths.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join

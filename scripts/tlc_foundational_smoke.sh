@@ -269,6 +269,9 @@ run_case monitoring-db-permanent-insert \
 run_case monitoring-db-insert \
     models/monitoring/ParslMonitoringDBInsertFixed.cfg \
     models/monitoring/ParslMonitoringDBInsert.tla
+run_case monitoring-db-insert-present \
+    models/monitoring/ParslMonitoringDBInsertPresent.cfg \
+    models/monitoring/ParslMonitoringDBInsert.tla
 run_case monitoring-db-permanent-update \
     models/monitoring/ParslMonitoringDBUpdatePermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBUpdatePermanentError.tla
