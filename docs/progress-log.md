@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `94760cd` (`Record Zip stage-out smoke result`).
+- Latest locally preserved commit: `17a4974` (`Model HTEX worker result service priority`).
 - Foundational smoke inventory: 616 TLC cases and 415 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
