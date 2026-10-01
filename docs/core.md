@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 398 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 398 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 399 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 399 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -336,6 +336,10 @@ Current silently drops it through a truthiness check, reproducing BUG-114.
 `ParslProviderPollClockRollback.tla` adds the provider polling clock boundary. The Fixed branch
 polls immediately after a backward wall-clock step instead of waiting for the old timestamp,
 while Current reproduces the delayed-poll behavior recorded as BUG-118.
+
+`ParslAWSProviderStatus.tla` models a requested EC2 instance absent from the response. The Fixed
+branch returns an explicit completed/missing observation rather than leaving the provider status
+unknown, while the Current branch reproduces the incomplete projection path.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
