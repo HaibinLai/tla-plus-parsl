@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `42d59cf` (`Add join stageout cancellation model`).
+- Latest locally preserved commit: `6f2f242` (`Model strategy idle clock rollback`).
 - Foundational smoke inventory: 493 TLC cases and 408 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
