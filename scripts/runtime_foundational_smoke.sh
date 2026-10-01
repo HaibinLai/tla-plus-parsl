@@ -413,6 +413,7 @@ tests=(
     tests/test_output_list_mutation_runtime.py
     tests/test_app_future_output_streams_runtime.py
     tests/test_data_manager_stage_out_return_runtime.py
+    tests/test_join_stageout_cancellation_runtime.py
     tests/test_apply_message_arity_runtime.py
     tests/test_serialization_short_frame_count_runtime.py
     tests/test_serialization_truncated_length_runtime.py

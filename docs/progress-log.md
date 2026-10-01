@@ -8,15 +8,15 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `0032abf` (`Promote validated cross-layer abstraction batch`).
-- Foundational smoke inventory: 614 TLC cases and 412 Python runtime probes.
+- Latest locally preserved commit: `3ac3906` (`Record validated abstraction batch`).
+- Foundational smoke inventory: 614 TLC cases and 413 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
 - The bug ledger records source/runtime findings separately from candidate fixed semantics. Current
   and fixed configurations are intentionally kept where a TLC counterexample documents the source
   behavior.
-- Full Python runtime smoke was rerun after the duplicate-cancellation join stage: all 412/412 probes passed.
+- Full Python runtime smoke was rerun after the join/stage-out cancellation bridge: all 413/413 probes passed.
 
 ### Bounded v0.1 target (scope frozen)
 
@@ -38,6 +38,11 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: added the concrete `join_app`/stage-out cancellation runtime bridge. The probe
+  uses the real `DataManager` and `DataFuture` contract to show that an independent transfer can
+  publish after application cancellation, matching the Current branch of
+  `ParslJoinStageOutCancellation`.
 
 - Current stage: completed the full foundational Python runtime regression after adding the
   duplicate-cancellation join probe. All 412/412 probes pass against the pinned Parsl source;

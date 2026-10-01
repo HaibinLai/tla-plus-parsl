@@ -154,3 +154,9 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinThreeCancellati
 stage-out Future. The Current branch allows an in-flight stage-out callback to publish after the
 outer join is cancelled; the Fixed branch ignores that late publication. This is intentionally a
 small composition baseline for later provider-specific refinement.
+
+`tests/test_join_stageout_cancellation_runtime.py` supplies the concrete bridge: an independent
+`DataManager.stage_out` Future can complete after its application Future has been cancelled, and
+the current `DataFuture` publishes that late transfer result. The probe does not claim that every
+provider has this return shape; it anchors the model's independent-transfer branch to the actual
+DataManager/DataFuture contract.
