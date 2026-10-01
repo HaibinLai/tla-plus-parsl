@@ -1775,5 +1775,8 @@ run_case monitoring-starter-construction-fixed \
 run_case monitoring-batch-three-fixed \
     models/monitoring/ParslMonitoringBatchThreeFixed.cfg \
     models/monitoring/ParslMonitoringBatchThree.tla
+run_case monitoring-udp-pickle-fixed \
+    models/monitoring/ParslMonitoringUDPPickleIsolationFixed.cfg \
+    models/monitoring/ParslMonitoringUDPPickleIsolation.tla
 
 echo "Foundational TLC smoke suite passed."

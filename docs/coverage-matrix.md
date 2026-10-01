@@ -498,6 +498,9 @@ that monitoring database construction failures preserve their original exception
 Fixed `ParslMonitoringBatchThree` is also in the foundational TLC gate, checking atomic rollback
 of a three-event transaction after a mid-batch write failure.
 
+Fixed `ParslMonitoringUDPPickleIsolation` is also in the foundational TLC gate, checking malformed
+authenticated UDP payload isolation and router survival for subsequent valid messages.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

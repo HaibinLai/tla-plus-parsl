@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `bb2baac` (`Promote three-event monitoring batch gate`).
-- Foundational smoke inventory: 575 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 576 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted fixed `ParslMonitoringUDPPickleIsolation` into the foundational TLC
+  gate. An authenticated malformed pickle is discarded without killing the UDP router, allowing
+  the next valid datagram to reach the monitoring queue.
 
 - Current stage: promoted fixed `ParslMonitoringBatchThree` into the foundational TLC gate. A
   three-event monitoring transaction restores its snapshot after a failure on the second write,
