@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `e0c563d` (`Promote execute task models`).
-- Foundational smoke inventory: 505 TLC cases and 411 Python runtime probes.
+- Latest locally preserved commit: `8fa1fd1` (`Promote Bash app outcome model`).
+- Foundational smoke inventory: 506 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
