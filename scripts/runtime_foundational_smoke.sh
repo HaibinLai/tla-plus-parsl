@@ -98,6 +98,7 @@ tests=(
     tests/test_future_projection_runtime.py
     tests/test_future_wait_timeout_runtime.py
     tests/test_join_cancellation_end_to_end_runtime.py
+    tests/test_join_duplicate_cancellation_runtime.py
     tests/test_join_list_cancellation_end_to_end_runtime.py
     tests/test_join_list_cancellation_runtime.py
     tests/test_join_single_cancellation_runtime.py
