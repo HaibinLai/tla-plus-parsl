@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `5fb09c6` (`Record full file bytes promotion`).
+- Latest locally preserved commit: `cbf20ed` (`Promote heartbeat timeout persistence model`).
 - Foundational smoke inventory: 454 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
