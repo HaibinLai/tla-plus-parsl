@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `8b9fd47` (`Promote HTEX zero scale in gate`).
+- Latest locally preserved commit: `b985c0b` (`Promote HTEX address probe gate`).
 - Foundational smoke inventory: 592 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
