@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `bb2baac` (`Promote three-event monitoring batch gate`).
+- Latest locally preserved commit: `637887f` (`Promote UDP pickle isolation gate`).
 - Foundational smoke inventory: 576 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
