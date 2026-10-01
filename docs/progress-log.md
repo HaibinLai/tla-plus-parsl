@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `5340174` (`Record monitoring database retry promotion`).
+- Latest locally preserved commit: `2ee6635` (`Promote provider polling lifecycle baseline`).
 - Foundational smoke inventory: 434 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
