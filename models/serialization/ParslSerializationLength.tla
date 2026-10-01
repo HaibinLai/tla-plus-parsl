@@ -10,7 +10,7 @@ EXTENDS Naturals
  * condition; STRICT_LENGTH models the corrected behavior.
  ***************************************************************************)
 
-CONSTANT STRICT_LENGTH
+CONSTANTS STRICT_LENGTH, VALID_FRAME
 
 States == {"wire", "accepted", "rejected"}
 
@@ -19,9 +19,10 @@ vars == <<state, declaredLength, actualLength>>
 
 Init ==
     /\ STRICT_LENGTH \in BOOLEAN
+    /\ VALID_FRAME \in BOOLEAN
     /\ state = "wire"
     /\ declaredLength = 5
-    /\ actualLength = 3
+    /\ actualLength = IF VALID_FRAME THEN 5 ELSE 3
 
 ParseFrame ==
     /\ state = "wire"

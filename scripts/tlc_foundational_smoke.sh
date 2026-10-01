@@ -476,6 +476,12 @@ run_case serialization-frame-count-fixed \
 run_case serialization-frame-count-normal \
     models/serialization/ParslSerializationFrameCountNormal.cfg \
     models/serialization/ParslSerializationFrameCount.tla
+run_case serialization-length-fixed \
+    models/serialization/ParslSerializationLengthFixed.cfg \
+    models/serialization/ParslSerializationLength.tla
+run_case serialization-length-valid \
+    models/serialization/ParslSerializationLengthValid.cfg \
+    models/serialization/ParslSerializationLength.tla
 run_case serialization-plugin-cache \
     models/serialization/ParslSerializationPluginCache.cfg \
     models/serialization/ParslSerializationPluginCache.tla

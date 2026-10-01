@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `561fd30` (`Promote serialization frame count gate`).
-- Foundational smoke inventory: 551 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 553 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted the fixed and valid `ParslSerializationLength` configurations. The
+  length model now distinguishes a truncated payload, which must be rejected, from a complete
+  five-byte payload, which may be accepted without violating `LengthSafety`.
 
 - Current stage: promoted the fixed and normal `ParslSerializationFrameCount` configurations
   into the foundational TLC gate. The model now checks that an apply message with an extra frame

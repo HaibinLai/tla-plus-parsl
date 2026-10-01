@@ -438,6 +438,9 @@ outer observation, ordered nested results, and failure propagation through both 
 extra apply-message frames before deserialization, while the normal branch preserves the valid
 three-frame decode path; the runtime probe documents the current eager-decode behavior.
 
+`ParslSerializationLength` is also in the foundational TLC gate with separate fixed/truncated and
+fixed/valid configurations, checking declared-versus-actual payload length before acceptance.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
