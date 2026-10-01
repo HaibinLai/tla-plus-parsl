@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `39ba4d7` (`Record function object transport promotion`).
+- Latest locally preserved commit: `b259bb1` (`Promote HTEX result forwarding model`).
 - Foundational smoke inventory: 440 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
