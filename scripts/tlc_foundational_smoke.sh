@@ -980,6 +980,9 @@ run_case htex-duplicate-registration \
 run_case flux-provider-status-empty \
     models/executors/ParslFluxProviderStatusEmptyFixed.cfg \
     models/executors/ParslFluxProviderStatusEmpty.tla
+run_case flux-working-directory \
+    models/executors/ParslFluxWorkingDirectoryFixed.cfg \
+    models/executors/ParslFluxWorkingDirectory.tla
 run_case heartbeat-late-ack \
     models/executors/ParslHeartbeatLateAckFixed.cfg \
     models/executors/ParslHeartbeatLateAck.tla
