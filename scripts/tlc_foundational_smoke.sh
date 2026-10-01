@@ -122,6 +122,9 @@ run_case thread-executor-thread-count-valid \
 run_case file-bytes-transfer \
     models/staging/ParslFileBytesSmoke.cfg \
     models/staging/ParslFileBytes.tla
+run_case file-bytes-transfer-full \
+    models/staging/ParslFileBytes.cfg \
+    models/staging/ParslFileBytes.tla
 run_case heartbeat \
     models/clock/ParslTimedHeartbeatSmokeFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla

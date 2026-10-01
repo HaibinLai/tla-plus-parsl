@@ -147,6 +147,9 @@ For a quick complete TLC check, `ParslFileBytesSmoke.cfg` reduces the detailed a
 file and one chunk (99 states generated, 44 distinct states). The detailed configuration remains
 available for multi-file and multi-chunk exploration; corruption is bounded to one mutation per
 clean in-flight chunk before a retry can resend it.
+The two-chunk `ParslFileBytes.cfg` configuration is now also in the foundational smoke gate, so
+the default regression checks the full bounded content/checksum path rather than only its one-chunk
+smoke reduction.
 
 `ParslDataManagerStageOutReturn.tla` models the two return shapes of `DataManager.stage_out`: a
 provider may return `None`, in which case the output `DataFuture` follows the application Future,
