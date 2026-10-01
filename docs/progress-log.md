@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `4ec5c6d` (`Model HTTP in-task transfer gating`).
+- Latest locally preserved commit: `c1aa88d` (`Model monitoring resource lifecycle clocks`).
 - Foundational smoke inventory: 619 TLC cases and 419 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
