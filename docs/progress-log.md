@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `8fa1990` (`Add runtime bridge for join monitoring generations`).
-- Foundational smoke inventory: 617 TLC cases and 417 Python runtime probes.
+- Foundational smoke inventory: 618 TLC cases and 418 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 617 TLC cases and 417 Python probes pass as a regression gate;
+- the existing 618 TLC cases and 418 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -1023,6 +1023,11 @@ criteria for this deliverable.
 - Current stage: added a real `join_app` retry/monitoring bridge. A decorated join with a real
   retried inner Python app reaches inner `try_id = 1`, while the SQLite STATUS table still accepts
   a later timestamp for `try_id = 0`; the probe is now part of the 417-entry runtime gate.
+- Current stage: added `ParslHTTPInTaskTransferGate`. The model connects HTTP response status,
+  streamed chunks, temporary/final publication, and wrapped-task admission. Its Current case
+  reproduces a non-2xx response reaching user code; the Fixed case requires successful complete
+  publication. The real wrapper probe passes, and the full gate now contains 618 TLC cases,
+  418 runtime entries, and 654 discovered unittest methods.
 
 ### Verification convention
 

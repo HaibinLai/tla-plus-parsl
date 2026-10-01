@@ -3,6 +3,18 @@
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 
+`ParslHTTPInTaskTransferGate.tla` composes HTTP response validation, streamed chunk receipt,
+temporary/final publication, and admission of the wrapped user function.  Its Current
+configuration reproduces the installed `in_task_transfer_wrapper` behavior where a non-2xx
+response body is written and the user function still runs (BUG-288); the Fixed configuration
+requires a successful response and complete final publication before execution.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskTransferGateCurrent.cfg models/staging/ParslHTTPInTaskTransferGate.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskTransferGateFixed.cfg models/staging/ParslHTTPInTaskTransferGate.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_in_task_transfer_gate_runtime.py -v
+```
+
 Files live in [`models/staging/`](../models/staging/).
 
 The compact cross-layer model [`ParslDataReadyExecution`](../models/core/ParslDataReadyExecution.tla)
