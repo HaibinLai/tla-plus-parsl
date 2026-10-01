@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `8fa1990` (`Add runtime bridge for join monitoring generations`).
+- Latest locally preserved commit: `4ec5c6d` (`Model HTTP in-task transfer gating`).
 - Foundational smoke inventory: 618 TLC cases and 418 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
