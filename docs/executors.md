@@ -1242,3 +1242,14 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxShutdownLifecy
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxShutdownLifecycleFixed.cfg models/executors/ParslFluxShutdownLifecycle.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_flux_shutdown_lifecycle_runtime.py -v
 ```
+
+`ParslRadicalPilotDecodeFailure.tla` models the Python-result decode boundary in
+`RadicalPilotExecutor.task_state_cb`. A malformed `return_value` currently lets the serializer
+exception escape the callback and leaves the Future pending; the Fixed branch turns it into a
+terminal Future failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeFailureCurrent.cfg models/executors/ParslRadicalPilotDecodeFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeFailureFixed.cfg models/executors/ParslRadicalPilotDecodeFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_decode_failure_runtime.py -v
+```

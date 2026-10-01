@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c3a6918` (`Model Flux shutdown lifecycle`).
-- Foundational smoke inventory: 495 TLC cases and 410 Python runtime probes.
+- Foundational smoke inventory: 496 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,11 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Flux lifecycle stage: all 410/410 probes passed.
 
 ### Latest completed stages
+
+- Current stage: added `ParslRadicalPilotDecodeFailure`, covering malformed serialized Python
+  result payloads in the RP `DONE` callback. The Current branch lets decode failure escape and
+  leaves the Future pending; the Fixed branch resolves a terminal failure. The focused TLC model
+  and runtime probe pass.
 
 - Current stage: added `ParslFluxShutdownLifecycle`, covering shutdown before FluxExecutor
   startup. The Current branch joins an unstarted submission thread and raises `RuntimeError`; the

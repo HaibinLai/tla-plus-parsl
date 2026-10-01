@@ -213,6 +213,7 @@ tests=(
     tests/test_thread_executor_runtime.py
     tests/test_thread_executor_lifecycle_runtime.py
     tests/test_flux_shutdown_lifecycle_runtime.py
+    tests/test_radical_decode_failure_runtime.py
     tests/test_thread_executor_resource_spec_runtime.py
     tests/test_thread_executor_thread_count_runtime.py
     tests/test_pool_executor_map_runtime.py
