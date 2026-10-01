@@ -68,6 +68,9 @@ serializer-token/frame/route/correlation baseline used by the larger ZMQ retry m
 The three `ParslExecuteTask` configurations are now in the foundational gate, covering worker
 decode, callable invocation, value/exception result publication, and malformed-message rejection.
 
+`ParslBashAppOutcome` is now in the foundational gate, checking nonzero shell exits, output-file
+validation, stdout side effects, and terminal Future resolution.
+
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes

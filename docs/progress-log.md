@@ -663,6 +663,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted all three `ParslExecuteTask` configurations into the foundational TLC
   gate. The worker-side baseline now checks valid value return, user exception propagation, and
   malformed payload rejection before invocation.
+- Current stage: promoted `ParslBashAppOutcome` into the foundational TLC gate. The executor-side
+  model separates shell exit, stdout side effects, declared output validation, and Future terminal
+  success/failure so output publication cannot turn a failed Bash task into success.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

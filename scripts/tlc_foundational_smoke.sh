@@ -215,6 +215,9 @@ run_case execute-task-exception \
 run_case execute-task-malformed \
     models/executors/ParslExecuteTaskMalformed.cfg \
     models/executors/ParslExecuteTask.tla
+run_case bash-app-outcome \
+    models/executors/ParslBashAppOutcome.cfg \
+    models/executors/ParslBashAppOutcome.tla
 run_case serialization-wire \
     models/serialization/ParslSerializationWire.cfg \
     models/serialization/ParslSerializationWire.tla
