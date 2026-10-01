@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `88f746d` (`Model AWS state file atomicity`).
+- Latest locally preserved commit: `c9c5e59` (`Model stage-in attempt generations`).
 - Foundational smoke inventory: 633 TLC cases and 430 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
