@@ -179,6 +179,9 @@ run_case zmq-serialization \
 run_case zmq-serialization-end-to-end \
     models/serialization/ParslZMQSerializationEndToEndFixed.cfg \
     models/serialization/ParslZMQSerializationEndToEnd.tla
+run_case serialization-wire \
+    models/serialization/ParslSerializationWire.cfg \
+    models/serialization/ParslSerializationWire.tla
 run_case htex-submit-queue-cleanup \
     models/executors/ParslHtexSubmitLifecycleQueueFailureFixed.cfg \
     models/executors/ParslHtexSubmitLifecycle.tla

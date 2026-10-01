@@ -103,6 +103,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationB
 `ParslSerializationWire.tla` refines that framing for the actual `pack_apply_message` shape:
 buffer 0 is the callable (`C2`), buffers 1 and 2 are positional arguments and keyword arguments
 (`02`), and all three must be length-prefixed, unpacked, and decoded in order before dispatch.
+The normal wire configuration is part of the foundational smoke gate; the companion failure
+configuration exercises rejection when one of the three buffers cannot be serialized.
 The runtime probe `test_apply_message_has_three_length_prefixed_serializer_buffers` inspects the
 real packed bytes and then executes the decoded callable. This is the concrete bridge between the
 symbolic frame indices in the model and Parsl's serializer facade.

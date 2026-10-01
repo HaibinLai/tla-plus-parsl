@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c6d480c` (`Promote multi-task timeout model`).
-- Foundational smoke inventory: 475 TLC cases and 407 Python runtime probes.
+- Foundational smoke inventory: 476 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,11 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslSerializationWire` as the concrete apply-message framing
+  boundary. It requires callable, args, and kwargs buffers to serialize, receive the expected
+  `C2`/`02` headers, preserve length validity, and decode in order before dispatch. The failure
+  configuration also checks that an unserializable buffer rejects the complete message.
 
 - Current stage: promoted `ParslThreeConcurrentTimeouts` as the multi-task timeout boundary.
   Three independent logical tasks have distinct deadlines and retry generations; a late result
