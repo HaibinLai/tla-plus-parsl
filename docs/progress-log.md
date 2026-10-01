@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `eb36718` (`Promote Azure status translation baseline`).
-- Foundational smoke inventory: 431 TLC cases and 406 Python runtime probes.
+- Latest locally preserved commit: `f5e7c94` (`Record Azure status translation promotion`).
+- Foundational smoke inventory: 433 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -18,6 +18,10 @@ are recorded here in English and committed with the model changes.
   behavior.
 
 ### Latest completed stages
+
+- Current stage: added the compact `ParslMonitoringDBRetry` insert primitive. The operational
+  configuration models rollback/retry and single-row persistence; the integrity configuration
+  models a non-retry drop. Both configurations are now part of the TLC smoke gate.
 
 - Current stage: promoted `ParslLocalProviderStatusScope`. The Fixed model passed TLC and the
   Current branch reproduced the stale unrelated-resource query failure; the targeted runtime

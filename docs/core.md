@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 431 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 431 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 433 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 433 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -425,6 +425,13 @@ cannot evict a healthy manager (BUG-026) and a backward jump cannot defer expiry
 `ParslMonitoringDBInsert.tla` models the monitoring `STATUS` primary-key boundary. Fixed treats
 duplicate terminal/event rows as idempotent, while Current rolls back and drops the duplicate
 event after an integrity error (BUG-070).
+
+`ParslMonitoringDBRetry.tla` is the smaller insertion primitive beneath that composition. It
+separates a recoverable SQLAlchemy `OperationalError` (rollback, one retry, then one stored row)
+from a non-recoverable integrity error (drop without retry), while `SingleRowSafety` prevents a
+successful retry from duplicating the logical event. The model maps to
+`DatabaseManager._insert` in `parsl/monitoring/db_manager.py`; the persistent-error runtime
+probe remains the source-level evidence for the current unbounded retry behavior.
 
 `ParslHTTPPartialCleanup.tla` models streamed HTTP stage-in publication. Fixed removes partial
  destination bytes when a later chunk fails; Current leaves the first chunk visible as a complete

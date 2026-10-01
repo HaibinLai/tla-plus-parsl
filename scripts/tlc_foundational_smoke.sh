@@ -239,6 +239,12 @@ run_case monitoring-batch-atomicity \
 run_case monitoring-persistent-retry \
     models/monitoring/ParslMonitoringPersistentRetryFixed.cfg \
     models/monitoring/ParslMonitoringPersistentRetry.tla
+run_case monitoring-db-retry-operational \
+    models/monitoring/ParslMonitoringDBRetry.cfg \
+    models/monitoring/ParslMonitoringDBRetry.tla
+run_case monitoring-db-retry-integrity \
+    models/monitoring/ParslMonitoringDBRetryIntegrity.cfg \
+    models/monitoring/ParslMonitoringDBRetry.tla
 run_case monitoring-db-permanent-insert \
     models/monitoring/ParslMonitoringDBPermanentErrorFixed.cfg \
     models/monitoring/ParslMonitoringDBPermanentError.tla
