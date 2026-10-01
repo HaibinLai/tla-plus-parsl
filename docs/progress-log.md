@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `a2723f4` (`Promote job status read error gate`).
+- Latest locally preserved commit: `5fc8bd4` (`Promote job status summary gate`).
 - Foundational smoke inventory: 596 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
