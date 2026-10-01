@@ -167,6 +167,9 @@ run_case heartbeat-clock-jump \
 run_case kubernetes-admission \
     models/providers/ParslKubernetesAdmissionFixed.cfg \
     models/providers/ParslKubernetesAdmission.tla
+run_case kubernetes-submit-state \
+    models/providers/ParslKubernetesSubmitFixed.cfg \
+    models/providers/ParslKubernetesSubmit.tla
 run_case torque-submit-shape \
     models/providers/ParslTorqueSubmitShapeFixed.cfg \
     models/providers/ParslTorqueSubmitShape.tla

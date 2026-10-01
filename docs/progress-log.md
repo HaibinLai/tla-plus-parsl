@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest pushed commit: `677cfa7` (`Promote Slurm submit boundary model`).
-- Foundational smoke inventory: 428 TLC cases and 406 Python runtime probes.
+- Foundational smoke inventory: 429 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -103,6 +103,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslSlurmSubmit`. Fixed passed TLC and three targeted runtime tests
   passed; Current reproduced a successful regex match without a named job-id group crashing
   submission.
+
+- Current stage: promoted `ParslKubernetesSubmit`. Fixed passed TLC and two targeted runtime tests
+  passed; Current reproduced a newly created Pending pod being recorded as RUNNING.
 
 - Current stage: added `ParslJoinStageRetry`, combining per-dependency file publication,
   physical-attempt retry, late-result correlation, and outer join completion. The Fixed
