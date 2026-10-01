@@ -452,6 +452,9 @@ run_case lsf-missing-job \
 run_case lsf-resource-validation \
     models/providers/ParslLSFResourceValidationFixed.cfg \
     models/providers/ParslLSFResourceValidation.tla
+run_case lsf-submit-job-id \
+    models/providers/ParslLsfSubmitJobIdFixed.cfg \
+    models/providers/ParslLsfSubmitJobId.tla
 run_case pbspro-submit-shape \
     models/providers/ParslPbsproSubmitShapeFixed.cfg \
     models/providers/ParslPbsproSubmitShape.tla
