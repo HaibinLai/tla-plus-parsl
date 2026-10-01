@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `e3cac91` (`Promote monitoring DB insert model`).
+- Latest pushed commit: `b1f4f4e` (`Promote HTTP partial cleanup model`).
 - Foundational smoke inventory: 421 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
