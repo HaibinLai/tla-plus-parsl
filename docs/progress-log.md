@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `b2858a5` (`Model Globus Compute restore failure`).
-- Foundational smoke inventory: 631 TLC cases and 429 Python runtime probes.
+- Foundational smoke inventory: 632 TLC cases and 430 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -23,7 +23,7 @@ are recorded here in English and committed with the model changes.
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 622 TLC cases and 422 Python probes pass as a regression gate;
+- the existing 632 TLC cases and 430 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -39,7 +39,20 @@ criteria for this deliverable.
 
 ### Latest completed stages
 
-- Current stage: audited Globus Compute submit cleanup with
+- Current stage: modeled AWS provider state-file publication with
+  `ParslAwsStateFileAtomicity`. The Current branch writes directly to the final JSON path, so an
+  interrupted write can corrupt the only saved state and cause infrastructure recreation on
+  restart. The Fixed branch publishes through a temporary file and preserves the last valid
+  state. Targeted TLC and runtime checks pass; the full smoke checkpoint is pending.
+
+- Current stage: modeled AWS provider state-file publication with
+  `ParslAwsStateFileAtomicity`. The Current branch writes directly to the final JSON path, so an
+  interrupted write can corrupt the only saved state and cause infrastructure recreation on
+  restart. The Fixed branch publishes through a temporary file and preserves the last valid
+  state. Full smoke verification passed: 632 TLC cases and 430 Python runtime probes; 669
+  unittest methods are present.
+
+- Previous stage: audited Globus Compute submit cleanup with
   `ParslGlobusComputeRestoreFailure`. The Current branch lets a restoration error mask the SDK
   submit exception; the Fixed branch preserves the primary error and terminalizes cleanup. Full
   smoke verification passed: 631 TLC cases and 429 Python runtime probes; 668 unittest methods

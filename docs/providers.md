@@ -6,6 +6,19 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslAwsStateFileAtomicity.tla` models the persistence boundary in `AWSProvider`. The current
+implementation writes JSON directly to the final state path; an interruption after truncation
+can leave malformed state, and the next initialization may recreate infrastructure. The fixed
+branch writes a temporary file and atomically publishes it, preserving the previous valid state.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsStateFileAtomicityCurrent.cfg models/providers/ParslAwsStateFileAtomicity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsStateFileAtomicityFixed.cfg models/providers/ParslAwsStateFileAtomicity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_state_file_atomicity_runtime.py -v
+```
+
+This interrupted-publication boundary is recorded as BUG-305.
+
 `ParslProviderPolling.tla` is the compact provider lifecycle baseline. It separates block
 submission from acceptance/rejection, status polling, transient API errors, unknown-status
 failure, and cancellation rollback. `TargetSafety` keeps the provider target within capacity;

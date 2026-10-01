@@ -1001,6 +1001,9 @@ run_case aws-status-missing-result \
 run_case aws-status-ordering \
     models/providers/ParslAwsStatusOrderingFixed.cfg \
     models/providers/ParslAwsStatusOrdering.tla
+run_case aws-state-file-atomicity \
+    models/providers/ParslAwsStateFileAtomicityFixed.cfg \
+    models/providers/ParslAwsStateFileAtomicity.tla
 run_case azure-cancel-missing-local \
     models/providers/ParslAzureCancelMissingFixed.cfg \
     models/providers/ParslAzureCancel.tla
