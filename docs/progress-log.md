@@ -8,17 +8,40 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `4271d08` (`Add duplicate cancellation runtime probe`).
-- Foundational smoke inventory: 614 TLC cases and 411 Python runtime probes.
+- Latest locally preserved commit: `94b4419` (`Record duplicate cancellation runtime probe`).
+- Foundational smoke inventory: 614 TLC cases and 412 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
 - The bug ledger records source/runtime findings separately from candidate fixed semantics. Current
   and fixed configurations are intentionally kept where a TLC counterexample documents the source
   behavior.
-- Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
+- Full Python runtime smoke was rerun after the duplicate-cancellation join stage: all 412/412 probes passed.
+
+### Bounded v0.1 target (scope frozen)
+
+The first deliverable is a bounded validation package, not a complete executable model of every
+Parsl backend. It is complete when all of the following are true:
+
+- the existing 614 TLC cases and 412 Python probes pass as a regression gate;
+- the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
+  propagation, executor/worker execution, retry and failure, timeout/stale results, provider
+  provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
+- each source-aligned risk in the bug ledger has a source location, a runtime reproduction when
+  feasible, and a Current/Fixed TLA+ configuration or an explicit reason why modeling is not yet
+  feasible;
+- the final report documents the component mapping, counterexamples, limitations, and exact
+  reproduction commands.
+
+After this acceptance gate is met, the v0.1 scope is frozen. Additional executors, providers, or
+implementation details become a separately tracked backlog rather than extending the completion
+criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: completed the full foundational Python runtime regression after adding the
+  duplicate-cancellation join probe. All 412/412 probes pass against the pinned Parsl source;
+  the 614-case TLC gate remains green.
 
 - Current stage: added fixed `ParslJoinDuplicateCancellation` to the foundational TLC gate. A
   duplicated logical input now maps to one physical cancellation callback, and cancellation
@@ -28,8 +51,8 @@ are recorded here in English and committed with the model changes.
   callable and its aliased argument preserve shared object identity across retry snapshotting,
   while each retry captures the current source epoch.
 
-- Current stage: promoted fixed/success `ParslStrategyBlockCapacity` configurations into the
-  foundational TLC gate. Non-positive nodes-per-block capacity now has an explicit rejected
+- Current stage: promoted fixed/success `ParslStrategyBlockCapacity` configurations into
+  the foundational TLC gate. Non-positive nodes-per-block capacity now has an explicit rejected
   path, while valid capacity proceeds to scaling without division failure.
 
 - Current stage: promoted the core `ParslStrategy` model into the foundational TLC gate. The
@@ -181,7 +204,7 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted the busy and idle `ParslHtexWorkerWatchdog` configurations into the
   foundational TLC gate. The model separates physical worker death from logical task state,
-  emits one WorkerLost result for a failed busy worker, and restarts idle capacity without a task result.
+  emits one WorkerLost result for a busy worker, and restarts idle capacity without a task result.
 
 - Current stage: promoted the fixed `ParslHtexHeartbeatVersion` configuration into the
   foundational TLC gate. The combined model rejects task admission after registration or
@@ -200,13 +223,13 @@ are recorded here in English and committed with the model changes.
   transfer failure even when no diagnostic event is available, while preserving successful
   transfer handling.
 
-- Current stage: promoted the fixed and valid `ParslSerializationLength` configurations. The
-  length model now distinguishes a truncated payload, which must be rejected, from a complete
-  five-byte payload, which may be accepted without violating `LengthSafety`.
-
 - Current stage: promoted the fixed and normal `ParslSerializationFrameCount` configurations
   into the foundational TLC gate. The model now checks that an apply message with an extra frame
   is rejected before any payload decode, while a valid three-frame message decodes exactly once.
+
+- Current stage: promoted the fixed and valid `ParslSerializationLength` configurations. The
+  length model now distinguishes a truncated payload, which must be rejected, from a complete
+  five-byte payload, which may be accepted without violating `LengthSafety`.
 
 - Current stage: promoted `ParslNestedJoin` into the foundational TLC gate. The two-level
   composition now checks that an outer `join_app` waits for the inner join, preserves the inner
@@ -240,9 +263,8 @@ are recorded here in English and committed with the model changes.
 
 - Current stage: promoted `ParslZipStageOut` as the archive publication boundary. Archive write,
   source cleanup, retry after cleanup failure, source-version change, and duplicate-member handling
-  are explicit; the fixed branch replaces an existing member rather than appending a duplicate.
+  are explicit; the Fixed branch replaces an existing member rather than appending a duplicate.
   The fixed TLC configuration and six real ZIP staging probes pass.
-
 
 - Current stage: promoted `ParslLSFSubmit` as the LSF `bsub` submission lifecycle. Script writing,
   scheduler failure, empty/malformed successful output, and valid marker/job-id registration are
