@@ -477,6 +477,9 @@ of a running inner Future produces terminal outer failure with contained callbac
 Fixed `ParslJoinThreeCancellation` is also in the foundational TLC gate, checking cancellation
 inside a three-element join list and callback containment during failure aggregation.
 
+`ParslResultRace` is also in the foundational TLC gate, checking retry-bound attempt correlation,
+late-success classification, and logical Future terminal-state consistency.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

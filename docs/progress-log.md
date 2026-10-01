@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `e683701` (`Promote three-way join cancellation gate`).
-- Foundational smoke inventory: 567 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 568 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslResultRace` into the foundational TLC gate. Physical attempt
+  failure, retry, late success, and result delivery are correlated by attempt id; stale results
+  cannot resolve the logical Future after a newer attempt is current.
 
 - Current stage: promoted fixed `ParslJoinThreeCancellation` into the foundational TLC gate. A
   cancelled member of a three-Future list now yields terminal outer failure while the callback
