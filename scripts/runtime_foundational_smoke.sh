@@ -263,6 +263,15 @@ tests=(
     tests/test_apply_dispatch_boundary_runtime.py
     tests/test_retry_handler_runtime.py
     tests/test_duplicate_job_id_runtime.py
+    tests/test_bad_state_task_mutation_runtime.py
+    tests/test_grid_engine_status_runtime.py
+    tests/test_lsf_cancel_runtime.py
+    tests/test_lsf_resource_validation_runtime.py
+    tests/test_pbspro_job_id_alias_runtime.py
+    tests/test_slurm_foreign_job_runtime.py
+    tests/test_torque_tasks_per_node_runtime.py
+    tests/test_local_submit_pid_shape_runtime.py
+    tests/test_local_tasks_per_node_runtime.py
     tests/test_local_provider_cancel_unknown_runtime.py
     tests/test_htex_submit_runtime.py
     tests/test_kubernetes_cancel_runtime.py
