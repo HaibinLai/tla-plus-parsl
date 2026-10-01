@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `17a4974` (`Model HTEX worker result service priority`).
+- Latest locally preserved commit: `38dd04d` (`Record HTEX poll priority counterexample`).
 - Foundational smoke inventory: 616 TLC cases and 415 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
@@ -56,6 +56,11 @@ criteria for this deliverable.
   communicator when task and result sockets are simultaneously readable. The fixed branch gives a
   ready result bounded service priority, with a deterministic fake-ZMQ runtime reproduction. The
   Current simulation reaches its 27-state counterexample, while the Fixed case passes.
+
+- Current stage: audited monitoring database queue ordering against `DatabaseManager.start`.
+  Priority messages are batch-bounded and the loop proceeds to worker/resource queues, so no new
+  unbounded starvation model was added; shutdown and stale-queue observations remain separately
+  modeled risks.
 
 - Current stage: completed the full foundational Python runtime regression after adding the
   duplicate-cancellation join probe. All 412/412 probes pass against the pinned Parsl source;

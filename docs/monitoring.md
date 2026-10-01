@@ -482,3 +482,11 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslResourceMonitorClockCu
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslResourceMonitorClockFixed.cfg models/clock/ParslResourceMonitorClock.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_resource_monitor_clock_runtime.py -v
 ```
+
+### Monitoring queue fairness audit
+
+The database manager drains the priority queue first, but `_get_messages_in_batch` bounds each
+batch by both `batching_interval` and `batching_threshold`; the loop then services node, block,
+worker-task, and resource queues in the same iteration. Unlike the HTEX worker poll path, this
+ordering does not by itself create an unbounded priority-queue starvation model. The existing
+shutdown and stale-`empty()` models remain the relevant monitoring queue-loss boundaries.
