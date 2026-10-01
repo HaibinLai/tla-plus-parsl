@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `0f19a78` (`Record monitoring insert present promotion`).
+- Latest locally preserved commit: `beedbe2` (`Promote normal HTTP status case`).
 - Foundational smoke inventory: 446 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
