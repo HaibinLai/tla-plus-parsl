@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 499 TLC cases and 411 Python runtime test files.
-On 2026-10-01, all 499 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 500 TLC cases and 411 Python runtime test files.
+On 2026-10-01, all 500 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 411 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch

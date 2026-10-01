@@ -651,6 +651,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslMonitoringWorkflowDuration` into the foundational TLC gate. This
   small database-contract model checks that workflow duration survives the close/finalization
   update instead of being silently ignored by a schema mismatch.
+- Current stage: promoted `ParslMonitoringZMQRouterFailure` into the foundational TLC gate. The
+  compact transport model now checks that an unrecoverable monitoring receive channel reaches a
+  terminal state instead of retrying indefinitely until an unrelated external stop.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

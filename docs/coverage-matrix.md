@@ -56,6 +56,9 @@ provider and join timing compositions.
 `ParslMonitoringWorkflowDuration` is also in the foundational gate, connecting the computed
 workflow-finalization duration to an explicit persisted database field.
 
+`ParslMonitoringZMQRouterFailure` is also in the foundational gate, isolating terminal handling
+of a permanently broken monitoring receive channel before database delivery can proceed.
+
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes

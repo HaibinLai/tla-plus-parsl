@@ -176,6 +176,9 @@ run_case monitoring-db \
 run_case monitoring-workflow-duration \
     models/monitoring/ParslMonitoringWorkflowDurationFixed.cfg \
     models/monitoring/ParslMonitoringWorkflowDuration.tla
+run_case monitoring-zmq-router-failure \
+    models/monitoring/ParslMonitoringZMQRouterFailureFixed.cfg \
+    models/monitoring/ParslMonitoringZMQRouterFailure.tla
 run_case monitoring-resource-history \
     models/monitoring/ParslMonitoringResourceHistory.cfg \
     models/monitoring/ParslMonitoringResourceHistory.tla
