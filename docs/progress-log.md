@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c280fa7` (`Promote stage-out Future modes`).
-- Foundational smoke inventory: 518 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 521 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -692,6 +692,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted all three `ParslStageOutFuture` modes into the foundational TLC gate.
   Separate stage-out now gates DataFuture readiness on publication, while in-task and no-stage modes
   complete output readiness with the application; dependent admission remains blocked until ready.
+- Current stage: promoted the three `ParslRsyncStage` paths into the foundational TLC gate. Stage-in
+  runs before the application, stage-out runs after it, and either transfer failure prevents false
+  success while preserving the expected application execution ordering.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.

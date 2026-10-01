@@ -247,6 +247,9 @@ The three `ParslStageOutFuture` configurations are also in the foundational gate
 separate stage-out, in-task publication, and no-stage output readiness, including dependent-task
 admission only after a ready DataFuture.
 
+The three `ParslRsyncStage` configurations are also in the foundational gate, covering stage-in
+failure, stage-out failure after application execution, and successful in-task rsync ordering.
+
 The ZMQ/serialization row also includes `ParslHtexRegistrationShape` (BUG-173), which checks
 required HTEX manager-registration fields before manager state is published.
 

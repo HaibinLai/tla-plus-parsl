@@ -737,6 +737,15 @@ run_case stageout-future-in-task \
 run_case stageout-future-none \
     models/staging/ParslStageOutNone.cfg \
     models/staging/ParslStageOutFuture.tla
+run_case rsync-stage-in-failure \
+    models/staging/ParslRsyncStageInFail.cfg \
+    models/staging/ParslRsyncStage.tla
+run_case rsync-stage-out-failure \
+    models/staging/ParslRsyncStageOutFail.cfg \
+    models/staging/ParslRsyncStage.tla
+run_case rsync-stage-success \
+    models/staging/ParslRsyncStageSuccess.cfg \
+    models/staging/ParslRsyncStage.tla
 run_case flux-error-cleanup \
     models/executors/ParslFluxErrorCleanupCancellationFixed.cfg \
     models/executors/ParslFluxErrorCleanupCancellation.tla
