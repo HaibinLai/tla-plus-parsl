@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `c280fa7` (`Promote stage-out Future modes`).
+- Latest locally preserved commit: `37e7cf2` (`Promote rsync staging paths`).
 - Foundational smoke inventory: 521 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
