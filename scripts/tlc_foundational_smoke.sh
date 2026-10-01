@@ -206,6 +206,15 @@ run_case zmq-serialization-end-to-end \
 run_case serialization-zmq-bridge \
     models/serialization/ParslSerializationZMQBridgeSmoke.cfg \
     models/serialization/ParslSerializationZMQBridge.tla
+run_case execute-task-value \
+    models/executors/ParslExecuteTaskValue.cfg \
+    models/executors/ParslExecuteTask.tla
+run_case execute-task-exception \
+    models/executors/ParslExecuteTaskException.cfg \
+    models/executors/ParslExecuteTask.tla
+run_case execute-task-malformed \
+    models/executors/ParslExecuteTaskMalformed.cfg \
+    models/executors/ParslExecuteTask.tla
 run_case serialization-wire \
     models/serialization/ParslSerializationWire.cfg \
     models/serialization/ParslSerializationWire.tla

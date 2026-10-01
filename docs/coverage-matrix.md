@@ -65,6 +65,9 @@ contract that local URLs resolve directly while remote URLs require a staged loc
 `ParslSerializationZMQBridge` is now in the foundational gate, providing the small executable
 serializer-token/frame/route/correlation baseline used by the larger ZMQ retry models.
 
+The three `ParslExecuteTask` configurations are now in the foundational gate, covering worker
+decode, callable invocation, value/exception result publication, and malformed-message rejection.
+
 Recent refinements: `ParslPipelineTimed` adds a compact DAG/physical-attempt/clock/monitoring
 composition, `ParslProviderExecutorTimed` adds provider re-provisioning, manager heartbeat,
 worker capacity, and bounded provider retry, and `ParslProviderExecutorTimedMonitoring` composes

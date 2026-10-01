@@ -660,6 +660,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted `ParslSerializationZMQBridge` into the foundational TLC gate. This
   compact bridge connects serializer tokens and attempt IDs to framing, route validation,
   duplicate/discard handling, worker dispatch, result decoding, and stale-result rejection.
+- Current stage: promoted all three `ParslExecuteTask` configurations into the foundational TLC
+  gate. The worker-side baseline now checks valid value return, user exception propagation, and
+  malformed payload rejection before invocation.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
