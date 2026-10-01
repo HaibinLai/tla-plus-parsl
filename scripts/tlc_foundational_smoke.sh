@@ -1784,5 +1784,11 @@ run_case monitoring-zmq-batch-clock-fixed \
 run_case file-transfer-monitoring-fixed \
     models/monitoring/ParslFileTransferMonitoringFixed.cfg \
     models/monitoring/ParslFileTransferMonitoring.tla
+run_case task-transport \
+    models/serialization/ParslTaskTransport.cfg \
+    models/serialization/ParslTaskTransport.tla
+run_case task-transport-failure \
+    models/serialization/ParslTaskTransportFailure.cfg \
+    models/serialization/ParslTaskTransport.tla
 
 echo "Foundational TLC smoke suite passed."

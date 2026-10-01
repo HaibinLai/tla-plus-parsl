@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `012e17e` (`Promote file transfer monitoring gate`).
-- Foundational smoke inventory: 578 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 580 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -19,6 +19,10 @@ are recorded here in English and committed with the model changes.
 - Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
+
+- Current stage: promoted `ParslTaskTransport` normal and serialization-failure configurations
+  into the foundational TLC gate. The cross-layer model requires a valid serialized task before
+  dispatch, correlates results to the current attempt, and bounds retry-driven stale results.
 
 - Current stage: promoted fixed `ParslFileTransferMonitoring` into the foundational TLC gate.
   Stage-out now requires all chunks and a version-matching source snapshot before publishing a
