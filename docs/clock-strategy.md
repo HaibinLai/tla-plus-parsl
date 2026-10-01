@@ -223,6 +223,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutPersis
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_heartbeat_runtime.py -v
 ```
 
+`ParslHeartbeatResultAttempt.tla` composes manager expiry with result-attempt generations. Once
+the heartbeat threshold loses attempt 0, the Fixed branch does not revive the manager on a late
+heartbeat and does not resolve the retry Future with an old result. The runtime bridge combines
+the real HTEX expiry path with serialized Flux `TaskResult` envelopes in
+`tests/test_heartbeat_result_attempt_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatResultAttemptCurrent.cfg models/clock/ParslHeartbeatResultAttempt.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatResultAttemptFixed.cfg models/clock/ParslHeartbeatResultAttempt.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_heartbeat_result_attempt_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeoutMonitoringCurrent.cfg models/clock/ParslTimeoutMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslTimeoutMonitoringFixed.cfg models/clock/ParslTimeoutMonitoring.tla

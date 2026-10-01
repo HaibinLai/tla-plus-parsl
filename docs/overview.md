@@ -9,8 +9,8 @@ boundaries that affect observable workflow behavior: DataFlowKernel task/Future 
 executor submission, worker execution, provider capacity, retries, memoization, data
 readiness, and late results.
 
-The current foundational baseline is 627 TLC configurations and 425 Python runtime probe
-entries (663 unittest methods). The model was based on the Parsl paper and the current source
+The current foundational baseline is 628 TLC configurations and 426 Python runtime probe
+entries (665 unittest methods). The model was based on the Parsl paper and the current source
 tree, especially:
 
 - `parsl/dataflow/states.py`: task states. The usual DFK success path is

@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `4762071` (`Compose serialized result attempt delivery`).
-- Foundational smoke inventory: 625 TLC cases and 424 Python runtime probes.
+- Foundational smoke inventory: 628 TLC cases and 426 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,12 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: composed heartbeat expiry with retry-generation result delivery in
+  `ParslHeartbeatResultAttempt`. The Fixed branch ignores late heartbeats from expired managers,
+  rejects old-attempt results, and keeps malformed/current result handling terminal. Full smoke
+  verification passed: 628 TLC cases and 426 Python runtime probes; 665 unittest methods are
+  present.
 
 - Current stage: composed result delivery with physical-attempt generations in
   `ParslZMQResultAttempt`. The Fixed branch rejects malformed result payloads, ignores old

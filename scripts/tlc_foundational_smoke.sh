@@ -149,6 +149,9 @@ run_case heartbeat-timeout-persistence \
 run_case heartbeat-retry-basic \
     models/clock/ParslHeartbeatRetryFixed.cfg \
     models/clock/ParslHeartbeatRetry.tla
+run_case heartbeat-result-attempt \
+    models/clock/ParslHeartbeatResultAttemptFixed.cfg \
+    models/clock/ParslHeartbeatResultAttempt.tla
 run_case heartbeat-full-horizon \
     models/clock/ParslTimedHeartbeatFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla
