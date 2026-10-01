@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `0fe99da` (`Promote Torque tasks-per-node model`).
+- Latest pushed commit: `86d1948` (`Promote LocalProvider tasks-per-node model`).
 - Foundational smoke inventory: 425 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
