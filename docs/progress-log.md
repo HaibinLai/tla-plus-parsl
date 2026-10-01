@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `6f2f242` (`Model strategy idle clock rollback`).
+- Latest locally preserved commit: `a940dbb` (`Model thread executor startup cleanup`).
 - Foundational smoke inventory: 494 TLC cases and 409 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
