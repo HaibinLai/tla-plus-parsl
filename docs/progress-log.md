@@ -54,7 +54,8 @@ criteria for this deliverable.
 
 - Current stage: added `ParslHtexWorkerPollPriority`, exposing the task-first branch of the worker
   communicator when task and result sockets are simultaneously readable. The fixed branch gives a
-  ready result bounded service priority, with a deterministic fake-ZMQ runtime reproduction.
+  ready result bounded service priority, with a deterministic fake-ZMQ runtime reproduction. The
+  Current simulation reaches its 27-state counterexample, while the Fixed case passes.
 
 - Current stage: completed the full foundational Python runtime regression after adding the
   duplicate-cancellation join probe. All 412/412 probes pass against the pinned Parsl source;
