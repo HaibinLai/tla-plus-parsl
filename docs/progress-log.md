@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `367e865` (`Record join stage-out cancellation bridge`).
+- Latest locally preserved commit: `34286d5` (`Refine bound stage-out cancellation semantics`).
 - Foundational smoke inventory: 615 TLC cases and 413 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
