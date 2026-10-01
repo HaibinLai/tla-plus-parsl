@@ -981,6 +981,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeShutd
 /tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_shutdown_cleanup_runtime.py -v
 ```
 
+`ParslGlobusComputeRestoreFailure.tla` covers the submit-side cleanup boundary. If the SDK
+submission raises and restoring a temporarily overridden resource property also raises, the
+Current path exposes the restoration error and masks the primary failure. The Fixed branch keeps
+the original submit error as the observable terminal cause. This is recorded as BUG-304 and is
+bridged by `tests/test_globus_compute_restore_failure_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeRestoreFailureCurrent.cfg models/executors/ParslGlobusComputeRestoreFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeRestoreFailureFixed.cfg models/executors/ParslGlobusComputeRestoreFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_restore_failure_runtime.py -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider

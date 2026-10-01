@@ -205,6 +205,7 @@ tests=(
     tests/test_globus_compute_resource_spec_type_runtime.py
     tests/test_globus_compute_runtime.py
     tests/test_globus_compute_shutdown_cleanup_runtime.py
+    tests/test_globus_compute_restore_failure_runtime.py
     tests/test_globus_staging_runtime.py
     tests/test_globus_transfer_failure_runtime.py
     tests/test_rsync_staging_runtime.py

@@ -977,6 +977,9 @@ run_case globus-resource-spec \
 run_case globus-shutdown-cleanup \
     models/executors/ParslGlobusComputeShutdownCleanupFixed.cfg \
     models/executors/ParslGlobusComputeShutdownCleanup.tla
+run_case globus-restore-failure \
+    models/executors/ParslGlobusComputeRestoreFailureFixed.cfg \
+    models/executors/ParslGlobusComputeRestoreFailure.tla
 run_case aws-submit \
     models/providers/ParslAWSProviderSubmitFixed.cfg \
     models/providers/ParslAWSProviderSubmit.tla

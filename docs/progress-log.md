@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `b9301e2` (`Model callable global and default snapshots`).
-- Foundational smoke inventory: 630 TLC cases and 428 Python runtime probes.
+- Foundational smoke inventory: 631 TLC cases and 429 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,12 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: audited Globus Compute submit cleanup with
+  `ParslGlobusComputeRestoreFailure`. The Current branch lets a restoration error mask the SDK
+  submit exception; the Fixed branch preserves the primary error and terminalizes cleanup. Full
+  smoke verification passed: 631 TLC cases and 429 Python runtime probes; 668 unittest methods
+  are present.
 
 - Current stage: refined Python callable contents with separate global/default roots in
   `ParslFunctionGlobalDefaultSnapshot`. The Current branch reproduces a live module-global read
