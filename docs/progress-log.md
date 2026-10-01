@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `f4b298e` (`Reconcile executable coverage counts`).
+- Latest locally preserved commit: `8fa1990` (`Add runtime bridge for join monitoring generations`).
 - Foundational smoke inventory: 617 TLC cases and 417 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
