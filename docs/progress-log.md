@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `0cd1ff5` (`Promote Grid Engine submit model`).
+- Latest locally preserved commit: `1d141c4` (`Promote LSF submit model`).
 - Foundational smoke inventory: 490 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
