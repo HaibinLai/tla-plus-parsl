@@ -401,6 +401,9 @@ run_case condor-submit-whitespace \
 run_case condor-empty-submit \
     models/providers/ParslCondorEmptySubmitFixed.cfg \
     models/providers/ParslCondorEmptySubmit.tla
+run_case condor-submit-boundary \
+    models/providers/ParslCondorSubmitFixed.cfg \
+    models/providers/ParslCondorSubmit.tla
 run_case condor-unknown-job \
     models/providers/ParslCondorUnknownJobFixed.cfg \
     models/providers/ParslCondorUnknownJob.tla
