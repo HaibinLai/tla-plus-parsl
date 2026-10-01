@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest pushed commit: `2cabe31` (`Promote Kubernetes cancellation model`).
+- Latest pushed commit: `b0ee8e5` (`Promote Condor submit boundary model`).
 - Foundational smoke inventory: 410 TLC cases and 406 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
