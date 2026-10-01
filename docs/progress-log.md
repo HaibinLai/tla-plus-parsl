@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `d637a52` (`Promote join monitoring model`).
+- Latest locally preserved commit: `756008c` (`Promote ResultsIncoming model`).
 - Foundational smoke inventory: 482 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
