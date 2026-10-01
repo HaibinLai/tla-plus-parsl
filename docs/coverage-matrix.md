@@ -486,6 +486,9 @@ mutable join-result lists cannot change callback membership after registration.
 `ParslJoinThreeList` is also in the foundational TLC gate, checking distinct Future completion,
 ordered four-position result reconstruction, and duplicate input preservation.
 
+`ParslHeartbeatProvider` is also in the foundational TLC gate, checking provider status versus
+manager heartbeat expiry, capacity admission, and terminal cleanup of in-flight work.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 

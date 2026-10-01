@@ -1757,6 +1757,9 @@ run_case htex-worker-watchdog-busy \
 run_case htex-worker-watchdog-idle \
     models/executors/ParslHtexWorkerWatchdogIdle.cfg \
     models/executors/ParslHtexWorkerWatchdog.tla
+run_case heartbeat-provider \
+    models/executors/ParslHeartbeatProvider.cfg \
+    models/executors/ParslHeartbeatProvider.tla
 run_case monitoring-threshold-fixed \
     models/monitoring/ParslMonitoringThresholdFixed.cfg \
     models/monitoring/ParslMonitoringThreshold.tla
