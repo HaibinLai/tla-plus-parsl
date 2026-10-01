@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `dd1952d` (`Record Bash timeout cleanup promotion`).
+- Latest locally preserved commit: `38bdc8f` (`Promote command client close race model`).
 - Foundational smoke inventory: 472 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
