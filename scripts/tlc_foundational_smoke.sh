@@ -947,6 +947,9 @@ run_case join-body-retry \
 run_case join-callback-race \
     models/dataflow/ParslJoinCallbackRace.cfg \
     models/dataflow/ParslJoinCallbackRace.tla
+run_case join-callable-transport \
+    models/dataflow/ParslJoinCallableTransport.cfg \
+    models/dataflow/ParslJoinCallableTransport.tla
 run_case join-mixed-list \
     models/dataflow/ParslJoinMixedList.cfg \
     models/dataflow/ParslJoinMixedList.tla

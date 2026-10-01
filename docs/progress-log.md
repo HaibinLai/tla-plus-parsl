@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `06d8a19` (`Record Kubernetes cancellation poll race`).
-- Foundational smoke inventory: 436 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `bf190c1` (`Record Kubernetes race ledger promotion`).
+- Foundational smoke inventory: 437 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: added a re-entrant Kubernetes runtime probe for a poll/cancel race. It reproduces
   BUG-282 against the installed provider: `_status()` can publish a late terminal pod phase after
   `cancel()` has already published `CANCELLED`.
+
+- Current stage: promoted `ParslJoinCallableTransport` into the TLC gate. It composes callable
+  snapshots, retry generations, stale result rejection, logical Future completion, and ordered
+  duplicate join positions.
 
 - Current stage: promoted `ParslLocalProviderStatusScope`. The Fixed model passed TLC and the
   Current branch reproduced the stale unrelated-resource query failure; the targeted runtime

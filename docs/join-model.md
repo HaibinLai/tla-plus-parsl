@@ -35,6 +35,10 @@ The integrated ParslJoinFull model covers:
 
 Focused models refine boundaries that are easy to lose in a set-based abstraction:
 
+- `ParslJoinCallableTransport` connects serialized callable/object snapshots to retry generations,
+  rejects obsolete physical-attempt results, and reconstructs duplicate input positions in order.
+  Its runtime bridge is `tests/test_join_callable_transport_runtime.py`.
+
 - ParslJoinDuplicates and ParslJoinDuplicateFailureAggregation preserve list positions and
   count a failed Future once per occurrence;
 - ParslJoinCallbackRace models callbacks that run before all inner Futures are terminal and
