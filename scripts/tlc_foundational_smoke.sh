@@ -422,6 +422,9 @@ run_case grid-engine-duplicate-status \
 run_case grid-engine-status-batch \
     models/providers/ParslGridEngineStatusBatchFixed.cfg \
     models/providers/ParslGridEngineStatusBatch.tla
+run_case grid-engine-status-line \
+    models/providers/ParslGridEngineStatusFixed.cfg \
+    models/providers/ParslGridEngineStatus.tla
 run_case lsf-duplicate-status \
     models/providers/ParslLSFDuplicateStatusFixed.cfg \
     models/providers/ParslLSFDuplicateStatus.tla

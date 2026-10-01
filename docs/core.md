@@ -141,8 +141,8 @@ one interactive run. `TLC_CASE_START` is one-based and `TLC_CASE_LIMIT` is inclu
 This is a regression entry point, not a replacement for the exhaustive TLC configurations or
 the concrete Python runtime probes documented by each module.
 
-The current repository smoke runner enumerates 403 TLC cases and 406 Python runtime test files.
-On 2026-10-01, all 403 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
+The current repository smoke runner enumerates 404 TLC cases and 406 Python runtime test files.
+On 2026-10-01, all 404 TLC cases passed with `TLC_SIMULATE=100`, and the complete runtime
 suite passed with 406 entries. The subsequently added cases were also run individually as they
 were introduced, including provider admission/staging dispatch, monitoring queue shutdown and
 UDP drain timing, and the PBS Pro status-batch
@@ -355,6 +355,9 @@ status line and continues the poll; Current preserves the parser crash recorded 
 `ParslGridEngineStatusBatch.tla` models a malformed `qstat` record followed by a valid record.
 The Fixed branch isolates the malformed entry and applies the later status; Current aborts the
 whole batch, reproducing BUG-029.
+
+`ParslGridEngineStatus.tla` keeps the single-record parser boundary explicit as well: malformed
+lines are ignored in Fixed and crash the Current poll, preserving the direct source-level path.
 
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
