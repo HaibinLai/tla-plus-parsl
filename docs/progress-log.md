@@ -8,8 +8,8 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `2debcb2` (`Promote full heartbeat horizon case`).
-- Foundational smoke inventory: 441 TLC cases and 407 Python runtime probes.
+- Latest locally preserved commit: `b66fb82` (`Record full heartbeat horizon promotion`).
+- Foundational smoke inventory: 442 TLC cases and 407 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -58,6 +58,10 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the full-horizon `ParslTimedHeartbeatFixed` configuration. The smoke gate
   now checks both the short and four-tick paths for heartbeat expiry, task timeout, and late-result
   classification.
+
+- Current stage: promoted the normal-length `ParslHTTPSeparateContentLength` configuration. The
+  staging gate now checks both short-response rejection and successful publication when received
+  bytes exactly match the declared `Content-Length`.
 
 - Current stage: promoted `ParslJoinImmediateCallback` into the TLC gate. It models an already
   completed dependency invoking its callback during registration and verifies that outer join

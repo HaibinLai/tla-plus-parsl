@@ -1211,6 +1211,9 @@ run_case http-existing-destination \
 run_case http-separate-content-length \
     models/staging/ParslHTTPSeparateContentLengthFixed.cfg \
     models/staging/ParslHTTPSeparateContentLength.tla
+run_case http-separate-content-length-normal \
+    models/staging/ParslHTTPSeparateContentLengthNormal.cfg \
+    models/staging/ParslHTTPSeparateContentLength.tla
 run_case http-separate-status \
     models/staging/ParslHTTPSeparateStatusFixed.cfg \
     models/staging/ParslHTTPSeparateStatus.tla
