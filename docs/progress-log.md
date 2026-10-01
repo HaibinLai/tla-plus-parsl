@@ -644,6 +644,10 @@ are recorded here in English and committed with the model changes.
   logical inner Futures separate from physical retry attempts and checks ordered join observation,
   cancellation/failure aggregation, terminal outer state, and result-shape safety in one compact
   cross-layer state machine.
+- Current stage: promoted the compact `ParslHeartbeatRetry` model into the foundational TLC gate.
+  It provides the simple clock/heartbeat baseline: monotonic manager expiry, task timeout,
+  bounded retry, and rejection of late results before the more detailed provider/join timing
+  compositions.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
