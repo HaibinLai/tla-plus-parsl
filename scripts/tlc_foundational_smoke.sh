@@ -1889,5 +1889,8 @@ run_case strategy-block-capacity-success \
 run_case callable-alias-retry-fixed \
     models/serialization/ParslCallableAliasRetry.cfg \
     models/serialization/ParslCallableAliasRetry.tla
+run_case join-duplicate-cancellation-fixed \
+    models/dataflow/ParslJoinDuplicateCancellationFixed.cfg \
+    models/dataflow/ParslJoinDuplicateCancellation.tla
 
 echo "Foundational TLC smoke suite passed."

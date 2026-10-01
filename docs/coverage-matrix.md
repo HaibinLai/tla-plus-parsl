@@ -578,6 +578,9 @@ current configuration remains a deliberate bug-ledger counterexample.
 Fixed `ParslCallableAliasRetry` is also in the foundational TLC gate, checking callable/argument
 alias identity and per-attempt object snapshots across retry.
 
+Fixed `ParslJoinDuplicateCancellation` is also in the foundational TLC gate, composing duplicate
+dependency registration with cancellation handling and outer-join terminalization.
+
 `ParslTripleNestedJoin` extends the state abstraction to three dependency levels and checks that
 the second join cannot finalize before both the inner join and its independent leaf are terminal.
 
