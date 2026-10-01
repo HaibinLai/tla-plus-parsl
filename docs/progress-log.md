@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `9fed28a` (`Promote HTEX worker drain clock`).
-- Foundational smoke inventory: 540 TLC cases and 411 Python runtime probes.
+- Foundational smoke inventory: 541 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -734,6 +734,9 @@ are recorded here in English and committed with the model changes.
 - Current stage: promoted the Fixed `ParslHtexWorkerDrainClock` configuration into the foundational
   TLC gate. Worker drain deadlines now use monotonic elapsed time; the Current configuration remains
   a wall-clock rollback counterexample that suppresses a due drain message.
+- Current stage: promoted the Fixed `ParslResourceMonitorClock` configuration into the foundational
+  TLC gate. Remote resource-monitor sampling now uses an elapsed monotonic schedule despite wall-clock
+  rollback; the Current configuration remains a suppressed-due-sample counterexample.
 - Current stage: promoted five monitoring lifecycle runtime bridges into the foundational gate:
   close/finalization, starter construction failure, zero batching threshold, authenticated malformed
   UDP payloads, and workflow-duration schema behavior.
