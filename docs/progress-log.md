@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `b54be21` (`Add duplicate cancellation join gate`).
+- Latest locally preserved commit: `4271d08` (`Add duplicate cancellation runtime probe`).
 - Foundational smoke inventory: 614 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
