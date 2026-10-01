@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `3110559` (`Promote TaskVine result model`).
+- Latest locally preserved commit: `8a3b178` (`Promote Work Queue result model`).
 - Foundational smoke inventory: 513 TLC cases and 411 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
