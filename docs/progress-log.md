@@ -16,7 +16,7 @@ are recorded here in English and committed with the model changes.
 - The bug ledger records source/runtime findings separately from candidate fixed semantics. Current
   and fixed configurations are intentionally kept where a TLC counterexample documents the source
   behavior.
-- Full Python runtime smoke was rerun after the Flux lifecycle stage: all 410/410 probes passed.
+- Full Python runtime smoke was rerun after the Radical-Pilot decode stage: all 411/411 probes passed.
 
 ### Latest completed stages
 
