@@ -3852,6 +3852,9 @@ run_case future-wait-timeout pass \
 run_case join-duplicates pass \
     models/dataflow/ParslJoinDuplicates.cfg \
     models/dataflow/ParslJoinDuplicates.tla
+run_case join-multi-output-monitoring pass \
+    models/core/ParslJoinMultiOutputMonitoring.cfg \
+    models/core/ParslJoinMultiOutputMonitoring.tla
 run_case join-mixed-list-current pass \
     models/dataflow/ParslJoinMixedList.cfg \
     models/dataflow/ParslJoinMixedList.tla

@@ -80,6 +80,9 @@ run_case join-file-staging \
 run_case join-monitoring-db \
     models/core/ParslJoinMonitoringDBFixed.cfg \
     models/core/ParslJoinMonitoringDB.tla
+run_case join-multi-output-monitoring \
+    models/core/ParslJoinMultiOutputMonitoring.cfg \
+    models/core/ParslJoinMultiOutputMonitoring.tla
 run_case join-heartbeat-retry \
     models/core/ParslJoinHeartbeatRetryFixed.cfg \
     models/core/ParslJoinHeartbeatRetry.tla

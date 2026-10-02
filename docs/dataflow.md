@@ -494,6 +494,12 @@ retried Python app and an item projection.
 later inner-Future join. The outer task installs a join handle only after a body attempt succeeds;
 `tests/test_join_body_retry_runtime.py` verifies this ordering with a real decorated `join_app`.
 
+`ParslJoinMultiOutputMonitoring.tla` composes list-valued `join_app` completion with independent
+stage-out/DataFuture publication and the terminal monitoring row. Both inner Futures must finish,
+both output transfers must publish and be observed, and only then may monitoring persist the join
+success. `tests/test_join_multi_output_monitoring_runtime.py` exercises the real decorated join,
+DataManager stage-out Futures, and SQLite status row.
+
 `ParslFutureWaitTimeout.tla` separates a caller-side `Future.result(timeout=...)` expiry from a
 Parsl task timeout. The caller may stop waiting while the Future remains pending and can later
 complete normally. `tests/test_future_wait_timeout_runtime.py` verifies this behavior with a real

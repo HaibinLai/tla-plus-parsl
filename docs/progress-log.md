@@ -2375,6 +2375,11 @@ The remaining work is documentation and handoff, not model expansion:
   stale-frame isolation, and projection safety; the runtime bridge uses in-process ZMQ and Parsl's
   serialized `TaskResult`. Inventory is now 729 TLC configurations, 468 runtime entries, and 743
   unittest methods.
+- Current stage: added `ParslJoinMultiOutputMonitoring`, composing list-valued `join_app`
+  completion, two independent stage-out/DataFuture transfers, output observation, and SQLite
+  terminal status persistence. The model checks join dependency, output publication, completeness,
+  and monitoring terminality; the real decorated join/DataManager/SQLite bridge passes. Inventory
+  is now 730 TLC configurations, 469 runtime entries, and 744 unittest methods.
 
 ### Verification convention
 

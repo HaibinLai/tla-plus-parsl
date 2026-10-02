@@ -87,6 +87,9 @@ same attempt boundary through serialized multipart-style result envelopes.
 The `join_app` coverage also includes `ParslJoinBodyRetry`, which separates outer join-body retry
 attempts from installation and completion of the inner Future join.
 
+It also includes `ParslJoinMultiOutputMonitoring`, which composes list-valued inner completion,
+multi-output stage-out/DataFuture readiness, and terminal monitoring persistence.
+
 Provider coverage also includes `ParslLocalCancelFailure` (BUG-226), which checks that a failed
 local kill command cannot be reported as successful cancellation. `ParslAzureCancelBookkeeping`
 (BUG-227) checks that confirmed Azure deletion clears both the instance list and the resource map.
