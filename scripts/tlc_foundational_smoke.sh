@@ -86,6 +86,9 @@ run_case join-heartbeat-retry \
 run_case join-stage-retry \
     models/core/ParslJoinStageRetryFixed.cfg \
     models/core/ParslJoinStageRetry.tla
+run_case thread-shutdown-mode \
+    models/executors/ParslThreadExecutorShutdownModeFixed.cfg \
+    models/executors/ParslThreadExecutorShutdownMode.tla
 run_case stageout-executor-retry \
     models/core/ParslStageOutExecutorRetryFixed.cfg \
     models/core/ParslStageOutExecutorRetry.tla

@@ -63,6 +63,12 @@ queued Future can be cancelled, a running callable cannot be interrupted by `can
 shutdown waits without converting accepted work into cancellation. The runtime bridge forces one
 running and one queued task through the real `ThreadPoolExecutor`.
 
+`ParslThreadExecutorShutdownMode.tla` refines this boundary with `shutdown(wait=False)`. A
+non-blocking shutdown returns while a running callable and its worker remain alive; the Fixed
+branch closes the executor only after completion, while the Current branch exposes a premature
+worker-stop interpretation. The runtime bridge is
+`tests/test_thread_executor_nonblocking_shutdown_runtime.py`.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorFutureLifecycle.cfg models/executors/ParslThreadExecutorFutureLifecycle.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_future_lifecycle_runtime.py -v

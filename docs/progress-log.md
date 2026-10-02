@@ -32,6 +32,12 @@ jumps, worker-pool heartbeat handling, and retry timeout all passed (15 unittest
 tests correspond to the existing `ParslHeartbeatResultAttempt`, `ParslHtexLivenessAttempt`, and
 `ParslJoinTimedMonitoring` abstractions; no duplicate model was added.
 
+The ThreadPoolExecutor audit added `ParslThreadExecutorShutdownMode`, separating executor-return
+from worker termination for `shutdown(wait=False)`. Current TLC reaches `RunningWorkerSafety` in
+293 states; Fixed passes 100,001 simulated states. The corresponding nonblocking-shutdown,
+Future-lifecycle, and executor runtime probes pass 5/5, and the Fixed case is in the foundational
+TLC gate. The resulting full foundational smoke run passed 659/659 TLC cases.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
