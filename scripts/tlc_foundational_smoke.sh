@@ -1049,6 +1049,9 @@ run_case azure-status-shape \
 run_case azure-status-translation \
     models/providers/ParslAzureStatus.cfg \
     models/providers/ParslAzureStatus.tla
+run_case azure-lifecycle \
+    models/providers/ParslAzureLifecycleFixed.cfg \
+    models/providers/ParslAzureLifecycle.tla
 run_case google-submit \
     models/providers/ParslGoogleCloudSubmitFixed.cfg \
     models/providers/ParslGoogleCloudSubmit.tla

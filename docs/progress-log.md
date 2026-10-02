@@ -60,6 +60,15 @@ states. The fixed configuration is now part of the foundational smoke gate.
 
 The post-v0.1 foundational inventory is now 642 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Azure provider lifecycle
+
+`ParslAzureLifecycle` composes VM provisioning, status ordering, and post-delete bookkeeping. The
+Current branch reaches `FailureCleanupSafety` on a partial setup failure; the Fixed branch rolls
+back the VM/resource records and passes five million simulated states, including the swapped-status
+and cancellation paths. The fixed configuration is now part of the foundational smoke gate.
+
+The post-v0.1 foundational inventory is now 643 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

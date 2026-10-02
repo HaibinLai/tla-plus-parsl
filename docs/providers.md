@@ -54,6 +54,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureCancelBookkee
 
 This stale resource-map boundary is recorded as BUG-227.
 
+`ParslAzureLifecycle.tla` composes Azure VM provisioning, status translation, and cancellation.
+The Current branch retains partial VM/resource records after setup failure, under-reports a
+running VM when status entries are reordered, and leaves a deleted VM in local bookkeeping. The
+Fixed branch rolls back failed setup, selects status by meaning, and clears local records after
+remote deletion.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslAzureLifecycleCurrent.cfg \
+  models/providers/ParslAzureLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslAzureLifecycleFixed.cfg \
+  models/providers/ParslAzureLifecycle.tla
+```
+
 `ParslCondorStatusUnknown.tla` models the Condor status projection boundary. The current
 provider indexes every requested ID after polling, while the fixed branch returns an explicit
 UNKNOWN result for IDs no longer present in local bookkeeping.
