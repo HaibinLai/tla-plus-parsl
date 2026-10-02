@@ -2301,6 +2301,12 @@ run_case executor-context-exit-current counterexample \
 run_case executor-context-exit-fixed pass \
     models/executors/ParslExecutorContextExitFixed.cfg \
     models/executors/ParslExecutorContextExit.tla
+run_case monitoring-wrapper-cleanup-current counterexample \
+    models/monitoring/ParslMonitoringWrapperCleanupCurrent.cfg \
+    models/monitoring/ParslMonitoringWrapperCleanup.tla
+run_case monitoring-wrapper-cleanup-fixed pass \
+    models/monitoring/ParslMonitoringWrapperCleanupFixed.cfg \
+    models/monitoring/ParslMonitoringWrapperCleanup.tla
 run_case mpi-malformed-result-cleanup-current counterexample \
     models/executors/ParslMPIMalformedResultCleanupCurrent.cfg \
     models/executors/ParslMPIMalformedResultCleanup.tla

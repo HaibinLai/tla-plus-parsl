@@ -38,6 +38,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringRemoteL
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_remote_lifecycle_runtime.py -v
 ```
 
+`ParslMonitoringWrapperCleanup.tla` audits the application wrapper's final monitoring send.  If
+the wrapped function fails and `send_last_message` fails in the `finally` path, the Current branch
+observes the monitoring exception instead of the application exception (BUG-334).  The Fixed
+branch treats final-send failure as secondary cleanup and preserves the primary application
+failure.  The runtime bridge uses the installed `monitor_wrapper` with deterministic send
+doubles.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWrapperCleanupCurrent.cfg models/monitoring/ParslMonitoringWrapperCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringWrapperCleanupFixed.cfg models/monitoring/ParslMonitoringWrapperCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_wrapper_cleanup_runtime.py -v
+```
+
 `ParslMonitoringFailureShutdown.tla` composes permanent WORKFLOW-end update failure with the
 database-manager close path. The Current branch marks finalization and stops after losing the
 failed update; the Fixed branch bounds retries and records either a persisted or explicit dropped

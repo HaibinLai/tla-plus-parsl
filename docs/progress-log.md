@@ -2437,6 +2437,10 @@ The remaining work is documentation and handoff, not model expansion:
   cleanup boundary. The Current runtime and TLC model show a shutdown exception masking an already
   raised body exception (BUG-333); the Fixed branch preserves the primary body failure. Inventory
   is now 741 TLC configurations, 479 runtime entries, and 754 unittest methods.
+- Current stage: added `ParslMonitoringWrapperCleanup`, refining resource-monitor final-send
+  cleanup. The Current runtime and TLC model show a final monitoring send exception masking an
+  application exception (BUG-334); the Fixed branch preserves the primary application failure.
+  Inventory is now 743 TLC configurations, 480 runtime entries, and 755 unittest methods.
 
 ### Verification convention
 

@@ -1301,6 +1301,9 @@ run_case bad-state-monitoring \
 run_case executor-context-exit \
     models/executors/ParslExecutorContextExitFixed.cfg \
     models/executors/ParslExecutorContextExit.tla
+run_case monitoring-wrapper-cleanup \
+    models/monitoring/ParslMonitoringWrapperCleanupFixed.cfg \
+    models/monitoring/ParslMonitoringWrapperCleanup.tla
 run_case mpi-malformed-result-cleanup \
     models/executors/ParslMPIMalformedResultCleanupFixed.cfg \
     models/executors/ParslMPIMalformedResultCleanup.tla

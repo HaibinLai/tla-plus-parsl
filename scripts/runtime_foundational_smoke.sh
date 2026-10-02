@@ -171,6 +171,7 @@ tests=(
     tests/test_mpi_no_resource_result_monitoring_runtime.py
     tests/test_block_provider_bad_state_monitoring_runtime.py
     tests/test_executor_context_exit_runtime.py
+    tests/test_monitoring_wrapper_cleanup_runtime.py
     tests/test_taskvine_factory_runtime.py
     tests/test_taskvine_start_failure_cleanup_runtime.py
     tests/test_taskvine_failure_fanout_runtime.py
