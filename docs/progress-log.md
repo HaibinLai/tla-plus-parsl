@@ -48,6 +48,15 @@ are recorded here in English and committed with the model changes.
 - The composition reuses BUG-076/105 rather than creating duplicate ledger entries. Inventory is
   now 725 TLC configurations, 464 runtime entries, and 735 unittest methods.
 
+## 2026-10-02 — HTTP in-task cleanup and admission composition
+
+- Added `ParslHTTPInTaskCleanupGate`, composing HTTP response cleanup and partial-byte
+  publication with wrapped-task admission. Current reproduces an open response and visible
+  partial bytes after stream failure; Fixed passes the combined cleanup invariant. The real
+  wrapper probe passes.
+- This refines BUG-085/288 without adding duplicate ledger entries. Inventory is now 726 TLC
+  configurations, 465 runtime entries, and 736 unittest methods.
+
 ## 2026-10-02 — Full foundational TLC regression
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17. Every foundational Fixed or

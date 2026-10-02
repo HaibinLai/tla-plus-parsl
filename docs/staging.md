@@ -13,6 +13,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPInTaskTransferGat
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_in_task_transfer_gate_runtime.py -v
 ```
 
+`ParslHTTPInTaskCleanupGate.tla` composes the HTTP in-task response lifetime and destination
+publication boundary with user-function admission. Current reproduces a failed stream leaving
+partial bytes and an open response while user code remains blocked; Fixed requires cleanup before
+publication. This reuses BUG-085/288 without duplicating ledger entries.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskCleanupGateCurrent.cfg models/staging/ParslHTTPInTaskCleanupGate.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskCleanupGateFixed.cfg models/staging/ParslHTTPInTaskCleanupGate.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_in_task_cleanup_gate_runtime.py -v
+```
+
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 

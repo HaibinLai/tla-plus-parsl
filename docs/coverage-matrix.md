@@ -16,6 +16,9 @@ ownership across worker-pool socket send failure.
 File-transfer coverage also includes `ParslFTPInTaskTransferGate`, composing FTP partial-byte
 publication and connection cleanup with the in-task user-function admission gate (BUG-076/105).
 
+The HTTP in-task row also includes `ParslHTTPInTaskCleanupGate`, composing response cleanup and
+partial publication with the existing status/length admission gate (BUG-085/288).
+
 The ZMQ/serialization coverage also includes `ParslHtexResultForwarding`, which models manager
 task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 

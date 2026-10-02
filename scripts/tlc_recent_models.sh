@@ -2100,6 +2100,12 @@ run_case ftp-in-task-transfer-gate-current counterexample \
 run_case ftp-in-task-transfer-gate-fixed pass \
     models/staging/ParslFTPInTaskTransferGateFixed.cfg \
     models/staging/ParslFTPInTaskTransferGate.tla
+run_case http-in-task-cleanup-gate-current counterexample \
+    models/staging/ParslHTTPInTaskCleanupGateCurrent.cfg \
+    models/staging/ParslHTTPInTaskCleanupGate.tla
+run_case http-in-task-cleanup-gate-fixed pass \
+    models/staging/ParslHTTPInTaskCleanupGateFixed.cfg \
+    models/staging/ParslHTTPInTaskCleanupGate.tla
 run_case workqueue-failure-fanout-current counterexample \
     models/executors/ParslWorkQueueFailureFanoutCurrent.cfg \
     models/executors/ParslWorkQueueFailureFanout.tla

@@ -947,6 +947,9 @@ run_case http-in-task-transfer-gate-fixed \
 run_case http-in-task-admission-fixed \
     models/staging/ParslHTTPInTaskAdmissionFixed.cfg \
     models/staging/ParslHTTPInTaskAdmission.tla
+run_case http-in-task-cleanup-gate \
+    models/staging/ParslHTTPInTaskCleanupGateFixed.cfg \
+    models/staging/ParslHTTPInTaskCleanupGate.tla
 run_case rsync-stage-in-failure \
     models/staging/ParslRsyncStageInFail.cfg \
     models/staging/ParslRsyncStage.tla
