@@ -520,6 +520,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResult
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_malformed_result_runtime.py -v
 ```
 
+`ParslMPILifecycle.tla` composes MPI resource validation, node allocation, launch, result
+decoding, optional task-to-node mapping, cancellation, and shutdown. The Current branch permits
+invalid resource admission, leaks allocation on corrupt payloads, or reaches a raw assertion for
+an unmapped task; the Fixed branch rejects invalid resources, releases nodes on decode failure,
+and returns unmapped results normally. Existing MPI runtime probes cover the concrete scheduler
+boundaries.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslMPILifecycleCurrent.cfg models/executors/ParslMPILifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslMPILifecycleFixed.cfg models/executors/ParslMPILifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_mpi*_runtime.py' -v
+```
+
 `ParslMPIBacklogRetry.tla` models the MPI backlog scheduler when its head task needs more nodes
 than are currently free. The current `_schedule_backlog_tasks` requeues that task and immediately
 recurses, so an unchanged resource count eventually raises `RecursionError`. The fixed branch

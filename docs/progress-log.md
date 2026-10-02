@@ -199,6 +199,16 @@ submit, result, and shutdown paths.
 
 The post-v0.1 foundational inventory is now 656 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: MPI executor lifecycle composition
+
+`ParslMPILifecycle` composes MPI resource validation, node allocation, launch, result decoding,
+optional task-to-node mapping, cancellation, and shutdown. The Current branch reaches the invalid
+resource, decode-leak, and unmapped-result safety counterexamples; the Fixed branch rejects bad
+resources, releases nodes on decode failure, and passes five million simulated states. Existing
+MPI runtime probes cover the concrete scheduler boundaries.
+
+The post-v0.1 foundational inventory is now 657 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state
