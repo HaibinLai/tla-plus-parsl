@@ -1,31 +1,5 @@
 # Executor and HTEX models
 
-`ParslFluxProviderHandshake.tla` composes Flux startup with the concrete provider status
-polling and two-message ZMQ handshake used by `_submit_flux_jobs` and `_check_provider_job`.
-The Current branch accepts a readable package/URI message after the provider job has already
-become terminal, publishing an unusable ready executor. The Fixed branch checks provider
-liveness before accepting each handshake message and fails queued startup work when the
-provider terminates. TLC reaches the Current `NoReadyAfterProviderTermination` counterexample;
-Fixed TLC passes. The runtime probe uses the installed `_check_provider_job` with a readable
-socket and terminal provider double; it records the current early-return behavior and the
-required guard.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslFluxProviderHandshakeCurrent.cfg models/executors/ParslFluxProviderHandshake.tla
-java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslFluxProviderHandshakeFixed.cfg models/executors/ParslFluxProviderHandshake.tla
-/tmp/parsl-venv/bin/python -m unittest tests/test_flux_provider_handshake_runtime.py -v
-```
-
-This startup-liveness boundary is recorded as BUG-320.
-
-The provider-side composition `models/providers/ParslKubernetesFutureAdmission.tla` connects
-Kubernetes pod phases to executor Future admission and status monitoring. `KubernetesProvider.submit`
-currently records a newly-created pod as RUNNING before the first API poll; the Current branch
-therefore allows a Future and monitor event while the actual pod is still Pending. The Fixed
-branch requires an observed Running phase. This is a cross-layer refinement of BUG-126 rather
-than a duplicate ledger entry. The targeted runtime bridge is
-`tests/test_kubernetes_future_admission_runtime.py`.
-
 These models cover executor lifecycle, task execution, HTEX submission and result queues, worker
 registration, heartbeats, command deadlines, ThreadExecutor, WorkQueue, TaskVine, Flux, and
 RadicalPilot result handling.
@@ -558,17 +532,6 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResult
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_malformed_result_runtime.py -v
 ```
 
-`ParslMPIMalformedResultMonitoring.tla` refines the same decode failure across resource
-allocation, Future completion, and monitoring. Current leaves the allocation held and has no
-terminal Future/monitoring failure; Fixed releases the allocation and publishes both terminal
-failure states. The existing MPI malformed-result runtime probe supplies the concrete scheduler
-evidence.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResultMonitoringCurrent.cfg models/executors/ParslMPIMalformedResultMonitoring.tla
-java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResultMonitoringFixed.cfg models/executors/ParslMPIMalformedResultMonitoring.tla
-```
-
 `ParslMPILifecycle.tla` composes MPI resource validation, node allocation, launch, result
 decoding, optional task-to-node mapping, cancellation, and shutdown. The Current branch permits
 invalid resource admission, leaks allocation on corrupt payloads, or reaches a raw assertion for
@@ -634,17 +597,6 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelled
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_cancelled_result_runtime.py -v
 ```
 
-`ParslWorkQueueCancelledMonitoring.tla` refines that race across the peer Future and monitoring
-layers. The Current branch lets a stale cancelled-task report fail the collector and then fail an
-unrelated pending peer; the Fixed branch discards the stale report and allows the peer result to
-publish a successful terminal monitoring state. The existing
-`tests/test_workqueue_cancelled_result_runtime.py` supplies the concrete collector evidence.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledMonitoringCurrent.cfg models/executors/ParslWorkQueueCancelledMonitoring.tla
-java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledMonitoringFixed.cfg models/executors/ParslWorkQueueCancelledMonitoring.tla
-```
-
 `ParslWorkQueueCancelledFailureResult.tla` refines the same race for the no-result/failure report
 branch, where the collector calls `set_exception` rather than `set_result`. A cancelled Future
 raises on that path as well, so the current collector can still abort and fail an unrelated task.
@@ -688,16 +640,6 @@ drives two real result-file reports through the collector boundary.
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledResultCurrent.cfg models/executors/ParslTaskVineCancelledResult.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledResultFixed.cfg models/executors/ParslTaskVineCancelledResult.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_cancelled_result_runtime.py -v
-```
-
-`ParslTaskVineCancelledMonitoring.tla` refines this race across the peer Future and monitoring
-layers. The Current branch lets a stale cancelled-task report fail the collector and an unrelated
-peer; the Fixed branch discards the stale report and permits a successful peer/monitoring terminal
-state. The same concrete collector probe supplies runtime evidence.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledMonitoringCurrent.cfg models/executors/ParslTaskVineCancelledMonitoring.tla
-java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledMonitoringFixed.cfg models/executors/ParslTaskVineCancelledMonitoring.tla
 ```
 
 `ParslTaskVineCancelledFailureResult.tla` covers the corresponding TaskVine no-result/failure
@@ -1464,6 +1406,16 @@ terminal Future failure.
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeFailureCurrent.cfg models/executors/ParslRadicalPilotDecodeFailure.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeFailureFixed.cfg models/executors/ParslRadicalPilotDecodeFailure.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_radical_decode_failure_runtime.py -v
+```
+
+`ParslRadicalPilotDecodeMonitoring.tla` composes the same malformed `DONE` payload with
+Future completion, monitoring publication, and callback-loop progress. The Current branch
+strands the Future, hides the failure from monitoring, and stops collection; the Fixed branch
+publishes a terminal failure while keeping the collector alive.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeMonitoringCurrent.cfg models/executors/ParslRadicalPilotDecodeMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeMonitoringFixed.cfg models/executors/ParslRadicalPilotDecodeMonitoring.tla
 ```
 `ParslBadStateSubmitRace.tla` models the admission race between
 `HighThroughputExecutor.submit_payload` and `BlockProviderExecutor.set_bad_state_and_fail_all`.
