@@ -2501,6 +2501,11 @@ communication and selected async completion criteria in that document are satisf
   state. Inventory is now 752 TLC configurations, 485 runtime entries, and 760 unittest methods.
 - Verification stage: `ParslHtexManagerLossSendFailure` Current TLC returns the expected
   counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes.
+- Verification stage: completed the full foundational Python runtime regression after the
+  communication refinements. All 485/485 runtime entries passed (`runtime_exit=0`).
+- Verification stage: completed the full foundational TLC smoke regression with
+  `TLC_SIMULATE=100`. All 752 configured entries passed (`tlc_exit=0`), including the Current
+  counterexample checks and Fixed safety models registered by the smoke scripts.
 
 ## Scope note
 
