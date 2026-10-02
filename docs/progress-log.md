@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `cd4f5f1` (`Model monitoring task try worker lifecycle`).
-- Foundational smoke inventory: 634 TLC cases and 431 Python runtime probes.
+- Foundational smoke inventory: 635 TLC cases and 432 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,12 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: audited Radical-Pilot master admission with
+  `ParslRadicalMasterSubmitShape`. The Current branch reproduces raw `IndexError` when
+  `submit_raptors` returns an empty collection; the Fixed branch turns the response into an
+  explicit startup failure. Full smoke verification passed: 635 TLC configurations and 432
+  Python runtime probes; 671 unittest methods are present.
 
 - Current stage: composed deferred worker-first monitoring with TASK/TRY creation and STATUS/TRY
   persistence in `ParslMonitoringTaskTryWorkerLifecycle`. The Current branch reproduces a

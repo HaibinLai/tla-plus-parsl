@@ -2,6 +2,8 @@
 
 This file contains the complete ledger entries assigned to this component. See the [split index](../index.md) or the [flat compatibility ledger](../../bug-ledger.md).
 
+| BUG-309 | Radical-Pilot empty master response leaks startup IndexError | `RadicalPilotExecutor.start` indexes `TaskManager.submit_raptors(md)[0]` without validating the returned collection. An empty successful-looking response raises raw `IndexError` after the pilot is created but before the executor reaches a controlled startup state. | `ParslRadicalMasterSubmitShapeCurrent.cfg` (counterexample to `StartupOutcomeSafety`); fixed configuration passes; `tests/test_radical_master_submit_shape_runtime.py` | Validate the master submission response and convert an empty result into an explicit executor startup failure with cleanup. | Reproduced against the installed Radical-Pilot executor; candidate fixed model passes |
+
 | ID | Component | Current behavior / risk | Evidence | Candidate safety condition | Status |
 | --- | --- | --- | --- | --- | --- |
 | BUG-233 | MPI accepts non-divisible rank allocation | `mpi_prefix_composer.validate_resource_spec` derives `ranks_per_node` with true division. `num_nodes=2` and `num_ranks=5` therefore produce `ranks_per_node="2.5"`, which is emitted in the launcher prefix instead of being rejected before launch. | `ParslMPINonDivisibleRanksCurrent.cfg` (counterexample to `IntegralRanksSafety`); fixed configuration passes; `tests/test_mpi_nondivisible_runtime.py` | Require `num_ranks % num_nodes == 0` before deriving an integral per-node rank count. | Reproduced against the installed MPI resource helper; candidate fixed model passes |

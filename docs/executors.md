@@ -4,6 +4,18 @@ These models cover executor lifecycle, task execution, HTEX submission and resul
 registration, heartbeats, command deadlines, ThreadExecutor, WorkQueue, TaskVine, Flux, and
 RadicalPilot result handling.
 
+`ParslRadicalMasterSubmitShape.tla` models the Radical-Pilot startup response boundary. The
+current executor indexes the first master returned by `submit_raptors` without checking that a
+master exists. The fixed branch turns an empty response into an explicit startup failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslRadicalMasterSubmitShapeCurrent.cfg models/executors/ParslRadicalMasterSubmitShape.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -config models/executors/ParslRadicalMasterSubmitShapeFixed.cfg models/executors/ParslRadicalMasterSubmitShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_master_submit_shape_runtime.py -v
+```
+
+This startup response boundary is recorded as BUG-309.
+
 `ParslHtexShutdownReap.tla` refines the HTEX shutdown timeout boundary. The current path sends
 `kill()` after a timed wait but does not perform a second `wait()` before closing ZMQ pipes; the
 fixed branch requires a reap step before shutdown completion. The runtime probe uses the concrete

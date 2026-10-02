@@ -968,6 +968,9 @@ run_case flux-shutdown-lifecycle \
 run_case radical-decode-failure \
     models/executors/ParslRadicalPilotDecodeFailureFixed.cfg \
     models/executors/ParslRadicalPilotDecodeFailure.tla
+run_case radical-master-submit-shape \
+    models/executors/ParslRadicalMasterSubmitShapeFixed.cfg \
+    models/executors/ParslRadicalMasterSubmitShape.tla
 run_case globus-submit-race \
     models/executors/ParslGlobusComputeSubmitRaceFixed.cfg \
     models/executors/ParslGlobusComputeSubmitRace.tla
