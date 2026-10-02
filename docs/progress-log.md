@@ -2444,6 +2444,9 @@ The remaining work is documentation and handoff, not model expansion:
 - Verification stage: ran the complete foundational Python runtime smoke after the executor,
   MPI, context-cleanup, and monitoring-wrapper refinements. All 480/480 runtime entries passed
   (`runtime_exit=0`); the full log is preserved at `/tmp/runtime-foundational-7696a09.log`.
+- Verification stage: reran the foundational TLC smoke after the same refinements with
+  `TLC_SIMULATE=100`. All 743 configured entries passed (`tlc_exit=0`); the full log is preserved
+  at `/tmp/tlc-foundational-7696a09-full.log`.
 
 ### Verification convention
 
