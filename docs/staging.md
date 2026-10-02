@@ -3,6 +3,14 @@
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 
+`ParslGlobusTransferReadiness.tla` composes the Globus ACTIVE-transfer polling loop with its
+downstream DataFuture and consumer gate. The Current branch has no overall deadline, so an
+ACTIVE transfer can leave both the DataFuture and dependent task without a terminal outcome;
+the Fixed branch converts the bounded poll budget into transfer/DataFuture failure before
+consumer admission. The concrete bridge is
+`tests/test_globus_transfer_readiness_runtime.py`, refining the existing transfer-timeout
+boundary.
+
 `ParslStageInAttemptGeneration.tla` is the cross-layer model for logical task retries and
 physical stage-in transfers. A transfer from an earlier task attempt may complete late. The
 Current configuration allows that stale transfer to make the retried task ready; the Fixed
@@ -140,6 +148,16 @@ the real wrapper with a temporary destination and a failed command.
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupCurrent.cfg models/staging/ParslRsyncPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupFixed.cfg models/staging/ParslRsyncPartialCleanup.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_rsync_partial_cleanup_runtime.py -v
+```
+
+`ParslRsyncDataFutureGate.tla` composes the in-task RSync stage-out wrapper with DataManager's
+`None` stage-out return contract. The Current branch lets the output DataFuture follow application
+completion before the remote copy publishes bytes; the Fixed branch keeps consumers blocked until
+RSync succeeds, and turns a failed copy into a terminal DataFuture failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateCurrent.cfg models/staging/ParslRsyncDataFutureGate.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateFixed.cfg models/staging/ParslRsyncDataFutureGate.tla
 ```
 
 `ParslRsyncQuoting.tla` models the command-construction boundary in the same wrapper. The current
