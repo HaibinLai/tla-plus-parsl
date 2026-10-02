@@ -129,6 +129,16 @@ runtime probes cover the concrete parser and cancellation behavior.
 
 The post-v0.1 foundational inventory is now 649 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Grid Engine provider lifecycle composition
+
+`ParslGridEngineLifecycle` composes qsub admission, qstat observations, local resource ownership,
+and qdel cancellation. The Current branch reaches safety counterexamples for missing jobs,
+malformed/duplicate/foreign rows, and stale cancellation; the Fixed branch requires explicit
+terminal evidence, isolates invalid rows, and passes five million simulated states. Existing Grid
+Engine runtime probes cover the concrete parser and cancellation behavior.
+
+The post-v0.1 foundational inventory is now 650 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

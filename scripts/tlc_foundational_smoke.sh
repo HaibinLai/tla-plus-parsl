@@ -722,6 +722,9 @@ run_case grid-engine-submit-shape \
 run_case grid-engine-submit \
     models/providers/ParslGridEngineSubmitJob.cfg \
     models/providers/ParslGridEngineSubmit.tla
+run_case grid-engine-lifecycle \
+    models/providers/ParslGridEngineLifecycleFixed.cfg \
+    models/providers/ParslGridEngineLifecycle.tla
 run_case lsf-missing-job \
     models/providers/ParslLSFMissingJobFixed.cfg \
     models/providers/ParslLSFMissingJob.tla

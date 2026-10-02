@@ -504,6 +504,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySub
 /tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_empty_submit_runtime.py -v
 ```
 
+`ParslGridEngineLifecycle.tla` composes Grid Engine qsub admission, qstat observations, local
+resource ownership, and qdel cancellation. The Current branch can treat a missing job as
+completed, abort on malformed/duplicate/foreign rows, or crash on a stale cancellation record.
+The Fixed branch requires explicit terminal evidence, isolates invalid rows, and makes stale
+cancellation terminal. Existing Grid Engine runtime probes cover the concrete paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslGridEngineLifecycleCurrent.cfg models/providers/ParslGridEngineLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslGridEngineLifecycleFixed.cfg models/providers/ParslGridEngineLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_grid_engine*_runtime.py' -v
+```
+
 `ParslSlurmEmptyJobId.tla` models the default submit regex boundary. The current `\\S*` capture
 accepts an empty identifier from a truncated success line and publishes an empty resource key;
 the fixed branch requires a non-empty ID before registration.
