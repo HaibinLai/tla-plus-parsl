@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Zip duplicate-member/DataFuture readiness bridge
+
+- Added `ParslZipDuplicateReadiness`, composing archive retry history with stage-in/DataFuture
+  publication. The Current branch allows readiness after a duplicate member exists; the Fixed
+  branch rejects ambiguous archive contents before exposing data to a consumer.
+- TLC Fixed passes and Current reproduces `ReadinessUniqueness`; the real Zip stage-out/stage-in
+  probes already demonstrate that Python `ZipFile.read` returns the latest duplicate member while
+  both entries remain in the archive.
+- The current baseline is 675 TLC cases, 443 runtime entries, and 702 unittest methods.
+
 ## 2026-10-02 — ordered join completion bridge
 
 - Added `ParslJoinFailureOrder`, a small executable model in which inner Futures complete in an
