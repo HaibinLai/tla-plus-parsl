@@ -296,6 +296,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStar
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_contact_timeout_starvation_runtime.py -v
 ```
 
+`ParslHtexContactTimeoutStarvationFutureMonitoring.tla` composes this communicator starvation
+boundary with the logical task, Future, and monitoring status. Continuous result traffic leaves
+the Current task pending past the contact threshold; the Fixed branch expires the manager on the
+deadline and publishes one terminal failure. TLC passes 10,000 simulation steps in Fixed while
+the real communicator probe reproduces the Current starvation behavior.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationFutureMonitoringCurrent.cfg models/clock/ParslHtexContactTimeoutStarvationFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationFutureMonitoringFixed.cfg models/clock/ParslHtexContactTimeoutStarvationFutureMonitoring.tla
+```
+
 The clock smoke set also covers independent per-task timeout clocks, periodic timer callback
 failure and quiescent close, HTEX shutdown kill ordering, heartbeat parameter admission, worker
 contact expiry, timeout-to-monitoring cause persistence, and timeout-timer cleanup. These models

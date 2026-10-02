@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — HTEX contact starvation with Future monitoring
+
+- Added `ParslHtexContactTimeoutStarvationFutureMonitoring`, composing continuous result traffic,
+  heartbeat/contact expiry, task Future state, and monitoring publication. Current TLC violates
+  `ContactTimeoutSafety` while the result socket stays readable; Fixed TLC expires the manager and
+  passes 10,000 simulation steps. The real HTEX communicator starvation probe passes. The
+  foundational inventory is now 710 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — Condor empty submit with Future monitoring
 
 - Added `ParslCondorEmptySubmitFutureMonitoring`, composing an empty `condor_submit` response

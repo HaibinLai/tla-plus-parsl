@@ -500,6 +500,9 @@ run_case heartbeat-timeout-future-monitoring \
 run_case htex-contact-timeout \
     models/clock/ParslHtexContactTimeoutStarvationFixed.cfg \
     models/clock/ParslHtexContactTimeoutStarvation.tla
+run_case htex-contact-timeout-starvation-future-monitoring \
+    models/clock/ParslHtexContactTimeoutStarvationFutureMonitoringFixed.cfg \
+    models/clock/ParslHtexContactTimeoutStarvationFutureMonitoring.tla
 run_case worker-contact-rollback \
     models/clock/ParslWorkerContactClockRollbackFixed.cfg \
     models/clock/ParslWorkerContactClockRollback.tla
