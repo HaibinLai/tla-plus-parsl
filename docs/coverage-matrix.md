@@ -130,6 +130,10 @@ The join coverage now also includes `ParslJoinExceptionIdentity`, which checks t
 outer `JoinError` instances retain the same leaf exception object as `__cause__` while annotating
 sibling failures. Arbitrary user object graphs remain bounded and abstract.
 
+Work Queue file-transfer coverage now includes `ParslWorkQueueFileCacheIdentity`, which checks
+that repeated uses of the same filepath produce a cache hint independent of Python `File` object
+identity.
+
 The compact `ParslHeartbeatRetry` model is now in the foundational TLC gate. It isolates
 monotonic heartbeat expiry, task timeout/retry, and stale late-result rejection before the larger
 provider and join timing compositions.

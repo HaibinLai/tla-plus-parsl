@@ -2393,6 +2393,11 @@ The remaining work is documentation and handoff, not model expansion:
 - Verification stage: reran the complete foundational regression after the exception-identity
   addition. All 732 TLC configurations and all 471 runtime entries passed (`tlc_exit=0`,
   `runtime_exit=0`). The full logs were captured under `/tmp/parsl-regression-f515759.RHGlk8`.
+- Current stage: added `ParslWorkQueueFileCacheIdentity`, refining Work Queue's real file-transfer
+  cache boundary. The Current model and runtime probe show that two distinct `File("input.dat")`
+  objects both produce `cache=False`, despite the documented filepath-based reuse contract; the
+  Fixed model keys reuse by filepath. Inventory is now 733 TLC configurations, 472 runtime
+  entries, and 747 unittest methods.
 
 ### Verification convention
 

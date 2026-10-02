@@ -668,6 +668,9 @@ run_case htex-poll-priority-future-timeout \
 run_case join-exception-identity \
     models/dataflow/ParslJoinExceptionIdentityFixed.cfg \
     models/dataflow/ParslJoinExceptionIdentity.tla
+run_case workqueue-file-cache-identity \
+    models/executors/ParslWorkQueueFileCacheIdentityFixed.cfg \
+    models/executors/ParslWorkQueueFileCacheIdentity.tla
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla

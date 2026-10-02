@@ -1481,6 +1481,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexPollPriorityFu
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_poll_priority_future_timeout_runtime.py -v
 ```
 
+`ParslWorkQueueFileCacheIdentity.tla` models the Work Queue `_register_file` cache hint. The
+source documentation describes reuse by filepath, but the current implementation stores `File`
+objects in `registered_files`, so two distinct objects for one path miss the second-use cache
+flag. The Current configuration produces the cache-contract counterexample; the Fixed branch
+keys the registry by filepath. The runtime probe reproduces the current behavior with the real
+`WorkQueueExecutor` helper.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueFileCacheIdentityCurrent.cfg models/executors/ParslWorkQueueFileCacheIdentity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueFileCacheIdentityFixed.cfg models/executors/ParslWorkQueueFileCacheIdentity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_file_cache_identity_runtime.py -v
+```
+
 `ParslFluxShutdownLifecycle.tla` models the Flux executor's submission-thread lifecycle. The
 Current `shutdown()` path calls `join()` even when `start()` was never called, while the Fixed path
 accepts an unstarted executor as already quiescent. The runtime probe constructs the real executor
