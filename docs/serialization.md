@@ -216,6 +216,8 @@ invariants complete in 2,589 generated and 760 distinct states, providing a fast
 The full `ParslZMQSerializationEndToEndFixed.cfg` configuration is also in the foundational smoke
 gate, retaining one retry so late result correlation, duplicate frames, route recovery, and
 payload rejection are checked together.
+The runtime probe `tests/test_zmq_serialization_runtime.py` also sends real serialized result
+frames over an in-process ZMQ pair and accepts only the current attempt.
 
 `ParslTaskTransport.tla` is the smaller cross-layer companion: a bounded callable/argument object
 graph must finish serialization before task transport, decoding must precede worker dispatch, and

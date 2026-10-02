@@ -1,6 +1,7 @@
 """Runtime probe for a real ZMQ multipart task envelope and Parsl payload."""
 
 import unittest
+from concurrent.futures import Future
 
 import zmq
 
@@ -9,6 +10,7 @@ from parsl.serialize.facade import (
     unpack_apply_message,
     unpack_buffers,
 )
+from parsl.serialize import deserialize, serialize
 
 
 def increment(value, label=None):
@@ -97,6 +99,36 @@ class ZmqSerializationRuntimeTest(unittest.TestCase):
 
             self.assertEqual(received, [(b"D", 5), (b"C", 4),
                                         (b"B", 3), (b"A", 2)])
+        finally:
+            sender.close(0)
+            receiver.close(0)
+            context.term()
+
+    def test_result_attempt_correlation_rejects_late_serialized_frame(self):
+        context = zmq.Context()
+        sender = context.socket(zmq.PAIR)
+        receiver = context.socket(zmq.PAIR)
+        try:
+            endpoint = "inproc://parsl-tla-result-attempt-correlation"
+            sender.bind(endpoint)
+            receiver.connect(endpoint)
+            sender.send_multipart([b"task-1", b"0", serialize({"value": "old"})])
+            sender.send_multipart([b"task-1", b"1", serialize({"value": "new"})])
+
+            current_attempt = 1
+            future = Future()
+            accepted = set()
+            for _ in range(2):
+                self.assertTrue(receiver.poll(1000, zmq.POLLIN))
+                task_id, attempt_bytes, payload = receiver.recv_multipart()
+                identity = (task_id, int(attempt_bytes))
+                if identity[1] != current_attempt or identity in accepted:
+                    continue
+                accepted.add(identity)
+                future.set_result(deserialize(payload)["value"])
+
+            self.assertEqual(future.result(), "new")
+            self.assertEqual(accepted, {(b"task-1", 1)})
         finally:
             sender.close(0)
             receiver.close(0)
