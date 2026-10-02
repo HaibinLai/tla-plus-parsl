@@ -6,6 +6,12 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslKubernetesCancelFutureMonitoring.tla` composes the Kubernetes delete response with the
+executor Future and monitoring cancellation state. The Current branch propagates cancellation
+even when the API reports a failed delete; the Fixed branch requires confirmed remote deletion.
+This is a cross-layer refinement of BUG-189, backed by
+`tests/test_kubernetes_cancel_future_monitoring_runtime.py`.
+
 `ParslAwsTeardownStateCleanup.tla` models idempotent AWS state-file removal after infrastructure
 teardown. The current provider leaks `FileNotFoundError` when the state path is already absent;
 the fixed branch treats the missing file as completed cleanup.
@@ -333,6 +339,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorIsol
 /tmp/parsl-venv/bin/python -m unittest tests/test_poller_executor_isolation_runtime.py -v
 ```
 
+`ParslPollerExecutorFutureIsolation.tla` refines this boundary through the Future layer: the
+first provider failure must not leave a healthy executor's independent Future pending merely
+because both executors share one polling callback. The Current branch strands that Future; the
+Fixed branch continues to the healthy executor. The runtime bridge uses a real
+`JobStatusPoller` with deterministic executor doubles.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorFutureIsolationCurrent.cfg models/providers/ParslPollerExecutorFutureIsolation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorFutureIsolationFixed.cfg models/providers/ParslPollerExecutorFutureIsolation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_poller_executor_future_isolation_runtime.py -v
+```
+
 `ParslKubernetesUnknownJob.tla` models a status request for an id absent from the provider's
 local resource map. The current `status()` path raises `KeyError`; the fixed branch returns an
 explicit UNKNOWN status. The runtime probe isolates the concrete lookup with an empty resource
@@ -526,6 +544,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySub
 /tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_empty_submit_runtime.py -v
 ```
 
+`ParslGridEngineEmptySubmitFutureMonitoring.tla` composes the successful-but-empty `qsub`
+response with task, Future, and monitoring state. The Current branch returns `None`, leaving an
+unusable provider result and an unresolved Future; the Fixed branch rejects the response and
+publishes one terminal failure through all upper layers. TLC finds the `NoUnusableSubmit`
+counterexample in Current and passes 10,000 simulation steps in Fixed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitFutureMonitoringCurrent.cfg models/providers/ParslGridEngineEmptySubmitFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitFutureMonitoringFixed.cfg models/providers/ParslGridEngineEmptySubmitFutureMonitoring.tla
+```
+
 `ParslGridEngineLifecycle.tla` composes Grid Engine qsub admission, qstat observations, local
 resource ownership, and qdel cancellation. The Current branch can treat a missing job as
 completed, abort on malformed/duplicate/foreign rows, or crash on a stale cancellation record.
@@ -666,6 +695,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownInstance
 /tmp/parsl-venv/bin/python -m unittest tests/test_aws_unknown_instance_runtime.py -v
 ```
 
+`ParslAwsUnknownFutureMonitoring.tla` composes the same unknown-instance boundary with the
+logical task, Future, and monitoring terminal path. In the Current branch, an untracked EC2
+instance crashes the poller, so the healthy peer cannot complete the task or publish its Future;
+the Fixed branch isolates the unknown observation, preserves polling, and propagates success.
+TLC finds the `UnknownIsolation` counterexample in the Current branch and checks 10,000
+simulation steps in the Fixed branch.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownFutureMonitoringCurrent.cfg models/providers/ParslAwsUnknownFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownFutureMonitoringFixed.cfg models/providers/ParslAwsUnknownFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_unknown_future_monitoring_runtime.py -v
+```
+
 `ParslAwsSubmitEmptyResponse.tla` models an EC2 launch response with no instances. The current
 `submit()` destructures the empty list before checking the result, raising `ValueError`; the fixed
 branch treats it as a failed submission and leaves `resources` unchanged. TLC finds the current
@@ -677,6 +719,17 @@ response exception.
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsSubmitEmptyResponseCurrent.cfg models/providers/ParslAwsSubmitEmptyResponse.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsSubmitEmptyResponseFixed.cfg models/providers/ParslAwsSubmitEmptyResponse.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_aws_submit_runtime.py -v
+```
+
+`ParslAwsEmptySubmitFutureMonitoring.tla` composes the empty-launch response with the logical
+task, Future, and monitoring terminal path. The Current branch crashes before publishing any
+failure, leaving all upper-layer state pending; the Fixed branch converts the provider response
+to a failed submission and propagates failure to the task, Future, and monitoring row. TLC finds
+the `NoCrashOnSubmit` counterexample in Current and passes 10,000 simulation steps in Fixed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsEmptySubmitFutureMonitoringCurrent.cfg models/providers/ParslAwsEmptySubmitFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsEmptySubmitFutureMonitoringFixed.cfg models/providers/ParslAwsEmptySubmitFutureMonitoring.tla
 ```
 
 `ParslTorqueStatusFailure.tla` models the return-code boundary around `qstat`. The current
@@ -922,6 +975,7 @@ the concrete PBS Pro runtime probe.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedFutureMonitoringCurrent.cfg models/providers/ParslPBSProMalformedFutureMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedFutureMonitoringFixed.cfg models/providers/ParslPBSProMalformedFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_malformed_future_monitoring_runtime.py -v
 ```
 
 `ParslPbsproMissingStatus.tla` models the successful-but-incomplete `qstat` boundary. The
@@ -1004,6 +1058,18 @@ with empty stdout and checks that no resource is published.
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitCurrent.cfg models/providers/ParslCondorEmptySubmit.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFixed.cfg models/providers/ParslCondorEmptySubmit.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_condor_empty_submit_runtime.py -v
+```
+
+`ParslCondorEmptySubmitFutureMonitoring.tla` composes that empty `condor_submit` response with
+logical task admission, Future failure, and monitoring publication. The Current branch leaks a
+raw parser error and leaves the upper layers pending; the Fixed branch rejects the malformed
+admission and publishes one terminal failure. TLC finds the `NoRawEmptyResponse` counterexample
+in Current and passes 10,000 simulation steps in Fixed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFutureMonitoringCurrent.cfg models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFutureMonitoringFixed.cfg models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_empty_submit_future_monitoring_runtime.py -v
 ```
 
 `ParslClusterSubmitScript.tla` covers the common `ClusterProvider._write_submit_script` boundary.

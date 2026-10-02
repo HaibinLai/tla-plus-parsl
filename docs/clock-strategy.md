@@ -33,6 +33,18 @@ timeout and treats the completion as stale. `HeartbeatExpirySafety`, `TimeoutTer
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutFutureMonitoringCurrent.cfg models/clock/ParslHeartbeatTimeoutFutureMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutFutureMonitoringFixed.cfg models/clock/ParslHeartbeatTimeoutFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_heartbeat_timeout_future_monitoring_runtime.py -v
+```
+
+`ParslHeartbeatProviderBoundary.tla` is a smaller boundary-accurate refinement. It keeps the
+interchange's strict `>` heartbeat expiry, releases the physical manager slot on loss, reconnects
+the manager, and separates the retried logical attempt from a late physical result. The Current
+configuration demonstrates stale-result acceptance; the Fixed configuration enforces attempt
+generation safety.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatProviderBoundaryCurrent.cfg models/clock/ParslHeartbeatProviderBoundary.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatProviderBoundaryFixed.cfg models/clock/ParslHeartbeatProviderBoundary.tla
 ```
 
 `ParslClockSmoke.cfg` is a fast bounded regression configuration for `ParslClock.tla`. It keeps
@@ -283,6 +295,17 @@ The deterministic runtime probe drives the installed loop with fake ZMQ sockets.
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationCurrent.cfg models/clock/ParslHtexContactTimeoutStarvation.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationFixed.cfg models/clock/ParslHtexContactTimeoutStarvation.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_contact_timeout_starvation_runtime.py -v
+```
+
+`ParslHtexContactTimeoutStarvationFutureMonitoring.tla` composes this communicator starvation
+boundary with the logical task, Future, and monitoring status. Continuous result traffic leaves
+the Current task pending past the contact threshold; the Fixed branch expires the manager on the
+deadline and publishes one terminal failure. TLC passes 10,000 simulation steps in Fixed while
+the real communicator probe reproduces the Current starvation behavior.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationFutureMonitoringCurrent.cfg models/clock/ParslHtexContactTimeoutStarvationFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHtexContactTimeoutStarvationFutureMonitoringFixed.cfg models/clock/ParslHtexContactTimeoutStarvationFutureMonitoring.tla
 ```
 
 The clock smoke set also covers independent per-task timeout clocks, periodic timer callback

@@ -3,6 +3,25 @@
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 
+`ParslGlobusTransferReadiness.tla` composes the Globus ACTIVE-transfer polling loop with its
+downstream DataFuture and consumer gate. The Current branch has no overall deadline, so an
+ACTIVE transfer can leave both the DataFuture and dependent task without a terminal outcome;
+the Fixed branch converts the bounded poll budget into transfer/DataFuture failure before
+consumer admission. The concrete bridge is
+`tests/test_globus_transfer_readiness_runtime.py`, refining the existing transfer-timeout
+boundary.
+
+`ParslGlobusTransferReadinessMonitoring.tla` adds the monitoring terminal state to that same
+boundary. At the poll budget, the Current branch leaves the ACTIVE transfer, DataFuture,
+consumer, and monitoring row pending; the Fixed branch publishes a coordinated timeout failure.
+TLC passes 10,000 simulation steps in Fixed, and the readiness/timeout runtime probes exercise the
+real `Globus.transfer_file` loop.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferReadinessMonitoringCurrent.cfg models/staging/ParslGlobusTransferReadinessMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferReadinessMonitoringFixed.cfg models/staging/ParslGlobusTransferReadinessMonitoring.tla
+```
+
 `ParslStageInAttemptGeneration.tla` is the cross-layer model for logical task retries and
 physical stage-in transfers. A transfer from an earlier task attempt may complete late. The
 Current configuration allows that stale transfer to make the retried task ready; the Fixed
@@ -140,6 +159,27 @@ the real wrapper with a temporary destination and a failed command.
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupCurrent.cfg models/staging/ParslRsyncPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupFixed.cfg models/staging/ParslRsyncPartialCleanup.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_rsync_partial_cleanup_runtime.py -v
+```
+
+`ParslRsyncPartialCleanupFutureMonitoring.tla` composes the non-zero RSync result with partial
+destination bytes, DataFuture readiness, dependent-task blocking, and monitoring. The Current
+branch leaves the partial path visible and the Future pending; the Fixed branch removes the
+publication and propagates one terminal failure. TLC passes 10,000 simulation steps in Fixed, and
+the runtime probe drives the real RSync wrapper with a failed command.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupFutureMonitoringCurrent.cfg models/staging/ParslRsyncPartialCleanupFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupFutureMonitoringFixed.cfg models/staging/ParslRsyncPartialCleanupFutureMonitoring.tla
+```
+
+`ParslRsyncDataFutureGate.tla` composes the in-task RSync stage-out wrapper with DataManager's
+`None` stage-out return contract. The Current branch lets the output DataFuture follow application
+completion before the remote copy publishes bytes; the Fixed branch keeps consumers blocked until
+RSync succeeds, and turns a failed copy into a terminal DataFuture failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateCurrent.cfg models/staging/ParslRsyncDataFutureGate.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateFixed.cfg models/staging/ParslRsyncDataFutureGate.tla
 ```
 
 `ParslRsyncQuoting.tla` models the command-construction boundary in the same wrapper. The current
@@ -378,6 +418,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingProviderDispa
 /tmp/parsl-venv/bin/python -m unittest tests/test_staging_provider_dispatch_runtime.py -v
 ```
 
+`ParslStagingProviderTransferFailure.tla` refines the same boundary with a provider whose
+`can_stage_in` predicate succeeds but whose transfer raises. The current `DataManager` lets that
+exception abort the dispatch before a later capable provider is tried; the Fixed branch isolates
+the failure and continues ordered fallback. This is recorded as BUG-323.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingProviderTransferFailureCurrent.cfg models/staging/ParslStagingProviderTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingProviderTransferFailureFixed.cfg models/staging/ParslStagingProviderTransferFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_staging_provider_transfer_failure_runtime.py -v
+```
+
 `ParslDataManagerStageOutOrdering.tla` checks the analogous output path in
 `DataFlowKernel._add_output_deps`: `stage_out` starts a separate transfer before
 `replace_task_stage_out` constructs the application wrapper. A wrapper exception can therefore
@@ -400,6 +451,17 @@ injects a fake FTP connection into the real staging function.
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupCurrent.cfg models/staging/ParslFTPPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFixed.cfg models/staging/ParslFTPPartialCleanup.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_partial_cleanup_runtime.py -v
+```
+
+`ParslFTPPartialCleanupFutureMonitoring.tla` composes the partial destination-file boundary with
+DataFuture readiness, dependent-task admission, and monitoring. The Current branch leaves the
+partial bytes visible and the Future pending after transfer failure; the Fixed branch removes the
+publication and propagates one terminal failure. TLC passes 10,000 simulation steps in Fixed, and
+the runtime probe drives the real `_ftp_stage_in` path with a failing FTP stream.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFutureMonitoringCurrent.cfg models/staging/ParslFTPPartialCleanupFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFutureMonitoringFixed.cfg models/staging/ParslFTPPartialCleanupFutureMonitoring.tla
 ```
 
 This file-publication boundary is recorded as BUG-105: a failed FTP stream leaves partial bytes
@@ -429,6 +491,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupCu
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFixed.cfg models/staging/ParslHTTPPartialCleanup.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupSuccess.cfg models/staging/ParslHTTPPartialCleanup.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_http_partial_cleanup_runtime.py -v
+```
+
+`ParslHTTPPartialCleanupFutureMonitoring.tla` composes the HTTP partial-destination boundary with
+DataFuture readiness, dependent-task admission, and monitoring. The Current branch leaves the
+first response chunk visible and the Future pending after a later read failure; the Fixed branch
+removes the partial publication and propagates one terminal failure. TLC passes 10,000 simulation
+steps in Fixed, and the runtime probe drives the real HTTP staging wrapper with a failing response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFutureMonitoringCurrent.cfg models/staging/ParslHTTPPartialCleanupFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFutureMonitoringFixed.cfg models/staging/ParslHTTPPartialCleanupFutureMonitoring.tla
 ```
 
 `ParslHTTPExistingDestination.tla` refines the same boundary when the destination already holds
@@ -539,6 +612,18 @@ generated/three distinct states in the fixed branch.
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInCurrent.cfg models/staging/ParslZipStageIn.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInFixed.cfg models/staging/ParslZipStageIn.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
+```
+
+`ParslZipDuplicateReadiness.tla` composes the duplicate-member retry with DataFuture readiness.
+The current `ZipFile.read` path selects the last member and exposes it as ready data even when
+the archive contains conflicting history; the fixed branch rejects readiness until the member
+name is unique. `tests/test_zip_duplicate_readiness_runtime.py` connects the real byte extractor
+and `DataFuture` and records the current behavior (BUG-190).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipDuplicateReadinessCurrent.cfg models/staging/ParslZipDuplicateReadiness.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipDuplicateReadinessFixed.cfg models/staging/ParslZipDuplicateReadiness.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zip_duplicate_readiness_runtime.py -v
 ```
 
 `ParslMultiOutputVersionedStageOut.tla` combines the multi-output readiness boundary with source

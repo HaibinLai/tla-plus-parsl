@@ -27,6 +27,7 @@ tests=(
     tests/test_function_object_contents_runtime.py
     tests/test_function_global_default_snapshot_runtime.py
     tests/test_function_object_transport_runtime.py
+    tests/test_function_decode_failure_runtime.py
     tests/test_callable_argument_alias_runtime.py
     tests/test_python_nested_alias_runtime.py
     tests/test_callable_deserialize_cache_runtime.py
@@ -62,6 +63,7 @@ tests=(
     tests/test_taskvine_malformed_report_runtime.py
     tests/test_workqueue_start_timeout_cleanup_runtime.py
     tests/test_file_bytes_transfer_runtime.py
+    tests/test_content_file_pipeline_runtime.py
     tests/test_data_manager_stage_in_ordering_runtime.py
     tests/test_data_manager_stage_out_ordering_runtime.py
     tests/test_http_content_length_runtime.py
@@ -140,6 +142,7 @@ tests=(
     tests/test_thread_executor_future_lifecycle_runtime.py
     tests/test_thread_executor_empty_resource_spec_runtime.py
     tests/test_flux_serialization_error_name_runtime.py
+    tests/test_flux_serialization_failure_runtime.py
     tests/test_workqueue_submit_runtime.py
     tests/test_taskvine_submit_runtime.py
     tests/test_workqueue_cancelled_result_runtime.py
@@ -236,6 +239,7 @@ tests=(
     tests/test_thread_executor_lifecycle_runtime.py
     tests/test_flux_shutdown_lifecycle_runtime.py
     tests/test_radical_decode_failure_runtime.py
+    tests/test_radical_decode_monitoring_runtime.py
     tests/test_radical_master_submit_shape_runtime.py
     tests/test_radical_master_count_admission_runtime.py
     tests/test_thread_executor_resource_spec_runtime.py
@@ -325,6 +329,7 @@ tests=(
     tests/test_flux_working_directory_runtime.py
     tests/test_local_provider_submit_cleanup_runtime.py
     tests/test_staging_provider_dispatch_runtime.py
+    tests/test_staging_provider_transfer_failure_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py
@@ -342,6 +347,15 @@ tests=(
     tests/test_monitoring_zmq_tuple_shape_runtime.py
     tests/test_result_monitoring_attempt_runtime.py
     tests/test_provider_executor_timed_monitoring_runtime.py
+    tests/test_poller_executor_future_isolation_runtime.py
+    tests/test_zmq_serialized_ack_future_monitoring_runtime.py
+    tests/test_heartbeat_timeout_future_monitoring_runtime.py
+    tests/test_join_timed_monitoring_runtime.py
+    tests/test_join_retry_stale_result_runtime.py
+    tests/test_zip_duplicate_readiness_runtime.py
+    tests/test_aws_unknown_future_monitoring_runtime.py
+    tests/test_condor_empty_submit_future_monitoring_runtime.py
+    tests/test_pbspro_malformed_future_monitoring_runtime.py
     tests/test_monitoring_batch_runtime.py
     tests/test_monitoring_db_permanent_error_runtime.py
     tests/test_monitoring_db_update_permanent_error_runtime.py
@@ -459,6 +473,8 @@ tests=(
     tests/test_memo_checkpoint_order_runtime.py
     tests/test_memo_checkpoint_result_failure_runtime.py
     tests/test_memo_exception_checkpoint_runtime.py
+    tests/test_join_memo_failure_runtime.py
+    tests/test_monitoring_db_retry_future_runtime.py
     tests/test_last_checkpoint_uuid_runtime.py
     tests/test_task_status_future_ordering_runtime.py
 )
