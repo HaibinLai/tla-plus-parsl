@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Azure status bookkeeping with Future monitoring
+
+- Added `ParslAzureStatusBookkeepingFutureMonitoring`, composing Azure translated/local status,
+  Future completion, and monitoring publication. The Current branch violates
+  `BookkeepingConsistency` because RUNNING is not recorded locally; the Fixed branch preserves
+  the local status and passes 10,000 TLC simulation steps. The existing concrete Azure
+  bookkeeping runtime probe passes. The foundational inventory is now 701 TLC cases and 453
+  runtime entries.
+
 ## 2026-10-02 — Google Cloud unknown status with Future monitoring
 
 - Added `ParslGoogleCloudUnknownFutureMonitoring`, composing unknown GCE status translation with

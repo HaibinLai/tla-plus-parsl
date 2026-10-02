@@ -638,6 +638,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureStatusBookkee
 /tmp/parsl-venv/bin/python -m unittest tests/test_azure_status_bookkeeping_runtime.py -v
 ```
 
+`ParslAzureStatusBookkeepingFutureMonitoring.tla` composes the returned-vs-local Azure status
+boundary with Future completion and monitoring publication. The Current branch reports RUNNING
+without updating local bookkeeping, so the completion path cannot satisfy `BookkeepingConsistency`;
+the Fixed branch records the translated state and reaches the normal Future/monitoring terminal
+path.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureStatusBookkeepingFutureMonitoringCurrent.cfg models/providers/ParslAzureStatusBookkeepingFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAzureStatusBookkeepingFutureMonitoringFixed.cfg models/providers/ParslAzureStatusBookkeepingFutureMonitoring.tla
+```
+
 `ParslAwsUnknownInstance.tla` models an EC2 status response containing an instance absent from
 `AWSProvider.resources`. The current status loop indexes the local map directly, so a stale or
 externally-created instance raises `KeyError` and aborts the poll. The fixed branch records an

@@ -1130,6 +1130,9 @@ run_case azure-cancel-duplicates \
 run_case azure-status-bookkeeping \
     models/providers/ParslAzureStatusBookkeepingFixed.cfg \
     models/providers/ParslAzureStatusBookkeeping.tla
+run_case azure-status-bookkeeping-future-monitoring \
+    models/providers/ParslAzureStatusBookkeepingFutureMonitoringFixed.cfg \
+    models/providers/ParslAzureStatusBookkeepingFutureMonitoring.tla
 run_case azure-status-ordering \
     models/providers/ParslAzureStatusOrderingFixed.cfg \
     models/providers/ParslAzureStatusOrdering.tla
