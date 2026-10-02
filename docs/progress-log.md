@@ -2403,6 +2403,11 @@ The remaining work is documentation and handoff, not model expansion:
   force a recycled `id(fn)` and show a new function receiving the old dependency package; the
   Fixed model requires a content/snapshot key. Inventory is now 734 TLC configurations, 473
   runtime entries, and 748 unittest methods.
+- Current stage: added `ParslJoinDuplicateObjectIdentity`, refining duplicate `join_app` list
+  positions from value equality to Python reference identity. The fixed TLC model and real
+  decorated-join runtime probe confirm that repeating one Future preserves the same returned
+  object in both output positions. Inventory is now 735 TLC configurations, 474 runtime entries,
+  and 749 unittest methods.
 
 ### Verification convention
 

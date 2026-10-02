@@ -129,6 +129,8 @@ final message.
 The join coverage now also includes `ParslJoinExceptionIdentity`, which checks that nested and
 outer `JoinError` instances retain the same leaf exception object as `__cause__` while annotating
 sibling failures. Arbitrary user object graphs remain bounded and abstract.
+`ParslJoinDuplicateObjectIdentity` additionally checks reference aliasing for duplicate Future
+positions, beyond equal serialized values.
 
 Work Queue file-transfer coverage now includes `ParslWorkQueueFileCacheIdentity`, which checks
 that repeated uses of the same filepath produce a cache hint independent of Python `File` object

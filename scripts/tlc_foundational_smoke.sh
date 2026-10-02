@@ -674,6 +674,9 @@ run_case workqueue-file-cache-identity \
 run_case function-environment-cache-identity \
     models/executors/ParslFunctionEnvironmentCacheIdentityFixed.cfg \
     models/executors/ParslFunctionEnvironmentCacheIdentity.tla
+run_case join-duplicate-object-identity \
+    models/dataflow/ParslJoinDuplicateObjectIdentityFixed.cfg \
+    models/dataflow/ParslJoinDuplicateObjectIdentity.tla
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla

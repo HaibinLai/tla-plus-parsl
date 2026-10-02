@@ -97,6 +97,12 @@ object when an outer `JoinError` aggregates the nested failure and a sibling. Th
 checks identity and sibling annotation; `tests/test_join_exception_identity_runtime.py` verifies
 the behavior against the installed `JoinError` implementation.
 
+`ParslJoinDuplicateObjectIdentity.tla` refines duplicate list positions from value equality to
+Python reference identity. When the same inner Future appears twice in a `join_app` list, the
+outer result contains the same returned object at both positions. TLC checks the alias contract,
+and `tests/test_join_duplicate_object_identity_runtime.py` confirms it with a real thread
+executor and decorated `join_app`.
+
 ParslJoinCallbackMultiplicity preserves callback multiplicity for a duplicate list such as
 I1, I1, I2. The source registers one callback per list position, so completion of I1 schedules
 two callback invocations. The model keeps those invocations in a sequence and checks that they
