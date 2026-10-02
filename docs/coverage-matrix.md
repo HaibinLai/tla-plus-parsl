@@ -133,6 +133,8 @@ sibling failures. Arbitrary user object graphs remain bounded and abstract.
 Work Queue file-transfer coverage now includes `ParslWorkQueueFileCacheIdentity`, which checks
 that repeated uses of the same filepath produce a cache hint independent of Python `File` object
 identity.
+Callable-content coverage also includes `ParslFunctionEnvironmentCacheIdentity`, which checks
+that dependency-package reuse cannot cross callable-content epochs through recycled object IDs.
 
 The compact `ParslHeartbeatRetry` model is now in the foundational TLC gate. It isolates
 monotonic heartbeat expiry, task timeout/retry, and stale late-result rejection before the larger

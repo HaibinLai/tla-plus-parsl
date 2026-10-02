@@ -1494,6 +1494,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueFileCache
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_file_cache_identity_runtime.py -v
 ```
 
+`ParslFunctionEnvironmentCacheIdentity.tla` checks the callable dependency-package cache used by
+the Work Queue and TaskVine `_prepare_package` helpers. The current `id(fn)` key can be reused by
+a different function object after garbage collection, returning the old environment package; the
+Fixed branch keys the cache by a content snapshot. The runtime probe forces the id-reuse
+interleaving at the actual Work Queue helper and observes the stale package hit.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFunctionEnvironmentCacheIdentityCurrent.cfg models/executors/ParslFunctionEnvironmentCacheIdentity.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFunctionEnvironmentCacheIdentityFixed.cfg models/executors/ParslFunctionEnvironmentCacheIdentity.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_function_environment_cache_identity_runtime.py -v
+```
+
 `ParslFluxShutdownLifecycle.tla` models the Flux executor's submission-thread lifecycle. The
 Current `shutdown()` path calls `join()` even when `start()` was never called, while the Fixed path
 accepts an unstarted executor as already quiescent. The runtime probe constructs the real executor

@@ -2398,6 +2398,11 @@ The remaining work is documentation and handoff, not model expansion:
   objects both produce `cache=False`, despite the documented filepath-based reuse contract; the
   Fixed model keys reuse by filepath. Inventory is now 733 TLC configurations, 472 runtime
   entries, and 747 unittest methods.
+- Current stage: added `ParslFunctionEnvironmentCacheIdentity`, refining callable-content caching
+  in the Work Queue/TaskVine package-preparation path. The Current TLC model and runtime probe
+  force a recycled `id(fn)` and show a new function receiving the old dependency package; the
+  Fixed model requires a content/snapshot key. Inventory is now 734 TLC configurations, 473
+  runtime entries, and 748 unittest methods.
 
 ### Verification convention
 

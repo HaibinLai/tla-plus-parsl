@@ -671,6 +671,9 @@ run_case join-exception-identity \
 run_case workqueue-file-cache-identity \
     models/executors/ParslWorkQueueFileCacheIdentityFixed.cfg \
     models/executors/ParslWorkQueueFileCacheIdentity.tla
+run_case function-environment-cache-identity \
+    models/executors/ParslFunctionEnvironmentCacheIdentityFixed.cfg \
+    models/executors/ParslFunctionEnvironmentCacheIdentity.tla
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla
