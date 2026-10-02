@@ -2,6 +2,7 @@
 
 import unittest
 
+from parsl.jobs.states import JobState, JobStatus
 from parsl.executors.status_handling import BlockProviderExecutor
 
 
@@ -19,6 +20,11 @@ class PartialProvider:
         if self.calls == 1:
             return "job-0"
         raise RuntimeError("provider rejected second allocation")
+
+    def status(self, job_ids):
+        self.status_calls = getattr(self, "status_calls", [])
+        self.status_calls.append(list(job_ids))
+        return [JobStatus(JobState.PENDING) for _ in job_ids]
 
 
 class RecordingRadio:
@@ -69,6 +75,19 @@ class ScaleOutFailureMonitoringRuntimeTest(unittest.TestCase):
         self.assertEqual(executor._status["1"].status_name, "FAILED")
         payload = executor.submit_monitoring_radio.messages[0][1]
         self.assertEqual([entry["block_id"] for entry in payload], ["0"])
+
+    def test_status_keeps_simulated_failure_separate_from_provider_jobs(self):
+        provider = PartialProvider()
+        executor = DummyBlockExecutor(provider)
+
+        self.assertEqual(executor.scale_out_facade(2), ["0"])
+        status = executor.status()
+
+        self.assertEqual(provider.status_calls, [["job-0"]])
+        self.assertEqual(status["0"].status_name, "PENDING")
+        self.assertEqual(status["1"].status_name, "FAILED")
+        self.assertEqual(executor.blocks_to_job_id, {"0": "job-0"})
+        self.assertEqual(executor.job_ids_to_block, {"job-0": "0"})
 
 
 if __name__ == "__main__":

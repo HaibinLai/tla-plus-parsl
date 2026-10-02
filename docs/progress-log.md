@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — partial scale-out status isolation bridge
+
+- Extended `test_scale_out_failure_monitoring_runtime.py` to poll after a
+  mixed scale-out result using the real `BlockProviderExecutor.status()` path.
+- The successful block remains provider-owned and PENDING, while the failed
+  block remains a simulated FAILED status and is excluded from provider
+  status requests and block/job maps.
+- Focused runtime coverage passes 3/3 tests; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 693 unittest methods.
+
 ## 2026-10-02 — heartbeat expiry and late-message bridge
 
 - Extended `test_heartbeat_result_attempt_runtime.py` to feed a real late
