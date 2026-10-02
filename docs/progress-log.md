@@ -57,6 +57,13 @@ are recorded here in English and committed with the model changes.
   held-allocation/no-terminal-state combination; Fixed releases resources and passes bounded TLC.
   The foundational gate is now 688 TLC configurations and 453 runtime entries.
 
+## 2026-10-02 — TaskVine stale-result/peer-monitoring composition
+
+- Added `ParslTaskVineCancelledMonitoring`, refining the cancelled-result collector race across
+  peer Future progress and monitoring terminality. Current TLC reproduces stale-report failure
+  cascading to an unrelated peer; Fixed discards the stale report and passes bounded TLC. The
+  foundational gate is now 689 TLC configurations and 453 runtime entries.
+
 ## 2026-10-02 — DFK executor-shutdown/monitoring finalization
 
 - Added `ParslDfkExecutorShutdownMonitoring`, composing the real DFK cleanup order with executor

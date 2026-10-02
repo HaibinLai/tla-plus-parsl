@@ -690,6 +690,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledR
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_cancelled_result_runtime.py -v
 ```
 
+`ParslTaskVineCancelledMonitoring.tla` refines this race across the peer Future and monitoring
+layers. The Current branch lets a stale cancelled-task report fail the collector and an unrelated
+peer; the Fixed branch discards the stale report and permits a successful peer/monitoring terminal
+state. The same concrete collector probe supplies runtime evidence.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledMonitoringCurrent.cfg models/executors/ParslTaskVineCancelledMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineCancelledMonitoringFixed.cfg models/executors/ParslTaskVineCancelledMonitoring.tla
+```
+
 `ParslTaskVineCancelledFailureResult.tla` covers the corresponding TaskVine no-result/failure
 report branch. It demonstrates that guarding only successful result delivery is insufficient:
 `set_exception` must also ignore a terminal Future and allow later reports to be collected.

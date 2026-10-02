@@ -2114,5 +2114,8 @@ run_case workqueue-cancelled-monitoring \
 run_case mpi-malformed-result-monitoring \
     models/executors/ParslMPIMalformedResultMonitoringFixed.cfg \
     models/executors/ParslMPIMalformedResultMonitoring.tla
+run_case taskvine-cancelled-monitoring \
+    models/executors/ParslTaskVineCancelledMonitoringFixed.cfg \
+    models/executors/ParslTaskVineCancelledMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."
