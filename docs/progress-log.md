@@ -58,6 +58,12 @@ single-Future, empty-list, ordered-list, duplicate-Future, nested, retry, cancel
 failure-aggregation paths.  The existing model set covers these branches; the complete join-focused
 runtime discovery passed 40/40 tests, so no duplicate join model was added in this pass.
 
+The serialization/ZMQ audit then exercised the real facade registry, dynamic deserializer plugins,
+fallback and header paths, frame length/arity validation, decode failures, ACK/result correlation,
+and callable-object caches.  The serialization-focused subset passed 29/29 tests, the ZMQ subset
+passed 10/10, and the callable-object subset passed 10/10; all corresponding boundaries already
+have Current/Fixed models, so no duplicate model was added.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
