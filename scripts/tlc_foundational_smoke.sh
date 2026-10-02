@@ -89,6 +89,9 @@ run_case join-stage-retry \
 run_case thread-shutdown-mode \
     models/executors/ParslThreadExecutorShutdownModeFixed.cfg \
     models/executors/ParslThreadExecutorShutdownMode.tla
+run_case pool-map-shutdown \
+    models/executors/ParslPoolExecutorMapShutdownFixed.cfg \
+    models/executors/ParslPoolExecutorMapShutdown.tla
 run_case stageout-executor-retry \
     models/core/ParslStageOutExecutorRetryFixed.cfg \
     models/core/ParslStageOutExecutorRetry.tla

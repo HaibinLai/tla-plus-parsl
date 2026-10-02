@@ -38,6 +38,11 @@ from worker termination for `shutdown(wait=False)`. Current TLC reaches `Running
 Future-lifecycle, and executor runtime probes pass 5/5, and the Fixed case is in the foundational
 TLC gate. The resulting full foundational smoke run passed 659/659 TLC cases.
 
+The `ParslPoolExecutor.map` audit then composed timeout with advisory shutdown.  Current TLC
+reaches the cancellation invariant in 17 states; Fixed passes 100,001 simulated states.  The
+combined timeout/shutdown runtime probe passes, and its Fixed configuration is now in the
+foundational TLC gate. The updated full foundational smoke run passed 660/660 TLC cases.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router

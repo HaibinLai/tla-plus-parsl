@@ -69,6 +69,12 @@ branch closes the executor only after completion, while the Current branch expos
 worker-stop interpretation. The runtime bridge is
 `tests/test_thread_executor_nonblocking_shutdown_runtime.py`.
 
+`ParslPoolExecutorMapShutdown.tla` composes the map timeout boundary with advisory
+`shutdown(cancel_futures=True)`.  The timeout stops result iteration, but all eagerly submitted
+Futures remain non-cancellable and may complete later.  The Current branch cancels pending work;
+the Fixed branch preserves it.  The runtime bridge is
+`tests/test_pool_executor_map_shutdown_runtime.py`.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorFutureLifecycle.cfg models/executors/ParslThreadExecutorFutureLifecycle.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_thread_executor_future_lifecycle_runtime.py -v
