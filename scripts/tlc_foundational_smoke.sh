@@ -1760,6 +1760,9 @@ run_case http-connection-cleanup \
 run_case http-partial-cleanup \
     models/staging/ParslHTTPPartialCleanupFixed.cfg \
     models/staging/ParslHTTPPartialCleanup.tla
+run_case http-partial-cleanup-future-monitoring \
+    models/staging/ParslHTTPPartialCleanupFutureMonitoringFixed.cfg \
+    models/staging/ParslHTTPPartialCleanupFutureMonitoring.tla
 run_case http-separate-task-cleanup \
     models/staging/ParslHTTPSeparateTaskCleanupFixed.cfg \
     models/staging/ParslHTTPSeparateTaskCleanup.tla

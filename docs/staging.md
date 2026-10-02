@@ -460,6 +460,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupSu
 /tmp/parsl-venv/bin/python -m unittest tests/test_http_partial_cleanup_runtime.py -v
 ```
 
+`ParslHTTPPartialCleanupFutureMonitoring.tla` composes the HTTP partial-destination boundary with
+DataFuture readiness, dependent-task admission, and monitoring. The Current branch leaves the
+first response chunk visible and the Future pending after a later read failure; the Fixed branch
+removes the partial publication and propagates one terminal failure. TLC passes 10,000 simulation
+steps in Fixed, and the runtime probe drives the real HTTP staging wrapper with a failing response.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFutureMonitoringCurrent.cfg models/staging/ParslHTTPPartialCleanupFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPPartialCleanupFutureMonitoringFixed.cfg models/staging/ParslHTTPPartialCleanupFutureMonitoring.tla
+```
+
 `ParslHTTPExistingDestination.tla` refines the same boundary when the destination already holds
 a valid previous version. The current `open(..., "wb")` truncates that version before the stream
 completes, so a later read failure leaves only the new partial bytes. The fixed branch preserves
