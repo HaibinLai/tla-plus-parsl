@@ -94,6 +94,11 @@ After this composition was added, the complete foundational Python runtime smoke
 the installed Parsl environment and passed 434/434 entries.  This confirms that the added provider,
 stage-out, monitoring, and retry abstractions did not regress the concrete runtime bridges.
 
+The callable/memoization audit then followed `id_for_memo`, memoized Future completion, checkpoint
+loads, closure/function identity, ignored cache keys, and join-result memoization.  The focused
+memoization plus base join probes passed 18/18 tests; `ParslJoinMemoData` and the integrated core
+model already cover the memoized-inner/data-ready combination.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
