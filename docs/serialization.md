@@ -492,6 +492,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPoolExecutorCa
 
 This callable-cache boundary is recorded as BUG-102: an otherwise serializable callable with
 `__hash__ = None` is rejected by the current hash-keyed cache before dill is attempted.
+
+## HTEX heartbeat ACK send failure
+
+`ParslHtexHeartbeatReplySendFailure.tla` audits the heartbeat branch in
+`executors/high_throughput/interchange.py::process_manager_socket_message`. The
+Current branch updates the manager heartbeat and then lets a failed
+`manager_sock.send_multipart` escape the interchange loop. The Fixed branch
+isolates the failed ACK so later work can still be processed. The runtime probe
+uses an in-process socket double and reproduces the current exception.
 `ParslFutureProjectionRetryZMQ.tla` connects the retried logical Future to the real serialized
 result envelope. Attempt identity remains outside the payload, duplicate/current frames are
 deduplicated, and a late old-attempt frame is consumed as stale without releasing the projection.

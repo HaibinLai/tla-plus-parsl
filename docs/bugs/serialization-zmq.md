@@ -45,3 +45,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-336 | HTEX command ingress escapes malformed frame | [BUG-336](../bug-ledger.md) |
 | BUG-337 | HTEX command reply send failure escapes interchange | [BUG-337](../bug-ledger.md) |
 | BUG-004 refinement | HTEX manager-loss synthetic result send failure | [BUG-004](../bug-ledger.md) |
+| BUG-338 | HTEX heartbeat ACK send failure escapes interchange | [BUG-338](../bug-ledger.md) |

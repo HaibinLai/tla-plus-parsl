@@ -2506,6 +2506,17 @@ communication and selected async completion criteria in that document are satisf
 - Verification stage: completed the full foundational TLC smoke regression with
   `TLC_SIMULATE=100`. All 752 configured entries passed (`tlc_exit=0`), including the Current
   counterexample checks and Fixed safety models registered by the smoke scripts.
+- Current stage: audited the HTEX manager heartbeat ACK send boundary in
+  `Interchange.process_manager_socket_message` and added `ParslHtexHeartbeatReplySendFailure`
+  (BUG-338). The Current branch lets a failed `manager_sock.send_multipart` escape after updating
+  `last_heartbeat`; the Fixed branch isolates the ACK failure and preserves interchange liveness.
+  Inventory is now 754 TLC configurations, 486 runtime entries, and 761 unittest methods.
+- Verification stage: the BUG-338 Current TLC configuration returns the expected counterexample
+  (`rc=12`), Fixed TLC passes (`rc=0`), and its installed-source runtime probe passes.
+- Verification stage: reran the complete foundational Python runtime smoke after BUG-338.
+  All 486/486 runtime entries passed (`runtime_exit=0`).
+- Verification stage: reran the complete foundational TLC smoke after BUG-338 with
+  `TLC_SIMULATE=100`. All 754 configured entries passed (`tlc_exit=0`).
 
 ## Scope note
 

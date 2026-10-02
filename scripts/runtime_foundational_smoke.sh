@@ -216,6 +216,7 @@ tests=(
     tests/test_htex_command_ingress_isolation_runtime.py
     tests/test_htex_command_reply_send_failure_runtime.py
     tests/test_htex_manager_loss_send_failure_runtime.py
+    tests/test_htex_heartbeat_reply_send_failure_runtime.py
     tests/test_htex_monitoring_message_runtime.py
     tests/test_execute_wait_timeout_runtime.py
     tests/test_negative_scale_in_runtime.py

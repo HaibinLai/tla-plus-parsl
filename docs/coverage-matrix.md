@@ -25,6 +25,10 @@ malformed command-frame isolation at the interchange main loop.
 It also includes `ParslHtexCommandReplySendFailure` (BUG-337), checking command-reply send
 failure isolation at the same loop.
 
+The communication audit also includes `ParslHtexHeartbeatReplySendFailure` (BUG-338), checking
+that a failed manager heartbeat ACK does not terminate the interchange loop after heartbeat
+state has been accepted.
+
 The manager-loss path is refined by `ParslHtexManagerLossSendFailure`, which checks synthetic
 failure-result ownership when heartbeat expiry coincides with a failed result transport.
 

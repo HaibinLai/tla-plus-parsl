@@ -2124,6 +2124,12 @@ run_case htex-manager-loss-send-failure-current counterexample \
 run_case htex-manager-loss-send-failure-fixed pass \
     models/serialization/ParslHtexManagerLossSendFailureFixed.cfg \
     models/serialization/ParslHtexManagerLossSendFailure.tla
+run_case htex-heartbeat-reply-send-failure-current counterexample \
+    models/serialization/ParslHtexHeartbeatReplySendFailureCurrent.cfg \
+    models/serialization/ParslHtexHeartbeatReplySendFailure.tla
+run_case htex-heartbeat-reply-send-failure-fixed pass \
+    models/serialization/ParslHtexHeartbeatReplySendFailureFixed.cfg \
+    models/serialization/ParslHtexHeartbeatReplySendFailure.tla
 run_case ftp-in-task-transfer-gate-current counterexample \
     models/staging/ParslFTPInTaskTransferGateCurrent.cfg \
     models/staging/ParslFTPInTaskTransferGate.tla

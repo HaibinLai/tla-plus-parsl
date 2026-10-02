@@ -137,6 +137,9 @@ run_case htex-command-reply-send-failure \
 run_case htex-manager-loss-send-failure \
     models/serialization/ParslHtexManagerLossSendFailureFixed.cfg \
     models/serialization/ParslHtexManagerLossSendFailure.tla
+run_case htex-heartbeat-reply-send-failure \
+    models/serialization/ParslHtexHeartbeatReplySendFailureFixed.cfg \
+    models/serialization/ParslHtexHeartbeatReplySendFailure.tla
 run_case htex-result-queue \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla
