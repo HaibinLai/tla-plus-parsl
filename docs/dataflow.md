@@ -6,6 +6,13 @@ resource admission, and result races.
 
 Files live in [`models/dataflow/`](../models/dataflow/).
 
+`ParslJoinMemoFailure.tla` is a cross-layer regression guard for a failed memo hit inside a
+`join_app`.  The memoized Future is already terminal and therefore consumes no new executor
+attempt; the other inner Future may still be waiting for file staging.  The fixed branch waits
+for both callbacks and propagates the memoized exception as the outer terminal join failure,
+while the current branch demonstrates the unsafe success path.  The runtime bridge uses the
+real `BasicMemoizer` and `DataFlowKernel.handle_join_update` implementation.
+
 `ParslDependencyFailurePropagation.tla` models the ordinary DAG failure boundary.  The dependent
 logical task remains blocked until its upstream Future is terminal.  A failed upstream is unwrapped
 as `DependencyError`, so the current Parsl `launch_if_ready`/`handle_exec_update` path completes

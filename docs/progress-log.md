@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — memoized failure propagation through join_app
+
+- Added `ParslJoinMemoFailure`, composing an already-terminal failed memo Future with a staged
+  successful inner Future and the outer `join_app` callback barrier. Current TLC violates
+  `MemoFailurePropagation`; Fixed TLC passes 10,000 simulation steps. The real runtime bridge
+  confirms that `BasicMemoizer` reuses the failed Future without a new attempt and that
+  `handle_join_update` produces one terminal `JoinError`. The foundational inventory is now
+  717 TLC cases and 455 runtime entries (716 unittest methods).
+
 ## 2026-10-02 — callable decode failure with Future monitoring
 
 - Added `ParslFunctionDecodeFailureFutureMonitoring`, composing Python callable/argument snapshot

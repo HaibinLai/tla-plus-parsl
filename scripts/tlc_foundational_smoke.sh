@@ -1526,6 +1526,9 @@ run_case join-mixed-list \
 run_case join-memo-data \
     models/dataflow/ParslJoinMemoData.cfg \
     models/dataflow/ParslJoinMemoData.tla
+run_case join-memo-failure \
+    models/dataflow/ParslJoinMemoFailureFixed.cfg \
+    models/dataflow/ParslJoinMemoFailure.tla
 run_case nested-join-failure \
     models/dataflow/ParslNestedJoinFailure.cfg \
     models/dataflow/ParslNestedJoinFailure.tla
