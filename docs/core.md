@@ -312,6 +312,13 @@ correlation. Each dependency stages and publishes its own two-chunk snapshot bef
 the Fixed branch rejects checksum-blind publication and late results from obsolete attempts,
 while the Current configuration produces both counterexamples.
 
+`ParslStageOutExecutorRetry.tla` isolates the complementary producer boundary: executor success
+and asynchronous stage-out can race with a logical retry.  The Fixed branch correlates both the
+published output and result frame with the current attempt, so a `DataFuture` cannot become ready
+from an old transfer.  The Current branch reaches `PublicationSafety`/`StaleResultSafety` and is
+kept as an executable counterexample.  The Fixed configuration is included in the foundational
+TLC smoke gate.
+
 The `ParslJoinTimedMonitoring` fixed case is now part of the foundational gate as well. It
 connects chunk readiness and source-version capture to heartbeat expiry, task timeout, outer
 cancellation, late completion, and bounded monitoring persistence in one executable join model.

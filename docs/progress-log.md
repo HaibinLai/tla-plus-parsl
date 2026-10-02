@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines
 per-dependency staging, physical-attempt retry, stale-result rejection, and outer-join gating.
-The Fixed configuration is covered by the full 657-case TLC smoke run; the Current configuration
+The Fixed configuration is covered by the full 658-case TLC smoke run; the Current configuration
 still produces the intended unsafe-publication and stale-result counterexamples.  With the
 repository Parsl environment (`/tmp/parsl-venv`), the concrete join bridges
 `test_nested_join_retry_runtime`, `test_join_stageout_cancellation_runtime`,
@@ -20,6 +20,11 @@ The complete foundational Python smoke command was then rerun with
 `PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl` and completed with all 434/434 entries passing.
 This includes the serialization/ZMQ, callable-object, file-transfer, clock/heartbeat, monitoring,
 executor/provider, and join runtime bridges in the current inventory.
+
+The next cross-layer model is `ParslStageOutExecutorRetry`.  It separates executor result
+delivery from asynchronous stage-out while a logical task retries.  The Current configuration
+reproduces stale-result admission in 31 simulated states; the Fixed configuration passed one
+million simulated states.  The Fixed case is now part of the foundational TLC gate.
 
 ## 2026-09-30
 
