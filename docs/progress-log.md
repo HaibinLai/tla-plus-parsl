@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — no-slot strategy admission bridge
+
+- Extended `test_strategy_runtime.py` with the strategy's explicit no-slot
+  path: queued tasks with zero active blocks request one block.
+- This exercises the concrete `Case 4a` branch and confirms it remains within
+  the configured capacity boundary.
+- Focused runtime coverage passes 6/6 tests; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 695 unittest methods.
+
 ## 2026-10-02 — strategy scale-out capacity bridge
 
 - Extended `test_strategy_runtime.py` with a large-backlog case against the

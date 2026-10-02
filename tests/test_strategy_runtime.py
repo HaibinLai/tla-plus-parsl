@@ -86,6 +86,18 @@ class StrategyRuntimeTest(unittest.TestCase):
         # A very large backlog can request only the one remaining block.
         self.assertEqual(executor.scale_out_calls, [0, 1])
 
+    def test_tasks_with_no_active_slots_request_one_block(self):
+        provider = FakeProvider(max_blocks=3, parallelism=0.0)
+        executor = FakeExecutor(provider, outstanding_tasks=2, block_states=[])
+        strategy = Strategy(strategy="simple", max_idletime=10)
+        strategy.add_executors([executor])
+
+        strategy.strategize([executor])
+
+        # With no running or pending block, the strategy uses the explicit
+        # no-slot path and requests one block for the queued work.
+        self.assertEqual(executor.scale_out_calls, [0, 1])
+
     def test_idle_scale_in_waits_and_preserves_minimum(self):
         provider = FakeProvider(min_blocks=1, max_blocks=4)
         executor = FakeExecutor(
