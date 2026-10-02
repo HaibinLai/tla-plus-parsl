@@ -647,6 +647,9 @@ run_case slurm-tasks-per-node \
 run_case slurm-cancel \
     models/providers/ParslSlurmCancelFixed.cfg \
     models/providers/ParslSlurmCancel.tla
+run_case slurm-lifecycle \
+    models/providers/ParslSlurmLifecycleFixed.cfg \
+    models/providers/ParslSlurmLifecycle.tla
 run_case condor-submit-count \
     models/providers/ParslCondorSubmitCountFixed.cfg \
     models/providers/ParslCondorSubmitCount.tla

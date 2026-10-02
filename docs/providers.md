@@ -650,6 +650,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmCancelBatchCu
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmCancelBatchFixed.cfg models/providers/ParslSlurmCancelBatch.tla
 ```
 
+`ParslSlurmLifecycle.tla` composes the provider path from a valid `sbatch` admission through
+foreign, malformed, and duplicate scheduler records to cancellation. The Current branch aborts
+the lifecycle on one of those parser/bookkeeping boundaries; the Fixed branch isolates records,
+preserves the local resource, and treats a stale cancellation ID as idempotent.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslSlurmLifecycleCurrent.cfg \
+  models/providers/ParslSlurmLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslSlurmLifecycleFixed.cfg \
+  models/providers/ParslSlurmLifecycle.tla
+```
+
 `ParslSlurmTasksPerNode.tla` covers submit-time resource validation when `cores_per_node` is
 configured. The current `SlurmProvider.submit` divides by `tasks_per_node` before validating it,
 so zero reaches a raw `ZeroDivisionError`; the fixed branch rejects the request before script

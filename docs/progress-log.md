@@ -41,6 +41,16 @@ foundational smoke gate.
 
 The post-v0.1 foundational inventory is now 640 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Slurm provider lifecycle
+
+`ParslSlurmLifecycle` composes valid submission, scheduler status parsing, and cancellation. It
+keeps foreign/malformed/duplicate records separate from the local resource and models a stale
+cancellation ID after a known job. The Current branch reaches `NoAbort`; the Fixed branch passes
+five million simulated states. The fixed configuration is now part of the foundational smoke
+gate.
+
+The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
+
 ### Current repository state
 
 - Latest locally preserved commit: `f50a060` (`Model file bytes across logical retry attempts`).
