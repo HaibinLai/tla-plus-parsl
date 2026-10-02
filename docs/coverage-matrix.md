@@ -4,6 +4,9 @@ The executor coverage also includes `ParslTaskVineFailureFanout` (BUG-324): mana
 fan-out is checked with a live-dictionary callback mutation counterexample and a snapshot-based
 Fixed protocol, plus a concrete collector runtime probe.
 
+It also includes `ParslWorkQueueFailureFanout` (BUG-325), checking the independent Work Queue
+collector implementation with the same callback mutation interleaving.
+
 The ZMQ/serialization coverage also includes `ParslHtexResultForwarding`, which models manager
 task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 

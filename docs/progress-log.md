@@ -13,6 +13,15 @@ are recorded here in English and committed with the model changes.
 - Added BUG-324 to the executor ledger and promoted the Fixed case into the foundational gate.
   The inventory is now 721 TLC configurations, 460 runtime entries, and 731 unittest methods.
 
+## 2026-10-02 — Work Queue failure fan-out mutation
+
+- Added `ParslWorkQueueFailureFanout`, independently modeling the Work Queue collector's
+  manager-failure fan-out. The Current branch reproduces a callback-driven dictionary mutation
+  that strands a later Future; Fixed snapshots entries before callbacks. The concrete runtime
+  probe passes against the installed executor.
+- Added BUG-325 and promoted the Fixed case into the foundational gate. The inventory is now
+  722 TLC configurations, 461 runtime entries, and 732 unittest methods.
+
 ## 2026-10-02 — Full foundational TLC regression
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17. Every foundational Fixed or

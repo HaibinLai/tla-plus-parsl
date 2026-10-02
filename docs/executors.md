@@ -16,6 +16,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineFailureFan
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_failure_fanout_runtime.py -v
 ```
 
+`ParslWorkQueueFailureFanout.tla` checks the corresponding Work Queue collector boundary. Its
+Current branch has the same live-dictionary mutation counterexample in the independent
+`WorkQueueExecutor` implementation; Fixed uses a snapshot and the runtime probe reproduces the
+failure against the installed source.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueFailureFanoutCurrent.cfg models/executors/ParslWorkQueueFailureFanout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueFailureFanoutFixed.cfg models/executors/ParslWorkQueueFailureFanout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_failure_fanout_runtime.py -v
+```
+
 `ParslFluxProviderHandshake.tla` composes Flux startup with the concrete provider status
 polling and two-message ZMQ handshake used by `_submit_flux_jobs` and `_check_provider_job`.
 The Current branch accepts a readable package/URI message after the provider job has already

@@ -270,6 +270,7 @@ tests=(
     tests/test_serializer_registry_runtime.py
     tests/test_python_cyclic_object_runtime.py
     tests/test_taskvine_results_runtime.py
+    tests/test_workqueue_failure_fanout_runtime.py
     tests/test_workqueue_results_runtime.py
     tests/test_file_path_runtime.py
     tests/test_command_client_runtime.py

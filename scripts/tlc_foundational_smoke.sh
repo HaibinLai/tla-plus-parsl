@@ -914,6 +914,9 @@ run_case taskvine-failure-fanout \
 run_case taskvine-results \
     models/executors/ParslTaskVineResults.cfg \
     models/executors/ParslTaskVineResults.tla
+run_case workqueue-failure-fanout \
+    models/executors/ParslWorkQueueFailureFanoutFixed.cfg \
+    models/executors/ParslWorkQueueFailureFanout.tla
 run_case workqueue-results \
     models/executors/ParslWorkQueueResults.cfg \
     models/executors/ParslWorkQueueResults.tla
