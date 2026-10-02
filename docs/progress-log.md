@@ -64,6 +64,11 @@ and callable-object caches.  The serialization-focused subset passed 29/29 tests
 passed 10/10, and the callable-object subset passed 10/10; all corresponding boundaries already
 have Current/Fixed models, so no duplicate model was added.
 
+The file-content and staging audit then ran all 48 focused runtime probe files covering DataManager
+ordering and DataFuture readiness, checksum/versioned bytes, FTP/HTTP/Rsync/Zip/Globus transfers,
+partial cleanup, path validation, multi-output publication, and provider-backed staging.  Every
+file passed; existing staging models remain the authoritative Current/Fixed abstractions.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
