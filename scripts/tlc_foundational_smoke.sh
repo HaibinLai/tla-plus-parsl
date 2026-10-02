@@ -1025,6 +1025,9 @@ run_case aws-state-file-atomicity \
 run_case aws-teardown-state-cleanup \
     models/providers/ParslAwsTeardownStateCleanupFixed.cfg \
     models/providers/ParslAwsTeardownStateCleanup.tla
+run_case aws-lifecycle \
+    models/providers/ParslAwsLifecycleFixed.cfg \
+    models/providers/ParslAwsLifecycle.tla
 run_case azure-cancel-missing-local \
     models/providers/ParslAzureCancelMissingFixed.cfg \
     models/providers/ParslAzureCancel.tla

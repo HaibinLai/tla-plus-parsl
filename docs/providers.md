@@ -18,6 +18,22 @@ java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -config models/providers/Par
 
 This teardown cleanup boundary is recorded as BUG-310.
 
+`ParslAwsLifecycle.tla` composes AWS submission, status polling, missing-response handling,
+stale local records, and cancellation. The Current branch can abort when the cloud API omits a
+status or when cancellation is requested after local bookkeeping has disappeared; the Fixed
+branch treats missing observations as `unknown` and makes remote termination idempotent. This is
+the compact provider-level composition model, while the narrower AWS models above preserve the
+individual source-level findings.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslAwsLifecycleCurrent.cfg models/providers/ParslAwsLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslAwsLifecycleFixed.cfg models/providers/ParslAwsLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_submit_runtime.py tests/test_aws_status_runtime.py tests/test_aws_cancel_runtime.py -v
+```
+
+The composition is a regression model for the existing AWS provider findings; it does not claim
+that every EC2 API detail is modeled.
+
 `ParslAwsStateFileAtomicity.tla` models the persistence boundary in `AWSProvider`. The current
 implementation writes JSON directly to the final state path; an interruption after truncation
 can leave malformed state, and the next initialization may recreate infrastructure. The fixed

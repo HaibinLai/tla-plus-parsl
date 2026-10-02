@@ -78,6 +78,16 @@ configuration is now part of the foundational smoke gate.
 
 The post-v0.1 foundational inventory is now 644 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: AWS provider lifecycle composition
+
+`ParslAwsLifecycle` composes AWS instance submission, incomplete status responses, stale local
+records, and cancellation. The Current branch reaches `NoAbort` when a provider response is
+missing or a remote termination arrives after local bookkeeping has been removed; the Fixed
+branch records an `unknown` observation and makes termination idempotent, passing five million
+simulated states. The fixed configuration is now part of the foundational smoke gate.
+
+The post-v0.1 foundational inventory is now 645 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state
