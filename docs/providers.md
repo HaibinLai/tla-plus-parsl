@@ -428,6 +428,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorMalformedSta
 /tmp/parsl-venv/bin/python -m unittest tests/test_condor_malformed_status_line_runtime.py -v
 ```
 
+`ParslCondorMalformedFutureMonitoring.tla` composes the failed/truncated `condor_q` boundary
+with poller progress, Future completion, and monitoring publication. The Current branch crashes
+before a later valid status can resolve the task; the Fixed branch preserves the poller and
+reaches the normal terminal path. `PollerProgress` and `CompletionPropagation` are checked
+together with the existing concrete malformed-line probe.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorMalformedFutureMonitoringCurrent.cfg models/providers/ParslCondorMalformedFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorMalformedFutureMonitoringFixed.cfg models/providers/ParslCondorMalformedFutureMonitoring.tla
+```
+
 `ParslLocalTasksPerNode.tla` models the LocalProvider resource-input boundary. A zero
 `tasks_per_node` value currently creates a process that fails in the generated launcher script;
 the fixed branch rejects it before launch. The runtime probe submits `true` to a real local

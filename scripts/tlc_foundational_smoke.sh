@@ -713,6 +713,9 @@ run_case condor-unknown-job \
 run_case condor-malformed-status \
     models/providers/ParslCondorMalformedStatusLineFixed.cfg \
     models/providers/ParslCondorMalformedStatusLine.tla
+run_case condor-malformed-future-monitoring \
+    models/providers/ParslCondorMalformedFutureMonitoringFixed.cfg \
+    models/providers/ParslCondorMalformedFutureMonitoring.tla
 run_case condor-status-unknown \
     models/providers/ParslCondorStatusUnknownFixed.cfg \
     models/providers/ParslCondorStatusUnknown.tla

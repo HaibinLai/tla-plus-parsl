@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Condor malformed status with Future monitoring
+
+- Added `ParslCondorMalformedFutureMonitoring`, composing a failed/truncated Condor status poll
+  with poller progress, Future completion, and monitoring publication. The Current branch
+  violates `PollerProgress` by crashing before a later valid status; the Fixed branch preserves
+  progress and passes 10,000 TLC simulation steps. The existing concrete Condor malformed-line
+  runtime probe passes. The foundational inventory is now 695 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — three-level join retry and monitoring composition
 
 - Added `ParslTripleNestedJoinRetryMonitoring`, connecting a retried inner join (J1), a second
