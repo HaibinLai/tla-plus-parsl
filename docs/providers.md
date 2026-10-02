@@ -1068,6 +1068,7 @@ in Current and passes 10,000 simulation steps in Fixed.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFutureMonitoringCurrent.cfg models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFutureMonitoringFixed.cfg models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_condor_empty_submit_future_monitoring_runtime.py -v
 ```
 
 `ParslClusterSubmitScript.tla` covers the common `ClusterProvider._write_submit_script` boundary.

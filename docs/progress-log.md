@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Condor empty-submit Future monitoring bridge
+
+- Added `test_condor_empty_submit_future_monitoring_runtime.py`, connecting the real Condor
+  parser to a logical Future and monitoring observation. An empty successful submit currently
+  leaks `IndexError`, leaving the Future pending and emitting no terminal event, matching
+  `ParslCondorEmptySubmitFutureMonitoring`. Inventory is now 718 TLC cases and 463 runtime
+  entries (724 unittest methods).
+
 ## 2026-10-02 — AWS unknown-instance Future monitoring bridge
 
 - Added `test_aws_unknown_future_monitoring_runtime.py`, connecting the real AWS provider status
