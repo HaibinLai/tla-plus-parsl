@@ -42,6 +42,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexShutdownReapNo
 
 This shutdown quiescence boundary is recorded as BUG-213.
 
+`ParslHtexLifecycle.tla` composes HTEX task admission, worker execution, retry-attempt
+generation, late-result filtering, manager/worker failure, and shutdown. It keeps logical task
+attempts separate from physical result attempts. The Current branch retains a stale result from a
+failed attempt and permits it to satisfy the retried task; the Fixed branch drops that stale
+traffic and passes five million simulated states with terminal shutdown guarantees. Existing HTEX
+runtime probes cover the concrete transport, worker, retry, and shutdown boundaries.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslHtexLifecycleCurrent.cfg models/executors/ParslHtexLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslHtexLifecycleFixed.cfg models/executors/ParslHtexLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_htex*_runtime.py' -v
+```
+
 Files live in [`models/executors/`](../models/executors/). The full TLC command list is in
 [the overview](overview.md).
 

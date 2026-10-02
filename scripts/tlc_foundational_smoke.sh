@@ -1472,6 +1472,9 @@ run_case scale-out-failure-monitoring \
 run_case htex-shutdown-reap \
     models/executors/ParslHtexShutdownReapFixed.cfg \
     models/executors/ParslHtexShutdownReap.tla
+run_case htex-lifecycle \
+    models/executors/ParslHtexLifecycleFixed.cfg \
+    models/executors/ParslHtexLifecycle.tla
 run_case htex-unknown-manager-heartbeat \
     models/executors/ParslHtexUnknownManagerHeartbeat.cfg \
     models/executors/ParslHtexUnknownManagerMessage.tla

@@ -179,6 +179,16 @@ Pilot runtime probes cover the concrete callback and shutdown paths.
 
 The post-v0.1 foundational inventory is now 654 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: HTEX executor lifecycle composition
+
+`ParslHtexLifecycle` composes HTEX task admission, worker execution, retry-attempt generation,
+late-result filtering, manager/worker failure, and shutdown. It separates logical attempts from
+physical result attempts; the Current branch reaches the stale-result safety counterexample,
+while the Fixed branch drops stale traffic and passes five million simulated states. Existing
+HTEX runtime probes cover the concrete transport, worker, retry, and shutdown boundaries.
+
+The post-v0.1 foundational inventory is now 655 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state
