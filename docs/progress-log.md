@@ -26,6 +26,16 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 663 TLC cases, 436 runtime entries, and
   677 unittest methods passed.
 
+## 2026-10-02 — composed join immediate-callback/list-mutation model
+
+- Added `ParslJoinImmediateMutation.tla` with Current/Fixed configurations.
+- The model combines an already-completed inner Future's synchronous callback
+  with mutation of the returned join list before the remaining callback.
+- Added a runtime bridge for the same ordering through
+  `DataFlowKernel.handle_join_update`.
+- Full regression after this addition: 664 TLC cases, 437 runtime entries, and
+  678 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

@@ -381,6 +381,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinListMutationSta
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_list_mutation_runtime.py -v
 ```
 
+`ParslJoinImmediateMutation.tla` composes that boundary with Python Future callback timing. An
+already-completed first Future can invoke `handle_join_update` immediately; if the caller then
+mutates the aliased join list before the second callback, the Current branch loses a result
+position. The Fixed branch models a stable membership snapshot. The runtime probe drives the
+same ordering against the real `DataFlowKernel.handle_join_update` path.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinImmediateMutationCurrent.cfg models/dataflow/ParslJoinImmediateMutation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinImmediateMutationFixed.cfg models/dataflow/ParslJoinImmediateMutation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_immediate_mutation_runtime.py -v
+```
+
 `ParslJoinReturnEquality.tla` covers a return-validation hazard before the normal join callback.
 The current implementation compares an arbitrary join-body result with `[]` before checking its
 type; a user-defined `__eq__` can raise and strand the outer Future. The fixed branch performs

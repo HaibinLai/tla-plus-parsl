@@ -218,6 +218,9 @@ run_case monitoring-queue-fairness \
 run_case stageout-failure-gate \
     models/staging/ParslStageOutFailureGateFixed.cfg \
     models/staging/ParslStageOutFailureGate.tla
+run_case join-immediate-mutation \
+    models/dataflow/ParslJoinImmediateMutationFixed.cfg \
+    models/dataflow/ParslJoinImmediateMutation.tla
 run_case join-app \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
