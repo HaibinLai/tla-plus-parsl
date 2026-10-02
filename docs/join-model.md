@@ -113,6 +113,11 @@ times while the status remains queued; `DatabaseRetryBound` proves the retry cou
 The focused cancellation configurations expose the current resurrection counterexample
 independently of the content-integrity counterexample.
 
+The runtime bridge `tests/test_join_timed_monitoring_runtime.py` exercises the corresponding
+DFK path with a real `python_app(walltime=...)` inner Future. Its injected walltime failure is
+observed by `join_app` and becomes one terminal outer `JoinError`, rather than leaving the outer
+Future in `joining`.
+
 ## Safety properties
 
 - an outer join handle remains live while the outer task is joining;

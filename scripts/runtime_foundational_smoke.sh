@@ -346,6 +346,7 @@ tests=(
     tests/test_poller_executor_future_isolation_runtime.py
     tests/test_zmq_serialized_ack_future_monitoring_runtime.py
     tests/test_heartbeat_timeout_future_monitoring_runtime.py
+    tests/test_join_timed_monitoring_runtime.py
     tests/test_monitoring_batch_runtime.py
     tests/test_monitoring_db_permanent_error_runtime.py
     tests/test_monitoring_db_update_permanent_error_runtime.py

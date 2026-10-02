@@ -4,6 +4,13 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — timed inner Future through join_app
+
+- Added `test_join_timed_monitoring_runtime.py`, a real DFK bridge for the timed join boundary.
+  An inner `python_app(walltime=...)` timeout is aggregated by `join_app` into one terminal
+  `JoinError`; the outer Future does not remain in `joining`. Inventory is now 718 TLC cases and
+  460 runtime entries (721 unittest methods).
+
 ## 2026-10-02 — heartbeat expiry and timeout Future bridge
 
 - Added a concrete runtime bridge for `ParslHeartbeatTimeoutFutureMonitoring`. The real HTEX
