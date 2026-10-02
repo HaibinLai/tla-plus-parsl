@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `2c135b2` (`Model Radical Pilot master count admission`).
+- Latest locally preserved commit: `998c013` (`Record Radical Pilot master count checkpoint`).
 - Foundational smoke inventory: 637 TLC cases and 434 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
@@ -18,12 +18,12 @@ are recorded here in English and committed with the model changes.
   behavior.
 - Full Python runtime smoke was rerun after the HTEX worker poll-priority bridge: all 415/415 probes passed.
 
-### Bounded v0.1 target (scope frozen)
+### Bounded v0.1 target (scope frozen; final acceptance gate)
 
 The first deliverable is a bounded validation package, not a complete executable model of every
 Parsl backend. It is complete when all of the following are true:
 
-- the existing 634 TLC cases and 431 Python probes pass as a regression gate;
+- the existing 637 TLC cases and 434 Python probes pass as a regression gate;
 - the models cover the paper-level behaviors of logical tasks, physical attempts, dependency/Future
   propagation, executor/worker execution, retry and failure, timeout/stale results, provider
   provisioning and scale-in/out, memoization, staging/data readiness, monitoring, and `join_app`;
@@ -33,9 +33,18 @@ Parsl backend. It is complete when all of the following are true:
 - the final report documents the component mapping, counterexamples, limitations, and exact
   reproduction commands.
 
-After this acceptance gate is met, the v0.1 scope is frozen. Additional executors, providers, or
-implementation details become a separately tracked backlog rather than extending the completion
-criteria for this deliverable.
+This acceptance gate is now met. The v0.1 scope is frozen at 637 TLC cases, 434 Python probes,
+and 673 discovered unittest methods. Additional executors, providers, or implementation details
+are a separately tracked backlog and must not extend the completion criteria for this deliverable.
+
+### Close-out work only
+
+The remaining work is documentation and handoff, not model expansion:
+
+- keep the two regression commands reproducible;
+- finish the v0.1 report and coverage/bug-ledger cross-links;
+- record known limitations and the DNS-blocked GitHub push status;
+- prepare a post-v0.1 backlog without adding items to the acceptance gate.
 
 ### Latest completed stages
 
