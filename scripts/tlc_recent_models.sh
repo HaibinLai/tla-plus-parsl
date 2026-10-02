@@ -2076,6 +2076,12 @@ run_case taskvine-start-failure-cleanup-current counterexample \
 run_case taskvine-start-failure-cleanup-fixed pass \
     models/executors/ParslTaskVineStartFailureCleanupFixed.cfg \
     models/executors/ParslTaskVineStartFailureCleanup.tla
+run_case taskvine-failure-fanout-current counterexample \
+    models/executors/ParslTaskVineFailureFanoutCurrent.cfg \
+    models/executors/ParslTaskVineFailureFanout.tla
+run_case taskvine-failure-fanout-fixed pass \
+    models/executors/ParslTaskVineFailureFanoutFixed.cfg \
+    models/executors/ParslTaskVineFailureFanout.tla
 run_case workqueue-duplicate-report-current counterexample \
     models/executors/ParslWorkQueueDuplicateReport.cfg \
     models/executors/ParslWorkQueueDuplicateReport.tla

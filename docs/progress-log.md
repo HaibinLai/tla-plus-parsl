@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — TaskVine failure fan-out mutation
+
+- Added `ParslTaskVineFailureFanout`, a small executor model for manager-failure fan-out. The
+  Current branch reproduces `RuntimeError: dictionary changed size during iteration` when a
+  Future callback removes its task entry; the Fixed branch snapshots entries and fails all
+  pending Futures. The concrete runtime probe reproduces the installed collector behavior.
+- Added BUG-324 to the executor ledger and promoted the Fixed case into the foundational gate.
+  The inventory is now 721 TLC configurations, 460 runtime entries, and 731 unittest methods.
+
 ## 2026-10-02 — Full foundational TLC regression
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17. Every foundational Fixed or

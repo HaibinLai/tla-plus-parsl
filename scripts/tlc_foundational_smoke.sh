@@ -908,6 +908,9 @@ run_case taskvine-shutdown \
 run_case taskvine-lifecycle \
     models/executors/ParslTaskVineLifecycleFixed.cfg \
     models/executors/ParslTaskVineLifecycle.tla
+run_case taskvine-failure-fanout \
+    models/executors/ParslTaskVineFailureFanoutFixed.cfg \
+    models/executors/ParslTaskVineFailureFanout.tla
 run_case taskvine-results \
     models/executors/ParslTaskVineResults.cfg \
     models/executors/ParslTaskVineResults.tla

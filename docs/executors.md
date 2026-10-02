@@ -1,5 +1,21 @@
 # Executor and HTEX models
 
+## TaskVine failure fan-out and callback mutation
+
+`ParslTaskVineFailureFanout.tla` isolates manager-failure cleanup. The installed
+`_collect_taskvine_results` implementation iterates the live `tasks` dictionary while calling
+`Future.set_exception`. A callback that removes its task entry changes the dictionary during
+iteration, so the collector raises `RuntimeError` and leaves later Futures pending. The Current
+TLC configuration violates `FanoutSafety`; the Fixed configuration snapshots entries before
+invoking callbacks and passes. The runtime probe reproduces the same interleaving against the
+installed executor.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineFailureFanoutCurrent.cfg models/executors/ParslTaskVineFailureFanout.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineFailureFanoutFixed.cfg models/executors/ParslTaskVineFailureFanout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_failure_fanout_runtime.py -v
+```
+
 `ParslFluxProviderHandshake.tla` composes Flux startup with the concrete provider status
 polling and two-message ZMQ handshake used by `_submit_flux_jobs` and `_check_provider_job`.
 The Current branch accepts a readable package/URI message after the provider job has already

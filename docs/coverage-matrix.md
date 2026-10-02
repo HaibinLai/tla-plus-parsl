@@ -1,5 +1,9 @@
 # Abstraction coverage matrix
 
+The executor coverage also includes `ParslTaskVineFailureFanout` (BUG-324): manager-failure
+fan-out is checked with a live-dictionary callback mutation counterexample and a snapshot-based
+Fixed protocol, plus a concrete collector runtime probe.
+
 The ZMQ/serialization coverage also includes `ParslHtexResultForwarding`, which models manager
 task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 

@@ -158,6 +158,7 @@ tests=(
     tests/test_mpi_malformed_result_runtime.py
     tests/test_taskvine_factory_runtime.py
     tests/test_taskvine_start_failure_cleanup_runtime.py
+    tests/test_taskvine_failure_fanout_runtime.py
     tests/test_workqueue_shutdown_runtime.py
     tests/test_thread_executor_future_lifecycle_runtime.py
     tests/test_aws_submit_runtime.py
