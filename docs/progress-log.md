@@ -159,6 +159,16 @@ Existing TaskVine runtime probes cover the concrete executor boundaries.
 
 The post-v0.1 foundational inventory is now 652 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Flux executor lifecycle composition
+
+`ParslFluxLifecycle` composes Flux submission, underlying job failure/success, callback result
+decoding, cancellation, late/duplicate callbacks, and shutdown draining. The Current branch
+reaches `StaleDoesNotKillPeer` when a stale callback stops collection and leaves an unrelated task
+pending; the Fixed branch ignores stale callbacks and passes five million simulated states with
+terminal shutdown guarantees. Existing Flux runtime probes cover the concrete executor paths.
+
+The post-v0.1 foundational inventory is now 653 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

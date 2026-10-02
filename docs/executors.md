@@ -1321,6 +1321,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxShutdownLifecy
 /tmp/parsl-venv/bin/python -m unittest tests/test_flux_shutdown_lifecycle_runtime.py -v
 ```
 
+`ParslFluxLifecycle.tla` composes Flux submission, underlying job failure/success, callback result
+decoding, cancellation, late/duplicate callbacks, and shutdown draining. The Current branch can
+let a stale callback stop collection and leave a peer Future pending; the Fixed branch ignores
+stale callbacks and requires terminal Futures before shutdown completes. Existing Flux runtime
+probes cover the concrete submission, callback, cancellation, and shutdown paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslFluxLifecycleCurrent.cfg models/executors/ParslFluxLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslFluxLifecycleFixed.cfg models/executors/ParslFluxLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_flux*_runtime.py' -v
+```
+
 `ParslRadicalPilotDecodeFailure.tla` models the Python-result decode boundary in
 `RadicalPilotExecutor.task_state_cb`. A malformed `return_value` currently lets the serializer
 exception escape the callback and leaves the Future pending; the Fixed branch turns it into a

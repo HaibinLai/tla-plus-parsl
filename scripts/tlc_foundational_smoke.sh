@@ -998,6 +998,9 @@ run_case thread-executor-lifecycle \
 run_case flux-shutdown-lifecycle \
     models/executors/ParslFluxShutdownLifecycleFixed.cfg \
     models/executors/ParslFluxShutdownLifecycle.tla
+run_case flux-lifecycle \
+    models/executors/ParslFluxLifecycleFixed.cfg \
+    models/executors/ParslFluxLifecycle.tla
 run_case radical-decode-failure \
     models/executors/ParslRadicalPilotDecodeFailureFixed.cfg \
     models/executors/ParslRadicalPilotDecodeFailure.tla
