@@ -584,6 +584,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINoResourceResul
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_no_resource_result_runtime.py -v
 ```
 
+`ParslMPINoResourceResultMonitoring.tla` composes the same unmapped-result boundary with the
+logical Future and monitoring terminal state.  The Current branch stops at the raw assertion,
+leaving both downstream records pending; the Fixed branch returns the successful result and marks
+both records ready.  The runtime bridge uses the real scheduler method and a small Future/
+monitoring collector to make the missing terminal transition explicit.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINoResourceResultMonitoringCurrent.cfg models/executors/ParslMPINoResourceResultMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPINoResourceResultMonitoringFixed.cfg models/executors/ParslMPINoResourceResultMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_mpi_no_resource_result_monitoring_runtime.py -v
+```
+
 `ParslMPIMalformedResultCleanup.tla` models a corrupt worker result payload. The current
 `MPITaskScheduler.get_result` performs `pickle.loads` before releasing nodes; the surrounding
 ferry loop catches the decode exception and continues, but the allocation remains held and no

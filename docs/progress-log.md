@@ -2422,6 +2422,12 @@ The remaining work is documentation and handoff, not model expansion:
   configuration passes. A real `_http_stage_in` plus `DataFuture` runtime bridge confirms that
   the installed helper can expose the error-page bytes as a ready file. Inventory is now 737 TLC
   configurations, 476 runtime entries, and 751 unittest methods.
+- Current stage: added `ParslMPINoResourceResultMonitoring`, composing the existing MPI unmapped
+  result assertion with logical Future and monitoring terminality. The Current TLC branch leaves
+  both downstream records pending after the assertion; the Fixed branch returns the result and
+  resolves them. The runtime bridge confirms the installed scheduler raises before either terminal
+  transition. Inventory is now 738 TLC configurations, 477 runtime entries, and 752 unittest
+  methods.
 
 ### Verification convention
 

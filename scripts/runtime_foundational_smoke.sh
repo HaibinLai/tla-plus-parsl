@@ -168,6 +168,7 @@ tests=(
     tests/test_radical_late_callback_runtime.py
     tests/test_mpi_backlog_retry_runtime.py
     tests/test_mpi_malformed_result_runtime.py
+    tests/test_mpi_no_resource_result_monitoring_runtime.py
     tests/test_taskvine_factory_runtime.py
     tests/test_taskvine_start_failure_cleanup_runtime.py
     tests/test_taskvine_failure_fanout_runtime.py
