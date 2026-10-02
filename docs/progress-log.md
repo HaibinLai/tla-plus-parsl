@@ -139,6 +139,14 @@ are recorded here in English and committed with the model changes.
 - This connects real `join_app` retry execution to the `ParslJoinMonitoringDB`
   high-water invariant without discarding append-only monitoring history.
 
+## 2026-10-02 — heartbeat loss and monitoring persistence bridge
+
+- Extended `test_heartbeat_result_attempt_runtime.py` to persist a real HTEX
+  manager-loss status and reject a late result from the expired attempt.
+- This ties `Interchange.expire_bad_managers`, retry attempt generation, and
+  SQLite terminal status persistence to `ParslHeartbeatTimeoutPersistence`.
+- Full unittest regression after this addition: 691 tests passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

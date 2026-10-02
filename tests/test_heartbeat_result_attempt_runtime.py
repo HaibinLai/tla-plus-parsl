@@ -1,11 +1,14 @@
 """Runtime bridge for expired HTEX managers and serialized attempt results."""
 
+import datetime
 import pickle
+import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
 from parsl.executors.flux import TaskResult
 from parsl.executors.high_throughput.interchange import Interchange
+from parsl.monitoring.db_manager import Database, STATUS, WORKFLOW
 from parsl.serialize import deserialize, serialize
 
 
@@ -43,6 +46,49 @@ class HeartbeatResultAttemptRuntimeTest(unittest.TestCase):
             accepted.append(deserialize(message["payload"]).returnval)
 
         self.assertEqual(accepted, ["new"])
+
+    def test_manager_loss_status_survives_late_old_result(self):
+        interchange = Interchange.__new__(Interchange)
+        interchange.heartbeat_threshold = 10
+        interchange._ready_managers = {
+            b"manager-1": {
+                "last_heartbeat": 89,
+                "active": True,
+                "tasks": [17],
+                "hostname": "worker-host",
+            }
+        }
+        interchange.results_outgoing = type("Out", (), {"messages": []})()
+        interchange.results_outgoing.send = lambda message: interchange.results_outgoing.messages.append(message)
+        interchange._send_monitoring_info = lambda radio, manager: None
+
+        with patch("parsl.executors.high_throughput.interchange.time.time", return_value=100):
+            interchange.expire_bad_managers({b"manager-1"}, monitoring_radio=object())
+
+        with tempfile.TemporaryDirectory() as directory:
+            database = Database("sqlite:///" + directory + "/monitoring.db")
+            now = datetime.datetime.now()
+            database.insert(table=WORKFLOW, messages=[{
+                "run_id": "heartbeat-run", "time_began": now, "host": "host",
+                "user": "user", "rundir": directory,
+                "tasks_failed_count": 0, "tasks_completed_count": 0,
+            }])
+            database.insert(table=STATUS, messages=[{
+                "task_id": 17, "run_id": "heartbeat-run",
+                "task_status_name": "lost", "timestamp": now, "try_id": 0,
+            }])
+
+            current_attempt = 1
+            late = {"task_id": 17, "attempt": 0,
+                    "payload": serialize(TaskResult("late", None))}
+            accepted = []
+            if late["attempt"] == current_attempt:
+                accepted.append(deserialize(late["payload"]).returnval)
+
+            rows = database.session.execute(database.meta.tables[STATUS].select()).fetchall()
+
+        self.assertEqual(accepted, [])
+        self.assertEqual(rows[0].task_status_name, "lost")
 
 
 if __name__ == "__main__":

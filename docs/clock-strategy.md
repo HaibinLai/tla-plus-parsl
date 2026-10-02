@@ -243,6 +243,8 @@ the heartbeat threshold loses attempt 0, the Fixed branch does not revive the ma
 heartbeat and does not resolve the retry Future with an old result. The runtime bridge combines
 the real HTEX expiry path with serialized Flux `TaskResult` envelopes in
 `tests/test_heartbeat_result_attempt_runtime.py`.
+The bridge also persists the manager-loss status in SQLite and verifies that a late attempt-0
+result cannot replace that terminal status after retry generation 1 begins.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatResultAttemptCurrent.cfg models/clock/ParslHeartbeatResultAttempt.tla
