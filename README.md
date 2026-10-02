@@ -20,7 +20,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Project progress log](docs/progress-log.md)
 
 Runtime probes are under [`tests/`](tests/). The repository currently contains 697 unittest
-methods; the foundational smoke runner executes 443 named probe entries and 669 TLC
+methods; the foundational smoke runner executes 443 named probe entries and 670 TLC
 configurations.
 TLC commands and measured state-space results are maintained in [`docs/overview.md`](docs/overview.md).
 

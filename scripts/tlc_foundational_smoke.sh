@@ -2051,6 +2051,9 @@ run_case strategy-block-capacity-success \
 run_case strategy-parallelism-admission \
     models/strategy/ParslStrategyParallelismAdmissionFixed.cfg \
     models/strategy/ParslStrategyParallelismAdmission.tla
+run_case monitoring-priority-status-atomicity \
+    models/monitoring/ParslMonitoringPriorityStatusAtomicityFixed.cfg \
+    models/monitoring/ParslMonitoringPriorityStatusAtomicity.tla
 run_case callable-alias-retry-fixed \
     models/serialization/ParslCallableAliasRetry.cfg \
     models/serialization/ParslCallableAliasRetry.tla

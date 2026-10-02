@@ -4,6 +4,17 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — monitoring priority TASK/STATUS/TRY atomicity bridge
+
+- Added `ParslMonitoringPriorityStatusAtomicity`, modeling the priority path's separate TASK,
+  STATUS, and TRY commits when a STATUS write fails.
+- The current configuration reproduces a cross-table consistency violation: TASK and TRY metadata
+  remain committed without the corresponding STATUS row. The fixed configuration rolls back the
+  logical batch and passes TLC.
+- The runtime bridge reproduces the same ordering against the installed `DatabaseManager`; focused
+  coverage passes. The current baseline is 670 TLC cases, 443 runtime entries, and 698 unittest
+  methods. Recorded as BUG-316 in the monitoring ledger.
+
 ## 2026-10-02 — negative strategy parallelism admission bridge
 
 - Added `ParslStrategyParallelismAdmission`, separating the current behavior that accepts a
