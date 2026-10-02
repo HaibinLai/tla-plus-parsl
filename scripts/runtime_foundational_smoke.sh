@@ -63,6 +63,7 @@ tests=(
     tests/test_taskvine_malformed_report_runtime.py
     tests/test_workqueue_start_timeout_cleanup_runtime.py
     tests/test_file_bytes_transfer_runtime.py
+    tests/test_content_file_pipeline_runtime.py
     tests/test_data_manager_stage_in_ordering_runtime.py
     tests/test_data_manager_stage_out_ordering_runtime.py
     tests/test_http_content_length_runtime.py

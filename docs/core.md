@@ -18,6 +18,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyExecutionFixed
 /tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_runtime.py -v
 ```
 
+`ParslContentFilePipeline.tla` composes the smallest callable/object snapshot with a two-chunk
+file publication gate. The worker can execute only after the payload is decoded and the complete
+file is available; source mutation after serialization cannot alter the captured callable. The
+runtime bridge `tests/test_content_file_pipeline_runtime.py` exercises the real Parsl serializer
+and Zip staging helper together.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslContentFilePipeline.cfg models/core/ParslContentFilePipeline.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_content_file_pipeline_runtime.py -v
+```
+
 `ParslDataTransferDependencyFailure.tla` closes the stage-out/dataflow loop.  A producer finishes,
 the DataManager transfers a bounded output in chunks, and a DataFuture becomes ready only after
 publication.  If the stage-out fails, the consumer remains blocked and is completed as a

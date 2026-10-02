@@ -4,6 +4,13 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Composed callable snapshot and file-content pipeline bridge
+
+- Added `test_content_file_pipeline_runtime.py`, combining the real Parsl callable serializer with
+  Zip stage-in bytes in one worker-style path. The existing `ParslContentFilePipeline` model now
+  has a concrete runtime bridge for callable snapshot isolation and file publication readiness.
+  Inventory is now 720 TLC cases and 468 runtime entries (728 unittest methods).
+
 ## 2026-10-02 — Staging transfer failure and ordered provider fallback
 
 - Added `ParslStagingProviderTransferFailure.tla` and a real `DataManager` runtime probe. A
