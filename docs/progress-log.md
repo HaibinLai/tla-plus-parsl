@@ -16,6 +16,11 @@ repository Parsl environment (`/tmp/parsl-venv`), the concrete join bridges
 `test_join_monitoring_runtime` all pass (5/5).  This confirms that the small model's combined
 boundary is backed by executable Parsl behavior rather than TLC-only traces.
 
+The complete foundational Python smoke command was then rerun with
+`PYTHONPATH=/tmp/parsl-source:/home/cc/tla-parsl` and completed with all 434/434 entries passing.
+This includes the serialization/ZMQ, callable-object, file-transfer, clock/heartbeat, monitoring,
+executor/provider, and join runtime bridges in the current inventory.
+
 ## 2026-09-30
 
 ### Post-v0.1 extension: file bytes and logical-attempt gate
