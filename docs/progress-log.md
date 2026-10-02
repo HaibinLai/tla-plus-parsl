@@ -2468,9 +2468,11 @@ states.
 
 ### Next audit direction
 
-Continue source-aligned refinement of executor/provider details and `join_app` composition. Prefer
-new cross-layer models that connect logical Futures, physical attempts, transport/staging events,
-and monitoring records rather than duplicating an existing single-boundary model.
+Follow the finite scope in [`modeling-goal.md`](modeling-goal.md): communication is primary and
+asynchronous interleavings are secondary. Prioritize HTEX/ZeroMQ task/result/command/ACK/heartbeat
+paths, send-failure ownership, malformed-message isolation, and Future/attempt correlation.
+Add only source-backed Current/Fixed models with runtime evidence; stop expanding once the
+communication and selected async completion criteria in that document are satisfied.
 
 ## Scope note
 
