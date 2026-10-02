@@ -155,6 +155,9 @@ run_case heartbeat-retry-basic \
 run_case heartbeat-result-attempt \
     models/clock/ParslHeartbeatResultAttemptFixed.cfg \
     models/clock/ParslHeartbeatResultAttempt.tla
+run_case htex-liveness-attempt-fixed \
+    models/clock/ParslHtexLivenessAttemptFixed.cfg \
+    models/clock/ParslHtexLivenessAttempt.tla
 run_case heartbeat-full-horizon \
     models/clock/ParslTimedHeartbeatFixed.cfg \
     models/clock/ParslTimedHeartbeat.tla

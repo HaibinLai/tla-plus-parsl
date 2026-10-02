@@ -19,10 +19,21 @@ The foundational inventory after this extension is 638 TLC cases and 434 Python 
 the v0.1 acceptance baseline remains frozen at 637/434, while this model is tracked as the first
 post-v0.1 refinement.
 
+### Post-v0.1 extension: HTEX liveness, clock, and retry composition
+
+`ParslHtexLivenessAttempt` composes continuous result traffic, heartbeat expiry, wall-clock
+rollback, retry-attempt result filtering, and worker drain deadlines. The Current branch
+reproduces a `DrainDeadlineSafety` counterexample; the Fixed branch uses monotonic elapsed time,
+expires the manager on the communication path, and rejects old results. Targeted TLC passed the
+Current/Fixed distinction, with the Fixed branch passing five million simulated states. The fixed
+configuration is now part of the foundational smoke gate.
+
+The post-v0.1 foundational inventory is now 639 TLC cases and 434 Python runtime probes.
+
 ### Current repository state
 
-- Latest locally preserved commit: `998c013` (`Record Radical Pilot master count checkpoint`).
-- Foundational smoke inventory: 637 TLC cases and 434 Python runtime probes.
+- Latest locally preserved commit: `f50a060` (`Model file bytes across logical retry attempts`).
+- Foundational smoke inventory before the current liveness extension: 638 TLC cases and 434 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.

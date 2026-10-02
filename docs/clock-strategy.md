@@ -8,6 +8,21 @@ manager, while the monotonic fixed branch expires once elapsed time reaches the 
 scenarios. `models/strategy/` contains the focused scale-out/scale-in policy model with block and
 idle limits.
 
+`ParslHtexLivenessAttempt.tla` is the compact HTEX communicator composition. It combines
+continuous result traffic, heartbeat expiry, wall-clock rollback, retry-attempt result filtering,
+and worker drain deadlines. The Current branch exposes a deadline/result-safety counterexample;
+the Fixed branch checks expiry and drain using monotonic elapsed time and rejects late results from
+the old attempt.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/clock/ParslHtexLivenessAttemptCurrent.cfg \
+  models/clock/ParslHtexLivenessAttempt.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/clock/ParslHtexLivenessAttemptFixed.cfg \
+  models/clock/ParslHtexLivenessAttempt.tla
+```
+
 `ParslClockSmoke.cfg` is a fast bounded regression configuration for `ParslClock.tla`. It keeps
 one worker, one retry, and a three-tick horizon while checking all six clock/result invariants.
 Use it for quick edits before running the larger `ParslClock.cfg` exploration.
