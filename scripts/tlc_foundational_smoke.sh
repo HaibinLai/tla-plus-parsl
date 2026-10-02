@@ -1022,6 +1022,9 @@ run_case globus-shutdown-cleanup \
 run_case globus-restore-failure \
     models/executors/ParslGlobusComputeRestoreFailureFixed.cfg \
     models/executors/ParslGlobusComputeRestoreFailure.tla
+run_case globus-lifecycle \
+    models/executors/ParslGlobusComputeLifecycleFixed.cfg \
+    models/executors/ParslGlobusComputeLifecycle.tla
 run_case aws-submit \
     models/providers/ParslAWSProviderSubmitFixed.cfg \
     models/providers/ParslAWSProviderSubmit.tla

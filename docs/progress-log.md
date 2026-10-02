@@ -189,6 +189,16 @@ HTEX runtime probes cover the concrete transport, worker, retry, and shutdown bo
 
 The post-v0.1 foundational inventory is now 655 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Globus Compute executor lifecycle composition
+
+`ParslGlobusComputeLifecycle` composes SDK submission, result propagation, submit/restore error
+ordering, and shutdown watcher cleanup. The Current branch reaches the primary-error masking and
+watcher-leak counterexamples; the Fixed branch preserves the submit error, stops the watcher, and
+passes five million simulated states. Existing Globus Compute runtime probes cover the concrete
+submit, result, and shutdown paths.
+
+The post-v0.1 foundational inventory is now 656 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

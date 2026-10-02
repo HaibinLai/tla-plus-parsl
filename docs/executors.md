@@ -1067,6 +1067,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslGlobusComputeResto
 /tmp/parsl-venv/bin/python -m unittest tests/test_globus_compute_restore_failure_runtime.py -v
 ```
 
+`ParslGlobusComputeLifecycle.tla` composes SDK submission, result propagation, submit/restore
+error ordering, and shutdown watcher cleanup. The Current branch can mask the original submit
+failure with a restore exception and leave the result watcher running after SDK shutdown fails;
+the Fixed branch preserves the primary error, stops the watcher, and passes five million
+simulated states. Existing Globus Compute runtime probes cover the concrete submit, result, and
+shutdown paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslGlobusComputeLifecycleCurrent.cfg models/executors/ParslGlobusComputeLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslGlobusComputeLifecycleFixed.cfg models/executors/ParslGlobusComputeLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_globus_compute*_runtime.py' -v
+```
+
 `ParslExecutorProviderLifecycle.tla` connects provider allocation, manager registration, free
 worker slots, queued/running tasks, executor drain, and provider terminal cleanup. The current
 configuration finds a `MinBlockSafety` counterexample when scale-in leaves an active provider
