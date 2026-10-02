@@ -26,6 +26,12 @@ delivery from asynchronous stage-out while a logical task retries.  The Current 
 reproduces stale-result admission in 31 simulated states; the Fixed configuration passed one
 million simulated states.  The Fixed case is now part of the foundational TLC gate.
 
+The HTEX heartbeat/manager-loss audit was then rerun against the installed implementation.  The
+runtime bridges for heartbeat/result attempt correlation, heartbeat expiry, manager loss, wall-clock
+jumps, worker-pool heartbeat handling, and retry timeout all passed (15 unittest methods).  These
+tests correspond to the existing `ParslHeartbeatResultAttempt`, `ParslHtexLivenessAttempt`, and
+`ParslJoinTimedMonitoring` abstractions; no duplicate model was added.
+
 ## 2026-09-30
 
 ### Post-v0.1 extension: file bytes and logical-attempt gate
