@@ -4,6 +4,13 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — complete 703-case foundational regression
+
+- Ran the full foundational TLC smoke suite after the callable global/default retry and
+  LocalProvider exit-file compositions were added. All 703 bounded configurations passed at
+  `TLC_SIMULATE=1000`; the runtime inventory remains 453 entries. README, overview, and coverage
+  matrix now report the verified 703-case baseline.
+
 ## 2026-10-02 — LocalProvider exit-file status with Future monitoring
 
 - Added `ParslLocalExitFileFutureMonitoring`, composing a transient missing exit-code file with
