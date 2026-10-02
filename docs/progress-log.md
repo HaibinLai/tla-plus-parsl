@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — callable decode failure with Future monitoring
+
+- Added `ParslFunctionDecodeFailureFutureMonitoring`, composing Python callable/argument snapshot
+  bytes with worker decode failure and task/Future/monitoring terminality. Current TLC violates
+  `DecodeFailureTerminality`; Fixed TLC passes 10,000 simulation steps. The real serializer
+  facade rejects malformed apply-message bytes in the new runtime probe. The foundational
+  inventory is now 716 TLC cases and 454 runtime entries (714 unittest methods).
+
 ## 2026-10-02 — Globus readiness timeout with monitoring
 
 - Added `ParslGlobusTransferReadinessMonitoring`, composing ACTIVE-transfer poll budgets with

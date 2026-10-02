@@ -272,6 +272,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObject
 /tmp/parsl-venv/bin/python -m unittest tests/test_function_object_contents_runtime.py -v
 ```
 
+`ParslFunctionDecodeFailureFutureMonitoring.tla` composes the callable/argument snapshot with
+worker decode failure and terminal Future/monitoring propagation. The Current branch records only
+the transport failure and leaves the logical task pending; the Fixed branch fails task, Future,
+and monitoring together. TLC passes 10,000 simulation steps in Fixed, while
+`test_function_decode_failure_runtime.py` verifies that the real facade rejects malformed apply
+message bytes before dispatch admission.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionDecodeFailureFutureMonitoringCurrent.cfg models/serialization/ParslFunctionDecodeFailureFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionDecodeFailureFutureMonitoringFixed.cfg models/serialization/ParslFunctionDecodeFailureFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_function_decode_failure_runtime.py -v
+```
+
 `ParslFunctionGlobalDefaultSnapshot.tla` separates two Python callable roots that are often
 collapsed into one opaque function: module-global state and default arguments. The runtime probe
 shows the current `pack_apply_message` behavior: the default is captured, while a module global is

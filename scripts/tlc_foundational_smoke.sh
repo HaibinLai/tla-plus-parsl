@@ -548,6 +548,9 @@ run_case zmq-serialized-ack \
 run_case zmq-serialized-ack-future-monitoring \
     models/serialization/ParslZMQSerializedAckFutureMonitoringFixed.cfg \
     models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
+run_case function-decode-failure-future-monitoring \
+    models/serialization/ParslFunctionDecodeFailureFutureMonitoringFixed.cfg \
+    models/serialization/ParslFunctionDecodeFailureFutureMonitoring.tla
 run_case zmq-multipart-ack \
     models/serialization/ParslZMQMultipartAckFixed.cfg \
     models/serialization/ParslZMQMultipartAck.tla
