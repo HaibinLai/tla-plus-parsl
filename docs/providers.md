@@ -887,6 +887,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedJSO
 /tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_malformed_json_runtime.py -v
 ```
 
+`ParslPBSProMalformedFutureMonitoring.tla` composes the malformed `qstat` JSON boundary with
+poller progress, Future completion, and monitoring publication. The Current branch crashes before
+a later valid poll can resolve the task; the Fixed branch isolates the decode error and reaches
+the normal terminal path. `PollerProgress` and `CompletionPropagation` are checked together with
+the concrete PBS Pro runtime probe.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedFutureMonitoringCurrent.cfg models/providers/ParslPBSProMalformedFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedFutureMonitoringFixed.cfg models/providers/ParslPBSProMalformedFutureMonitoring.tla
+```
+
 `ParslPbsproMissingStatus.tla` models the successful-but-incomplete `qstat` boundary. The
 current provider marks every locally known job absent from the response as `COMPLETED`, even
 when the scheduler returned an empty `Jobs` object. The fixed branch preserves a non-terminal

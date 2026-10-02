@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — PBS Pro malformed JSON with Future monitoring
+
+- Added `ParslPBSProMalformedFutureMonitoring`, composing malformed `qstat` JSON with poller
+  progress, Future completion, and monitoring publication. The Current branch violates
+  `PollerProgress` by crashing before a later valid poll; the Fixed branch isolates the decode
+  error and passes 10,000 TLC simulation steps. The existing concrete PBS Pro malformed-JSON
+  runtime probe passes. The foundational inventory is now 699 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — multipart decode and peer monitoring composition
 
 - Added `ParslZMQMultipartDecodeMonitoring`, composing malformed multipart frames, serializer

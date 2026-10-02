@@ -731,6 +731,9 @@ run_case pbspro-job-id-alias \
 run_case pbspro-malformed-json \
     models/providers/ParslPBSProMalformedJSONFixed.cfg \
     models/providers/ParslPBSProMalformedJSON.tla
+run_case pbspro-malformed-future-monitoring \
+    models/providers/ParslPBSProMalformedFutureMonitoringFixed.cfg \
+    models/providers/ParslPBSProMalformedFutureMonitoring.tla
 run_case grid-engine-duplicate-status \
     models/providers/ParslGridEngineDuplicateStatusFixed.cfg \
     models/providers/ParslGridEngineDuplicateStatus.tla
