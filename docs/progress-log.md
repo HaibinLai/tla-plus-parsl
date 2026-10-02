@@ -74,6 +74,11 @@ files across AWS, Azure, Condor, Grid Engine, Kubernetes, Local, LSF, PBS Pro, S
 Globus Compute, and shared provider logic).  All 112 files passed; no new provider behavior fell
 outside the existing Current/Fixed model inventory.
 
+The executor-focused audit then ran 112 runtime probe files across HTEX, MPI, ThreadPool,
+PoolExecutor, Work Queue, TaskVine, Flux, Radical-Pilot, Globus Compute, poller lifecycle, and
+shared executor paths.  All 112 files passed, including worker/result continuation, shutdown,
+retry, cancellation, scaling, and resource-admission probes.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
