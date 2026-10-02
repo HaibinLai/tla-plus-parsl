@@ -2412,6 +2412,10 @@ The remaining work is documentation and handoff, not model expansion:
   validation. The Current model and runtime probe reproduce an unhashable list task ID raising
   `TypeError` and stranding a separate valid Future; the Fixed model isolates the malformed frame.
   Inventory is now 736 TLC configurations, 475 runtime entries, and 750 unittest methods.
+- Verification stage: reran the complete foundational regression after the Work Queue cache,
+  duplicate-join alias, and HTEX result-ID refinements. All 736 TLC configurations and all 475
+  runtime entries passed (`tlc_exit=0`, `runtime_exit=0`). Logs are preserved under
+  `/tmp/parsl-regression-d459ac1.eoeuWX`.
 
 ### Verification convention
 
