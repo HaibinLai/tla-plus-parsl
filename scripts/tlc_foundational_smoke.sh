@@ -2069,5 +2069,8 @@ run_case callable-alias-retry-fixed \
 run_case join-duplicate-cancellation-fixed \
     models/dataflow/ParslJoinDuplicateCancellationFixed.cfg \
     models/dataflow/ParslJoinDuplicateCancellation.tla
+run_case join-failure-order \
+    models/dataflow/ParslJoinFailureOrder.cfg \
+    models/dataflow/ParslJoinFailureOrder.tla
 
 echo "Foundational TLC smoke suite passed."

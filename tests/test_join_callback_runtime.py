@@ -72,6 +72,19 @@ class JoinCallbackRuntimeTest(unittest.TestCase):
         kernel.handle_join_update(record, first)
         self.assertEqual(len(kernel.completed), 1)
 
+    def test_reverse_completion_preserves_original_join_list_order(self):
+        kernel = self.kernel_for()
+        first = self.future(1, join_id="first")
+        second = self.future(2, join_id="second")
+        record = self.record_for([first, second])
+
+        # Both inner Futures are already complete, but the callback that
+        # triggers finalization is the second one. Result construction must
+        # still follow the original [first, second] join-list order.
+        kernel.handle_join_update(record, second)
+
+        self.assertEqual(kernel.completed, [(States.exec_done, [1, 2])])
+
     def test_concurrent_duplicate_callbacks_finalize_once(self):
         """The real join lock permits only one terminal completion."""
         kernel = self.kernel_for()

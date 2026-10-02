@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — ordered join completion bridge
+
+- Added `ParslJoinFailureOrder`, a small executable model in which inner Futures complete in an
+  arbitrary order but the outer join result is constructed by original list position.
+- The real `DataFlowKernel.handle_join_update` probe completes the second inner Future's callback
+  first and still publishes `[1, 2]`, preserving join-list order.
+- TLC and focused join coverage pass; the current baseline is 674 TLC cases, 443 runtime entries,
+  and 702 unittest methods.
+
 ## 2026-10-02 — Radical-Pilot serialization failure bridge
 
 - Added `ParslRadicalSerializationFailure`, separating the Current path that leaks non-`TypeError`
