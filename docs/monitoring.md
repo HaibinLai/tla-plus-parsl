@@ -53,6 +53,10 @@ instead of resolving the Future or writing `succeeded` for the old attempt. The 
 uses the real SQLite `STATUS` table and verifies that the current `try_id` remains the selected
 record.
 
+The same runtime bridge also inserts a newer terminal row followed by a late older-attempt row.
+The append-only SQLite history retains both rows, while the current-selection high-water remains
+on the newer `try_id`; this is the concrete counterpart of `ParslMonitoringVersionedBatch`.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslResultMonitoringAttemptCurrent.cfg models/monitoring/ParslResultMonitoringAttempt.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslResultMonitoringAttemptFixed.cfg models/monitoring/ParslResultMonitoringAttempt.tla

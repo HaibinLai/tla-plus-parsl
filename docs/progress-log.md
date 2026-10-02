@@ -88,6 +88,14 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 667 TLC cases, 441 runtime entries, and
   685 unittest methods passed.
 
+## 2026-10-02 — monitoring status high-water runtime bridge
+
+- Extended `test_result_monitoring_attempt_runtime.py` with a late older-attempt
+  status arriving after a newer terminal row in the real SQLite `STATUS` table.
+- The bridge confirms append-only history plus current `try_id` selection, matching
+  the `ParslMonitoringVersionedBatch` high-water invariant.
+- Full unittest regression after this addition: 686 tests passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines
