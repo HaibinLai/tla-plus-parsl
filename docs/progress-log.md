@@ -20,6 +20,14 @@ are recorded here in English and committed with the model changes.
   a failed Kubernetes delete response; Fixed requires remote success and passes bounded TLC. The
   foundational gate is now 684 TLC configurations and 449 runtime entries.
 
+## 2026-10-02 — Globus transfer/DataFuture readiness composition
+
+- Added `ParslGlobusTransferReadiness`, composing ACTIVE transfer polling with DataFuture
+  readiness and dependent-task admission. Current TLC and the concrete runtime bridge reproduce
+  the missing overall deadline; Fixed turns poll-budget exhaustion into explicit transfer and
+  DataFuture failure. The foundational gate is now 685 TLC configurations and 451 runtime
+  entries.
+
 ## 2026-10-02 — DFK executor-shutdown/monitoring finalization
 
 - Added `ParslDfkExecutorShutdownMonitoring`, composing the real DFK cleanup order with executor

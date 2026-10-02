@@ -15,13 +15,16 @@ validation with Future and monitoring cancellation (a refinement of BUG-189).
 The monitoring coverage also includes `ParslDfkExecutorShutdownMonitoring`, which composes DFK
 executor shutdown failures with final WORKFLOW monitoring delivery and close (BUG-321).
 
+The file-transfer coverage also includes `ParslGlobusTransferReadiness`, which propagates a
+bounded Globus transfer timeout into DataFuture failure and dependent-task admission.
+
 The file-transfer coverage also includes `ParslDataManagerStageOutReturn`, which distinguishes a
 `None` stage-out return (the output follows the application Future) from an independent transfer
 Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 684 TLC cases and 449 runtime entries (709 unittest
+deduplication. The current baseline is 685 TLC cases and 451 runtime entries (711 unittest
 methods).
 
 It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode

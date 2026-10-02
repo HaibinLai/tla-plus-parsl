@@ -2102,5 +2102,8 @@ run_case dfk-executor-shutdown-monitoring \
 run_case kubernetes-cancel-future-monitoring \
     models/providers/ParslKubernetesCancelFutureMonitoringFixed.cfg \
     models/providers/ParslKubernetesCancelFutureMonitoring.tla
+run_case globus-transfer-readiness \
+    models/staging/ParslGlobusTransferReadinessFixed.cfg \
+    models/staging/ParslGlobusTransferReadiness.tla
 
 echo "Foundational TLC smoke suite passed."

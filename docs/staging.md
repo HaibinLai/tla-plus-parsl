@@ -3,6 +3,14 @@
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 
+`ParslGlobusTransferReadiness.tla` composes the Globus ACTIVE-transfer polling loop with its
+downstream DataFuture and consumer gate. The Current branch has no overall deadline, so an
+ACTIVE transfer can leave both the DataFuture and dependent task without a terminal outcome;
+the Fixed branch converts the bounded poll budget into transfer/DataFuture failure before
+consumer admission. The concrete bridge is
+`tests/test_globus_transfer_readiness_runtime.py`, refining the existing transfer-timeout
+boundary.
+
 `ParslStageInAttemptGeneration.tla` is the cross-layer model for logical task retries and
 physical stage-in transfers. A transfer from an earlier task attempt may complete late. The
 Current configuration allows that stale transfer to make the retried task ready; the Fixed
