@@ -2433,6 +2433,10 @@ The remaining work is documentation and handoff, not model expansion:
   dictionary mutation that strands the second task and its monitoring row; the Fixed branch
   snapshots the sweep and terminalizes both. Inventory is now 739 TLC configurations, 478 runtime
   entries, and 753 unittest methods.
+- Current stage: added `ParslExecutorContextExit`, refining the base executor context-manager
+  cleanup boundary. The Current runtime and TLC model show a shutdown exception masking an already
+  raised body exception (BUG-333); the Fixed branch preserves the primary body failure. Inventory
+  is now 741 TLC configurations, 479 runtime entries, and 754 unittest methods.
 
 ### Verification convention
 

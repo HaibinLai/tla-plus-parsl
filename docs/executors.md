@@ -1295,6 +1295,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadSt
 /tmp/parsl-venv/bin/python -m unittest tests/test_block_provider_bad_state_monitoring_runtime.py -v
 ```
 
+`ParslExecutorContextExit.tla` audits the common `ParslExecutor` context-manager boundary.
+The Current branch lets a failing `shutdown()` replace an exception raised by the context body,
+while the Fixed branch preserves the primary body failure and treats cleanup as secondary.  The
+runtime probe uses a concrete subclass of the installed base executor and exercises `with`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorContextExitCurrent.cfg models/executors/ParslExecutorContextExit.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslExecutorContextExitFixed.cfg models/executors/ParslExecutorContextExit.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_executor_context_exit_runtime.py -v
+```
+
 `ParslHtexManagerSelection.tla` abstracts the two manager selectors in
 `high_throughput/manager_selector.py`. Random selection is modeled as any permutation of ready
 managers; block-ID selection preserves the source ordering rule, including managers with no block

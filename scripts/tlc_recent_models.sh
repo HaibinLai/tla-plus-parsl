@@ -2295,6 +2295,12 @@ run_case bad-state-monitoring-current counterexample \
 run_case bad-state-monitoring-fixed pass \
     models/executors/ParslBlockProviderBadStateMonitoringFixed.cfg \
     models/executors/ParslBlockProviderBadStateMonitoring.tla
+run_case executor-context-exit-current counterexample \
+    models/executors/ParslExecutorContextExitCurrent.cfg \
+    models/executors/ParslExecutorContextExit.tla
+run_case executor-context-exit-fixed pass \
+    models/executors/ParslExecutorContextExitFixed.cfg \
+    models/executors/ParslExecutorContextExit.tla
 run_case mpi-malformed-result-cleanup-current counterexample \
     models/executors/ParslMPIMalformedResultCleanupCurrent.cfg \
     models/executors/ParslMPIMalformedResultCleanup.tla
