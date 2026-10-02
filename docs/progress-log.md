@@ -149,6 +149,16 @@ Existing Work Queue runtime probes cover the concrete executor boundaries.
 
 The post-v0.1 foundational inventory is now 651 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: TaskVine executor lifecycle composition
+
+`ParslTaskVineLifecycle` composes manager admission, result collection, duplicate/late reports,
+manager failure, and shutdown finalization. The Current branch reaches `StaleDoesNotKillPeer`
+when a duplicate report stops collection and leaves an unrelated pending task; the Fixed branch
+ignores stale reports and passes five million simulated states with terminal shutdown guarantees.
+Existing TaskVine runtime probes cover the concrete executor boundaries.
+
+The post-v0.1 foundational inventory is now 652 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

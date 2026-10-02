@@ -818,6 +818,9 @@ run_case taskvine-resource-spec-shape \
 run_case taskvine-shutdown \
     models/executors/ParslTaskVineShutdown.cfg \
     models/executors/ParslTaskVineShutdown.tla
+run_case taskvine-lifecycle \
+    models/executors/ParslTaskVineLifecycleFixed.cfg \
+    models/executors/ParslTaskVineLifecycle.tla
 run_case taskvine-results \
     models/executors/ParslTaskVineResults.cfg \
     models/executors/ParslTaskVineResults.tla

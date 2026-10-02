@@ -922,6 +922,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslTaskVineShutdown.c
 /tmp/parsl-venv/bin/python -m unittest tests/test_taskvine_shutdown_runtime.py -v
 ```
 
+`ParslTaskVineLifecycle.tla` composes manager admission, result collection, duplicate/late
+reports, manager failure, and shutdown finalization. The Current branch lets a stale report stop
+collection and leave a peer task pending; the Fixed branch ignores stale reports and requires all
+accepted tasks to be terminal before shutdown completes. Existing TaskVine runtime probes cover
+the concrete submit, result, duplicate-report, and shutdown paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslTaskVineLifecycleCurrent.cfg models/executors/ParslTaskVineLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslTaskVineLifecycleFixed.cfg models/executors/ParslTaskVineLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_taskvine*_runtime.py' -v
+```
+
 `ParslTaskVineStartFailureCleanup.tla` models provider-scaling failure during startup. The current
 `TaskVineExecutor.start` launches the manager before calling `initialize_scaling`; a provider
 exception escapes before the collector starts and leaves the manager process running. The fixed
