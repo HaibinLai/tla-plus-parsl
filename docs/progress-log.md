@@ -28,6 +28,13 @@ are recorded here in English and committed with the model changes.
   DataFuture failure. The foundational gate is now 685 TLC configurations and 451 runtime
   entries.
 
+## 2026-10-02 — Deserializer plugin retry/monitoring composition
+
+- Added `ParslPluginRetryMonitoring`, connecting dynamic deserializer cache poisoning to logical
+  retry, Future terminal state, and monitoring. Current TLC and runtime reproduce retry reuse of
+  the failed plugin; Fixed evicts it and passes bounded TLC. This deepens BUG-064/BUG-104. The
+  foundational gate is now 686 TLC configurations and 453 runtime entries.
+
 ## 2026-10-02 — DFK executor-shutdown/monitoring finalization
 
 - Added `ParslDfkExecutorShutdownMonitoring`, composing the real DFK cleanup order with executor

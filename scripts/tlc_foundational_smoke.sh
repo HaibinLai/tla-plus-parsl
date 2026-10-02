@@ -2105,5 +2105,8 @@ run_case kubernetes-cancel-future-monitoring \
 run_case globus-transfer-readiness \
     models/staging/ParslGlobusTransferReadinessFixed.cfg \
     models/staging/ParslGlobusTransferReadiness.tla
+run_case plugin-retry-monitoring \
+    models/serialization/ParslPluginRetryMonitoringFixed.cfg \
+    models/serialization/ParslPluginRetryMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."

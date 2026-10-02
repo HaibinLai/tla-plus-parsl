@@ -4,6 +4,12 @@ The serialization abstraction is layered rather than treating a task as one opaq
 The models distinguish serializer bytes, multipart framing, ZMQ queueing, route validation,
 worker decode/dispatch, and result correlation.
 
+`ParslPluginRetryMonitoring.tla` composes dynamic deserializer-plugin caching with a logical task
+retry and terminal monitoring status. The Current branch reuses a plugin instance that already
+failed decoding, so the retry reaches a failed Future; the Fixed branch evicts the failed cache
+entry before retrying. The runtime bridge is
+`tests/test_plugin_retry_monitoring_runtime.py`, refining BUG-064/BUG-104.
+
 `ParslRemoteExceptionTransport.tla` adds the exception-object boundary: a worker-side
 `RemoteExceptionWrapper` with a nested `__cause__` is serialized, decoded by the result worker,
 and reraised into a terminal Future failure.  The runtime bridge uses the installed HTEX result
