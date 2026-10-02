@@ -43,6 +43,13 @@ are recorded here in English and committed with the model changes.
   the failed plugin; Fixed evicts it and passes bounded TLC. This deepens BUG-064/BUG-104. The
   foundational gate is now 686 TLC configurations and 453 runtime entries.
 
+## 2026-10-02 — Work Queue stale-result/peer-monitoring composition
+
+- Added `ParslWorkQueueCancelledMonitoring`, refining the existing cancelled-result race across
+  peer Future progress and monitoring terminality. Current TLC reproduces stale-report collector
+  failure cascading to an unrelated peer; Fixed discards the stale report and passes bounded TLC.
+  The foundational gate is now 687 TLC configurations and 453 runtime entries.
+
 ## 2026-10-02 — DFK executor-shutdown/monitoring finalization
 
 - Added `ParslDfkExecutorShutdownMonitoring`, composing the real DFK cleanup order with executor

@@ -2108,5 +2108,8 @@ run_case globus-transfer-readiness \
 run_case plugin-retry-monitoring \
     models/serialization/ParslPluginRetryMonitoringFixed.cfg \
     models/serialization/ParslPluginRetryMonitoring.tla
+run_case workqueue-cancelled-monitoring \
+    models/executors/ParslWorkQueueCancelledMonitoringFixed.cfg \
+    models/executors/ParslWorkQueueCancelledMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."

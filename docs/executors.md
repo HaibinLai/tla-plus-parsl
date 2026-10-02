@@ -623,6 +623,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelled
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_cancelled_result_runtime.py -v
 ```
 
+`ParslWorkQueueCancelledMonitoring.tla` refines that race across the peer Future and monitoring
+layers. The Current branch lets a stale cancelled-task report fail the collector and then fail an
+unrelated pending peer; the Fixed branch discards the stale report and allows the peer result to
+publish a successful terminal monitoring state. The existing
+`tests/test_workqueue_cancelled_result_runtime.py` supplies the concrete collector evidence.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledMonitoringCurrent.cfg models/executors/ParslWorkQueueCancelledMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueCancelledMonitoringFixed.cfg models/executors/ParslWorkQueueCancelledMonitoring.tla
+```
+
 `ParslWorkQueueCancelledFailureResult.tla` refines the same race for the no-result/failure report
 branch, where the collector calls `set_exception` rather than `set_result`. A cancelled Future
 raises on that path as well, so the current collector can still abort and fail an unrelated task.
