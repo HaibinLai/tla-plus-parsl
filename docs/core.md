@@ -339,6 +339,10 @@ The `ParslJoinTimedMonitoring` fixed case is now part of the foundational gate a
 connects chunk readiness and source-version capture to heartbeat expiry, task timeout, outer
 cancellation, late completion, and bounded monitoring persistence in one executable join model.
 
+`ParslJoinCallbackMonitoring.tla` composes the callback lock with terminal monitoring
+publication. Its Fixed branch permits only one SQLite-visible terminal row even when duplicate
+inner-Future callbacks are queued; the Current branch produces a duplicate-row counterexample.
+
 `ParslHtexUnknownResultType.tla` is also promoted into the gate. It models the result worker's
 malformed-type boundary: the Fixed branch discards an unknown frame and continues to the next
 valid Future, while the Current branch records the worker-stop behavior documented in BUG-255.

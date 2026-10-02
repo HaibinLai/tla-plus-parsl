@@ -1439,6 +1439,9 @@ run_case join-retry-cancellation \
 run_case join-callback-race \
     models/dataflow/ParslJoinCallbackRace.cfg \
     models/dataflow/ParslJoinCallbackRace.tla
+run_case join-callback-monitoring \
+    models/dataflow/ParslJoinCallbackMonitoringFixed.cfg \
+    models/dataflow/ParslJoinCallbackMonitoring.tla
 run_case join-callable-transport \
     models/dataflow/ParslJoinCallableTransport.cfg \
     models/dataflow/ParslJoinCallableTransport.tla

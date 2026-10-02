@@ -4,6 +4,17 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — callback/monitoring terminal-publication model
+
+- Added `ParslJoinCallbackMonitoring.tla` with Current/Fixed configurations.
+- The model composes duplicate inner-Future callbacks, terminal outer state,
+  Future resolution, and monitoring-row publication. Fixed TLC rejects a
+  second terminal row while Current produces the intended counterexample.
+- Extended the real callback runtime bridge to write SQLite `STATUS` rows;
+  concurrent duplicate callbacks publish exactly one terminal row.
+- Fixed TLC and focused runtime coverage pass; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 690 unittest methods.
+
 ## 2026-10-02 — concurrent `join_app` callback bridge
 
 - Extended `test_join_callback_runtime.py` with two simultaneous duplicate

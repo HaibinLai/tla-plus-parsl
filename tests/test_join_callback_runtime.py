@@ -1,11 +1,14 @@
 """Runtime probes for DataFlowKernel join callback gating and ordering."""
 
+import datetime
+import tempfile
 import threading
 import unittest
 from concurrent.futures import CancelledError, Future
 
 from parsl.dataflow.dflow import DataFlowKernel
 from parsl.dataflow.errors import JoinError
+from parsl.monitoring.db_manager import Database, STATUS, WORKFLOW
 from parsl.dataflow.states import States
 
 
@@ -94,6 +97,59 @@ class JoinCallbackRuntimeTest(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertEqual(record["status"], States.exec_done)
         self.assertEqual(kernel.completed, [(States.exec_done, [1, 2])])
+
+    def test_duplicate_callbacks_publish_one_monitoring_terminal_row(self):
+        """Callback idempotence must hold for the SQLite monitoring history."""
+        with tempfile.TemporaryDirectory() as directory:
+            database = Database("sqlite:///" + directory + "/monitoring.db")
+            now = datetime.datetime.now()
+            database.insert(table=WORKFLOW, messages=[{
+                "run_id": "join-callback-monitoring",
+                "time_began": now,
+                "host": "host",
+                "user": "user",
+                "rundir": directory,
+                "tasks_failed_count": 0,
+                "tasks_completed_count": 0,
+            }])
+
+            kernel = self.kernel_for()
+            record = self.record_for([
+                self.future(1, join_id="first"),
+                self.future(2, join_id="second"),
+            ])
+            record["id"] = 91
+
+            def complete_and_monitor(task_record, state, result):
+                task_record["status"] = state
+                database.insert(table=STATUS, messages=[{
+                    "task_id": task_record["id"],
+                    "run_id": "join-callback-monitoring",
+                    "task_status_name": state.name,
+                    "timestamp": datetime.datetime.now(),
+                    "try_id": 0,
+                }])
+
+            kernel._complete_task_result = complete_and_monitor
+            barrier = threading.Barrier(2)
+
+            def invoke_callback():
+                barrier.wait(timeout=2)
+                kernel.handle_join_update(record, record["joins"][0])
+
+            workers = [threading.Thread(target=invoke_callback) for _ in range(2)]
+            for worker in workers:
+                worker.start()
+            for worker in workers:
+                worker.join(timeout=2)
+
+            rows = database.session.execute(
+                database.meta.tables[STATUS].select()
+                .where(database.meta.tables[STATUS].c.task_id == 91)
+            ).fetchall()
+
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0].task_status_name, States.exec_done.name)
 
     def test_all_done_failure_becomes_join_error_with_inner_exception(self):
         kernel = self.kernel_for()
