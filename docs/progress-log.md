@@ -90,6 +90,10 @@ Fixed passes 100,001 simulated states.  The Fixed configuration is now in the fo
 gate, extending the separate provider-retry, stage-out, and monitoring models across one boundary.
 The updated foundational TLC smoke run passed 661/661 cases.
 
+After this composition was added, the complete foundational Python runtime smoke was rerun from
+the installed Parsl environment and passed 434/434 entries.  This confirms that the added provider,
+stage-out, monitoring, and retry abstractions did not regress the concrete runtime bridges.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
