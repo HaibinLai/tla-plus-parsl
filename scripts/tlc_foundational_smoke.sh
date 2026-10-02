@@ -149,6 +149,9 @@ run_case file-bytes-transfer-full \
 run_case file-bytes-attempt-gate \
     models/staging/ParslFileBytesAttemptGateFixed.cfg \
     models/staging/ParslFileBytesAttemptGate.tla
+run_case rsync-datafuture-gate \
+    models/staging/ParslRsyncDataFutureGateFixed.cfg \
+    models/staging/ParslRsyncDataFutureGate.tla
 run_case file-path-resolution \
     models/staging/ParslFilePathResolution.cfg \
     models/staging/ParslFilePathResolution.tla

@@ -142,6 +142,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupF
 /tmp/parsl-venv/bin/python -m unittest tests/test_rsync_partial_cleanup_runtime.py -v
 ```
 
+`ParslRsyncDataFutureGate.tla` composes the in-task RSync stage-out wrapper with DataManager's
+`None` stage-out return contract. The Current branch lets the output DataFuture follow application
+completion before the remote copy publishes bytes; the Fixed branch keeps consumers blocked until
+RSync succeeds, and turns a failed copy into a terminal DataFuture failure.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateCurrent.cfg models/staging/ParslRsyncDataFutureGate.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateFixed.cfg models/staging/ParslRsyncDataFutureGate.tla
+```
+
 `ParslRsyncQuoting.tla` models the command-construction boundary in the same wrapper. The current
 implementation interpolates source and destination paths into `os.system`, so a valid path with
 spaces is split by the shell; the fixed branch quotes each argument. The runtime probe inspects

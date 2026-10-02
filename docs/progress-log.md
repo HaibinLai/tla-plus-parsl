@@ -32,6 +32,16 @@ are recorded here in English and committed with the model changes.
   runtime probes remain the concrete source evidence. The foundational gate is now 678 TLC
   configurations and 443 runtime entries.
 
+## 2026-10-02 — RSync/DataFuture remote-publication gate
+
+- Added `ParslRsyncDataFutureGate`, composing the real RSync stage-out wrapper (application first,
+  remote copy second) with DataManager's `None` return/DataFuture contract and byte publication.
+  The Current TLC configuration allows readiness after application completion, before RSync has
+  published bytes; the Fixed configuration gates readiness and consumer admission on successful
+  RSync and converts copy failure into a terminal DataFuture failure. Fixed TLC passes 100,001
+  simulated states; existing RSync/DataFuture runtime probes provide concrete source evidence.
+  The foundational gate is now 679 TLC configurations and 443 runtime entries.
+
 ## 2026-10-02 — Zip duplicate-member/DataFuture readiness bridge
 
 - Added `ParslZipDuplicateReadiness`, composing archive retry history with stage-in/DataFuture
