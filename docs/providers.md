@@ -975,6 +975,7 @@ the concrete PBS Pro runtime probe.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedFutureMonitoringCurrent.cfg models/providers/ParslPBSProMalformedFutureMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPBSProMalformedFutureMonitoringFixed.cfg models/providers/ParslPBSProMalformedFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_pbspro_malformed_future_monitoring_runtime.py -v
 ```
 
 `ParslPbsproMissingStatus.tla` models the successful-but-incomplete `qstat` boundary. The
