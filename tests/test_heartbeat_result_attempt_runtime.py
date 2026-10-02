@@ -6,10 +6,24 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
+import zmq
+
 from parsl.executors.flux import TaskResult
 from parsl.executors.high_throughput.interchange import Interchange
 from parsl.monitoring.db_manager import Database, STATUS, WORKFLOW
 from parsl.serialize import deserialize, serialize
+
+
+class HeartbeatSocket:
+    def __init__(self, message):
+        self.message = message
+        self.sent = []
+
+    def recv_multipart(self):
+        return self.message
+
+    def send_multipart(self, message):
+        self.sent.append(message)
 
 
 class HeartbeatResultAttemptRuntimeTest(unittest.TestCase):
@@ -64,6 +78,21 @@ class HeartbeatResultAttemptRuntimeTest(unittest.TestCase):
 
         with patch("parsl.executors.high_throughput.interchange.time.time", return_value=100):
             interchange.expire_bad_managers({b"manager-1"}, monitoring_radio=object())
+
+        # A heartbeat received after expiry must not recreate the manager or
+        # send an acknowledgement that could make it appear live again.
+        manager_sock = HeartbeatSocket(
+            [b"manager-1", pickle.dumps({"type": "heartbeat"})]
+        )
+        interchange.manager_sock = manager_sock
+        interchange.socks = {manager_sock: zmq.POLLIN}
+        interesting = set()
+        interchange.process_manager_socket_message(
+            interesting, monitoring_radio=None, kill_event=Mock()
+        )
+        self.assertEqual(interchange._ready_managers, {})
+        self.assertEqual(interesting, set())
+        self.assertEqual(manager_sock.sent, [])
 
         with tempfile.TemporaryDirectory() as directory:
             database = Database("sqlite:///" + directory + "/monitoring.db")

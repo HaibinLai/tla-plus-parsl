@@ -4,6 +4,17 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — heartbeat expiry and late-message bridge
+
+- Extended `test_heartbeat_result_attempt_runtime.py` to feed a real late
+  heartbeat through `Interchange.process_manager_socket_message` after the
+  manager was expired.
+- The expired manager remains absent, no heartbeat acknowledgement is sent,
+  and the persisted `lost` status remains the terminal observation while the
+  old result is filtered from retry attempt 1.
+- Focused runtime coverage passes 3/3 tests; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 692 unittest methods.
+
 ## 2026-10-02 — verified byte publication and DataFuture readiness
 
 - Extended `test_file_bytes_transfer_runtime.py` with a real `DataFuture`
