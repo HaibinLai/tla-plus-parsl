@@ -758,6 +758,9 @@ run_case aws-unknown-instance \
 run_case aws-unknown-future-monitoring \
     models/providers/ParslAwsUnknownFutureMonitoringFixed.cfg \
     models/providers/ParslAwsUnknownFutureMonitoring.tla
+run_case aws-empty-submit-future-monitoring \
+    models/providers/ParslAwsEmptySubmitFutureMonitoringFixed.cfg \
+    models/providers/ParslAwsEmptySubmitFutureMonitoring.tla
 run_case local-unknown-job-status \
     models/providers/ParslLocalUnknownJobStatusFixed.cfg \
     models/providers/ParslLocalUnknownJobStatus.tla

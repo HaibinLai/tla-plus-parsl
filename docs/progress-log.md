@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — AWS empty submit with Future monitoring
+
+- Added `ParslAwsEmptySubmitFutureMonitoring`, composing an empty EC2 launch response with task,
+  Future, and monitoring failure propagation. Current TLC violates `NoCrashOnSubmit` because the
+  provider crashes before publishing failure; Fixed TLC passes 10,000 simulation steps. The real
+  `AWSProvider.submit()` runtime probe reproduces the empty-response `ValueError` and verifies the
+  normal failed-submit path. The foundational inventory is now 705 TLC cases and 453 runtime
+  entries.
+
 ## 2026-10-02 — AWS unknown instance with Future monitoring
 
 - Added `ParslAwsUnknownFutureMonitoring`, composing AWS status-poll isolation with logical task

@@ -697,6 +697,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsSubmitEmptyResp
 /tmp/parsl-venv/bin/python -m unittest tests/test_aws_submit_runtime.py -v
 ```
 
+`ParslAwsEmptySubmitFutureMonitoring.tla` composes the empty-launch response with the logical
+task, Future, and monitoring terminal path. The Current branch crashes before publishing any
+failure, leaving all upper-layer state pending; the Fixed branch converts the provider response
+to a failed submission and propagates failure to the task, Future, and monitoring row. TLC finds
+the `NoCrashOnSubmit` counterexample in Current and passes 10,000 simulation steps in Fixed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsEmptySubmitFutureMonitoringCurrent.cfg models/providers/ParslAwsEmptySubmitFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsEmptySubmitFutureMonitoringFixed.cfg models/providers/ParslAwsEmptySubmitFutureMonitoring.tla
+```
+
 `ParslTorqueStatusFailure.tla` models the return-code boundary around `qstat`. The current
 Torque parser ignores a non-zero command result and still consumes stdout, so stale output can
 overwrite a running local resource. The fixed branch returns early and preserves the known
