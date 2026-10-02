@@ -128,6 +128,9 @@ run_case htex-ferry-result-send-failure \
 run_case htex-task-dispatch-send-failure \
     models/serialization/ParslHtexTaskDispatchSendFailureFixed.cfg \
     models/serialization/ParslHtexTaskDispatchSendFailure.tla
+run_case htex-command-ingress-isolation \
+    models/serialization/ParslHtexCommandIngressIsolationFixed.cfg \
+    models/serialization/ParslHtexCommandIngressIsolation.tla
 run_case htex-result-queue \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla

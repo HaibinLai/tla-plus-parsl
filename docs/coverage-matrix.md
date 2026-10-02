@@ -19,6 +19,9 @@ ownership across worker-pool socket send failure.
 It also includes `ParslHtexTaskDispatchSendFailure` (BUG-335), checking task ownership when the
 interchange removes a pending task before a manager ZMQ send.
 
+The communication audit also includes `ParslHtexCommandIngressIsolation` (BUG-336), checking
+malformed command-frame isolation at the interchange main loop.
+
 File-transfer coverage also includes `ParslFTPInTaskTransferGate`, composing FTP partial-byte
 publication and connection cleanup with the in-task user-function admission gate (BUG-076/105).
 

@@ -41,3 +41,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-324 | TaskVine failure fan-out mutation | [BUG-324](../bug-ledger.md) |
 | BUG-325 | Work Queue failure fan-out mutation | [BUG-325](../bug-ledger.md) |
 | BUG-335 | HTEX task dispatch loses task on ZMQ send failure | [BUG-335](../bug-ledger.md) |
+| BUG-336 | HTEX command ingress escapes malformed frame | [BUG-336](../bug-ledger.md) |

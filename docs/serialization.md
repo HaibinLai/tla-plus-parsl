@@ -239,6 +239,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexTaskDispat
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_dispatch_send_failure_runtime.py -v
 ```
 
+`ParslHtexCommandIngressIsolation.tla` models malformed command frames at the interchange
+command channel. The Current branch lets `recv_pyobj()` escape and stop the main loop; the Fixed
+branch discards the malformed request and keeps later work available. The runtime probe uses a
+failing command socket against the installed interchange.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexCommandIngressIsolationCurrent.cfg models/serialization/ParslHtexCommandIngressIsolation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexCommandIngressIsolationFixed.cfg models/serialization/ParslHtexCommandIngressIsolation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_command_ingress_isolation_runtime.py -v
+```
+
 `ParslTaskTransportSmoke.cfg` keeps the full bounded callable/argument/closure graph but sets
 `MAX_RETRIES = 0`. It provides a fast terminal-path regression for the serialization gate,
 task/result wire ordering, and Future-resolution invariants; TLC checks 69 generated / 29 distinct

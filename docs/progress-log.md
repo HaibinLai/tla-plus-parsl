@@ -2483,6 +2483,12 @@ communication and selected async completion criteria in that document are satisf
 - Verification stage: `ParslHtexTaskDispatchSendFailure` Current TLC returns the expected
   counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes. Script syntax
   checks and `git diff --check` also pass.
+- Current stage: added `ParslHtexCommandIngressIsolation`, refining the command-channel side of
+  the communication inventory. The Current branch lets a malformed `recv_pyobj()` exception
+  escape the interchange loop; the Fixed branch isolates it and preserves later work. Inventory
+  is now 748 TLC configurations, 483 runtime entries, and 758 unittest methods.
+- Verification stage: `ParslHtexCommandIngressIsolation` Current TLC returns the expected
+  counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes.
 
 ## Scope note
 
