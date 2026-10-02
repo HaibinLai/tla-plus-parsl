@@ -36,5 +36,6 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-287 | HTEX worker poll prioritizes tasks over results | [BUG-287](../bug-ledger.md) |
 | BUG-320 | Flux startup handshake accepts a dead provider | [BUG-320](../bug-ledger.md) |
 | BUG-322 | Flux leaks non-TypeError serialization failure | [BUG-322](../bug-ledger.md) |
+| BUG-328 | Flux cancellation does not propagate underlying cancellation | [BUG-328](../bug-ledger.md) |
 | BUG-324 | TaskVine failure fan-out mutation | [BUG-324](../bug-ledger.md) |
 | BUG-325 | Work Queue failure fan-out mutation | [BUG-325](../bug-ledger.md) |

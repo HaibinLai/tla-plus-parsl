@@ -11,7 +11,14 @@ are recorded here in English and committed with the model changes.
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17: all 726 foundational
   configurations passed, including the HTTP in-task cleanup gate, FTP transfer gate, HTEX ferry
   send-failure model, and Slurm scale-in composition. The recent-model runner continues to keep
-  intentional Current counterexamples separate from the Fixed foundational gate.
+intentional Current counterexamples separate from the Fixed foundational gate.
+
+## 2026-10-02 — Flux cancellation ledger reconciliation
+
+- Promoted the already-verified `ParslFluxCancelUnderlyingState` finding to BUG-328. When the
+  underlying Flux Future is already cancelled, the installed wrapper returns success but remains
+  pending; the existing Current/Fixed TLC pair and runtime probe provide the evidence. No new
+  model was needed; the executor ledger now records this previously omitted finding.
 
 ## 2026-10-02 — TaskVine failure fan-out mutation
 
