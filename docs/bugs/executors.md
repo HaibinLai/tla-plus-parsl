@@ -34,3 +34,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-167 | MPI result path asserts for tasks without node allocation | [BUG-167](../bug-ledger.md) |
 | BUG-168 | Bad-state cleanup calls `set_exception` on terminal Future | [BUG-168](../bug-ledger.md) |
 | BUG-287 | HTEX worker poll prioritizes tasks over results | [BUG-287](../bug-ledger.md) |
+| BUG-320 | Flux startup handshake accepts a dead provider | [BUG-320](../bug-ledger.md) |

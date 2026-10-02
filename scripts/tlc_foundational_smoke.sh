@@ -2090,5 +2090,8 @@ run_case join-multi-output-readiness \
 run_case zip-duplicate-readiness \
     models/staging/ParslZipDuplicateReadinessFixed.cfg \
     models/staging/ParslZipDuplicateReadiness.tla
+run_case flux-provider-handshake \
+    models/executors/ParslFluxProviderHandshakeFixed.cfg \
+    models/executors/ParslFluxProviderHandshake.tla
 
 echo "Foundational TLC smoke suite passed."

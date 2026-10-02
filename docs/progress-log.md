@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Flux provider startup handshake boundary
+
+- Added `ParslFluxProviderHandshake`, a compact provider/executor composition for the concrete
+  Flux startup sequence: provider allocation, package-path and instance-URI ZMQ messages, status
+  polling, and executor readiness. The Current TLC configuration accepts a readable handshake
+  after provider termination and violates `NoReadyAfterProviderTermination`; Fixed checks
+  liveness before publication and passes. The runtime probe reproduces the concrete
+  `_check_provider_job` early return and records the guard as BUG-320. The foundational gate is
+  now 681 TLC configurations and 444 runtime entries.
+
 ## 2026-10-02 — Heartbeat/provider attempt-generation boundary
 
 - Added `ParslHeartbeatProviderBoundary`, a compact cross-layer refinement that combines the

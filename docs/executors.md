@@ -1,5 +1,23 @@
 # Executor and HTEX models
 
+`ParslFluxProviderHandshake.tla` composes Flux startup with the concrete provider status
+polling and two-message ZMQ handshake used by `_submit_flux_jobs` and `_check_provider_job`.
+The Current branch accepts a readable package/URI message after the provider job has already
+become terminal, publishing an unusable ready executor. The Fixed branch checks provider
+liveness before accepting each handshake message and fails queued startup work when the
+provider terminates. TLC reaches the Current `NoReadyAfterProviderTermination` counterexample;
+Fixed TLC passes. The runtime probe uses the installed `_check_provider_job` with a readable
+socket and terminal provider double; it records the current early-return behavior and the
+required guard.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslFluxProviderHandshakeCurrent.cfg models/executors/ParslFluxProviderHandshake.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslFluxProviderHandshakeFixed.cfg models/executors/ParslFluxProviderHandshake.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_provider_handshake_runtime.py -v
+```
+
+This startup-liveness boundary is recorded as BUG-320.
+
 These models cover executor lifecycle, task execution, HTEX submission and result queues, worker
 registration, heartbeats, command deadlines, ThreadExecutor, WorkQueue, TaskVine, Flux, and
 RadicalPilot result handling.
