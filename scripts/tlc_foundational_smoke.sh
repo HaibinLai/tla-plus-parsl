@@ -302,6 +302,9 @@ run_case torque-submit-empty-output \
 run_case torque-submit-failure \
     models/providers/ParslTorqueSubmitFailure.cfg \
     models/providers/ParslTorqueSubmit.tla
+run_case torque-lifecycle \
+    models/providers/ParslTorqueLifecycleFixed.cfg \
+    models/providers/ParslTorqueLifecycle.tla
 run_case torque-tasks-per-node \
     models/providers/ParslTorqueTasksPerNodeFixed.cfg \
     models/providers/ParslTorqueTasksPerNode.tla

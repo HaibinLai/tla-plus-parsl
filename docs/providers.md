@@ -662,6 +662,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslTorqueMissingStatu
 
 This successful-empty status boundary is recorded as BUG-241.
 
+`ParslTorqueLifecycle.tla` composes Torque submission, qstat observations, local resource
+ownership, and qdel cancellation. The Current branch can treat a missing qstat row as completion,
+abort on foreign or malformed rows, and report a successful cancellation as completion. The Fixed
+branch requires explicit terminal evidence, isolates bad rows, and preserves cancellation as a
+terminal cancelled state. Existing Torque runtime probes cover the concrete submit, status, and
+cancel paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslTorqueLifecycleCurrent.cfg models/providers/ParslTorqueLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslTorqueLifecycleFixed.cfg models/providers/ParslTorqueLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_torque*_runtime.py' -v
+```
+
 `ParslLSFDuplicateStatus.tla` covers the analogous LSF `bjobs` response. The current set-based
 bookkeeping raises `KeyError` on a duplicate job line; the fixed branch ignores the second line.
 TLC checks six generated/three distinct states in the fixed and unique-row configurations.

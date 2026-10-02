@@ -109,6 +109,16 @@ concrete parser behavior.
 
 The post-v0.1 foundational inventory is now 647 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Torque provider lifecycle composition
+
+`ParslTorqueLifecycle` composes qsub submission, qstat observations, local resource ownership,
+and qdel cancellation. The Current branch reaches the safety counterexamples for missing status,
+foreign/malformed rows, and cancellation-state misclassification; the Fixed branch requires
+explicit terminal evidence, isolates invalid rows, and passes five million simulated states.
+Existing Torque runtime probes cover the concrete parser and cancellation behavior.
+
+The post-v0.1 foundational inventory is now 648 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state
