@@ -284,6 +284,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionGlobal
 /tmp/parsl-venv/bin/python -m unittest tests/test_function_global_default_snapshot_runtime.py -v
 ```
 
+`ParslFunctionGlobalDefaultFutureRetry.tla` composes that epoch boundary with a task envelope,
+Future completion, monitoring, and one physical retry. The Current branch executes a mixed-epoch
+callable and violates `SnapshotResultSafety`; the Fixed branch fails the inconsistent payload,
+re-serializes both roots for the retry, and preserves coherent result propagation. The concrete
+global/default and callable-retry probes exercise the corresponding serializer boundaries.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionGlobalDefaultFutureRetryCurrent.cfg models/serialization/ParslFunctionGlobalDefaultFutureRetry.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionGlobalDefaultFutureRetryFixed.cfg models/serialization/ParslFunctionGlobalDefaultFutureRetry.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_function_global_default_snapshot_runtime.py tests/test_callable_retry_transport_runtime.py -v
+```
+
 `ParslPythonSmoke.cfg` provides the smallest complete object-graph check for `ParslPython.tla`:
 one function root and one argument root with no nested edges. It generates 92 states (31 distinct)
 and is useful for fast regression checks before exploring the larger cyclic graph.

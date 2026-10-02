@@ -527,6 +527,9 @@ run_case object-snapshot-retry \
 run_case function-global-default-snapshot \
     models/serialization/ParslFunctionGlobalDefaultSnapshotFixed.cfg \
     models/serialization/ParslFunctionGlobalDefaultSnapshot.tla
+run_case function-global-default-future-retry \
+    models/serialization/ParslFunctionGlobalDefaultFutureRetryFixed.cfg \
+    models/serialization/ParslFunctionGlobalDefaultFutureRetry.tla
 run_case message-correlation \
     models/serialization/ParslMessageCorrelationFixed.cfg \
     models/serialization/ParslMessageCorrelation.tla

@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — callable global/default snapshot with retry
+
+- Added `ParslFunctionGlobalDefaultFutureRetry`, composing separate function/global and default
+  snapshots with task envelope execution, Future/monitoring terminality, and one physical retry.
+  The Current branch violates `SnapshotResultSafety` on a mixed-epoch callable; the Fixed branch
+  rejects it, re-snapshots on retry, and passes 10,000 TLC simulation steps. Three corresponding
+  serializer runtime tests pass. The foundational inventory is now 702 TLC cases and 453 runtime
+  entries.
+
 ## 2026-10-02 — Azure status bookkeeping with Future monitoring
 
 - Added `ParslAzureStatusBookkeepingFutureMonitoring`, composing Azure translated/local status,
