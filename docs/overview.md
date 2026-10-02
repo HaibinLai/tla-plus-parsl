@@ -9,7 +9,7 @@ boundaries that affect observable workflow behavior: DataFlowKernel task/Future 
 executor submission, worker execution, provider capacity, retries, memoization, data
 readiness, and late results.
 
-The current foundational baseline is 676 TLC configurations and 443 Python runtime probe
+The current foundational baseline is 677 TLC configurations and 443 Python runtime probe
 entries (702 unittest methods). The model was based on the Parsl paper and the current source
 tree, especially:
 
@@ -649,6 +649,11 @@ The finite model mirrors the main-loop ordering in
 attempt generations. It releases the physical manager slot on loss, reconnects the manager, and
 keeps a late old-attempt result separate from the retried logical Future. Its Current branch is an
 intentional stale-result counterexample; its Fixed branch passes the bounded TLC check.
+
+`ParslJoinMultiOutputReadiness.tla` composes multi-output stage-out with `join_app` aggregation.
+The Current branch can publish one output and finish the join with a partial result; the Fixed
+branch requires all output transfers, current source versions, and callbacks before producing the
+ordered two-output result.
 
 `ParslHeartbeatClockJump.tla` refines the clock source itself. The current interchange compares
 `time.time()` values, so a forward wall-clock adjustment can expire a manager whose monotonic age

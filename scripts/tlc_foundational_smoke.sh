@@ -2075,6 +2075,9 @@ run_case join-duplicate-cancellation-fixed \
 run_case join-failure-order \
     models/dataflow/ParslJoinFailureOrder.cfg \
     models/dataflow/ParslJoinFailureOrder.tla
+run_case join-multi-output-readiness \
+    models/dataflow/ParslJoinMultiOutputReadinessFixed.cfg \
+    models/dataflow/ParslJoinMultiOutputReadiness.tla
 run_case zip-duplicate-readiness \
     models/staging/ParslZipDuplicateReadinessFixed.cfg \
     models/staging/ParslZipDuplicateReadiness.tla

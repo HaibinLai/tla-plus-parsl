@@ -14,6 +14,15 @@ are recorded here in English and committed with the model changes.
   This stage is model-only because the concrete interchange expiry and stale-result paths already
   have focused runtime probes; it adds their composition rather than duplicating another probe.
 
+## 2026-10-02 — Multi-output stage-out and join readiness
+
+- Added `ParslJoinMultiOutputReadiness`, composing per-output transfer state, captured file
+  versions, DataFuture publication, and ordered `join_app` callback aggregation. The Current TLC
+  configuration reaches a `JoinCompleteness` counterexample where one output finishes the join;
+  the Fixed configuration requires both outputs and both callbacks and passes 100,132 simulated
+  states. Existing multi-output stage-out and join runtime probes remain green. The foundational
+  gate is now 677 TLC configurations and 443 runtime entries.
+
 ## 2026-10-02 — Zip duplicate-member/DataFuture readiness bridge
 
 - Added `ParslZipDuplicateReadiness`, composing archive retry history with stage-in/DataFuture
