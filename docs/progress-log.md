@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — strategy scale-out capacity bridge
+
+- Extended `test_strategy_runtime.py` with a large-backlog case against the
+  real `Strategy._general_strategy` path.
+- The strategy requests only the remaining capacity up to `max_blocks`,
+  preserving the `ParslStrategy` `CapacitySafety` invariant even when task
+  pressure is much larger than available blocks.
+- Focused runtime coverage passes 5/5 tests; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 694 unittest methods.
+
 ## 2026-10-02 — partial scale-out status isolation bridge
 
 - Extended `test_scale_out_failure_monitoring_runtime.py` to poll after a

@@ -71,6 +71,21 @@ class StrategyRuntimeTest(unittest.TestCase):
         # slot serves three tasks, so two more blocks are needed.
         self.assertEqual(executor.scale_out_calls, [0, 2])
 
+    def test_overload_scale_out_is_capped_at_provider_max_blocks(self):
+        provider = FakeProvider(max_blocks=2, parallelism=1.0)
+        executor = FakeExecutor(
+            provider,
+            outstanding_tasks=100,
+            block_states=[JobState.RUNNING],
+        )
+        strategy = Strategy(strategy="simple", max_idletime=10)
+        strategy.add_executors([executor])
+
+        strategy.strategize([executor])
+
+        # A very large backlog can request only the one remaining block.
+        self.assertEqual(executor.scale_out_calls, [0, 1])
+
     def test_idle_scale_in_waits_and_preserves_minimum(self):
         provider = FakeProvider(min_blocks=1, max_blocks=4)
         executor = FakeExecutor(
