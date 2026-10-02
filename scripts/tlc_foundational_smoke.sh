@@ -488,6 +488,9 @@ run_case rsync-path-quoting \
 run_case heartbeat-clock-rollback \
     models/clock/ParslHeartbeatClockRollbackFixed.cfg \
     models/clock/ParslHeartbeatClockRollback.tla
+run_case heartbeat-timeout-future-monitoring \
+    models/clock/ParslHeartbeatTimeoutFutureMonitoringFixed.cfg \
+    models/clock/ParslHeartbeatTimeoutFutureMonitoring.tla
 run_case htex-contact-timeout \
     models/clock/ParslHtexContactTimeoutStarvationFixed.cfg \
     models/clock/ParslHtexContactTimeoutStarvation.tla

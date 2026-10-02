@@ -23,6 +23,18 @@ java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
 models/clock/ParslHtexLivenessAttempt.tla
 ```
 
+`ParslHeartbeatTimeoutFutureMonitoring.tla` composes the wall/monotonic clock boundary with
+heartbeat expiry, task timeout, Future terminality, and monitoring status. A wall-clock rollback
+is injected into the bounded trace. The Current branch can later accept a completion after a
+recorded timeout, changing both the Future and monitoring result; the Fixed branch preserves the
+timeout and treats the completion as stale. `HeartbeatExpirySafety`, `TimeoutTerminality`, and
+`MonitoringConsistency` are checked together.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutFutureMonitoringCurrent.cfg models/clock/ParslHeartbeatTimeoutFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutFutureMonitoringFixed.cfg models/clock/ParslHeartbeatTimeoutFutureMonitoring.tla
+```
+
 `ParslHeartbeatProviderBoundary.tla` is a smaller boundary-accurate refinement. It keeps the
 interchange's strict `>` heartbeat expiry, releases the physical manager slot on loss, reconnects
 the manager, and separates the retried logical attempt from a late physical result. The Current

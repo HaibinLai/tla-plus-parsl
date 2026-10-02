@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — heartbeat timeout and monitoring composition
+
+- Added `ParslHeartbeatTimeoutFutureMonitoring`, combining wall-clock rollback, monotonic
+  heartbeat age, task timeout, Future terminality, late completion, and monitoring status. The
+  Current branch violates `TimeoutTerminality` after accepting a late completion; the Fixed
+  branch passes 10,000 TLC simulation steps and preserves the timed-out result. Existing HTEX
+  heartbeat and timeout runtime probes remain the concrete source-level evidence. The
+  foundational inventory is now 692 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — file-content retry with DataFuture and monitoring
 
 - Added `ParslFileTransferRetryMonitoring`, composing source-versioned file publication,
