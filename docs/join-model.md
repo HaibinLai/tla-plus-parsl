@@ -91,6 +91,12 @@ This matches handle_join_update: the nested JoinError is the exception attached 
 Future, while its dependent exception identifiers retain the leaf causes. TLC checks the
 failure-shape and completion invariants over 100,001 simulated states.
 
+`ParslJoinExceptionIdentity.tla` makes the Python object-identity part explicit. It models an
+inner leaf exception becoming the `__cause__` of a nested `JoinError`, then remaining the same
+object when an outer `JoinError` aggregates the nested failure and a sibling. The fixed TLC case
+checks identity and sibling annotation; `tests/test_join_exception_identity_runtime.py` verifies
+the behavior against the installed `JoinError` implementation.
+
 ParslJoinCallbackMultiplicity preserves callback multiplicity for a duplicate list such as
 I1, I1, I2. The source registers one callback per list position, so completion of I1 schedules
 two callback invocations. The model keeps those invocations in a sequence and checks that they

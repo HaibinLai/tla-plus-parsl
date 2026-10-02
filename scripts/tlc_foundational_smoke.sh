@@ -665,6 +665,9 @@ run_case htex-worker-poll-priority \
 run_case htex-poll-priority-future-timeout \
     models/executors/ParslHtexPollPriorityFutureTimeoutFixed.cfg \
     models/executors/ParslHtexPollPriorityFutureTimeout.tla
+run_case join-exception-identity \
+    models/dataflow/ParslJoinExceptionIdentityFixed.cfg \
+    models/dataflow/ParslJoinExceptionIdentity.tla
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla

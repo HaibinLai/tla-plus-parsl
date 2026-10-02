@@ -126,6 +126,10 @@ intermediate sampling, wall-clock rollback, monotonic scheduling, termination, a
 unconditional final resource message; the runtime bridge checks that rollback does not drop the
 final message.
 
+The join coverage now also includes `ParslJoinExceptionIdentity`, which checks that nested and
+outer `JoinError` instances retain the same leaf exception object as `__cause__` while annotating
+sibling failures. Arbitrary user object graphs remain bounded and abstract.
+
 The compact `ParslHeartbeatRetry` model is now in the foundational TLC gate. It isolates
 monotonic heartbeat expiry, task timeout/retry, and stale late-result rejection before the larger
 provider and join timing compositions.

@@ -2385,6 +2385,11 @@ The remaining work is documentation and handoff, not model expansion:
   reproduces a ready result remaining unconsumed through three deadline polls, while the Fixed TLC
   configuration requires result service or an explicit timeout. Inventory is now 731 TLC
   configurations, 470 runtime entries, and 745 unittest methods.
+- Current stage: added `ParslJoinExceptionIdentity`, refining `join_app` failure aggregation from
+  exception text to Python object identity. The fixed TLC case preserves the leaf exception as
+  the nested and outer `JoinError.__cause__` while retaining sibling annotation, and the real
+  `JoinError` runtime probe passes. Inventory is now 732 TLC configurations, 471 runtime entries,
+  and 746 unittest methods.
 
 ### Verification convention
 
