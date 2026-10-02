@@ -46,6 +46,8 @@ are recorded here in English and committed with the model changes.
   ledgers.
 - Full regression after this addition: 665 TLC cases, 438 runtime entries, and
   679 unittest methods passed.
+- The BUG-312 runtime bridge now covers both `stage_in` and `stage_out`; the
+  repository-wide unittest count is 680.
 
 ## 2026-10-02 — join cross-layer runtime bridge
 

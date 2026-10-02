@@ -234,7 +234,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutFailureGateF
 `can_stage_in`/`can_stage_out` predicate itself raises. The Current branch aborts before a later
 capable provider is considered; the Fixed branch isolates the predicate failure and continues
 selection. The runtime probe uses the real `DataManager` with a failing first predicate and a
-working second provider. This source-level risk is recorded as BUG-312.
+working second provider for both stage-in and stage-out. This source-level risk is recorded as
+BUG-312.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingPredicateFailureCurrent.cfg models/staging/ParslStagingPredicateFailure.tla
