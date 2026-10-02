@@ -32,6 +32,12 @@ jumps, worker-pool heartbeat handling, and retry timeout all passed (15 unittest
 tests correspond to the existing `ParslHeartbeatResultAttempt`, `ParslHtexLivenessAttempt`, and
 `ParslJoinTimedMonitoring` abstractions; no duplicate model was added.
 
+The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
+test patched the process-wide `time.time` object while other monitoring threads were still active.
+The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
+synchronously.  The complete monitoring subset then passed 55/55 tests, preserving BUG-247 as the
+source-level wall-clock finding without treating test interference as a new Parsl defect.
+
 ## 2026-09-30
 
 ### Post-v0.1 extension: file bytes and logical-attempt gate

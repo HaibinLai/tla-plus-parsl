@@ -1,10 +1,12 @@
 """Runtime probe for the ZMQ router's wall-clock receive-batch deadline."""
 
 import threading
+import types
 import unittest
 from unittest.mock import patch
 
 from parsl.monitoring.radios.zmq_router import MonitoringRouter
+import parsl.monitoring.radios.zmq_router as zmq_router
 
 
 class TimeoutReceiver:
@@ -40,13 +42,14 @@ class MonitoringZMQBatchClockRuntimeTest(unittest.TestCase):
         # A monotonic clock would reach 101 on the first cycle and finish the
         # one-second batch after one receive attempt.
         clock_values = iter([100, 99, 99, 99, 101])
-        with patch("parsl.monitoring.radios.zmq_router.time.time", side_effect=clock_values), \
+        fake_time = types.SimpleNamespace(time=lambda: next(clock_values))
+        with patch.object(zmq_router, "time", fake_time), \
              patch("parsl.monitoring.radios.zmq_router.logger.warning"):
-            thread = threading.Thread(target=router.start, daemon=True)
-            thread.start()
-            thread.join(timeout=1)
+            # Run the bounded fake router synchronously.  A background thread
+            # would share the patched module-level clock with other monitoring
+            # probes and make this test order-dependent.
+            router.start()
 
-        self.assertFalse(thread.is_alive())
         self.assertGreater(receiver.calls, 1)
         exit_event.set()
 
