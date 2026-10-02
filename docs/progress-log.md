@@ -50,6 +50,13 @@ are recorded here in English and committed with the model changes.
   failure cascading to an unrelated peer; Fixed discards the stale report and passes bounded TLC.
   The foundational gate is now 687 TLC configurations and 453 runtime entries.
 
+## 2026-10-02 — MPI malformed-result/monitoring composition
+
+- Added `ParslMPIMalformedResultMonitoring`, refining corrupt MPI result decoding across node
+  allocation, Future terminality, and monitoring failure publication. Current TLC reproduces the
+  held-allocation/no-terminal-state combination; Fixed releases resources and passes bounded TLC.
+  The foundational gate is now 688 TLC configurations and 453 runtime entries.
+
 ## 2026-10-02 — DFK executor-shutdown/monitoring finalization
 
 - Added `ParslDfkExecutorShutdownMonitoring`, composing the real DFK cleanup order with executor

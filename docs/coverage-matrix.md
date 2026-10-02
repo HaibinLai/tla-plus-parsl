@@ -24,13 +24,16 @@ deserializer cache eviction to retry recovery and monitoring terminal state.
 The executor coverage also includes `ParslWorkQueueCancelledMonitoring`, which connects stale
 cancelled-result isolation to peer Future progress and monitoring terminality.
 
+It also includes `ParslMPIMalformedResultMonitoring`, which connects MPI decode-failure cleanup
+to allocation release, Future terminality, and monitoring failure publication.
+
 The file-transfer coverage also includes `ParslDataManagerStageOutReturn`, which distinguishes a
 `None` stage-out return (the output follows the application Future) from an independent transfer
 Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 687 TLC cases and 453 runtime entries (713 unittest
+deduplication. The current baseline is 688 TLC cases and 453 runtime entries (713 unittest
 methods).
 
 It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode

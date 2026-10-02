@@ -2111,5 +2111,8 @@ run_case plugin-retry-monitoring \
 run_case workqueue-cancelled-monitoring \
     models/executors/ParslWorkQueueCancelledMonitoringFixed.cfg \
     models/executors/ParslWorkQueueCancelledMonitoring.tla
+run_case mpi-malformed-result-monitoring \
+    models/executors/ParslMPIMalformedResultMonitoringFixed.cfg \
+    models/executors/ParslMPIMalformedResultMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."

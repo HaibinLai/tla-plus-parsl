@@ -558,6 +558,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResult
 /tmp/parsl-venv/bin/python -m unittest tests/test_mpi_malformed_result_runtime.py -v
 ```
 
+`ParslMPIMalformedResultMonitoring.tla` refines the same decode failure across resource
+allocation, Future completion, and monitoring. Current leaves the allocation held and has no
+terminal Future/monitoring failure; Fixed releases the allocation and publishes both terminal
+failure states. The existing MPI malformed-result runtime probe supplies the concrete scheduler
+evidence.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResultMonitoringCurrent.cfg models/executors/ParslMPIMalformedResultMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslMPIMalformedResultMonitoringFixed.cfg models/executors/ParslMPIMalformedResultMonitoring.tla
+```
+
 `ParslMPILifecycle.tla` composes MPI resource validation, node allocation, launch, result
 decoding, optional task-to-node mapping, cancellation, and shutdown. The Current branch permits
 invalid resource admission, leaks allocation on corrupt payloads, or reaches a raw assertion for
