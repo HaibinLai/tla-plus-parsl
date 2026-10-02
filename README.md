@@ -19,6 +19,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Modeling goal and stopping rule](docs/modeling-goal.md)
 - [v0.1 validation report](docs/v0.1-report.md)
 - [Project report](docs/project-report.md)
+- [Article and podcast plan](docs/article-podcast-plan.md)
 - [Project progress log](docs/progress-log.md)
 
 Runtime probes are under [`tests/`](tests/). The repository currently contains 761 unittest
