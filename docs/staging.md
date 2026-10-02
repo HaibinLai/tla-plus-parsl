@@ -216,6 +216,20 @@ application and the selected transfer are complete. Both paths are checked again
 /tmp/parsl-venv/bin/python -m unittest tests/test_file_bytes_transfer_runtime.py -v
 ```
 
+`ParslStageOutFailureGate.tla` adds the failure side of that contract. The logical application
+Future may fail after submission but before a provider's independent transfer finishes. The
+Current branch permits that transfer to publish a successful output; the Fixed branch converts
+the transfer/output to failure. The model is intentionally provider-neutral: the runtime bridge
+uses `GlobusStaging.stage_out` to verify that the real provider receives the failed application
+Future as its stage-out input, rather than claiming that every provider has identical callback
+behavior.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutFailureGateCurrent.cfg models/staging/ParslStageOutFailureGate.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutFailureGateFixed.cfg models/staging/ParslStageOutFailureGate.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_stageout_failure_gate_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryCurrent.cfg models/staging/ParslFileTransferRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryFixed.cfg models/staging/ParslFileTransferRetry.tla

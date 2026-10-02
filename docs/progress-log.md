@@ -15,6 +15,17 @@ are recorded here in English and committed with the model changes.
 - Added the probe to the foundational runtime runner; the current baseline is
   662 TLC cases, 435 runtime entries, and 676 unittest methods.
 
+## 2026-10-02 — stage-out failure gate
+
+- Added `ParslStageOutFailureGate.tla` with Current/Fixed configurations.
+- The model separates a failed logical application Future from an independent
+  physical stage-out transfer and forbids successful output publication after
+  application failure in the Fixed branch.
+- Added a Globus staging runtime bridge that verifies the provider receives the
+  failed application Future as its stage-out dependency.
+- Full regression after this addition: 663 TLC cases, 436 runtime entries, and
+  677 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

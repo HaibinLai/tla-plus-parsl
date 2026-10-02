@@ -215,6 +215,9 @@ run_case monitoring-internal-queue-drain \
 run_case monitoring-queue-fairness \
     models/monitoring/ParslMonitoringQueueFairnessFixed.cfg \
     models/monitoring/ParslMonitoringQueueFairness.tla
+run_case stageout-failure-gate \
+    models/staging/ParslStageOutFailureGateFixed.cfg \
+    models/staging/ParslStageOutFailureGate.tla
 run_case join-app \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
