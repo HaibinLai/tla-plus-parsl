@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Full 726-case regression after transfer and transport refinements
+
+- Ran `scripts/runtime_foundational_smoke.sh` with the installed Parsl source: all 465 named
+  runtime entries passed.
+- Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17: all 726 foundational
+  configurations passed, including the HTTP in-task cleanup gate, FTP transfer gate, HTEX ferry
+  send-failure model, and Slurm scale-in composition. The recent-model runner continues to keep
+  intentional Current counterexamples separate from the Fixed foundational gate.
+
 ## 2026-10-02 — TaskVine failure fan-out mutation
 
 - Added `ParslTaskVineFailureFanout`, a small executor model for manager-failure fan-out. The
