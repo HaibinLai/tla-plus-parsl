@@ -95,6 +95,9 @@ run_case pool-map-shutdown \
 run_case stageout-executor-retry \
     models/core/ParslStageOutExecutorRetryFixed.cfg \
     models/core/ParslStageOutExecutorRetry.tla
+run_case provider-stageout-monitoring \
+    models/core/ParslProviderStageOutMonitoringFixed.cfg \
+    models/core/ParslProviderStageOutMonitoring.tla
 run_case join-timed-monitoring-cancel \
     models/dataflow/ParslJoinTimedMonitoringCancelFixed.cfg \
     models/dataflow/ParslJoinTimedMonitoring.tla

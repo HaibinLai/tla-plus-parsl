@@ -84,6 +84,12 @@ monotonic deadlines, heartbeat/result generations, worker contact and drain, com
 timeouts, timer close/reentrancy/interval validation, provider polling clocks, and monitoring clock
 paths.  All 34 files passed with no new nondeterministic failure.
 
+The new `ParslProviderStageOutMonitoring` composition connects provider loss/reprovisioning to
+stage-out publication and terminal monitoring.  Current TLC reaches `StaleSafety` in 181 states;
+Fixed passes 100,001 simulated states.  The Fixed configuration is now in the foundational TLC
+gate, extending the separate provider-retry, stage-out, and monitoring models across one boundary.
+The updated foundational TLC smoke run passed 661/661 cases.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router

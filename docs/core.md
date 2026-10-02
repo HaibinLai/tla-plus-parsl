@@ -319,6 +319,12 @@ from an old transfer.  The Current branch reaches `PublicationSafety`/`StaleResu
 kept as an executable counterexample.  The Fixed configuration is included in the foundational
 TLC smoke gate.
 
+`ParslProviderStageOutMonitoring.tla` adds provider loss and reprovisioning to that boundary.  An
+output transfer may still finish after the provider has been lost and a new logical attempt has
+started; the Fixed branch rejects that transfer and only persists a terminal monitoring status for
+the active provider/attempt.  The Current branch reaches `StaleSafety` in an executable trace, and
+the Fixed configuration is part of the foundational TLC gate.
+
 The `ParslJoinTimedMonitoring` fixed case is now part of the foundational gate as well. It
 connects chunk readiness and source-version capture to heartbeat expiry, task timeout, outer
 cancellation, late completion, and bounded monitoring persistence in one executable join model.
