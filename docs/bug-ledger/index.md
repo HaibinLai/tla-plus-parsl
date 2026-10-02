@@ -6,13 +6,13 @@ This directory is the split, component-oriented view of the complete [Parsl bug 
 | --- | ---: | --- |
 | Executors and worker lifecycle | 65 | [executors/README.md](executors/README.md) |
 | Serialization and ZMQ transport | 46 | [serialization/README.md](serialization/README.md) |
-| Providers and scheduler adapters | 83 | [providers/README.md](providers/README.md) |
+| Providers and scheduler adapters | 90 | [providers/README.md](providers/README.md) |
 | Monitoring and database | 24 | [monitoring/README.md](monitoring/README.md) |
-| File staging and transfer | 24 | [staging/README.md](staging/README.md) |
+| File staging and transfer | 28 | [staging/README.md](staging/README.md) |
 | join_app and memoization | 9 | [join/README.md](join/README.md) |
 | Clock, heartbeat, and timeout | 22 | [clock/README.md](clock/README.md) |
 | Core dataflow and Future lifecycle | 2 | [dataflow/README.md](dataflow/README.md) |
 
-Every BUG ID in the flat ledger appears exactly once in these category files (290 unique entries).
+Every BUG ID in the flat ledger appears exactly once in these category files (291 unique entries).
 Cross-component findings are assigned to the primary implementation or safety property; the
 original component text is preserved in each row.

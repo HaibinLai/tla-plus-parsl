@@ -36,6 +36,17 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 664 TLC cases, 437 runtime entries, and
   678 unittest methods passed.
 
+## 2026-10-02 — staging predicate-failure isolation
+
+- Added `ParslStagingPredicateFailure.tla` with Current/Fixed configurations.
+- The model and runtime bridge cover ordered `DataManager` provider selection
+  when an earlier `can_stage_*` predicate raises before a later provider can
+  accept the file.
+- Recorded the source-level risk as BUG-312 in the categorized and flat bug
+  ledgers.
+- Full regression after this addition: 665 TLC cases, 438 runtime entries, and
+  679 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

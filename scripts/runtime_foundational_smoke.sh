@@ -90,6 +90,7 @@ tests=(
     tests/test_monitoring_queue_fairness_runtime.py
     tests/test_stageout_failure_gate_runtime.py
     tests/test_join_immediate_mutation_runtime.py
+    tests/test_staging_predicate_failure_runtime.py
     tests/test_worker_initial_probe_timeout_runtime.py
     tests/test_time_limited_open_timeout_runtime.py
     tests/test_bash_timeout_cleanup_runtime.py

@@ -221,6 +221,9 @@ run_case stageout-failure-gate \
 run_case join-immediate-mutation \
     models/dataflow/ParslJoinImmediateMutationFixed.cfg \
     models/dataflow/ParslJoinImmediateMutation.tla
+run_case staging-predicate-failure \
+    models/staging/ParslStagingPredicateFailureFixed.cfg \
+    models/staging/ParslStagingPredicateFailure.tla
 run_case join-app \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla

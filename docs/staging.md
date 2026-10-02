@@ -230,6 +230,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStageOutFailureGateF
 /tmp/parsl-venv/bin/python -m unittest tests/test_stageout_failure_gate_runtime.py -v
 ```
 
+`ParslStagingPredicateFailure.tla` models ordered provider selection when a
+`can_stage_in`/`can_stage_out` predicate itself raises. The Current branch aborts before a later
+capable provider is considered; the Fixed branch isolates the predicate failure and continues
+selection. The runtime probe uses the real `DataManager` with a failing first predicate and a
+working second provider. This source-level risk is recorded as BUG-312.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingPredicateFailureCurrent.cfg models/staging/ParslStagingPredicateFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingPredicateFailureFixed.cfg models/staging/ParslStagingPredicateFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_staging_predicate_failure_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryCurrent.cfg models/staging/ParslFileTransferRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryFixed.cfg models/staging/ParslFileTransferRetry.tla
