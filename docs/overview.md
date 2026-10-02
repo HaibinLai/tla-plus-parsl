@@ -10,7 +10,7 @@ executor submission, worker execution, provider capacity, retries, memoization, 
 readiness, and late results.
 
 The current foundational baseline is 690 TLC configurations and 453 Python runtime probe
-entries (713 unittest methods). The model was based on the Parsl paper and the current source
+entries (702 unittest methods). The model was based on the Parsl paper and the current source
 tree, especially:
 
 - `parsl/dataflow/states.py`: task states. The usual DFK success path is
@@ -644,6 +644,16 @@ when `now - last_heartbeat > heartbeat_threshold`, a heartbeat received before t
 resets the timestamp, and expiration converts all manager in-flight tasks into failure reports.
 The finite model mirrors the main-loop ordering in
 [`interchange.py`](https://raw.githubusercontent.com/Parsl/Parsl/master/parsl/executors/high_throughput/interchange.py).
+
+`ParslHeartbeatProviderBoundary.tla` composes that strict boundary with provider capacity and
+attempt generations. It releases the physical manager slot on loss, reconnects the manager, and
+keeps a late old-attempt result separate from the retried logical Future. Its Current branch is an
+intentional stale-result counterexample; its Fixed branch passes the bounded TLC check.
+
+`ParslJoinMultiOutputReadiness.tla` composes multi-output stage-out with `join_app` aggregation.
+The Current branch can publish one output and finish the join with a partial result; the Fixed
+branch requires all output transfers, current source versions, and callbacks before producing the
+ordered two-output result.
 
 `ParslHeartbeatClockJump.tla` refines the clock source itself. The current interchange compares
 `time.time()` values, so a forward wall-clock adjustment can expire a manager whose monotonic age
