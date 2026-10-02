@@ -2441,6 +2441,9 @@ The remaining work is documentation and handoff, not model expansion:
   cleanup. The Current runtime and TLC model show a final monitoring send exception masking an
   application exception (BUG-334); the Fixed branch preserves the primary application failure.
   Inventory is now 743 TLC configurations, 480 runtime entries, and 755 unittest methods.
+- Verification stage: ran the complete foundational Python runtime smoke after the executor,
+  MPI, context-cleanup, and monitoring-wrapper refinements. All 480/480 runtime entries passed
+  (`runtime_exit=0`); the full log is preserved at `/tmp/runtime-foundational-7696a09.log`.
 
 ### Verification convention
 
