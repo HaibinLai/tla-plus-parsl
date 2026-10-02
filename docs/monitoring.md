@@ -25,6 +25,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringRemoteL
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_remote_lifecycle_runtime.py -v
 ```
 
+`ParslMonitoringFailureShutdown.tla` composes permanent WORKFLOW-end update failure with the
+database-manager close path. The Current branch marks finalization and stops after losing the
+failed update; the Fixed branch bounds retries and records either a persisted or explicit dropped
+terminal outcome before stopping.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringFailureShutdownCurrent.cfg models/monitoring/ParslMonitoringFailureShutdown.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringFailureShutdownFixed.cfg models/monitoring/ParslMonitoringFailureShutdown.tla
+```
+
 `ParslMonitoringZMQTupleShape.tla` models the router admission boundary before messages enter the
 database queue: exactly two-element tuples are forwarded, while malformed tuple lengths are
 discarded and the listener continues. `tests/test_monitoring_zmq_tuple_shape_runtime.py` drives

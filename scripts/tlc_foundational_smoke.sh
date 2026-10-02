@@ -2072,6 +2072,9 @@ run_case strategy-parallelism-range-admission \
 run_case monitoring-priority-status-atomicity \
     models/monitoring/ParslMonitoringPriorityStatusAtomicityFixed.cfg \
     models/monitoring/ParslMonitoringPriorityStatusAtomicity.tla
+run_case monitoring-failure-shutdown \
+    models/monitoring/ParslMonitoringFailureShutdownFixed.cfg \
+    models/monitoring/ParslMonitoringFailureShutdown.tla
 run_case callable-alias-retry-fixed \
     models/serialization/ParslCallableAliasRetry.cfg \
     models/serialization/ParslCallableAliasRetry.tla

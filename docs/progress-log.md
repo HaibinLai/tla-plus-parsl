@@ -42,6 +42,16 @@ are recorded here in English and committed with the model changes.
   simulated states; existing RSync/DataFuture runtime probes provide concrete source evidence.
   The foundational gate is now 679 TLC configurations and 443 runtime entries.
 
+## 2026-10-02 — Monitoring failure/shutdown terminal outcome
+
+- Added `ParslMonitoringFailureShutdown`, composing permanent WORKFLOW-end update failure with
+  database-manager close and loop termination. The Current TLC configuration stops after marking
+  finalization while losing the failed update; the Fixed configuration bounds retries and records
+  either persistence or an explicit dropped outcome before shutdown, passing 100,001 simulated
+  states. Existing workflow-end bookkeeping, persistent-retry, and close runtime probes remain
+  the concrete source evidence. The foundational gate is now 680 TLC configurations and 443
+  runtime entries.
+
 ## 2026-10-02 — Zip duplicate-member/DataFuture readiness bridge
 
 - Added `ParslZipDuplicateReadiness`, composing archive retry history with stage-in/DataFuture
