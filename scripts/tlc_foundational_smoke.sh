@@ -125,6 +125,9 @@ run_case htex-result-forwarding \
 run_case htex-ferry-result-send-failure \
     models/serialization/ParslHtexFerryResultSendFailureFixed.cfg \
     models/serialization/ParslHtexFerryResultSendFailure.tla
+run_case htex-task-dispatch-send-failure \
+    models/serialization/ParslHtexTaskDispatchSendFailureFixed.cfg \
+    models/serialization/ParslHtexTaskDispatchSendFailure.tla
 run_case htex-result-queue \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla

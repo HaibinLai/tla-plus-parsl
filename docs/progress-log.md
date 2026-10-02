@@ -2474,6 +2474,16 @@ paths, send-failure ownership, malformed-message isolation, and Future/attempt c
 Add only source-backed Current/Fixed models with runtime evidence; stop expanding once the
 communication and selected async completion criteria in that document are satisfied.
 
+- Current stage: added `ParslHtexTaskDispatchSendFailure`, the first model in the frozen
+  communication audit inventory. The Current branch reproduces task ownership loss when
+  `Interchange.process_tasks_to_send` pops a pending task before a failing manager ZMQ send; the
+  Fixed branch retains the task for retry or explicit terminal failure. The runtime bridge uses
+  the installed HTEX interchange and a failing socket. Inventory is now 746 TLC configurations,
+  482 runtime entries, and 757 unittest methods.
+- Verification stage: `ParslHtexTaskDispatchSendFailure` Current TLC returns the expected
+  counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes. Script syntax
+  checks and `git diff --check` also pass.
+
 ## Scope note
 
 The repository preserves the implementation artifacts and project decisions. It does not claim to

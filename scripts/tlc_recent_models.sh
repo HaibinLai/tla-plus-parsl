@@ -2100,6 +2100,12 @@ run_case htex-ferry-result-send-failure-current counterexample \
 run_case htex-ferry-result-send-failure-fixed pass \
     models/serialization/ParslHtexFerryResultSendFailureFixed.cfg \
     models/serialization/ParslHtexFerryResultSendFailure.tla
+run_case htex-task-dispatch-send-failure-current counterexample \
+    models/serialization/ParslHtexTaskDispatchSendFailureCurrent.cfg \
+    models/serialization/ParslHtexTaskDispatchSendFailure.tla
+run_case htex-task-dispatch-send-failure-fixed pass \
+    models/serialization/ParslHtexTaskDispatchSendFailureFixed.cfg \
+    models/serialization/ParslHtexTaskDispatchSendFailure.tla
 run_case ftp-in-task-transfer-gate-current counterexample \
     models/staging/ParslFTPInTaskTransferGateCurrent.cfg \
     models/staging/ParslFTPInTaskTransferGate.tla

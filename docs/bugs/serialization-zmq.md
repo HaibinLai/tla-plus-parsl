@@ -41,3 +41,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-158 | HTEX task ingress accepts non-mapping context | [BUG-158](../bug-ledger.md) |
 | BUG-165 | TasksOutgoing sends through a closed socket | [BUG-165](../bug-ledger.md) |
 | BUG-327 | HTEX ferry loses result on ZMQ send failure | [BUG-327](../bug-ledger.md) |
+| BUG-335 | HTEX task dispatch loses task on ZMQ send failure | [BUG-335](../bug-ledger.md) |

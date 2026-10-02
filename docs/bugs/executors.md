@@ -40,3 +40,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-329 | Flux cancellation before underlying binding allows late callback | [BUG-329](../bug-ledger.md) |
 | BUG-324 | TaskVine failure fan-out mutation | [BUG-324](../bug-ledger.md) |
 | BUG-325 | Work Queue failure fan-out mutation | [BUG-325](../bug-ledger.md) |
+| BUG-335 | HTEX task dispatch loses task on ZMQ send failure | [BUG-335](../bug-ledger.md) |

@@ -228,6 +228,17 @@ configuration. `tests/test_task_transport_runtime.py` sends a
 real `pack_apply_message` payload through an in-process ZMQ pair, decodes it with the real facade,
 and invokes the reconstructed closure.
 
+`ParslHtexTaskDispatchSendFailure.tla` covers the opposite ownership direction:
+`Interchange.process_tasks_to_send` pops a task before the manager ZMQ send. The Current branch
+loses that task when `send_multipart` raises; the Fixed branch retains it for retry or explicit
+terminal failure. The runtime probe uses the installed interchange with a failing socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexTaskDispatchSendFailureCurrent.cfg models/serialization/ParslHtexTaskDispatchSendFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexTaskDispatchSendFailureFixed.cfg models/serialization/ParslHtexTaskDispatchSendFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_task_dispatch_send_failure_runtime.py -v
+```
+
 `ParslTaskTransportSmoke.cfg` keeps the full bounded callable/argument/closure graph but sets
 `MAX_RETRIES = 0`. It provides a fast terminal-path regression for the serialization gate,
 task/result wire ordering, and Future-resolution invariants; TLC checks 69 generated / 29 distinct

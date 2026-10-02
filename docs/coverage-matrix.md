@@ -16,6 +16,9 @@ ledger, preserving the existing Current/Fixed model and runtime probe.
 ZMQ/HTEX coverage also includes `ParslHtexFerryResultSendFailure` (BUG-327), checking result
 ownership across worker-pool socket send failure.
 
+It also includes `ParslHtexTaskDispatchSendFailure` (BUG-335), checking task ownership when the
+interchange removes a pending task before a manager ZMQ send.
+
 File-transfer coverage also includes `ParslFTPInTaskTransferGate`, composing FTP partial-byte
 publication and connection cleanup with the in-task user-function admission gate (BUG-076/105).
 
