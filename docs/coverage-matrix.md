@@ -10,6 +10,9 @@ collector implementation with the same callback mutation interleaving.
 Provider/executor composition also includes `ParslSlurmCancelScaleInMonitoring` (BUG-326),
 connecting stale scheduler cancellation to block terminality and monitoring publication.
 
+ZMQ/HTEX coverage also includes `ParslHtexFerryResultSendFailure` (BUG-327), checking result
+ownership across worker-pool socket send failure.
+
 The ZMQ/serialization coverage also includes `ParslHtexResultForwarding`, which models manager
 task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 

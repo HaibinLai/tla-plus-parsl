@@ -119,6 +119,9 @@ run_case callable-object-transport \
 run_case htex-result-forwarding \
     models/serialization/ParslHtexResultForwardingFixed.cfg \
     models/serialization/ParslHtexResultForwarding.tla
+run_case htex-ferry-result-send-failure \
+    models/serialization/ParslHtexFerryResultSendFailureFixed.cfg \
+    models/serialization/ParslHtexFerryResultSendFailure.tla
 run_case htex-result-queue \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla

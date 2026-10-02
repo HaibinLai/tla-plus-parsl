@@ -31,6 +31,14 @@ are recorded here in English and committed with the model changes.
 - Added BUG-326 and promoted the Fixed case into the foundational gate. Inventory: 723 TLC
   configurations, 462 runtime entries, and 733 unittest methods.
 
+## 2026-10-02 — HTEX ferry result send-failure ownership
+
+- Added `ParslHtexFerryResultSendFailure`, connecting the real worker-pool result scheduler to
+  its ZMQ send boundary. Current reproduces a consumed-but-unsent result after `notify_sock.send`
+  fails; Fixed preserves ownership for retry. The deterministic runtime bridge passes.
+- Added BUG-327 and promoted the Fixed case into the foundational gate. Inventory: 724 TLC
+  configurations, 463 runtime entries, and 734 unittest methods.
+
 ## 2026-10-02 — Full foundational TLC regression
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17. Every foundational Fixed or

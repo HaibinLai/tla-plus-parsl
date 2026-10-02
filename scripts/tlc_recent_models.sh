@@ -2088,6 +2088,12 @@ run_case slurm-cancel-scale-in-monitoring-current counterexample \
 run_case slurm-cancel-scale-in-monitoring-fixed pass \
     models/providers/ParslSlurmCancelScaleInMonitoringFixed.cfg \
     models/providers/ParslSlurmCancelScaleInMonitoring.tla
+run_case htex-ferry-result-send-failure-current counterexample \
+    models/serialization/ParslHtexFerryResultSendFailureCurrent.cfg \
+    models/serialization/ParslHtexFerryResultSendFailure.tla
+run_case htex-ferry-result-send-failure-fixed pass \
+    models/serialization/ParslHtexFerryResultSendFailureFixed.cfg \
+    models/serialization/ParslHtexFerryResultSendFailure.tla
 run_case workqueue-failure-fanout-current counterexample \
     models/executors/ParslWorkQueueFailureFanoutCurrent.cfg \
     models/executors/ParslWorkQueueFailureFanout.tla

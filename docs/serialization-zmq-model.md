@@ -1,5 +1,16 @@
 # Serialization and ZMQ model map
 
+`ParslHtexFerryResultSendFailure.tla` models the worker-pool `Manager.ferry_result` boundary.
+The Current branch consumes a scheduler result and loses it when the in-process ZMQ send fails;
+Fixed retains ownership for retry. The runtime probe drives the real `Manager.ferry_result` with
+deterministic scheduler/socket doubles and confirms the current consumption behavior.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexFerryResultSendFailureCurrent.cfg models/serialization/ParslHtexFerryResultSendFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexFerryResultSendFailureFixed.cfg models/serialization/ParslHtexFerryResultSendFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_ferry_result_send_failure_runtime.py -v
+```
+
 The serialization abstraction is layered rather than treating a task as one opaque message.
 The models distinguish serializer bytes, multipart framing, ZMQ queueing, route validation,
 worker decode/dispatch, and result correlation.
