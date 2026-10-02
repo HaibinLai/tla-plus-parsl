@@ -1094,6 +1094,9 @@ run_case azure-submit \
 run_case azure-cancel \
     models/providers/ParslAzureCancelBookkeepingFixed.cfg \
     models/providers/ParslAzureCancelBookkeeping.tla
+run_case azure-cancel-duplicates \
+    models/providers/ParslAzureCancelDuplicatesFixed.cfg \
+    models/providers/ParslAzureCancelDuplicates.tla
 run_case azure-status-bookkeeping \
     models/providers/ParslAzureStatusBookkeepingFixed.cfg \
     models/providers/ParslAzureStatusBookkeeping.tla

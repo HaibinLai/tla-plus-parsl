@@ -62,6 +62,14 @@ class AzureCancelRuntimeTest(unittest.TestCase):
 
         self.assertEqual(provider.cancel(["vm-1"]), [False])
 
+    def test_duplicate_successful_delete_returns_partial_result_currently(self):
+        # Both remote delete calls succeed, but the second local list.remove
+        # raises because the first duplicate already removed the VM.
+        provider = self.provider_with(FakeDeleteOperation())
+
+        self.assertEqual(provider.cancel(["vm-1", "vm-1"]), [True, False])
+        self.assertEqual(provider.instances, [])
+
 
 if __name__ == "__main__":
     unittest.main()

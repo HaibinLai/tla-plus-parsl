@@ -4,6 +4,17 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Azure duplicate cancellation bridge
+
+- Added `ParslAzureCancelDuplicates`, modeling remote deletion and local instance bookkeeping
+  when the same VM ID appears twice in one cancellation request.
+- The current branch returns a partial result after both remote deletions succeed because the
+  second local removal raises; the fixed branch makes duplicate cleanup idempotent. TLC produces
+  the intended `RemoteSuccessSafety` counterexample for Current and passes Fixed.
+- The runtime Azure provider probe reproduces `[True, False]` for the duplicate request. The
+  current baseline is 672 TLC cases, 443 runtime entries, and 700 unittest methods. Recorded as
+  BUG-318 in the provider ledger.
+
 ## 2026-10-02 — strategy parallelism range admission bridge
 
 - Added `ParslStrategyParallelismRangeAdmission` for the documented upper bound on the
