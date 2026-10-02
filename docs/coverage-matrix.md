@@ -12,6 +12,9 @@ refinement of BUG-126), and `ParslFluxProviderHandshake`, which composes provide
 the Flux startup handshake. `ParslKubernetesCancelFutureMonitoring` composes delete-response
 validation with Future and monitoring cancellation (a refinement of BUG-189).
 
+`ParslGridEngineEmptySubmitFutureMonitoring` and the AWS submit/status compositions extend this
+provider boundary to explicit task, Future, and monitoring terminal propagation.
+
 The monitoring coverage also includes `ParslDfkExecutorShutdownMonitoring`, which composes DFK
 executor shutdown failures with final WORKFLOW monitoring delivery and close (BUG-321).
 
@@ -36,7 +39,7 @@ Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 705 TLC cases and 453 runtime entries (713 unittest
+deduplication. The current baseline is 706 TLC cases and 453 runtime entries (713 unittest
 methods).
 
 It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode

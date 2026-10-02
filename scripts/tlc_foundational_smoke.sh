@@ -779,6 +779,9 @@ run_case grid-engine-missing-status \
 run_case grid-engine-empty-submit \
     models/providers/ParslGridEngineEmptySubmitFixed.cfg \
     models/providers/ParslGridEngineEmptySubmit.tla
+run_case grid-engine-empty-submit-future-monitoring \
+    models/providers/ParslGridEngineEmptySubmitFutureMonitoringFixed.cfg \
+    models/providers/ParslGridEngineEmptySubmitFutureMonitoring.tla
 run_case grid-engine-submit-shape \
     models/providers/ParslGridEngineSubmitShapeFixed.cfg \
     models/providers/ParslGridEngineSubmitShape.tla

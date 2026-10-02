@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Grid Engine empty submit with Future monitoring
+
+- Added `ParslGridEngineEmptySubmitFutureMonitoring`, composing a successful-but-empty `qsub`
+  response with provider admission, task failure, Future failure, and monitoring publication.
+  Current TLC violates `NoUnusableSubmit` because `None` is returned to the scaling layer; Fixed
+  TLC passes 10,000 simulation steps. The real Grid Engine empty-submit runtime probe passes.
+  The foundational inventory is now 706 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — AWS empty submit with Future monitoring
 
 - Added `ParslAwsEmptySubmitFutureMonitoring`, composing an empty EC2 launch response with task,

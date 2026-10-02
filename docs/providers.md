@@ -532,6 +532,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySub
 /tmp/parsl-venv/bin/python -m unittest tests/test_grid_engine_empty_submit_runtime.py -v
 ```
 
+`ParslGridEngineEmptySubmitFutureMonitoring.tla` composes the successful-but-empty `qsub`
+response with task, Future, and monitoring state. The Current branch returns `None`, leaving an
+unusable provider result and an unresolved Future; the Fixed branch rejects the response and
+publishes one terminal failure through all upper layers. TLC finds the `NoUnusableSubmit`
+counterexample in Current and passes 10,000 simulation steps in Fixed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitFutureMonitoringCurrent.cfg models/providers/ParslGridEngineEmptySubmitFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGridEngineEmptySubmitFutureMonitoringFixed.cfg models/providers/ParslGridEngineEmptySubmitFutureMonitoring.tla
+```
+
 `ParslGridEngineLifecycle.tla` composes Grid Engine qsub admission, qstat observations, local
 resource ownership, and qdel cancellation. The Current branch can treat a missing job as
 completed, abort on malformed/duplicate/foreign rows, or crash on a stale cancellation record.
