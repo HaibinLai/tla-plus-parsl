@@ -48,6 +48,11 @@ cancel/poll race is already represented by `ParslKubernetesLifecycle` and BUG-28
 model was added.  The complete Kubernetes runtime subset (submit, polling, unknown jobs, cancel
 response, stale cancellation, and cancel/poll race) passed 11/11 tests.
 
+The Radical-Pilot executor audit then re-read task translation, callback dispatch, bulk collection,
+failure fan-out, and shutdown.  Existing models cover the unknown-callback, late-callback,
+failure-payload, decode-failure, master-admission, and bulk-shutdown boundaries; the complete
+Radical-Pilot runtime subset passed 14/14 tests without requiring another model.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
