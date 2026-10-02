@@ -502,6 +502,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringPersist
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_persistent_retry_runtime.py -v
 ```
 
+`ParslMonitoringDBRetryFuture.tla` composes the persistent-lock boundary with task/Future
+terminality. A task may already be successful while its status write is retried; the Current
+branch can remain in retrying forever at the attempt bound, while the Fixed branch records an
+aborted monitoring write without rolling back the Future. Stored monitoring is required to
+correspond to a successful Future. The existing persistent-retry runtime probes exercise the
+real DatabaseManager loop.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBRetryFutureCurrent.cfg models/monitoring/ParslMonitoringDBRetryFuture.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBRetryFutureFixed.cfg models/monitoring/ParslMonitoringDBRetryFuture.tla
+```
+
 `ParslMonitoringUpdatePersistentRetry.tla` applies the bounded-retry abstraction to the separate
 `_update` path. The source has an independent `OperationalError` loop, so a permanent lock can
 strand update processing even when insert handling is considered separately. The runtime probe

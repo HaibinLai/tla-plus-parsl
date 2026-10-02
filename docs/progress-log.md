@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — monitoring DB retry with Future terminality
+
+- Added `ParslMonitoringDBRetryFuture`, composing persistent SQLite write retries with task/Future
+  completion and monitoring publication. Current TLC violates `NoPersistentRetryAtBound`; Fixed
+  TLC records an aborted write at the bounded retry limit and passes 10,000 simulation steps. The
+  real persistent-retry DatabaseManager probes pass. The foundational inventory is now 711 TLC
+  cases and 453 runtime entries.
+
 ## 2026-10-02 — HTEX contact starvation with Future monitoring
 
 - Added `ParslHtexContactTimeoutStarvationFutureMonitoring`, composing continuous result traffic,
