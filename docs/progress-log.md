@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — verified byte publication and DataFuture readiness
+
+- Extended `test_file_bytes_transfer_runtime.py` with a real `DataFuture`
+  readiness edge after archive bytes have been published and verified.
+- The consumer callback remains blocked before the transfer Future resolves,
+  then reads the exact binary payload after publication, matching the
+  `ParslFileBytesAttemptGate` dependency/content safety boundary.
+- Focused runtime coverage passes 3/3 tests; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 692 unittest methods.
+
 ## 2026-10-02 — ZMQ result-attempt transport bridge
 
 - Extended `test_zmq_result_attempt_runtime.py` with a real in-process ZMQ

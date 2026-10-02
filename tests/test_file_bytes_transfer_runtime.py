@@ -4,8 +4,10 @@ import hashlib
 import tempfile
 import unittest
 import zipfile
+from concurrent.futures import Future
 from pathlib import Path
 
+from parsl.app.futures import DataFuture
 from parsl.data_provider.files import File
 from parsl.data_provider.zip import _zip_stage_in, _zip_stage_out
 
@@ -62,6 +64,31 @@ class FileBytesTransferRuntimeTest(unittest.TestCase):
                 )
 
             self.assertFalse(restored.exists())
+
+    def test_datafuture_readiness_follows_verified_archive_publication(self):
+        payload = b"ready-only-after-transfer\x00\xff"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            restored = root / "restored.bin"
+            restored.write_bytes(payload)
+            parent = Future()
+            data_future = DataFuture(parent, File(str(restored)), tid=23)
+            observed = []
+
+            def consume_when_ready(future):
+                observed.append(future.result().filepath)
+                self.assertEqual(Path(observed[-1]).read_bytes(), payload)
+
+            data_future.add_done_callback(consume_when_ready)
+            self.assertFalse(data_future.done())
+            self.assertEqual(observed, [])
+
+            # Publication of the verified transfer is the readiness edge for
+            # the dependent consumer; no consumer callback runs before it.
+            parent.set_result("archive-published")
+
+            self.assertTrue(data_future.done())
+            self.assertEqual(observed, [str(restored)])
 
 
 if __name__ == "__main__":
