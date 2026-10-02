@@ -53,6 +53,11 @@ failure fan-out, and shutdown.  Existing models cover the unknown-callback, late
 failure-payload, decode-failure, master-admission, and bulk-shutdown boundaries; the complete
 Radical-Pilot runtime subset passed 14/14 tests without requiring another model.
 
+The `join_app` source audit then followed `handle_exec_update` and `handle_join_update` through
+single-Future, empty-list, ordered-list, duplicate-Future, nested, retry, cancellation, and
+failure-aggregation paths.  The existing model set covers these branches; the complete join-focused
+runtime discovery passed 40/40 tests, so no duplicate join model was added in this pass.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
