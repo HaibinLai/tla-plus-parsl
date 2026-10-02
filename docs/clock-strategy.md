@@ -33,6 +33,7 @@ timeout and treats the completion as stale. `HeartbeatExpirySafety`, `TimeoutTer
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutFutureMonitoringCurrent.cfg models/clock/ParslHeartbeatTimeoutFutureMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatTimeoutFutureMonitoringFixed.cfg models/clock/ParslHeartbeatTimeoutFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_heartbeat_timeout_future_monitoring_runtime.py -v
 ```
 
 `ParslHeartbeatProviderBoundary.tla` is a smaller boundary-accurate refinement. It keeps the

@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — heartbeat expiry and timeout Future bridge
+
+- Added a concrete runtime bridge for `ParslHeartbeatTimeoutFutureMonitoring`. The real HTEX
+  `Interchange.expire_bad_managers` emits a manager-loss result frame, while a logical Future
+  already terminal due to its timeout remains a timeout and ignores that stale frame. The Fixed
+  TLC branch preserves timeout terminality and passes its bounded run. Inventory is now 718 TLC
+  cases and 459 runtime entries (720 unittest methods).
+
 ## 2026-10-02 — serialized ACK retry with Future monitoring bridge
 
 - Added a concrete runtime bridge for `ParslZMQSerializedAckFutureMonitoring`. Two duplicate
