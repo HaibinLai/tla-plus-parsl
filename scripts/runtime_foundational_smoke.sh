@@ -409,6 +409,7 @@ tests=(
     tests/test_slurm_duplicate_status_runtime.py
     tests/test_slurm_empty_job_id_runtime.py
     tests/test_slurm_cancel_runtime.py
+    tests/test_slurm_cancel_scale_in_monitoring_runtime.py
     tests/test_slurm_tasks_per_node_runtime.py
     tests/test_condor_status_unknown_runtime.py
     tests/test_grid_engine_empty_submit_runtime.py

@@ -51,3 +51,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-155 | Azure submission leaves partial resource state | [BUG-155](../bug-ledger.md) |
 | BUG-163 | Duplicate provider job ID overwrites block ownership | [BUG-163](../bug-ledger.md) |
 | BUG-282 | Kubernetes poll overwrites cancellation after an in-flight read | [BUG-282](../bug-ledger.md) |
+| BUG-326 | Slurm stale cancellation aborts executor scale-in propagation | [BUG-326](../bug-ledger.md) |

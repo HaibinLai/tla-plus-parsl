@@ -2082,6 +2082,12 @@ run_case taskvine-failure-fanout-current counterexample \
 run_case taskvine-failure-fanout-fixed pass \
     models/executors/ParslTaskVineFailureFanoutFixed.cfg \
     models/executors/ParslTaskVineFailureFanout.tla
+run_case slurm-cancel-scale-in-monitoring-current counterexample \
+    models/providers/ParslSlurmCancelScaleInMonitoringCurrent.cfg \
+    models/providers/ParslSlurmCancelScaleInMonitoring.tla
+run_case slurm-cancel-scale-in-monitoring-fixed pass \
+    models/providers/ParslSlurmCancelScaleInMonitoringFixed.cfg \
+    models/providers/ParslSlurmCancelScaleInMonitoring.tla
 run_case workqueue-failure-fanout-current counterexample \
     models/executors/ParslWorkQueueFailureFanoutCurrent.cfg \
     models/executors/ParslWorkQueueFailureFanout.tla

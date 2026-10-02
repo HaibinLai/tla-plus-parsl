@@ -22,6 +22,15 @@ are recorded here in English and committed with the model changes.
 - Added BUG-325 and promoted the Fixed case into the foundational gate. The inventory is now
   722 TLC configurations, 461 runtime entries, and 732 unittest methods.
 
+## 2026-10-02 — Slurm cancellation to scale-in monitoring composition
+
+- Added `ParslSlurmCancelScaleInMonitoring`, connecting Slurm's stale local cancellation failure
+  to `BlockProviderExecutor.scale_in_facade`. Current reproduces remote cancellation followed by
+  a `KeyError`, leaving executor state RUNNING without monitoring publication; Fixed passes the
+  terminal propagation invariant. The runtime bridge passes against installed Parsl.
+- Added BUG-326 and promoted the Fixed case into the foundational gate. Inventory: 723 TLC
+  configurations, 462 runtime entries, and 733 unittest methods.
+
 ## 2026-10-02 — Full foundational TLC regression
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17. Every foundational Fixed or

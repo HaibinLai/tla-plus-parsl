@@ -4,6 +4,16 @@ These models cover provider allocation, polling, cancellation, status parsing, d
 unknown jobs, scaling, and scheduler-specific behavior for AWS, Azure, Google Cloud, Slurm,
 Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
+`ParslSlurmCancelScaleInMonitoring.tla` composes the Slurm stale-cancellation boundary with
+`BlockProviderExecutor.scale_in_facade`. Current shows remote cancellation succeeding while a
+stale local ID aborts executor terminal-state and monitoring propagation; Fixed passes `NoAbort`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmCancelScaleInMonitoringCurrent.cfg models/providers/ParslSlurmCancelScaleInMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmCancelScaleInMonitoringFixed.cfg models/providers/ParslSlurmCancelScaleInMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_slurm_cancel_scale_in_monitoring_runtime.py -v
+```
+
 Files live in [`models/providers/`](../models/providers/).
 
 `ParslKubernetesCancelFutureMonitoring.tla` composes the Kubernetes delete response with the

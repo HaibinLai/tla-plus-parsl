@@ -716,6 +716,9 @@ run_case slurm-cancel \
 run_case slurm-lifecycle \
     models/providers/ParslSlurmLifecycleFixed.cfg \
     models/providers/ParslSlurmLifecycle.tla
+run_case slurm-cancel-scale-in-monitoring \
+    models/providers/ParslSlurmCancelScaleInMonitoringFixed.cfg \
+    models/providers/ParslSlurmCancelScaleInMonitoring.tla
 run_case condor-submit-count \
     models/providers/ParslCondorSubmitCountFixed.cfg \
     models/providers/ParslCondorSubmitCount.tla
