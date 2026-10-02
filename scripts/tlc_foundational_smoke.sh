@@ -1115,6 +1115,9 @@ run_case azure-status-translation \
 run_case azure-lifecycle \
     models/providers/ParslAzureLifecycleFixed.cfg \
     models/providers/ParslAzureLifecycle.tla
+run_case radical-serialization-failure \
+    models/executors/ParslRadicalSerializationFailureFixed.cfg \
+    models/executors/ParslRadicalSerializationFailure.tla
 run_case google-submit \
     models/providers/ParslGoogleCloudSubmitFixed.cfg \
     models/providers/ParslGoogleCloudSubmit.tla

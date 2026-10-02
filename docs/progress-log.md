@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Radical-Pilot serialization failure bridge
+
+- Added `ParslRadicalSerializationFailure`, separating the Current path that leaks non-`TypeError`
+  serializer exceptions from a Fixed path that normalizes them at the executor boundary.
+- The installed Radical-Pilot executor probe patches `pack_apply_message` to raise `ValueError`;
+  Current propagates the raw exception and the Fixed model passes `FailureNormalization`.
+- Focused runtime coverage passes; the current baseline is 673 TLC cases, 443 runtime entries,
+  and 701 unittest methods. Recorded as BUG-319 in the executor ledger.
+
 ## 2026-10-02 — Azure duplicate cancellation bridge
 
 - Added `ParslAzureCancelDuplicates`, modeling remote deletion and local instance bookkeeping
