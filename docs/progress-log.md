@@ -79,6 +79,11 @@ PoolExecutor, Work Queue, TaskVine, Flux, Radical-Pilot, Globus Compute, poller 
 shared executor paths.  All 112 files passed, including worker/result continuation, shutdown,
 retry, cancellation, scaling, and resource-admission probes.
 
+The time/heartbeat audit then ran all 34 focused runtime probe files covering wall-clock rollback,
+monotonic deadlines, heartbeat/result generations, worker contact and drain, command/file/Future
+timeouts, timer close/reentrancy/interval validation, provider polling clocks, and monitoring clock
+paths.  All 34 files passed with no new nondeterministic failure.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
