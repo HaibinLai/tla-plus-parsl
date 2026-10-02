@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — AWS unknown instance with Future monitoring
+
+- Added `ParslAwsUnknownFutureMonitoring`, composing AWS status-poll isolation with logical task
+  completion, Future propagation, and monitoring publication. Current TLC violates
+  `UnknownIsolation` after an untracked instance crashes the poller; Fixed TLC passes 10,000
+  simulation steps. The existing AWS runtime probe still reproduces the concrete `KeyError`.
+  The foundational inventory is now 704 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — complete 703-case foundational regression
 
 - Ran the full foundational TLC smoke suite after the callable global/default retry and

@@ -672,6 +672,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownInstance
 /tmp/parsl-venv/bin/python -m unittest tests/test_aws_unknown_instance_runtime.py -v
 ```
 
+`ParslAwsUnknownFutureMonitoring.tla` composes the same unknown-instance boundary with the
+logical task, Future, and monitoring terminal path. In the Current branch, an untracked EC2
+instance crashes the poller, so the healthy peer cannot complete the task or publish its Future;
+the Fixed branch isolates the unknown observation, preserves polling, and propagates success.
+TLC finds the `UnknownIsolation` counterexample in the Current branch and checks 10,000
+simulation steps in the Fixed branch.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownFutureMonitoringCurrent.cfg models/providers/ParslAwsUnknownFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownFutureMonitoringFixed.cfg models/providers/ParslAwsUnknownFutureMonitoring.tla
+```
+
 `ParslAwsSubmitEmptyResponse.tla` models an EC2 launch response with no instances. The current
 `submit()` destructures the empty list before checking the result, raising `ValueError`; the fixed
 branch treats it as a failed submission and leaves `resources` unchanged. TLC finds the current

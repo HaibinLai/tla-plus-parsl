@@ -755,6 +755,9 @@ run_case lsf-duplicate-status \
 run_case aws-unknown-instance \
     models/providers/ParslAwsUnknownInstanceFixed.cfg \
     models/providers/ParslAwsUnknownInstance.tla
+run_case aws-unknown-future-monitoring \
+    models/providers/ParslAwsUnknownFutureMonitoringFixed.cfg \
+    models/providers/ParslAwsUnknownFutureMonitoring.tla
 run_case local-unknown-job-status \
     models/providers/ParslLocalUnknownJobStatusFixed.cfg \
     models/providers/ParslLocalUnknownJobStatus.tla
