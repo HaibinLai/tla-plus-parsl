@@ -21,6 +21,16 @@ intentional Current counterexamples separate from the Fixed foundational gate.
   entries passed. Existing `join_app`, provider, executor, staging, clock, and database cases
   remain green after the new cross-layer additions.
 
+## 2026-10-02 — Source-aligned `join_app` audit
+
+- Reviewed the installed `DataFlowKernel.handle_exec_update` and `handle_join_update` branches
+  and mapped single-Future, empty-list, list, invalid-shape, cancellation, retry, stale-result,
+  nested-join, callback-race, stage-out, and monitoring behavior to existing models and runtime
+  probes in `docs/audits/join-source-audit.md`.
+- Confirmed that the known cancellation escapes are already tracked as BUG-011, BUG-012, and
+  BUG-178; no duplicate model or ledger entry was added. The next distinct join composition is
+  list-valued join callback plus stage-out/DataFuture publication and monitoring finalization.
+
 ## 2026-10-02 — Full 727-case regression after Future projection retry model
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17: all 727 foundational
