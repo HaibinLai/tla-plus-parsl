@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `cd4f5f1` (`Model monitoring task try worker lifecycle`).
+- Latest locally preserved commit: `1fb32f7` (`Model Radical Pilot master admission`).
 - Foundational smoke inventory: 635 TLC cases and 432 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
