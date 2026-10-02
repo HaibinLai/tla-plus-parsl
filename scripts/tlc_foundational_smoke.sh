@@ -716,6 +716,9 @@ run_case condor-submit-whitespace \
 run_case condor-empty-submit \
     models/providers/ParslCondorEmptySubmitFixed.cfg \
     models/providers/ParslCondorEmptySubmit.tla
+run_case condor-empty-submit-future-monitoring \
+    models/providers/ParslCondorEmptySubmitFutureMonitoringFixed.cfg \
+    models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
 run_case condor-submit-boundary \
     models/providers/ParslCondorSubmitFixed.cfg \
     models/providers/ParslCondorSubmit.tla

@@ -1046,6 +1046,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitF
 /tmp/parsl-venv/bin/python -m unittest tests/test_condor_empty_submit_runtime.py -v
 ```
 
+`ParslCondorEmptySubmitFutureMonitoring.tla` composes that empty `condor_submit` response with
+logical task admission, Future failure, and monitoring publication. The Current branch leaks a
+raw parser error and leaves the upper layers pending; the Fixed branch rejects the malformed
+admission and publishes one terminal failure. TLC finds the `NoRawEmptyResponse` counterexample
+in Current and passes 10,000 simulation steps in Fixed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFutureMonitoringCurrent.cfg models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorEmptySubmitFutureMonitoringFixed.cfg models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
+```
+
 `ParslClusterSubmitScript.tla` covers the common `ClusterProvider._write_submit_script` boundary.
 Valid template substitution publishes the script; missing template keys map to
 `SchedulerMissingArgs`, while target I/O failures map to `ScriptPathError`. The runtime probe
