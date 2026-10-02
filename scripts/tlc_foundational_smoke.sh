@@ -14,10 +14,10 @@ TLC_CASE_LIMIT=${TLC_CASE_LIMIT:-0}
 CASE_COUNT=0
 
 if [[ "$JAVA_BIN" == "java" ]] && ! command -v java >/dev/null 2>&1; then
-    JAVA_BIN=$(find /tmp -path '*/jdk-*/bin/java' -type f -perm -u+x -print -quit 2>/dev/null)
+    JAVA_BIN=$(find /tmp -path '*/jdk-*/bin/java' -type f -perm -u+x -print -quit 2>/dev/null || true)
 fi
 if [[ "$TLA_JAR" == "tla2tools.jar" ]] && [[ ! -f "$TLA_JAR" ]]; then
-    TLA_JAR=$(find /tmp -path '*/tla2tools.jar' -type f -print -quit 2>/dev/null)
+    TLA_JAR=$(find /tmp -path '*/tla2tools.jar' -type f -print -quit 2>/dev/null || true)
 fi
 if [[ -z "$JAVA_BIN" || -z "$TLA_JAR" || ! -x "$JAVA_BIN" || ! -f "$TLA_JAR" ]]; then
     echo "Unable to locate Java/TLC. Set JAVA_BIN and TLA_JAR explicitly." >&2

@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Full foundational TLC regression
+
+- Hardened `scripts/tlc_foundational_smoke.sh` so automatic Java/TLC discovery tolerates
+  permission-denied temporary directories under `/tmp` while `set -e` is enabled.
+- Re-ran the complete foundational suite after the fix: all 686 TLC cases passed at the bounded
+  simulation setting, including the latest provider, staging, monitoring, join, and serialization
+  compositions. Runtime count remains 453 entries.
+
 ## 2026-10-02 — Kubernetes provider/Future admission composition
 
 - Added `ParslKubernetesFutureAdmission`, composing the concrete Kubernetes submit state with
