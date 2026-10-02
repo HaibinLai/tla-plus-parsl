@@ -484,6 +484,12 @@ contract. A separate stage-out `DataFuture` overrides the original task-record v
 opaque value because the source currently documents tuple stage-out handling as future work.
 `tests/test_app_future_output_streams_runtime.py` checks these paths against the real `AppFuture`.
 
+`ParslFutureProjectionRetry.tla` refines the deferred projection boundary with logical retry
+state. It keeps the projection blocked while a physical source attempt fails, accepts only the
+current attempt's terminal result, and marks a late result from the failed attempt stale before
+the projection runs. `tests/test_future_projection_retry_runtime.py` checks this with a real
+retried Python app and an item projection.
+
 `ParslJoinBodyRetry.tla` separates retries of the join body's own physical execution from the
 later inner-Future join. The outer task installs a join handle only after a body attempt succeeds;
 `tests/test_join_body_retry_runtime.py` verifies this ordering with a real decorated `join_app`.

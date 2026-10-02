@@ -75,6 +75,9 @@ The dataflow coverage also includes `ParslAppFutureOutputStreams`, which models 
 `AppFuture.stdout`/`stderr` distinction between raw task-record values and installed stage-out
 `DataFuture` overrides; tuple values remain an explicitly coarse boundary.
 
+It also includes `ParslFutureProjectionRetry`, which separates a logical source Future from its
+physical retry attempts and keeps deferred item projection behind the current terminal attempt.
+
 The `join_app` coverage also includes `ParslJoinBodyRetry`, which separates outer join-body retry
 attempts from installation and completion of the inner Future join.
 

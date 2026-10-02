@@ -3837,6 +3837,9 @@ run_case future-projection-invalid pass \
 run_case future-projection-valid pass \
     models/dataflow/ParslFutureProjectionValid.cfg \
     models/dataflow/ParslFutureProjection.tla
+run_case future-projection-retry pass \
+    models/dataflow/ParslFutureProjectionRetry.cfg \
+    models/dataflow/ParslFutureProjectionRetry.tla
 run_case future-wait-timeout pass \
     models/dataflow/ParslFutureWaitTimeout.cfg \
     models/dataflow/ParslFutureWaitTimeout.tla

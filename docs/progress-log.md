@@ -2332,6 +2332,12 @@ The remaining work is documentation and handoff, not model expansion:
   cancelled wrapper. The Current TLC case produces the callback-state counterexample, the Fixed
   case passes, and both runtime interleavings pass against the installed Flux wrapper. The ledger
   now contains 306 unique findings (74 executor/worker findings).
+- Current stage: added `ParslFutureProjectionRetry`, refining `AppFuture.__getitem__`/`__getattr__`
+  with logical-task retry state and physical-attempt identity. TLC explored 96 states with all
+  dependency, attempt-correlation, stale-result, retry-bound, and terminal-stability invariants
+  passing. A real retried Python app plus item projection completed successfully after two
+  physical attempts. The foundational inventory is now 727 TLC configurations, 466 runtime
+  entries, and 741 unittest methods.
 
 ### Verification convention
 
