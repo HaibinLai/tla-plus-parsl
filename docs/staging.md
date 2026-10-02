@@ -150,6 +150,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupF
 /tmp/parsl-venv/bin/python -m unittest tests/test_rsync_partial_cleanup_runtime.py -v
 ```
 
+`ParslRsyncPartialCleanupFutureMonitoring.tla` composes the non-zero RSync result with partial
+destination bytes, DataFuture readiness, dependent-task blocking, and monitoring. The Current
+branch leaves the partial path visible and the Future pending; the Fixed branch removes the
+publication and propagates one terminal failure. TLC passes 10,000 simulation steps in Fixed, and
+the runtime probe drives the real RSync wrapper with a failed command.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupFutureMonitoringCurrent.cfg models/staging/ParslRsyncPartialCleanupFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupFutureMonitoringFixed.cfg models/staging/ParslRsyncPartialCleanupFutureMonitoring.tla
+```
+
 `ParslRsyncDataFutureGate.tla` composes the in-task RSync stage-out wrapper with DataManager's
 `None` stage-out return contract. The Current branch lets the output DataFuture follow application
 completion before the remote copy publishes bytes; the Fixed branch keeps consumers blocked until

@@ -1772,6 +1772,9 @@ run_case http-status-validation \
 run_case rsync-partial-cleanup \
     models/staging/ParslRsyncPartialCleanupFixed.cfg \
     models/staging/ParslRsyncPartialCleanup.tla
+run_case rsync-partial-cleanup-future-monitoring \
+    models/staging/ParslRsyncPartialCleanupFutureMonitoringFixed.cfg \
+    models/staging/ParslRsyncPartialCleanupFutureMonitoring.tla
 run_case file-transfer-retry \
     models/staging/ParslFileTransferRetryFixed.cfg \
     models/staging/ParslFileTransferRetry.tla
