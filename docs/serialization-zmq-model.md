@@ -98,6 +98,7 @@ snapshot and deduplication behavior.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFutureMonitoringCurrent.cfg models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFutureMonitoringFixed.cfg models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialized_ack_future_monitoring_runtime.py -v
 ```
 
 `ParslZMQMultipartAck.tla` adds multipart validation to the same path. A valid three-buffer

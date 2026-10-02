@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — serialized ACK retry with Future monitoring bridge
+
+- Added a concrete runtime bridge for `ParslZMQSerializedAckFutureMonitoring`. Two duplicate
+  in-process ZMQ envelopes are decoded with Parsl's real `pack_apply_message` facade; receiver
+  correlation resolves one Future and emits one terminal monitoring event. The existing Current
+  TLC branch still exposes duplicate dispatch, while Fixed passes its bounded model. Inventory is
+  now 718 TLC cases and 458 runtime entries (719 unittest methods).
+
 ## 2026-10-02 — provider poll isolation with Future terminality
 
 - Added `ParslPollerExecutorFutureIsolation`, refining the provider status-poller model so a
