@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — concurrent join failure aggregation bridge
+
+- Extended `test_join_callback_runtime.py` with simultaneous success and
+  failure callbacks for a list-valued join.
+- The real `DataFlowKernel` callback lock emits exactly one terminal
+  `JoinError`, containing only the failed dependency, and never publishes an
+  incorrect success result.
+- Focused runtime coverage passes 7/7 tests; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 696 unittest methods.
+
 ## 2026-10-02 — no-slot strategy admission bridge
 
 - Extended `test_strategy_runtime.py` with the strategy's explicit no-slot

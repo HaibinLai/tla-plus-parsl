@@ -151,6 +151,37 @@ class JoinCallbackRuntimeTest(unittest.TestCase):
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0].task_status_name, States.exec_done.name)
 
+    def test_concurrent_success_and_failure_callbacks_publish_one_join_error(self):
+        """A mixed inner outcome must aggregate to one terminal JoinError."""
+        kernel = self.kernel_for()
+        success = self.future(1, join_id="success")
+        failure = self.future(error=RuntimeError("inner failed"), join_id="failure")
+        record = self.record_for([success, failure])
+        barrier = threading.Barrier(2)
+        errors = []
+
+        def invoke_callback(inner):
+            try:
+                barrier.wait(timeout=2)
+                kernel.handle_join_update(record, inner)
+            except Exception as exc:  # pragma: no cover - diagnostic path
+                errors.append(exc)
+
+        workers = [
+            threading.Thread(target=invoke_callback, args=(success,)),
+            threading.Thread(target=invoke_callback, args=(failure,)),
+        ]
+        for worker in workers:
+            worker.start()
+        for worker in workers:
+            worker.join(timeout=2)
+
+        self.assertEqual(errors, [])
+        self.assertEqual(kernel.completed, [])
+        self.assertEqual(len(kernel.failed), 1)
+        self.assertIsInstance(kernel.failed[0][1], JoinError)
+        self.assertEqual(len(kernel.failed[0][1].dependent_exceptions_tids), 1)
+
     def test_all_done_failure_becomes_join_error_with_inner_exception(self):
         kernel = self.kernel_for()
         first = self.future(1, join_id="first")
