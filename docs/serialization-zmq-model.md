@@ -88,6 +88,10 @@ four-buffer envelope is rejected before the Fixed branch decodes it; the Current
 keeps the decode-before-reject behavior represented by `ParslSerializationFrameCount`. The
 runtime bridge is `tests/test_zmq_multipart_ack_runtime.py`.
 
+The runtime probe also reproduces BUG-314: the current `unpack_and_deserialize` path invokes the
+deserializer for a fourth buffer before its final count assertion. The Fixed protocol validates
+frame count and lengths before invoking any payload deserializer.
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartAckCurrent.cfg models/serialization/ParslZMQMultipartAck.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartAckFixed.cfg models/serialization/ParslZMQMultipartAck.tla

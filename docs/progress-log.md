@@ -104,6 +104,15 @@ are recorded here in English and committed with the model changes.
   argument still use the submit-time content required by the TLA+ abstraction.
 - Full unittest regression after this addition: 687 tests passed.
 
+## 2026-10-02 — multipart frame validation ordering
+
+- Added BUG-314 for `unpack_and_deserialize` invoking an extra buffer
+  deserializer before checking the required three-buffer count.
+- Extended `test_zmq_multipart_ack_runtime.py` with a side-effect/exception
+  probe for the malformed fourth frame; the Current behavior escapes before
+  the framing error, while the existing Fixed TLA+ branch rejects it first.
+- Full unittest regression after this addition: 688 tests passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines
