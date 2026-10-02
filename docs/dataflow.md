@@ -291,6 +291,19 @@ until the inner join is terminal; successful inner list order is preserved, and 
 wrapped and propagated through both join layers. `tests/test_nested_join_runtime.py` exercises
 both paths with the real decorators and ThreadPool executor.
 
+`ParslTripleNestedJoinRetryMonitoring.tla` extends this boundary to three nested levels. Leaves
+A/B feed a retried inner join J1; J1 and C feed J2; J2 resolves the root Future and monitoring
+record. A late result from J1 attempt 0 can satisfy J2 in the Current branch after attempt 1 has
+started, violating `CurrentAttemptSafety`. The Fixed branch marks that result stale and keeps the
+root join waiting for the current generation. Existing heartbeat/ZMQ join probes provide the
+concrete attempt-correlation evidence.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTripleNestedJoinRetryMonitoringCurrent.cfg models/dataflow/ParslTripleNestedJoinRetryMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslTripleNestedJoinRetryMonitoringFixed.cfg models/dataflow/ParslTripleNestedJoinRetryMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_heartbeat_retry_runtime.py tests/test_join_zmq_retry_runtime.py -v
+```
+
 `ParslJoinImmediateCallback.tla` models the already-completed inner Future race. The DFK must
 enter `joining` and install `join_lock` before calling `add_done_callback`, because Python may
 invoke that callback synchronously during registration. TLC checks the two callback interleavings

@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — three-level join retry and monitoring composition
+
+- Added `ParslTripleNestedJoinRetryMonitoring`, connecting a retried inner join (J1), a second
+  nested join (J2), the root Future, and monitoring. The Current branch accepts a late J1 attempt
+  and lets it resolve the root join; the Fixed branch rejects it as stale and preserves attempt
+  correlation. Current violates `CurrentAttemptSafety`, Fixed passes 10,000 TLC simulation steps,
+  and the existing heartbeat/ZMQ join runtime probes pass. The foundational inventory is now 694
+  TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — Slurm malformed status with Future monitoring
 
 - Added `ParslSlurmMalformedFutureMonitoring`, composing the truncated Slurm status-line parser

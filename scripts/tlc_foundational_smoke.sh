@@ -422,6 +422,9 @@ run_case join-three-list \
 run_case triple-nested-join \
     models/dataflow/ParslTripleNestedJoinFixed.cfg \
     models/dataflow/ParslTripleNestedJoin.tla
+run_case triple-nested-join-retry-monitoring \
+    models/dataflow/ParslTripleNestedJoinRetryMonitoringFixed.cfg \
+    models/dataflow/ParslTripleNestedJoinRetryMonitoring.tla
 run_case nested-join \
     models/dataflow/ParslNestedJoin.cfg \
     models/dataflow/ParslNestedJoin.tla
