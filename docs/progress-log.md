@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — provider scale-in to logical retry bridge
+
+- Extended `test_htex_force_scale_in_runtime.py` to connect a real HTEX
+  `scale_in` cancellation with heartbeat-driven `ManagerLost` resolution.
+- The probe keeps the logical retry generation separate from the withdrawn
+  physical attempt, matching `ParslProviderTaskScaleRetry`'s admission and
+  retry invariants.
+- The focused runtime file passes 3/3 tests; the Fixed provider scale/retry
+  abstraction remains covered by the foundational TLC suite.
+
 ## 2026-10-02 — bounded monitoring queue-fairness abstraction
 
 - Added `ParslMonitoringQueueFairness.tla` with Current/Fixed configurations.
