@@ -43,6 +43,11 @@ reaches the cancellation invariant in 17 states; Fixed passes 100,001 simulated 
 combined timeout/shutdown runtime probe passes, and its Fixed configuration is now in the
 foundational TLC gate. The updated full foundational smoke run passed 660/660 TLC cases.
 
+The Kubernetes provider audit then re-read `submit`, `_status`, and `cancel`.  Its in-flight
+cancel/poll race is already represented by `ParslKubernetesLifecycle` and BUG-282, so no duplicate
+model was added.  The complete Kubernetes runtime subset (submit, polling, unknown jobs, cancel
+response, stale cancellation, and cancel/poll race) passed 11/11 tests.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
