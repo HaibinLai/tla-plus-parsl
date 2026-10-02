@@ -69,6 +69,11 @@ ordering and DataFuture readiness, checksum/versioned bytes, FTP/HTTP/Rsync/Zip/
 partial cleanup, path validation, multi-output publication, and provider-backed staging.  Every
 file passed; existing staging models remain the authoritative Current/Fixed abstractions.
 
+The provider-focused audit then ran the complete scheduler/provider runtime selection (112 probe
+files across AWS, Azure, Condor, Grid Engine, Kubernetes, Local, LSF, PBS Pro, Slurm, Torque,
+Globus Compute, and shared provider logic).  All 112 files passed; no new provider behavior fell
+outside the existing Current/Fixed model inventory.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router
