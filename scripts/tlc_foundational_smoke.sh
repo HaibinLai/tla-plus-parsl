@@ -1370,6 +1370,9 @@ run_case local-cancel-failure \
 run_case local-exit-file-missing \
     models/providers/ParslLocalExitFileMissingFixed.cfg \
     models/providers/ParslLocalExitFileMissing.tla
+run_case local-exit-file-future-monitoring \
+    models/providers/ParslLocalExitFileFutureMonitoringFixed.cfg \
+    models/providers/ParslLocalExitFileFutureMonitoring.tla
 run_case local-provider-cancel-unknown \
     models/providers/ParslLocalProviderCancelUnknownFixed.cfg \
     models/providers/ParslLocalProviderCancelUnknown.tla

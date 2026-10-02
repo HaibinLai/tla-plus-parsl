@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — LocalProvider exit-file status with Future monitoring
+
+- Added `ParslLocalExitFileFutureMonitoring`, composing a transient missing exit-code file with
+  poller progress, Future failure, and monitoring publication. The Current branch violates
+  `PollerProgress` by aborting before the later process failure; the Fixed branch records an
+  unknown observation and passes 10,000 TLC simulation steps. The existing concrete LocalProvider
+  missing-exit-file runtime probe passes. The foundational inventory is now 703 TLC cases and 453
+  runtime entries.
+
 ## 2026-10-02 — callable global/default snapshot with retry
 
 - Added `ParslFunctionGlobalDefaultFutureRetry`, composing separate function/global and default

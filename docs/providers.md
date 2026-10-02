@@ -610,6 +610,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalExitFileMissi
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_exit_file_missing_runtime.py -v
 ```
 
+`ParslLocalExitFileFutureMonitoring.tla` composes the live-process/missing-`.ec` observation with
+Future and monitoring propagation. The Current branch crashes the poller before the later process
+failure can resolve the task; the Fixed branch records `UNKNOWN`, continues polling, and publishes
+an explicit failed Future when the process exit is observed.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalExitFileFutureMonitoringCurrent.cfg models/providers/ParslLocalExitFileFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalExitFileFutureMonitoringFixed.cfg models/providers/ParslLocalExitFileFutureMonitoring.tla
+```
+
 `ParslWalltimeParsing.tla` models the provider walltime conversion in
 [`parsl/utils.py`](https://github.com/Parsl/Parsl/blob/master/parsl/utils.py). The current
 `wtime_to_minutes` implementation truncates seconds, so a positive request such as `00:00:59`
