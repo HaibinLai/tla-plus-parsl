@@ -220,6 +220,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatusP
 /tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_status_runtime.py -v
 ```
 
+`ParslGoogleCloudLifecycle.tla` composes GCE instance submission, a status batch with one failed
+remote lookup and one healthy VM, and subsequent cancellation. The Current branch aborts the
+batch on the first API exception; the Fixed branch records `UNKNOWN` for the failed VM, preserves
+the healthy observation, and keeps the instance cancellable.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslGoogleCloudLifecycleCurrent.cfg \
+  models/providers/ParslGoogleCloudLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslGoogleCloudLifecycleFixed.cfg \
+  models/providers/ParslGoogleCloudLifecycle.tla
+```
+
 `ParslPollerCloseScaleInRace.tla` refines the `JobStatusPoller.close(timeout)` lifecycle. The
 current implementation calls `Timer.close`, then scales in every executor even when the timer
 thread is still running a provider-status callback after the join timeout. The fixed branch keeps

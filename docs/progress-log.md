@@ -51,6 +51,17 @@ gate.
 
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Google Cloud provider lifecycle
+
+`ParslGoogleCloudLifecycle` composes instance submission, per-VM status failure isolation, healthy
+VM observation, and cancellation. The Current branch reaches `StatusBatchSafety` when one remote
+lookup fails; the Fixed branch records an unknown observation and passes five million simulated
+states. The fixed configuration is now part of the foundational smoke gate.
+
+The post-v0.1 foundational inventory is now 642 TLC cases and 434 Python runtime probes.
+
+The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
+
 ### Current repository state
 
 - Latest locally preserved commit: `f50a060` (`Model file bytes across logical retry attempts`).

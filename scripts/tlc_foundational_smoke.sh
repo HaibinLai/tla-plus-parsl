@@ -1067,6 +1067,9 @@ run_case google-status-present \
 run_case google-status-remote-failure \
     models/providers/ParslGoogleCloudStatusRemoteFailureFixed.cfg \
     models/providers/ParslGoogleCloudStatusRemoteFailure.tla
+run_case google-cloud-lifecycle \
+    models/providers/ParslGoogleCloudLifecycleFixed.cfg \
+    models/providers/ParslGoogleCloudLifecycle.tla
 run_case google-unknown-local-status \
     models/providers/ParslGoogleCloudUnknownLocalStatusFixed.cfg \
     models/providers/ParslGoogleCloudUnknownLocalStatus.tla
