@@ -30,6 +30,17 @@ configuration is now part of the foundational smoke gate.
 
 The post-v0.1 foundational inventory is now 639 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: monitoring result and shutdown composition
+
+`ParslMonitoringResultShutdown` composes logical retry result filtering with the
+`DatabaseManager` shutdown queue. The Current branch can stop with a queued result still present;
+the Fixed branch requires the queue to drain before stopping and ignores results from an old
+attempt. Targeted TLC reproduced the Current `ShutdownDrainSafety` counterexample and passed the
+Fixed branch with five million simulated states. The fixed configuration is now part of the
+foundational smoke gate.
+
+The post-v0.1 foundational inventory is now 640 TLC cases and 434 Python runtime probes.
+
 ### Current repository state
 
 - Latest locally preserved commit: `f50a060` (`Model file bytes across logical retry attempts`).

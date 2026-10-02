@@ -434,6 +434,9 @@ run_case monitoring-task-retry \
 run_case monitoring-result-attempt \
     models/monitoring/ParslResultMonitoringAttemptFixed.cfg \
     models/monitoring/ParslResultMonitoringAttempt.tla
+run_case monitoring-result-shutdown \
+    models/monitoring/ParslMonitoringResultShutdownFixed.cfg \
+    models/monitoring/ParslMonitoringResultShutdown.tla
 run_case stage-in-ordering \
     models/staging/ParslDataManagerStageInOrderingFixed.cfg \
     models/staging/ParslDataManagerStageInOrdering.tla

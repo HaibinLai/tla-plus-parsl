@@ -59,6 +59,21 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslResultMonitoringA
 /tmp/parsl-venv/bin/python -m unittest tests/test_result_monitoring_attempt_runtime.py -v
 ```
 
+`ParslMonitoringResultShutdown.tla` adds the database-manager shutdown boundary to that result
+protocol. A queued result can race with `_kill_event`; the Current branch can stop while work is
+still queued, or persist an old-attempt result as terminal success. The Fixed branch drains the
+queue before stopping and ignores results whose attempt is no longer current. This maps to the
+`DatabaseManager.start` queue loop, `_insert` status path, and the logical Future/attempt state.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/monitoring/ParslMonitoringResultShutdownCurrent.cfg \
+  models/monitoring/ParslMonitoringResultShutdown.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/monitoring/ParslMonitoringResultShutdownFixed.cfg \
+  models/monitoring/ParslMonitoringResultShutdown.tla
+```
+
 `ParslMonitoringEventStream.tla` is the compact producer-to-database stream model. It has
 per-task logical status versions, a bounded event queue, duplicate and reordered events, a
 single database writer with bounded write retry, and an explicit producer/database shutdown
