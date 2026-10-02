@@ -579,6 +579,12 @@ run_case http-separate-status-fixed pass \
 run_case http-separate-status-normal pass \
     models/staging/ParslHTTPSeparateStatusNormal.cfg \
     models/staging/ParslHTTPSeparateStatus.tla
+run_case http-separate-status-readiness-current counterexample \
+    models/staging/ParslHTTPSeparateStatusReadinessCurrent.cfg \
+    models/staging/ParslHTTPSeparateStatusReadiness.tla
+run_case http-separate-status-readiness-fixed pass \
+    models/staging/ParslHTTPSeparateStatusReadinessFixed.cfg \
+    models/staging/ParslHTTPSeparateStatusReadiness.tla
 run_case monitoring-workflow-duration-current counterexample \
     models/monitoring/ParslMonitoringWorkflowDurationCurrent.cfg \
     models/monitoring/ParslMonitoringWorkflowDuration.tla

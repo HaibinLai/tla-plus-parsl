@@ -73,6 +73,7 @@ tests=(
     tests/test_data_manager_stage_in_ordering_runtime.py
     tests/test_data_manager_stage_out_ordering_runtime.py
     tests/test_http_content_length_runtime.py
+    tests/test_http_separate_status_readiness_runtime.py
     tests/test_rsync_quoting_runtime.py
     tests/test_file_clean_copy_runtime.py
     tests/test_filesystem_radio_runtime.py

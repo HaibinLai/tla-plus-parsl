@@ -2416,6 +2416,12 @@ The remaining work is documentation and handoff, not model expansion:
   duplicate-join alias, and HTEX result-ID refinements. All 736 TLC configurations and all 475
   runtime entries passed (`tlc_exit=0`, `runtime_exit=0`). Logs are preserved under
   `/tmp/parsl-regression-d459ac1.eoeuWX`.
+- Current stage: added `ParslHTTPSeparateStatusReadiness`, composing separate-task HTTP status
+  validation with DataFuture publication, dependent-task admission, and monitoring terminality.
+  The Current TLC configuration violates `InvalidReadySafety` for a 404 response; the Fixed
+  configuration passes. A real `_http_stage_in` plus `DataFuture` runtime bridge confirms that
+  the installed helper can expose the error-page bytes as a ready file. Inventory is now 737 TLC
+  configurations, 476 runtime entries, and 751 unittest methods.
 
 ### Verification convention
 

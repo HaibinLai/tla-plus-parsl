@@ -1829,6 +1829,9 @@ run_case http-separate-task-cleanup \
 run_case http-status-validation \
     models/staging/ParslHTTPStatusValidationFixed.cfg \
     models/staging/ParslHTTPStatusValidation.tla
+run_case http-status-readiness \
+    models/staging/ParslHTTPSeparateStatusReadinessFixed.cfg \
+    models/staging/ParslHTTPSeparateStatusReadiness.tla
 run_case rsync-partial-cleanup \
     models/staging/ParslRsyncPartialCleanupFixed.cfg \
     models/staging/ParslRsyncPartialCleanup.tla

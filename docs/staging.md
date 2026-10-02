@@ -83,6 +83,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPInTaskAdmissionF
 /tmp/parsl-venv/bin/python -m unittest tests/test_http_in_task_admission_runtime.py -v
 ```
 
+`ParslHTTPSeparateStatusReadiness.tla` composes the separate-task HTTP status boundary with
+`DataFuture` publication, dependent-task admission, and the monitoring terminal state.  With a
+404 response, the Current branch reproduces the installed helper's behavior: it publishes the
+body, marks the staging Future ready, and allows a consumer to run.  The Fixed branch rejects the
+response before publication and propagates failure to the DataFuture, consumer gate, and monitor.
+The runtime bridge uses the real `_http_stage_in` helper and `DataFuture` object.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateStatusReadinessCurrent.cfg models/staging/ParslHTTPSeparateStatusReadiness.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslHTTPSeparateStatusReadinessFixed.cfg models/staging/ParslHTTPSeparateStatusReadiness.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_http_separate_status_readiness_runtime.py -v
+```
+
 Files live in [`models/staging/`](../models/staging/).
 
 The compact cross-layer model [`ParslDataReadyExecution`](../models/core/ParslDataReadyExecution.tla)
