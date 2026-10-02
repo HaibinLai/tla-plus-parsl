@@ -27,6 +27,19 @@ be terminal before outer finalization, preserves file readiness, and prevents an
 event from replacing a terminal database record. The compact configuration is now foundational;
 the more detailed provider/result/monitoring models refine the same protocol.
 
+`ParslJoinBodyRetryMonitoring.tla` composes the physical retry of a `join_app` body with inner
+Future admission and monitoring. A retryable body failure must leave the outer Future pending;
+the join callback is installed only after a successful body result. The Current branch violates
+`RetryDoesNotTerminate` by publishing failure during the retry window, while the Fixed branch
+passes 10,000 simulation steps. `tests/test_join_body_retry_runtime.py` exercises the real
+body-retry and post-success join-admission path.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinBodyRetryMonitoringCurrent.cfg models/dataflow/ParslJoinBodyRetryMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinBodyRetryMonitoringFixed.cfg models/dataflow/ParslJoinBodyRetryMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_body_retry_runtime.py -v
+```
+
 ## Model layers
 
 The integrated ParslJoinFull model covers:

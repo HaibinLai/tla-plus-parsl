@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — join body retry with Future monitoring
+
+- Added `ParslJoinBodyRetryMonitoring`, composing join-body physical retries with delayed inner
+  Future admission and terminal monitoring. Current TLC violates `RetryDoesNotTerminate` by
+  publishing failure during a retry window; Fixed TLC passes 10,000 simulation steps. The real
+  `join_app` body-retry runtime probe passes. The foundational inventory is now 707 TLC cases and
+  453 runtime entries.
+
 ## 2026-10-02 — Grid Engine empty submit with Future monitoring
 
 - Added `ParslGridEngineEmptySubmitFutureMonitoring`, composing a successful-but-empty `qsub`

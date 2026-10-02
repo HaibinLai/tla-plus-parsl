@@ -1490,6 +1490,9 @@ run_case join-return-shape \
 run_case join-body-retry \
     models/dataflow/ParslJoinBodyRetry.cfg \
     models/dataflow/ParslJoinBodyRetry.tla
+run_case join-body-retry-monitoring \
+    models/dataflow/ParslJoinBodyRetryMonitoringFixed.cfg \
+    models/dataflow/ParslJoinBodyRetryMonitoring.tla
 run_case join-retry-cancellation \
     models/dataflow/ParslJoinRetryCancellationFixed.cfg \
     models/dataflow/ParslJoinRetryCancellation.tla
