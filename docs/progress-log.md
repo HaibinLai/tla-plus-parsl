@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 - Extended `test_zmq_serialization_runtime.py` with a real in-process ZMQ result path. Multipart
   result frames carry serialized payload bytes and attempt IDs; the probe rejects the late old
   attempt and resolves the Future only from the current attempt. Inventory is now 720 TLC cases
-  and 469 runtime entries (730 unittest methods).
+  and 459 runtime entries (730 unittest methods).
 
 ## 2026-10-02 — Composed callable snapshot and file-content pipeline bridge
 
