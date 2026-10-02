@@ -6,6 +6,19 @@ are recorded here in English and committed with the model changes.
 
 ## 2026-09-30
 
+### Post-v0.1 extension: file bytes and logical-attempt gate
+
+The first post-v0.1 model extension is `ParslFileBytesAttemptGate`. It combines concrete symbolic
+file chunks and checksums with logical task retry identity. The Current branch allows a completed
+physical transfer from an earlier attempt to publish the new DataFuture; the Fixed branch rejects
+the stale attempt and source version, then restarts stage-in. TLC reproduced the Current
+`PublicationSafety` counterexample with seed 1 and passed the Fixed branch with five million
+simulated states. The fixed configuration is now part of the foundational smoke gate.
+
+The foundational inventory after this extension is 638 TLC cases and 434 Python runtime probes;
+the v0.1 acceptance baseline remains frozen at 637/434, while this model is tracked as the first
+post-v0.1 refinement.
+
 ### Current repository state
 
 - Latest locally preserved commit: `998c013` (`Record Radical Pilot master count checkpoint`).

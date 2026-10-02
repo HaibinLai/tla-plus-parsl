@@ -188,6 +188,24 @@ The two-chunk `ParslFileBytes.cfg` configuration is now also in the foundational
 the default regression checks the full bounded content/checksum path rather than only its one-chunk
 smoke reduction.
 
+`ParslFileBytesAttemptGate.tla` composes that byte/checksum path with logical task attempts.  A
+retry can occur while the previous physical stage-in is still delivering chunks.  The Current
+configuration permits the old attempt's fully received bytes to publish the new DataFuture; the
+Fixed configuration requires both the logical attempt and source version to match, marks the old
+transfer stale, and restarts it.  This keeps logical task identity separate from physical transfer
+identity while retaining concrete chunk tokens and checksum checks.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/staging/ParslFileBytesAttemptGateCurrent.cfg \
+  models/staging/ParslFileBytesAttemptGate.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/staging/ParslFileBytesAttemptGateFixed.cfg \
+  models/staging/ParslFileBytesAttemptGate.tla
+```
+
+The Current run intentionally produces a `PublicationSafety` counterexample; the Fixed run passes.
+
 `ParslDataManagerStageOutReturn.tla` models the two return shapes of `DataManager.stage_out`: a
 provider may return `None`, in which case the output `DataFuture` follows the application Future,
 or return an independent Future for a separate transfer. The output is publishable only after the
