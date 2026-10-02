@@ -2390,6 +2390,9 @@ The remaining work is documentation and handoff, not model expansion:
   the nested and outer `JoinError.__cause__` while retaining sibling annotation, and the real
   `JoinError` runtime probe passes. Inventory is now 732 TLC configurations, 471 runtime entries,
   and 746 unittest methods.
+- Verification stage: reran the complete foundational regression after the exception-identity
+  addition. All 732 TLC configurations and all 471 runtime entries passed (`tlc_exit=0`,
+  `runtime_exit=0`). The full logs were captured under `/tmp/parsl-regression-f515759.RHGlk8`.
 
 ### Verification convention
 
