@@ -81,6 +81,9 @@ physical retry attempts and keeps deferred item projection behind the current te
 The monitoring coverage also includes `ParslFutureProjectionRetryMonitoring`, which connects that
 attempt boundary to database status high-water and projection admission.
 
+The ZMQ/serialization coverage also includes `ParslFutureProjectionRetryZMQ`, which carries the
+same attempt boundary through serialized multipart-style result envelopes.
+
 The `join_app` coverage also includes `ParslJoinBodyRetry`, which separates outer join-body retry
 attempts from installation and completion of the inner Future join.
 

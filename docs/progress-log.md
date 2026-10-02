@@ -2352,6 +2352,11 @@ The remaining work is documentation and handoff, not model expansion:
   terminal status before projection admission and isolates a late attempt-0 status. The SQLite
   runtime bridge and real retried Python projection pass. Inventory is now 728 TLC configurations,
   467 runtime entries, and 742 unittest methods.
+- Current stage: added `ParslFutureProjectionRetryZMQ`, carrying the same logical/physical attempt
+  boundary through serialized result envelopes. TLC checks attempt correlation, payload snapshot,
+  stale-frame isolation, and projection safety; the runtime bridge uses in-process ZMQ and Parsl's
+  serialized `TaskResult`. Inventory is now 729 TLC configurations, 468 runtime entries, and 743
+  unittest methods.
 
 ### Verification convention
 

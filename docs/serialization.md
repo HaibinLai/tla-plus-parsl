@@ -447,3 +447,7 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslPoolExecutorCa
 
 This callable-cache boundary is recorded as BUG-102: an otherwise serializable callable with
 `__hash__ = None` is rejected by the current hash-keyed cache before dill is attempted.
+`ParslFutureProjectionRetryZMQ.tla` connects the retried logical Future to the real serialized
+result envelope. Attempt identity remains outside the payload, duplicate/current frames are
+deduplicated, and a late old-attempt frame is consumed as stale without releasing the projection.
+The runtime bridge uses in-process ZMQ, `pickle`, and Parsl's serialized `TaskResult` payload.

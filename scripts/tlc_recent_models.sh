@@ -3843,6 +3843,9 @@ run_case future-projection-retry pass \
 run_case future-projection-retry-monitoring pass \
     models/monitoring/ParslFutureProjectionRetryMonitoring.cfg \
     models/monitoring/ParslFutureProjectionRetryMonitoring.tla
+run_case future-projection-retry-zmq pass \
+    models/serialization/ParslFutureProjectionRetryZMQ.cfg \
+    models/serialization/ParslFutureProjectionRetryZMQ.tla
 run_case future-wait-timeout pass \
     models/dataflow/ParslFutureWaitTimeout.cfg \
     models/dataflow/ParslFutureWaitTimeout.tla
