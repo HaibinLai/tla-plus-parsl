@@ -603,6 +603,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInFixed.cfg 
 /tmp/parsl-venv/bin/python -m unittest tests/test_zip_file_transfer_runtime.py -v
 ```
 
+`ParslZipDuplicateReadiness.tla` composes the duplicate-member retry with DataFuture readiness.
+The current `ZipFile.read` path selects the last member and exposes it as ready data even when
+the archive contains conflicting history; the fixed branch rejects readiness until the member
+name is unique. `tests/test_zip_duplicate_readiness_runtime.py` connects the real byte extractor
+and `DataFuture` and records the current behavior (BUG-190).
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipDuplicateReadinessCurrent.cfg models/staging/ParslZipDuplicateReadiness.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipDuplicateReadinessFixed.cfg models/staging/ParslZipDuplicateReadiness.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_zip_duplicate_readiness_runtime.py -v
+```
+
 `ParslMultiOutputVersionedStageOut.tla` combines the multi-output readiness boundary with source
 versioning. The current branch can release one output before its sibling or publish bytes from an
 obsolete source version; the fixed branch requires both transfers to be ready and version-matched

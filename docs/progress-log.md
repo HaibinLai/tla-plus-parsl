@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Zip duplicate readiness runtime bridge
+
+- Added `test_zip_duplicate_readiness_runtime.py`, connecting real Zip byte extraction to a real
+  `DataFuture`. The current Parsl path publishes the last duplicate archive member and marks the
+  represented file ready even though the archive contains two entries; this is the runtime
+  witness for `ParslZipDuplicateReadiness`/BUG-190. Inventory is now 718 TLC cases and 461
+  runtime entries (722 unittest methods).
+
 ## 2026-10-02 — timed inner Future through join_app
 
 - Added `test_join_timed_monitoring_runtime.py`, a real DFK bridge for the timed join boundary.
