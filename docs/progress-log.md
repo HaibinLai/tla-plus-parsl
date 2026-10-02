@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — full Python foundational regression
+
+- Ran `scripts/runtime_foundational_smoke.sh` against the inspected Parsl source and virtual
+  environment. All 446 listed runtime test files completed successfully, including the newest
+  memoized-join and monitoring-DB retry bridges. The run emitted only pre-existing resource/SQL
+  warnings and no test failures; the repository inventory remains 717 TLC cases and 456 named
+  runtime entries (717 unittest methods).
+
 ## 2026-10-02 — monitoring DB retry runtime bridge
 
 - Added a direct runtime bridge for `ParslMonitoringDBRetryFuture`. A real
