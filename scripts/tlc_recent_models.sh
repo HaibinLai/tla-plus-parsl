@@ -2445,6 +2445,12 @@ run_case monitoring-malformed-worker-current counterexample \
 run_case monitoring-malformed-worker-fixed pass \
     models/monitoring/ParslMonitoringMalformedWorkerMessageFixed.cfg \
     models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
+run_case monitoring-malformed-continuation-current counterexample \
+    models/monitoring/ParslMonitoringMalformedContinuationCurrent.cfg \
+    models/monitoring/ParslMonitoringMalformedContinuation.tla
+run_case monitoring-malformed-continuation-fixed pass \
+    models/monitoring/ParslMonitoringMalformedContinuationFixed.cfg \
+    models/monitoring/ParslMonitoringMalformedContinuation.tla
 run_case monitoring-close-idempotence-current counterexample \
     models/monitoring/ParslMonitoringCloseIdempotenceCurrent.cfg \
     models/monitoring/ParslMonitoringCloseIdempotence.tla

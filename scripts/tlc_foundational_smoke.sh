@@ -1745,6 +1745,9 @@ run_case monitoring-status-history \
 run_case monitoring-malformed-worker-message \
     models/monitoring/ParslMonitoringMalformedWorkerMessageFixed.cfg \
     models/monitoring/ParslMonitoringMalformedWorkerMessage.tla
+run_case monitoring-malformed-continuation \
+    models/monitoring/ParslMonitoringMalformedContinuationFixed.cfg \
+    models/monitoring/ParslMonitoringMalformedContinuation.tla
 run_case monitoring-dispatch-envelope \
     models/monitoring/ParslMonitoringDispatchEnvelopeFixed.cfg \
     models/monitoring/ParslMonitoringDispatchEnvelope.tla

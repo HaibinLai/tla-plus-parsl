@@ -113,6 +113,7 @@ tests=(
     tests/test_monitoring_db_runtime.py
     tests/test_monitoring_resource_history_runtime.py
     tests/test_monitoring_batch_atomicity_runtime.py
+    tests/test_monitoring_malformed_continuation_runtime.py
     tests/test_monitoring_persistent_retry_runtime.py
     tests/test_join_runtime.py
     tests/test_join_monitoring_runtime.py

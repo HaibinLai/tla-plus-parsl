@@ -432,6 +432,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringMalform
 This malformed-input boundary is recorded as BUG-106 because the current exception escapes the
 monitoring worker thread.
 
+`ParslMonitoringMalformedContinuation.tla` extends BUG-106 to a mixed batch: a malformed worker
+message precedes a valid terminal message. The current loop aborts the batch at the malformed
+record, so the valid message is not persisted; the fixed branch discards the malformed record and
+continues with the remaining batch entries. The runtime probe supplies both records to the real
+`DatabaseManager.start` loop and observes that the current path raises before any insert.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringMalformedContinuationCurrent.cfg models/monitoring/ParslMonitoringMalformedContinuation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringMalformedContinuationFixed.cfg models/monitoring/ParslMonitoringMalformedContinuation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_malformed_continuation_runtime.py -v
+```
+
 `ParslMonitoringDelivery.tla` is the compact end-to-end event path. It models logical status
 versions, an asynchronous queue, reordering, and database writes. The current configuration finds
 a `DatabaseMonotonic` counterexample when an older event overwrites a newer record. The fixed

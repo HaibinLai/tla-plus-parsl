@@ -2447,6 +2447,17 @@ The remaining work is documentation and handoff, not model expansion:
 - Verification stage: reran the foundational TLC smoke after the same refinements with
   `TLC_SIMULATE=100`. All 743 configured entries passed (`tlc_exit=0`); the full log is preserved
   at `/tmp/tlc-foundational-7696a09-full.log`.
+- Current stage: added `ParslMonitoringMalformedContinuation`, a small cross-layer refinement of
+  BUG-106. It models a malformed worker-task message followed by a valid terminal message in one
+  `DatabaseManager` batch: the Current branch aborts the batch before persisting the valid record,
+  while the Fixed branch discards the malformed record and continues. The TLC Current case finds
+  the two-state worker-survival counterexample, the Fixed case passes, and the runtime bridge
+  reproduces the installed `DatabaseManager.start` behavior. Inventory is now 744 TLC
+  configurations, 481 runtime entries, and 756 unittest methods.
+- Verification stage: ran the complete foundational Python runtime smoke after the malformed
+  monitoring-batch continuation refinement. All 481/481 runtime entries passed (`runtime_exit=0`).
+- Verification stage: ran the complete foundational TLC smoke with `TLC_SIMULATE=100` after the
+  same refinement. All 744 configured entries passed (`tlc_exit=0`).
 
 ### Verification convention
 
