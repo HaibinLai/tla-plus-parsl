@@ -13,6 +13,15 @@ are recorded here in English and committed with the model changes.
   send-failure model, and Slurm scale-in composition. The recent-model runner continues to keep
 intentional Current counterexamples separate from the Fixed foundational gate.
 
+## 2026-10-02 — Full 727-case regression after Future projection retry model
+
+- Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17: all 727 foundational
+  configurations passed, including `ParslFutureProjectionRetry`.
+- Ran `scripts/runtime_foundational_smoke.sh` against `/tmp/parsl-source`: all 466 runtime
+  entries passed. The complete regression covers the new projection/retry bridge together with
+  the existing ZMQ, callable, staging, clock, monitoring, executor, provider, and `join_app`
+  abstractions.
+
 ## 2026-10-02 — Flux cancellation ledger reconciliation
 
 - Promoted the already-verified `ParslFluxCancelUnderlyingState` finding to BUG-328. When the
