@@ -1703,6 +1703,9 @@ run_case condor-cancel \
 run_case condor-status-failure \
     models/providers/ParslCondorStatusFailureFixedMalformed.cfg \
     models/providers/ParslCondorStatusFailure.tla
+run_case condor-lifecycle \
+    models/providers/ParslCondorLifecycleFixed.cfg \
+    models/providers/ParslCondorLifecycle.tla
 run_case condor-status-malformed-line \
     models/providers/ParslCondorStatusFixed.cfg \
     models/providers/ParslCondorStatus.tla

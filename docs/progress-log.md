@@ -69,6 +69,15 @@ and cancellation paths. The fixed configuration is now part of the foundational 
 
 The post-v0.1 foundational inventory is now 643 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Condor provider lifecycle
+
+`ParslCondorLifecycle` composes submit admission, `condor_q` command failure and malformed/
+foreign records, and cancellation. The Current branch reaches `NoAbort`; the Fixed branch keeps
+the pending/running resource state and passes five million simulated states. The fixed
+configuration is now part of the foundational smoke gate.
+
+The post-v0.1 foundational inventory is now 644 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

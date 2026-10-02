@@ -366,6 +366,20 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslCondorUnknownJobFi
 /tmp/parsl-venv/bin/python -m unittest tests/test_condor_unknown_job_runtime.py -v
 ```
 
+`ParslCondorLifecycle.tla` composes successful `condor_submit`, failed or malformed `condor_q`
+responses, foreign records, and later cancellation. The Current branch aborts the resource
+lifecycle at a status-parser boundary; the Fixed branch preserves the previous resource state,
+ignores unrelated records, and reaches cancellation.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslCondorLifecycleCurrent.cfg \
+  models/providers/ParslCondorLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
+  -config models/providers/ParslCondorLifecycleFixed.cfg \
+  models/providers/ParslCondorLifecycle.tla
+```
+
 `ParslCondorMalformedStatusLine.tla` refines Condor polling to a successful command with a
 truncated scheduler line. The current parser still indexes the missing state token and raises
 `IndexError`; the fixed branch skips the malformed record and preserves the known RUNNING state.
