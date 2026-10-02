@@ -99,6 +99,12 @@ loads, closure/function identity, ignored cache keys, and join-result memoizatio
 memoization plus base join probes passed 18/18 tests; `ParslJoinMemoData` and the integrated core
 model already cover the memoized-inner/data-ready combination.
 
+The complete repository test discovery initially found one order-dependent clock probe failure in
+`test_htex_worker_drain_clock_runtime`: it patched the process-wide `time.time` object while other
+tests were active.  The probe now injects a clock object only into `process_worker_pool`; the full
+repository suite then passed 675/675 unittest methods.  The underlying wall-clock behavior remains
+tracked as BUG-256 with its existing Current/Fixed model.
+
 The monitoring runtime audit initially exposed an order-dependent probe failure: the ZMQ batch-clock
 test patched the process-wide `time.time` object while other monitoring threads were still active.
 The probe now injects a clock object only into `MonitoringRouter` and runs its bounded fake router

@@ -1,6 +1,7 @@
 """Runtime probe for worker drain deadlines under a wall-clock rollback."""
 
 import threading
+import types
 import unittest
 from unittest.mock import patch
 
@@ -81,8 +82,9 @@ class HtexWorkerDrainClockRuntimeTest(unittest.TestCase):
         # The deadline was created at wall time 100, but the current reading
         # is 90 after a rollback; monotonic elapsed time would already be due.
         readings = iter([90.0, 90.0, 90.0, 90.0, 90.0])
+        fake_time = types.SimpleNamespace(time=lambda: next(readings))
         with patch.object(pool.zmq, "Poller", lambda: OneTimeoutPoller(worker)), \
-             patch.object(pool.time, "time", side_effect=lambda: next(readings)):
+             patch.object(pool, "time", fake_time):
             pool.Manager.interchange_communicator.__wrapped__(worker, threading.Event())
 
         ix_socket = next(sock for sock in context.sockets if sock.kind == zmq.DEALER)
