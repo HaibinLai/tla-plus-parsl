@@ -18,6 +18,14 @@ java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/execu
 
 This startup-liveness boundary is recorded as BUG-320.
 
+The provider-side composition `models/providers/ParslKubernetesFutureAdmission.tla` connects
+Kubernetes pod phases to executor Future admission and status monitoring. `KubernetesProvider.submit`
+currently records a newly-created pod as RUNNING before the first API poll; the Current branch
+therefore allows a Future and monitor event while the actual pod is still Pending. The Fixed
+branch requires an observed Running phase. This is a cross-layer refinement of BUG-126 rather
+than a duplicate ledger entry. The targeted runtime bridge is
+`tests/test_kubernetes_future_admission_runtime.py`.
+
 These models cover executor lifecycle, task execution, HTEX submission and result queues, worker
 registration, heartbeats, command deadlines, ThreadExecutor, WorkQueue, TaskVine, Flux, and
 RadicalPilot result handling.

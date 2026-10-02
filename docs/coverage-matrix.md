@@ -6,13 +6,18 @@ task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 The monitoring coverage also includes `ParslMonitoringLifecycleBookkeeping`, which composes
 successful/failed TASK, TRY, and WORKFLOW writes with finalization markers.
 
+The provider/executor coverage also includes `ParslKubernetesFutureAdmission`, which composes
+Kubernetes pod-phase publication with Future admission and monitoring readiness (a cross-layer
+refinement of BUG-126), and `ParslFluxProviderHandshake`, which composes provider liveness with
+the Flux startup handshake.
+
 The file-transfer coverage also includes `ParslDataManagerStageOutReturn`, which distinguishes a
 `None` stage-out return (the output follows the application Future) from an independent transfer
 Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 681 TLC cases and 444 runtime entries (704 unittest
+deduplication. The current baseline is 682 TLC cases and 445 runtime entries (705 unittest
 methods).
 
 It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode

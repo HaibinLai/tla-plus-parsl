@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Kubernetes provider/Future admission composition
+
+- Added `ParslKubernetesFutureAdmission`, composing the concrete Kubernetes submit state with
+  executor Future admission and monitoring publication. The Current branch admits work while
+  the pod is still Pending because `submit` stores RUNNING before the first API poll; Fixed
+  requires an observed Running phase and passes bounded TLC. The runtime bridge reproduces the
+  submit-then-Pending observation. This deepens existing BUG-126 without duplicating its ledger
+  entry. The foundational gate is now 682 TLC configurations and 445 runtime entries.
+
 ## 2026-10-02 — Flux provider startup handshake boundary
 
 - Added `ParslFluxProviderHandshake`, a compact provider/executor composition for the concrete

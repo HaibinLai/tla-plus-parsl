@@ -2093,5 +2093,8 @@ run_case zip-duplicate-readiness \
 run_case flux-provider-handshake \
     models/executors/ParslFluxProviderHandshakeFixed.cfg \
     models/executors/ParslFluxProviderHandshake.tla
+run_case kubernetes-future-admission \
+    models/providers/ParslKubernetesFutureAdmissionFixed.cfg \
+    models/providers/ParslKubernetesFutureAdmission.tla
 
 echo "Foundational TLC smoke suite passed."
