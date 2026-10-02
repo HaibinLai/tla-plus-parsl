@@ -177,6 +177,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPbsproSubmitShapeN
 
 This PBS Pro submit-response boundary is recorded as BUG-215.
 
+`ParslPBSProLifecycle.tla` composes PBS Pro submission, qstat observations, local resource
+ownership, and cancellation. The Current branch permits an empty successful `qsub` response to
+publish an untrackable submission and can abort on foreign/malformed status records or stale
+cancellation IDs. The Fixed branch rejects empty submissions, preserves running state for a
+missing qstat record, isolates malformed/foreign observations, and makes stale cancellation
+terminal. The existing PBS Pro runtime probes exercise the concrete parser boundaries.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslPBSProLifecycleCurrent.cfg models/providers/ParslPBSProLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslPBSProLifecycleFixed.cfg models/providers/ParslPBSProLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_pbspro*_runtime.py' -v
+```
+
 `ParslClusterStatusRequest.tla` captures the common `ClusterProvider.status` projection. A single
 provider-specific `_status()` poll updates local resources, then the public method projects those
 records back in the caller's requested order, including duplicate job IDs. The runtime probe uses

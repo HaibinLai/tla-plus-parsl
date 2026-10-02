@@ -740,6 +740,9 @@ run_case pbspro-submit-shape \
 run_case pbspro-submit-boundary \
     models/providers/ParslPBSProSubmitFixed.cfg \
     models/providers/ParslPBSProSubmit.tla
+run_case pbspro-lifecycle \
+    models/providers/ParslPBSProLifecycleFixed.cfg \
+    models/providers/ParslPBSProLifecycle.tla
 run_case torque-malformed-status \
     models/providers/ParslTorqueMalformedStatusLineFixed.cfg \
     models/providers/ParslTorqueMalformedStatusLine.tla

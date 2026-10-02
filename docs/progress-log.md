@@ -98,6 +98,17 @@ provider runtime suite covering process launch, output, exit markers, and cancel
 
 The post-v0.1 foundational inventory is now 646 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: PBS Pro provider lifecycle composition
+
+`ParslPBSProLifecycle` composes qsub admission, qstat status interpretation, local resource
+ownership, and cancellation. The Current branch reaches `NoAbort` through empty successful
+submission output, foreign/malformed status records, or stale cancellation; the Fixed branch
+rejects the empty submission, preserves nonterminal state for missing observations, isolates bad
+records, and passes five million simulated states. Existing PBS Pro runtime probes cover the
+concrete parser behavior.
+
+The post-v0.1 foundational inventory is now 647 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state
