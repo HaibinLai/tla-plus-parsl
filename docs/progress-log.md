@@ -2347,6 +2347,11 @@ The remaining work is documentation and handoff, not model expansion:
   passing. A real retried Python app plus item projection completed successfully after two
   physical attempts. The foundational inventory is now 727 TLC configurations, 466 runtime
   entries, and 741 unittest methods.
+- Current stage: added `ParslFutureProjectionRetryMonitoring`, connecting the logical projection
+  retry path to monitoring attempt high-water state. The model requires the current attempt's
+  terminal status before projection admission and isolates a late attempt-0 status. The SQLite
+  runtime bridge and real retried Python projection pass. Inventory is now 728 TLC configurations,
+  467 runtime entries, and 742 unittest methods.
 
 ### Verification convention
 

@@ -610,3 +610,7 @@ batch by both `batching_interval` and `batching_threshold`; the loop then servic
 worker-task, and resource queues in the same iteration. Unlike the HTEX worker poll path, this
 ordering does not by itself create an unbounded priority-queue starvation model. The existing
 shutdown and stale-`empty()` models remain the relevant monitoring queue-loss boundaries.
+`ParslFutureProjectionRetryMonitoring.tla` composes logical Future retry with the monitoring
+status high-water mark. The projection is admitted only after the current physical attempt is
+published as done; a late status from the failed attempt is isolated as stale and cannot move the
+database back to an older attempt.

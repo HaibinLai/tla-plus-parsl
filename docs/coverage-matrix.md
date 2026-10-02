@@ -78,6 +78,9 @@ The dataflow coverage also includes `ParslAppFutureOutputStreams`, which models 
 It also includes `ParslFutureProjectionRetry`, which separates a logical source Future from its
 physical retry attempts and keeps deferred item projection behind the current terminal attempt.
 
+The monitoring coverage also includes `ParslFutureProjectionRetryMonitoring`, which connects that
+attempt boundary to database status high-water and projection admission.
+
 The `join_app` coverage also includes `ParslJoinBodyRetry`, which separates outer join-body retry
 attempts from installation and completion of the inner Future join.
 

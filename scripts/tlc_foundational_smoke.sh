@@ -128,6 +128,9 @@ run_case htex-result-queue \
 run_case remote-exception-transport \
     models/serialization/ParslRemoteExceptionTransport.cfg \
     models/serialization/ParslRemoteExceptionTransport.tla
+run_case future-projection-retry-monitoring \
+    models/monitoring/ParslFutureProjectionRetryMonitoring.cfg \
+    models/monitoring/ParslFutureProjectionRetryMonitoring.tla
 run_case results-incoming \
     models/executors/ParslResultsIncoming.cfg \
     models/executors/ParslResultsIncoming.tla
