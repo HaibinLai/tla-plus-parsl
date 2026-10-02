@@ -507,11 +507,12 @@ terminality. A task may already be successful while its status write is retried;
 branch can remain in retrying forever at the attempt bound, while the Fixed branch records an
 aborted monitoring write without rolling back the Future. Stored monitoring is required to
 correspond to a successful Future. The existing persistent-retry runtime probes exercise the
-real DatabaseManager loop.
+real DatabaseManager loop. `tests/test_monitoring_db_retry_future_runtime.py` additionally calls
+the real `_insert` method with a one-shot `OperationalError` and verifies that the already
+terminal application Future is unchanged while the database write retries.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBRetryFutureCurrent.cfg models/monitoring/ParslMonitoringDBRetryFuture.tla
-java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBRetryFutureFixed.cfg models/monitoring/ParslMonitoringDBRetryFuture.tla
 ```
 
 `ParslMonitoringUpdatePersistentRetry.tla` applies the bounded-retry abstraction to the separate

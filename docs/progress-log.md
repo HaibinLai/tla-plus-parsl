@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — monitoring DB retry runtime bridge
+
+- Added a direct runtime bridge for `ParslMonitoringDBRetryFuture`. A real
+  `DatabaseManager._insert` call retries one transient SQLAlchemy `OperationalError` while an
+  application Future is already terminal; the Future remains unchanged and the insert succeeds
+  on the second call. The foundational inventory is now 717 TLC cases and 456 runtime entries
+  (717 unittest methods).
+
 ## 2026-10-02 — memoized failure propagation through join_app
 
 - Added `ParslJoinMemoFailure`, composing an already-terminal failed memo Future with a staged
