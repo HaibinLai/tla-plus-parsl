@@ -19,4 +19,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-105 | FTP stage-in publishes partial destination on failure | [BUG-105](../bug-ledger.md) |
 | BUG-121 | LocalProvider failed launch leaves submit script | [BUG-121](../bug-ledger.md) |
 | BUG-138 | HTTP stage-in failure destroys an existing good destination | [BUG-138](../bug-ledger.md) |
-
+| BUG-323 | DataManager transfer failure suppresses later staging provider | [BUG-323](../bug-ledger.md) |

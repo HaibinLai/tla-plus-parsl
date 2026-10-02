@@ -4,6 +4,13 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Staging transfer failure and ordered provider fallback
+
+- Added `ParslStagingProviderTransferFailure.tla` and a real `DataManager` runtime probe. A
+  provider whose capability predicate succeeds but whose transfer raises currently aborts before
+  a later capable provider is considered; the Fixed branch isolates the failure and continues
+  fallback. Inventory is now 720 TLC cases and 467 runtime entries (727 unittest methods).
+
 ## 2026-10-02 — Flux non-TypeError serializer-failure abstraction
 
 - Added `ParslFluxSerializationFailure.tla` and a concrete runtime probe. The installed

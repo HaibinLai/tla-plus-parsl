@@ -328,6 +328,7 @@ tests=(
     tests/test_flux_working_directory_runtime.py
     tests/test_local_provider_submit_cleanup_runtime.py
     tests/test_staging_provider_dispatch_runtime.py
+    tests/test_staging_provider_transfer_failure_runtime.py
     tests/test_htex_task_priority_type_runtime.py
     tests/test_htex_task_resource_spec_type_runtime.py
     tests/test_htex_version_mismatch_runtime.py

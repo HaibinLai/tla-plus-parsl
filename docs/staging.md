@@ -418,6 +418,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingProviderDispa
 /tmp/parsl-venv/bin/python -m unittest tests/test_staging_provider_dispatch_runtime.py -v
 ```
 
+`ParslStagingProviderTransferFailure.tla` refines the same boundary with a provider whose
+`can_stage_in` predicate succeeds but whose transfer raises. The current `DataManager` lets that
+exception abort the dispatch before a later capable provider is tried; the Fixed branch isolates
+the failure and continues ordered fallback. This is recorded as BUG-323.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingProviderTransferFailureCurrent.cfg models/staging/ParslStagingProviderTransferFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslStagingProviderTransferFailureFixed.cfg models/staging/ParslStagingProviderTransferFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_staging_provider_transfer_failure_runtime.py -v
+```
+
 `ParslDataManagerStageOutOrdering.tla` checks the analogous output path in
 `DataFlowKernel._add_output_deps`: `stage_out` starts a separate transfer before
 `replace_task_stage_out` constructs the application wrapper. A wrapper exception can therefore

@@ -1955,6 +1955,9 @@ run_case globus-transfer-failure-success \
 run_case staging-provider-dispatch \
     models/staging/ParslStagingProviderDispatchCurrent.cfg \
     models/staging/ParslStagingProviderDispatch.tla
+run_case staging-provider-transfer-failure \
+    models/staging/ParslStagingProviderTransferFailureFixed.cfg \
+    models/staging/ParslStagingProviderTransferFailure.tla
 run_case data-manager-stage-out-return \
     models/staging/ParslDataManagerStageOutReturnFuture.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla

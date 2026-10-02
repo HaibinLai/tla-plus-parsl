@@ -3429,6 +3429,12 @@ run_case multi-output-stageout-early counterexample \
 run_case staging-provider-dispatch pass \
     models/staging/ParslStagingProviderDispatchCurrent.cfg \
     models/staging/ParslStagingProviderDispatch.tla
+run_case staging-provider-transfer-failure-current counterexample \
+    models/staging/ParslStagingProviderTransferFailureCurrent.cfg \
+    models/staging/ParslStagingProviderTransferFailure.tla
+run_case staging-provider-transfer-failure-fixed pass \
+    models/staging/ParslStagingProviderTransferFailureFixed.cfg \
+    models/staging/ParslStagingProviderTransferFailure.tla
 run_case zip-stageout pass \
     models/staging/ParslZipStageOut.cfg \
     models/staging/ParslZipStageOut.tla
