@@ -288,6 +288,11 @@ outer cancellation, stale-result rejection, failure aggregation, and terminal mo
 small `ParslJoinApp` protocol. Focused models remain the place for individual callback races and
 backend-specific details.
 
+The runtime bridge `test_join_heartbeat_retry_runtime.py` follows the smaller
+`ParslJoinHeartbeatRetry` protocol with real `Future` callbacks: manager loss advances both
+inner dependencies to attempt 1, late attempt-0 results are ignored, and the outer Future resolves
+only after both current attempts complete.
+
 `ParslJoinRetryStaleResult.tla` is a smaller cross-layer companion. It keeps two logical join
 dependencies separate from their physical attempts, lets one timed-out attempt report late, and
 checks that the outer join cannot become consistent with a stale attempt. The fixed configuration

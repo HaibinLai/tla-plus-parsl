@@ -123,6 +123,15 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 667 TLC cases, 442 runtime entries, and
   689 unittest methods passed.
 
+## 2026-10-02 — join heartbeat/retry runtime bridge
+
+- Added `test_join_heartbeat_retry_runtime.py` for heartbeat-loss generation
+  changes across two inner join dependencies.
+- Real `Future` callbacks ignore late attempt-0 values and resolve the outer
+  Future only after both current attempt-1 values arrive.
+- Full regression after this addition: 667 TLC cases, 443 runtime entries, and
+  690 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

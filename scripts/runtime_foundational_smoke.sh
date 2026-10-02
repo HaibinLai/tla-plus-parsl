@@ -122,6 +122,7 @@ tests=(
     tests/test_join_cleanup_lifecycle_runtime.py
     tests/test_join_return_shape_runtime.py
     tests/test_join_zmq_retry_runtime.py
+    tests/test_join_heartbeat_retry_runtime.py
     tests/test_join_return_equality_runtime.py
     tests/test_outer_join_cancellation_runtime.py
     tests/test_join_body_retry_runtime.py
