@@ -250,6 +250,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexCommandIng
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_command_ingress_isolation_runtime.py -v
 ```
 
+`ParslHtexCommandReplySendFailure.tla` covers the reply side of the same command channel. The
+Current branch lets a `send_pyobj` failure from a disconnected client escape the interchange
+loop; the Fixed branch drops that reply and preserves later work. The runtime probe uses a valid
+command and a failing reply socket.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexCommandReplySendFailureCurrent.cfg models/serialization/ParslHtexCommandReplySendFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexCommandReplySendFailureFixed.cfg models/serialization/ParslHtexCommandReplySendFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_command_reply_send_failure_runtime.py -v
+```
+
 `ParslTaskTransportSmoke.cfg` keeps the full bounded callable/argument/closure graph but sets
 `MAX_RETRIES = 0`. It provides a fast terminal-path regression for the serialization gate,
 task/result wire ordering, and Future-resolution invariants; TLC checks 69 generated / 29 distinct

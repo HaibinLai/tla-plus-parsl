@@ -2112,6 +2112,12 @@ run_case htex-command-ingress-isolation-current counterexample \
 run_case htex-command-ingress-isolation-fixed pass \
     models/serialization/ParslHtexCommandIngressIsolationFixed.cfg \
     models/serialization/ParslHtexCommandIngressIsolation.tla
+run_case htex-command-reply-send-failure-current counterexample \
+    models/serialization/ParslHtexCommandReplySendFailureCurrent.cfg \
+    models/serialization/ParslHtexCommandReplySendFailure.tla
+run_case htex-command-reply-send-failure-fixed pass \
+    models/serialization/ParslHtexCommandReplySendFailureFixed.cfg \
+    models/serialization/ParslHtexCommandReplySendFailure.tla
 run_case ftp-in-task-transfer-gate-current counterexample \
     models/staging/ParslFTPInTaskTransferGateCurrent.cfg \
     models/staging/ParslFTPInTaskTransferGate.tla

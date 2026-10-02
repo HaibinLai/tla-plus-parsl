@@ -2489,6 +2489,12 @@ communication and selected async completion criteria in that document are satisf
   is now 748 TLC configurations, 483 runtime entries, and 758 unittest methods.
 - Verification stage: `ParslHtexCommandIngressIsolation` Current TLC returns the expected
   counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes.
+- Current stage: added `ParslHtexCommandReplySendFailure`, covering the command-reply side of the
+  same communication path. The Current branch lets a disconnected-client `send_pyobj` exception
+  escape the interchange loop; the Fixed branch drops the reply and preserves loop liveness.
+  Inventory is now 750 TLC configurations, 484 runtime entries, and 759 unittest methods.
+- Verification stage: `ParslHtexCommandReplySendFailure` Current TLC returns the expected
+  counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes.
 
 ## Scope note
 

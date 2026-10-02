@@ -131,6 +131,9 @@ run_case htex-task-dispatch-send-failure \
 run_case htex-command-ingress-isolation \
     models/serialization/ParslHtexCommandIngressIsolationFixed.cfg \
     models/serialization/ParslHtexCommandIngressIsolation.tla
+run_case htex-command-reply-send-failure \
+    models/serialization/ParslHtexCommandReplySendFailureFixed.cfg \
+    models/serialization/ParslHtexCommandReplySendFailure.tla
 run_case htex-result-queue \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla
