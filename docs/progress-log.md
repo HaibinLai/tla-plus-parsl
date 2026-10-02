@@ -49,6 +49,15 @@ are recorded here in English and committed with the model changes.
 - The BUG-312 runtime bridge now covers both `stage_in` and `stage_out`; the
   repository-wide unittest count is 680.
 
+## 2026-10-02 — composed DataFuture stage-out failure gate
+
+- Added `ParslDataReadyStageOutFailure.tla` with Current/Fixed configurations.
+- The model combines bounded file chunks, independent stage-out completion,
+  DataFuture readiness, application failure, and downstream consumer admission.
+- Added a real `DataManager`/`DataFuture` runtime bridge for the two-chunk path.
+- Full regression after this addition: 666 TLC cases, 439 runtime entries, and
+  681 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

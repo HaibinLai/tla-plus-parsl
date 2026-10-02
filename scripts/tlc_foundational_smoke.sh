@@ -224,6 +224,9 @@ run_case join-immediate-mutation \
 run_case staging-predicate-failure \
     models/staging/ParslStagingPredicateFailureFixed.cfg \
     models/staging/ParslStagingPredicateFailure.tla
+run_case data-ready-stageout-failure \
+    models/core/ParslDataReadyStageOutFailureFixed.cfg \
+    models/core/ParslDataReadyStageOutFailure.tla
 run_case join-app \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla

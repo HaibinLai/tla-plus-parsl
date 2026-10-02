@@ -670,3 +670,14 @@ immediately after the real snapshot operation.
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataFlowWaitSnapshotCurrent.cfg models/core/ParslDataFlowWaitSnapshot.tla
 java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataFlowWaitSnapshotFixed.cfg models/core/ParslDataFlowWaitSnapshot.tla
 ```
+`ParslDataReadyStageOutFailure.tla` composes application failure, bounded file chunks,
+independent stage-out completion, `DataFuture` publication, and consumer admission. The Current
+branch permits a completed independent transfer to make a `DataFuture` ready after the logical
+application failed; the Fixed branch requires application success before transfer admission. The
+runtime bridge uses the real `DataManager` and `DataFuture` path with a two-chunk file.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyStageOutFailureCurrent.cfg models/core/ParslDataReadyStageOutFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyStageOutFailureFixed.cfg models/core/ParslDataReadyStageOutFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_data_ready_stageout_failure_runtime.py -v
+```
