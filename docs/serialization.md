@@ -187,16 +187,6 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationT
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_truncated_length_runtime.py -v
 ```
 
-`ParslApplyFrameValidation.tla` composes the exact-three-buffer and declared-length checks. The
-Current branch models the installed `unpack_and_deserialize()` ordering: it invokes a deserializer
-before rejecting malformed frame metadata. The Fixed branch rejects either malformed condition
-before any decode side effect.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyFrameValidationCurrent.cfg models/serialization/ParslApplyFrameValidation.tla
-java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyFrameValidationFixed.cfg models/serialization/ParslApplyFrameValidation.tla
-```
-
 `ParslSerializerRegistry.tla` models the concrete `facade.deserialize` registry order. With a
 colliding identifier, the current configuration decodes a data payload through the code registry
 and violates `DispatchSafety`; the fixed configuration rejects the ambiguous header, while the
@@ -216,8 +206,6 @@ invariants complete in 2,589 generated and 760 distinct states, providing a fast
 The full `ParslZMQSerializationEndToEndFixed.cfg` configuration is also in the foundational smoke
 gate, retaining one retry so late result correlation, duplicate frames, route recovery, and
 payload rejection are checked together.
-The runtime probe `tests/test_zmq_serialization_runtime.py` also sends real serialized result
-frames over an in-process ZMQ pair and accepts only the current attempt.
 
 `ParslTaskTransport.tla` is the smaller cross-layer companion: a bounded callable/argument object
 graph must finish serialization before task transport, decoding must precede worker dispatch, and
@@ -272,19 +260,6 @@ including a callable closure and a keyword argument object captured in one apply
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObjectContents.cfg models/serialization/ParslFunctionObjectContents.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_function_object_contents_runtime.py -v
-```
-
-`ParslFunctionDecodeFailureFutureMonitoring.tla` composes the callable/argument snapshot with
-worker decode failure and terminal Future/monitoring propagation. The Current branch records only
-the transport failure and leaves the logical task pending; the Fixed branch fails task, Future,
-and monitoring together. TLC passes 10,000 simulation steps in Fixed, while
-`test_function_decode_failure_runtime.py` verifies that the real facade rejects malformed apply
-message bytes before dispatch admission.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionDecodeFailureFutureMonitoringCurrent.cfg models/serialization/ParslFunctionDecodeFailureFutureMonitoring.tla
-java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionDecodeFailureFutureMonitoringFixed.cfg models/serialization/ParslFunctionDecodeFailureFutureMonitoring.tla
-/tmp/parsl-venv/bin/python -m unittest tests/test_function_decode_failure_runtime.py -v
 ```
 
 `ParslFunctionGlobalDefaultSnapshot.tla` separates two Python callable roots that are often

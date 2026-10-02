@@ -4,12 +4,6 @@ The serialization abstraction is layered rather than treating a task as one opaq
 The models distinguish serializer bytes, multipart framing, ZMQ queueing, route validation,
 worker decode/dispatch, and result correlation.
 
-`ParslPluginRetryMonitoring.tla` composes dynamic deserializer-plugin caching with a logical task
-retry and terminal monitoring status. The Current branch reuses a plugin instance that already
-failed decoding, so the retry reaches a failed Future; the Fixed branch evicts the failed cache
-entry before retrying. The runtime bridge is
-`tests/test_plugin_retry_monitoring_runtime.py`, refining BUG-064/BUG-104.
-
 `ParslRemoteExceptionTransport.tla` adds the exception-object boundary: a worker-side
 `RemoteExceptionWrapper` with a nested `__cause__` is serialized, decoded by the result worker,
 and reraised into a terminal Future failure.  The runtime bridge uses the installed HTEX result
@@ -86,19 +80,6 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQAckRetryFix
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckCurrent.cfg models/serialization/ParslZMQSerializedAck.tla
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFixed.cfg models/serialization/ParslZMQSerializedAck.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialized_ack_runtime.py -v
-```
-
-`ParslZMQSerializedAckFutureMonitoring.tla` composes that retransmission boundary with logical
-task dispatch, Future resolution, and monitoring. The Current branch dispatches a duplicate
-envelope and records a duplicate monitoring event; the Fixed branch ignores the duplicate after
-the task/attempt identity has been seen. TLC checks snapshot immutability, single dispatch, and
-terminal Future/monitor consistency. The same real serializer probe exercises the concrete wire
-snapshot and deduplication behavior.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFutureMonitoringCurrent.cfg models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
-java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFutureMonitoringFixed.cfg models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
-/tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialized_ack_future_monitoring_runtime.py -v
 ```
 
 `ParslZMQMultipartAck.tla` adds multipart validation to the same path. A valid three-buffer

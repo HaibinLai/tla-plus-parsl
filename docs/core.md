@@ -18,17 +18,6 @@ java -cp tla2tools.jar tlc2.TLC -config models/core/ParslDataReadyExecutionFixed
 /tmp/parsl-venv/bin/python -m unittest tests/test_datafuture_runtime.py -v
 ```
 
-`ParslContentFilePipeline.tla` composes the smallest callable/object snapshot with a two-chunk
-file publication gate. The worker can execute only after the payload is decoded and the complete
-file is available; source mutation after serialization cannot alter the captured callable. The
-runtime bridge `tests/test_content_file_pipeline_runtime.py` exercises the real Parsl serializer
-and Zip staging helper together.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/core/ParslContentFilePipeline.cfg models/core/ParslContentFilePipeline.tla
-/tmp/parsl-venv/bin/python -m unittest tests/test_content_file_pipeline_runtime.py -v
-```
-
 `ParslDataTransferDependencyFailure.tla` closes the stage-out/dataflow loop.  A producer finishes,
 the DataManager transfers a bounded output in chunks, and a DataFuture becomes ready only after
 publication.  If the stage-out fails, the consumer remains blocked and is completed as a
@@ -349,10 +338,6 @@ the Fixed configuration is part of the foundational TLC gate.
 The `ParslJoinTimedMonitoring` fixed case is now part of the foundational gate as well. It
 connects chunk readiness and source-version capture to heartbeat expiry, task timeout, outer
 cancellation, late completion, and bounded monitoring persistence in one executable join model.
-
-`ParslJoinCallbackMonitoring.tla` composes the callback lock with terminal monitoring
-publication. Its Fixed branch permits only one SQLite-visible terminal row even when duplicate
-inner-Future callbacks are queued; the Current branch produces a duplicate-row counterexample.
 
 `ParslHtexUnknownResultType.tla` is also promoted into the gate. It models the result worker's
 malformed-type boundary: the Fixed branch discards an unknown frame and continues to the next

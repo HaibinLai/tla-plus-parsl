@@ -1,18 +1,5 @@
 # Monitoring models
 
-`ParslDfkExecutorShutdownMonitoring.tla` composes the concrete
-`DataFlowKernel.cleanup()` executor-shutdown loop with final workflow monitoring. The Current
-branch aborts cleanup when one executor's `shutdown()` raises, before sending `WORKFLOW_INFO` or
-closing the monitoring hub. The Fixed branch isolates the executor error and still publishes a
-terminal workflow outcome before closing monitoring. The runtime bridge uses the installed DFK
-cleanup method with a failing executor double; this boundary is recorded as BUG-321.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/monitoring/ParslDfkExecutorShutdownMonitoringCurrent.cfg models/monitoring/ParslDfkExecutorShutdownMonitoring.tla
-java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/monitoring/ParslDfkExecutorShutdownMonitoringFixed.cfg models/monitoring/ParslDfkExecutorShutdownMonitoring.tla
-/tmp/parsl-venv/bin/python -m unittest tests/test_dfk_executor_shutdown_monitoring_runtime.py -v
-```
-
 `ParslMonitoringTaskTryWorkerLifecycle.tla` composes the deferred worker-first path with the
 TASK/TRY inserts and the paired STATUS/TRY running update. The Current branch permits one table
 to advance when the other write fails; the Fixed branch retains the worker event and avoids a
@@ -36,16 +23,6 @@ uses monotonic elapsed time for scheduling.  The runtime bridge is
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringRemoteLifecycleCurrent.cfg models/monitoring/ParslMonitoringRemoteLifecycle.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringRemoteLifecycleFixed.cfg models/monitoring/ParslMonitoringRemoteLifecycle.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_remote_lifecycle_runtime.py -v
-```
-
-`ParslMonitoringFailureShutdown.tla` composes permanent WORKFLOW-end update failure with the
-database-manager close path. The Current branch marks finalization and stops after losing the
-failed update; the Fixed branch bounds retries and records either a persisted or explicit dropped
-terminal outcome before stopping.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringFailureShutdownCurrent.cfg models/monitoring/ParslMonitoringFailureShutdown.tla
-java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringFailureShutdownFixed.cfg models/monitoring/ParslMonitoringFailureShutdown.tla
 ```
 
 `ParslMonitoringZMQTupleShape.tla` models the router admission boundary before messages enter the
@@ -500,19 +477,6 @@ watchdog to confirm that the current loop does not return until externally inter
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringPersistentRetryCurrent.cfg models/monitoring/ParslMonitoringPersistentRetry.tla
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringPersistentRetryFixed.cfg models/monitoring/ParslMonitoringPersistentRetry.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_persistent_retry_runtime.py -v
-```
-
-`ParslMonitoringDBRetryFuture.tla` composes the persistent-lock boundary with task/Future
-terminality. A task may already be successful while its status write is retried; the Current
-branch can remain in retrying forever at the attempt bound, while the Fixed branch records an
-aborted monitoring write without rolling back the Future. Stored monitoring is required to
-correspond to a successful Future. The existing persistent-retry runtime probes exercise the
-real DatabaseManager loop. `tests/test_monitoring_db_retry_future_runtime.py` additionally calls
-the real `_insert` method with a one-shot `OperationalError` and verifies that the already
-terminal application Future is unchanged while the database write retries.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringDBRetryFutureCurrent.cfg models/monitoring/ParslMonitoringDBRetryFuture.tla
 ```
 
 `ParslMonitoringUpdatePersistentRetry.tla` applies the bounded-retry abstraction to the separate

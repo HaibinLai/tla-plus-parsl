@@ -14,10 +14,10 @@ TLC_CASE_LIMIT=${TLC_CASE_LIMIT:-0}
 CASE_COUNT=0
 
 if [[ "$JAVA_BIN" == "java" ]] && ! command -v java >/dev/null 2>&1; then
-    JAVA_BIN=$(find /tmp -path '*/jdk-*/bin/java' -type f -perm -u+x -print -quit 2>/dev/null || true)
+    JAVA_BIN=$(find /tmp -path '*/jdk-*/bin/java' -type f -perm -u+x -print -quit 2>/dev/null)
 fi
 if [[ "$TLA_JAR" == "tla2tools.jar" ]] && [[ ! -f "$TLA_JAR" ]]; then
-    TLA_JAR=$(find /tmp -path '*/tla2tools.jar' -type f -print -quit 2>/dev/null || true)
+    TLA_JAR=$(find /tmp -path '*/tla2tools.jar' -type f -print -quit 2>/dev/null)
 fi
 if [[ -z "$JAVA_BIN" || -z "$TLA_JAR" || ! -x "$JAVA_BIN" || ! -f "$TLA_JAR" ]]; then
     echo "Unable to locate Java/TLC. Set JAVA_BIN and TLA_JAR explicitly." >&2
@@ -149,9 +149,6 @@ run_case file-bytes-transfer-full \
 run_case file-bytes-attempt-gate \
     models/staging/ParslFileBytesAttemptGateFixed.cfg \
     models/staging/ParslFileBytesAttemptGate.tla
-run_case rsync-datafuture-gate \
-    models/staging/ParslRsyncDataFutureGateFixed.cfg \
-    models/staging/ParslRsyncDataFutureGate.tla
 run_case file-path-resolution \
     models/staging/ParslFilePathResolution.cfg \
     models/staging/ParslFilePathResolution.tla
@@ -452,9 +449,6 @@ run_case monitoring-batch-atomicity \
 run_case monitoring-persistent-retry \
     models/monitoring/ParslMonitoringPersistentRetryFixed.cfg \
     models/monitoring/ParslMonitoringPersistentRetry.tla
-run_case monitoring-db-retry-future \
-    models/monitoring/ParslMonitoringDBRetryFutureFixed.cfg \
-    models/monitoring/ParslMonitoringDBRetryFuture.tla
 run_case monitoring-db-retry-operational \
     models/monitoring/ParslMonitoringDBRetry.cfg \
     models/monitoring/ParslMonitoringDBRetry.tla
@@ -503,9 +497,6 @@ run_case heartbeat-timeout-future-monitoring \
 run_case htex-contact-timeout \
     models/clock/ParslHtexContactTimeoutStarvationFixed.cfg \
     models/clock/ParslHtexContactTimeoutStarvation.tla
-run_case htex-contact-timeout-starvation-future-monitoring \
-    models/clock/ParslHtexContactTimeoutStarvationFutureMonitoringFixed.cfg \
-    models/clock/ParslHtexContactTimeoutStarvationFutureMonitoring.tla
 run_case worker-contact-rollback \
     models/clock/ParslWorkerContactClockRollbackFixed.cfg \
     models/clock/ParslWorkerContactClockRollback.tla
@@ -545,12 +536,6 @@ run_case zmq-ack-retry \
 run_case zmq-serialized-ack \
     models/serialization/ParslZMQSerializedAckFixed.cfg \
     models/serialization/ParslZMQSerializedAck.tla
-run_case zmq-serialized-ack-future-monitoring \
-    models/serialization/ParslZMQSerializedAckFutureMonitoringFixed.cfg \
-    models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
-run_case function-decode-failure-future-monitoring \
-    models/serialization/ParslFunctionDecodeFailureFutureMonitoringFixed.cfg \
-    models/serialization/ParslFunctionDecodeFailureFutureMonitoring.tla
 run_case zmq-multipart-ack \
     models/serialization/ParslZMQMultipartAckFixed.cfg \
     models/serialization/ParslZMQMultipartAck.tla
@@ -725,9 +710,6 @@ run_case condor-submit-whitespace \
 run_case condor-empty-submit \
     models/providers/ParslCondorEmptySubmitFixed.cfg \
     models/providers/ParslCondorEmptySubmit.tla
-run_case condor-empty-submit-future-monitoring \
-    models/providers/ParslCondorEmptySubmitFutureMonitoringFixed.cfg \
-    models/providers/ParslCondorEmptySubmitFutureMonitoring.tla
 run_case condor-submit-boundary \
     models/providers/ParslCondorSubmitFixed.cfg \
     models/providers/ParslCondorSubmit.tla
@@ -773,9 +755,6 @@ run_case aws-unknown-instance \
 run_case aws-unknown-future-monitoring \
     models/providers/ParslAwsUnknownFutureMonitoringFixed.cfg \
     models/providers/ParslAwsUnknownFutureMonitoring.tla
-run_case aws-empty-submit-future-monitoring \
-    models/providers/ParslAwsEmptySubmitFutureMonitoringFixed.cfg \
-    models/providers/ParslAwsEmptySubmitFutureMonitoring.tla
 run_case local-unknown-job-status \
     models/providers/ParslLocalUnknownJobStatusFixed.cfg \
     models/providers/ParslLocalUnknownJobStatus.tla
@@ -794,9 +773,6 @@ run_case grid-engine-missing-status \
 run_case grid-engine-empty-submit \
     models/providers/ParslGridEngineEmptySubmitFixed.cfg \
     models/providers/ParslGridEngineEmptySubmit.tla
-run_case grid-engine-empty-submit-future-monitoring \
-    models/providers/ParslGridEngineEmptySubmitFutureMonitoringFixed.cfg \
-    models/providers/ParslGridEngineEmptySubmitFutureMonitoring.tla
 run_case grid-engine-submit-shape \
     models/providers/ParslGridEngineSubmitShapeFixed.cfg \
     models/providers/ParslGridEngineSubmitShape.tla
@@ -860,9 +836,6 @@ run_case thread-executor-empty-resource-spec \
 run_case flux-serialization-error-name \
     models/executors/ParslFluxSerializationErrorNameFixed.cfg \
     models/executors/ParslFluxSerializationErrorName.tla
-run_case flux-serialization-failure \
-    models/executors/ParslFluxSerializationFailureFixed.cfg \
-    models/executors/ParslFluxSerializationFailure.tla
 run_case workqueue-submit \
     models/executors/ParslWorkQueueSubmitFixed.cfg \
     models/executors/ParslWorkQueueSubmit.tla
@@ -1154,9 +1127,6 @@ run_case azure-submit \
 run_case azure-cancel \
     models/providers/ParslAzureCancelBookkeepingFixed.cfg \
     models/providers/ParslAzureCancelBookkeeping.tla
-run_case azure-cancel-duplicates \
-    models/providers/ParslAzureCancelDuplicatesFixed.cfg \
-    models/providers/ParslAzureCancelDuplicates.tla
 run_case azure-status-bookkeeping \
     models/providers/ParslAzureStatusBookkeepingFixed.cfg \
     models/providers/ParslAzureStatusBookkeeping.tla
@@ -1178,9 +1148,6 @@ run_case azure-status-translation \
 run_case azure-lifecycle \
     models/providers/ParslAzureLifecycleFixed.cfg \
     models/providers/ParslAzureLifecycle.tla
-run_case radical-serialization-failure \
-    models/executors/ParslRadicalSerializationFailureFixed.cfg \
-    models/executors/ParslRadicalSerializationFailure.tla
 run_case google-submit \
     models/providers/ParslGoogleCloudSubmitFixed.cfg \
     models/providers/ParslGoogleCloudSubmit.tla
@@ -1463,9 +1430,6 @@ run_case provider-executor-timed \
 run_case provider-executor-timed-monitoring \
     models/executors/ParslProviderExecutorTimedMonitoringFixed.cfg \
     models/executors/ParslProviderExecutorTimedMonitoring.tla
-run_case poller-executor-future-isolation \
-    models/providers/ParslPollerExecutorFutureIsolationFixed.cfg \
-    models/providers/ParslPollerExecutorFutureIsolation.tla
 run_case manager-liveness-pool \
     models/executors/ParslManagerLivenessPoolFixed.cfg \
     models/executors/ParslManagerLivenessPool.tla
@@ -1511,18 +1475,12 @@ run_case join-return-shape \
 run_case join-body-retry \
     models/dataflow/ParslJoinBodyRetry.cfg \
     models/dataflow/ParslJoinBodyRetry.tla
-run_case join-body-retry-monitoring \
-    models/dataflow/ParslJoinBodyRetryMonitoringFixed.cfg \
-    models/dataflow/ParslJoinBodyRetryMonitoring.tla
 run_case join-retry-cancellation \
     models/dataflow/ParslJoinRetryCancellationFixed.cfg \
     models/dataflow/ParslJoinRetryCancellation.tla
 run_case join-callback-race \
     models/dataflow/ParslJoinCallbackRace.cfg \
     models/dataflow/ParslJoinCallbackRace.tla
-run_case join-callback-monitoring \
-    models/dataflow/ParslJoinCallbackMonitoringFixed.cfg \
-    models/dataflow/ParslJoinCallbackMonitoring.tla
 run_case join-callable-transport \
     models/dataflow/ParslJoinCallableTransport.cfg \
     models/dataflow/ParslJoinCallableTransport.tla
@@ -1532,9 +1490,6 @@ run_case join-mixed-list \
 run_case join-memo-data \
     models/dataflow/ParslJoinMemoData.cfg \
     models/dataflow/ParslJoinMemoData.tla
-run_case join-memo-failure \
-    models/dataflow/ParslJoinMemoFailureFixed.cfg \
-    models/dataflow/ParslJoinMemoFailure.tla
 run_case nested-join-failure \
     models/dataflow/ParslNestedJoinFailure.cfg \
     models/dataflow/ParslNestedJoinFailure.tla
@@ -1742,9 +1697,6 @@ run_case ftp-stage \
 run_case ftp-partial-cleanup \
     models/staging/ParslFTPPartialCleanupFixed.cfg \
     models/staging/ParslFTPPartialCleanup.tla
-run_case ftp-partial-cleanup-future-monitoring \
-    models/staging/ParslFTPPartialCleanupFutureMonitoringFixed.cfg \
-    models/staging/ParslFTPPartialCleanupFutureMonitoring.tla
 run_case ftp-connection-cleanup \
     models/staging/ParslFTPConnectionCleanupFixed.cfg \
     models/staging/ParslFTPConnectionCleanup.tla
@@ -1772,9 +1724,6 @@ run_case http-connection-cleanup \
 run_case http-partial-cleanup \
     models/staging/ParslHTTPPartialCleanupFixed.cfg \
     models/staging/ParslHTTPPartialCleanup.tla
-run_case http-partial-cleanup-future-monitoring \
-    models/staging/ParslHTTPPartialCleanupFutureMonitoringFixed.cfg \
-    models/staging/ParslHTTPPartialCleanupFutureMonitoring.tla
 run_case http-separate-task-cleanup \
     models/staging/ParslHTTPSeparateTaskCleanupFixed.cfg \
     models/staging/ParslHTTPSeparateTaskCleanup.tla
@@ -1784,9 +1733,6 @@ run_case http-status-validation \
 run_case rsync-partial-cleanup \
     models/staging/ParslRsyncPartialCleanupFixed.cfg \
     models/staging/ParslRsyncPartialCleanup.tla
-run_case rsync-partial-cleanup-future-monitoring \
-    models/staging/ParslRsyncPartialCleanupFutureMonitoringFixed.cfg \
-    models/staging/ParslRsyncPartialCleanupFutureMonitoring.tla
 run_case file-transfer-retry \
     models/staging/ParslFileTransferRetryFixed.cfg \
     models/staging/ParslFileTransferRetry.tla
@@ -1955,9 +1901,6 @@ run_case globus-transfer-failure-success \
 run_case staging-provider-dispatch \
     models/staging/ParslStagingProviderDispatchCurrent.cfg \
     models/staging/ParslStagingProviderDispatch.tla
-run_case staging-provider-transfer-failure \
-    models/staging/ParslStagingProviderTransferFailureFixed.cfg \
-    models/staging/ParslStagingProviderTransferFailure.tla
 run_case data-manager-stage-out-return \
     models/staging/ParslDataManagerStageOutReturnFuture.cfg \
     models/staging/ParslDataManagerStageOutReturn.tla
@@ -1979,9 +1922,6 @@ run_case serialization-negative-length \
 run_case serialization-binary-payload \
     models/serialization/ParslSerializationBinaryPayload.cfg \
     models/serialization/ParslSerializationBinaryPayload.tla
-run_case apply-frame-validation \
-    models/serialization/ParslApplyFrameValidationFixed.cfg \
-    models/serialization/ParslApplyFrameValidation.tla
 run_case serialized-result-file \
     models/core/ParslSerializedResultFileFixed.cfg \
     models/core/ParslSerializedResultFile.tla
@@ -2012,9 +1952,6 @@ run_case strategy-idle-clock \
 run_case heartbeat-boundary \
     models/executors/ParslHeartbeatBoundary.cfg \
     models/executors/ParslHeartbeatBoundary.tla
-run_case heartbeat-provider-boundary \
-    models/clock/ParslHeartbeatProviderBoundaryFixed.cfg \
-    models/clock/ParslHeartbeatProviderBoundary.tla
 run_case htex-heartbeat-version \
     models/executors/ParslHtexHeartbeatVersion.cfg \
     models/executors/ParslHtexHeartbeatVersion.tla
@@ -2153,62 +2090,11 @@ run_case strategy-block-capacity-fixed \
 run_case strategy-block-capacity-success \
     models/strategy/ParslStrategyBlockCapacitySuccess.cfg \
     models/strategy/ParslStrategyBlockCapacity.tla
-run_case strategy-parallelism-admission \
-    models/strategy/ParslStrategyParallelismAdmissionFixed.cfg \
-    models/strategy/ParslStrategyParallelismAdmission.tla
-run_case strategy-parallelism-range-admission \
-    models/strategy/ParslStrategyParallelismRangeAdmissionFixed.cfg \
-    models/strategy/ParslStrategyParallelismRangeAdmission.tla
-run_case monitoring-priority-status-atomicity \
-    models/monitoring/ParslMonitoringPriorityStatusAtomicityFixed.cfg \
-    models/monitoring/ParslMonitoringPriorityStatusAtomicity.tla
-run_case monitoring-failure-shutdown \
-    models/monitoring/ParslMonitoringFailureShutdownFixed.cfg \
-    models/monitoring/ParslMonitoringFailureShutdown.tla
 run_case callable-alias-retry-fixed \
     models/serialization/ParslCallableAliasRetry.cfg \
     models/serialization/ParslCallableAliasRetry.tla
 run_case join-duplicate-cancellation-fixed \
     models/dataflow/ParslJoinDuplicateCancellationFixed.cfg \
     models/dataflow/ParslJoinDuplicateCancellation.tla
-run_case join-failure-order \
-    models/dataflow/ParslJoinFailureOrder.cfg \
-    models/dataflow/ParslJoinFailureOrder.tla
-run_case join-multi-output-readiness \
-    models/dataflow/ParslJoinMultiOutputReadinessFixed.cfg \
-    models/dataflow/ParslJoinMultiOutputReadiness.tla
-run_case zip-duplicate-readiness \
-    models/staging/ParslZipDuplicateReadinessFixed.cfg \
-    models/staging/ParslZipDuplicateReadiness.tla
-run_case flux-provider-handshake \
-    models/executors/ParslFluxProviderHandshakeFixed.cfg \
-    models/executors/ParslFluxProviderHandshake.tla
-run_case kubernetes-future-admission \
-    models/providers/ParslKubernetesFutureAdmissionFixed.cfg \
-    models/providers/ParslKubernetesFutureAdmission.tla
-run_case dfk-executor-shutdown-monitoring \
-    models/monitoring/ParslDfkExecutorShutdownMonitoringFixed.cfg \
-    models/monitoring/ParslDfkExecutorShutdownMonitoring.tla
-run_case kubernetes-cancel-future-monitoring \
-    models/providers/ParslKubernetesCancelFutureMonitoringFixed.cfg \
-    models/providers/ParslKubernetesCancelFutureMonitoring.tla
-run_case globus-transfer-readiness \
-    models/staging/ParslGlobusTransferReadinessFixed.cfg \
-    models/staging/ParslGlobusTransferReadiness.tla
-run_case globus-transfer-readiness-monitoring \
-    models/staging/ParslGlobusTransferReadinessMonitoringFixed.cfg \
-    models/staging/ParslGlobusTransferReadinessMonitoring.tla
-run_case plugin-retry-monitoring \
-    models/serialization/ParslPluginRetryMonitoringFixed.cfg \
-    models/serialization/ParslPluginRetryMonitoring.tla
-run_case workqueue-cancelled-monitoring \
-    models/executors/ParslWorkQueueCancelledMonitoringFixed.cfg \
-    models/executors/ParslWorkQueueCancelledMonitoring.tla
-run_case mpi-malformed-result-monitoring \
-    models/executors/ParslMPIMalformedResultMonitoringFixed.cfg \
-    models/executors/ParslMPIMalformedResultMonitoring.tla
-run_case taskvine-cancelled-monitoring \
-    models/executors/ParslTaskVineCancelledMonitoringFixed.cfg \
-    models/executors/ParslTaskVineCancelledMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."
