@@ -3,14 +3,6 @@
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 
-`ParslGlobusTransferReadiness.tla` composes the Globus ACTIVE-transfer polling loop with its
-downstream DataFuture and consumer gate. The Current branch has no overall deadline, so an
-ACTIVE transfer can leave both the DataFuture and dependent task without a terminal outcome;
-the Fixed branch converts the bounded poll budget into transfer/DataFuture failure before
-consumer admission. The concrete bridge is
-`tests/test_globus_transfer_readiness_runtime.py`, refining the existing transfer-timeout
-boundary.
-
 `ParslStageInAttemptGeneration.tla` is the cross-layer model for logical task retries and
 physical stage-in transfers. A transfer from an earlier task attempt may complete late. The
 Current configuration allows that stale transfer to make the retried task ready; the Fixed
@@ -150,16 +142,6 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncPartialCleanupF
 /tmp/parsl-venv/bin/python -m unittest tests/test_rsync_partial_cleanup_runtime.py -v
 ```
 
-`ParslRsyncDataFutureGate.tla` composes the in-task RSync stage-out wrapper with DataManager's
-`None` stage-out return contract. The Current branch lets the output DataFuture follow application
-completion before the remote copy publishes bytes; the Fixed branch keeps consumers blocked until
-RSync succeeds, and turns a failed copy into a terminal DataFuture failure.
-
-```bash
-java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateCurrent.cfg models/staging/ParslRsyncDataFutureGate.tla
-java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslRsyncDataFutureGateFixed.cfg models/staging/ParslRsyncDataFutureGate.tla
-```
-
 `ParslRsyncQuoting.tla` models the command-construction boundary in the same wrapper. The current
 implementation interpolates source and destination paths into `os.system`, so a valid path with
 spaces is split by the shell; the fixed branch quotes each argument. The runtime probe inspects
@@ -212,6 +194,17 @@ configuration permits the old attempt's fully received bytes to publish the new 
 Fixed configuration requires both the logical attempt and source version to match, marks the old
 transfer stale, and restarts it.  This keeps logical task identity separate from physical transfer
 identity while retaining concrete chunk tokens and checksum checks.
+
+`ParslFileTransferRetryMonitoring.tla` is a compact cross-layer version of the same boundary. It
+adds a monitoring state to the source-version race: the Current branch reports a successful
+publication for stale bytes, while the Fixed branch records the stale transfer, retries, and only
+then releases the DataFuture. `VersionPublicationSafety`, `DataFutureGate`, `ContentSafety`, and
+`StaleVisibility` make the file-content and consumer consequences explicit.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryMonitoringCurrent.cfg models/staging/ParslFileTransferRetryMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFileTransferRetryMonitoringFixed.cfg models/staging/ParslFileTransferRetryMonitoring.tla
+```
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
