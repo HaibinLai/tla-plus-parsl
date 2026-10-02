@@ -88,6 +88,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedA
 /tmp/parsl-venv/bin/python -m unittest tests/test_zmq_serialized_ack_runtime.py -v
 ```
 
+`ParslZMQSerializedAckFutureMonitoring.tla` composes that retransmission boundary with logical
+task dispatch, Future resolution, and monitoring. The Current branch dispatches a duplicate
+envelope and records a duplicate monitoring event; the Fixed branch ignores the duplicate after
+the task/attempt identity has been seen. TLC checks snapshot immutability, single dispatch, and
+terminal Future/monitor consistency. The same real serializer probe exercises the concrete wire
+snapshot and deduplication behavior.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFutureMonitoringCurrent.cfg models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQSerializedAckFutureMonitoringFixed.cfg models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
+```
+
 `ParslZMQMultipartAck.tla` adds multipart validation to the same path. A valid three-buffer
 envelope can be retransmitted after ACK loss and remains at-most-once at dispatch. A malformed
 four-buffer envelope is rejected before the Fixed branch decodes it; the Current configuration

@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — ZMQ serialized ACK with Future monitoring
+
+- Added `ParslZMQSerializedAckFutureMonitoring`, composing a real callable snapshot and ACK-loss
+  retransmission with at-most-once dispatch, Future resolution, and monitoring publication.
+  Current TLC violates `SingleDispatch`/`NoDuplicatePublication` after duplicate delivery; Fixed
+  TLC passes 10,000 simulation steps. The real `parsl.serialize` duplicate-envelope runtime probe
+  passes. The foundational inventory is now 708 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — join body retry with Future monitoring
 
 - Added `ParslJoinBodyRetryMonitoring`, composing join-body physical retries with delayed inner

@@ -539,6 +539,9 @@ run_case zmq-ack-retry \
 run_case zmq-serialized-ack \
     models/serialization/ParslZMQSerializedAckFixed.cfg \
     models/serialization/ParslZMQSerializedAck.tla
+run_case zmq-serialized-ack-future-monitoring \
+    models/serialization/ParslZMQSerializedAckFutureMonitoringFixed.cfg \
+    models/serialization/ParslZMQSerializedAckFutureMonitoring.tla
 run_case zmq-multipart-ack \
     models/serialization/ParslZMQMultipartAckFixed.cfg \
     models/serialization/ParslZMQMultipartAck.tla
