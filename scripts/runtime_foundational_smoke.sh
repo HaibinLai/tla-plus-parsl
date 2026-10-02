@@ -52,6 +52,7 @@ tests=(
     tests/test_command_max_retries_runtime.py
     tests/test_worker_pool_control_frame_runtime.py
     tests/test_htex_worker_poll_priority_runtime.py
+    tests/test_htex_poll_priority_future_timeout_runtime.py
     tests/test_htex_monitoring_batch_continuation_runtime.py
     tests/test_htex_result_batch_continuation_runtime.py
     tests/test_htex_manager_eligibility_runtime.py

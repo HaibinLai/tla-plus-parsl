@@ -662,6 +662,9 @@ run_case worker-pool-control-frame \
 run_case htex-worker-poll-priority \
     models/executors/ParslHtexWorkerPollPriorityFixed.cfg \
     models/executors/ParslHtexWorkerPollPriority.tla
+run_case htex-poll-priority-future-timeout \
+    models/executors/ParslHtexPollPriorityFutureTimeoutFixed.cfg \
+    models/executors/ParslHtexPollPriorityFutureTimeout.tla
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla

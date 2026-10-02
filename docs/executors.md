@@ -1469,6 +1469,18 @@ The current branch always services the interchange task socket first, while the 
 a ready result precedence so continuous task traffic cannot postpone result forwarding. The runtime
 probe uses deterministic fake sockets and confirms the current branch's task-first behavior.
 
+`ParslHtexPollPriorityFutureTimeout.tla` composes that transport ordering with a logical Future
+deadline and monitoring terminal state. A continuously readable task channel can leave a ready
+result unserved through the deadline in the Current branch; the Fixed branch services the result
+before accepting another task. The runtime bridge drives the installed worker communicator with
+the same fake sockets and records the starvation; TLC checks the timeout and terminal-state
+contract.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslHtexPollPriorityFutureTimeoutFixed.cfg models/executors/ParslHtexPollPriorityFutureTimeout.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_poll_priority_future_timeout_runtime.py -v
+```
+
 `ParslFluxShutdownLifecycle.tla` models the Flux executor's submission-thread lifecycle. The
 Current `shutdown()` path calls `join()` even when `start()` was never called, while the Fixed path
 accepts an unstarted executor as already quiescent. The runtime probe constructs the real executor

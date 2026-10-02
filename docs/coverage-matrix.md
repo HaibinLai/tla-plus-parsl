@@ -983,3 +983,5 @@ and the bound-provider cancellation invariant.
 
 HTEX worker transport coverage also includes `ParslHtexWorkerPollPriority`, which makes the
 two-readable-socket scheduling choice explicit and checks a bounded result-service guarantee.
+`ParslHtexPollPriorityFutureTimeout` composes that ordering with Future timeout and monitoring
+terminality, requiring a ready result to be serviced before the deadline or an explicit timeout.

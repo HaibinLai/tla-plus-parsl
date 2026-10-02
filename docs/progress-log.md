@@ -2380,6 +2380,11 @@ The remaining work is documentation and handoff, not model expansion:
   terminal status persistence. The model checks join dependency, output publication, completeness,
   and monitoring terminality; the real decorated join/DataManager/SQLite bridge passes. Inventory
   is now 730 TLC configurations, 469 runtime entries, and 744 unittest methods.
+- Current stage: added `ParslHtexPollPriorityFutureTimeout`, composing the HTEX task/result poll
+  ordering with a logical Future deadline and monitoring terminality. The Current runtime bridge
+  reproduces a ready result remaining unconsumed through three deadline polls, while the Fixed TLC
+  configuration requires result service or an explicit timeout. Inventory is now 731 TLC
+  configurations, 470 runtime entries, and 745 unittest methods.
 
 ### Verification convention
 
