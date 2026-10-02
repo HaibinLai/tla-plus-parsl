@@ -878,6 +878,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLocalProviderFixed
 /tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_exit_status_runtime.py -v
 ```
 
+`ParslLocalLifecycle.tla` is the small composition boundary for the local provider. It connects
+submission, process start, `.ec` status interpretation, local-resource loss, and cancellation.
+The Current branch reproduces an abort when cancellation reaches a stale local record; the Fixed
+branch makes that cancellation terminal and idempotent. The existing end-to-end
+`test_local_provider_runtime.py` probe supplies the concrete process, exit-file, and cancellation
+checks for this composition.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslLocalLifecycleCurrent.cfg models/providers/ParslLocalLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslLocalLifecycleFixed.cfg models/providers/ParslLocalLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_local_provider_runtime.py -v
+```
+
 `ParslCondorEmptySubmit.tla` models the successful-but-empty `condor_submit` response boundary in
 `CondorProvider.submit`. The current parser builds an empty job-ID list and then indexes its first
 element, leaking `IndexError` instead of reporting a failed provisioning request. The fixed branch

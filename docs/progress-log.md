@@ -88,6 +88,16 @@ simulated states. The fixed configuration is now part of the foundational smoke 
 
 The post-v0.1 foundational inventory is now 645 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Local provider lifecycle composition
+
+`ParslLocalLifecycle` composes local submission, process/exit-marker status, stale local
+bookkeeping, and cancellation. The Current branch reaches `NoAbort` when cancellation sees a
+missing local resource record; the Fixed branch makes the stale cancellation terminal and
+idempotent. The model is now in the foundational smoke gate, with the existing concrete local
+provider runtime suite covering process launch, output, exit markers, and cancellation.
+
+The post-v0.1 foundational inventory is now 646 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

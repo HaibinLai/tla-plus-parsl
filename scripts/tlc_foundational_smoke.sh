@@ -704,6 +704,9 @@ run_case local-provider-status-scope \
 run_case local-provider-lifecycle \
     models/providers/ParslLocalProviderFixed.cfg \
     models/providers/ParslLocalProvider.tla
+run_case local-lifecycle \
+    models/providers/ParslLocalLifecycleFixed.cfg \
+    models/providers/ParslLocalLifecycle.tla
 run_case grid-engine-missing-status \
     models/providers/ParslGridEngineMissingStatusFixed.cfg \
     models/providers/ParslGridEngineMissingStatus.tla
