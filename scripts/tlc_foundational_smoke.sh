@@ -680,6 +680,9 @@ run_case slurm-foreign-job \
 run_case slurm-malformed-line \
     models/providers/ParslSlurmMalformedLineFixed.cfg \
     models/providers/ParslSlurmMalformedLine.tla
+run_case slurm-malformed-future-monitoring \
+    models/providers/ParslSlurmMalformedFutureMonitoringFixed.cfg \
+    models/providers/ParslSlurmMalformedFutureMonitoring.tla
 run_case slurm-tasks-per-node \
     models/providers/ParslSlurmTasksPerNodeFixed.cfg \
     models/providers/ParslSlurmTasksPerNode.tla

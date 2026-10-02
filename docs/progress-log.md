@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Slurm malformed status with Future monitoring
+
+- Added `ParslSlurmMalformedFutureMonitoring`, composing the truncated Slurm status-line parser
+  with poller progress, Future completion, and monitoring publication. The Current branch
+  violates `PollerProgress` by crashing before a later valid completion; the Fixed branch skips
+  the malformed record and passes 10,000 TLC simulation steps. The existing concrete Slurm
+  malformed-line runtime probe passes. The foundational inventory is now 693 TLC cases and 453
+  runtime entries.
+
 ## 2026-10-02 — heartbeat timeout and monitoring composition
 
 - Added `ParslHeartbeatTimeoutFutureMonitoring`, combining wall-clock rollback, monotonic

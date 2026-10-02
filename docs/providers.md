@@ -719,6 +719,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedLine
 /tmp/parsl-venv/bin/python -m unittest tests/test_slurm_malformed_line_runtime.py -v
 ```
 
+`ParslSlurmMalformedFutureMonitoring.tla` composes BUG-130's parser boundary with a logical
+task, its Future, and monitoring publication. The Current branch crashes the poller after the
+truncated line, so a later valid completion cannot propagate; the Fixed branch skips the bad
+record and reaches the normal terminal path. `PollerProgress` and `CompletionPropagation` make
+that cross-layer requirement executable.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedFutureMonitoringCurrent.cfg models/providers/ParslSlurmMalformedFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslSlurmMalformedFutureMonitoringFixed.cfg models/providers/ParslSlurmMalformedFutureMonitoring.tla
+```
+
 `ParslSlurmDuplicateStatus.tla` models duplicate scheduler rows for the same Slurm job. The
 current missing-job bookkeeping removes the ID twice and raises `KeyError`; the fixed branch
 ignores the duplicate and continues polling. TLC checks six generated/three distinct states in
