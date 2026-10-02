@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — monitoring timeout and late-event persistence
+
+- Added `ParslMonitoringTimeoutLateEvent`, composing logical timeout, asynchronous status events,
+  transient database-write retry, and late success handling. The Current branch writes a stale
+  success after timeout and violates `TimeoutDatabaseSafety`; the Fixed branch keeps Future and
+  database terminal states aligned and passes 10,000 TLC simulation steps. Existing insert/update
+  persistent-retry runtime probes pass. The foundational inventory is now 697 TLC cases and 453
+  runtime entries.
+
 ## 2026-10-02 — LSF missing job with Future monitoring
 
 - Added `ParslLSFMissingJobFutureMonitoring`, composing LSF missing-job polling with Future

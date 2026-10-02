@@ -70,6 +70,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRet
 java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTaskRetryFixed.cfg models/monitoring/ParslMonitoringTaskRetry.tla
 ```
 
+`ParslMonitoringTimeoutLateEvent.tla` composes a logical timeout with asynchronous database
+delivery. A late success event can arrive while the timeout event is queued or being retried
+after a transient database failure. The Current branch writes that stale success and violates
+`TimeoutDatabaseSafety`; the Fixed branch rejects it, keeps the database aligned with the
+timed-out Future, and preserves the bounded retry count.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTimeoutLateEventCurrent.cfg models/monitoring/ParslMonitoringTimeoutLateEvent.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringTimeoutLateEventFixed.cfg models/monitoring/ParslMonitoringTimeoutLateEvent.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_persistent_retry_runtime.py tests/test_monitoring_update_persistent_retry_runtime.py -v
+```
+
 `ParslResultMonitoringAttempt.tla` composes that retry ordering with terminal result persistence.
 After attempt 0 is replaced by attempt 1, the Fixed branch turns an old result into a stale event
 instead of resolving the Future or writing `succeeded` for the old attempt. The runtime bridge

@@ -197,6 +197,9 @@ run_case worker-contact-timeout \
 run_case timeout-monitoring \
     models/clock/ParslTimeoutMonitoringFixed.cfg \
     models/clock/ParslTimeoutMonitoring.tla
+run_case monitoring-timeout-late-event \
+    models/monitoring/ParslMonitoringTimeoutLateEventFixed.cfg \
+    models/monitoring/ParslMonitoringTimeoutLateEvent.tla
 run_case timeout-timer-error \
     models/clock/ParslTimeoutTimerError.cfg \
     models/clock/ParslTimeoutTimer.tla
