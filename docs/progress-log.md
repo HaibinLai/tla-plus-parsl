@@ -132,6 +132,13 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 667 TLC cases, 443 runtime entries, and
   690 unittest methods passed.
 
+## 2026-10-02 — join monitoring high-water bridge
+
+- Extended `test_join_monitoring_runtime.py` to select the current terminal
+  status by highest inner `try_id` after a delayed old-generation row.
+- This connects real `join_app` retry execution to the `ParslJoinMonitoringDB`
+  high-water invariant without discarding append-only monitoring history.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

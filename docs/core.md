@@ -527,6 +527,8 @@ COMPLETED, and unfamiliar codes to UNKNOWN.
 `ParslJoinMonitoringDB.tla` connects terminal join state to monitoring persistence. It models
 queued status, transient write retry, duplicate-row arrival, and idempotent fixed behavior; the
 Current branch turns a duplicate write into a lost terminal status.
+The runtime join bridge now also selects the highest `try_id` as the current terminal row after
+an older status arrives late, while retaining the append-only history for audit.
 
 `ParslJoinHeartbeatRetry.tla` connects logical time and heartbeat expiry to join retries. It
 separates manager loss from task timeout, bounds reprovisioned attempts, and rejects late results

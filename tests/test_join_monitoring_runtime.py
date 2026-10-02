@@ -81,6 +81,10 @@ class JoinMonitoringRuntimeTest(unittest.TestCase):
         self.assertEqual([row.try_id for row in rows], [0, 1, 0])
         self.assertEqual(rows[-1].try_id, 0)
 
+        current = max(rows, key=lambda row: row.try_id)
+        self.assertEqual(current.try_id, 1)
+        self.assertEqual(current.task_status_name, "succeeded")
+
 
 if __name__ == "__main__":
     unittest.main()
