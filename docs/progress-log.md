@@ -4,6 +4,17 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — strategy parallelism range admission bridge
+
+- Added `ParslStrategyParallelismRangeAdmission` for the documented upper bound on the
+  parallelism ratio. The current branch accepts `parallelism=2.0`; with one active slot and
+  queued work it requests all remaining capacity, while the fixed branch rejects the value.
+- TLC fixed configuration passes and the current configuration reproduces the
+  `AdmissionRangeSafety` counterexample. The real strategy runtime probe confirms the
+  `[0, 3]` scale-out sequence (initialization plus provider-maximum demand).
+- Focused strategy coverage passes 8/8 tests; the current baseline is 671 TLC cases, 443 runtime
+  entries, and 699 unittest methods. Recorded as BUG-317 in the executor ledger.
+
 ## 2026-10-02 — monitoring priority TASK/STATUS/TRY atomicity bridge
 
 - Added `ParslMonitoringPriorityStatusAtomicity`, modeling the priority path's separate TASK,
