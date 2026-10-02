@@ -1160,6 +1160,9 @@ run_case google-cancel \
 run_case google-status \
     models/providers/ParslGoogleCloudStatusFixed.cfg \
     models/providers/ParslGoogleCloudStatus.tla
+run_case google-unknown-future-monitoring \
+    models/providers/ParslGoogleCloudUnknownFutureMonitoringFixed.cfg \
+    models/providers/ParslGoogleCloudUnknownFutureMonitoring.tla
 run_case google-status-present \
     models/providers/ParslGoogleCloudStatusPresent.cfg \
     models/providers/ParslGoogleCloudStatus.tla

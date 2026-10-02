@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Google Cloud unknown status with Future monitoring
+
+- Added `ParslGoogleCloudUnknownFutureMonitoring`, composing unknown GCE status translation with
+  poller progress, Future completion, and monitoring publication. The Current branch violates
+  `UnknownIsolation` by aborting before a healthy observation; the Fixed branch isolates the
+  unknown state and passes 10,000 TLC simulation steps. The existing four-case Google Cloud
+  status runtime probe passes. The foundational inventory is now 700 TLC cases and 453 runtime
+  entries.
+
 ## 2026-10-02 — PBS Pro malformed JSON with Future monitoring
 
 - Added `ParslPBSProMalformedFutureMonitoring`, composing malformed `qstat` JSON with poller

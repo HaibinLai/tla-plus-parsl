@@ -270,6 +270,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudStatusP
 /tmp/parsl-venv/bin/python -m unittest tests/test_googlecloud_status_runtime.py -v
 ```
 
+`ParslGoogleCloudUnknownFutureMonitoring.tla` composes the unknown GCE status translation with
+poller progress, Future completion, and monitoring publication. The Current branch aborts on the
+unknown provider state before a healthy observation can complete the task; the Fixed branch maps
+it to an isolated `UNKNOWN` observation and continues. `UnknownIsolation` and
+`CompletionPropagation` make the cross-layer contract executable.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudUnknownFutureMonitoringCurrent.cfg models/providers/ParslGoogleCloudUnknownFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslGoogleCloudUnknownFutureMonitoringFixed.cfg models/providers/ParslGoogleCloudUnknownFutureMonitoring.tla
+```
+
 `ParslGoogleCloudLifecycle.tla` composes GCE instance submission, a status batch with one failed
 remote lookup and one healthy VM, and subsequent cancellation. The Current branch aborts the
 batch on the first API exception; the Fixed branch records `UNKNOWN` for the failed VM, preserves
