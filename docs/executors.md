@@ -16,6 +16,18 @@ java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -config models/executors/Par
 
 This startup response boundary is recorded as BUG-309.
 
+`ParslRadicalMasterCountAdmission.tla` models the configuration boundary for the number of
+Radical-Pilot masters. A zero master count creates an empty cyclic selector in the current
+executor and fails only when a task is selected; the fixed branch rejects it during startup.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslRadicalMasterCountAdmissionCurrent.cfg models/executors/ParslRadicalMasterCountAdmission.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -config models/executors/ParslRadicalMasterCountAdmissionFixed.cfg models/executors/ParslRadicalMasterCountAdmission.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_master_count_admission_runtime.py -v
+```
+
+This configuration-admission boundary is recorded as BUG-311.
+
 `ParslHtexShutdownReap.tla` refines the HTEX shutdown timeout boundary. The current path sends
 `kill()` after a timed wait but does not perform a second `wait()` before closing ZMQ pipes; the
 fixed branch requires a reap step before shutdown completion. The runtime probe uses the concrete

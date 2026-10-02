@@ -9,7 +9,7 @@ are recorded here in English and committed with the model changes.
 ### Current repository state
 
 - Latest locally preserved commit: `c0d816a` (`Model AWS teardown state cleanup`).
-- Foundational smoke inventory: 636 TLC cases and 433 Python runtime probes.
+- Foundational smoke inventory: 637 TLC cases and 434 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
   monitoring persistence, executors, providers, schedulers, scaling, memoization, and `join_app`.
@@ -38,6 +38,12 @@ implementation details become a separately tracked backlog rather than extending
 criteria for this deliverable.
 
 ### Latest completed stages
+
+- Current stage: audited Radical-Pilot master-count admission with
+  `ParslRadicalMasterCountAdmission`. The Current branch permits `masters=0`, starts with an
+  empty selector, and leaks `IndexError` on first selection; the Fixed branch rejects the
+  configuration during startup. Full smoke verification passed: 637 TLC configurations and 434
+  Python runtime probes; 673 unittest methods are present.
 
 - Current stage: audited AWS teardown state-file cleanup with
   `ParslAwsTeardownStateCleanup`. The Current branch leaks `FileNotFoundError` when the state

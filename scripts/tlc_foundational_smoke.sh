@@ -971,6 +971,9 @@ run_case radical-decode-failure \
 run_case radical-master-submit-shape \
     models/executors/ParslRadicalMasterSubmitShapeFixed.cfg \
     models/executors/ParslRadicalMasterSubmitShape.tla
+run_case radical-master-count-admission \
+    models/executors/ParslRadicalMasterCountAdmissionFixed.cfg \
+    models/executors/ParslRadicalMasterCountAdmission.tla
 run_case globus-submit-race \
     models/executors/ParslGlobusComputeSubmitRaceFixed.cfg \
     models/executors/ParslGlobusComputeSubmitRace.tla
