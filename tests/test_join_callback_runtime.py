@@ -69,6 +69,32 @@ class JoinCallbackRuntimeTest(unittest.TestCase):
         kernel.handle_join_update(record, first)
         self.assertEqual(len(kernel.completed), 1)
 
+    def test_concurrent_duplicate_callbacks_finalize_once(self):
+        """The real join lock permits only one terminal completion."""
+        kernel = self.kernel_for()
+        first = self.future(1, join_id="first")
+        second = self.future(2, join_id="second")
+        record = self.record_for([first, second])
+        barrier = threading.Barrier(2)
+        errors = []
+
+        def invoke_callback():
+            try:
+                barrier.wait(timeout=2)
+                kernel.handle_join_update(record, first)
+            except Exception as exc:  # pragma: no cover - diagnostic path
+                errors.append(exc)
+
+        workers = [threading.Thread(target=invoke_callback) for _ in range(2)]
+        for worker in workers:
+            worker.start()
+        for worker in workers:
+            worker.join(timeout=2)
+
+        self.assertEqual(errors, [])
+        self.assertEqual(record["status"], States.exec_done)
+        self.assertEqual(kernel.completed, [(States.exec_done, [1, 2])])
+
     def test_all_done_failure_becomes_join_error_with_inner_exception(self):
         kernel = self.kernel_for()
         first = self.future(1, join_id="first")

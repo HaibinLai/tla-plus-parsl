@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — concurrent `join_app` callback bridge
+
+- Extended `test_join_callback_runtime.py` with two simultaneous duplicate
+  callbacks against a real `DataFlowKernel.handle_join_update` record.
+- The probe verifies that the `join_lock` serializes terminal completion:
+  ordered results are published once and the second callback is harmless,
+  matching `ParslJoinCallbackRace`'s lock and terminal-state invariants.
+- Focused runtime coverage passes 5/5 tests.
+
 ## 2026-10-02 — provider scale-in to logical retry bridge
 
 - Extended `test_htex_force_scale_in_runtime.py` to connect a real HTEX
