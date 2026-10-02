@@ -220,6 +220,16 @@ The callable-name refinement is also checked at the Flux executor boundary by
 Flux uses the same unsafe `func.__name__` error-reporting path as HTEX; the fixed condition from
 BUG-272 must hold for both concrete submit implementations.
 
+`ParslFluxSerializationFailure.tla` covers the adjacent Flux serializer boundary. The current
+implementation catches only `TypeError`; a `ValueError` from `pack_apply_message` escapes raw.
+The Fixed branch normalizes the failure to `SerializationError`. This is recorded as BUG-322.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxSerializationFailureCurrent.cfg models/executors/ParslFluxSerializationFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslFluxSerializationFailureFixed.cfg models/executors/ParslFluxSerializationFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_flux_serialization_failure_runtime.py -v
+```
+
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecCurrent.cfg models/executors/ParslThreadExecutorResourceSpec.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslThreadExecutorResourceSpecFixed.cfg models/executors/ParslThreadExecutorResourceSpec.tla

@@ -410,6 +410,8 @@ at the HTEX submit boundary instead of escaping as raw implementation exceptions
 an explicit serialization error rather than masking it with `AttributeError` (BUG-272).
 The same condition is checked at the concrete Flux submit boundary by
 `ParslFluxSerializationErrorName`.
+`ParslFluxSerializationFailure` additionally checks that non-`TypeError` serializer failures
+cannot escape the Flux submission boundary (BUG-322).
 The temporal refinement `ParslHtexResultDecodeContinuation` places a corrupt result before a
 valid result in one batch and checks that decode failure cannot strand the later Future (BUG-020).
 Provider/executor coverage also includes `ParslPollerExecutorIsolation` (BUG-269), which keeps

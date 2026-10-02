@@ -4,13 +4,20 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Flux non-TypeError serializer-failure abstraction
+
+- Added `ParslFluxSerializationFailure.tla` and a concrete runtime probe. The installed
+  `FluxExecutor.submit` catches only `TypeError` from `pack_apply_message`; a `ValueError` escapes
+  raw. Current TLC produces the intentional `FailureNormalization` counterexample, while Fixed
+  passes. Inventory is now 719 TLC cases and 466 runtime entries (726 unittest methods).
+
 ## 2026-10-02 — Radical-Pilot decode failure and collector-progress runtime bridge
 
 - Added `test_radical_decode_monitoring_runtime.py`, which drives the real
   `RadicalPilotExecutor.task_state_cb` with a malformed `DONE` payload followed by a valid
   payload. The current callback raises before the later event is consumed and leaves both
   Futures unresolved; the accompanying Fixed TLA branch records a terminal decode failure and
-  keeps collection alive. Inventory is now 718 TLC cases and 465 runtime entries (726 unittest
+  keeps collection alive. Inventory is now 718 TLC cases and 465 runtime entries (725 unittest
   methods).
 
 ## 2026-10-02 — PBS Pro malformed-status Future monitoring bridge

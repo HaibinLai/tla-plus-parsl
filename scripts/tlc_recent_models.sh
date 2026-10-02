@@ -3045,6 +3045,12 @@ run_case flux-serialization-error-name-current counterexample \
 run_case flux-serialization-error-name-fixed pass \
     models/executors/ParslFluxSerializationErrorNameFixed.cfg \
     models/executors/ParslFluxSerializationErrorName.tla
+run_case flux-serialization-failure-current counterexample \
+    models/executors/ParslFluxSerializationFailureCurrent.cfg \
+    models/executors/ParslFluxSerializationFailure.tla
+run_case flux-serialization-failure-fixed pass \
+    models/executors/ParslFluxSerializationFailureFixed.cfg \
+    models/executors/ParslFluxSerializationFailure.tla
 run_case thread-executor-count-current counterexample \
     models/executors/ParslThreadExecutorThreadCountCurrent.cfg \
     models/executors/ParslThreadExecutorThreadCount.tla

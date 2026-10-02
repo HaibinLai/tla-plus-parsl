@@ -860,6 +860,9 @@ run_case thread-executor-empty-resource-spec \
 run_case flux-serialization-error-name \
     models/executors/ParslFluxSerializationErrorNameFixed.cfg \
     models/executors/ParslFluxSerializationErrorName.tla
+run_case flux-serialization-failure \
+    models/executors/ParslFluxSerializationFailureFixed.cfg \
+    models/executors/ParslFluxSerializationFailure.tla
 run_case workqueue-submit \
     models/executors/ParslWorkQueueSubmitFixed.cfg \
     models/executors/ParslWorkQueueSubmit.tla

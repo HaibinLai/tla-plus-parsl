@@ -141,6 +141,7 @@ tests=(
     tests/test_thread_executor_future_lifecycle_runtime.py
     tests/test_thread_executor_empty_resource_spec_runtime.py
     tests/test_flux_serialization_error_name_runtime.py
+    tests/test_flux_serialization_failure_runtime.py
     tests/test_workqueue_submit_runtime.py
     tests/test_taskvine_submit_runtime.py
     tests/test_workqueue_cancelled_result_runtime.py
