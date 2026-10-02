@@ -79,6 +79,130 @@ After these criteria are met, no additional model is added unless the project
 scope is explicitly changed. The goal is a useful finite audit, not exhaustive
 modeling of all Parsl source files.
 
+## Concrete audit inventory
+
+The source tree used for this audit is `/tmp/parsl-source/parsl`. The following
+inventory is the planned review set. Paths are relative to that directory. The
+counts are estimates for deep protocol review, not a claim that every listed
+file needs a new model.
+
+### A. Primary communication set: 31 files
+
+```text
+executors/high_throughput/executor.py
+executors/high_throughput/interchange.py
+executors/high_throughput/process_worker_pool.py
+executors/high_throughput/zmq_pipes.py
+executors/high_throughput/manager_record.py
+executors/high_throughput/manager_selector.py
+executors/high_throughput/monitoring_info.py
+executors/high_throughput/probe.py
+executors/high_throughput/mpi_executor.py
+executors/high_throughput/mpi_resource_management.py
+executors/high_throughput/mpi_prefix_composer.py
+executors/base.py
+executors/execute_task.py
+executors/status_handling.py
+executors/threads.py
+executors/flux/executor.py
+executors/workqueue/executor.py
+executors/taskvine/executor.py
+executors/radical/executor.py
+executors/globus_compute.py
+dataflow/dflow.py
+dataflow/futures.py
+dataflow/taskrecord.py
+dataflow/states.py
+dataflow/errors.py
+serialize/facade.py
+serialize/base.py
+serialize/concretes.py
+serialize/errors.py
+app/futures.py
+app/python.py
+```
+
+This pass covers task/result framing, serializer boundaries, attempt
+correlation, ACK/retry, duplicate and stale frames, close behavior, and result
+ownership after a failed send.
+
+### B. Asynchronous and lifecycle set: 20 entries
+
+```text
+dataflow/dflow.py                 dataflow/futures.py
+dataflow/memoization.py           dataflow/dependency_resolvers.py
+dataflow/rundirs.py               app/app.py
+app/bash.py                       app/errors.py
+executors/base.py                 executors/status_handling.py
+executors/high_throughput/process_worker_pool.py
+executors/high_throughput/interchange.py
+executors/flux/execute_parsl_task.py
+executors/flux/flux_instance_manager.py
+executors/taskvine/manager.py     executors/taskvine/factory.py
+executors/workqueue/parsl_coprocess.py
+monitoring/remote.py              monitoring/monitoring.py
+```
+
+These entries are reviewed for callback mutation, cancellation/timeout races,
+shutdown ordering, failure fan-out, and Future/monitoring terminality. Shared
+files are counted once; the mandatory communication plus async set is about 42
+unique source files.
+
+### C. Monitoring and persistence set: 14 files
+
+```text
+monitoring/db_manager.py          monitoring/message_type.py
+monitoring/types.py               monitoring/monitoring.py
+monitoring/remote.py              monitoring/radios/base.py
+monitoring/radios/htex.py         monitoring/radios/multiprocessing.py
+monitoring/radios/zmq.py          monitoring/radios/zmq_router.py
+monitoring/radios/udp.py          monitoring/radios/udp_router.py
+monitoring/radios/filesystem.py   monitoring/radios/filesystem_router.py
+```
+
+### D. Supporting data-transfer set: 10 files
+
+```text
+data_provider/data_manager.py     data_provider/staging.py
+data_provider/files.py             data_provider/http.py
+data_provider/ftp.py               data_provider/rsync.py
+data_provider/globus.py            data_provider/zip.py
+data_provider/file_noop.py         data_provider/__init__.py
+```
+
+Only transfers that gate task readiness or result delivery are in scope.
+
+### E. Provider adapter sweep: 13 implementation files
+
+```text
+providers/base.py                 providers/cluster_provider.py
+providers/local/local.py          providers/slurm/slurm.py
+providers/pbspro/pbspro.py        providers/torque/torque.py
+providers/lsf/lsf.py              providers/condor/condor.py
+providers/grid_engine/grid_engine.py
+providers/aws/aws.py              providers/azure/azure.py
+providers/googlecloud/googlecloud.py
+providers/kubernetes/kube.py      providers/errors.py
+```
+
+This sweep covers every currently shipped provider family. Provider templates
+and package `__init__.py` files are reference-only unless they change a message
+shape or lifecycle contract.
+
+### Expected file changes
+
+The planned source review is approximately 70–80 file entries, with roughly
+42 unique files in the mandatory communication/async pass and the remaining
+entries providing monitoring, staging, and provider context. The expected
+repository delta is smaller:
+
+- 6–10 new model families, normally one `.tla` plus 2–3 `.cfg` files each;
+- 6–10 focused runtime probe files;
+- 5–10 updates across documentation, bug ledger, coverage matrix, and smoke scripts.
+
+If a reviewed source file has no communication or asynchronous risk, it is
+recorded as reviewed and does not generate a model or speculative bug entry.
+
 ## Explicit non-goals
 
 - exhaustive line-by-line modeling of all Parsl backends;
