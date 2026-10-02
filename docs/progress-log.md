@@ -12,6 +12,8 @@ are recorded here in English and committed with the model changes.
   under a continuously replenished priority stream.
 - Added `test_monitoring_queue_fairness_runtime.py` to verify the helper's
   threshold behavior against the checked-out Parsl source.
+- Added the probe to the foundational runtime runner; the current baseline is
+  662 TLC cases, 435 runtime entries, and 676 unittest methods.
 
 ## 2026-10-02 — join cross-layer runtime bridge
 
