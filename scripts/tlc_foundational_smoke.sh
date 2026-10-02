@@ -1007,6 +1007,9 @@ run_case aws-status-ordering \
 run_case aws-state-file-atomicity \
     models/providers/ParslAwsStateFileAtomicityFixed.cfg \
     models/providers/ParslAwsStateFileAtomicity.tla
+run_case aws-teardown-state-cleanup \
+    models/providers/ParslAwsTeardownStateCleanupFixed.cfg \
+    models/providers/ParslAwsTeardownStateCleanup.tla
 run_case azure-cancel-missing-local \
     models/providers/ParslAzureCancelMissingFixed.cfg \
     models/providers/ParslAzureCancel.tla

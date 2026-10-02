@@ -6,6 +6,18 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslAwsTeardownStateCleanup.tla` models idempotent AWS state-file removal after infrastructure
+teardown. The current provider leaks `FileNotFoundError` when the state path is already absent;
+the fixed branch treats the missing file as completed cleanup.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslAwsTeardownStateCleanupCurrent.cfg models/providers/ParslAwsTeardownStateCleanup.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -config models/providers/ParslAwsTeardownStateCleanupFixed.cfg models/providers/ParslAwsTeardownStateCleanup.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_teardown_state_cleanup_runtime.py -v
+```
+
+This teardown cleanup boundary is recorded as BUG-310.
+
 `ParslAwsStateFileAtomicity.tla` models the persistence boundary in `AWSProvider`. The current
 implementation writes JSON directly to the final state path; an interruption after truncation
 can leave malformed state, and the next initialization may recreate infrastructure. The fixed
