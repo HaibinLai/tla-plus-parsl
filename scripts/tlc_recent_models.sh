@@ -2289,6 +2289,12 @@ run_case mpi-no-resource-result-monitoring-current counterexample \
 run_case mpi-no-resource-result-monitoring-fixed pass \
     models/executors/ParslMPINoResourceResultMonitoringFixed.cfg \
     models/executors/ParslMPINoResourceResultMonitoring.tla
+run_case bad-state-monitoring-current counterexample \
+    models/executors/ParslBlockProviderBadStateMonitoringCurrent.cfg \
+    models/executors/ParslBlockProviderBadStateMonitoring.tla
+run_case bad-state-monitoring-fixed pass \
+    models/executors/ParslBlockProviderBadStateMonitoringFixed.cfg \
+    models/executors/ParslBlockProviderBadStateMonitoring.tla
 run_case mpi-malformed-result-cleanup-current counterexample \
     models/executors/ParslMPIMalformedResultCleanupCurrent.cfg \
     models/executors/ParslMPIMalformedResultCleanup.tla

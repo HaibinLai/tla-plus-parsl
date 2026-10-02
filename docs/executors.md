@@ -1283,6 +1283,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadSt
 /tmp/parsl-venv/bin/python -m unittest tests/test_block_provider_bad_state_mutation_runtime.py -v
 ```
 
+`ParslBlockProviderBadStateMonitoring.tla` composes the callback-mutation failure with the
+logical Future and monitoring terminal states.  The Current branch leaves the second task and
+its monitoring row pending after the live-dictionary iterator aborts; the Fixed branch snapshots
+the task set and terminalizes every outstanding entry.  The runtime bridge records both Future
+callbacks and confirms the partial sweep in the installed executor.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadStateMonitoringCurrent.cfg models/executors/ParslBlockProviderBadStateMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBlockProviderBadStateMonitoringFixed.cfg models/executors/ParslBlockProviderBadStateMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_block_provider_bad_state_monitoring_runtime.py -v
+```
+
 `ParslHtexManagerSelection.tla` abstracts the two manager selectors in
 `high_throughput/manager_selector.py`. Random selection is modeled as any permutation of ready
 managers; block-ID selection preserves the source ordering rule, including managers with no block

@@ -2428,6 +2428,11 @@ The remaining work is documentation and handoff, not model expansion:
   resolves them. The runtime bridge confirms the installed scheduler raises before either terminal
   transition. Inventory is now 738 TLC configurations, 477 runtime entries, and 752 unittest
   methods.
+- Current stage: added `ParslBlockProviderBadStateMonitoring`, composing executor bad-state
+  fan-out with Future and monitoring terminality. The Current branch reproduces callback-driven
+  dictionary mutation that strands the second task and its monitoring row; the Fixed branch
+  snapshots the sweep and terminalizes both. Inventory is now 739 TLC configurations, 478 runtime
+  entries, and 753 unittest methods.
 
 ### Verification convention
 

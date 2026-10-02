@@ -1295,6 +1295,9 @@ run_case mpi-no-resource-result \
 run_case mpi-no-resource-result-monitoring \
     models/executors/ParslMPINoResourceResultMonitoringFixed.cfg \
     models/executors/ParslMPINoResourceResultMonitoring.tla
+run_case bad-state-monitoring \
+    models/executors/ParslBlockProviderBadStateMonitoringFixed.cfg \
+    models/executors/ParslBlockProviderBadStateMonitoring.tla
 run_case mpi-malformed-result-cleanup \
     models/executors/ParslMPIMalformedResultCleanupFixed.cfg \
     models/executors/ParslMPIMalformedResultCleanup.tla
