@@ -994,6 +994,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFMissingJobFixed
 /tmp/parsl-venv/bin/python -m unittest tests/test_lsf_missing_job_runtime.py -v
 ```
 
+`ParslLSFMissingJobFutureMonitoring.tla` composes this missing-job result with the logical
+Future and monitoring row. The Current branch publishes `succeeded` immediately on absence;
+the Fixed branch keeps the Future pending as `UNKNOWN` and only publishes failure after an
+explicit terminal observation. `MissingJobSafety`, `SuccessPropagation`, and
+`FailurePropagation` check the cross-layer contract.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFMissingJobFutureMonitoringCurrent.cfg models/providers/ParslLSFMissingJobFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFMissingJobFutureMonitoringFixed.cfg models/providers/ParslLSFMissingJobFutureMonitoring.tla
+```
+
 `ParslLSFLifecycle.tla` composes LSF `bsub` admission, `bjobs` observations, local resource
 ownership, and `bkill` cancellation. The Current branch can treat a missing job as completed,
 abort on duplicate/foreign/malformed records, or crash when cancellation targets a stale local

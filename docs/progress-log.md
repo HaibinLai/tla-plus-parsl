@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — LSF missing job with Future monitoring
+
+- Added `ParslLSFMissingJobFutureMonitoring`, composing LSF missing-job polling with Future
+  completion and monitoring publication. The Current branch reports success from absence alone;
+  the Fixed branch retains `UNKNOWN` until explicit failure and passes 10,000 TLC simulation
+  steps. The existing concrete LSF missing-job runtime probe passes. The foundational inventory
+  is now 696 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — Condor malformed status with Future monitoring
 
 - Added `ParslCondorMalformedFutureMonitoring`, composing a failed/truncated Condor status poll

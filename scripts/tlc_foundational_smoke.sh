@@ -773,6 +773,9 @@ run_case grid-engine-lifecycle \
 run_case lsf-missing-job \
     models/providers/ParslLSFMissingJobFixed.cfg \
     models/providers/ParslLSFMissingJob.tla
+run_case lsf-missing-job-future-monitoring \
+    models/providers/ParslLSFMissingJobFutureMonitoringFixed.cfg \
+    models/providers/ParslLSFMissingJobFutureMonitoring.tla
 run_case lsf-resource-validation \
     models/providers/ParslLSFResourceValidationFixed.cfg \
     models/providers/ParslLSFResourceValidation.tla
