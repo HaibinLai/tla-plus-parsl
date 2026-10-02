@@ -4,6 +4,18 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — join cross-layer runtime bridge
+
+The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines
+per-dependency staging, physical-attempt retry, stale-result rejection, and outer-join gating.
+The Fixed configuration is covered by the full 657-case TLC smoke run; the Current configuration
+still produces the intended unsafe-publication and stale-result counterexamples.  With the
+repository Parsl environment (`/tmp/parsl-venv`), the concrete join bridges
+`test_nested_join_retry_runtime`, `test_join_stageout_cancellation_runtime`,
+`test_join_retry_runtime`, `test_outer_join_cancellation_runtime`, and
+`test_join_monitoring_runtime` all pass (5/5).  This confirms that the small model's combined
+boundary is backed by executable Parsl behavior rather than TLC-only traces.
+
 ## 2026-09-30
 
 ### Post-v0.1 extension: file bytes and logical-attempt gate
