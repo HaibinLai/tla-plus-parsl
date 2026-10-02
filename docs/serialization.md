@@ -187,6 +187,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslSerializationT
 /tmp/parsl-venv/bin/python -m unittest tests/test_serialization_truncated_length_runtime.py -v
 ```
 
+`ParslApplyFrameValidation.tla` composes the exact-three-buffer and declared-length checks. The
+Current branch models the installed `unpack_and_deserialize()` ordering: it invokes a deserializer
+before rejecting malformed frame metadata. The Fixed branch rejects either malformed condition
+before any decode side effect.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyFrameValidationCurrent.cfg models/serialization/ParslApplyFrameValidation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslApplyFrameValidationFixed.cfg models/serialization/ParslApplyFrameValidation.tla
+```
+
 `ParslSerializerRegistry.tla` models the concrete `facade.deserialize` registry order. With a
 colliding identifier, the current configuration decodes a data payload through the code registry
 and violates `DispatchSafety`; the fixed configuration rejects the ambiguous header, while the

@@ -1886,6 +1886,9 @@ run_case serialization-negative-length \
 run_case serialization-binary-payload \
     models/serialization/ParslSerializationBinaryPayload.cfg \
     models/serialization/ParslSerializationBinaryPayload.tla
+run_case apply-frame-validation \
+    models/serialization/ParslApplyFrameValidationFixed.cfg \
+    models/serialization/ParslApplyFrameValidation.tla
 run_case serialized-result-file \
     models/core/ParslSerializedResultFileFixed.cfg \
     models/core/ParslSerializedResultFile.tla

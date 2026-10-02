@@ -23,6 +23,15 @@ are recorded here in English and committed with the model changes.
   states. Existing multi-output stage-out and join runtime probes remain green. The foundational
   gate is now 677 TLC configurations and 443 runtime entries.
 
+## 2026-10-02 — Combined apply-frame validation
+
+- Added `ParslApplyFrameValidation`, composing exact apply-message arity with declared byte
+  lengths. The Current TLC configuration reproduces a decode side effect before malformed-frame
+  rejection; the Fixed configuration rejects both bad frame count and truncated payload before
+  deserialization and passes 100,001 simulated states. Existing arity and truncated-length
+  runtime probes remain the concrete source evidence. The foundational gate is now 678 TLC
+  configurations and 443 runtime entries.
+
 ## 2026-10-02 — Zip duplicate-member/DataFuture readiness bridge
 
 - Added `ParslZipDuplicateReadiness`, composing archive retry history with stage-in/DataFuture
