@@ -888,6 +888,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslWorkQueueShutdown.
 /tmp/parsl-venv/bin/python -m unittest tests/test_workqueue_shutdown_runtime.py -v
 ```
 
+`ParslWorkQueueLifecycle.tla` composes task admission, result collection, duplicate/late reports,
+and shutdown finalization. The Current branch lets a stale report terminate the collector and
+leave a peer Future pending; the Fixed branch ignores stale reports, keeps the collector alive,
+and requires every accepted task to be terminal before shutdown completes. The existing Work
+Queue runtime probes cover the concrete submit, result, duplicate-report, and shutdown paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslWorkQueueLifecycleCurrent.cfg models/executors/ParslWorkQueueLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslWorkQueueLifecycleFixed.cfg models/executors/ParslWorkQueueLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_workqueue*_runtime.py' -v
+```
+
 `ParslWorkQueueStartTimeoutCleanup.tla` models the startup port-announcement boundary. The
 current `WorkQueueExecutor.start` starts the submit process and collector before waiting on the
 port mailbox; a timeout raises without stopping either component. The fixed branch terminally

@@ -980,6 +980,9 @@ run_case mpi-backlog-retry \
 run_case workqueue-shutdown \
     models/executors/ParslWorkQueueShutdown.cfg \
     models/executors/ParslWorkQueueShutdown.tla
+run_case workqueue-lifecycle \
+    models/executors/ParslWorkQueueLifecycleFixed.cfg \
+    models/executors/ParslWorkQueueLifecycle.tla
 run_case thread-executor-nonblocking \
     models/executors/ParslThreadExecutorNonBlocking.cfg \
     models/executors/ParslThreadExecutor.tla

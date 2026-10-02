@@ -139,6 +139,16 @@ Engine runtime probes cover the concrete parser and cancellation behavior.
 
 The post-v0.1 foundational inventory is now 650 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Work Queue executor lifecycle composition
+
+`ParslWorkQueueLifecycle` composes task admission, result collection, duplicate/late reports,
+and shutdown finalization. The Current branch reaches `StaleDoesNotKillPeer` when a duplicate
+report exits the collector and later cleanup fails an unrelated pending Future; the Fixed branch
+ignores stale reports and passes five million simulated states while requiring terminal shutdown.
+Existing Work Queue runtime probes cover the concrete executor boundaries.
+
+The post-v0.1 foundational inventory is now 651 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state
