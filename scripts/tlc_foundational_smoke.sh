@@ -734,6 +734,9 @@ run_case lsf-submit-job-id \
 run_case lsf-submit \
     models/providers/ParslLSFSubmit.cfg \
     models/providers/ParslLSFSubmit.tla
+run_case lsf-lifecycle \
+    models/providers/ParslLSFLifecycleFixed.cfg \
+    models/providers/ParslLSFLifecycle.tla
 run_case lsf-cancel-unknown \
     models/providers/ParslLSFCancelFixed.cfg \
     models/providers/ParslLSFCancel.tla

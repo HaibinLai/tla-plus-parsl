@@ -953,3 +953,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFMissingJobCurre
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslLSFMissingJobFixed.cfg models/providers/ParslLSFMissingJob.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_lsf_missing_job_runtime.py -v
 ```
+
+`ParslLSFLifecycle.tla` composes LSF `bsub` admission, `bjobs` observations, local resource
+ownership, and `bkill` cancellation. The Current branch can treat a missing job as completed,
+abort on duplicate/foreign/malformed records, or crash when cancellation targets a stale local
+record. The Fixed branch requires explicit terminal evidence, isolates invalid rows, and makes
+stale cancellation terminal. Existing LSF runtime probes cover the concrete submit, status, and
+cancel paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslLSFLifecycleCurrent.cfg models/providers/ParslLSFLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/providers/ParslLSFLifecycleFixed.cfg models/providers/ParslLSFLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_lsf*_runtime.py' -v
+```

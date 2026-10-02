@@ -119,6 +119,16 @@ Existing Torque runtime probes cover the concrete parser and cancellation behavi
 
 The post-v0.1 foundational inventory is now 648 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: LSF provider lifecycle composition
+
+`ParslLSFLifecycle` composes bsub admission, bjobs observations, local resource ownership, and
+bkill cancellation. The Current branch reaches safety counterexamples for missing jobs,
+duplicate/foreign/malformed records, and stale cancellation; the Fixed branch requires explicit
+terminal evidence, isolates invalid rows, and passes five million simulated states. Existing LSF
+runtime probes cover the concrete parser and cancellation behavior.
+
+The post-v0.1 foundational inventory is now 649 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state
