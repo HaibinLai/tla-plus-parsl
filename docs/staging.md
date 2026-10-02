@@ -534,6 +534,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslZipStageInFixed.cfg 
 versioning. The current branch can release one output before its sibling or publish bytes from an
 obsolete source version; the fixed branch requires both transfers to be ready and version-matched
 before releasing either consumer. TLC checks 100,142 simulated fixed states.
+The multi-output runtime bridge extends the existing DataManager gate with two real rsync wrappers
+and demonstrates the observed mixed-version publication boundary covered by BUG-025.
 
 `ParslMultiOutputStageOut.tla` is the smaller application-gate abstraction beneath that versioned
 model. It gives each output its own stage-out Future while requiring all outputs to wait on the

@@ -3,9 +3,11 @@
 import unittest
 from concurrent.futures import Future
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from parsl.data_provider.data_manager import DataManager
 from parsl.data_provider.files import File
+from parsl.data_provider.rsync import in_task_stage_out_wrapper
 
 
 class FakeStaging:
@@ -62,6 +64,44 @@ class MultiOutputStageOutRuntimeTest(unittest.TestCase):
 
         application.set_result("application complete")
         self.assertTrue(all(output.done() for output in outputs))
+
+    def test_independent_rsync_outputs_can_publish_mixed_source_versions_currently(self):
+        """The versioned TLA+ bridge captures the current mixed-publication boundary."""
+        with self.subTest("source-version mismatch"):
+            import tempfile
+            from pathlib import Path
+
+            with tempfile.TemporaryDirectory() as directory:
+                first = Path(directory) / "first.txt"
+                second = Path(directory) / "second.txt"
+                first.write_bytes(b"version-0")
+                second.write_bytes(b"version-0")
+                first_file = File("file:///remote/first.txt")
+                second_file = File("file:///remote/second.txt")
+                first_file.local_path = str(first)
+                second_file.local_path = str(second)
+                published = []
+
+                def copy_with_version_change(command):
+                    if not published:
+                        published.append(first.read_bytes())
+                        first.write_bytes(b"version-1")
+                    else:
+                        second.write_bytes(b"version-1")
+                        published.append(second.read_bytes())
+                    return 0
+
+                first_wrapped = in_task_stage_out_wrapper(
+                    lambda: "first-result", first_file, None, "remote-host"
+                )
+                second_wrapped = in_task_stage_out_wrapper(
+                    lambda: "second-result", second_file, None, "remote-host"
+                )
+                with patch("parsl.data_provider.rsync.os.system", side_effect=copy_with_version_change):
+                    self.assertEqual(first_wrapped(), "first-result")
+                    self.assertEqual(second_wrapped(), "second-result")
+
+                self.assertEqual(published, [b"version-0", b"version-1"])
 
 
 if __name__ == "__main__":

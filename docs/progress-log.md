@@ -78,6 +78,16 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 667 TLC cases, 441 runtime entries, and
   684 unittest methods passed.
 
+## 2026-10-02 — versioned multi-output stage-out runtime bridge
+
+- Extended `test_multi_output_stageout_runtime.py` with two real rsync-wrapper
+  calls whose source files change between transfers.
+- The probe reproduces the existing BUG-025 boundary: independent outputs can
+  publish different source versions, while `ParslMultiOutputVersionedStageOut`
+  Fixed requires one complete version-matched set.
+- Full regression after this addition: 667 TLC cases, 441 runtime entries, and
+  685 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

@@ -10,7 +10,7 @@ executor submission, worker execution, provider capacity, retries, memoization, 
 readiness, and late results.
 
 The current foundational baseline is 667 TLC configurations and 441 Python runtime probe
-entries (684 unittest methods). The model was based on the Parsl paper and the current source
+entries (685 unittest methods). The model was based on the Parsl paper and the current source
 tree, especially:
 
 - `parsl/dataflow/states.py`: task states. The usual DFK success path is
