@@ -20,7 +20,18 @@ java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
   models/clock/ParslHtexLivenessAttempt.tla
 java -cp tla2tools.jar tlc2.TLC -simulate num=50000 -seed 1 \
   -config models/clock/ParslHtexLivenessAttemptFixed.cfg \
-  models/clock/ParslHtexLivenessAttempt.tla
+models/clock/ParslHtexLivenessAttempt.tla
+```
+
+`ParslHeartbeatProviderBoundary.tla` is a smaller boundary-accurate refinement. It keeps the
+interchange's strict `>` heartbeat expiry, releases the physical manager slot on loss, reconnects
+the manager, and separates the retried logical attempt from a late physical result. The Current
+configuration demonstrates stale-result acceptance; the Fixed configuration enforces attempt
+generation safety.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatProviderBoundaryCurrent.cfg models/clock/ParslHeartbeatProviderBoundary.tla
+java -cp tla2tools.jar tlc2.TLC -config models/clock/ParslHeartbeatProviderBoundaryFixed.cfg models/clock/ParslHeartbeatProviderBoundary.tla
 ```
 
 `ParslClockSmoke.cfg` is a fast bounded regression configuration for `ParslClock.tla`. It keeps

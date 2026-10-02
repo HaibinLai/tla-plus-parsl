@@ -1916,6 +1916,9 @@ run_case strategy-idle-clock \
 run_case heartbeat-boundary \
     models/executors/ParslHeartbeatBoundary.cfg \
     models/executors/ParslHeartbeatBoundary.tla
+run_case heartbeat-provider-boundary \
+    models/clock/ParslHeartbeatProviderBoundaryFixed.cfg \
+    models/clock/ParslHeartbeatProviderBoundary.tla
 run_case htex-heartbeat-version \
     models/executors/ParslHtexHeartbeatVersion.cfg \
     models/executors/ParslHtexHeartbeatVersion.tla

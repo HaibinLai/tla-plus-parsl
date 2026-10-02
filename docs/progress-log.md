@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Heartbeat/provider attempt-generation boundary
+
+- Added `ParslHeartbeatProviderBoundary`, a compact cross-layer refinement that combines the
+  source-accurate strict HTEX heartbeat boundary, manager-slot release, manager reconnection,
+  retry generation, and stale physical results. The Current TLC configuration reaches the
+  intentional `StaleResultSafety` counterexample; the Fixed configuration passes 100,001
+  simulated states. The foundational gate is now 676 TLC configurations and 443 runtime entries.
+  This stage is model-only because the concrete interchange expiry and stale-result paths already
+  have focused runtime probes; it adds their composition rather than duplicating another probe.
+
 ## 2026-10-02 — Zip duplicate-member/DataFuture readiness bridge
 
 - Added `ParslZipDuplicateReadiness`, composing archive retry history with stage-in/DataFuture
