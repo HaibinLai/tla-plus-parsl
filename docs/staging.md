@@ -1,5 +1,18 @@
 # Staging and data-transfer models
 
+`ParslFTPInTaskTransferGate.tla` composes the FTP in-task wrapper's three observable boundaries:
+the destination bytes, FTP connection lifetime, and admission of the wrapped user function. The
+Current branch leaves partial bytes visible and the connection open after a failed transfer;
+Fixed requires cleanup before any successful publication. The runtime probe drives the real
+wrapper with a failing FTP stream and confirms that user code is blocked while the two cleanup
+risks remain.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPInTaskTransferGateCurrent.cfg models/staging/ParslFTPInTaskTransferGate.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPInTaskTransferGateFixed.cfg models/staging/ParslFTPInTaskTransferGate.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_ftp_in_task_transfer_gate_runtime.py -v
+```
+
 These models cover stage-in/stage-out dependencies, FTP, HTTP, Rsync, Zip, Globus, file bytes,
 partial cleanup, corruption, retries, and multi-output publication.
 

@@ -13,6 +13,9 @@ connecting stale scheduler cancellation to block terminality and monitoring publ
 ZMQ/HTEX coverage also includes `ParslHtexFerryResultSendFailure` (BUG-327), checking result
 ownership across worker-pool socket send failure.
 
+File-transfer coverage also includes `ParslFTPInTaskTransferGate`, composing FTP partial-byte
+publication and connection cleanup with the in-task user-function admission gate (BUG-076/105).
+
 The ZMQ/serialization coverage also includes `ParslHtexResultForwarding`, which models manager
 task ownership across a failed `results_outgoing.send_multipart` call (BUG-225).
 

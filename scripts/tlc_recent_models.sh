@@ -2094,6 +2094,12 @@ run_case htex-ferry-result-send-failure-current counterexample \
 run_case htex-ferry-result-send-failure-fixed pass \
     models/serialization/ParslHtexFerryResultSendFailureFixed.cfg \
     models/serialization/ParslHtexFerryResultSendFailure.tla
+run_case ftp-in-task-transfer-gate-current counterexample \
+    models/staging/ParslFTPInTaskTransferGateCurrent.cfg \
+    models/staging/ParslFTPInTaskTransferGate.tla
+run_case ftp-in-task-transfer-gate-fixed pass \
+    models/staging/ParslFTPInTaskTransferGateFixed.cfg \
+    models/staging/ParslFTPInTaskTransferGate.tla
 run_case workqueue-failure-fanout-current counterexample \
     models/executors/ParslWorkQueueFailureFanoutCurrent.cfg \
     models/executors/ParslWorkQueueFailureFanout.tla

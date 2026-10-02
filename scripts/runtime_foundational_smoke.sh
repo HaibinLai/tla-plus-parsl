@@ -379,6 +379,7 @@ tests=(
     tests/test_monitoring_update_persistent_retry_runtime.py
     tests/test_ftp_connection_cleanup_runtime.py
     tests/test_ftp_partial_cleanup_runtime.py
+    tests/test_ftp_in_task_transfer_gate_runtime.py
     tests/test_ftp_staging_runtime.py
     tests/test_globus_endpoint_path_runtime.py
     tests/test_globus_failure_event_runtime.py

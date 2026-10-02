@@ -39,6 +39,15 @@ are recorded here in English and committed with the model changes.
 - Added BUG-327 and promoted the Fixed case into the foundational gate. Inventory: 724 TLC
   configurations, 463 runtime entries, and 734 unittest methods.
 
+## 2026-10-02 — FTP in-task transfer gate composition
+
+- Added `ParslFTPInTaskTransferGate`, composing existing FTP partial-publication and connection
+  cleanup boundaries with wrapped user-function admission. Current reproduces partial bytes and
+  an open FTP connection after transfer failure while user code remains blocked; Fixed passes the
+  combined cleanup/admission invariants. The real wrapper probe passes.
+- The composition reuses BUG-076/105 rather than creating duplicate ledger entries. Inventory is
+  now 725 TLC configurations, 464 runtime entries, and 735 unittest methods.
+
 ## 2026-10-02 — Full foundational TLC regression
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17. Every foundational Fixed or

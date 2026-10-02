@@ -1754,6 +1754,9 @@ run_case ftp-stage \
 run_case ftp-partial-cleanup \
     models/staging/ParslFTPPartialCleanupFixed.cfg \
     models/staging/ParslFTPPartialCleanup.tla
+run_case ftp-in-task-transfer-gate \
+    models/staging/ParslFTPInTaskTransferGateFixed.cfg \
+    models/staging/ParslFTPInTaskTransferGate.tla
 run_case ftp-partial-cleanup-future-monitoring \
     models/staging/ParslFTPPartialCleanupFutureMonitoringFixed.cfg \
     models/staging/ParslFTPPartialCleanupFutureMonitoring.tla
