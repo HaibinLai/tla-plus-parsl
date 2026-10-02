@@ -542,6 +542,9 @@ run_case zmq-multipart-ack \
 run_case zmq-multipart-ack-malformed \
     models/serialization/ParslZMQMultipartAckMalformedFixed.cfg \
     models/serialization/ParslZMQMultipartAck.tla
+run_case zmq-multipart-decode-monitoring \
+    models/serialization/ParslZMQMultipartDecodeMonitoringFixed.cfg \
+    models/serialization/ParslZMQMultipartDecodeMonitoring.tla
 run_case zmq-result-attempt \
     models/serialization/ParslZMQResultAttemptFixed.cfg \
     models/serialization/ParslZMQResultAttempt.tla

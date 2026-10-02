@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — multipart decode and peer monitoring composition
+
+- Added `ParslZMQMultipartDecodeMonitoring`, composing malformed multipart frames, serializer
+  failure, two result Futures, and monitoring. The Current branch violates
+  `MalformedFrameIsolation` by crashing the collector before the bad Future is completed; the
+  Fixed branch rejects the bad frame and continues to the valid peer. Fixed passes 10,000 TLC
+  simulation steps, and four existing ZMQ/HTEX decode runtime tests pass. The foundational
+  inventory is now 698 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — monitoring timeout and late-event persistence
 
 - Added `ParslMonitoringTimeoutLateEvent`, composing logical timeout, asynchronous status events,

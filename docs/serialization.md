@@ -236,6 +236,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransport.
 /tmp/parsl-venv/bin/python -m unittest tests/test_task_transport_runtime.py -v
 ```
 
+`ParslZMQMultipartDecodeMonitoring.tla` composes multipart frame-count validation and serializer
+decode failure with two independent result Futures. A malformed first frame must be rejected as a
+terminal failure without stopping collection of the valid peer frame. The Current branch crashes
+the collector before either failure publication or peer completion; the Fixed branch publishes a
+failed Future/monitoring row and continues. This is the small cross-layer counterpart of the
+runtime probes in `test_zmq_multipart_ack_runtime.py` and
+`test_htex_result_decode_continuation_runtime.py`.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartDecodeMonitoringCurrent.cfg models/serialization/ParslZMQMultipartDecodeMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslZMQMultipartDecodeMonitoringFixed.cfg models/serialization/ParslZMQMultipartDecodeMonitoring.tla
+```
+
 `ParslTaskTransportCloseRace.tla` adds the sender lifecycle to that boundary. The current branch
 allows a ready serialized task to reach `TasksOutgoing.put()` after close, while the fixed branch
 rejects it before touching the terminated socket. The runtime bridge uses a real
