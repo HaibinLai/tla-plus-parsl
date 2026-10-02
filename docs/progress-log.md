@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — ZMQ result-attempt transport bridge
+
+- Extended `test_zmq_result_attempt_runtime.py` with a real in-process ZMQ
+  multipart delivery of serialized `TaskResult` envelopes.
+- The bridge filters a late attempt-0 result and a duplicate attempt-1 frame
+  after transport, while decoding the current attempt exactly once.
+- Focused runtime coverage passes 3/3 tests; the current baseline is 668 TLC
+  cases, 443 runtime entries, and 691 unittest methods.
+
 ## 2026-10-02 — callback/monitoring terminal-publication model
 
 - Added `ParslJoinCallbackMonitoring.tla` with Current/Fixed configurations.
