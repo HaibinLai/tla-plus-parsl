@@ -212,6 +212,9 @@ run_case monitoring-resource-history \
 run_case monitoring-internal-queue-drain \
     models/monitoring/ParslMonitoringInternalQueueDrainFixed.cfg \
     models/monitoring/ParslMonitoringInternalQueueDrain.tla
+run_case monitoring-queue-fairness \
+    models/monitoring/ParslMonitoringQueueFairnessFixed.cfg \
+    models/monitoring/ParslMonitoringQueueFairness.tla
 run_case join-app \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla

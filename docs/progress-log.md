@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — bounded monitoring queue-fairness abstraction
+
+- Added `ParslMonitoringQueueFairness.tla` with Current/Fixed configurations.
+- The model captures the per-queue `batching_threshold` bound in
+  `DatabaseManager._get_messages_in_batch` and checks lower-priority admission
+  under a continuously replenished priority stream.
+- Added `test_monitoring_queue_fairness_runtime.py` to verify the helper's
+  threshold behavior against the checked-out Parsl source.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

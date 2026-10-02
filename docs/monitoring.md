@@ -126,6 +126,22 @@ java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringInterna
 /tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_internal_queue_drain_runtime.py -v
 ```
 
+`ParslMonitoringQueueFairness.tla` isolates the queue-service policy in
+`DatabaseManager._db_mgmt_loop`: priority, worker-task, and resource queues are
+visited in sequence, and `_get_messages_in_batch` caps each visit at
+`batching_threshold`. The Current branch models an implementation that lets a
+continuously replenished priority queue monopolize the loop; the Fixed branch
+admits a lower-priority message during the bounded visit. The runtime probe
+checks the source helper's threshold behavior directly. This is a bounded
+fairness abstraction, not a claim that the current Parsl implementation has
+the modeled starvation bug.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringQueueFairnessCurrent.cfg models/monitoring/ParslMonitoringQueueFairness.tla
+java -cp tla2tools.jar tlc2.TLC -config models/monitoring/ParslMonitoringQueueFairnessFixed.cfg models/monitoring/ParslMonitoringQueueFairness.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_monitoring_queue_fairness_runtime.py -v
+```
+
 `ParslMonitoringStatusHistory.tla` is the append-only status-history abstraction.  It permits
 event delivery to be reordered but keeps every `(task, run, status, timestamp)` event as a row;
 the latest status is derived from the greatest event version rather than insertion order.  The
