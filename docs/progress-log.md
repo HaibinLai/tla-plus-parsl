@@ -169,6 +169,16 @@ terminal shutdown guarantees. Existing Flux runtime probes cover the concrete ex
 
 The post-v0.1 foundational inventory is now 653 TLC cases and 434 Python runtime probes.
 
+### Post-v0.1 extension: Radical Pilot executor lifecycle composition
+
+`ParslRadicalPilotLifecycle` composes RP task submission, DONE/FAILED/CANCELED callback mapping,
+late callbacks, master failure fan-out, and bulk shutdown. The Current branch reaches the stale
+callback/peer-pending safety counterexample; the Fixed branch ignores stale callbacks, fails
+outstanding tasks during shutdown, and passes five million simulated states. Existing Radical
+Pilot runtime probes cover the concrete callback and shutdown paths.
+
+The post-v0.1 foundational inventory is now 654 TLC cases and 434 Python runtime probes.
+
 The post-v0.1 foundational inventory is now 641 TLC cases and 434 Python runtime probes.
 
 ### Current repository state

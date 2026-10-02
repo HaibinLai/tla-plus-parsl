@@ -1172,6 +1172,9 @@ run_case radical-unknown-callback \
 run_case radical-bulk-shutdown \
     models/executors/ParslRadicalPilotBulkShutdownFixed.cfg \
     models/executors/ParslRadicalPilotBulkShutdown.tla
+run_case radical-lifecycle \
+    models/executors/ParslRadicalPilotLifecycleFixed.cfg \
+    models/executors/ParslRadicalPilotLifecycle.tla
 run_case resource-admission \
     models/dataflow/ParslResourceAdmission.cfg \
     models/dataflow/ParslResourceAdmission.tla

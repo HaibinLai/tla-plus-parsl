@@ -810,6 +810,19 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotBulkSh
 
 This shutdown queue-loss behavior is recorded as BUG-136 in the bug ledger.
 
+`ParslRadicalPilotLifecycle.tla` composes RP task submission, DONE/FAILED/CANCELED callback
+mapping, late callbacks, master failure fan-out, and bulk shutdown. The Current branch lets a
+late callback stop collection or lets shutdown leave a peer Future pending; the Fixed branch
+ignores stale callbacks, fails outstanding tasks during shutdown, and passes five million
+simulated states. Existing Radical Pilot runtime probes cover the concrete callback and shutdown
+paths.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslRadicalPilotLifecycleCurrent.cfg models/executors/ParslRadicalPilotLifecycle.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/executors/ParslRadicalPilotLifecycleFixed.cfg models/executors/ParslRadicalPilotLifecycle.tla
+/tmp/parsl-venv/bin/python -m unittest discover -s tests -p 'test_radical*_runtime.py' -v
+```
+
 `ParslRadicalPilotUnknownCallback.tla` models a callback whose RP task UID has already been
 removed from `future_tasks` by cancellation, cleanup, or an earlier terminal callback. The current
 callback handler indexes the dictionary before checking membership and raises `KeyError`; the
