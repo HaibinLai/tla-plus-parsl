@@ -134,6 +134,9 @@ run_case htex-command-ingress-isolation \
 run_case htex-command-reply-send-failure \
     models/serialization/ParslHtexCommandReplySendFailureFixed.cfg \
     models/serialization/ParslHtexCommandReplySendFailure.tla
+run_case htex-manager-loss-send-failure \
+    models/serialization/ParslHtexManagerLossSendFailureFixed.cfg \
+    models/serialization/ParslHtexManagerLossSendFailure.tla
 run_case htex-result-queue \
     models/executors/ParslHtexResultQueueFixed.cfg \
     models/executors/ParslHtexResultQueue.tla

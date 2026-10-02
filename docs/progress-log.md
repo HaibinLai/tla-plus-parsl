@@ -2495,6 +2495,12 @@ communication and selected async completion criteria in that document are satisf
   Inventory is now 750 TLC configurations, 484 runtime entries, and 759 unittest methods.
 - Verification stage: `ParslHtexCommandReplySendFailure` Current TLC returns the expected
   counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes.
+- Current stage: added `ParslHtexManagerLossSendFailure`, a communication/async refinement of
+  BUG-004. The Current branch leaves an expired manager and its Future unresolved when the
+  synthetic `ManagerLost` result cannot be sent; the Fixed branch records terminal manager-loss
+  state. Inventory is now 752 TLC configurations, 485 runtime entries, and 760 unittest methods.
+- Verification stage: `ParslHtexManagerLossSendFailure` Current TLC returns the expected
+  counterexample (`rc=12`), Fixed TLC passes (`rc=0`), and its runtime probe passes.
 
 ## Scope note
 

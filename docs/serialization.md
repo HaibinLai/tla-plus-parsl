@@ -261,6 +261,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexCommandRep
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_command_reply_send_failure_runtime.py -v
 ```
 
+`ParslHtexManagerLossSendFailure.tla` refines BUG-004 at the transport boundary. When heartbeat
+expiry creates a synthetic `ManagerLost` result, the Current branch leaves the manager and task
+unresolved if the result send fails; the Fixed branch records an explicit terminal manager-loss
+outcome even when delivery is unavailable. The runtime probe drives
+`Interchange.expire_bad_managers` with a failing result transport.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexManagerLossSendFailureCurrent.cfg models/serialization/ParslHtexManagerLossSendFailure.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexManagerLossSendFailureFixed.cfg models/serialization/ParslHtexManagerLossSendFailure.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_manager_loss_send_failure_runtime.py -v
+```
+
 `ParslTaskTransportSmoke.cfg` keeps the full bounded callable/argument/closure graph but sets
 `MAX_RETRIES = 0`. It provides a fast terminal-path regression for the serialization gate,
 task/result wire ordering, and Future-resolution invariants; TLC checks 69 generated / 29 distinct

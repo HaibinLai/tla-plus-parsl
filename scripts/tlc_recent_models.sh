@@ -2118,6 +2118,12 @@ run_case htex-command-reply-send-failure-current counterexample \
 run_case htex-command-reply-send-failure-fixed pass \
     models/serialization/ParslHtexCommandReplySendFailureFixed.cfg \
     models/serialization/ParslHtexCommandReplySendFailure.tla
+run_case htex-manager-loss-send-failure-current counterexample \
+    models/serialization/ParslHtexManagerLossSendFailureCurrent.cfg \
+    models/serialization/ParslHtexManagerLossSendFailure.tla
+run_case htex-manager-loss-send-failure-fixed pass \
+    models/serialization/ParslHtexManagerLossSendFailureFixed.cfg \
+    models/serialization/ParslHtexManagerLossSendFailure.tla
 run_case ftp-in-task-transfer-gate-current counterexample \
     models/staging/ParslFTPInTaskTransferGateCurrent.cfg \
     models/staging/ParslFTPInTaskTransferGate.tla

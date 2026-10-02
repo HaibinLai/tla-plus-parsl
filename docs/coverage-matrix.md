@@ -25,6 +25,9 @@ malformed command-frame isolation at the interchange main loop.
 It also includes `ParslHtexCommandReplySendFailure` (BUG-337), checking command-reply send
 failure isolation at the same loop.
 
+The manager-loss path is refined by `ParslHtexManagerLossSendFailure`, which checks synthetic
+failure-result ownership when heartbeat expiry coincides with a failed result transport.
+
 File-transfer coverage also includes `ParslFTPInTaskTransferGate`, composing FTP partial-byte
 publication and connection cleanup with the in-task user-function admission gate (BUG-076/105).
 
