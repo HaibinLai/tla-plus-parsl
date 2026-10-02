@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — FTP partial cleanup with DataFuture monitoring
+
+- Added `ParslFTPPartialCleanupFutureMonitoring`, composing partial FTP bytes with DataFuture
+  readiness, dependent-task blocking, and monitoring failure propagation. Current TLC violates
+  `FailurePublicationSafety` after a stream failure; Fixed TLC removes the partial publication and
+  passes 10,000 simulation steps. The real FTP partial-cleanup runtime probe passes. The
+  foundational inventory is now 712 TLC cases and 453 runtime entries.
+
 ## 2026-10-02 — monitoring DB retry with Future terminality
 
 - Added `ParslMonitoringDBRetryFuture`, composing persistent SQLite write retries with task/Future

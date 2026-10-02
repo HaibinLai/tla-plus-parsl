@@ -420,6 +420,17 @@ java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFix
 /tmp/parsl-venv/bin/python -m unittest tests/test_ftp_partial_cleanup_runtime.py -v
 ```
 
+`ParslFTPPartialCleanupFutureMonitoring.tla` composes the partial destination-file boundary with
+DataFuture readiness, dependent-task admission, and monitoring. The Current branch leaves the
+partial bytes visible and the Future pending after transfer failure; the Fixed branch removes the
+publication and propagates one terminal failure. TLC passes 10,000 simulation steps in Fixed, and
+the runtime probe drives the real `_ftp_stage_in` path with a failing FTP stream.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFutureMonitoringCurrent.cfg models/staging/ParslFTPPartialCleanupFutureMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslFTPPartialCleanupFutureMonitoringFixed.cfg models/staging/ParslFTPPartialCleanupFutureMonitoring.tla
+```
+
 This file-publication boundary is recorded as BUG-105: a failed FTP stream leaves partial bytes
 at the final destination instead of cleaning up or publishing atomically.
 
