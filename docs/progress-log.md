@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Full foundational TLC regression
+
+- Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17. Every foundational Fixed or
+  normal case passed, including the recent Flux serializer, staging-provider fallback, composed
+  file pipeline, join stale-result, and serialized ZMQ attempt-correlation coverage. The suite
+  completed without a TLC failure; intentional Current counterexamples remain exercised by the
+  recent-model runner.
+
 ## 2026-10-02 — Real ZMQ serialized-result attempt bridge
 
 - Extended `test_zmq_serialization_runtime.py` with a real in-process ZMQ result path. Multipart
