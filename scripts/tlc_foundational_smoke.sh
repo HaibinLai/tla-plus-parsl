@@ -677,6 +677,9 @@ run_case function-environment-cache-identity \
 run_case join-duplicate-object-identity \
     models/dataflow/ParslJoinDuplicateObjectIdentityFixed.cfg \
     models/dataflow/ParslJoinDuplicateObjectIdentity.tla
+run_case htex-result-task-id-shape \
+    models/serialization/ParslHtexResultTaskIdShapeFixed.cfg \
+    models/serialization/ParslHtexResultTaskIdShape.tla
 run_case htex-registration-state-poisoning \
     models/serialization/ParslHtexRegistrationStatePoisoningFixed.cfg \
     models/serialization/ParslHtexRegistrationStatePoisoning.tla

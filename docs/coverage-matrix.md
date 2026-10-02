@@ -137,6 +137,8 @@ that repeated uses of the same filepath produce a cache hint independent of Pyth
 identity.
 Callable-content coverage also includes `ParslFunctionEnvironmentCacheIdentity`, which checks
 that dependency-package reuse cannot cross callable-content epochs through recycled object IDs.
+ZMQ result coverage also includes `ParslHtexResultTaskIdShape`, which rejects unhashable decoded
+task IDs before task-map lookup so malformed frames cannot stop later valid results.
 
 The compact `ParslHeartbeatRetry` model is now in the foundational TLC gate. It isolates
 monotonic heartbeat expiry, task timeout/retry, and stale late-result rejection before the larger

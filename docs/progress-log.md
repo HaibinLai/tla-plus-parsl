@@ -2408,6 +2408,10 @@ The remaining work is documentation and handoff, not model expansion:
   decorated-join runtime probe confirm that repeating one Future preserves the same returned
   object in both output positions. Inventory is now 735 TLC configurations, 474 runtime entries,
   and 749 unittest methods.
+- Current stage: added `ParslHtexResultTaskIdShape`, refining executor-side ZMQ result-envelope
+  validation. The Current model and runtime probe reproduce an unhashable list task ID raising
+  `TypeError` and stranding a separate valid Future; the Fixed model isolates the malformed frame.
+  Inventory is now 736 TLC configurations, 475 runtime entries, and 750 unittest methods.
 
 ### Verification convention
 

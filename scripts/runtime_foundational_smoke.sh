@@ -57,6 +57,7 @@ tests=(
     tests/test_workqueue_file_cache_identity_runtime.py
     tests/test_function_environment_cache_identity_runtime.py
     tests/test_join_duplicate_object_identity_runtime.py
+    tests/test_htex_result_task_id_shape_runtime.py
     tests/test_htex_monitoring_batch_continuation_runtime.py
     tests/test_htex_result_batch_continuation_runtime.py
     tests/test_htex_manager_eligibility_runtime.py

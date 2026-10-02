@@ -255,6 +255,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexResultForw
 /tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_forwarding_runtime.py -v
 ```
 
+`ParslHtexResultTaskIdShape.tla` refines result-envelope validation beyond presence of the
+`task_id` field. An unhashable decoded ID (for example a list) reaches the executor's task-map
+lookup in the Current implementation, raises `TypeError`, and stops the result worker before a
+later valid frame. The Fixed branch rejects the malformed ID and keeps the worker available; the
+runtime probe reproduces the current failure with the installed HTEX result worker.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexResultTaskIdShapeCurrent.cfg models/serialization/ParslHtexResultTaskIdShape.tla
+java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslHtexResultTaskIdShapeFixed.cfg models/serialization/ParslHtexResultTaskIdShape.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_htex_result_task_id_shape_runtime.py -v
+```
+
 ## Safety properties
 
 - no dispatch occurs before receive and decode;
