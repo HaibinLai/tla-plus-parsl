@@ -2326,6 +2326,12 @@ The remaining work is documentation and handoff, not model expansion:
   `RemoteExceptionWrapper` cause surviving serialization and becoming a terminal Future failure;
   the real HTEX result worker probe verifies the leaf cause after decoding. The full gate now
   contains 621 TLC cases, 421 runtime entries, and 657 discovered unittest methods.
+- Current stage: reconciled the existing `ParslFluxCancelSubmitRace` model with the bug ledger as
+  BUG-329. This is distinct from ordinary late-result delivery: cancellation happens before the
+  underlying Flux Future is bound, so a later bind/completion can still call `set_result` on the
+  cancelled wrapper. The Current TLC case produces the callback-state counterexample, the Fixed
+  case passes, and both runtime interleavings pass against the installed Flux wrapper. The ledger
+  now contains 306 unique findings (74 executor/worker findings).
 
 ### Verification convention
 
