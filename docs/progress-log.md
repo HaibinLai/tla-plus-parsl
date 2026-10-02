@@ -13,6 +13,13 @@ are recorded here in English and committed with the model changes.
   submit-then-Pending observation. This deepens existing BUG-126 without duplicating its ledger
   entry. The foundational gate is now 682 TLC configurations and 445 runtime entries.
 
+## 2026-10-02 — Kubernetes cancellation/Future/monitoring composition
+
+- Added `ParslKubernetesCancelFutureMonitoring`, refining BUG-189 across provider, executor
+  Future, and monitoring layers. Current TLC and runtime reproduce cancellation publication after
+  a failed Kubernetes delete response; Fixed requires remote success and passes bounded TLC. The
+  foundational gate is now 684 TLC configurations and 449 runtime entries.
+
 ## 2026-10-02 — DFK executor-shutdown/monitoring finalization
 
 - Added `ParslDfkExecutorShutdownMonitoring`, composing the real DFK cleanup order with executor

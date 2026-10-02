@@ -6,6 +6,12 @@ Condor, Grid Engine, LSF, PBS Pro, Torque, Kubernetes, and local providers.
 
 Files live in [`models/providers/`](../models/providers/).
 
+`ParslKubernetesCancelFutureMonitoring.tla` composes the Kubernetes delete response with the
+executor Future and monitoring cancellation state. The Current branch propagates cancellation
+even when the API reports a failed delete; the Fixed branch requires confirmed remote deletion.
+This is a cross-layer refinement of BUG-189, backed by
+`tests/test_kubernetes_cancel_future_monitoring_runtime.py`.
+
 `ParslAwsTeardownStateCleanup.tla` models idempotent AWS state-file removal after infrastructure
 teardown. The current provider leaks `FileNotFoundError` when the state path is already absent;
 the fixed branch treats the missing file as completed cleanup.

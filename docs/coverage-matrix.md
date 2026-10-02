@@ -9,7 +9,8 @@ successful/failed TASK, TRY, and WORKFLOW writes with finalization markers.
 The provider/executor coverage also includes `ParslKubernetesFutureAdmission`, which composes
 Kubernetes pod-phase publication with Future admission and monitoring readiness (a cross-layer
 refinement of BUG-126), and `ParslFluxProviderHandshake`, which composes provider liveness with
-the Flux startup handshake.
+the Flux startup handshake. `ParslKubernetesCancelFutureMonitoring` composes delete-response
+validation with Future and monitoring cancellation (a refinement of BUG-189).
 
 The monitoring coverage also includes `ParslDfkExecutorShutdownMonitoring`, which composes DFK
 executor shutdown failures with final WORKFLOW monitoring delivery and close (BUG-321).
@@ -20,7 +21,7 @@ Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 683 TLC cases and 447 runtime entries (707 unittest
+deduplication. The current baseline is 684 TLC cases and 449 runtime entries (709 unittest
 methods).
 
 It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode
