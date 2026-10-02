@@ -94,7 +94,15 @@ are recorded here in English and committed with the model changes.
   status arriving after a newer terminal row in the real SQLite `STATUS` table.
 - The bridge confirms append-only history plus current `try_id` selection, matching
   the `ParslMonitoringVersionedBatch` high-water invariant.
-- Full unittest regression after this addition: 686 tests passed.
+- Full unittest regression after this addition: 687 tests passed.
+
+## 2026-10-02 — callable and argument snapshot consistency
+
+- Extended `test_function_object_contents_runtime.py` so one packed apply
+  message carries a callable closure and a keyword object snapshot together.
+- After mutating the submitter-side object, the decoded function and keyword
+  argument still use the submit-time content required by the TLA+ abstraction.
+- Full unittest regression after this addition: 687 tests passed.
 
 ## 2026-10-02 — join cross-layer runtime bridge
 

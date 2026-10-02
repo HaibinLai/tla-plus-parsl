@@ -241,7 +241,8 @@ java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslTaskTransportC
 closure's captured value and the argument value at their two serialization boundaries, permits
 the submitter to mutate its source object afterward, then decodes and runs the captured content.
 The `MutationIsolation` invariant checks that post-serialization mutation cannot alter the
-worker's result. The runtime probe performs the same check with the real `dill`-backed facade.
+worker's result. The runtime probe performs the same check with the real `dill`-backed facade,
+including a callable closure and a keyword argument object captured in one apply message.
 
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/serialization/ParslFunctionObjectContents.cfg models/serialization/ParslFunctionObjectContents.tla
