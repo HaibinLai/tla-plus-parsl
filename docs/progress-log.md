@@ -58,6 +58,16 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 666 TLC cases, 439 runtime entries, and
   681 unittest methods passed.
 
+## 2026-10-02 — executor bad-state admission race
+
+- Added `ParslBadStateSubmitRace.tla` with Current/Fixed configurations.
+- The model isolates the interleaving between HTEX task admission and
+  `set_bad_state_and_fail_all`; the runtime probe forces a submit after the
+  failure sweep has already inspected the task registry.
+- Recorded the source-level risk as BUG-313.
+- Full regression after this addition: 667 TLC cases, 440 runtime entries, and
+  682 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

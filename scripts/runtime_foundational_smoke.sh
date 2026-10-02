@@ -92,6 +92,7 @@ tests=(
     tests/test_join_immediate_mutation_runtime.py
     tests/test_staging_predicate_failure_runtime.py
     tests/test_data_ready_stageout_failure_runtime.py
+    tests/test_bad_state_submit_race_runtime.py
     tests/test_worker_initial_probe_timeout_runtime.py
     tests/test_time_limited_open_timeout_runtime.py
     tests/test_bash_timeout_cleanup_runtime.py

@@ -1407,3 +1407,15 @@ java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecode
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeFailureFixed.cfg models/executors/ParslRadicalPilotDecodeFailure.tla
 /tmp/parsl-venv/bin/python -m unittest tests/test_radical_decode_failure_runtime.py -v
 ```
+`ParslBadStateSubmitRace.tla` models the admission race between
+`HighThroughputExecutor.submit_payload` and `BlockProviderExecutor.set_bad_state_and_fail_all`.
+The Current branch checks the bad-state flag, lets the failure sweep run, and then inserts a new
+Future that the sweep never saw. The Fixed branch rechecks/serializes admission before publishing
+the task. `tests/test_bad_state_submit_race_runtime.py` forces the same interleaving against the
+real HTEX submit path; this finding is recorded as BUG-313.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBadStateSubmitRaceCurrent.cfg models/executors/ParslBadStateSubmitRace.tla
+java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslBadStateSubmitRaceFixed.cfg models/executors/ParslBadStateSubmitRace.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_bad_state_submit_race_runtime.py -v
+```

@@ -227,6 +227,9 @@ run_case staging-predicate-failure \
 run_case data-ready-stageout-failure \
     models/core/ParslDataReadyStageOutFailureFixed.cfg \
     models/core/ParslDataReadyStageOutFailure.tla
+run_case bad-state-submit-race \
+    models/executors/ParslBadStateSubmitRaceFixed.cfg \
+    models/executors/ParslBadStateSubmitRace.tla
 run_case join-app \
     models/dataflow/ParslJoinApp.cfg \
     models/dataflow/ParslJoinApp.tla
