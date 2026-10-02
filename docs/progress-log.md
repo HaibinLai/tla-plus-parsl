@@ -4,6 +4,15 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — Globus readiness timeout with monitoring
+
+- Added `ParslGlobusTransferReadinessMonitoring`, composing ACTIVE-transfer poll budgets with
+  DataFuture readiness, consumer admission, and monitoring terminality. Current TLC violates
+  `TimeoutTerminality` when the transfer remains ACTIVE at the budget; Fixed TLC publishes a
+  coordinated timeout failure and passes 10,000 simulation steps. The real Globus readiness and
+  timeout runtime probes pass. The foundational inventory is now 715 TLC cases and 453 runtime
+  entries.
+
 ## 2026-10-02 — RSync partial cleanup with DataFuture monitoring
 
 - Added `ParslRsyncPartialCleanupFutureMonitoring`, composing a failed RSync stage-in with

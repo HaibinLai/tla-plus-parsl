@@ -11,6 +11,17 @@ consumer admission. The concrete bridge is
 `tests/test_globus_transfer_readiness_runtime.py`, refining the existing transfer-timeout
 boundary.
 
+`ParslGlobusTransferReadinessMonitoring.tla` adds the monitoring terminal state to that same
+boundary. At the poll budget, the Current branch leaves the ACTIVE transfer, DataFuture,
+consumer, and monitoring row pending; the Fixed branch publishes a coordinated timeout failure.
+TLC passes 10,000 simulation steps in Fixed, and the readiness/timeout runtime probes exercise the
+real `Globus.transfer_file` loop.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferReadinessMonitoringCurrent.cfg models/staging/ParslGlobusTransferReadinessMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -config models/staging/ParslGlobusTransferReadinessMonitoringFixed.cfg models/staging/ParslGlobusTransferReadinessMonitoring.tla
+```
+
 `ParslStageInAttemptGeneration.tla` is the cross-layer model for logical task retries and
 physical stage-in transfers. A transfer from an earlier task attempt may complete late. The
 Current configuration allows that stale transfer to make the retried task ready; the Fixed

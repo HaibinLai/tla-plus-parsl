@@ -2180,6 +2180,9 @@ run_case kubernetes-cancel-future-monitoring \
 run_case globus-transfer-readiness \
     models/staging/ParslGlobusTransferReadinessFixed.cfg \
     models/staging/ParslGlobusTransferReadiness.tla
+run_case globus-transfer-readiness-monitoring \
+    models/staging/ParslGlobusTransferReadinessMonitoringFixed.cfg \
+    models/staging/ParslGlobusTransferReadinessMonitoring.tla
 run_case plugin-retry-monitoring \
     models/serialization/ParslPluginRetryMonitoringFixed.cfg \
     models/serialization/ParslPluginRetryMonitoring.tla
