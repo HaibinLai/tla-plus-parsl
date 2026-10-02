@@ -252,6 +252,16 @@ java -cp tla2tools.jar tlc2.TLC -config models/dataflow/ParslJoinRetry.cfg model
 /tmp/parsl-venv/bin/python -m unittest tests/test_join_retry_runtime.py -v
 ```
 
+`ParslJoinRetryStaleResult.tla` composes two logical join dependencies with timeout, physical
+attempt generations, late-result rejection, and outer completion. The focused runtime bridge
+`tests/test_join_retry_stale_result_runtime.py` drives two real `Future` pairs through the same
+generation filter and verifies that the outer result waits for both current attempts.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/core/ParslJoinRetryStaleResultFixed.cfg models/core/ParslJoinRetryStaleResult.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_join_retry_stale_result_runtime.py -v
+```
+
 `ParslJoinRetryDuplicates.tla` combines physical inner retries with duplicate-preserving input
 ordering. The current branch collapses `<<I1, I2, I1>>` to two result positions; TLC finds
 `ResultOrderSafety` at depth 9 (72 distinct states). The fixed branch preserves all three
