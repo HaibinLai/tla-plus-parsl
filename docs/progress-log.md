@@ -4,6 +4,16 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — negative strategy parallelism admission bridge
+
+- Added `ParslStrategyParallelismAdmission`, separating the current behavior that accepts a
+  negative provider parallelism ratio from a fixed admission path that rejects it before polling.
+- TLC fixed configuration passes; the current configuration reproduces the `AdmissionSafety`
+  counterexample. The runtime probe confirms that one active block plus queued work performs only
+  the initial zero-block call when `parallelism=-1.0`, silently skipping overload scale-out.
+- Focused strategy coverage passes 7/7 tests; the current baseline is 669 TLC cases, 443 runtime
+  entries, and 697 unittest methods. Recorded as BUG-315 in the executor ledger.
+
 ## 2026-10-02 — concurrent join failure aggregation bridge
 
 - Extended `test_join_callback_runtime.py` with simultaneous success and

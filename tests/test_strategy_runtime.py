@@ -98,6 +98,22 @@ class StrategyRuntimeTest(unittest.TestCase):
         # no-slot path and requests one block for the queued work.
         self.assertEqual(executor.scale_out_calls, [0, 1])
 
+    def test_negative_parallelism_is_accepted_and_skips_overload_scaling_currently(self):
+        provider = FakeProvider(max_blocks=4, parallelism=-1.0)
+        executor = FakeExecutor(
+            provider,
+            outstanding_tasks=3,
+            block_states=[JobState.RUNNING],
+        )
+        strategy = Strategy(strategy="simple", max_idletime=10)
+        strategy.add_executors([executor])
+
+        strategy.strategize([executor])
+
+        # The source accepts this invalid ratio and performs only its initial
+        # zero-block call, leaving an overloaded executor under-provisioned.
+        self.assertEqual(executor.scale_out_calls, [0])
+
     def test_idle_scale_in_waits_and_preserves_minimum(self):
         provider = FakeProvider(min_blocks=1, max_blocks=4)
         executor = FakeExecutor(

@@ -2048,6 +2048,9 @@ run_case strategy-block-capacity-fixed \
 run_case strategy-block-capacity-success \
     models/strategy/ParslStrategyBlockCapacitySuccess.cfg \
     models/strategy/ParslStrategyBlockCapacity.tla
+run_case strategy-parallelism-admission \
+    models/strategy/ParslStrategyParallelismAdmissionFixed.cfg \
+    models/strategy/ParslStrategyParallelismAdmission.tla
 run_case callable-alias-retry-fixed \
     models/serialization/ParslCallableAliasRetry.cfg \
     models/serialization/ParslCallableAliasRetry.tla
