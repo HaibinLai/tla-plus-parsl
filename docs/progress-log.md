@@ -8,7 +8,7 @@ are recorded here in English and committed with the model changes.
 
 ### Current repository state
 
-- Latest locally preserved commit: `c0d816a` (`Model AWS teardown state cleanup`).
+- Latest locally preserved commit: `2c135b2` (`Model Radical Pilot master count admission`).
 - Foundational smoke inventory: 637 TLC cases and 434 Python runtime probes.
 - The smoke inventory has been expanded across core dataflow, Futures, retries, stale results,
   ZMQ/serialization, callable snapshots, file bytes and staging, clocks/heartbeats/timeouts,
