@@ -348,6 +348,7 @@ tests=(
     tests/test_heartbeat_timeout_future_monitoring_runtime.py
     tests/test_join_timed_monitoring_runtime.py
     tests/test_zip_duplicate_readiness_runtime.py
+    tests/test_aws_unknown_future_monitoring_runtime.py
     tests/test_monitoring_batch_runtime.py
     tests/test_monitoring_db_permanent_error_runtime.py
     tests/test_monitoring_db_update_permanent_error_runtime.py

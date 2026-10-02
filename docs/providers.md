@@ -705,6 +705,7 @@ simulation steps in the Fixed branch.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownFutureMonitoringCurrent.cfg models/providers/ParslAwsUnknownFutureMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslAwsUnknownFutureMonitoringFixed.cfg models/providers/ParslAwsUnknownFutureMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_aws_unknown_future_monitoring_runtime.py -v
 ```
 
 `ParslAwsSubmitEmptyResponse.tla` models an EC2 launch response with no instances. The current

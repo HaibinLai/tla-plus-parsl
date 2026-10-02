@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — AWS unknown-instance Future monitoring bridge
+
+- Added `test_aws_unknown_future_monitoring_runtime.py`, connecting the real AWS provider status
+  loop to an independent Future/monitoring observation. An untracked EC2 instance currently
+  raises `KeyError` before the healthy peer can resolve its Future or publish a terminal event,
+  matching `ParslAwsUnknownFutureMonitoring`. Inventory is now 718 TLC cases and 462 runtime
+  entries (723 unittest methods).
+
 ## 2026-10-02 — Zip duplicate readiness runtime bridge
 
 - Added `test_zip_duplicate_readiness_runtime.py`, connecting real Zip byte extraction to a real
