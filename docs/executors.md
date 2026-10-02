@@ -1474,6 +1474,7 @@ terminal failure while keeping the collector alive.
 ```bash
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeMonitoringCurrent.cfg models/executors/ParslRadicalPilotDecodeMonitoring.tla
 java -cp tla2tools.jar tlc2.TLC -config models/executors/ParslRadicalPilotDecodeMonitoringFixed.cfg models/executors/ParslRadicalPilotDecodeMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_radical_decode_monitoring_runtime.py -v
 ```
 `ParslBadStateSubmitRace.tla` models the admission race between
 `HighThroughputExecutor.submit_payload` and `BlockProviderExecutor.set_bad_state_and_fail_all`.

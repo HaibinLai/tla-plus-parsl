@@ -237,6 +237,7 @@ tests=(
     tests/test_thread_executor_lifecycle_runtime.py
     tests/test_flux_shutdown_lifecycle_runtime.py
     tests/test_radical_decode_failure_runtime.py
+    tests/test_radical_decode_monitoring_runtime.py
     tests/test_radical_master_submit_shape_runtime.py
     tests/test_radical_master_count_admission_runtime.py
     tests/test_thread_executor_resource_spec_runtime.py
