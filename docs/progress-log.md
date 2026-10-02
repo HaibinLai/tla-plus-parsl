@@ -113,6 +113,16 @@ are recorded here in English and committed with the model changes.
   the framing error, while the existing Fixed TLA+ branch rejects it first.
 - Full unittest regression after this addition: 688 tests passed.
 
+## 2026-10-02 — provider/executor/monitoring timed composition
+
+- Added `test_provider_executor_timed_monitoring_runtime.py` as a concrete
+  bridge for provider loss, logical retry generation, Future result filtering,
+  and SQLite `STATUS` persistence.
+- The bridge backs the existing `ParslProviderExecutorTimedMonitoring` Fixed
+  abstraction without adding a duplicate single-component model.
+- Full regression after this addition: 667 TLC cases, 442 runtime entries, and
+  689 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines

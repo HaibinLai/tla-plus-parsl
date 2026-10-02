@@ -278,6 +278,9 @@ this smoke suite: provisioning, manager heartbeat expiry, task timeout/retry, st
 results, monitoring persistence, and scale-in/scale-out admission are checked together. Its
 exhaustive configuration remains documented in `docs/executor-provider-model.md` because the
 full state space is intentionally larger than the smoke bound.
+The runtime bridge `test_provider_executor_timed_monitoring_runtime.py` follows the same
+provider-loss/retry sequence with real `Future` objects and the SQLite `STATUS` table: the old
+attempt remains unresolved, while only the current retry is terminal in monitoring.
 
 `ParslJoinFull.cfg` is the corresponding fixed join composition. It adds join-body execution,
 serialized callable admission, duplicate-preserving input positions, inner retry attempts,
