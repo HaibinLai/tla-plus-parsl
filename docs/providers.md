@@ -339,6 +339,18 @@ java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorIsol
 /tmp/parsl-venv/bin/python -m unittest tests/test_poller_executor_isolation_runtime.py -v
 ```
 
+`ParslPollerExecutorFutureIsolation.tla` refines this boundary through the Future layer: the
+first provider failure must not leave a healthy executor's independent Future pending merely
+because both executors share one polling callback. The Current branch strands that Future; the
+Fixed branch continues to the healthy executor. The runtime bridge uses a real
+`JobStatusPoller` with deterministic executor doubles.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorFutureIsolationCurrent.cfg models/providers/ParslPollerExecutorFutureIsolation.tla
+java -cp tla2tools.jar tlc2.TLC -config models/providers/ParslPollerExecutorFutureIsolationFixed.cfg models/providers/ParslPollerExecutorFutureIsolation.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_poller_executor_future_isolation_runtime.py -v
+```
+
 `ParslKubernetesUnknownJob.tla` models a status request for an id absent from the provider's
 local resource map. The current `status()` path raises `KeyError`; the fixed branch returns an
 explicit UNKNOWN status. The runtime probe isolates the concrete lookup with an empty resource

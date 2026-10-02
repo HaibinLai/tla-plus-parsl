@@ -4,6 +4,14 @@ This file is the durable project record for the TLA+ Parsl abstraction effort. C
 external to this repository, so important decisions, coverage counts, and the next audit target
 are recorded here in English and committed with the model changes.
 
+## 2026-10-02 — provider poll isolation with Future terminality
+
+- Added `ParslPollerExecutorFutureIsolation`, refining the provider status-poller model so a
+  failing executor cannot strand an independent healthy executor Future. Current TLC violates
+  `IndependentFutureTerminality`; Fixed TLC passes the bounded model. The real `JobStatusPoller`
+  runtime bridge reproduces the current skipped healthy poll and pending Future. Inventory is now
+  718 TLC cases and 457 runtime entries (718 unittest methods).
+
 ## 2026-10-02 — full Python foundational regression
 
 - Ran `scripts/runtime_foundational_smoke.sh` against the inspected Parsl source and virtual

@@ -343,6 +343,7 @@ tests=(
     tests/test_monitoring_zmq_tuple_shape_runtime.py
     tests/test_result_monitoring_attempt_runtime.py
     tests/test_provider_executor_timed_monitoring_runtime.py
+    tests/test_poller_executor_future_isolation_runtime.py
     tests/test_monitoring_batch_runtime.py
     tests/test_monitoring_db_permanent_error_runtime.py
     tests/test_monitoring_db_update_permanent_error_runtime.py

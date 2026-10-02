@@ -39,7 +39,7 @@ Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 717 TLC cases and 456 runtime entries (717 unittest
+deduplication. The current baseline is 718 TLC cases and 457 runtime entries (718 unittest
 methods).
 
 It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode
@@ -413,7 +413,9 @@ The same condition is checked at the concrete Flux submit boundary by
 The temporal refinement `ParslHtexResultDecodeContinuation` places a corrupt result before a
 valid result in one batch and checks that decode failure cannot strand the later Future (BUG-020).
 Provider/executor coverage also includes `ParslPollerExecutorIsolation` (BUG-269), which keeps
-one executor's transient status failure from suppressing independent executors in the same poll.
+one executor's transient status failure from suppressing independent executors in the same poll,
+and `ParslPollerExecutorFutureIsolation`, which carries that isolation requirement through an
+independent Future's terminal state.
 Thread executor coverage also includes `ParslThreadExecutorEmptyResourceSpec` (BUG-271), which
 rejects empty non-mapping resource specifications instead of silently accepting them.
 Monitoring coverage also includes `ParslMonitoringInternalQueueDrain` (BUG-270), which checks

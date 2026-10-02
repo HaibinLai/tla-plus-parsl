@@ -1460,6 +1460,9 @@ run_case provider-executor-timed \
 run_case provider-executor-timed-monitoring \
     models/executors/ParslProviderExecutorTimedMonitoringFixed.cfg \
     models/executors/ParslProviderExecutorTimedMonitoring.tla
+run_case poller-executor-future-isolation \
+    models/providers/ParslPollerExecutorFutureIsolationFixed.cfg \
+    models/providers/ParslPollerExecutorFutureIsolation.tla
 run_case manager-liveness-pool \
     models/executors/ParslManagerLivenessPoolFixed.cfg \
     models/executors/ParslManagerLivenessPool.tla
