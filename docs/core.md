@@ -302,6 +302,8 @@ The `(task, attempt)` correlation is retained across timeout and late-result del
 fixed branch can reject stale or corrupt frames without changing the logical Future.
 It also tracks a mutable Python-object version, the serialized capture version, and the worker
 dispatch version; `DispatchSnapshotSafety` requires the latter two to agree.
+The runtime bridge `test_join_zmq_retry_runtime.py` corroborates the submit-time object snapshot
+and accepts only the current result attempt once after retry.
 
 `ParslJoinFileStaging.tla` isolates the file-content gate before join execution. Two chunks carry
 checksum state and a source version; publication requires a complete, valid snapshot in the

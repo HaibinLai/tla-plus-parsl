@@ -68,6 +68,16 @@ are recorded here in English and committed with the model changes.
 - Full regression after this addition: 667 TLC cases, 440 runtime entries, and
   682 unittest methods passed.
 
+## 2026-10-02 — join/ZMQ/retry runtime bridge
+
+- Added `test_join_zmq_retry_runtime.py` for submit-time object snapshots and
+  `(logical task, physical attempt)` result correlation across retry.
+- The bridge exercises the existing `ParslJoinZMQRetry` Fixed abstraction against
+  the real Parsl serializer: a late old result and a duplicate current result do
+  not resolve the join dependency twice.
+- Full regression after this addition: 667 TLC cases, 441 runtime entries, and
+  684 unittest methods passed.
+
 ## 2026-10-02 — join cross-layer runtime bridge
 
 The bounded `ParslJoinStageRetry` model remains in the foundational TLC gate and combines
