@@ -22,4 +22,4 @@ Entries in this category are indexed here; the [root bug ledger](../bug-ledger.m
 | BUG-140 | Monitoring TRY bookkeeping advances before insert success | [BUG-140](../bug-ledger.md) |
 | BUG-141 | Monitoring WORKFLOW bookkeeping advances before insert success | [BUG-141](../bug-ledger.md) |
 | BUG-142 | Monitoring WORKFLOW end bookkeeping advances before update success | [BUG-142](../bug-ledger.md) |
-
+| BUG-321 | DFK executor shutdown skips terminal monitoring | [BUG-321](../bug-ledger.md) |

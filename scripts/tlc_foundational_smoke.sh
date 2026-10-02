@@ -2096,5 +2096,8 @@ run_case flux-provider-handshake \
 run_case kubernetes-future-admission \
     models/providers/ParslKubernetesFutureAdmissionFixed.cfg \
     models/providers/ParslKubernetesFutureAdmission.tla
+run_case dfk-executor-shutdown-monitoring \
+    models/monitoring/ParslDfkExecutorShutdownMonitoringFixed.cfg \
+    models/monitoring/ParslDfkExecutorShutdownMonitoring.tla
 
 echo "Foundational TLC smoke suite passed."

@@ -1,5 +1,18 @@
 # Monitoring models
 
+`ParslDfkExecutorShutdownMonitoring.tla` composes the concrete
+`DataFlowKernel.cleanup()` executor-shutdown loop with final workflow monitoring. The Current
+branch aborts cleanup when one executor's `shutdown()` raises, before sending `WORKFLOW_INFO` or
+closing the monitoring hub. The Fixed branch isolates the executor error and still publishes a
+terminal workflow outcome before closing monitoring. The runtime bridge uses the installed DFK
+cleanup method with a failing executor double; this boundary is recorded as BUG-321.
+
+```bash
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/monitoring/ParslDfkExecutorShutdownMonitoringCurrent.cfg models/monitoring/ParslDfkExecutorShutdownMonitoring.tla
+java -cp tla2tools.jar tlc2.TLC -simulate num=10000 -seed 1 -config models/monitoring/ParslDfkExecutorShutdownMonitoringFixed.cfg models/monitoring/ParslDfkExecutorShutdownMonitoring.tla
+/tmp/parsl-venv/bin/python -m unittest tests/test_dfk_executor_shutdown_monitoring_runtime.py -v
+```
+
 `ParslMonitoringTaskTryWorkerLifecycle.tla` composes the deferred worker-first path with the
 TASK/TRY inserts and the paired STATUS/TRY running update. The Current branch permits one table
 to advance when the other write fails; the Fixed branch retains the worker event and avoids a

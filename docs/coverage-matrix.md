@@ -11,13 +11,16 @@ Kubernetes pod-phase publication with Future admission and monitoring readiness 
 refinement of BUG-126), and `ParslFluxProviderHandshake`, which composes provider liveness with
 the Flux startup handshake.
 
+The monitoring coverage also includes `ParslDfkExecutorShutdownMonitoring`, which composes DFK
+executor shutdown failures with final WORKFLOW monitoring delivery and close (BUG-321).
+
 The file-transfer coverage also includes `ParslDataManagerStageOutReturn`, which distinguishes a
 `None` stage-out return (the output follows the application Future) from an independent transfer
 Future and checks output publication ordering with a real `DataManager` probe.
 
 The serialized transport coverage now also includes `ParslZMQSerializedAck`, which composes
 callable/object snapshotting with ACK-loss retransmission and receiver-side envelope
-deduplication. The current baseline is 682 TLC cases and 445 runtime entries (705 unittest
+deduplication. The current baseline is 683 TLC cases and 447 runtime entries (707 unittest
 methods).
 
 It now also includes `ParslZMQMultipartAck`, which validates three-buffer envelopes before decode

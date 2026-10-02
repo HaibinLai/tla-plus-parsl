@@ -13,6 +13,14 @@ are recorded here in English and committed with the model changes.
   submit-then-Pending observation. This deepens existing BUG-126 without duplicating its ledger
   entry. The foundational gate is now 682 TLC configurations and 445 runtime entries.
 
+## 2026-10-02 — DFK executor-shutdown/monitoring finalization
+
+- Added `ParslDfkExecutorShutdownMonitoring`, composing the real DFK cleanup order with executor
+  shutdown failure and final WORKFLOW monitoring delivery. Current TLC and the runtime bridge
+  reproduce cleanup aborting before terminal monitoring; Fixed isolates the executor error and
+  passes bounded TLC. This is recorded as BUG-321. The foundational gate is now 683 TLC
+  configurations and 447 runtime entries.
+
 ## 2026-10-02 — Flux provider startup handshake boundary
 
 - Added `ParslFluxProviderHandshake`, a compact provider/executor composition for the concrete
