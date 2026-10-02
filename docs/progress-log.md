@@ -13,6 +13,14 @@ are recorded here in English and committed with the model changes.
   send-failure model, and Slurm scale-in composition. The recent-model runner continues to keep
 intentional Current counterexamples separate from the Fixed foundational gate.
 
+## 2026-10-02 — Full 729-case regression after projection monitoring and ZMQ refinements
+
+- Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17: all 729 foundational
+  configurations passed, including the projection/retry monitoring and serialized-ZMQ cases.
+- Ran `scripts/runtime_foundational_smoke.sh` against `/tmp/parsl-source`: all 468 runtime
+  entries passed. Existing `join_app`, provider, executor, staging, clock, and database cases
+  remain green after the new cross-layer additions.
+
 ## 2026-10-02 — Full 727-case regression after Future projection retry model
 
 - Ran `scripts/tlc_foundational_smoke.sh` with TLC 2.19 and Java 17: all 727 foundational
