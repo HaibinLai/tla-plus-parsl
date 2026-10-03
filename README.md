@@ -19,6 +19,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Modeling goal and stopping rule](docs/modeling-goal.md)
 - [v0.1 validation report](docs/v0.1-report.md)
 - [Project report](docs/project-report.md)
+- [Project report source (LaTeX)](docs/project-report.tex) · [compiled PDF](docs/project-report.pdf)
 - [Article and podcast plan](docs/article-podcast-plan.md)
 - [Technical article draft](docs/article-draft.md)
 - [Podcast script draft](docs/podcast-script.md)
@@ -36,6 +37,12 @@ TLC commands and measured state-space results are maintained in [`docs/overview.
 ```
 
 For TLC, install Java 17 and `tla2tools.jar`, then use the commands in the full overview.
+
+To compile the LaTeX report with Tectonic:
+
+```bash
+tectonic -X compile docs/project-report.tex
+```
 
 To rerun the recent cross-layer TLC smoke set (including the intentional current-branch
 counterexamples), use:
