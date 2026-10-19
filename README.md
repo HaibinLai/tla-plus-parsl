@@ -30,6 +30,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Turn-by-turn jump plot](site/dist/session-turns.svg)
 - [AI code-output analysis](docs/ai4tla-code-output-analysis.md) · [code-output trend SVG](site/dist/code-output-trend.svg)
 - [Code changes by AI turn](docs/ai4tla-code-by-turn.md) · [per-turn code SVG](site/dist/code-by-turn.svg)
+- [Code additions by commit](site/dist/code-by-commit.svg)
 - [Session analysis data](docs/ai4tla-session-analysis.json) and [reproducible extractor](scripts/analyze_codex_session.py)
 - [Phase classification data](docs/ai4tla-phase-analysis.json) and [phase classifier](scripts/classify_codex_activity.py)
 - [Paper writing plan](docs/paper-plan.md)
