@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+<rect width="100%" height="100%" fill="#f8fafc"/>
+<text x="36" y="38" font-family="Arial,sans-serif" font-size="22" fill="#172033" text-anchor="start">Git commit activity aligned to the Codex session</text>
+<text x="36" y="61" font-family="Arial,sans-serif" font-size="12" fill="#64748b" text-anchor="start">Daily commit counts by changed-file category; exact changed paths are retained in the JSON evidence.</text>
+<text x="90" y="413" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">09-28</text>
+<rect x="77.0" y="368.4" width="26" height="21.6" fill="#2563eb"/>
+<rect x="77.0" y="319.4" width="26" height="49.0" fill="#60a5fa"/>
+<rect x="77.0" y="299.6" width="26" height="19.8" fill="#16a34a"/>
+<rect x="77.0" y="277.2" width="26" height="22.4" fill="#9333ea"/>
+<rect x="77.0" y="150.2" width="26" height="127.0" fill="#64748b"/>
+<text x="263" y="413" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">09-29</text>
+<rect x="250.3" y="372.5" width="26" height="17.5" fill="#2563eb"/>
+<rect x="250.3" y="334.5" width="26" height="38.0" fill="#60a5fa"/>
+<rect x="250.3" y="318.1" width="26" height="16.5" fill="#16a34a"/>
+<rect x="250.3" y="301.7" width="26" height="16.4" fill="#dc2626"/>
+<rect x="250.3" y="242.1" width="26" height="59.6" fill="#9333ea"/>
+<rect x="250.3" y="236.8" width="26" height="5.3" fill="#ea580c"/>
+<rect x="250.3" y="222.3" width="26" height="14.5" fill="#64748b"/>
+<text x="437" y="413" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">09-30</text>
+<rect x="423.7" y="364.4" width="26" height="25.6" fill="#2563eb"/>
+<rect x="423.7" y="311.8" width="26" height="52.6" fill="#60a5fa"/>
+<rect x="423.7" y="296.8" width="26" height="15.0" fill="#16a34a"/>
+<rect x="423.7" y="263.5" width="26" height="33.2" fill="#dc2626"/>
+<rect x="423.7" y="201.2" width="26" height="62.3" fill="#9333ea"/>
+<rect x="423.7" y="145.8" width="26" height="55.5" fill="#ea580c"/>
+<rect x="423.7" y="110.0" width="26" height="35.8" fill="#64748b"/>
+<text x="610" y="413" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">10-01</text>
+<rect x="597.0" y="386.0" width="26" height="4.0" fill="#2563eb"/>
+<rect x="597.0" y="378.5" width="26" height="7.6" fill="#60a5fa"/>
+<rect x="597.0" y="375.6" width="26" height="2.8" fill="#16a34a"/>
+<rect x="597.0" y="373.5" width="26" height="2.1" fill="#dc2626"/>
+<rect x="597.0" y="291.3" width="26" height="82.2" fill="#9333ea"/>
+<rect x="597.0" y="266.0" width="26" height="25.3" fill="#ea580c"/>
+<rect x="597.0" y="264.3" width="26" height="1.8" fill="#64748b"/>
+<text x="783" y="413" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">10-02</text>
+<rect x="770.3" y="378.1" width="26" height="11.9" fill="#2563eb"/>
+<rect x="770.3" y="355.3" width="26" height="22.9" fill="#60a5fa"/>
+<rect x="770.3" y="345.5" width="26" height="9.8" fill="#16a34a"/>
+<rect x="770.3" y="334.3" width="26" height="11.2" fill="#dc2626"/>
+<rect x="770.3" y="273.0" width="26" height="61.3" fill="#9333ea"/>
+<rect x="770.3" y="252.2" width="26" height="20.8" fill="#ea580c"/>
+<rect x="770.3" y="240.1" width="26" height="12.1" fill="#64748b"/>
+<text x="957" y="413" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">10-03</text>
+<rect x="943.7" y="389.8" width="26" height="0.2" fill="#9333ea"/>
+<rect x="943.7" y="389.7" width="26" height="0.1" fill="#64748b"/>
+<text x="1130" y="413" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="middle">10-19</text>
+<rect x="1117.0" y="389.4" width="26" height="0.6" fill="#9333ea"/>
+<rect x="1117.0" y="388.7" width="26" height="0.6" fill="#ea580c"/>
+<rect x="1117.0" y="388.2" width="26" height="0.5" fill="#64748b"/>
+<line x1="70" y1="390.0" x2="1130" y2="390.0" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+<text x="64" y="394.0" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="end">0</text>
+<line x1="70" y1="296.7" x2="1130" y2="296.7" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+<text x="64" y="300.6666666666667" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="end">890</text>
+<line x1="70" y1="203.3" x2="1130" y2="203.3" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+<text x="64" y="207.33333333333334" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="end">1780</text>
+<line x1="70" y1="110.0" x2="1130" y2="110.0" stroke="#cbd5e1" stroke-dasharray="3 4"/>
+<text x="64" y="114.0" font-family="Arial,sans-serif" font-size="10" fill="#64748b" text-anchor="end">2670</text>
+<rect x="90" y="454" width="11" height="11" fill="#2563eb"/>
+<text x="106" y="465" font-family="Arial,sans-serif" font-size="10" fill="#475569" text-anchor="start">tla</text>
+<rect x="235" y="454" width="11" height="11" fill="#60a5fa"/>
+<text x="251" y="465" font-family="Arial,sans-serif" font-size="10" fill="#475569" text-anchor="start">tla_config</text>
+<rect x="380" y="454" width="11" height="11" fill="#16a34a"/>
+<text x="396" y="465" font-family="Arial,sans-serif" font-size="10" fill="#475569" text-anchor="start">runtime_probe</text>
+<rect x="525" y="454" width="11" height="11" fill="#dc2626"/>
+<text x="541" y="465" font-family="Arial,sans-serif" font-size="10" fill="#475569" text-anchor="start">bug_ledger</text>
+<rect x="670" y="454" width="11" height="11" fill="#9333ea"/>
+<text x="686" y="465" font-family="Arial,sans-serif" font-size="10" fill="#475569" text-anchor="start">documentation</text>
+<rect x="815" y="454" width="11" height="11" fill="#ea580c"/>
+<text x="831" y="465" font-family="Arial,sans-serif" font-size="10" fill="#475569" text-anchor="start">analysis_script</text>
+<rect x="960" y="454" width="11" height="11" fill="#64748b"/>
+<text x="976" y="465" font-family="Arial,sans-serif" font-size="10" fill="#475569" text-anchor="start">other</text>
+</svg>
