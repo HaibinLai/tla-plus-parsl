@@ -77,6 +77,11 @@ nearest-event distance was 0.407 seconds (maximum 2.768 seconds). This shows
 that the local log and Git history overlap closely in time, but it does not
 prove causality between a particular turn and a commit.
 
+Each commit record now also retains its exact changed repository paths, so a
+consumer can filter commits touching `models/**/*.tla`, `models/**/*.cfg`,
+`tests/test_*_runtime.py`, or `docs/bug-ledger*` instead of relying only on the
+aggregate categories.
+
 Across the commit history, changed-file categories were counted as follows:
 
 ```text

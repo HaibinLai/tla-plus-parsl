@@ -144,7 +144,9 @@ def main() -> None:
             commit["nearest_session_event"] = nearest.isoformat()
             commit["nearest_event_delta_seconds"] = round(abs((nearest - stamp).total_seconds()), 3)
         commit["changed_file_count"] = len(commit["files"])
-        del commit["files"]
+        # Repository paths are safe evidence to retain; prompt/tool text is
+        # still omitted. This makes exact TLA+/probe/ledger alignment possible.
+        commit["changed_files"] = commit.pop("files")
 
     bug_ledger_text = ""
     canonical_ledger = args.repo / "docs" / "bug-ledger.md"
