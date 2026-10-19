@@ -1,0 +1,91 @@
+{
+  "schema": "ai4tla.code-output-analysis.v1",
+  "definition": "code means non-doc Python/TLA+/CFG/shell/config files; generated artifacts are excluded",
+  "daily": [
+    {
+      "day": "2026-09-28",
+      "commits": 324,
+      "code_add": 32776,
+      "code_del": 224,
+      "median_code_add": 103.0,
+      "mean_code_add": 101.16,
+      "zero_code_commits": 17,
+      "cumulative_net_code_lines": 32552,
+      "classified_turns": 345,
+      "code_add_per_classified_turn": 95.003
+    },
+    {
+      "day": "2026-09-29",
+      "commits": 338,
+      "code_add": 18569,
+      "code_del": 63,
+      "median_code_add": 34.5,
+      "mean_code_add": 54.938,
+      "zero_code_commits": 108,
+      "cumulative_net_code_lines": 51058,
+      "classified_turns": 376,
+      "code_add_per_classified_turn": 49.386
+    },
+    {
+      "day": "2026-09-30",
+      "commits": 646,
+      "code_add": 33380,
+      "code_del": 316,
+      "median_code_add": 15.0,
+      "mean_code_add": 51.672,
+      "zero_code_commits": 141,
+      "cumulative_net_code_lines": 84122,
+      "classified_turns": 588,
+      "code_add_per_classified_turn": 56.769
+    },
+    {
+      "day": "2026-10-01",
+      "commits": 462,
+      "code_add": 5982,
+      "code_del": 7,
+      "median_code_add": 0.0,
+      "mean_code_add": 12.948,
+      "zero_code_commits": 237,
+      "cumulative_net_code_lines": 90097,
+      "classified_turns": 241,
+      "code_add_per_classified_turn": 24.822
+    },
+    {
+      "day": "2026-10-02",
+      "commits": 195,
+      "code_add": 15814,
+      "code_del": 352,
+      "median_code_add": 88,
+      "mean_code_add": 81.097,
+      "zero_code_commits": 43,
+      "cumulative_net_code_lines": 105559,
+      "classified_turns": 210,
+      "code_add_per_classified_turn": 75.305
+    },
+    {
+      "day": "2026-10-03",
+      "commits": 1,
+      "code_add": 0,
+      "code_del": 0,
+      "median_code_add": 0,
+      "mean_code_add": 0,
+      "zero_code_commits": 1,
+      "cumulative_net_code_lines": 105559,
+      "classified_turns": 1,
+      "code_add_per_classified_turn": 0.0
+    },
+    {
+      "day": "2026-10-19",
+      "commits": 6,
+      "code_add": 698,
+      "code_del": 2,
+      "median_code_add": 81.5,
+      "mean_code_add": 116.333,
+      "zero_code_commits": 0,
+      "cumulative_net_code_lines": 106255,
+      "classified_turns": 6,
+      "code_add_per_classified_turn": 116.333
+    }
+  ],
+  "commit_count": 1972
+}
