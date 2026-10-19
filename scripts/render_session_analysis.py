@@ -62,6 +62,12 @@ def main() -> None:
             f'<td><code>{commit["short"]}</code></td><td>{html.escape(commit["subject"])}</td>'
             f'<td>{html.escape(cats)}</td><td>{commit["nearest_event_delta_seconds"]:.3f}s</td></tr>'
         )
+    agent_rows = "".join(
+        f'<div class="bar-row"><span class="label">{html.escape(agent.rsplit("/", 1)[-1])}</span>'
+        f'<span class="bar" style="width:{max(2, count * 8)}px;background:#0f766e"></span>'
+        f'<span class="value">{count:,}</span></div>'
+        for agent, count in data.get("agent_mentions", {}).items()
+    )
     cards = [
         ("JSONL records", f'{sum(data["record_counts"].values()):,}'),
         ("Distinct turns", f'{data["distinct_turn_ids"]:,}'),
@@ -92,6 +98,8 @@ th,td{{padding:8px;border-bottom:1px solid #e2e8f0;text-align:left;vertical-alig
 <div class="cards">{card_html}</div>
 <div class="grid"><section><h2>Commit file categories</h2>{bar_rows(dict(commit_categories))}</section>
 <section><h2>Session records by day</h2><div class="chart">{"".join(daily_rows)}</div></section></div>
+<div class="grid" style="margin-top:20px"><section><h2>Agent mentions</h2><p class="muted">Names observed in exposed response text; this is a lower bound, not a complete delegation count.</p>{agent_rows}</section>
+<section><h2>Artifact inventory</h2>{bar_rows(data.get("artifact_inventory", {}))}</section></div>
 <section style="margin-top:20px"><h2>Commit ↔ session alignment</h2>
 <p class="muted">The delta is the distance from each commit timestamp to the nearest recorded session event. This is temporal evidence, not proof that one specific turn caused the commit.</p>
 <div class="scroll"><table><thead><tr><th>UTC</th><th>Commit</th><th>Subject</th><th>Changed categories</th><th>Nearest event</th></tr></thead><tbody>{"".join(commit_rows)}</tbody></table></div></section>

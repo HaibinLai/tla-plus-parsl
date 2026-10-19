@@ -84,6 +84,7 @@ def main() -> None:
     turns = set()
     timestamps: list[dt.datetime] = []
     text_path_mentions = Counter()
+    agent_mentions = Counter()
     allowlisted_paths = set()
     for name in ("models", "docs", "scripts", "tests"):
         root = args.repo / name
@@ -126,6 +127,9 @@ def main() -> None:
                         content_types[item.get("type", "unknown")] += 1
                         text = item.get("text")
                         if isinstance(text, str):
+                            for agent in re.findall(r"/root/[A-Za-z0-9_-]+", text):
+                                if agent != "/root":
+                                    agent_mentions[agent] += 1
                             for match in repo_path_re.finditer(text):
                                 path = match.group(0).rstrip(".,:;)]}")
                                 if path in allowlisted_paths:
@@ -174,6 +178,7 @@ def main() -> None:
             path: {"count": count, "category": category(path)}
             for path, count in text_path_mentions.most_common()
         },
+        "agent_mentions": dict(agent_mentions.most_common()),
         "commit_alignment": commits,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

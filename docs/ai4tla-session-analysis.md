@@ -104,3 +104,10 @@ The repository inventory captured alongside the session is 676 TLA+ modules,
 ledger files, and 317 unique numeric bug IDs in the canonical ledger. These are
 repository inventory counts, not claims that every file was semantically
 inspected in every turn.
+
+Exposed response text also contains lower-bound mentions of seven delegated
+agents: `organize_bug_ledger`, `audit_next_backend`, `audit_provider_next`,
+`agent_activity_audit`, `bug_taxonomy_visuals`, `literature_research`, and
+`draft_publication`. These names can be correlated with the 38 inter-agent
+metadata records, but the metadata does not by itself establish which agent
+produced a particular commit.
