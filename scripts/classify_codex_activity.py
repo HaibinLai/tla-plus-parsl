@@ -64,6 +64,8 @@ def main() -> None:
     agent_by_phase = collections.defaultdict(collections.Counter)
     phase_events: list[tuple[dt.datetime, list[str], str | None]] = []
     current_model = None
+    current_turn_id = None
+    turns = {}
     records = 0
     text_records = 0
     with args.session.open(encoding="utf-8") as handle:
@@ -78,6 +80,9 @@ def main() -> None:
                 continue
             if record.get("type") == "turn_context":
                 current_model = payload.get("model")
+                current_turn_id = payload.get("turn_id")
+                if current_turn_id:
+                    turns.setdefault(current_turn_id, {"turn_id": current_turn_id, "timestamp": record.get("timestamp"), "model": current_model, "phases": collections.Counter(), "text_records": 0})
             if record.get("type") != "response_item":
                 continue
             content = payload.get("content")
@@ -99,12 +104,27 @@ def main() -> None:
                     phase_counts[label] += 1
                     phase_by_day[day][label] += 1
                     phase_by_model[current_model or "unknown"][label] += 1
+                    if current_turn_id in turns:
+                        turns[current_turn_id]["phases"][label] += 1
+                if current_turn_id in turns:
+                    turns[current_turn_id]["text_records"] += 1
                 for agent in set(AGENT_RE.findall(text)):
                     for label in labels:
                         agent_by_phase[agent][label] += 1
                 phase_events.append((stamp, labels, current_model))
 
     phase_events.sort(key=lambda item: item[0])
+    turn_sequence = []
+    for turn in turns.values():
+        if not turn["phases"]:
+            continue
+        dominant = max(turn["phases"], key=turn["phases"].get)
+        turn_sequence.append({"turn_id": turn["turn_id"], "timestamp": turn["timestamp"], "model": turn["model"], "dominant_phase": dominant, "phases": dict(turn["phases"]), "text_records": turn["text_records"]})
+    turn_sequence.sort(key=lambda item: item.get("timestamp") or "")
+    transitions = collections.Counter()
+    for previous, current in zip(turn_sequence, turn_sequence[1:]):
+        transitions[f'{previous["dominant_phase"]}->{current["dominant_phase"]}'] += 1
+
     commit_alignment = []
     for commit in git_commits(args.repo):
         stamp = parse_time(commit["timestamp"])
@@ -128,6 +148,8 @@ def main() -> None:
         "phase_by_day": {day: dict(counts) for day, counts in sorted(phase_by_day.items())},
         "phase_by_model": {model: dict(counts) for model, counts in sorted(phase_by_model.items())},
         "agent_by_phase": {agent: dict(counts) for agent, counts in sorted(agent_by_phase.items())},
+        "turn_sequence": turn_sequence,
+        "transition_counts": dict(transitions),
         "commit_alignment": commit_alignment,
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -27,6 +27,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Session activity dashboard](site/dist/session-analysis.html)
 - [Research phase dashboard](site/dist/session-phases.html)
 - [SVG phase heatmap](site/dist/session-phase-heatmap.svg) · [SVG commit timeline](site/dist/session-commit-timeline.svg)
+- [Turn-by-turn jump plot](site/dist/session-turns.svg)
 - [Session analysis data](docs/ai4tla-session-analysis.json) and [reproducible extractor](scripts/analyze_codex_session.py)
 - [Phase classification data](docs/ai4tla-phase-analysis.json) and [phase classifier](scripts/classify_codex_activity.py)
 - [Paper writing plan](docs/paper-plan.md)

@@ -87,6 +87,40 @@ def render_commits(data: dict, path: Path) -> None:
     write(path, lines)
 
 
+def render_turns(data: dict, path: Path) -> None:
+    """Plot turn number on x and dominant activity phase on y."""
+    width, height = 1400, 620
+    lines = header("Turn-by-turn activity jumps", "X = classified turn number; Y = dominant activity in that turn. Lines connect consecutive turns.", width, height)
+    turns = data.get("turn_sequence", [])
+    left, right, top, bottom = 165, 60, 105, 130
+    plot_w, plot_h = width - left - right, height - top - bottom
+    y_for = {phase: top + i * plot_h / max(1, len(PHASES) - 1) for i, phase in enumerate(PHASES)}
+    for phase in PHASES:
+        y = y_for[phase]
+        lines.append(f'<line x1="{left}" y1="{y:.1f}" x2="{width-right}" y2="{y:.1f}" stroke="#cbd5e1" stroke-dasharray="3 4"/>')
+        lines.append(svg_text(left - 12, y + 4, phase, 12, PHASE_COLORS[phase], "end"))
+    if turns:
+        points = []
+        for index, turn in enumerate(turns):
+            x = left + index * plot_w / max(1, len(turns) - 1)
+            y = y_for.get(turn["dominant_phase"], y_for[PHASES[0]])
+            points.append((x, y))
+        lines.append('<polyline points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in points) + '" fill="none" stroke="#334155" stroke-width="1.2" opacity="0.55"/>')
+        for index, (turn, (x, y)) in enumerate(zip(turns, points)):
+            phase = turn["dominant_phase"]
+            title = f'Turn {index + 1}: {phase}; {turn.get("timestamp", "")} ({turn.get("model", "unknown")})'
+            lines.append(f'<circle cx="{x:.1f}" cy="{y:.1f}" r="2.4" fill="{PHASE_COLORS[phase]}"><title>{html.escape(title)}</title></circle>')
+        for tick in range(0, len(turns), 100):
+            x = left + tick * plot_w / max(1, len(turns) - 1)
+            lines.append(f'<line x1="{x:.1f}" y1="{top+plot_h}" x2="{x:.1f}" y2="{top+plot_h+7}" stroke="#64748b"/>')
+            lines.append(svg_text(round(x), top + plot_h + 24, str(tick + 1), 10, "#64748b", "middle"))
+        lines.append(svg_text(left + plot_w / 2, height - 40, "classified turn number", 12, "#475569", "middle"))
+    else:
+        lines.append(svg_text(left, top + 30, "No classified turns", 14, "#64748b"))
+    lines.append(svg_text(36, 555, f"{len(turns):,} turns classified; multi-label phase details remain in the JSON evidence.", 12, "#64748b"))
+    write(path, lines)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("session_json", type=Path)
@@ -94,9 +128,12 @@ def main() -> None:
     ap.add_argument("--output-dir", type=Path, required=True)
     args = ap.parse_args()
     render_commits(json.loads(args.session_json.read_text(encoding="utf-8")), args.output_dir / "session-commit-timeline.svg")
-    render_phase(json.loads(args.phase_json.read_text(encoding="utf-8")), args.output_dir / "session-phase-heatmap.svg")
+    phase_data = json.loads(args.phase_json.read_text(encoding="utf-8"))
+    render_phase(phase_data, args.output_dir / "session-phase-heatmap.svg")
+    render_turns(phase_data, args.output_dir / "session-turns.svg")
     print(args.output_dir / "session-commit-timeline.svg")
     print(args.output_dir / "session-phase-heatmap.svg")
+    print(args.output_dir / "session-turns.svg")
 
 
 if __name__ == "__main__":
