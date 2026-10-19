@@ -111,3 +111,24 @@ agents: `organize_bug_ledger`, `audit_next_backend`, `audit_provider_next`,
 `draft_publication`. These names can be correlated with the 38 inter-agent
 metadata records, but the metadata does not by itself establish which agent
 produced a particular commit.
+
+## Phase classification
+
+`scripts/classify_codex_activity.py` performs a multi-label classification of
+exposed `output_text` records. It found 4,977 classified records with the
+following lower-bound activity counts:
+
+```text
+verification   4,033
+source_audit   3,712
+tla_modeling   1,531
+bug_ledger       742
+documentation    463
+coordination      24
+```
+
+The phase data is in `docs/ai4tla-phase-analysis.json`, and the phase heatmap,
+model comparison, dominant daily sequence, and commit-to-phase mapping are
+available in `site/dist/session-phases.html`. Classification labels overlap;
+for example, one turn that reads Parsl source and adds a TLC invariant counts
+in both `source_audit` and `tla_modeling`.
