@@ -38,6 +38,12 @@ commit separately. Its x-axis is chronological commit number, its y-axis is
 the number of code lines added by that commit, and hover text includes the
 commit hash, subject, nearest turn, timestamp, and phase.
 
+For a reader-oriented trend view, use `site/dist/code-trend-human.svg`. It
+groups commits into chronological windows, draws the median and interquartile
+range, calls out the overall statistics, and adds a separate cumulative-size
+strip. This view is intended for a report or presentation; the per-commit and
+per-turn SVGs remain available for detailed inspection.
+
 ## Interpretation
 
 This view supports the idea that “AI coding output” is bursty rather than
