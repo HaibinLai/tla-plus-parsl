@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1450" height="760" viewBox="0 0 1450 760">
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity=".14"/></filter></defs>
+<rect width="100%" height="100%" fill="#f6f8fb"/>
+<rect x="28" y="22" width="1394" height="120" rx="18" fill="#ffffff" filter="url(#shadow)"/>
+<text x="58" y="60" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#172033" text-anchor="start">From bug proposal to validated ledger entry</text>
+<text x="58" y="91" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="start">Inferred turn-level workflow: bug → TLA+ model → TLC → runtime probe → bug ledger</text>
+<text x="58" y="120" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#94a3b8" text-anchor="start">Edges show non-decreasing stage transitions observed within adjacent classified turns</text>
+<line x1="235" y1="320" x2="345" y2="320" stroke="#64748b" stroke-width="10.7" opacity=".65"/>
+<text x="290" y="302" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="middle">704</text>
+<circle cx="150" cy="320" r="82" fill="#dc2626" filter="url(#shadow)"/>
+<text x="150" y="312" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">bug proposal</text>
+<text x="150" y="338" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#fff" text-anchor="middle">1,025 turns</text>
+<line x1="515" y1="320" x2="625" y2="320" stroke="#64748b" stroke-width="15.5" opacity=".65"/>
+<text x="570" y="302" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="middle">1,143</text>
+<circle cx="430" cy="320" r="82" fill="#7c3aed" filter="url(#shadow)"/>
+<text x="430" y="312" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">tla modeling</text>
+<text x="430" y="338" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#fff" text-anchor="middle">1,228 turns</text>
+<line x1="795" y1="320" x2="905" y2="320" stroke="#64748b" stroke-width="17.0" opacity=".65"/>
+<text x="850" y="302" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="middle">1,277</text>
+<circle cx="710" cy="320" r="82" fill="#2563eb" filter="url(#shadow)"/>
+<text x="710" y="312" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">tlc</text>
+<text x="710" y="338" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#fff" text-anchor="middle">1,638 turns</text>
+<line x1="1075" y1="320" x2="1185" y2="320" stroke="#64748b" stroke-width="7.4" opacity=".65"/>
+<text x="1130" y="302" font-family="Arial,sans-serif" font-size="12" font-weight="700" fill="#475569" text-anchor="middle">403</text>
+<circle cx="990" cy="320" r="82" fill="#16a34a" filter="url(#shadow)"/>
+<text x="990" y="312" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">runtime probe</text>
+<text x="990" y="338" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#fff" text-anchor="middle">1,391 turns</text>
+<circle cx="1270" cy="320" r="82" fill="#9333ea" filter="url(#shadow)"/>
+<text x="1270" y="312" font-family="Arial,sans-serif" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">bug ledger</text>
+<text x="1270" y="338" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#fff" text-anchor="middle">464 turns</text>
+<text x="58" y="525" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#172033" text-anchor="start">Complete chain detection</text>
+<text x="58" y="552" font-family="Arial,sans-serif" font-size="13" font-weight="400" fill="#475569" text-anchor="start">112 complete chains found within a maximum 50-turn span.</text>
+<text x="58" y="580" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="start">A chain is counted when the ordered stage signals appear after one another; stages can overlap within one turn.</text>
+<rect x="58" y="610" width="1334" height="92" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="78" y="640" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 1: turns 423→463 (40 span)</text>
+<text x="403" y="640" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 2: turns 464→467 (3 span)</text>
+<text x="728" y="640" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 3: turns 468→471 (3 span)</text>
+<text x="1053" y="640" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 4: turns 472→482 (10 span)</text>
+<text x="78" y="667" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 5: turns 483→486 (3 span)</text>
+<text x="403" y="667" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 6: turns 487→490 (3 span)</text>
+<text x="728" y="667" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 7: turns 491→494 (3 span)</text>
+<text x="1053" y="667" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="start">chain 8: turns 495→512 (17 span)</text>
+</svg>

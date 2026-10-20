@@ -1,0 +1,1610 @@
+{
+  "bigrams": [
+    {
+      "count": 1024,
+      "source": "runtime",
+      "target": "probe"
+    },
+    {
+      "count": 657,
+      "source": "current",
+      "target": "fixed"
+    },
+    {
+      "count": 636,
+      "source": "fixed",
+      "target": "tlc"
+    },
+    {
+      "count": 486,
+      "source": "current",
+      "target": "tlc"
+    },
+    {
+      "count": 472,
+      "source": "generated",
+      "target": "distinct"
+    },
+    {
+      "count": 465,
+      "source": "tlc",
+      "target": "runtime"
+    },
+    {
+      "count": 372,
+      "source": "distinct",
+      "target": "states"
+    },
+    {
+      "count": 369,
+      "source": "tlc",
+      "target": "current"
+    },
+    {
+      "count": 345,
+      "source": "github",
+      "target": "push"
+    },
+    {
+      "count": 295,
+      "source": "executor",
+      "target": "provider"
+    },
+    {
+      "count": 295,
+      "source": "bug",
+      "target": "ledger"
+    },
+    {
+      "count": 278,
+      "source": "states",
+      "target": "generated"
+    },
+    {
+      "count": 259,
+      "source": "push",
+      "target": "dns"
+    },
+    {
+      "count": 250,
+      "source": "tlc",
+      "target": "smoke"
+    },
+    {
+      "count": 244,
+      "source": "runtime",
+      "target": "probes"
+    },
+    {
+      "count": 196,
+      "source": "tlc",
+      "target": "states"
+    },
+    {
+      "count": 196,
+      "source": "coverage",
+      "target": "matrix"
+    },
+    {
+      "count": 191,
+      "source": "smoke",
+      "target": "sweep"
+    },
+    {
+      "count": 189,
+      "source": "haibinlai",
+      "target": "tla-plus-parsl"
+    },
+    {
+      "count": 179,
+      "source": "github.com",
+      "target": "haibinlai"
+    },
+    {
+      "count": 175,
+      "source": "work",
+      "target": "queue"
+    },
+    {
+      "count": 175,
+      "source": "github",
+      "target": "dns"
+    },
+    {
+      "count": 160,
+      "source": "tlc",
+      "target": "fixed"
+    },
+    {
+      "count": 158,
+      "source": "dns",
+      "target": "github.com"
+    },
+    {
+      "count": 153,
+      "source": "runtime",
+      "target": "tests"
+    },
+    {
+      "count": 152,
+      "source": "provider",
+      "target": "executor"
+    },
+    {
+      "count": 147,
+      "source": "fixed",
+      "target": "states"
+    },
+    {
+      "count": 142,
+      "source": "inner",
+      "target": "future"
+    },
+    {
+      "count": 139,
+      "source": "current",
+      "target": "states"
+    },
+    {
+      "count": 136,
+      "source": "home",
+      "target": "tla-parsl"
+    },
+    {
+      "count": 136,
+      "source": "foundational",
+      "target": "tlc"
+    },
+    {
+      "count": 135,
+      "source": "fixed",
+      "target": "runtime"
+    },
+    {
+      "count": 131,
+      "source": "github",
+      "target": "commit"
+    },
+    {
+      "count": 127,
+      "source": "grid",
+      "target": "engine"
+    },
+    {
+      "count": 124,
+      "source": "parsl",
+      "target": "runtime"
+    },
+    {
+      "count": 120,
+      "source": "parsl",
+      "target": "parsl"
+    },
+    {
+      "count": 120,
+      "source": "future",
+      "target": "pending"
+    },
+    {
+      "count": 118,
+      "source": "counterexample",
+      "target": "fixed"
+    },
+    {
+      "count": 115,
+      "source": "states",
+      "target": "depth"
+    },
+    {
+      "count": 114,
+      "source": "outer",
+      "target": "join"
+    },
+    {
+      "count": 113,
+      "source": "pbs",
+      "target": "pro"
+    },
+    {
+      "count": 113,
+      "source": "foundational",
+      "target": "smoke"
+    },
+    {
+      "count": 110,
+      "source": "future",
+      "target": "monitoring"
+    },
+    {
+      "count": 108,
+      "source": "tlc",
+      "target": "cases"
+    },
+    {
+      "count": 107,
+      "source": "heartbeat",
+      "target": "timeout"
+    },
+    {
+      "count": 106,
+      "source": "probe",
+      "target": "tlc"
+    },
+    {
+      "count": 105,
+      "source": "origin",
+      "target": "main"
+    },
+    {
+      "count": 97,
+      "source": "states",
+      "target": "distinct"
+    },
+    {
+      "count": 96,
+      "source": "cases",
+      "target": "runtime"
+    },
+    {
+      "count": 95,
+      "source": "ran",
+      "target": "tests"
+    },
+    {
+      "count": 94,
+      "source": "promotion",
+      "target": "github"
+    },
+    {
+      "count": 92,
+      "source": "htex",
+      "target": "manager"
+    },
+    {
+      "count": 92,
+      "source": "htex",
+      "target": "worker"
+    },
+    {
+      "count": 92,
+      "source": "runtime",
+      "target": "tlc"
+    },
+    {
+      "count": 92,
+      "source": "tmp",
+      "target": "tla-parsl-localpublish.wd5vyc"
+    },
+    {
+      "count": 90,
+      "source": "fixed",
+      "target": "current"
+    },
+    {
+      "count": 89,
+      "source": "master",
+      "target": "parsl"
+    },
+    {
+      "count": 89,
+      "source": "runtime",
+      "target": "bridge"
+    },
+    {
+      "count": 87,
+      "source": "smoke",
+      "target": "tlc"
+    },
+    {
+      "count": 85,
+      "source": "push",
+      "target": "clone"
+    },
+    {
+      "count": 85,
+      "source": "github.com",
+      "target": "clone"
+    },
+    {
+      "count": 84,
+      "source": "google",
+      "target": "cloud"
+    },
+    {
+      "count": 84,
+      "source": "runtime",
+      "target": "smoke"
+    },
+    {
+      "count": 83,
+      "source": "raw.githubusercontent.com",
+      "target": "parsl"
+    },
+    {
+      "count": 83,
+      "source": "parsl",
+      "target": "master"
+    },
+    {
+      "count": 83,
+      "source": "tlc",
+      "target": "foundational"
+    },
+    {
+      "count": 82,
+      "source": "tlc",
+      "target": "tlc"
+    },
+    {
+      "count": 81,
+      "source": "foundational",
+      "target": "gate"
+    },
+    {
+      "count": 80,
+      "source": "readme",
+      "target": "plan"
+    },
+    {
+      "count": 79,
+      "source": "docs",
+      "target": "coverage-matrix.md"
+    },
+    {
+      "count": 79,
+      "source": "smoke",
+      "target": "runtime"
+    },
+    {
+      "count": 78,
+      "source": "provider",
+      "target": "failure"
+    },
+    {
+      "count": 78,
+      "source": "provider",
+      "target": "runtime"
+    },
+    {
+      "count": 78,
+      "source": "github",
+      "target": "main"
+    },
+    {
+      "count": 77,
+      "source": "fixed",
+      "target": "valid"
+    },
+    {
+      "count": 77,
+      "source": "fixed",
+      "target": "generated"
+    },
+    {
+      "count": 76,
+      "source": "manager",
+      "target": "heartbeat"
+    },
+    {
+      "count": 75,
+      "source": "tlc",
+      "target": "parsl"
+    },
+    {
+      "count": 74,
+      "source": "provider",
+      "target": "status"
+    },
+    {
+      "count": 74,
+      "source": "radical",
+      "target": "pilot"
+    },
+    {
+      "count": 73,
+      "source": "resolve",
+      "target": "hostname"
+    },
+    {
+      "count": 73,
+      "source": "hostname",
+      "target": "github.com"
+    },
+    {
+      "count": 72,
+      "source": "tlc",
+      "target": "tests"
+    },
+    {
+      "count": 71,
+      "source": "docs",
+      "target": "bug-ledger.md"
+    },
+    {
+      "count": 70,
+      "source": "provider",
+      "target": "block"
+    },
+    {
+      "count": 70,
+      "source": "scheduler",
+      "target": "provider"
+    },
+    {
+      "count": 70,
+      "source": "model",
+      "target": "htex"
+    },
+    {
+      "count": 70,
+      "source": "distinct",
+      "target": "depth"
+    },
+    {
+      "count": 69,
+      "source": "runtime",
+      "target": "entries"
+    },
+    {
+      "count": 68,
+      "source": "future",
+      "target": "future"
+    },
+    {
+      "count": 68,
+      "source": "globus",
+      "target": "compute"
+    },
+    {
+      "count": 68,
+      "source": "dns",
+      "target": "clone"
+    },
+    {
+      "count": 68,
+      "source": "ledger",
+      "target": "coverage"
+    },
+    {
+      "count": 68,
+      "source": "runtime",
+      "target": "push"
+    },
+    {
+      "count": 67,
+      "source": "github.com",
+      "target": "tmp"
+    },
+    {
+      "count": 66,
+      "source": "tests",
+      "target": "github"
+    },
+    {
+      "count": 65,
+      "source": "tlc",
+      "target": "sweep"
+    },
+    {
+      "count": 65,
+      "source": "probe",
+      "target": "foundational"
+    },
+    {
+      "count": 63,
+      "source": "retry",
+      "target": "attempt"
+    },
+    {
+      "count": 60,
+      "source": "parsl",
+      "target": "tla+"
+    },
+    {
+      "count": 60,
+      "source": "nested",
+      "target": "join"
+    },
+    {
+      "count": 60,
+      "source": "probe",
+      "target": "runtime"
+    },
+    {
+      "count": 60,
+      "source": "push",
+      "target": "commit"
+    },
+    {
+      "count": 59,
+      "source": "manager",
+      "target": "registration"
+    },
+    {
+      "count": 59,
+      "source": "github",
+      "target": "github.com"
+    },
+    {
+      "count": 59,
+      "source": "tla+",
+      "target": "current"
+    },
+    {
+      "count": 59,
+      "source": "unittest",
+      "target": "methods"
+    },
+    {
+      "count": 58,
+      "source": "retry",
+      "target": "monitoring"
+    },
+    {
+      "count": 58,
+      "source": "runtime",
+      "target": "suite"
+    },
+    {
+      "count": 58,
+      "source": "tlc",
+      "target": "case"
+    },
+    {
+      "count": 57,
+      "source": "retry",
+      "target": "stale"
+    },
+    {
+      "count": 55,
+      "source": "parsl",
+      "target": "bug"
+    },
+    {
+      "count": 55,
+      "source": "heartbeat",
+      "target": "expiry"
+    },
+    {
+      "count": 55,
+      "source": "probe",
+      "target": "bug"
+    },
+    {
+      "count": 55,
+      "source": "bug-ledger.md",
+      "target": "docs"
+    },
+    {
+      "count": 55,
+      "source": "progress",
+      "target": "log"
+    },
+    {
+      "count": 54,
+      "source": "tla+",
+      "target": "parsl"
+    },
+    {
+      "count": 54,
+      "source": "future",
+      "target": "retry"
+    },
+    {
+      "count": 54,
+      "source": "tla+",
+      "target": "runtime"
+    },
+    {
+      "count": 53,
+      "source": "parsl",
+      "target": "tlc"
+    },
+    {
+      "count": 53,
+      "source": "executor",
+      "target": "worker"
+    },
+    {
+      "count": 53,
+      "source": "future",
+      "target": "tlc"
+    },
+    {
+      "count": 52,
+      "source": "join_app",
+      "target": "future"
+    },
+    {
+      "count": 52,
+      "source": "distinct",
+      "target": "runtime"
+    },
+    {
+      "count": 52,
+      "source": "probes",
+      "target": "tlc"
+    },
+    {
+      "count": 52,
+      "source": "plan.md",
+      "target": "smoke"
+    },
+    {
+      "count": 52,
+      "source": "runtime",
+      "target": "foundational"
+    },
+    {
+      "count": 50,
+      "source": "probe",
+      "target": "push"
+    },
+    {
+      "count": 49,
+      "source": "pending",
+      "target": "future"
+    },
+    {
+      "count": 49,
+      "source": "aws",
+      "target": "provider"
+    },
+    {
+      "count": 49,
+      "source": "future",
+      "target": "fixed"
+    },
+    {
+      "count": 49,
+      "source": "dns",
+      "target": "push"
+    },
+    {
+      "count": 48,
+      "source": "tlc",
+      "target": "counterexample"
+    },
+    {
+      "count": 48,
+      "source": "states",
+      "target": "runtime"
+    },
+    {
+      "count": 48,
+      "source": "fixed",
+      "target": "normal"
+    },
+    {
+      "count": 47,
+      "source": "task",
+      "target": "future"
+    },
+    {
+      "count": 47,
+      "source": "monitoring",
+      "target": "database"
+    },
+    {
+      "count": 47,
+      "source": "model",
+      "target": "monitoring"
+    },
+    {
+      "count": 47,
+      "source": "monitoring",
+      "target": "current"
+    },
+    {
+      "count": 47,
+      "source": "gate",
+      "target": "github"
+    },
+    {
+      "count": 46,
+      "source": "outer",
+      "target": "future"
+    },
+    {
+      "count": 46,
+      "source": "callable",
+      "target": "object"
+    },
+    {
+      "count": 46,
+      "source": "future",
+      "target": "callback"
+    },
+    {
+      "count": 46,
+      "source": "kubernetes",
+      "target": "provider"
+    },
+    {
+      "count": 46,
+      "source": "tlc",
+      "target": "generated"
+    },
+    {
+      "count": 45,
+      "source": "heartbeat",
+      "target": "manager"
+    },
+    {
+      "count": 45,
+      "source": "queue",
+      "target": "taskvine"
+    },
+    {
+      "count": 44,
+      "source": "tla-plus-parsl",
+      "target": "commit"
+    },
+    {
+      "count": 44,
+      "source": "provider",
+      "target": "provider"
+    },
+    {
+      "count": 44,
+      "source": "pending",
+      "target": "fixed"
+    }
+  ],
+  "cooccurrence": [
+    {
+      "count": 1553,
+      "source": "runtime",
+      "target": "tlc"
+    },
+    {
+      "count": 1537,
+      "source": "current",
+      "target": "fixed"
+    },
+    {
+      "count": 1324,
+      "source": "fixed",
+      "target": "tlc"
+    },
+    {
+      "count": 1164,
+      "source": "current",
+      "target": "tlc"
+    },
+    {
+      "count": 1103,
+      "source": "probe",
+      "target": "runtime"
+    },
+    {
+      "count": 1098,
+      "source": "fixed",
+      "target": "runtime"
+    },
+    {
+      "count": 973,
+      "source": "github",
+      "target": "tlc"
+    },
+    {
+      "count": 970,
+      "source": "current",
+      "target": "runtime"
+    },
+    {
+      "count": 914,
+      "source": "push",
+      "target": "tlc"
+    },
+    {
+      "count": 853,
+      "source": "probe",
+      "target": "tlc"
+    },
+    {
+      "count": 812,
+      "source": "push",
+      "target": "runtime"
+    },
+    {
+      "count": 805,
+      "source": "github",
+      "target": "runtime"
+    },
+    {
+      "count": 760,
+      "source": "model",
+      "target": "tlc"
+    },
+    {
+      "count": 707,
+      "source": "fixed",
+      "target": "probe"
+    },
+    {
+      "count": 679,
+      "source": "fixed",
+      "target": "github"
+    },
+    {
+      "count": 673,
+      "source": "provider",
+      "target": "tlc"
+    },
+    {
+      "count": 631,
+      "source": "fixed",
+      "target": "push"
+    },
+    {
+      "count": 627,
+      "source": "current",
+      "target": "probe"
+    },
+    {
+      "count": 619,
+      "source": "future",
+      "target": "tlc"
+    },
+    {
+      "count": 614,
+      "source": "current",
+      "target": "github"
+    },
+    {
+      "count": 610,
+      "source": "smoke",
+      "target": "tlc"
+    },
+    {
+      "count": 594,
+      "source": "provider",
+      "target": "runtime"
+    },
+    {
+      "count": 578,
+      "source": "current",
+      "target": "push"
+    },
+    {
+      "count": 576,
+      "source": "github",
+      "target": "push"
+    },
+    {
+      "count": 553,
+      "source": "future",
+      "target": "runtime"
+    },
+    {
+      "count": 549,
+      "source": "runtime",
+      "target": "smoke"
+    },
+    {
+      "count": 525,
+      "source": "fixed",
+      "target": "model"
+    },
+    {
+      "count": 512,
+      "source": "executor",
+      "target": "tlc"
+    },
+    {
+      "count": 509,
+      "source": "parsl",
+      "target": "tlc"
+    },
+    {
+      "count": 503,
+      "source": "github",
+      "target": "model"
+    },
+    {
+      "count": 500,
+      "source": "monitoring",
+      "target": "tlc"
+    },
+    {
+      "count": 500,
+      "source": "current",
+      "target": "model"
+    },
+    {
+      "count": 488,
+      "source": "model",
+      "target": "runtime"
+    },
+    {
+      "count": 472,
+      "source": "executor",
+      "target": "runtime"
+    },
+    {
+      "count": 462,
+      "source": "executor",
+      "target": "provider"
+    },
+    {
+      "count": 462,
+      "source": "fixed",
+      "target": "smoke"
+    },
+    {
+      "count": 456,
+      "source": "commit",
+      "target": "tlc"
+    },
+    {
+      "count": 446,
+      "source": "states",
+      "target": "tlc"
+    },
+    {
+      "count": 442,
+      "source": "distinct",
+      "target": "tlc"
+    },
+    {
+      "count": 437,
+      "source": "monitoring",
+      "target": "runtime"
+    },
+    {
+      "count": 413,
+      "source": "fixed",
+      "target": "future"
+    },
+    {
+      "count": 411,
+      "source": "current",
+      "target": "smoke"
+    },
+    {
+      "count": 405,
+      "source": "parsl",
+      "target": "runtime"
+    },
+    {
+      "count": 405,
+      "source": "fixed",
+      "target": "provider"
+    },
+    {
+      "count": 405,
+      "source": "github",
+      "target": "probe"
+    },
+    {
+      "count": 399,
+      "source": "github.com",
+      "target": "tlc"
+    },
+    {
+      "count": 391,
+      "source": "bug",
+      "target": "tlc"
+    },
+    {
+      "count": 385,
+      "source": "retry",
+      "target": "tlc"
+    },
+    {
+      "count": 385,
+      "source": "probe",
+      "target": "push"
+    },
+    {
+      "count": 378,
+      "source": "current",
+      "target": "future"
+    },
+    {
+      "count": 372,
+      "source": "distinct",
+      "target": "states"
+    },
+    {
+      "count": 372,
+      "source": "github",
+      "target": "smoke"
+    },
+    {
+      "count": 371,
+      "source": "task",
+      "target": "tlc"
+    },
+    {
+      "count": 369,
+      "source": "push",
+      "target": "smoke"
+    },
+    {
+      "count": 368,
+      "source": "tests",
+      "target": "tlc"
+    },
+    {
+      "count": 364,
+      "source": "failure",
+      "target": "tlc"
+    },
+    {
+      "count": 362,
+      "source": "github",
+      "target": "github.com"
+    },
+    {
+      "count": 356,
+      "source": "future",
+      "target": "github"
+    },
+    {
+      "count": 353,
+      "source": "fixed",
+      "target": "monitoring"
+    },
+    {
+      "count": 352,
+      "source": "distinct",
+      "target": "generated"
+    },
+    {
+      "count": 340,
+      "source": "current",
+      "target": "provider"
+    },
+    {
+      "count": 340,
+      "source": "runtime",
+      "target": "tests"
+    },
+    {
+      "count": 336,
+      "source": "generated",
+      "target": "tlc"
+    },
+    {
+      "count": 336,
+      "source": "commit",
+      "target": "runtime"
+    },
+    {
+      "count": 331,
+      "source": "htex",
+      "target": "runtime"
+    },
+    {
+      "count": 328,
+      "source": "htex",
+      "target": "tlc"
+    },
+    {
+      "count": 328,
+      "source": "future",
+      "target": "probe"
+    },
+    {
+      "count": 327,
+      "source": "bug",
+      "target": "runtime"
+    },
+    {
+      "count": 325,
+      "source": "probe",
+      "target": "provider"
+    },
+    {
+      "count": 323,
+      "source": "github",
+      "target": "provider"
+    },
+    {
+      "count": 323,
+      "source": "executor",
+      "target": "fixed"
+    },
+    {
+      "count": 321,
+      "source": "tlc",
+      "target": "worker"
+    },
+    {
+      "count": 319,
+      "source": "current",
+      "target": "monitoring"
+    },
+    {
+      "count": 315,
+      "source": "future",
+      "target": "push"
+    },
+    {
+      "count": 310,
+      "source": "github.com",
+      "target": "runtime"
+    },
+    {
+      "count": 310,
+      "source": "fixed",
+      "target": "states"
+    },
+    {
+      "count": 301,
+      "source": "commit",
+      "target": "fixed"
+    },
+    {
+      "count": 301,
+      "source": "monitoring",
+      "target": "push"
+    },
+    {
+      "count": 300,
+      "source": "provider",
+      "target": "push"
+    },
+    {
+      "count": 298,
+      "source": "current",
+      "target": "states"
+    },
+    {
+      "count": 294,
+      "source": "executor",
+      "target": "future"
+    },
+    {
+      "count": 293,
+      "source": "current",
+      "target": "executor"
+    },
+    {
+      "count": 287,
+      "source": "executor",
+      "target": "github"
+    },
+    {
+      "count": 286,
+      "source": "commit",
+      "target": "current"
+    },
+    {
+      "count": 285,
+      "source": "model",
+      "target": "push"
+    },
+    {
+      "count": 284,
+      "source": "model",
+      "target": "probe"
+    },
+    {
+      "count": 283,
+      "source": "provider",
+      "target": "status"
+    },
+    {
+      "count": 283,
+      "source": "fixed",
+      "target": "task"
+    },
+    {
+      "count": 283,
+      "source": "model",
+      "target": "tests"
+    },
+    {
+      "count": 280,
+      "source": "bug",
+      "target": "fixed"
+    },
+    {
+      "count": 280,
+      "source": "executor",
+      "target": "probe"
+    },
+    {
+      "count": 278,
+      "source": "retry",
+      "target": "runtime"
+    },
+    {
+      "count": 275,
+      "source": "runtime",
+      "target": "task"
+    },
+    {
+      "count": 275,
+      "source": "failure",
+      "target": "runtime"
+    },
+    {
+      "count": 273,
+      "source": "future",
+      "target": "join_app"
+    },
+    {
+      "count": 272,
+      "source": "parsl",
+      "target": "probe"
+    },
+    {
+      "count": 270,
+      "source": "runtime",
+      "target": "states"
+    },
+    {
+      "count": 268,
+      "source": "commit",
+      "target": "github"
+    },
+    {
+      "count": 264,
+      "source": "model",
+      "target": "states"
+    },
+    {
+      "count": 264,
+      "source": "github",
+      "target": "monitoring"
+    },
+    {
+      "count": 260,
+      "source": "fixed",
+      "target": "tests"
+    },
+    {
+      "count": 259,
+      "source": "tla+",
+      "target": "tlc"
+    },
+    {
+      "count": 258,
+      "source": "current",
+      "target": "task"
+    },
+    {
+      "count": 258,
+      "source": "join",
+      "target": "tlc"
+    },
+    {
+      "count": 258,
+      "source": "runtime",
+      "target": "tla+"
+    },
+    {
+      "count": 257,
+      "source": "generated",
+      "target": "states"
+    },
+    {
+      "count": 256,
+      "source": "github.com",
+      "target": "push"
+    },
+    {
+      "count": 254,
+      "source": "join",
+      "target": "join_app"
+    },
+    {
+      "count": 252,
+      "source": "github",
+      "target": "tests"
+    },
+    {
+      "count": 251,
+      "source": "fixed",
+      "target": "parsl"
+    },
+    {
+      "count": 249,
+      "source": "future",
+      "target": "task"
+    },
+    {
+      "count": 249,
+      "source": "status",
+      "target": "tlc"
+    },
+    {
+      "count": 249,
+      "source": "distinct",
+      "target": "fixed"
+    },
+    {
+      "count": 248,
+      "source": "monitoring",
+      "target": "retry"
+    },
+    {
+      "count": 247,
+      "source": "join_app",
+      "target": "runtime"
+    },
+    {
+      "count": 247,
+      "source": "fixed",
+      "target": "retry"
+    },
+    {
+      "count": 246,
+      "source": "monitoring",
+      "target": "provider"
+    },
+    {
+      "count": 246,
+      "source": "bug",
+      "target": "probe"
+    },
+    {
+      "count": 243,
+      "source": "bug",
+      "target": "current"
+    },
+    {
+      "count": 243,
+      "source": "current",
+      "target": "tests"
+    },
+    {
+      "count": 240,
+      "source": "future",
+      "target": "retry"
+    },
+    {
+      "count": 238,
+      "source": "join_app",
+      "target": "tlc"
+    },
+    {
+      "count": 238,
+      "source": "commit",
+      "target": "model"
+    },
+    {
+      "count": 238,
+      "source": "probe",
+      "target": "smoke"
+    },
+    {
+      "count": 236,
+      "source": "distinct",
+      "target": "runtime"
+    },
+    {
+      "count": 235,
+      "source": "future",
+      "target": "model"
+    },
+    {
+      "count": 235,
+      "source": "distinct",
+      "target": "model"
+    },
+    {
+      "count": 235,
+      "source": "current",
+      "target": "distinct"
+    },
+    {
+      "count": 233,
+      "source": "github",
+      "target": "parsl"
+    },
+    {
+      "count": 233,
+      "source": "future",
+      "target": "join"
+    },
+    {
+      "count": 232,
+      "source": "future",
+      "target": "parsl"
+    },
+    {
+      "count": 232,
+      "source": "provider",
+      "target": "smoke"
+    },
+    {
+      "count": 231,
+      "source": "future",
+      "target": "monitoring"
+    },
+    {
+      "count": 231,
+      "source": "executor",
+      "target": "push"
+    },
+    {
+      "count": 230,
+      "source": "runtime",
+      "target": "worker"
+    },
+    {
+      "count": 230,
+      "source": "fixed",
+      "target": "htex"
+    },
+    {
+      "count": 229,
+      "source": "monitoring",
+      "target": "probe"
+    },
+    {
+      "count": 227,
+      "source": "failure",
+      "target": "fixed"
+    },
+    {
+      "count": 226,
+      "source": "fixed",
+      "target": "github.com"
+    },
+    {
+      "count": 225,
+      "source": "github",
+      "target": "task"
+    },
+    {
+      "count": 224,
+      "source": "model",
+      "target": "provider"
+    },
+    {
+      "count": 224,
+      "source": "current",
+      "target": "retry"
+    },
+    {
+      "count": 222,
+      "source": "executor",
+      "target": "model"
+    },
+    {
+      "count": 221,
+      "source": "parsl",
+      "target": "provider"
+    },
+    {
+      "count": 221,
+      "source": "github",
+      "target": "states"
+    },
+    {
+      "count": 220,
+      "source": "failure",
+      "target": "future"
+    },
+    {
+      "count": 220,
+      "source": "runtime",
+      "target": "status"
+    },
+    {
+      "count": 218,
+      "source": "model",
+      "target": "smoke"
+    },
+    {
+      "count": 218,
+      "source": "push",
+      "target": "retry"
+    },
+    {
+      "count": 217,
+      "source": "tlc",
+      "target": "zmq"
+    }
+  ],
+  "document_count": 5383,
+  "schema": "ai4tla.text-network.v1",
+  "top_terms": {
+    "add": 262,
+    "admission": 236,
+    "attempt": 468,
+    "aws": 173,
+    "batch": 171,
+    "block": 279,
+    "bridge": 178,
+    "bug": 619,
+    "callable": 312,
+    "callback": 380,
+    "cancel": 220,
+    "cancellation": 361,
+    "case": 259,
+    "cleanup": 191,
+    "clone": 278,
+    "close": 163,
+    "collector": 179,
+    "commit": 547,
+    "condor": 201,
+    "counterexample": 193,
+    "coverage": 368,
+    "current": 1972,
+    "datafuture": 291,
+    "depth": 231,
+    "distinct": 683,
+    "dns": 448,
+    "docs": 428,
+    "duplicate": 298,
+    "executor": 1390,
+    "failure": 652,
+    "fixed": 2365,
+    "flux": 229,
+    "foundational": 460,
+    "frame": 200,
+    "future": 1762,
+    "gate": 256,
+    "generated": 511,
+    "git": 183,
+    "github": 1237,
+    "github.com": 478,
+    "globus": 198,
+    "haibinlai": 205,
+    "heartbeat": 648,
+    "htex": 876,
+    "inner": 279,
+    "job": 421,
+    "join": 893,
+    "join_app": 555,
+    "kubernetes": 197,
+    "late": 278,
+    "ledger": 436,
+    "list": 180,
+    "main": 367,
+    "malformed": 298,
+    "manager": 664,
+    "matrix": 201,
+    "model": 846,
+    "models": 214,
+    "monitoring": 1412,
+    "outer": 250,
+    "parsl": 1287,
+    "payload": 200,
+    "pending": 325,
+    "probe": 1538,
+    "probes": 351,
+    "promote": 166,
+    "provider": 2109,
+    "push": 1272,
+    "queue": 299,
+    "readme": 189,
+    "record": 431,
+    "resource": 198,
+    "retry": 900,
+    "runtime": 3003,
+    "scale-in": 161,
+    "scheduler": 249,
+    "serialization": 296,
+    "serializer": 183,
+    "shutdown": 275,
+    "slurm": 186,
+    "smoke": 1125,
+    "stage-out": 283,
+    "staging": 402,
+    "stale": 414,
+    "states": 1062,
+    "status": 642,
+    "submit": 444,
+    "sweep": 348,
+    "task": 864,
+    "taskvine": 204,
+    "terminal": 278,
+    "tests": 667,
+    "timeout": 595,
+    "tla+": 528,
+    "tla-plus-parsl": 191,
+    "tlc": 4026,
+    "torque": 164,
+    "work": 179,
+    "worker": 772,
+    "zmq": 535
+  }
+}
