@@ -1,0 +1,403 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1050" viewBox="0 0 1500 1050">
+<defs><filter id="shadow" x="-10%" y="-10%" width="120%" height="120%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity=".12"/></filter></defs>
+<rect width="100%" height="100%" fill="#f6f8fb"/>
+<rect x="28" y="22" width="1444" height="120" rx="18" fill="#ffffff" filter="url(#shadow)"/>
+<text x="58" y="60" font-family="Arial,sans-serif" font-size="28" font-weight="700" fill="#172033" text-anchor="start">What did the AI talk about?</text>
+<text x="58" y="91" font-family="Arial,sans-serif" font-size="15" font-weight="400" fill="#64748b" text-anchor="start">Technical term frequency from exposed session text — filtered and aggregated without exporting the transcript</text>
+<text x="58" y="120" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#94a3b8" text-anchor="start">Left: global frequency · Right: phase-normalized term heatmap</text>
+<rect x="50" y="160" width="560" height="790" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="78" y="194" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#172033" text-anchor="start">Top technical terms</text>
+<text x="82" y="203" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">tlc</text>
+<rect x="90" y="190" width="430.0" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>tlc: 4,049</title></rect>
+<text x="528.0" y="203" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">4,049</text>
+<text x="82" y="232" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">runtime</text>
+<rect x="90" y="219" width="319.2" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>runtime: 3,006</title></rect>
+<text x="417.23437885897755" y="232" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">3,006</text>
+<text x="82" y="261" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">fixed</text>
+<rect x="90" y="248" width="251.2" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>fixed: 2,365</title></rect>
+<text x="349.1607804396147" y="261" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">2,365</text>
+<text x="82" y="290" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">provider</text>
+<rect x="90" y="277" width="224.2" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>provider: 2,111</title></rect>
+<text x="322.1862188194616" y="290" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">2,111</text>
+<text x="82" y="319" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">current</text>
+<rect x="90" y="306" width="209.4" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>current: 1,972</title></rect>
+<text x="307.424549271425" y="319" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,972</text>
+<text x="82" y="348" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">future</text>
+<rect x="90" y="335" width="187.1" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>future: 1,762</title></rect>
+<text x="285.1227463571252" y="348" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,762</text>
+<text x="82" y="377" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">probe</text>
+<rect x="90" y="364" width="163.3" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>probe: 1,538</title></rect>
+<text x="261.3341565818721" y="377" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,538</text>
+<text x="82" y="406" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">monitoring</text>
+<rect x="90" y="393" width="150.1" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>monitoring: 1,413</title></rect>
+<text x="248.05927389478884" y="406" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,413</text>
+<text x="82" y="435" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">executor</text>
+<rect x="90" y="422" width="147.6" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>executor: 1,390</title></rect>
+<text x="245.61669548036554" y="435" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,390</text>
+<text x="82" y="464" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">parsl</text>
+<rect x="90" y="451" width="137.1" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>parsl: 1,291</title></rect>
+<text x="235.1029883921956" y="464" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,291</text>
+<text x="82" y="493" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">push</text>
+<rect x="90" y="480" width="136.4" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>push: 1,284</title></rect>
+<text x="234.35959496171895" y="493" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,284</text>
+<text x="82" y="522" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">github</text>
+<rect x="90" y="509" width="131.7" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>github: 1,240</title></rect>
+<text x="229.68683625586564" y="522" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,240</text>
+<text x="82" y="551" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">smoke</text>
+<rect x="90" y="538" width="119.6" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>smoke: 1,126</title></rect>
+<text x="217.58014324524572" y="551" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,126</text>
+<text x="82" y="580" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">states</text>
+<rect x="90" y="567" width="112.8" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>states: 1,062</title></rect>
+<text x="210.78340330945912" y="580" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">1,062</text>
+<text x="82" y="609" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">retry</text>
+<rect x="90" y="596" width="95.6" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>retry: 900</title></rect>
+<text x="193.57915534699924" y="609" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">900</text>
+<text x="82" y="638" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">join</text>
+<rect x="90" y="625" width="94.8" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>join: 893</title></rect>
+<text x="192.83576191652259" y="638" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">893</text>
+<text x="82" y="667" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">htex</text>
+<rect x="90" y="654" width="93.0" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>htex: 876</title></rect>
+<text x="191.03037787107928" y="667" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">876</text>
+<text x="82" y="696" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">task</text>
+<rect x="90" y="683" width="91.8" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>task: 864</title></rect>
+<text x="189.75598913311927" y="696" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">864</text>
+<text x="82" y="725" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">model</text>
+<rect x="90" y="712" width="89.8" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>model: 846</title></rect>
+<text x="187.84440602617929" y="725" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">846</text>
+<text x="82" y="754" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">worker</text>
+<rect x="90" y="741" width="82.0" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>worker: 772</title></rect>
+<text x="179.98567547542604" y="754" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">772</text>
+<text x="82" y="783" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">distinct</text>
+<rect x="90" y="770" width="72.5" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>distinct: 683</title></rect>
+<text x="170.5339590022228" y="783" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">683</text>
+<text x="82" y="812" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">tests</text>
+<rect x="90" y="799" width="70.8" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>tests: 667</title></rect>
+<text x="168.8347740182761" y="812" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">667</text>
+<text x="82" y="841" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">manager</text>
+<rect x="90" y="828" width="70.5" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>manager: 664</title></rect>
+<text x="168.51617683378612" y="841" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">664</text>
+<text x="82" y="870" font-family="Arial,sans-serif" font-size="11" font-weight="400" fill="#475569" text-anchor="end">failure</text>
+<rect x="90" y="857" width="69.2" height="16" rx="4" fill="#2563eb" fill-opacity=".78"><title>failure: 652</title></rect>
+<text x="167.2417880958261" y="870" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#64748b" text-anchor="start">652</text>
+<rect x="650" y="160" width="800" height="790" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="680" y="194" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#172033" text-anchor="start">Where terms occur</text>
+<text x="812.5" y="197" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#2563eb" text-anchor="middle">source audit</text>
+<text x="917.5" y="197" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#7c3aed" text-anchor="middle">tla modeling</text>
+<text x="1022.5" y="197" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#16a34a" text-anchor="middle">verification</text>
+<text x="1127.5" y="197" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#dc2626" text-anchor="middle">bug ledger</text>
+<text x="1232.5" y="197" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#9333ea" text-anchor="middle">documentation</text>
+<text x="1337.5" y="197" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#0f766e" text-anchor="middle">coordination</text>
+<text x="744" y="233" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">tlc</text>
+<rect x="760" y="215" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.911"><title>source_audit / tlc: 656.19 per 10k classified terms</title></rect>
+<text x="810.0" y="232" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">656.2</text>
+<rect x="865" y="215" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.913"><title>tla_modeling / tlc: 659.66 per 10k classified terms</title></rect>
+<text x="915.0" y="232" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">659.7</text>
+<rect x="970" y="215" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="1.0"><title>verification / tlc: 798.68 per 10k classified terms</title></rect>
+<text x="1020.0" y="232" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">798.7</text>
+<rect x="1075" y="215" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.98"><title>bug_ledger / tlc: 766.22 per 10k classified terms</title></rect>
+<text x="1125.0" y="232" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">766.2</text>
+<rect x="1180" y="215" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.845"><title>documentation / tlc: 559.01 per 10k classified terms</title></rect>
+<text x="1230.0" y="232" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">559.0</text>
+<rect x="1285" y="215" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.588"><title>coordination / tlc: 256.41 per 10k classified terms</title></rect>
+<text x="1335.0" y="232" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">256.4</text>
+<text x="744" y="261" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">runtime</text>
+<rect x="760" y="243" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.791"><title>source_audit / runtime: 485.62 per 10k classified terms</title></rect>
+<text x="810.0" y="260" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">485.6</text>
+<rect x="865" y="243" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.722"><title>tla_modeling / runtime: 400.05 per 10k classified terms</title></rect>
+<text x="915.0" y="260" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">400.1</text>
+<rect x="970" y="243" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.869"><title>verification / runtime: 592.95 per 10k classified terms</title></rect>
+<text x="1020.0" y="260" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">592.9</text>
+<rect x="1075" y="243" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.866"><title>bug_ledger / runtime: 589.14 per 10k classified terms</title></rect>
+<text x="1125.0" y="260" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">589.1</text>
+<rect x="1180" y="243" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.682"><title>documentation / runtime: 353.21 per 10k classified terms</title></rect>
+<text x="1230.0" y="260" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">353.2</text>
+<rect x="1285" y="243" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.588"><title>coordination / runtime: 256.41 per 10k classified terms</title></rect>
+<text x="1335.0" y="260" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">256.4</text>
+<text x="744" y="289" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">fixed</text>
+<rect x="760" y="271" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.705"><title>source_audit / fixed: 379.77 per 10k classified terms</title></rect>
+<text x="810.0" y="288" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">379.8</text>
+<rect x="865" y="271" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.725"><title>tla_modeling / fixed: 403.49 per 10k classified terms</title></rect>
+<text x="915.0" y="288" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">403.5</text>
+<rect x="970" y="271" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.746"><title>verification / fixed: 429.03 per 10k classified terms</title></rect>
+<text x="1020.0" y="288" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">429.0</text>
+<rect x="1075" y="271" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.827"><title>bug_ledger / fixed: 533.80 per 10k classified terms</title></rect>
+<text x="1125.0" y="288" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">533.8</text>
+<rect x="1180" y="271" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.65"><title>documentation / fixed: 318.75 per 10k classified terms</title></rect>
+<text x="1230.0" y="288" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">318.8</text>
+<rect x="1285" y="271" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.328"><title>coordination / fixed: 68.38 per 10k classified terms</title></rect>
+<text x="1335.0" y="288" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">68.4</text>
+<text x="744" y="317" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">provider</text>
+<rect x="760" y="299" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.756"><title>source_audit / provider: 440.73 per 10k classified terms</title></rect>
+<text x="810.0" y="316" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">440.7</text>
+<rect x="865" y="299" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.629"><title>tla_modeling / provider: 296.69 per 10k classified terms</title></rect>
+<text x="915.0" y="316" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">296.7</text>
+<rect x="970" y="299" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.655"><title>verification / provider: 324.09 per 10k classified terms</title></rect>
+<text x="1020.0" y="316" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">324.1</text>
+<rect x="1075" y="299" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.587"><title>bug_ledger / provider: 255.41 per 10k classified terms</title></rect>
+<text x="1125.0" y="316" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">255.4</text>
+<rect x="1180" y="299" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.544"><title>documentation / provider: 216.33 per 10k classified terms</title></rect>
+<text x="1230.0" y="316" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">216.3</text>
+<rect x="1285" y="299" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.03"><title>coordination / provider: 0.00 per 10k classified terms</title></rect>
+<text x="1335.0" y="316" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">0.0</text>
+<text x="744" y="345" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">current</text>
+<rect x="760" y="327" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.65"><title>source_audit / current: 318.18 per 10k classified terms</title></rect>
+<text x="810.0" y="344" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">318.2</text>
+<rect x="865" y="327" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.685"><title>tla_modeling / current: 356.44 per 10k classified terms</title></rect>
+<text x="915.0" y="344" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">356.4</text>
+<rect x="970" y="327" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.687"><title>verification / current: 359.40 per 10k classified terms</title></rect>
+<text x="1020.0" y="344" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">359.4</text>
+<rect x="1075" y="327" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.791"><title>bug_ledger / current: 486.12 per 10k classified terms</title></rect>
+<text x="1125.0" y="344" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">486.1</text>
+<rect x="1180" y="327" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.567"><title>documentation / current: 236.43 per 10k classified terms</title></rect>
+<text x="1230.0" y="344" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">236.4</text>
+<rect x="1285" y="327" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.291"><title>coordination / current: 51.28 per 10k classified terms</title></rect>
+<text x="1335.0" y="344" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">51.3</text>
+<text x="744" y="373" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">future</text>
+<rect x="760" y="355" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.634"><title>source_audit / future: 302.10 per 10k classified terms</title></rect>
+<text x="810.0" y="372" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">302.1</text>
+<rect x="865" y="355" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.612"><title>tla_modeling / future: 279.18 per 10k classified terms</title></rect>
+<text x="915.0" y="372" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">279.2</text>
+<rect x="970" y="355" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.61"><title>verification / future: 277.14 per 10k classified terms</title></rect>
+<text x="1020.0" y="372" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">277.1</text>
+<rect x="1075" y="355" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.519"><title>bug_ledger / future: 194.96 per 10k classified terms</title></rect>
+<text x="1125.0" y="372" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">195.0</text>
+<rect x="1180" y="355" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.612"><title>documentation / future: 279.51 per 10k classified terms</title></rect>
+<text x="1230.0" y="372" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">279.5</text>
+<rect x="1285" y="355" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.291"><title>coordination / future: 51.28 per 10k classified terms</title></rect>
+<text x="1335.0" y="372" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">51.3</text>
+<text x="744" y="401" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">probe</text>
+<rect x="760" y="383" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.573"><title>source_audit / probe: 241.76 per 10k classified terms</title></rect>
+<text x="810.0" y="400" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">241.8</text>
+<rect x="865" y="383" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.522"><title>tla_modeling / probe: 196.77 per 10k classified terms</title></rect>
+<text x="915.0" y="400" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">196.8</text>
+<rect x="970" y="383" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.636"><title>verification / probe: 303.38 per 10k classified terms</title></rect>
+<text x="1020.0" y="400" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">303.4</text>
+<rect x="1075" y="383" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.727"><title>bug_ledger / probe: 405.24 per 10k classified terms</title></rect>
+<text x="1125.0" y="400" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">405.2</text>
+<rect x="1180" y="383" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.499"><title>documentation / probe: 178.04 per 10k classified terms</title></rect>
+<text x="1230.0" y="400" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">178.0</text>
+<rect x="1285" y="383" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.531"><title>coordination / probe: 205.13 per 10k classified terms</title></rect>
+<text x="1335.0" y="400" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">205.1</text>
+<text x="744" y="429" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">monitoring</text>
+<rect x="760" y="411" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.547"><title>source_audit / monitoring: 219.01 per 10k classified terms</title></rect>
+<text x="810.0" y="428" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">219.0</text>
+<rect x="865" y="411" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.526"><title>tla_modeling / monitoring: 200.20 per 10k classified terms</title></rect>
+<text x="915.0" y="428" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">200.2</text>
+<rect x="970" y="411" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.553"><title>verification / monitoring: 224.08 per 10k classified terms</title></rect>
+<text x="1020.0" y="428" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">224.1</text>
+<rect x="1075" y="411" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.508"><title>bug_ledger / monitoring: 185.60 per 10k classified terms</title></rect>
+<text x="1125.0" y="428" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">185.6</text>
+<rect x="1180" y="411" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.491"><title>documentation / monitoring: 172.30 per 10k classified terms</title></rect>
+<text x="1230.0" y="428" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">172.3</text>
+<rect x="1285" y="411" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.291"><title>coordination / monitoring: 51.28 per 10k classified terms</title></rect>
+<text x="1335.0" y="428" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">51.3</text>
+<text x="744" y="457" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">executor</text>
+<rect x="760" y="439" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.623"><title>source_audit / executor: 290.20 per 10k classified terms</title></rect>
+<text x="810.0" y="456" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">290.2</text>
+<rect x="865" y="439" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.554"><title>tla_modeling / executor: 224.58 per 10k classified terms</title></rect>
+<text x="915.0" y="456" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">224.6</text>
+<rect x="970" y="439" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.543"><title>verification / executor: 215.40 per 10k classified terms</title></rect>
+<text x="1020.0" y="456" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">215.4</text>
+<rect x="1075" y="439" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.505"><title>bug_ledger / executor: 183.04 per 10k classified terms</title></rect>
+<text x="1125.0" y="456" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">183.0</text>
+<rect x="1180" y="439" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.501"><title>documentation / executor: 179.96 per 10k classified terms</title></rect>
+<text x="1230.0" y="456" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">180.0</text>
+<rect x="1285" y="439" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.03"><title>coordination / executor: 0.00 per 10k classified terms</title></rect>
+<text x="1335.0" y="456" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">0.0</text>
+<text x="744" y="485" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">parsl</text>
+<rect x="760" y="467" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.602"><title>source_audit / parsl: 269.53 per 10k classified terms</title></rect>
+<text x="810.0" y="484" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">269.5</text>
+<rect x="865" y="467" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.643"><title>tla_modeling / parsl: 310.77 per 10k classified terms</title></rect>
+<text x="915.0" y="484" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">310.8</text>
+<rect x="970" y="467" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.56"><title>verification / parsl: 230.39 per 10k classified terms</title></rect>
+<text x="1020.0" y="484" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">230.4</text>
+<rect x="1075" y="467" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.524"><title>bug_ledger / parsl: 199.22 per 10k classified terms</title></rect>
+<text x="1125.0" y="484" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">199.2</text>
+<rect x="1180" y="467" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.745"><title>documentation / parsl: 427.87 per 10k classified terms</title></rect>
+<text x="1230.0" y="484" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">427.9</text>
+<rect x="1285" y="467" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.531"><title>coordination / parsl: 205.13 per 10k classified terms</title></rect>
+<text x="1335.0" y="484" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">205.1</text>
+<text x="744" y="513" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">push</text>
+<rect x="760" y="495" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.525"><title>source_audit / push: 199.80 per 10k classified terms</title></rect>
+<text x="810.0" y="512" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">199.8</text>
+<rect x="865" y="495" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.474"><title>tla_modeling / push: 158.99 per 10k classified terms</title></rect>
+<text x="915.0" y="512" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">159.0</text>
+<rect x="970" y="495" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.554"><title>verification / push: 224.48 per 10k classified terms</title></rect>
+<text x="1020.0" y="512" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">224.5</text>
+<rect x="1075" y="495" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.537"><title>bug_ledger / push: 210.28 per 10k classified terms</title></rect>
+<text x="1125.0" y="512" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">210.3</text>
+<rect x="1180" y="495" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.365"><title>documentation / push: 88.06 per 10k classified terms</title></rect>
+<text x="1230.0" y="512" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">88.1</text>
+<rect x="1285" y="495" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.328"><title>coordination / push: 68.38 per 10k classified terms</title></rect>
+<text x="1335.0" y="512" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">68.4</text>
+<text x="744" y="541" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">github</text>
+<rect x="760" y="523" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.564"><title>source_audit / github: 233.41 per 10k classified terms</title></rect>
+<text x="810.0" y="540" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">233.4</text>
+<rect x="865" y="523" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.593"><title>tla_modeling / github: 261.32 per 10k classified terms</title></rect>
+<text x="915.0" y="540" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">261.3</text>
+<rect x="970" y="523" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.565"><title>verification / github: 234.34 per 10k classified terms</title></rect>
+<text x="1020.0" y="540" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">234.3</text>
+<rect x="1075" y="523" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.548"><title>bug_ledger / github: 219.65 per 10k classified terms</title></rect>
+<text x="1125.0" y="540" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">219.6</text>
+<rect x="1180" y="523" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.546"><title>documentation / github: 217.29 per 10k classified terms</title></rect>
+<text x="1230.0" y="540" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">217.3</text>
+<rect x="1285" y="523" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.361"><title>coordination / github: 85.47 per 10k classified terms</title></rect>
+<text x="1335.0" y="540" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">85.5</text>
+<text x="744" y="569" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">smoke</text>
+<rect x="760" y="551" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.503"><title>source_audit / smoke: 181.43 per 10k classified terms</title></rect>
+<text x="810.0" y="568" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">181.4</text>
+<rect x="865" y="551" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.476"><title>tla_modeling / smoke: 160.37 per 10k classified terms</title></rect>
+<text x="915.0" y="568" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">160.4</text>
+<rect x="970" y="551" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.551"><title>verification / smoke: 222.11 per 10k classified terms</title></rect>
+<text x="1020.0" y="568" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">222.1</text>
+<rect x="1075" y="551" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.418"><title>bug_ledger / smoke: 120.04 per 10k classified terms</title></rect>
+<text x="1125.0" y="568" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">120.0</text>
+<rect x="1180" y="551" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.367"><title>documentation / smoke: 89.02 per 10k classified terms</title></rect>
+<text x="1230.0" y="568" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">89.0</text>
+<rect x="1285" y="551" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.328"><title>coordination / smoke: 68.38 per 10k classified terms</title></rect>
+<text x="1335.0" y="568" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">68.4</text>
+<text x="744" y="597" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">states</text>
+<rect x="760" y="579" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.515"><title>source_audit / states: 191.24 per 10k classified terms</title></rect>
+<text x="810.0" y="596" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">191.2</text>
+<rect x="865" y="579" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.606"><title>tla_modeling / states: 273.69 per 10k classified terms</title></rect>
+<text x="915.0" y="596" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">273.7</text>
+<rect x="970" y="579" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.521"><title>verification / states: 196.47 per 10k classified terms</title></rect>
+<text x="1020.0" y="596" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">196.5</text>
+<rect x="1075" y="579" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.441"><title>bug_ledger / states: 135.37 per 10k classified terms</title></rect>
+<text x="1125.0" y="596" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">135.4</text>
+<rect x="1180" y="579" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.65"><title>documentation / states: 318.75 per 10k classified terms</title></rect>
+<text x="1230.0" y="596" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">318.8</text>
+<rect x="1285" y="579" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.03"><title>coordination / states: 0.00 per 10k classified terms</title></rect>
+<text x="1335.0" y="596" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">0.0</text>
+<text x="744" y="625" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">retry</text>
+<rect x="760" y="607" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.463"><title>source_audit / retry: 150.95 per 10k classified terms</title></rect>
+<text x="810.0" y="624" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">150.9</text>
+<rect x="865" y="607" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.456"><title>tla_modeling / retry: 145.60 per 10k classified terms</title></rect>
+<text x="915.0" y="624" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">145.6</text>
+<rect x="970" y="607" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.459"><title>verification / retry: 148.34 per 10k classified terms</title></rect>
+<text x="1020.0" y="624" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">148.3</text>
+<rect x="1075" y="607" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.378"><title>bug_ledger / retry: 95.35 per 10k classified terms</title></rect>
+<text x="1125.0" y="624" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">95.4</text>
+<rect x="1180" y="607" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.413"><title>documentation / retry: 116.78 per 10k classified terms</title></rect>
+<text x="1230.0" y="624" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">116.8</text>
+<rect x="1285" y="607" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.291"><title>coordination / retry: 51.28 per 10k classified terms</title></rect>
+<text x="1335.0" y="624" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">51.3</text>
+<text x="744" y="653" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">join</text>
+<rect x="760" y="635" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.445"><title>source_audit / join: 138.42 per 10k classified terms</title></rect>
+<text x="810.0" y="652" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">138.4</text>
+<rect x="865" y="635" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.436"><title>tla_modeling / join: 131.52 per 10k classified terms</title></rect>
+<text x="915.0" y="652" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">131.5</text>
+<rect x="970" y="635" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.447"><title>verification / join: 139.66 per 10k classified terms</title></rect>
+<text x="1020.0" y="652" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">139.7</text>
+<rect x="1075" y="635" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.32"><title>bug_ledger / join: 64.70 per 10k classified terms</title></rect>
+<text x="1125.0" y="652" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">64.7</text>
+<rect x="1180" y="635" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.392"><title>documentation / join: 103.38 per 10k classified terms</title></rect>
+<text x="1230.0" y="652" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">103.4</text>
+<rect x="1285" y="635" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.247"><title>coordination / join: 34.19 per 10k classified terms</title></rect>
+<text x="1335.0" y="652" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">34.2</text>
+<text x="744" y="681" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">htex</text>
+<rect x="760" y="663" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.505"><title>source_audit / htex: 182.89 per 10k classified terms</title></rect>
+<text x="810.0" y="680" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">182.9</text>
+<rect x="865" y="663" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.43"><title>tla_modeling / htex: 128.09 per 10k classified terms</title></rect>
+<text x="915.0" y="680" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">128.1</text>
+<rect x="970" y="663" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.451"><title>verification / htex: 142.42 per 10k classified terms</title></rect>
+<text x="1020.0" y="680" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">142.4</text>
+<rect x="1075" y="663" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.491"><title>bug_ledger / htex: 171.97 per 10k classified terms</title></rect>
+<text x="1125.0" y="680" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">172.0</text>
+<rect x="1180" y="663" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.392"><title>documentation / htex: 103.38 per 10k classified terms</title></rect>
+<text x="1230.0" y="680" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">103.4</text>
+<rect x="1285" y="663" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.328"><title>coordination / htex: 68.38 per 10k classified terms</title></rect>
+<text x="1335.0" y="680" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">68.4</text>
+<text x="744" y="709" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">task</text>
+<rect x="760" y="691" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.468"><title>source_audit / task: 154.49 per 10k classified terms</title></rect>
+<text x="810.0" y="708" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">154.5</text>
+<rect x="865" y="691" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.466"><title>tla_modeling / task: 153.50 per 10k classified terms</title></rect>
+<text x="915.0" y="708" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">153.5</text>
+<rect x="970" y="691" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.449"><title>verification / task: 141.23 per 10k classified terms</title></rect>
+<text x="1020.0" y="708" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">141.2</text>
+<rect x="1075" y="691" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.406"><title>bug_ledger / task: 112.38 per 10k classified terms</title></rect>
+<text x="1125.0" y="708" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">112.4</text>
+<rect x="1180" y="691" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.442"><title>documentation / task: 135.92 per 10k classified terms</title></rect>
+<text x="1230.0" y="708" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">135.9</text>
+<rect x="1285" y="691" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.328"><title>coordination / task: 68.38 per 10k classified terms</title></rect>
+<text x="1335.0" y="708" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">68.4</text>
+<text x="744" y="737" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">model</text>
+<rect x="760" y="719" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.487"><title>source_audit / model: 169.32 per 10k classified terms</title></rect>
+<text x="810.0" y="736" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">169.3</text>
+<rect x="865" y="719" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.623"><title>tla_modeling / model: 290.51 per 10k classified terms</title></rect>
+<text x="915.0" y="736" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">290.5</text>
+<rect x="970" y="719" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.48"><title>verification / model: 163.52 per 10k classified terms</title></rect>
+<text x="1020.0" y="736" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">163.5</text>
+<rect x="1075" y="719" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.52"><title>bug_ledger / model: 195.81 per 10k classified terms</title></rect>
+<text x="1125.0" y="736" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">195.8</text>
+<rect x="1180" y="719" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.513"><title>documentation / model: 189.53 per 10k classified terms</title></rect>
+<text x="1230.0" y="736" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">189.5</text>
+<rect x="1285" y="719" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.418"><title>coordination / model: 119.66 per 10k classified terms</title></rect>
+<text x="1335.0" y="736" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">119.7</text>
+<text x="744" y="765" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">worker</text>
+<rect x="760" y="747" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.453"><title>source_audit / worker: 143.43 per 10k classified terms</title></rect>
+<text x="810.0" y="764" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">143.4</text>
+<rect x="865" y="747" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.44"><title>tla_modeling / worker: 134.61 per 10k classified terms</title></rect>
+<text x="915.0" y="764" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">134.6</text>
+<rect x="970" y="747" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.424"><title>verification / worker: 123.48 per 10k classified terms</title></rect>
+<text x="1020.0" y="764" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">123.5</text>
+<rect x="1075" y="747" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.401"><title>bug_ledger / worker: 108.97 per 10k classified terms</title></rect>
+<text x="1125.0" y="764" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">109.0</text>
+<rect x="1180" y="747" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.382"><title>documentation / worker: 97.64 per 10k classified terms</title></rect>
+<text x="1230.0" y="764" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">97.6</text>
+<rect x="1285" y="747" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.03"><title>coordination / worker: 0.00 per 10k classified terms</title></rect>
+<text x="1335.0" y="764" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">0.0</text>
+<text x="744" y="793" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">distinct</text>
+<rect x="760" y="775" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.415"><title>source_audit / distinct: 117.96 per 10k classified terms</title></rect>
+<text x="810.0" y="792" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">118.0</text>
+<rect x="865" y="775" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.477"><title>tla_modeling / distinct: 161.40 per 10k classified terms</title></rect>
+<text x="915.0" y="792" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">161.4</text>
+<rect x="970" y="775" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.435"><title>verification / distinct: 131.17 per 10k classified terms</title></rect>
+<text x="1020.0" y="792" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">131.2</text>
+<rect x="1075" y="775" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.453"><title>bug_ledger / distinct: 143.88 per 10k classified terms</title></rect>
+<text x="1125.0" y="792" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">143.9</text>
+<rect x="1180" y="775" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.517"><title>documentation / distinct: 193.36 per 10k classified terms</title></rect>
+<text x="1230.0" y="792" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">193.4</text>
+<rect x="1285" y="775" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.03"><title>coordination / distinct: 0.00 per 10k classified terms</title></rect>
+<text x="1335.0" y="792" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">0.0</text>
+<text x="744" y="821" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">tests</text>
+<rect x="760" y="803" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.433"><title>source_audit / tests: 129.86 per 10k classified terms</title></rect>
+<text x="810.0" y="820" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">129.9</text>
+<rect x="865" y="803" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.503"><title>tla_modeling / tests: 181.66 per 10k classified terms</title></rect>
+<text x="915.0" y="820" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">181.7</text>
+<rect x="970" y="803" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.436"><title>verification / tests: 131.57 per 10k classified terms</title></rect>
+<text x="1020.0" y="820" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">131.6</text>
+<rect x="1075" y="803" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.365"><title>bug_ledger / tests: 87.69 per 10k classified terms</title></rect>
+<text x="1125.0" y="820" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">87.7</text>
+<rect x="1180" y="803" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.551"><title>documentation / tests: 222.07 per 10k classified terms</title></rect>
+<text x="1230.0" y="820" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">222.1</text>
+<rect x="1285" y="803" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.03"><title>coordination / tests: 0.00 per 10k classified terms</title></rect>
+<text x="1335.0" y="820" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">0.0</text>
+<text x="744" y="849" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">manager</text>
+<rect x="760" y="831" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.43"><title>source_audit / manager: 127.56 per 10k classified terms</title></rect>
+<text x="810.0" y="848" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">127.6</text>
+<rect x="865" y="831" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.396"><title>tla_modeling / manager: 105.77 per 10k classified terms</title></rect>
+<text x="915.0" y="848" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">105.8</text>
+<rect x="970" y="831" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.394"><title>verification / manager: 104.94 per 10k classified terms</title></rect>
+<text x="1020.0" y="848" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">104.9</text>
+<rect x="1075" y="831" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.308"><title>bug_ledger / manager: 58.74 per 10k classified terms</title></rect>
+<text x="1125.0" y="848" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">58.7</text>
+<rect x="1180" y="831" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.387"><title>documentation / manager: 100.51 per 10k classified terms</title></rect>
+<text x="1230.0" y="848" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">100.5</text>
+<rect x="1285" y="831" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.03"><title>coordination / manager: 0.00 per 10k classified terms</title></rect>
+<text x="1335.0" y="848" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">0.0</text>
+<text x="744" y="877" font-family="Arial,sans-serif" font-size="10" font-weight="400" fill="#475569" text-anchor="end">failure</text>
+<rect x="760" y="859" width="100" height="24" rx="4" fill="#2563eb" fill-opacity="0.416"><title>source_audit / failure: 118.59 per 10k classified terms</title></rect>
+<text x="810.0" y="876" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">118.6</text>
+<rect x="865" y="859" width="100" height="24" rx="4" fill="#7c3aed" fill-opacity="0.433"><title>tla_modeling / failure: 129.80 per 10k classified terms</title></rect>
+<text x="915.0" y="876" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">129.8</text>
+<rect x="970" y="859" width="100" height="24" rx="4" fill="#16a34a" fill-opacity="0.412"><title>verification / failure: 115.99 per 10k classified terms</title></rect>
+<text x="1020.0" y="876" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">116.0</text>
+<rect x="1075" y="859" width="100" height="24" rx="4" fill="#dc2626" fill-opacity="0.387"><title>bug_ledger / failure: 100.46 per 10k classified terms</title></rect>
+<text x="1125.0" y="876" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">100.5</text>
+<rect x="1180" y="859" width="100" height="24" rx="4" fill="#9333ea" fill-opacity="0.419"><title>documentation / failure: 120.61 per 10k classified terms</title></rect>
+<text x="1230.0" y="876" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">120.6</text>
+<rect x="1285" y="859" width="100" height="24" rx="4" fill="#0f766e" fill-opacity="0.39"><title>coordination / failure: 102.56 per 10k classified terms</title></rect>
+<text x="1335.0" y="876" font-family="Arial,sans-serif" font-size="9" font-weight="400" fill="#fff" text-anchor="middle">102.6</text>
+<text x="58" y="988" font-family="Arial,sans-serif" font-size="12" font-weight="400" fill="#64748b" text-anchor="start">Counts are descriptive: frequent terms can reflect task vocabulary, not necessarily importance or quality.</text>
+</svg>

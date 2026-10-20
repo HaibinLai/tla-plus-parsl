@@ -33,6 +33,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Code additions by commit](site/dist/code-by-commit.svg)
 - [Human-readable code-output trend](site/dist/code-trend-human.svg)
 - [Code growth every 20 commits](site/dist/code-every-20-commits.svg)
+- [Session text-term analysis](docs/ai4tla-text-analysis.md) · [term/phase heatmap](site/dist/text-term-analysis.svg)
 - [Session analysis data](docs/ai4tla-session-analysis.json) and [reproducible extractor](scripts/analyze_codex_session.py)
 - [Phase classification data](docs/ai4tla-phase-analysis.json) and [phase classifier](scripts/classify_codex_activity.py)
 - [Paper writing plan](docs/paper-plan.md)
