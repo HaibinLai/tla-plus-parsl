@@ -1,0 +1,1634 @@
+{
+  "schema": "ai4tla.code-every-n-commits.v1",
+  "window_size": 20,
+  "commit_count": 1973,
+  "windows": [
+    {
+      "window": 1,
+      "commit_start": 1,
+      "commit_end": 20,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 1941,
+      "code_del": 114,
+      "net_growth": 1827,
+      "cumulative_net_code": 1827,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 2,
+      "commit_start": 21,
+      "commit_end": 40,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 835,
+      "code_del": 46,
+      "net_growth": 789,
+      "cumulative_net_code": 2616,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 3,
+      "commit_start": 41,
+      "commit_end": 60,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2797,
+      "code_del": 13,
+      "net_growth": 2784,
+      "cumulative_net_code": 5400,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 4,
+      "commit_start": 61,
+      "commit_end": 80,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2991,
+      "code_del": 6,
+      "net_growth": 2985,
+      "cumulative_net_code": 8385,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 5,
+      "commit_start": 81,
+      "commit_end": 100,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2325,
+      "code_del": 0,
+      "net_growth": 2325,
+      "cumulative_net_code": 10710,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit"
+      ]
+    },
+    {
+      "window": 6,
+      "commit_start": 101,
+      "commit_end": 120,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 868,
+      "code_del": 0,
+      "net_growth": 868,
+      "cumulative_net_code": 11578,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling"
+      ]
+    },
+    {
+      "window": 7,
+      "commit_start": 121,
+      "commit_end": 140,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 1315,
+      "code_del": 0,
+      "net_growth": 1315,
+      "cumulative_net_code": 12893,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 8,
+      "commit_start": 141,
+      "commit_end": 160,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2340,
+      "code_del": 0,
+      "net_growth": 2340,
+      "cumulative_net_code": 15233,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 9,
+      "commit_start": 161,
+      "commit_end": 180,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 1981,
+      "code_del": 10,
+      "net_growth": 1971,
+      "cumulative_net_code": 17204,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 10,
+      "commit_start": 181,
+      "commit_end": 200,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2189,
+      "code_del": 26,
+      "net_growth": 2163,
+      "cumulative_net_code": 19367,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 11,
+      "commit_start": 201,
+      "commit_end": 220,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2047,
+      "code_del": 0,
+      "net_growth": 2047,
+      "cumulative_net_code": 21414,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 12,
+      "commit_start": 221,
+      "commit_end": 240,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 1500,
+      "code_del": 0,
+      "net_growth": 1500,
+      "cumulative_net_code": 22914,
+      "zero_code_commits": 7,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 13,
+      "commit_start": 241,
+      "commit_end": 260,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2498,
+      "code_del": 1,
+      "net_growth": 2497,
+      "cumulative_net_code": 25411,
+      "zero_code_commits": 4,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 14,
+      "commit_start": 261,
+      "commit_end": 280,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2274,
+      "code_del": 7,
+      "net_growth": 2267,
+      "cumulative_net_code": 27678,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 15,
+      "commit_start": 281,
+      "commit_end": 300,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2263,
+      "code_del": 0,
+      "net_growth": 2263,
+      "cumulative_net_code": 29941,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 16,
+      "commit_start": 301,
+      "commit_end": 320,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-28",
+      "code_add": 2081,
+      "code_del": 1,
+      "net_growth": 2080,
+      "cumulative_net_code": 32021,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 17,
+      "commit_start": 321,
+      "commit_end": 340,
+      "date_start": "2026-09-28",
+      "date_end": "2026-09-29",
+      "code_add": 1754,
+      "code_del": 20,
+      "net_growth": 1734,
+      "cumulative_net_code": 33755,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 18,
+      "commit_start": 341,
+      "commit_end": 360,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 1614,
+      "code_del": 0,
+      "net_growth": 1614,
+      "cumulative_net_code": 35369,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 19,
+      "commit_start": 361,
+      "commit_end": 380,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 1844,
+      "code_del": 0,
+      "net_growth": 1844,
+      "cumulative_net_code": 37213,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 20,
+      "commit_start": 381,
+      "commit_end": 400,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 2761,
+      "code_del": 0,
+      "net_growth": 2761,
+      "cumulative_net_code": 39974,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 21,
+      "commit_start": 401,
+      "commit_end": 420,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 1541,
+      "code_del": 19,
+      "net_growth": 1522,
+      "cumulative_net_code": 41496,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 22,
+      "commit_start": 421,
+      "commit_end": 440,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 584,
+      "code_del": 7,
+      "net_growth": 577,
+      "cumulative_net_code": 42073,
+      "zero_code_commits": 11,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 23,
+      "commit_start": 441,
+      "commit_end": 460,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 1275,
+      "code_del": 0,
+      "net_growth": 1275,
+      "cumulative_net_code": 43348,
+      "zero_code_commits": 8,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 24,
+      "commit_start": 461,
+      "commit_end": 480,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 34,
+      "code_del": 4,
+      "net_growth": 30,
+      "cumulative_net_code": 43378,
+      "zero_code_commits": 16,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 25,
+      "commit_start": 481,
+      "commit_end": 500,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 248,
+      "code_del": 3,
+      "net_growth": 245,
+      "cumulative_net_code": 43623,
+      "zero_code_commits": 16,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 26,
+      "commit_start": 501,
+      "commit_end": 520,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 957,
+      "code_del": 0,
+      "net_growth": 957,
+      "cumulative_net_code": 44580,
+      "zero_code_commits": 9,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 27,
+      "commit_start": 521,
+      "commit_end": 540,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 53,
+      "code_del": 0,
+      "net_growth": 53,
+      "cumulative_net_code": 44633,
+      "zero_code_commits": 19,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 28,
+      "commit_start": 541,
+      "commit_end": 560,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 311,
+      "code_del": 6,
+      "net_growth": 305,
+      "cumulative_net_code": 44938,
+      "zero_code_commits": 16,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 29,
+      "commit_start": 561,
+      "commit_end": 580,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 1778,
+      "code_del": 2,
+      "net_growth": 1776,
+      "cumulative_net_code": 46714,
+      "zero_code_commits": 6,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 30,
+      "commit_start": 581,
+      "commit_end": 600,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 2199,
+      "code_del": 0,
+      "net_growth": 2199,
+      "cumulative_net_code": 48913,
+      "zero_code_commits": 3,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 31,
+      "commit_start": 601,
+      "commit_end": 620,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 1859,
+      "code_del": 2,
+      "net_growth": 1857,
+      "cumulative_net_code": 50770,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 32,
+      "commit_start": 621,
+      "commit_end": 640,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 144,
+      "code_del": 0,
+      "net_growth": 144,
+      "cumulative_net_code": 50914,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 33,
+      "commit_start": 641,
+      "commit_end": 660,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-29",
+      "code_add": 132,
+      "code_del": 0,
+      "net_growth": 132,
+      "cumulative_net_code": 51046,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "documentation",
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 34,
+      "commit_start": 661,
+      "commit_end": 680,
+      "date_start": "2026-09-29",
+      "date_end": "2026-09-30",
+      "code_add": 293,
+      "code_del": 0,
+      "net_growth": 293,
+      "cumulative_net_code": 51339,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 35,
+      "commit_start": 681,
+      "commit_end": 700,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 147,
+      "code_del": 0,
+      "net_growth": 147,
+      "cumulative_net_code": 51486,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 36,
+      "commit_start": 701,
+      "commit_end": 720,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 120,
+      "code_del": 0,
+      "net_growth": 120,
+      "cumulative_net_code": 51606,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 37,
+      "commit_start": 721,
+      "commit_end": 740,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 142,
+      "code_del": 21,
+      "net_growth": 121,
+      "cumulative_net_code": 51727,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 38,
+      "commit_start": 741,
+      "commit_end": 760,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 123,
+      "code_del": 1,
+      "net_growth": 122,
+      "cumulative_net_code": 51849,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 39,
+      "commit_start": 761,
+      "commit_end": 780,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 120,
+      "code_del": 0,
+      "net_growth": 120,
+      "cumulative_net_code": 51969,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling"
+      ]
+    },
+    {
+      "window": 40,
+      "commit_start": 781,
+      "commit_end": 800,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 585,
+      "code_del": 0,
+      "net_growth": 585,
+      "cumulative_net_code": 52554,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 41,
+      "commit_start": 801,
+      "commit_end": 820,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 537,
+      "code_del": 0,
+      "net_growth": 537,
+      "cumulative_net_code": 53091,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 42,
+      "commit_start": 821,
+      "commit_end": 840,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 408,
+      "code_del": 0,
+      "net_growth": 408,
+      "cumulative_net_code": 53499,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit"
+      ]
+    },
+    {
+      "window": 43,
+      "commit_start": 841,
+      "commit_end": 860,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 782,
+      "code_del": 8,
+      "net_growth": 774,
+      "cumulative_net_code": 54273,
+      "zero_code_commits": 5,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 44,
+      "commit_start": 861,
+      "commit_end": 880,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1154,
+      "code_del": 22,
+      "net_growth": 1132,
+      "cumulative_net_code": 55405,
+      "zero_code_commits": 8,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 45,
+      "commit_start": 881,
+      "commit_end": 900,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 0,
+      "code_del": 0,
+      "net_growth": 0,
+      "cumulative_net_code": 55405,
+      "zero_code_commits": 20,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 46,
+      "commit_start": 901,
+      "commit_end": 920,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 0,
+      "code_del": 0,
+      "net_growth": 0,
+      "cumulative_net_code": 55405,
+      "zero_code_commits": 20,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 47,
+      "commit_start": 921,
+      "commit_end": 940,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 7439,
+      "code_del": 57,
+      "net_growth": 7382,
+      "cumulative_net_code": 62787,
+      "zero_code_commits": 6,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 48,
+      "commit_start": 941,
+      "commit_end": 960,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1935,
+      "code_del": 16,
+      "net_growth": 1919,
+      "cumulative_net_code": 64706,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 49,
+      "commit_start": 961,
+      "commit_end": 980,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1515,
+      "code_del": 2,
+      "net_growth": 1513,
+      "cumulative_net_code": 66219,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 50,
+      "commit_start": 981,
+      "commit_end": 1000,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1551,
+      "code_del": 1,
+      "net_growth": 1550,
+      "cumulative_net_code": 67769,
+      "zero_code_commits": 4,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 51,
+      "commit_start": 1001,
+      "commit_end": 1020,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1940,
+      "code_del": 0,
+      "net_growth": 1940,
+      "cumulative_net_code": 69709,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 52,
+      "commit_start": 1021,
+      "commit_end": 1040,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 2390,
+      "code_del": 1,
+      "net_growth": 2389,
+      "cumulative_net_code": 72098,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 53,
+      "commit_start": 1041,
+      "commit_end": 1060,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 811,
+      "code_del": 4,
+      "net_growth": 807,
+      "cumulative_net_code": 72905,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 54,
+      "commit_start": 1061,
+      "commit_end": 1080,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1170,
+      "code_del": 76,
+      "net_growth": 1094,
+      "cumulative_net_code": 73999,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 55,
+      "commit_start": 1081,
+      "commit_end": 1100,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1757,
+      "code_del": 84,
+      "net_growth": 1673,
+      "cumulative_net_code": 75672,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 56,
+      "commit_start": 1101,
+      "commit_end": 1120,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 2302,
+      "code_del": 0,
+      "net_growth": 2302,
+      "cumulative_net_code": 77974,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 57,
+      "commit_start": 1121,
+      "commit_end": 1140,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 823,
+      "code_del": 0,
+      "net_growth": 823,
+      "cumulative_net_code": 78797,
+      "zero_code_commits": 1,
+      "dominant_phases": [
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 58,
+      "commit_start": 1141,
+      "commit_end": 1160,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 592,
+      "code_del": 0,
+      "net_growth": 592,
+      "cumulative_net_code": 79389,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 59,
+      "commit_start": 1161,
+      "commit_end": 1180,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 717,
+      "code_del": 0,
+      "net_growth": 717,
+      "cumulative_net_code": 80106,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 60,
+      "commit_start": 1181,
+      "commit_end": 1200,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1328,
+      "code_del": 0,
+      "net_growth": 1328,
+      "cumulative_net_code": 81434,
+      "zero_code_commits": 9,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 61,
+      "commit_start": 1201,
+      "commit_end": 1220,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 766,
+      "code_del": 0,
+      "net_growth": 766,
+      "cumulative_net_code": 82200,
+      "zero_code_commits": 12,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 62,
+      "commit_start": 1221,
+      "commit_end": 1240,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 283,
+      "code_del": 0,
+      "net_growth": 283,
+      "cumulative_net_code": 82483,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 63,
+      "commit_start": 1241,
+      "commit_end": 1260,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 1201,
+      "code_del": 15,
+      "net_growth": 1186,
+      "cumulative_net_code": 83669,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 64,
+      "commit_start": 1261,
+      "commit_end": 1280,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 387,
+      "code_del": 0,
+      "net_growth": 387,
+      "cumulative_net_code": 84056,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 65,
+      "commit_start": 1281,
+      "commit_end": 1300,
+      "date_start": "2026-09-30",
+      "date_end": "2026-09-30",
+      "code_add": 54,
+      "code_del": 8,
+      "net_growth": 46,
+      "cumulative_net_code": 84102,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 66,
+      "commit_start": 1301,
+      "commit_end": 1320,
+      "date_start": "2026-09-30",
+      "date_end": "2026-10-01",
+      "code_add": 797,
+      "code_del": 0,
+      "net_growth": 797,
+      "cumulative_net_code": 84899,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 67,
+      "commit_start": 1321,
+      "commit_end": 1340,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 30,
+      "code_del": 0,
+      "net_growth": 30,
+      "cumulative_net_code": 84929,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 68,
+      "commit_start": 1341,
+      "commit_end": 1360,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 30,
+      "code_del": 0,
+      "net_growth": 30,
+      "cumulative_net_code": 84959,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 69,
+      "commit_start": 1361,
+      "commit_end": 1380,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 460,
+      "code_del": 0,
+      "net_growth": 460,
+      "cumulative_net_code": 85419,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 70,
+      "commit_start": 1381,
+      "commit_end": 1400,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 30,
+      "code_del": 0,
+      "net_growth": 30,
+      "cumulative_net_code": 85449,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 71,
+      "commit_start": 1401,
+      "commit_end": 1420,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 212,
+      "code_del": 0,
+      "net_growth": 212,
+      "cumulative_net_code": 85661,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 72,
+      "commit_start": 1421,
+      "commit_end": 1440,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 30,
+      "code_del": 0,
+      "net_growth": 30,
+      "cumulative_net_code": 85691,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 73,
+      "commit_start": 1441,
+      "commit_end": 1460,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 33,
+      "code_del": 0,
+      "net_growth": 33,
+      "cumulative_net_code": 85724,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 74,
+      "commit_start": 1461,
+      "commit_end": 1480,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 30,
+      "code_del": 0,
+      "net_growth": 30,
+      "cumulative_net_code": 85754,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 75,
+      "commit_start": 1481,
+      "commit_end": 1500,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 30,
+      "code_del": 0,
+      "net_growth": 30,
+      "cumulative_net_code": 85784,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 76,
+      "commit_start": 1501,
+      "commit_end": 1520,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 30,
+      "code_del": 0,
+      "net_growth": 30,
+      "cumulative_net_code": 85814,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 77,
+      "commit_start": 1521,
+      "commit_end": 1540,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 564,
+      "code_del": 0,
+      "net_growth": 564,
+      "cumulative_net_code": 86378,
+      "zero_code_commits": 11,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 78,
+      "commit_start": 1541,
+      "commit_end": 1560,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 42,
+      "code_del": 0,
+      "net_growth": 42,
+      "cumulative_net_code": 86420,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 79,
+      "commit_start": 1561,
+      "commit_end": 1580,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 51,
+      "code_del": 0,
+      "net_growth": 51,
+      "cumulative_net_code": 86471,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 80,
+      "commit_start": 1581,
+      "commit_end": 1600,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 39,
+      "code_del": 0,
+      "net_growth": 39,
+      "cumulative_net_code": 86510,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 81,
+      "commit_start": 1601,
+      "commit_end": 1620,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 56,
+      "code_del": 2,
+      "net_growth": 54,
+      "cumulative_net_code": 86564,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 82,
+      "commit_start": 1621,
+      "commit_end": 1640,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 33,
+      "code_del": 0,
+      "net_growth": 33,
+      "cumulative_net_code": 86597,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 83,
+      "commit_start": 1641,
+      "commit_end": 1660,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 33,
+      "code_del": 0,
+      "net_growth": 33,
+      "cumulative_net_code": 86630,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 84,
+      "commit_start": 1661,
+      "commit_end": 1680,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 36,
+      "code_del": 0,
+      "net_growth": 36,
+      "cumulative_net_code": 86666,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 85,
+      "commit_start": 1681,
+      "commit_end": 1700,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 60,
+      "code_del": 0,
+      "net_growth": 60,
+      "cumulative_net_code": 86726,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit"
+      ]
+    },
+    {
+      "window": 86,
+      "commit_start": 1701,
+      "commit_end": 1720,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 249,
+      "code_del": 4,
+      "net_growth": 245,
+      "cumulative_net_code": 86971,
+      "zero_code_commits": 11,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 87,
+      "commit_start": 1721,
+      "commit_end": 1740,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 570,
+      "code_del": 1,
+      "net_growth": 569,
+      "cumulative_net_code": 87540,
+      "zero_code_commits": 14,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 88,
+      "commit_start": 1741,
+      "commit_end": 1760,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-01",
+      "code_add": 1836,
+      "code_del": 0,
+      "net_growth": 1836,
+      "cumulative_net_code": 89376,
+      "zero_code_commits": 10,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 89,
+      "commit_start": 1761,
+      "commit_end": 1780,
+      "date_start": "2026-10-01",
+      "date_end": "2026-10-02",
+      "code_add": 1644,
+      "code_del": 0,
+      "net_growth": 1644,
+      "cumulative_net_code": 91020,
+      "zero_code_commits": 9,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 90,
+      "commit_start": 1781,
+      "commit_end": 1800,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 2433,
+      "code_del": 0,
+      "net_growth": 2433,
+      "cumulative_net_code": 93453,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 91,
+      "commit_start": 1801,
+      "commit_end": 1820,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 494,
+      "code_del": 6,
+      "net_growth": 488,
+      "cumulative_net_code": 93941,
+      "zero_code_commits": 14,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 92,
+      "commit_start": 1821,
+      "commit_end": 1840,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 1269,
+      "code_del": 1,
+      "net_growth": 1268,
+      "cumulative_net_code": 95209,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 93,
+      "commit_start": 1841,
+      "commit_end": 1860,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 1937,
+      "code_del": 0,
+      "net_growth": 1937,
+      "cumulative_net_code": 97146,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 94,
+      "commit_start": 1861,
+      "commit_end": 1880,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 2104,
+      "code_del": 142,
+      "net_growth": 1962,
+      "cumulative_net_code": 99108,
+      "zero_code_commits": 0,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 95,
+      "commit_start": 1881,
+      "commit_end": 1900,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 2072,
+      "code_del": 0,
+      "net_growth": 2072,
+      "cumulative_net_code": 101180,
+      "zero_code_commits": 2,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 96,
+      "commit_start": 1901,
+      "commit_end": 1920,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 1072,
+      "code_del": 203,
+      "net_growth": 869,
+      "cumulative_net_code": 102049,
+      "zero_code_commits": 3,
+      "dominant_phases": [
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 97,
+      "commit_start": 1921,
+      "commit_end": 1940,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 1924,
+      "code_del": 0,
+      "net_growth": 1924,
+      "cumulative_net_code": 103973,
+      "zero_code_commits": 7,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    },
+    {
+      "window": 98,
+      "commit_start": 1941,
+      "commit_end": 1960,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-02",
+      "code_add": 1586,
+      "code_del": 0,
+      "net_growth": 1586,
+      "cumulative_net_code": 105559,
+      "zero_code_commits": 6,
+      "dominant_phases": [
+        "bug_ledger",
+        "source_audit",
+        "verification"
+      ]
+    },
+    {
+      "window": 99,
+      "commit_start": 1961,
+      "commit_end": 1973,
+      "date_start": "2026-10-02",
+      "date_end": "2026-10-19",
+      "code_add": 826,
+      "code_del": 2,
+      "net_growth": 824,
+      "cumulative_net_code": 106383,
+      "zero_code_commits": 6,
+      "dominant_phases": [
+        "coordination",
+        "documentation",
+        "source_audit",
+        "tla_modeling",
+        "verification"
+      ]
+    }
+  ]
+}

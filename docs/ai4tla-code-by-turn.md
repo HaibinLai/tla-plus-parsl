@@ -44,6 +44,11 @@ range, calls out the overall statistics, and adds a separate cumulative-size
 strip. This view is intended for a report or presentation; the per-commit and
 per-turn SVGs remain available for detailed inspection.
 
+For a fixed-window view, `site/dist/code-every-20-commits.svg` groups exactly
+20 chronological commits per bar (the final window may be shorter). The
+underlying window data is in `docs/ai4tla-code-every-20-commits.json`, produced
+by `scripts/analyze_code_every_n_commits.py`.
+
 ## Interpretation
 
 This view supports the idea that “AI coding output” is bursty rather than
