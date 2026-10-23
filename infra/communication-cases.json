@@ -1,0 +1,36 @@
+{
+  "schema": "ai4tla.evidence-cases.v1",
+  "parsl_revision": "139caab94a7f2eb306512f9107b992c825974de8",
+  "cases": [
+    {
+      "id": "BUG-214",
+      "source": "parsl/executors/high_throughput/zmq_pipes.py",
+      "source_symbol": "CommandClient.run",
+      "model": "models/serialization/ParslCommandSendFailure.tla",
+      "current_cfg": "models/serialization/ParslCommandSendFailureCurrent.cfg",
+      "fixed_cfg": "models/serialization/ParslCommandSendFailureFixed.cfg",
+      "invariant": "SendFailureSafety",
+      "probe": "tests/test_command_send_failure_runtime.py"
+    },
+    {
+      "id": "BUG-238",
+      "source": "parsl/executors/high_throughput/zmq_pipes.py",
+      "source_symbol": "CommandClient.run",
+      "model": "models/serialization/ParslCommandReceiveFailure.tla",
+      "current_cfg": "models/serialization/ParslCommandReceiveFailureCurrent.cfg",
+      "fixed_cfg": "models/serialization/ParslCommandReceiveFailureFixed.cfg",
+      "invariant": "ReceiveFailureSafety",
+      "probe": "tests/test_command_receive_failure_runtime.py"
+    },
+    {
+      "id": "BUG-239",
+      "source": "parsl/executors/high_throughput/zmq_pipes.py",
+      "source_symbol": "CommandClient.close",
+      "model": "models/serialization/ParslCommandClientConcurrentClose.tla",
+      "current_cfg": "models/serialization/ParslCommandClientConcurrentCloseCurrent.cfg",
+      "fixed_cfg": "models/serialization/ParslCommandClientConcurrentCloseFixed.cfg",
+      "invariant": "ConcurrentCloseSafety",
+      "probe": "tests/test_command_client_concurrent_close_runtime.py"
+    }
+  ]
+}
