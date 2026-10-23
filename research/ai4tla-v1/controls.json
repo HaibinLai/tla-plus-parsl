@@ -1,0 +1,46 @@
+{
+  "schema": "ai4tla.abstention-controls.v1",
+  "parsl_revision": "139caab94a7f2eb306512f9107b992c825974de8",
+  "controls": [
+    {
+      "id": "C01",
+      "source": "parsl/executors/high_throughput/zmq_pipes.py",
+      "visible_lines": [62, 77],
+      "question": "Does a send failure make CommandClient unusable for later requests?",
+      "gold_decision": "UNKNOWN",
+      "missing_evidence": "The excerpt ends before send_pyobj and its failure handling."
+    },
+    {
+      "id": "C02",
+      "source": "parsl/executors/high_throughput/zmq_pipes.py",
+      "visible_lines": [109, 111],
+      "question": "Can a concurrent run continue safely while CommandClient.close executes?",
+      "gold_decision": "UNKNOWN",
+      "missing_evidence": "The excerpt omits run's locking and the interleaving with close."
+    },
+    {
+      "id": "C03",
+      "source": "parsl/executors/high_throughput/executor.py",
+      "visible_lines": [490, 509],
+      "question": "Can a corrupt result payload leave its Future pending after it is removed from the task map?",
+      "gold_decision": "UNKNOWN",
+      "missing_evidence": "The excerpt omits the pop/decode/update ordering."
+    },
+    {
+      "id": "C04",
+      "source": "parsl/executors/high_throughput/interchange.py",
+      "visible_lines": [350, 374],
+      "question": "Can a result-forwarding send failure cause the manager to lose ownership of an in-flight task?",
+      "gold_decision": "UNKNOWN",
+      "missing_evidence": "The excerpt omits task removal and results_outgoing.send_multipart."
+    },
+    {
+      "id": "C05",
+      "source": "parsl/dataflow/dflow.py",
+      "visible_lines": [438, 453],
+      "question": "Does cancellation of an inner join Future force the outer join to a terminal state?",
+      "gold_decision": "UNKNOWN",
+      "missing_evidence": "The excerpt omits Future.exception and the callback's failure path."
+    }
+  ]
+}

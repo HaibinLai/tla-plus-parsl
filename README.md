@@ -22,6 +22,7 @@ dependencies, retries, provider/executor failures, staging, serialization, and s
 - [Project report](docs/project-report.md)
 - [AI4TLA+ observational report](docs/ai4tla-observational-report.md)
 - [AI4TLA+ research paper plan](docs/ai4tla-paper-plan.md)
+- [AI4TLA+ v1 study design and 20-task inventory](research/ai4tla-v1/README.md)
 - [AI4TLA+ multi-model benchmark workflow](docs/ai4tla-benchmark-workflow.md)
 - [AI4TLA+ Codex session activity analysis](docs/ai4tla-session-analysis.md)
 - [Session activity dashboard](site/dist/session-analysis.html)
